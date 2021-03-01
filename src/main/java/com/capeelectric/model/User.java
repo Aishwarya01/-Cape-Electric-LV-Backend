@@ -1,5 +1,7 @@
 package com.capeelectric.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,8 +38,12 @@ public class User {
 	private String userType;
 	@Column(name = "role")
 	private String role;
-
-	
+	@Column(name = "creation_date")
+	private Date creationDate;
+	@Column(name = "updated_date")
+	private Date updatedDate;
+	@Column(name="user_exist")
+	private boolean userExist;
 	public User() {
     }
 
@@ -51,6 +57,9 @@ public class User {
         this.userType = users.getUserType();
         this.userName = users.getEmail();
         this.role = users.getRole();
+        this.creationDate = users.getCreationDate();
+        this.updatedDate = users.getUpdatedDate();
+        this.userExist = users.isUserExist();
     }
 
 	public int getId() {
@@ -124,7 +133,30 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	
+
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+
+	public boolean isUserExist() {
+		return userExist;
+	}
+
+	public void setUserExist(boolean userExist) {
+		this.userExist = userExist;
+	}
 	
 	
 }
