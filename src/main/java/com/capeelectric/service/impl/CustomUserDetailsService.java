@@ -1,6 +1,7 @@
 package com.capeelectric.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -27,4 +28,19 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 		return userDetails;
     }
+    
+	public  ResponseEntity<String> findByName(String userName) {
+		//TODO: Email triggering				
+				if ( userName != null) {
+					  User user = usersRepository.findByUserName(userName).get();					 
+					if (user != null) {
+						return  ResponseEntity.ok(user.getUserName());
+					} else {
+						throw new UsernameNotFoundException("username not valid");
+						}
+					} else {
+						throw new UsernameNotFoundException("User name required");
+					}          
+				
+			}
 }

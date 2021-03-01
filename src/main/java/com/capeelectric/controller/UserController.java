@@ -5,6 +5,8 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,22 +47,10 @@ public class UserController {
 	public CustomUserDetails fetchUser(@RequestBody AuthenticationRequest request) {
 		return userDetailsService.loadUserByUsername(request.getEmail());
 	}
-	@PostMapping("/forgetPassword")
-	public ResponseEntity<User> forgetPassword(@RequestBody User user) {
-
-		if (user.getUserName() != null) {
-			CustomUserDetails username = userDetailsService.loadUserByUsername(user.getUserName());
-			if (username != null) {
-
-				return ResponseEntity.ok(username);
-
-			} else {
-				throw new UsernameNotFoundException("username not valid");
-			}
-
-		} else {
-			throw new UsernameNotFoundException("User name required");
-		}
+	
+	@GetMapping("/forgotPassword/{userName}")
+	public ResponseEntity<String> forgetPassword(@PathVariable String userName) {
+ 		return userDetailsService.findByName(userName);
 
 	}
 }
