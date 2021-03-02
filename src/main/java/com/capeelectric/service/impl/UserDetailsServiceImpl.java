@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -47,7 +48,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if (email != null) {
 			User user = userRepository.findByUserName(email).get();
 			if (user != null) {
-				return ResponseEntity.ok(user.getUserName());
+				return new ResponseEntity<String>(user.getUserName(), HttpStatus.OK);
 			} else {
 				throw new UsernameNotFoundException("username not valid");
 			}
