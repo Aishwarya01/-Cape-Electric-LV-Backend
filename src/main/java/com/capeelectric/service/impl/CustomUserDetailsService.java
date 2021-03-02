@@ -13,12 +13,12 @@ import com.capeelectric.repository.UserRepository;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository usersRepository;
-    
-    @Override
-    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    	User user = usersRepository.findByUserName(username).get();
+	@Autowired
+	private UserRepository usersRepository;
+
+	@Override
+	public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		User user = usersRepository.findByUserName(username).get();
 		CustomUserDetails userDetails = null;
 		if (user != null) {
 			userDetails = new CustomUserDetails();
@@ -27,20 +27,20 @@ public class CustomUserDetailsService implements UserDetailsService {
 			throw new UsernameNotFoundException("User not exist with name : " + username);
 		}
 		return userDetails;
-    }
-    
-	public  ResponseEntity<String> findByName(String userName) {
-		//TODO: Email triggering				
-				if ( userName != null) {
-					  User user = usersRepository.findByUserName(userName).get();					 
-					if (user != null) {
-						return  ResponseEntity.ok(user.getUserName());
-					} else {
-						throw new UsernameNotFoundException("username not valid");
-						}
-					} else {
-						throw new UsernameNotFoundException("User name required");
-					}          
-				
+	}
+
+	public ResponseEntity<String> findByName(String userName) {
+		// TODO: Email triggering
+		if (userName != null) {
+			User user = usersRepository.findByUserName(userName).get();
+			if (user != null) {
+				return ResponseEntity.ok(user.getUserName());
+			} else {
+				throw new UsernameNotFoundException("username not valid");
 			}
+		} else {
+			throw new UsernameNotFoundException("User name required");
+		}
+
+	}
 }
