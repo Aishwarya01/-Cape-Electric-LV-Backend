@@ -49,7 +49,7 @@ public class UserController {
 	
 	@GetMapping("/forgotPassword/{userName}")
 	public ResponseEntity<String> forgetPassword(@PathVariable String userName) {
- 		return userDetailsService.findByName(userName);
+ 		return userService.findByUserName(userName);
 
 	}
 }
