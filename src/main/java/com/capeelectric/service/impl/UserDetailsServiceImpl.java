@@ -1,6 +1,6 @@
 package com.capeelectric.service.impl;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-	
+	/**
+	 * Method to save the user during the registration
+	 */
 	public User saveUser(User user) throws UserException {
 		Optional<User> createdUser = userRepository.findByUserName(user.getUserName());
 		if(createdUser.isPresent() && createdUser.get() != null && createdUser.get().isUserExist()) {
@@ -31,16 +33,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			String password = user.getPassword();
 			user.setPassword(passwordEncoder.encode(password));
 			user.setUserExist(true);
-			user.setCreationDate(new Date());
-			user.setUpdatedDate(new Date());
+			user.setCreationDate(LocalDateTime.now ());
+			user.setUpdatedDate(LocalDateTime.now ());
 			return userRepository.save(user);
 		}
 	}
 	
-	public ResponseEntity<String> findByUserName(String userName) {
+	/**
+	 * Method to retrieve the user
+	 */
+	public ResponseEntity<String> findByUserName(String email) {
 		// TODO: Email triggering
-		if (userName != null) {
-			User user = userRepository.findByUserName(userName).get();
+		if (email != null) {
+			User user = userRepository.findByUserName(email).get();
 			if (user != null) {
 				return ResponseEntity.ok(user.getUserName());
 			} else {
@@ -48,6 +53,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 		} else {
 			throw new UsernameNotFoundException("User name required");
+		}
+	}
+	
+	/**
+	 * Method to update the user after changing the password
+	 * @throws UserException 
+	 */
+	public User updateUser(String email, String password) throws UserException {
+		// TODO: Email triggering
+		if (email != null && password != null) {
+			User user = userRepository.findByUserName(email).get();
+			if (user != null && user.isUserExist()) {
+				user.setPassword(passwordEncoder.encode(password));
+				user.setUpdatedDate(LocalDateTime.now());
+				return userRepository.save(user);
+			}
+			else {
+				throw new UserException("User Not available");
+			}
+		} else {
+			throw new UsernameNotFoundException("username not valid");
 		}
 	}
 }

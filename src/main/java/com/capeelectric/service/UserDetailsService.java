@@ -9,5 +9,7 @@ public interface UserDetailsService {
 
 	public User saveUser(User user) throws UserException;
 	
-	public ResponseEntity<String> findByUserName(String userName);
+	public ResponseEntity<String> findByUserName(String email);
+	
+	public User updateUser(String email, String password) throws UserException;
 }

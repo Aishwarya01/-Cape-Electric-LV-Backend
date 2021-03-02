@@ -3,10 +3,12 @@ package com.capeelectric.controller;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +37,7 @@ public class UserController {
 	private UserDetailsServiceImpl userService;
 	
 	@PostMapping("/registerUser")
-	public ResponseEntity<User> addUser(@RequestBody User user) throws UserException {
+	public ResponseEntity<Void> addUser(@RequestBody User user) throws UserException {
 		User createdUser = userService.saveUser(user);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().
 				path("/{id}").buildAndExpand(createdUser.getId()).toUri();
@@ -50,5 +52,11 @@ public class UserController {
 	@GetMapping("/forgotPassword/{email}")
 	public ResponseEntity<String> forgotPassword(@PathVariable String email) {
  		return userService.findByUserName(email);
+	}
+	
+	@PutMapping("/updatePassword")
+	public ResponseEntity<String> updateUser(@RequestBody AuthenticationRequest request) throws UserException{
+		User user  = userService.updateUser(request.getEmail(), request.getPassword());
+		return new ResponseEntity<String>(user.getUserName(), HttpStatus.OK);
 	}
 }
