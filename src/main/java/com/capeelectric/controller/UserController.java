@@ -47,9 +47,8 @@ public class UserController {
 		return userDetailsService.loadUserByUsername(request.getEmail());
 	}
 	
-	@GetMapping("/forgotPassword/{userName}")
-	public ResponseEntity<String> forgetPassword(@PathVariable String userName) {
- 		return userService.findByUserName(userName);
-
+	@GetMapping("/forgotPassword/{email}")
+	public ResponseEntity<String> forgotPassword(@PathVariable String email) {
+ 		return userService.findByUserName(email);
 	}
 }
