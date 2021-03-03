@@ -45,8 +45,8 @@ public class UserController {
 	}
 	
 	@PostMapping("/authenticate")
-	public CustomUserDetails fetchUser(@RequestBody AuthenticationRequest request) {
-		return userDetailsService.loadUserByUsername(request.getEmail());
+	public CustomUserDetails fetchUser(@RequestBody AuthenticationRequest request) throws UserException {
+		return userService.loadUserInformation(userDetailsService.loadUserByUsername(request.getEmail()), request.getPassword());
 	}
 	
 	@GetMapping("/forgotPassword/{email}")

@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.UserException;
+import com.capeelectric.model.CustomUserDetails;
 import com.capeelectric.model.User;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.UserDetailsService;
@@ -75,6 +76,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 		} else {
 			throw new UsernameNotFoundException("username not valid");
+		}
+	}
+
+	@Override
+	public CustomUserDetails loadUserInformation(CustomUserDetails userDetails, String password) throws UserException {
+		if(passwordEncoder.matches(password, userDetails.getPassword())) {
+			return userDetails;
+		} else {
+			throw new UserException("Password is not matching");
 		}
 	}
 }
