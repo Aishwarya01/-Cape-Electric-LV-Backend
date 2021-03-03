@@ -44,17 +44,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	/**
 	 * Method to retrieve the user
 	 */
-	public ResponseEntity<String> findByUserName(String email) {
+	public ResponseEntity<String> findByUserName(String email) throws UserException{
 		// TODO: Email triggering
 		if (email != null) {
-			User user = userRepository.findByUserName(email).get();
-			if (user != null) {
-				return new ResponseEntity<String>(user.getUserName(), HttpStatus.OK);
+			Optional<User> optionalUser = userRepository.findByUserName(email);
+			if (optionalUser != null && optionalUser.isPresent() && optionalUser.get()!= null) {
+				return new ResponseEntity<String>(optionalUser.get().getUserName(), HttpStatus.OK);
 			} else {
-				throw new UsernameNotFoundException("username not valid");
+				throw new UserException("Email is not available with us");
 			}
 		} else {
-			throw new UsernameNotFoundException("User name required");
+			throw new UserException("Email is required");
 		}
 	}
 	

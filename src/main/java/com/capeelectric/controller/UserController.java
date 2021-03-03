@@ -50,7 +50,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/forgotPassword/{email}")
-	public ResponseEntity<String> forgotPassword(@PathVariable String email) {
+	public ResponseEntity<String> forgotPassword(@PathVariable String email) throws UserException{
  		return userService.findByUserName(email);
 	}
 	
