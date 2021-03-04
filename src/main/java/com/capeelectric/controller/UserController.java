@@ -2,6 +2,8 @@ package com.capeelectric.controller;
 
 import java.net.URI;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,7 @@ import com.capeelectric.service.impl.UserDetailsServiceImpl;
 @RequestMapping("/api/v1")
 public class UserController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
 	
@@ -38,9 +41,11 @@ public class UserController {
 	
 	@PostMapping("/registerUser")
 	public ResponseEntity<Void> addUser(@RequestBody User user) throws UserException {
+		logger.debug("Add User starts");
 		User createdUser = userService.saveUser(user);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().
 				path("/{id}").buildAndExpand(createdUser.getId()).toUri();
+		logger.debug("Add User ends");
 		return ResponseEntity.created(uri).build();
 	}
 	
@@ -56,7 +61,9 @@ public class UserController {
 	
 	@PutMapping("/updatePassword")
 	public ResponseEntity<String> updateUser(@RequestBody AuthenticationRequest request) throws UserException{
+		logger.debug("Update User starts");
 		User user  = userService.updateUser(request.getEmail(), request.getPassword());
+		logger.debug("Update User ends");
 		return new ResponseEntity<String>(user.getUserName(), HttpStatus.OK);
 	}
 }
