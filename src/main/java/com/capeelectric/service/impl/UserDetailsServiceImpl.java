@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 */
 	public User saveUser(User user) throws UserException {
 		logger.debug("Save User Starts");
-		Optional<User> createdUser = userRepository.findByUserName(user.getUsername());
+		Optional<User> createdUser = userRepository.findByUsername(user.getUsername());
 		if(createdUser.isPresent() && createdUser.get() != null && createdUser.get().isUserexist()) {
 			logger.debug("Save User Ends");
 			throw new UserException("User already available");
@@ -54,7 +54,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		// TODO: Email triggering
 		logger.debug("Find By User Name Starts");
 		if (email != null) {
-			Optional<User> optionalUser = userRepository.findByUserName(email);
+			Optional<User> optionalUser = userRepository.findByUsername(email);
 			if (optionalUser != null && optionalUser.isPresent() && optionalUser.get()!= null) {
 				logger.debug("Find By User Name Ends");
 				return new ResponseEntity<String>(optionalUser.get().getUsername(), HttpStatus.OK);
@@ -76,7 +76,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		// TODO: Email triggering
 		logger.debug("Update User Starts");
 		if (email != null && password != null) {
-			User user = userRepository.findByUserName(email).get();
+			User user = userRepository.findByUsername(email).get();
 			if (user != null && user.isUserexist()) {
 				user.setPassword(passwordEncoder.encode(password));
 				user.setUpdateddate(LocalDateTime.now());
