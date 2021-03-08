@@ -40,7 +40,7 @@ public class CustomUserDetails extends User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUserName();
+        return this.getUsername();
     }
 
     @Override

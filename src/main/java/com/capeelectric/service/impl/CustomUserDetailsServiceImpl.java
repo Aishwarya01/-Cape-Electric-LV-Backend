@@ -2,6 +2,7 @@ package com.capeelectric.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,9 +13,9 @@ import com.capeelectric.model.User;
 import com.capeelectric.repository.UserRepository;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
-	private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
+	private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsServiceImpl.class);
 	@Autowired
 	private UserRepository usersRepository;
 
@@ -25,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		CustomUserDetails userDetails = null;
 		if (user != null) {
 			userDetails = new CustomUserDetails();
-			userDetails.setUser(user);
+			BeanUtils.copyProperties(user, userDetails);
 		} else {
 			logger.debug("Load User By UserName ends");
 			throw new UsernameNotFoundException("User not exist with name : " + username);

@@ -23,10 +23,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.capeelectric.config.JwtTokenUtil;
 import com.capeelectric.exception.UserException;
+import com.capeelectric.model.CustomUserDetails;
 import com.capeelectric.model.User;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.response.AuthenticationResponse;
-import com.capeelectric.service.impl.CustomUserDetailsService;
+import com.capeelectric.service.impl.CustomUserDetailsServiceImpl;
 import com.capeelectric.service.impl.UserDetailsServiceImpl;
 
 /**
@@ -40,7 +41,7 @@ public class UserController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	@Autowired
-	private CustomUserDetailsService userDetailsService;
+	private CustomUserDetailsServiceImpl userDetailsService;
 	
 	@Autowired
 	private UserDetailsServiceImpl userService;
@@ -70,7 +71,7 @@ public class UserController {
 
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		logger.debug("Create Authenticate Token ends");
-		return ResponseEntity.ok(new AuthenticationResponse(token));
+		return ResponseEntity.ok(new AuthenticationResponse(token, userDetails));
 	}
 	
 	@GetMapping("/forgotPassword/{email}")
@@ -83,7 +84,7 @@ public class UserController {
 		logger.debug("Update User starts");
 		User user  = userService.updateUser(request.getEmail(), request.getPassword());
 		logger.debug("Update User ends");
-		return new ResponseEntity<String>(user.getUserName(), HttpStatus.OK);
+		return new ResponseEntity<String>(user.getUsername(), HttpStatus.OK);
 	}
 	
 	private void authenticate(String username, String password) throws Exception {

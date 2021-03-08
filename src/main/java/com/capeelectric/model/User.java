@@ -28,135 +28,114 @@ public class User {
 	private boolean active;
 	@Column(name="email")
 	private String email;
-	@Column(name="first_name")
-	private String firstName;
-	@Column(name="last_name")
-	private String lastName;
-	@Column(name="user_name")
-	private String userName;
-	@Column(name="user_type")
-	private String userType;
+	@Column(name="firstname")
+	private String firstname;
+	@Column(name="lastname")
+	private String lastname;
+	@Column(name="username")
+	private String username;
+	@Column(name="usertype")
+	private String usertype;
 	@Column(name = "role")
 	private String role;
-	@Column(name = "creation_date")
-	private LocalDateTime creationDate;
-	@Column(name = "updated_date")
-	private LocalDateTime updatedDate;
-	@Column(name="user_exist")
-	private boolean userExist;
+	@Column(name = "creationdate")
+	private LocalDateTime creationdate;
+	@Column(name = "updateddate")
+	private LocalDateTime updateddate;
+	@Column(name="userexist")
+	private boolean userexist;
 	public User() {
     }
-
-    public User(User users) {
-        this.active = users.isActive();
-        this.email = users.getEmail();
-        this.firstName = users.getFirstName();
-        this.lastName =users.getLastName();
-        this.id = users.getId();
-        this.password = users.getPassword();
-        this.userType = users.getUserType();
-        this.userName = users.getEmail();
-        this.role = users.getRole();
-        this.creationDate = users.getCreationDate();
-        this.updatedDate = users.getUpdatedDate();
-        this.userExist = users.isUserExist();
-    }
-
+	public User(int id, String password, boolean active, String email, String firstname, String lastname,
+			String username, String usertype, String role, LocalDateTime creationdate, LocalDateTime updateddate,
+			boolean userexist) {
+		super();
+		this.id = id;
+		this.password = password;
+		this.active = active;
+		this.email = email;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.username = username;
+		this.usertype = usertype;
+		this.role = role;
+		this.creationdate = creationdate;
+		this.updateddate = updateddate;
+		this.userexist = userexist;
+	}
 	public int getId() {
 		return id;
 	}
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
 	public String getPassword() {
 		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 	public boolean isActive() {
 		return active;
 	}
-
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	public String getFirstName() {
-		return firstName;
+	public String getFirstname() {
+		return firstname;
 	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
-	
-	public String getLastName() {
-		return lastName;
+	public String getLastname() {
+		return lastname;
 	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
-
-	public String getUserName() {
-		return email;
+	public String getUsername() {
+		return username;
 	}
-
-	public void setUserName(String email) {
-		this.userName = email;
+	public void setUsername(String username) {
+		this.username = username;
 	}
-	
-	public String getUserType() {
-		return userType;
+	public String getUsertype() {
+		return usertype;
 	}
-
-	public void setUserType(String userType) {
-		this.userType = userType;
+	public void setUsertype(String usertype) {
+		this.usertype = usertype;
 	}
-
 	public String getRole() {
 		return role;
 	}
-
 	public void setRole(String role) {
 		this.role = role;
 	}
-
-	public LocalDateTime getCreationDate() {
-		return creationDate;
+	public LocalDateTime getCreationdate() {
+		return creationdate;
+	}
+	public void setCreationdate(LocalDateTime creationdate) {
+		this.creationdate = creationdate;
+	}
+	public LocalDateTime getUpdateddate() {
+		return updateddate;
+	}
+	public void setUpdateddate(LocalDateTime updateddate) {
+		this.updateddate = updateddate;
+	}
+	public boolean isUserexist() {
+		return userexist;
+	}
+	public void setUserexist(boolean userexist) {
+		this.userexist = userexist;
 	}
 
-	public void setCreationDate(LocalDateTime creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public LocalDateTime getUpdatedDate() {
-		return updatedDate;
-	}
-
-	public void setUpdatedDate(LocalDateTime updatedDate) {
-		this.updatedDate = updatedDate;
-	}
-
-	public boolean isUserExist() {
-		return userExist;
-	}
-
-	public void setUserExist(boolean userExist) {
-		this.userExist = userExist;
-	}
 	
 	
 }

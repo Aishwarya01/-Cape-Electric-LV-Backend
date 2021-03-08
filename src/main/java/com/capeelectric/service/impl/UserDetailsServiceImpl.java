@@ -32,16 +32,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 */
 	public User saveUser(User user) throws UserException {
 		logger.debug("Save User Starts");
-		Optional<User> createdUser = userRepository.findByUserName(user.getUserName());
-		if(createdUser.isPresent() && createdUser.get() != null && createdUser.get().isUserExist()) {
+		Optional<User> createdUser = userRepository.findByUserName(user.getUsername());
+		if(createdUser.isPresent() && createdUser.get() != null && createdUser.get().isUserexist()) {
 			logger.debug("Save User Ends");
 			throw new UserException("User already available");
 		} else {
 			String password = user.getPassword();
 			user.setPassword(passwordEncoder.encode(password));
-			user.setUserExist(true);
-			user.setCreationDate(LocalDateTime.now ());
-			user.setUpdatedDate(LocalDateTime.now ());
+			user.setUserexist(true);
+			user.setCreationdate(LocalDateTime.now ());
+			user.setUpdateddate(LocalDateTime.now ());
 			logger.debug("Save User Ends");
 			return userRepository.save(user);
 		}
@@ -57,7 +57,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			Optional<User> optionalUser = userRepository.findByUserName(email);
 			if (optionalUser != null && optionalUser.isPresent() && optionalUser.get()!= null) {
 				logger.debug("Find By User Name Ends");
-				return new ResponseEntity<String>(optionalUser.get().getUserName(), HttpStatus.OK);
+				return new ResponseEntity<String>(optionalUser.get().getUsername(), HttpStatus.OK);
 			} else {
 				logger.debug("Find By User Name Ends");
 				throw new UserException("Email is not available with us");
@@ -77,9 +77,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		logger.debug("Update User Starts");
 		if (email != null && password != null) {
 			User user = userRepository.findByUserName(email).get();
-			if (user != null && user.isUserExist()) {
+			if (user != null && user.isUserexist()) {
 				user.setPassword(passwordEncoder.encode(password));
-				user.setUpdatedDate(LocalDateTime.now());
+				user.setUpdateddate(LocalDateTime.now());
 				logger.debug("Update User Ends");
 				return userRepository.save(user);
 			}
