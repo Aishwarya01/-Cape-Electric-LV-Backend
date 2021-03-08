@@ -1,4 +1,4 @@
-package com.capeelectric.service;
+package com.capeelectric.service.impl;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.capeelectric.model.User;
 
 @Service
-public class JwtUserDetailsService implements UserDetailsService {
+public class JwtUserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private com.capeelectric.repository.UserRepository userDao;
 
