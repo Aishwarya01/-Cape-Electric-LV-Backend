@@ -25,6 +25,16 @@ public class CustomUserDetails extends User implements UserDetails {
 		this.user = user;
 	}
 
+	
+	public CustomUserDetails() {
+		super();
+	}
+
+	
+	public CustomUserDetails(User user) {
+		this.user = user;
+	}
+
 	@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
@@ -40,7 +50,7 @@ public class CustomUserDetails extends User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUserName();
+        return user.getUsername();
     }
 
     @Override

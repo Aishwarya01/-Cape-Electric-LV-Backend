@@ -12,20 +12,19 @@ import com.capeelectric.model.User;
 import com.capeelectric.repository.UserRepository;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
-	private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
+	private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsServiceImpl.class);
 	@Autowired
 	private UserRepository usersRepository;
 
 	@Override
 	public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		logger.debug("Load User By UserName starts");
-		User user = usersRepository.findByUserName(username).get();
+		User user = usersRepository.findByUsername(username).get();
 		CustomUserDetails userDetails = null;
 		if (user != null) {
-			userDetails = new CustomUserDetails();
-			userDetails.setUser(user);
+			userDetails = new CustomUserDetails(user);
 		} else {
 			logger.debug("Load User By UserName ends");
 			throw new UsernameNotFoundException("User not exist with name : " + username);

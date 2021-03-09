@@ -12,5 +12,5 @@ import com.capeelectric.model.User;
  *
  */
 public interface UserRepository extends CrudRepository<User, Integer> {
-	Optional<User> findByUserName(String userName);
+	Optional<User> findByUsername(String userName);
 }
