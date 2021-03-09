@@ -11,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,11 +66,11 @@ public class UserController {
 		logger.debug("Create Authenticate Token starts");
 		authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
 
-		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+		final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
 
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		logger.debug("Create Authenticate Token ends");
-		return ResponseEntity.ok(new AuthenticationResponse(token, userDetails));
+		return ResponseEntity.ok(new AuthenticationResponse(token, userDetails.getUser()));
 	}
 	
 	@GetMapping("/forgotPassword/{email}")
