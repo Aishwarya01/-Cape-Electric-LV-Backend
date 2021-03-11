@@ -96,7 +96,7 @@ public class UserController {
 		return new ResponseEntity<String>(userDetails.getUsername(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/retrieveUserInformation")
+	@GetMapping("/retrieveUserInformation/{email}")
 	public User retrieveUserInforamtion(@PathVariable String email) throws UserException {
 		return userService.retrieveUserInformation(email);
 	}
