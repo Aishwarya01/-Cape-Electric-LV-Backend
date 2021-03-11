@@ -71,7 +71,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 						"/api/v1/registerUser",
 						"/api/v1/forgotPassword/**",
 						"/api/v1/updatePassword/**",
-						"/api/v1/changePassword/**").permitAll()
+						"/api/v1/changePassword/**",
+						"/api/v1/retrieveUserInformation").permitAll()
 				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll().
 				// all other requests need to be authenticated
 				anyRequest().authenticated().and().

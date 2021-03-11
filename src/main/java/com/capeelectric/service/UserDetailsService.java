@@ -16,4 +16,6 @@ public interface UserDetailsService {
 	
 	public User changePassword(String email, String oldPassword, String password) throws ChangePasswordException;
 	
+	public User retrieveUserInformation(String email) throws UserException;
+	
 }

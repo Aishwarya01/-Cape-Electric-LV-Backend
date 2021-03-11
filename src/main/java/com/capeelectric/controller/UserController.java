@@ -96,6 +96,11 @@ public class UserController {
 		return new ResponseEntity<String>(userDetails.getUsername(), HttpStatus.OK);
 	}
 	
+	@GetMapping("/retrieveUserInformation")
+	public User retrieveUserInforamtion(@PathVariable String email) throws UserException {
+		return userService.retrieveUserInformation(email);
+	}
+	
 	private void authenticate(String username, String password) throws Exception {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));

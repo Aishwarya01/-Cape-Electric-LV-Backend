@@ -113,5 +113,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}
 		return null;
 	}
+	
+	/**
+	 * 
+	 */
+	public User retrieveUserInformation(String email) throws UserException{
+		logger.debug("Retrieve User Starts");
+		Optional<User> retrievedUser = userRepository.findByUsername(email);
+		if(retrievedUser.isPresent() && retrievedUser.get() != null && retrievedUser.get().isUserexist()) {
+			return retrievedUser.get();
+		} else {
+			throw new UserException("User not available");
+		}
+	}
 
 }
