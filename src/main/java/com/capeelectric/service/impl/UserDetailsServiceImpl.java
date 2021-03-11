@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.UserException;
-import com.capeelectric.model.CustomUserDetails;
 import com.capeelectric.model.User;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.UserDetailsService;
@@ -72,7 +72,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 * Method to update the user after changing the password
 	 * @throws UserException 
 	 */
-	public User updateUser(String email, String password) throws UserException {
+	public User updatePassword(String email, String password) throws UserException {
 		// TODO: Email triggering
 		logger.debug("Update User Starts");
 		if (email != null && password != null) {
@@ -93,15 +93,25 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}
 	}
 
-	@Override
-	public CustomUserDetails loadUserInformation(CustomUserDetails userDetails, String password) throws UserException {
-		logger.debug("Load User Information Starts");
-		if(passwordEncoder.matches(password, userDetails.getPassword())) {
-			logger.debug("Load User Information Ends");
-			return userDetails;
+	/**
+	 * 
+	 */
+	
+	public User changePassword(String email, String oldPassword, String password) throws ChangePasswordException {
+		logger.debug("Change Password Starts");
+		if(oldPassword.equalsIgnoreCase(password)) {
+			logger.debug("Change Password Ends");
+			throw new ChangePasswordException("Old password cannot be entered as new password");
 		} else {
-			logger.debug("Load User Information Ends");
-			throw new UserException("Password is not matching");
+			User user = userRepository.findByUsername(email).get();
+			if (user != null && user.isUserexist()) {
+				user.setPassword(passwordEncoder.encode(password));
+				user.setUpdateddate(LocalDateTime.now());
+				logger.debug("Update User Ends");
+				return userRepository.save(user);
+			}
 		}
+		return null;
 	}
+
 }

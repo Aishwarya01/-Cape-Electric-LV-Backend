@@ -16,4 +16,10 @@ public class GlobalExceptionHandler {
     		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
     
+    @ExceptionHandler({ChangePasswordException.class})
+    public ResponseEntity<ErrorMessage> handleChangePasswordException(ChangePasswordException e){
+    		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+    		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+    }
+    
 }

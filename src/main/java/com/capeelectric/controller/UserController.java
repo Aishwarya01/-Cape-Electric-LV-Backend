@@ -21,10 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.capeelectric.config.JwtTokenUtil;
+import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.CustomUserDetails;
 import com.capeelectric.model.User;
 import com.capeelectric.request.AuthenticationRequest;
+import com.capeelectric.request.ChangePasswordRequest;
 import com.capeelectric.response.AuthenticationResponse;
 import com.capeelectric.service.impl.CustomUserDetailsServiceImpl;
 import com.capeelectric.service.impl.UserDetailsServiceImpl;
@@ -79,11 +81,19 @@ public class UserController {
 	}
 	
 	@PutMapping("/updatePassword")
-	public ResponseEntity<String> updateUser(@RequestBody AuthenticationRequest request) throws UserException{
-		logger.debug("Update User starts");
-		User user  = userService.updateUser(request.getEmail(), request.getPassword());
-		logger.debug("Update User ends");
+	public ResponseEntity<String> updatePassword(@RequestBody AuthenticationRequest request) throws UserException{
+		logger.debug("Update Password starts");
+		User user  = userService.updatePassword(request.getEmail(), request.getPassword());
+		logger.debug("Update Password ends");
 		return new ResponseEntity<String>(user.getUsername(), HttpStatus.OK);
+	}
+	
+	@PutMapping("/changePassword")
+	public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) throws ChangePasswordException{
+		logger.debug("Change Password Starts");
+		User userDetails = userService.changePassword(request.getEmail(), request.getOldPassword(), request.getPassword());
+		logger.debug("Change Password Ends");
+		return new ResponseEntity<String>(userDetails.getUsername(), HttpStatus.OK);
 	}
 	
 	private void authenticate(String username, String password) throws Exception {
