@@ -132,7 +132,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 * @return
 	 * @throws UserException
 	 */
-	public User updateUserProfile(User user) throws UserException{
+	public User updateUserProfile(User user){
 		logger.debug("Update User Profile Starts");
 		user.setUpdateddate(LocalDateTime.now());
 		logger.debug("Update User Profile Starts");

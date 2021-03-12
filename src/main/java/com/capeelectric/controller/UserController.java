@@ -102,7 +102,7 @@ public class UserController {
 	}
 	
 	@PutMapping("/updateUserProfile")
-	public ResponseEntity<String> updateUserProfile(@RequestBody User user) throws UserException{
+	public ResponseEntity<String> updateUserProfile(@RequestBody User user){
 		logger.debug("Update User Profile starts");
 		User updatedUser = userService.updateUserProfile(user);
 		logger.debug("Update Password ends");
