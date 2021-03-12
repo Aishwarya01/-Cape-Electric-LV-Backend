@@ -96,7 +96,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	/**
 	 * 
 	 */
-	
 	public User changePassword(String email, String oldPassword, String password) throws ChangePasswordException {
 		logger.debug("Change Password Starts");
 		if(oldPassword.equalsIgnoreCase(password)) {
@@ -125,6 +124,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		} else {
 			throw new UserException("User not available");
 		}
+	}
+	
+	/**
+	 * 
+	 * @param user
+	 * @return
+	 * @throws UserException
+	 */
+	public User updateUserProfile(User user) throws UserException{
+		logger.debug("Update User Profile Starts");
+		user.setUpdateddate(LocalDateTime.now());
+		logger.debug("Update User Profile Starts");
+		return userRepository.save(user);
+		
 	}
 
 }

@@ -18,4 +18,6 @@ public interface UserDetailsService {
 	
 	public User retrieveUserInformation(String email) throws UserException;
 	
+	public User updateUserProfile(User user) throws UserException;
+	
 }

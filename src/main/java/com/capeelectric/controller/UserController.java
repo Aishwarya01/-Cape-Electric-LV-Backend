@@ -101,6 +101,14 @@ public class UserController {
 		return userService.retrieveUserInformation(email);
 	}
 	
+	@PutMapping("/updateUserProfile")
+	public ResponseEntity<String> updateUserProfile(@RequestBody User user) throws UserException{
+		logger.debug("Update User Profile starts");
+		User updatedUser = userService.updateUserProfile(user);
+		logger.debug("Update Password ends");
+		return new ResponseEntity<String>(updatedUser.getEmail(), HttpStatus.OK);
+	}
+	
 	private void authenticate(String username, String password) throws Exception {
 		try {
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
