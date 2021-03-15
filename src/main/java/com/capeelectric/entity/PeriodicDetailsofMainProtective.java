@@ -14,46 +14,46 @@ public class PeriodicDetailsofMainProtective implements Serializable{   //TODO a
 	 */
 	private static final long serialVersionUID = -6708402291872721257L;
 
-	private Long DetailsofMainProtectiveIDKey;
-	private Long InstallationConditionPrimaryInfoIDKey;
-	private String LOCATION;
-	private String JOINTNO;
-	private String JOINTRESISTANCE;
+	private Long detailsOfMainProtectiveIDKey;
+	private Long installationConditionPrimaryInfoIDKey;
+	private String location;
+	private String jointno;
+	private String jointreResistance;
 	private Boolean deletedflg;
-	private Timestamp CreatedDt; 
-	private String CreatedBy; 
-	private Timestamp UpdatedDt; 
-	private String UpdatedBy;
+	private Timestamp createdDt; 
+	private String createdBy; 
+	private Timestamp updatedDt; 
+	private String updatedBy;
 	
-	public Long getDetailsofMainProtectiveIDKey() {
-		return DetailsofMainProtectiveIDKey;
+	public Long getDetailsOfMainProtectiveIDKey() {
+		return detailsOfMainProtectiveIDKey;
 	}
-	public void setDetailsofMainProtectiveIDKey(Long detailsofMainProtectiveIDKey) {
-		DetailsofMainProtectiveIDKey = detailsofMainProtectiveIDKey;
+	public void setDetailsOfMainProtectiveIDKey(Long detailsOfMainProtectiveIDKey) {
+		this.detailsOfMainProtectiveIDKey = detailsOfMainProtectiveIDKey;
 	}
 	public Long getInstallationConditionPrimaryInfoIDKey() {
-		return InstallationConditionPrimaryInfoIDKey;
+		return installationConditionPrimaryInfoIDKey;
 	}
 	public void setInstallationConditionPrimaryInfoIDKey(Long installationConditionPrimaryInfoIDKey) {
-		InstallationConditionPrimaryInfoIDKey = installationConditionPrimaryInfoIDKey;
+		this.installationConditionPrimaryInfoIDKey = installationConditionPrimaryInfoIDKey;
 	}
-	public String getLOCATION() {
-		return LOCATION;
+	public String getLocation() {
+		return location;
 	}
-	public void setLOCATION(String lOCATION) {
-		LOCATION = lOCATION;
+	public void setLocation(String location) {
+		this.location = location;
 	}
-	public String getJOINTNO() {
-		return JOINTNO;
+	public String getJointno() {
+		return jointno;
 	}
-	public void setJOINTNO(String jOINTNO) {
-		JOINTNO = jOINTNO;
+	public void setJointno(String jointno) {
+		this.jointno = jointno;
 	}
-	public String getJOINTRESISTANCE() {
-		return JOINTRESISTANCE;
+	public String getJointreResistance() {
+		return jointreResistance;
 	}
-	public void setJOINTRESISTANCE(String jOINTRESISTANCE) {
-		JOINTRESISTANCE = jOINTRESISTANCE;
+	public void setJointreResistance(String jointreResistance) {
+		this.jointreResistance = jointreResistance;
 	}
 	public Boolean getDeletedflg() {
 		return deletedflg;
@@ -62,31 +62,28 @@ public class PeriodicDetailsofMainProtective implements Serializable{   //TODO a
 		this.deletedflg = deletedflg;
 	}
 	public Timestamp getCreatedDt() {
-		return CreatedDt;
+		return createdDt;
 	}
 	public void setCreatedDt(Timestamp createdDt) {
-		CreatedDt = createdDt;
+		this.createdDt = createdDt;
 	}
 	public String getCreatedBy() {
-		return CreatedBy;
+		return createdBy;
 	}
 	public void setCreatedBy(String createdBy) {
-		CreatedBy = createdBy;
+		this.createdBy = createdBy;
 	}
 	public Timestamp getUpdatedDt() {
-		return UpdatedDt;
+		return updatedDt;
 	}
 	public void setUpdatedDt(Timestamp updatedDt) {
-		UpdatedDt = updatedDt;
+		this.updatedDt = updatedDt;
 	}
 	public String getUpdatedBy() {
-		return UpdatedBy;
+		return updatedBy;
 	}
 	public void setUpdatedBy(String updatedBy) {
-		UpdatedBy = updatedBy;
+		this.updatedBy = updatedBy;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	} 
-	
+	 
 }
