@@ -1,4 +1,4 @@
-package com.capeelectric.entity;
+package com.capeelectric.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
