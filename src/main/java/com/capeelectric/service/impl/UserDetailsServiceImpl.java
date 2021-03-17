@@ -98,16 +98,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 */
 	public User changePassword(String email, String oldPassword, String password) throws ChangePasswordException {
 		logger.debug("Change Password Starts");
-		if(oldPassword.equalsIgnoreCase(password)) {
+		User retrieveUser = userRepository.findByUsername(email).get();
+		if(!passwordEncoder.matches(oldPassword, retrieveUser.getPassword())) {
+			logger.debug("Change Password Ends");
+			throw new ChangePasswordException("Old password is not matching with encoded password");
+		} else if(oldPassword.equalsIgnoreCase(password)) {
 			logger.debug("Change Password Ends");
 			throw new ChangePasswordException("Old password cannot be entered as new password");
 		} else {
-			User user = userRepository.findByUsername(email).get();
-			if (user != null && user.isUserexist()) {
-				user.setPassword(passwordEncoder.encode(password));
-				user.setUpdateddate(LocalDateTime.now());
+			if (retrieveUser != null && retrieveUser.isUserexist()) {
+				retrieveUser.setPassword(passwordEncoder.encode(password));
+				retrieveUser.setUpdateddate(LocalDateTime.now());
 				logger.debug("Update User Ends");
-				return userRepository.save(user);
+				return userRepository.save(retrieveUser);
 			}
 		}
 		return null;
