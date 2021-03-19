@@ -21,8 +21,14 @@ public class ApplicationTypesServiceImpl implements ApplicationTypesService {
 	
 	@Override
 	public List<ApplicationTypes> retrieveTypes() {
-		// TODO Auto-generated method stub
 		return (List<ApplicationTypes>) repository.findAll();
 	}
+
+	@Override
+	public ApplicationTypes addApplicationTypes(ApplicationTypes types) {
+		return repository.save(types);
+	}
+	
+	
 
 }

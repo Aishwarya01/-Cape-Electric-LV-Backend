@@ -11,4 +11,6 @@ import com.capeelectric.model.ApplicationTypes;
 public interface ApplicationTypesService {
 
 	public List<ApplicationTypes> retrieveTypes();
+	
+	public ApplicationTypes addApplicationTypes(ApplicationTypes types);
 }
