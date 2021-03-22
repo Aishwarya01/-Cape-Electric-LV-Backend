@@ -14,7 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>LV-Safety-Verification</name>
 	<description>LV Inspection Safety Project</description>
-	<packaging>jar</packaging>
+
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
@@ -41,12 +41,6 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 		</dependency>
-		
-		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-			<version>0.9.1</version>
-		</dependency>
 
 		<dependency>
 			<groupId>mysql</groupId>
@@ -55,30 +49,35 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-		</dependency>
-
 
 	</dependencies>
 
 	<build>
 		<plugins>
-			<!-- <plugin>don't pack the war <groupId>org.apache.maven.plugins</groupId> 
-				<artifactId>maven-war-plugin</artifactId> <executions> <execution> <id>default-war</id> 
-				<phase>none</phase> </execution> <execution> <id>war-exploded</id> <configuration> 
-				<webappDirectory>target/deploy</webappDirectory> <archiveClasses>true</archiveClasses> 
-				</configuration> <phase>prepare-package</phase> <goals> <goal>exploded</goal> 
-				</goals> </execution> </executions> </plugin> -->
+			<plugin><!-- don't pack the war  -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-war</id>
+						<phase>none</phase>
+					</execution>
+					<execution>
+						<id>war-exploded</id>
+						<configuration>
+							<webappDirectory>target/deploy</webappDirectory>
+							<archiveClasses>true</archiveClasses>
+						</configuration>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>exploded</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
