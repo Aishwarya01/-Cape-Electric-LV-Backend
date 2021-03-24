@@ -6,9 +6,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,5 +46,13 @@ public class ApplicationTypesController {
 		logger.debug("Add ApplicationTypes ends");
 		return ResponseEntity.created(uri).build();
 		
+	}
+	
+	@PutMapping("/updateApplicationTypes")
+	public ResponseEntity<String> updateApplicationTypes(@RequestBody ApplicationTypes types){
+		logger.debug("Update Password starts");
+		ApplicationTypes updatedTypes  = applicationTypesService.updateApplicationTypes(types.getId(), types.getType());
+		logger.debug("Update Password ends");
+		return new ResponseEntity<String>(updatedTypes.getType(), HttpStatus.OK);
 	}
 }
