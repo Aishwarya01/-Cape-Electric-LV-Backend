@@ -15,7 +15,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="user")
+@Table(name="USERS")
 public class User {
 	
 	@Id
@@ -24,25 +24,25 @@ public class User {
 	private int id;
 	@Column(name="password")
 	private String password;
-	@Column(name="active")
+	@Column(name="user_active")
 	private boolean active;
 	@Column(name="email")
 	private String email;
-	@Column(name="firstname")
+	@Column(name="first_name")
 	private String firstname;
-	@Column(name="lastname")
+	@Column(name="last_name")
 	private String lastname;
-	@Column(name="username")
+	@Column(name="user_name")
 	private String username;
-	@Column(name="usertype")
+	@Column(name="user_type")
 	private String usertype;
-	@Column(name = "role")
+	@Column(name = "user_role")
 	private String role;
-	@Column(name = "creationdate")
+	@Column(name = "creation_date")
 	private LocalDateTime creationdate;
-	@Column(name = "updateddate")
+	@Column(name = "updated_date")
 	private LocalDateTime updateddate;
-	@Column(name="userexist")
+	@Column(name="user_exist")
 	private boolean userexist;
 	public User() {
     }

@@ -10,13 +10,13 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "types")
+@Table(name = "APPLICATIONTYPES")
 public class ApplicationTypes {
 
 	@Id
 	private int id;
 	
-	@Column
+	@Column(name = "APPLICATION")
 	private String type;
 
 	public int getId() {
