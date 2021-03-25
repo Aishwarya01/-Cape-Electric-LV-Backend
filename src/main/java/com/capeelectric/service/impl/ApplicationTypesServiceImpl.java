@@ -44,6 +44,12 @@ public class ApplicationTypesServiceImpl implements ApplicationTypesService {
 		
 		
 	}
+
+	@Override
+	public void deleteApplicationType(Integer id) {
+		// TODO Auto-generated method stub
+		repository.deleteById(id);;
+	}
 	
 	
 
