@@ -97,7 +97,4 @@ public class Company implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
-	
-	 
-
 }
