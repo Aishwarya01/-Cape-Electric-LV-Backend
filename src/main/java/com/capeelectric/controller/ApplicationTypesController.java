@@ -35,7 +35,6 @@ public class ApplicationTypesController {
 
 	@GetMapping("/retrieveApplicationTypes")
 	public List<ApplicationTypes> retrieveApplicationTypes(){
-		
 		return applicationTypesService.retrieveTypes();
 	}
 	
