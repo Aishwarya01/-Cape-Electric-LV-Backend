@@ -5,34 +5,38 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
+  
 /**
  * The persistent class for the company_table database table.
  * 
  */
 @Entity
 @Table(name = "company_table")
-@NamedQuery(name = "CompanyTable.findAll", query = "SELECT c FROM Company c")
+@NamedQueries(value = {
+		@NamedQuery(name = "Company.findByClientName",
+				query = "select c.clientName from Company c where c.clientName=?1")
+})
+
 public class Company implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="COMPANY_TABLE_COMPANYID_GENERATOR" )
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="COMPANY_TABLE_COMPANYID_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="COMPANY_ID")
 	private Integer companyId;
 
 	@Column(name = "CLIENT_NAME")
 	private String clientName;
 
-	private String createdby;
+	private String createdBy;
 
-	private String updatedby;
+	private String updatedBy;
 
-	private LocalDateTime createDate;
+	private LocalDateTime createdDate;
 
 	private Byte inactive;
 
-	private LocalDateTime updateDate;
+	private LocalDateTime updatedDate;
 
 	public Company() {
 	}
@@ -53,28 +57,28 @@ public class Company implements Serializable {
 		this.clientName = clientName;
 	}
 
-	public String getCreatedby() {
-		return createdby;
+	public String getCreatedBy() {
+		return createdBy;
 	}
 
-	public void setCreatedby(String createdby) {
-		this.createdby = createdby;
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
-	public String getUpdatedby() {
-		return updatedby;
+	public String getUpdatedBy() {
+		return updatedBy;
 	}
 
-	public void setUpdatedby(String updatedby) {
-		this.updatedby = updatedby;
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
 	}
 
-	public LocalDateTime getCreateDate() {
-		return createDate;
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setCreateDate(LocalDateTime createDate) {
-		this.createDate = createDate;
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
 	}
 
 	public Byte getInactive() {
@@ -85,14 +89,15 @@ public class Company implements Serializable {
 		this.inactive = inactive;
 	}
 
-	public LocalDateTime getUpdateDate() {
-		return updateDate;
+	public LocalDateTime getUpdatedDate() {
+		return updatedDate;
 	}
 
-	public void setUpdateDate(LocalDateTime updateDate) {
-		this.updateDate = updateDate;
+	public void setUpdatedDate(LocalDateTime updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 
+	
 	 
 
 }
