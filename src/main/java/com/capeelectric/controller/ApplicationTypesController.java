@@ -59,7 +59,8 @@ public class ApplicationTypesController {
 	}
 	
 	@DeleteMapping("/deleteApplicationType/{id}")
-	public void deleteApplicationType(@PathVariable Integer id) {
+	public ResponseEntity<Void> deleteApplicationType(@PathVariable Integer id) {
 		applicationTypesService.deleteApplicationType(id);
+		return ResponseEntity.noContent().build();
 	}
 }
