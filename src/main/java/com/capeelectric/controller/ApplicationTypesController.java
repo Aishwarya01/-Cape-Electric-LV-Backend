@@ -46,7 +46,6 @@ public class ApplicationTypesController {
 				path("/{id}").buildAndExpand(createdTypes.getId()).toUri();
 		logger.debug("Add ApplicationTypes ends");
 		return ResponseEntity.created(uri).build();
-		
 	}
 	
 	@PutMapping("/updateApplicationTypes")
