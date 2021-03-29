@@ -10,23 +10,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capeelectric.exception.UserException;
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Company;
 import com.capeelectric.service.CompanyService;
 
 @RestController()
 @RequestMapping("/api/v1")
-public class CompanyController {
+public class CompanyController {   //TODO Byusing CompanyController to store companyDetails in DB
 
 	private static final Logger logger = LoggerFactory.getLogger(CompanyController.class);
 
 	@Autowired
-	private CompanyService companyDetailsService;
+	private CompanyService companyService;
 
-	@PostMapping("/clientName")
-	public ResponseEntity<String> insertCompany(@RequestBody Company company) throws UserException {
+	@PostMapping("/company")
+	public ResponseEntity<String> insertCompany(@RequestBody Company company) throws CompanyDetailsException {
 		logger.info("called InsertCompany function clientName: {}", company.getClientName());
-		companyDetailsService.insertCompany(company);
+		companyService.insertCompany(company);
 		return new ResponseEntity<String>(company.getClientName(), HttpStatus.OK);
 	}
 

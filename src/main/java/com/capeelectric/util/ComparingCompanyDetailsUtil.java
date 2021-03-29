@@ -5,7 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.capeelectric.exception.UserException;
+import com.capeelectric.exception.CompanyDetailsException;
 
 import com.capeelectric.repository.CompanyRepository;
 import com.capeelectric.repository.DepartmentRepository;
@@ -13,8 +13,8 @@ import com.capeelectric.repository.DepartmentRepository;
 public class ComparingCompanyDetailsUtil {
 	private static final Logger logger = LoggerFactory.getLogger(ComparingCompanyDetailsUtil.class);
 
-	public static Boolean departmentClientNamecomparingCompanyDepartment(String clientName, CompanyRepository companyRepository)
-			throws UserException {
+	public static Boolean  clientNameCompanrison_Department(String clientName, CompanyRepository companyRepository)
+			throws CompanyDetailsException {
 		List<String> findByClientName = companyRepository.findByClientName(clientName);
 
 		if (findByClientName.contains(clientName)) {
@@ -23,15 +23,15 @@ public class ComparingCompanyDetailsUtil {
 					findByClientName.contains(clientName));
 			return true;
 		} else {
-			throw new UserException("specifed companyClientname not avilble");
+			throw new CompanyDetailsException("specifed companyClientname not avilble");
 
 		}
 
 	}
 
-	public static Boolean siteClientNameSiteDepartmentNameComparingCompanyDepartmentSite(String siteClientName,
+	public static Boolean clientNameDeptCompanrison_Site(String siteClientName,
 			String siteDepartmentName, CompanyRepository companyRepository, DepartmentRepository departmentRepository)
-			throws UserException {
+			throws CompanyDetailsException {
 		List<String> companyClientnames = companyRepository.findByClientName(siteClientName);
 
 		List<String> departmentClientNames = departmentRepository.findByClientName(siteClientName);
@@ -52,13 +52,13 @@ public class ComparingCompanyDetailsUtil {
 							departmentDepartmentNames.contains(siteDepartmentName));
 					return true;
 				} else {
-					throw new UserException("specifed departmentDepartmentName not avilble");
+					throw new CompanyDetailsException("specifed departmentDepartmentName not avilble");
 				}
 			} else {
-				throw new UserException("specifed departmentClientName not avilble");
+				throw new CompanyDetailsException("specifed departmentClientName not avilble");
 			}
 		} else {
-			throw new UserException("specifed companyClientname not avilble");
+			throw new CompanyDetailsException("specifed companyClientname not avilble");
 		}
 	}
 

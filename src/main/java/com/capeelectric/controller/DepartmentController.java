@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capeelectric.exception.UserException;
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Department;
 import com.capeelectric.repository.CompanyRepository;
 import com.capeelectric.service.DepartmentService;
@@ -18,7 +18,7 @@ import com.capeelectric.util.ComparingCompanyDetailsUtil;
 
 @RestController()
 @RequestMapping("/api/v1")
-public class DepartmentController {
+public class DepartmentController {    // //TODO Byusing DepartmentController to store DepartmentDetails in DB
 
 	private static final Logger logger = LoggerFactory.getLogger(DepartmentController.class);
 
@@ -28,15 +28,15 @@ public class DepartmentController {
 	@Autowired
 	private CompanyRepository companyRepository; // TODO delete this line
 
-	@PostMapping("/clientDeparment")
-	public ResponseEntity<String> insertDepartment(@RequestBody Department department) throws UserException {
+	@PostMapping("/department")
+	public ResponseEntity<String> insertDepartment(@RequestBody Department department) throws CompanyDetailsException {
 
 		logger.debug("called DepartmentController_class insertDepartment function DepartmentclientName: {},DepartmentName :{}",
 				department.getClientName(), department.getDepartmentName());
 
-		Boolean departmentClientNamecomparingCompanyDepartment = ComparingCompanyDetailsUtil.departmentClientNamecomparingCompanyDepartment(department.getClientName(), companyRepository);
+		Boolean clientNameCompanrison_Department = ComparingCompanyDetailsUtil.clientNameCompanrison_Department(department.getClientName(), companyRepository);
 		 
-		departmentService.insertDepartment(department, departmentClientNamecomparingCompanyDepartment);
+		departmentService.insertDepartment(department, clientNameCompanrison_Department);
 		
 		return new ResponseEntity<String>(department.getClientName() + " " + department.getDepartmentName(),
 				HttpStatus.OK);

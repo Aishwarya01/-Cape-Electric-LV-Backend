@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.capeelectric.exception.UserException;
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Department;
 import com.capeelectric.repository.DepartmentRepository;
 import com.capeelectric.service.DepartmentService;
@@ -19,19 +19,19 @@ public class DepartmentServiceImpl implements DepartmentService {
 	private DepartmentRepository departmentRepository;
 
 	@Override
-	public Department insertDepartment(Department department, Boolean comparingCompanyDepartmentClientName)
-			throws UserException {
+	public Department insertDepartment(Department department, Boolean clientNameCompanrison_Department)
+			throws CompanyDetailsException {
 
 		logger.debug("called DepartmentServiceImpl_class insertDepartment_function");
 
 		if (department.getClientName() == null) {
-			throw new UserException("ClientName Required");
+			throw new CompanyDetailsException("ClientName Required");
 		}
-		if (department.getDepartmentName() == null) {
-			throw new UserException("DepartmentName Required");
+		else if (department.getDepartmentName() == null) {
+			throw new CompanyDetailsException("DepartmentName Required");
 		}
-		if (comparingCompanyDepartmentClientName == false) {
-			throw new UserException("Department clientName not avilable in company");
+		else if (clientNameCompanrison_Department == false) {
+			throw new CompanyDetailsException("Department clientName not avilable in company");
 		} else {
 			department.setCreatedDate(LocalDateTime.now());
 			department.setUpdatedDate(LocalDateTime.now());

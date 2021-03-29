@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capeelectric.exception.UserException;
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Site;
 import com.capeelectric.repository.CompanyRepository;
 import com.capeelectric.repository.DepartmentRepository;
@@ -19,7 +19,7 @@ import com.capeelectric.util.ComparingCompanyDetailsUtil;
 
 @RestController()
 @RequestMapping("/api/v1")
-public class SiteController {
+public class SiteController {       //TODO ByUsing SiteController to store siteDetails in DB
 	private static final Logger logger = LoggerFactory.getLogger(SiteController.class);
 
 	@Autowired
@@ -30,19 +30,19 @@ public class SiteController {
 	@Autowired
 	private DepartmentRepository departmentRepository; // TODO delete this line
 
-	@PostMapping("/clientSite")
-	public ResponseEntity<String> insertSite(@RequestBody Site site) throws UserException {
+	@PostMapping("/site")
+	public ResponseEntity<String> insertSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.info("called SiteController_Class insertSite_function SiteClientName : {},SiteDepartment : {}, Site : {}", site.getClientName(),
 				site.getDepartmentName(), site.getSite());
 		
-		Boolean siteClientNameSiteDepartmentNameComparingCompanyDepartmentSite = ComparingCompanyDetailsUtil
-				.siteClientNameSiteDepartmentNameComparingCompanyDepartmentSite(site.getClientName(),
+		Boolean clientNameDeptCompanrison_Site = ComparingCompanyDetailsUtil
+				.clientNameDeptCompanrison_Site(site.getClientName(),
 						site.getDepartmentName(), companyRepository, departmentRepository);
 		
 		logger.info("called insertSite SiteClientNameSiteDepartmentNameComparingCompanyDepartmentSite : {}",
-				siteClientNameSiteDepartmentNameComparingCompanyDepartmentSite);
+				clientNameDeptCompanrison_Site);
 		
-		siteService.insertSite(site, siteClientNameSiteDepartmentNameComparingCompanyDepartmentSite);
+		siteService.insertSite(site, clientNameDeptCompanrison_Site);
 		return new ResponseEntity<String>(site.getClientName() + " " + site.getDepartmentName() + "  " + site.getSite(),
 				HttpStatus.OK);
 
