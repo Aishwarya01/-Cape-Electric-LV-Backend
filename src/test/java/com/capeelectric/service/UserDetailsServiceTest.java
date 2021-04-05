@@ -5,11 +5,12 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.UserException;
@@ -17,48 +18,70 @@ import com.capeelectric.model.User;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.impl.UserDetailsServiceImpl;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-public class UserDetailsServiceTest {
+@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
+public class UserDetailsServiceTest   {
+	@MockBean
+	UserRepository userRepository;
+	@InjectMocks
+	UserDetailsServiceImpl userDetailsServiceImpl;
 
-	@Mock
-	private BCryptPasswordEncoder passwordEncoder;
+	@MockBean
+	BCryptPasswordEncoder passwordEncoder;
 
 	@Test
 	void tsetFindByUserName() throws UserException {
 
-		UserRepository mock = Mockito.mock(UserRepository.class);
-		UserDetailsServiceImpl mock1 = Mockito.mock(UserDetailsServiceImpl.class);
+ 
+		User user = new User();
+		user.setUsername("sd@capeindia.net");
 
-		User user2 = new User();
-		user2.setUsername("sd@capeindia.net");
+		Optional<User> optionaluser = Optional.of(user);
 
-		Optional<User> user = Optional.of(user2);
+		when(userRepository.findByUsername("sd@capeindia.net")).thenReturn(optionaluser);
+		 userDetailsServiceImpl.findByUserName("sd@capeindia.net");
 
-		when(mock.findByUsername("sd@capeindia.net")).thenReturn(user);
-
+ 
 	}
 
 	@Test
-	void testchangePassword() throws ChangePasswordException {
+ 	void testchangePassword() throws ChangePasswordException {
+		BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
+	    
+		String encodePass = encode.encode("moorthy");
 
-		UserDetailsServiceImpl mock1 = Mockito.mock(UserDetailsServiceImpl.class);
-
-		User user = new User();
-		user.setEmail("moorthy@capeindia.net");
-		user.setPassword("moorthy");
-		when(mock1.changePassword("moorthy@capeindia.net", "moorthy", "thiru123")).thenReturn(user);
-	}
-
-	@Test
-	void testUpdatedPassword() throws UserException {
-		UserDetailsServiceImpl mock1 = Mockito.mock(UserDetailsServiceImpl.class);
+		boolean matches = true;
+	 
 
 		User user = new User();
+		user.setPassword(encodePass);
+		user.setUsername("thiru");
 		user.setEmail("moorthy@capeindia.net");
-		user.setPassword("moorthy");
+		user.setUserexist(true);
+		user.setActive(true);
+		when(passwordEncoder.matches("moorthy", encodePass)).thenReturn(matches);
+		
+		Optional<User> optionaluser = Optional.of(user);
 
-		when(mock1.updatePassword("moorthy@capeindia.net", "moorthy")).thenReturn(user);
+		when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
+		userDetailsServiceImpl.changePassword("moorthy@capeindia.net", "moorthy", "moorthy123");
+
+		 
 	}
 
+	
+	  @Test 
+	  void testUpdatedPassword() throws UserException {
+ 
+			User user = new User();
+ 			user.setEmail("moorthy@capeindia.net");
+			user.setUserexist(true);
+			user.setActive(true);
+			Optional<User> optionaluser = Optional.of(user);
+
+			  when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
+			  
+			  when(userDetailsServiceImpl.updatePassword("moorthy@capeindia.net","moorthy123")).thenReturn(user); }
+	  
+	 
 }
