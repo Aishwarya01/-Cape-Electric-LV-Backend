@@ -23,8 +23,10 @@ import com.capeelectric.service.impl.UserDetailsServiceImpl;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 public class UserDetailsServiceTest   {
+	
 	@MockBean
 	private UserRepository userRepository;
+	
 	@InjectMocks
 	private UserDetailsServiceImpl userDetailsServiceImpl;
 	 
@@ -40,7 +42,6 @@ public class UserDetailsServiceTest   {
 		user = new User();
 		user.setUsername("moorthy@capeindia.net");
 		user.setPassword("moorthy");
-		user.setUsername("thiru");
 		user.setEmail("moorthy@capeindia.net");
 		user.setUserexist(true);
 		user.setActive(true);
@@ -89,7 +90,7 @@ public class UserDetailsServiceTest   {
 
 	
 	  @Test 
-	  public void testUpdatedPassword() throws UserException,Throwable{
+	  public void testUpdatedPassword() throws UserException {
  
 			when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
 
@@ -103,5 +104,31 @@ public class UserDetailsServiceTest   {
 					() -> userDetailsServiceImpl.updatePassword("moorthy@capeindia.net", "moorthy123"));
 
 	  }
+
+		@Test
+		public void testSaveUser() throws UserException {
+
+			when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
+			Assertions.assertThrows(UserException.class, () -> userDetailsServiceImpl.saveUser(user));
+
+			user.setUserexist(false);
+			userDetailsServiceImpl.saveUser(user);
+		}
+		
+		@Test
+		public void testRetrieveUserInformation() throws UserException {
+			when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
+			userDetailsServiceImpl.retrieveUserInformation(user.getEmail());
+			
+			user.setUserexist(false);
+			Assertions.assertThrows(UserException.class,
+					() -> userDetailsServiceImpl.retrieveUserInformation(user.getEmail()));
+
+		}
+
+		@Test
+		public void testUpdateUserProfile() {
+			userDetailsServiceImpl.updateUserProfile(user);
+		}
 	 
 }
