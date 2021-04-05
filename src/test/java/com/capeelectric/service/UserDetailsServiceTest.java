@@ -4,11 +4,13 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -22,66 +24,84 @@ import com.capeelectric.service.impl.UserDetailsServiceImpl;
 @ExtendWith(MockitoExtension.class)
 public class UserDetailsServiceTest   {
 	@MockBean
-	UserRepository userRepository;
+	private UserRepository userRepository;
 	@InjectMocks
-	UserDetailsServiceImpl userDetailsServiceImpl;
-
-	@MockBean
-	BCryptPasswordEncoder passwordEncoder;
-
-	@Test
-	void tsetFindByUserName() throws UserException {
-
- 
-		User user = new User();
-		user.setUsername("sd@capeindia.net");
-
-		Optional<User> optionaluser = Optional.of(user);
-
-		when(userRepository.findByUsername("sd@capeindia.net")).thenReturn(optionaluser);
-		 userDetailsServiceImpl.findByUserName("sd@capeindia.net");
-
- 
-	}
-
-	@Test
- 	void testchangePassword() throws ChangePasswordException {
-		BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
-	    
-		String encodePass = encode.encode("moorthy");
-
-		boolean matches = true;
+	private UserDetailsServiceImpl userDetailsServiceImpl;
 	 
-
-		User user = new User();
-		user.setPassword(encodePass);
+ 	@MockBean
+ 	private BCryptPasswordEncoder passwordEncoder;
+ 	
+	private User user;
+	
+	private Optional<User> optionaluser;
+	
+ 	 
+	 {
+		user = new User();
+		user.setUsername("moorthy@capeindia.net");
+		user.setPassword("moorthy");
 		user.setUsername("thiru");
 		user.setEmail("moorthy@capeindia.net");
 		user.setUserexist(true);
 		user.setActive(true);
-		when(passwordEncoder.matches("moorthy", encodePass)).thenReturn(matches);
-		
-		Optional<User> optionaluser = Optional.of(user);
+
+		optionaluser = Optional.of(user);
+	}
+
+	@Test
+	public void testFindByUserName() throws UserException {
 
 		when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
-		userDetailsServiceImpl.changePassword("moorthy@capeindia.net", "moorthy", "moorthy123");
+		userDetailsServiceImpl.findByUserName("moorthy@capeindia.net");
 
-		 
+		Assertions.assertThrows(UserException.class, () -> userDetailsServiceImpl.findByUserName(null));
+
+		when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(null);
+		Assertions.assertThrows(UserException.class,
+				() -> userDetailsServiceImpl.findByUserName("moorthy@capeindia.net"));
+
+	}
+
+	@Test
+	public void testChangePassword() throws ChangePasswordException {
+		BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
+	    
+		String encodePass = encode.encode("moorthy");
+		optionaluser.get().setPassword(encodePass);
+		
+		when(passwordEncoder.matches("moorthy", encodePass)).thenReturn(true);
+ 		
+		when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
+		userDetailsServiceImpl.changePassword("moorthy@capeindia.net", "moorthy", "moorthy123");
+			 
+		Assertions.assertThrows(ChangePasswordException.class,
+				() -> userDetailsServiceImpl.changePassword("moorthy@capeindia.net", "moorthy1", "moorthy123"));
+		
+		optionaluser.get().setPassword(encodePass);
+		Assertions.assertThrows(ChangePasswordException.class,
+				() -> userDetailsServiceImpl.changePassword("moorthy@capeindia.net", "moorthy", "moorthy"));
+
+		user.setUserexist(false);
+ 		Assertions.assertThrows(null ,
+				() -> userDetailsServiceImpl.changePassword("moorthy@capeindia.net", "moorthy", "moorthy123"));
+				 
 	}
 
 	
 	  @Test 
-	  void testUpdatedPassword() throws UserException {
+	  public void testUpdatedPassword() throws UserException,Throwable{
  
-			User user = new User();
- 			user.setEmail("moorthy@capeindia.net");
-			user.setUserexist(true);
-			user.setActive(true);
-			Optional<User> optionaluser = Optional.of(user);
+			when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
 
-			  when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
-			  
-			  when(userDetailsServiceImpl.updatePassword("moorthy@capeindia.net","moorthy123")).thenReturn(user); }
-	  
+			userDetailsServiceImpl.updatePassword("moorthy@capeindia.net", "moorthy123");
+
+			Assertions.assertThrows(UsernameNotFoundException.class,
+					() -> userDetailsServiceImpl.updatePassword(null, "moorthy123"));
+
+			user.setUserexist(false);
+			Assertions.assertThrows(UserException.class,
+					() -> userDetailsServiceImpl.updatePassword("moorthy@capeindia.net", "moorthy123"));
+
+	  }
 	 
 }
