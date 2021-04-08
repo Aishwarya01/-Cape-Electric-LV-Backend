@@ -13,4 +13,8 @@ public interface ApplicationTypesService {
 	public List<ApplicationTypes> retrieveTypes();
 	
 	public ApplicationTypes addApplicationTypes(ApplicationTypes types);
+	
+	public ApplicationTypes updateApplicationTypes(Integer id, String types);
+	
+	public void deleteApplicationType(Integer id);
 }
