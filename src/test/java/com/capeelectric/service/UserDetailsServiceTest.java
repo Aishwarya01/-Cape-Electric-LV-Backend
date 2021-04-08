@@ -92,9 +92,8 @@ public class UserDetailsServiceTest {
 		assertEquals("Old password cannot be entered as new password", assertThrows2.getMessage());
 
 		user.setUserexist(false);
-		Assertions.assertThrows(null,
-				() -> userDetailsServiceImpl.changePassword("moorthy@capeindia.net", "moorthy", "moorthy123"));
-
+		User changePassword2 = userDetailsServiceImpl.changePassword("moorthy@capeindia.net", "moorthy", "moorthy123");
+		assertNull(changePassword2);
 	}
 
 	@Test
