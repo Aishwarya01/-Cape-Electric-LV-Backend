@@ -97,7 +97,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/retrieveUserInformation/{email}")
-	public User retrieveUserInforamtion(@PathVariable String email) throws UserException {
+	public User retrieveUserInformation(@PathVariable String email) throws UserException {
 		return userService.retrieveUserInformation(email);
 	}
 	
