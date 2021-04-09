@@ -73,23 +73,14 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	public Company retriveCompany(String userName) throws CompanyDetailsException {
-		int i = 0;
+	public List<Company> retriveCompany(String userName) throws CompanyDetailsException {
+
 		if (userName != null) {
-			List<Company> companyDetails = companyRepository.findByUserName(userName);
-			for (Company company : companyDetails) {
-				if (company.getUserName().equalsIgnoreCase(userName) && i == 0) {
-					++i;
-					return company;
-				} else {
-					throw new CompanyDetailsException("username not present");
-				}
-			}
+			return companyRepository.findByUserName(userName);
+
 		} else {
 			throw new CompanyDetailsException("username required");
 		}
-
-		return null;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.capeelectric.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +48,11 @@ public class CompanyController {
 		return new ResponseEntity<String>("Record Deleted", HttpStatus.OK);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@GetMapping("/retriveCompany/{userName}")
-	public ResponseEntity<Company> retriveCompany(@PathVariable String userName) throws CompanyDetailsException {
+	public ResponseEntity<List> retriveCompany(@PathVariable String userName) throws CompanyDetailsException {
 		logger.info("called updateCompany function clientName: {}", userName);
-		Company company = companyService.retriveCompany(userName);
-		return new ResponseEntity<Company>(company, HttpStatus.OK);
+		List<Company> retriveCompany = companyService.retriveCompany(userName);
+		return new ResponseEntity<List>(retriveCompany, HttpStatus.OK);
 	}
 }
