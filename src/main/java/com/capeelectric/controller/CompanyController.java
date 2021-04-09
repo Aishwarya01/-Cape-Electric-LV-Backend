@@ -41,7 +41,7 @@ public class CompanyController {
 		return new ResponseEntity<String>("Record Updated", HttpStatus.OK);
 	}
 
-	@PostMapping("/deletecompany/{userName}")
+	@GetMapping("/deletecompany/{userName}")
 	public ResponseEntity<String> deleteCompany(@PathVariable String userName) throws CompanyDetailsException {
 		logger.info("called updateCompany function clientName: {}", userName);
 		companyService.deleteCompany(userName);
