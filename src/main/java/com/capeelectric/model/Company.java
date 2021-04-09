@@ -5,37 +5,43 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
-  
 /**
  * The persistent class for the company_table database table.
  * 
  */
 @Entity
-@Table(name = "company_table")
+@Table(name = "COMPANY_TABLE")
 @NamedQueries(value = {
-		@NamedQuery(name = "Company.findByClientName",
-				query = "select c.clientName from Company c where c.clientName=?1")
-})
-
+		@NamedQuery(name = "CompanyRepository.findByClientName", query = "select c.clientName from Company c where c.clientName=:clientName"),
+		@NamedQuery(name = "CompanyRepository.findByUserName", query = "select c from Company c") })
+ 
 public class Company implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="COMPANY_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "COMPANY_ID")
 	private Integer companyId;
+	
+	@Column(name = "USER_NAME")
+	private String userName;
 
 	@Column(name = "CLIENT_NAME")
 	private String clientName;
 
+	@Column(name = "CREATED_BY")
 	private String createdBy;
 
+	@Column(name = "UPDATED_BY")
 	private String updatedBy;
 
+	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 
+	@Column(name = "IN_ACTIVE")
 	private Byte inactive;
 
+	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 
 	public Company() {
@@ -47,6 +53,14 @@ public class Company implements Serializable {
 
 	public void setCompanyId(Integer companyId) {
 		this.companyId = companyId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getClientName() {
