@@ -14,8 +14,9 @@ import javax.persistence.*;
 @NamedQueries(value = {
 		@NamedQuery(name = "CompanyRepository.findByClientName", query = "select c.clientName from Company c where c.clientName=:clientName"),
 		@NamedQuery(name = "CompanyRepository.findByUserName", query = "select c from Company c") })
- 
+
 public class Company implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
