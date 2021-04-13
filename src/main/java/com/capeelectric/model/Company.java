@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "COMPANY_TABLE")
 @NamedQueries(value = {
-		@NamedQuery(name = "CompanyRepository.findByClientName", query = "select c.clientName from Company c where c.clientName=:clientName"),
+		@NamedQuery(name = "Company.findByClientName", query = "select c.clientName from Company c where c.clientName=?1"),
 		@NamedQuery(name = "CompanyRepository.findByUserName", query = "select c from Company c")})
 
 public class Company implements Serializable {

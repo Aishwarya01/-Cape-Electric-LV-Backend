@@ -3,12 +3,9 @@ package com.capeelectric.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.capeelectric.controller.CompanyController;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Company;
 import com.capeelectric.repository.CompanyRepository;
@@ -16,10 +13,11 @@ import com.capeelectric.service.CompanyService;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
-	private static final Logger logger = LoggerFactory.getLogger(CompanyController.class);
 
 	@Autowired
 	private CompanyRepository companyRepository;
+	
+	Boolean flag=false;
 
 	@Override
 	public Company addcompany(Company company) throws CompanyDetailsException {
@@ -41,10 +39,12 @@ public class CompanyServiceImpl implements CompanyService {
 			for (Company companyUserName : companyDetails) {
 				if (companyUserName.getUserName().equalsIgnoreCase(company.getUserName())) {
 					companyRepository.save(company);
+					flag = true;
 					break;
-				} else {
-					throw new CompanyDetailsException("username not present");
 				}
+			}
+			if (!flag) {
+				throw new CompanyDetailsException("username not present");
 			}
 
 		} else {
@@ -60,10 +60,12 @@ public class CompanyServiceImpl implements CompanyService {
 			for (Company company : companyDetails) {
 				if (company.getUserName().equalsIgnoreCase(userName)) {
 					companyRepository.delete(company);
+					flag = true;
 					break;
-				} else {
-					throw new CompanyDetailsException("username not present");
 				}
+			}
+			if (!flag) {
+				throw new CompanyDetailsException("username not present");
 			}
 
 		} else {

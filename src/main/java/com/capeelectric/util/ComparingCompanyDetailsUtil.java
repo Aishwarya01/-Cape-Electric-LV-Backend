@@ -23,7 +23,7 @@ public class ComparingCompanyDetailsUtil {
 					findByClientName.contains(clientName));
 			return true;
 		} else {
-			throw new CompanyDetailsException("specifed companyClientname not avilble");
+			throw new CompanyDetailsException("specifed companyClientname not present");
 
 		}
 
@@ -52,13 +52,13 @@ public class ComparingCompanyDetailsUtil {
 							departmentDepartmentNames.contains(siteDepartmentName));
 					return true;
 				} else {
-					throw new CompanyDetailsException("specifed departmentDepartmentName not avilble");
+					throw new CompanyDetailsException("specifed departmentDepartmentName not present");
 				}
 			} else {
-				throw new CompanyDetailsException("specifed departmentClientName not avilble");
+				throw new CompanyDetailsException("specifed departmentClientName not present");
 			}
 		} else {
-			throw new CompanyDetailsException("specifed companyClientname not avilble");
+			throw new CompanyDetailsException("specifed companyClientname not present");
 		}
 	}
 

@@ -52,7 +52,6 @@ public class CompanyController {
 	@GetMapping("/retriveCompany/{userName}")
 	public ResponseEntity<List> retriveCompany(@PathVariable String userName) throws CompanyDetailsException {
 		logger.info("called updateCompany function clientName: {}", userName);
-		List<Company> retriveCompany = companyService.retriveCompany(userName);
-		return new ResponseEntity<List>(retriveCompany, HttpStatus.OK);
+		return new ResponseEntity<List>(companyService.retriveCompany(userName), HttpStatus.OK);
 	}
 }

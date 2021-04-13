@@ -4,6 +4,13 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
+
+
 
 /**
  * The persistent class for the site_table database table.
@@ -11,41 +18,94 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "site_table")
-//@NamedQuery(name="SiteTable.findAll", query="SELECT s FROM SiteTable s")
+@NamedQueries(value = {
+		 @NamedQuery(name = "siteRepository.findByUserNameAndClientNameAndSite", query = "select s from Site s where s.userName=:userName and s.clientName=:clientName and s.departmentName=:departmentName")
+})
 public class Site implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "SITE_ID")
-	private int siteId;
+	private Integer siteId;
 
+	@NotNull
+	@Column(name = "USER_NAME")
+	private String userName;
+
+	@NotNull
 	@Column(name = "CLIENT_NAME")
 	private String clientName;
 
-	@Column(name = "SITE")
-	private String site;
-
-	private String createdBy;
-
-	private LocalDateTime createdDate;
-
 	@Column(name = "DEPARTMENT_NAME")
+	@NotNull
 	private String departmentName;
 
+	@Column(name = "SITE")
+	@NotNull
+	@NotEmpty
+	private String site;
+
+	@Column(name = "PERSON_INCHARGE")
+	@NotNull
+	@NotEmpty
+	private String personIncharge;
+	
+	@Column(name = "E_MAIL")
+	@NotNull
+	@NotEmpty
+	private String email;
+
+	@Column(name = "ADDRESSLINE_1")
+	private String addressLine_1;
+
+	@Column(name = "ADDRESSLINE_2")
+	private String addressLine_2;
+
+	@Column(name = "LAND_MARK")
+	private String landMark;
+
+	@Column(name = "CITY")
+	private String city;
+
+	@Column(name = "STATE")
+	private String state;
+
+	@Column(name = "COUNTRY")
+	private String country;
+
+	@Column(name = "ZIP_CODE")
+	private String zipCode;
+
+	@Column(name = "PHONE_NUMBER")
+	private String phoneNumber;
+
+	@Column(name = "CREATED_BY")
+	private String createdBy;
+
+	@Column(name = "CREATED_DATE")
+	private LocalDateTime createdDate;
+
+	@Column(name = "UPDATED_BY")
 	private String updatedBy;
 
+	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 
-	public Site() {
-	}
-
-	public int getSiteId() {
+	public Integer getSiteId() {
 		return siteId;
 	}
 
-	public void setSiteId(int siteId) {
+	public void setSiteId(Integer siteId) {
 		this.siteId = siteId;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getClientName() {
@@ -56,12 +116,100 @@ public class Site implements Serializable {
 		this.clientName = clientName;
 	}
 
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
 	public String getSite() {
 		return site;
 	}
 
 	public void setSite(String site) {
 		this.site = site;
+	}
+
+	public String getPersonIncharge() {
+		return personIncharge;
+	}
+
+	public void setPersonIncharge(String personIncharge) {
+		this.personIncharge = personIncharge;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAddressLine_1() {
+		return addressLine_1;
+	}
+
+	public void setAddressLine_1(String addressLine_1) {
+		this.addressLine_1 = addressLine_1;
+	}
+
+	public String getAddressLine_2() {
+		return addressLine_2;
+	}
+
+	public void setAddressLine_2(String addressLine_2) {
+		this.addressLine_2 = addressLine_2;
+	}
+
+	public String getLandMark() {
+		return landMark;
+	}
+
+	public void setLandMark(String landMark) {
+		this.landMark = landMark;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getCreatedBy() {
@@ -80,14 +228,6 @@ public class Site implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public String getDepartmentName() {
-		return departmentName;
-	}
-
-	public void setDepartmentName(String departmentName) {
-		this.departmentName = departmentName;
-	}
-
 	public String getUpdatedBy() {
 		return updatedBy;
 	}
@@ -103,5 +243,4 @@ public class Site implements Serializable {
 	public void setUpdatedDate(LocalDateTime updatedDate) {
 		this.updatedDate = updatedDate;
 	}
-
 }
