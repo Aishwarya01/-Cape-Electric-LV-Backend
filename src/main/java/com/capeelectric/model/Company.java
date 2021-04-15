@@ -40,7 +40,7 @@ public class Company implements Serializable {
 	private LocalDateTime createdDate;
 
 	@Column(name = "IN_ACTIVE")
-	private Byte inactive;
+	private Boolean inactive;
 
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
@@ -96,11 +96,11 @@ public class Company implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public Byte getInactive() {
+	public Boolean getInactive() {
 		return inactive;
 	}
 
-	public void setInactive(Byte inactive) {
+	public void setInactive(Boolean inactive) {
 		this.inactive = inactive;
 	}
 

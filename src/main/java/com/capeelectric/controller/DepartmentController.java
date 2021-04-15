@@ -31,7 +31,7 @@ public class DepartmentController {
 	@Autowired
 	private CompanyRepository companyRepository; // TODO delete this line
 
-	@PostMapping("/adddepartment")
+	@PostMapping("/addDepartment")
 	public ResponseEntity<String> addDepartment(@RequestBody Department department) throws CompanyDetailsException {
 
 		logger.debug(
@@ -46,7 +46,7 @@ public class DepartmentController {
 		return new ResponseEntity<String>("Record inserted", HttpStatus.OK);
 	}
 
-	@PutMapping("/updatedepartment")
+	@PutMapping("/updateDepartment")
 	public ResponseEntity<String> updateDepartment(@RequestBody Department department) throws CompanyDetailsException {
 		logger.info("called updateDepartment function clientName: {},DepartmentName :{}", department.getUserName(),
 				department.getDepartmentName());
@@ -54,7 +54,7 @@ public class DepartmentController {
 		return new ResponseEntity<String>("Record Updated", HttpStatus.OK);
 	}
 
-	@PostMapping("/deletedepartment")
+	@PostMapping("/deleteDepartment")
 	public ResponseEntity<String> deleteDepartment(@RequestBody Department department) throws CompanyDetailsException {
 		logger.info("called deleteDepartment function clientName: {},DepartmentName :{}", department.getUserName(),
 				department.getClientName());
@@ -63,7 +63,7 @@ public class DepartmentController {
 	}
 
 	@SuppressWarnings("rawtypes")
-	@PostMapping("/retrivedepartment")
+	@PostMapping("/retriveDepartment")
 	public ResponseEntity<List> retriveDepartment(@RequestBody Department department) throws CompanyDetailsException {
 		logger.info("called retriveDepartment function clientName: {},DepartmentName :{}", department.getUserName(),
 				department.getClientName());

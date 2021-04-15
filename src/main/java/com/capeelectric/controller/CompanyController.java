@@ -27,28 +27,27 @@ public class CompanyController {
 	@Autowired
 	private CompanyService companyService;
 
-	@PostMapping("/addcompany")
-	public ResponseEntity<String> addcompany(@RequestBody Company company) throws CompanyDetailsException {
+	@PostMapping("/addCompany")
+	public ResponseEntity<String> addCompany(@RequestBody Company company) throws CompanyDetailsException {
 		logger.info("called InsertCompany function clientName: {}", company.getClientName());
 		companyService.addcompany(company);
 		return new ResponseEntity<String>(company.getClientName(), HttpStatus.OK);
 	}
 
-	@PostMapping("/updatecompany")
+	@PostMapping("/updateCompany")
 	public ResponseEntity<String> updateCompany(@RequestBody Company company) throws CompanyDetailsException {
 		logger.info("called updateCompany function clientName: {}", company.getUserName());
 		companyService.updateCompany(company);
 		return new ResponseEntity<String>("Record Updated", HttpStatus.OK);
 	}
 
-	@GetMapping("/deletecompany/{userName}")
+	@GetMapping("/deleteCompany/{userName}")
 	public ResponseEntity<String> deleteCompany(@PathVariable String userName) throws CompanyDetailsException {
 		logger.info("called updateCompany function clientName: {}", userName);
 		companyService.deleteCompany(userName);
 		return new ResponseEntity<String>("Record Deleted", HttpStatus.OK);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@GetMapping("/retriveCompany/{userName}")
 	public ResponseEntity<List> retriveCompany(@PathVariable String userName) throws CompanyDetailsException {
 		logger.info("called updateCompany function clientName: {}", userName);

@@ -33,7 +33,7 @@ public class SiteController {
 	@Autowired
 	private DepartmentRepository departmentRepository; // TODO delete this line
 
-	@PostMapping("/addsite")
+	@PostMapping("/addSite")
 	public ResponseEntity<String> addSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.info("called SiteController_Class insertSite_function ClientName : {},Department : {}, Site : {}",
 				site.getClientName(), site.getDepartmentName(), site.getSite());
@@ -50,7 +50,7 @@ public class SiteController {
 
 	}
 
-	@PutMapping("/updatesite")
+	@PutMapping("/updateSite")
 	public ResponseEntity<String> updateSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.info("called updateSite function clientName: {},Department : {}, Site : {}", site.getUserName(),
 				site.getDepartmentName(), site.getSite());
@@ -66,8 +66,7 @@ public class SiteController {
 		return new ResponseEntity<String>("Record Updated", HttpStatus.OK);
 	}
 
-	@SuppressWarnings("rawtypes")
-	@PostMapping("/retrivesite")
+ 	@PostMapping("/retriveSite")
 	public ResponseEntity<List> retriveSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.info("called retriveSite function clientName: {},Department : {}, Site : {}", site.getUserName(),
 				site.getDepartmentName(), site.getSite());

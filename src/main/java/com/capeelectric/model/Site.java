@@ -29,32 +29,23 @@ public class Site implements Serializable {
 	@Column(name = "SITE_ID")
 	private Integer siteId;
 
-	@NotNull
 	@Column(name = "USER_NAME")
 	private String userName;
 
-	@NotNull
-	@Column(name = "CLIENT_NAME")
+ 	@Column(name = "CLIENT_NAME")
 	private String clientName;
 
 	@Column(name = "DEPARTMENT_NAME")
-	@NotNull
-	private String departmentName;
+ 	private String departmentName;
 
 	@Column(name = "SITE")
-	@NotNull
-	@NotEmpty
-	private String site;
+ 	private String site;
 
 	@Column(name = "PERSON_INCHARGE")
-	@NotNull
-	@NotEmpty
 	private String personIncharge;
 	
 	@Column(name = "E_MAIL")
-	@NotNull
-	@NotEmpty
-	private String email;
+ 	private String email;
 
 	@Column(name = "ADDRESSLINE_1")
 	private String addressLine_1;
