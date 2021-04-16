@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedQueries;
@@ -85,6 +87,18 @@ public class Site implements Serializable {
 
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
+	
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="DEPARTMENT_ID")
+	private Department department;
 
 	public Integer getSiteId() {
 		return siteId;

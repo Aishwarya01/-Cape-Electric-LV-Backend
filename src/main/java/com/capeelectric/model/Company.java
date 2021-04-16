@@ -51,7 +51,7 @@ public class Company implements Serializable {
 	private LocalDateTime createdDate;
 
 	@Column(name = "IN_ACTIVE")
-	private boolean inactive;
+	private boolean inActive;
 
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
