@@ -118,12 +118,12 @@ public class Company implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public Boolean getInactive() {
+	public Boolean getInActive() {
 		return inActive;
 	}
 
-	public void setInactive(Boolean inactive) {
-		this.inActive = inactive;
+	public void setInActive(Boolean inActive) {
+		this.inActive = inActive;
 	}
 
 	public LocalDateTime getUpdatedDate() {
