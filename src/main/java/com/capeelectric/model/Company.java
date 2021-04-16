@@ -2,8 +2,19 @@ package com.capeelectric.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 
 /**
  * The persistent class for the company_table database table.
@@ -40,12 +51,23 @@ public class Company implements Serializable {
 	private LocalDateTime createdDate;
 
 	@Column(name = "IN_ACTIVE")
-	private Boolean inactive;
+	private boolean inactive;
 
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
+	
+	@OneToMany(mappedBy="company", fetch=FetchType.EAGER,targetEntity = Department.class)
+	private List<Department> department;
 
 	public Company() {
+	}
+
+	public List<Department> getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(List<Department> department) {
+		this.department = department;
 	}
 
 	public Integer getCompanyId() {

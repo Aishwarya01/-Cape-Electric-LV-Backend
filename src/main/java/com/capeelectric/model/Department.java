@@ -44,6 +44,21 @@ public class Department implements Serializable {
 
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
+	
+	@ManyToOne
+	@JoinColumn(name="COMPANY_ID")
+	private Company company;
+//	
+//	@OneToMany(mappedBy="department", fetch=FetchType.EAGER,targetEntity = Site.class)
+//	private List<Site> site;
+//
+//	public List<Site> getSite() {
+//		return site;
+//	}
+//
+//	public void setSite(List<Site> site) {
+//		this.site = site;
+//	}
 
 	public Integer getDepartmentId() {
 		return departmentId;
@@ -108,5 +123,14 @@ public class Department implements Serializable {
 	public void setUpdatedDate(LocalDateTime updatedDate) {
 		this.updatedDate = updatedDate;
 	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
 	
+
 }

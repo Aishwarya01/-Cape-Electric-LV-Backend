@@ -31,7 +31,7 @@ public class CompanyController {
 	public ResponseEntity<String> addCompany(@RequestBody Company company) throws CompanyDetailsException {
 		logger.info("called InsertCompany function clientName: {}", company.getClientName());
 		companyService.addcompany(company);
-		return new ResponseEntity<String>(company.getClientName(), HttpStatus.OK);
+		return new ResponseEntity<String>("Record added successfully", HttpStatus.OK);
 	}
 
 	@PostMapping("/updateCompany")
