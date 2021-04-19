@@ -2,6 +2,7 @@ package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,79 +25,68 @@ public class SiteServiceImpl implements SiteService {
 	Boolean flag=false;
 
 	@Override
-	public Site insertSite(Site site, Boolean clientNameDeptCompanrison_Site)
-			throws CompanyDetailsException {
+	public void insertSite(Site site, Boolean clientNameDeptCompanrison_Site) throws CompanyDetailsException {
 		logger.debug("called SiteServiceImpl_class insertSite_function");
-		if (site.getClientName() == null) {
-			throw new CompanyDetailsException("ClientName Required");
-		}
-		else if (site.getDepartmentName() == null) {
-			throw new CompanyDetailsException("DepartmentName Required");
-		}
-		else if (clientNameDeptCompanrison_Site == false) {
-			throw new CompanyDetailsException(
-					" specified clientName departmentName not matched");
+		if (site.getClientName() != null && site.getDepartmentName() != null) {
+			if (clientNameDeptCompanrison_Site != false) {
+				List<Site> siteRepo = siteRepository.findByUserNameAndClientNameAndDepartmentName(site.getUserName(),
+						site.getClientName(), site.getDepartmentName());
+				for (Site sites : siteRepo) {
+					if (sites.getSite().equalsIgnoreCase(site.getSite())) {
+						flag = true;
+						throw new CompanyDetailsException("site already present");
+					}
+				}
+			}
+			if (!false) {
+				site.setCreatedDate(LocalDateTime.now());
+				site.setUpdatedDate(LocalDateTime.now());
+				siteRepository.save(site);
+
+			}
+		} else {
+			throw new CompanyDetailsException("invalid inputs");
 		}
 
-		else {
-			site.setCreatedDate(LocalDateTime.now());
-			site.setUpdatedDate(LocalDateTime.now());
-		}
-
-		return siteRepository.save(site);
 	}
 
 	@Override
-	public void updateSite(Site site) throws CompanyDetailsException {
-		if (site.getDepartmentName() != null && site.getClientName() != null
-				&& site.getUserName() != null) {
- 			List<Site> username = siteRepository.findByUserNameAndClientNameAndDepartmentName(site.getUserName(),site.getClientName(),site.getDepartmentName());
- 			logger.info("called updateDepartment function clientName: {}", username);
-			for (Site siteRepo : username) {
-				if (siteRepo.getSiteId().equals(site.getSiteId())) {
-					if (siteRepo.getUserName().equalsIgnoreCase(site.getUserName())) {
-						if (siteRepo.getClientName().equalsIgnoreCase(site.getClientName())) {
-							siteRepository.save(site);
-							flag = true;
-							break;
-						} 
-					} 
+	public void updateSite(Site site, Boolean clientNameDeptCompanrison_Site) throws CompanyDetailsException {
+		if (site.getDepartmentName() != null && site.getClientName() != null && site.getUserName() != null
+				&& site.getSiteId() != null) {
+			Optional<Site> siteRepo = siteRepository.findById(site.getSiteId());
+			if (clientNameDeptCompanrison_Site) {
+				if (siteRepo.get().getSiteId().equals(site.getSiteId())) {
+					site.setUpdatedDate(LocalDateTime.now());
+					siteRepository.save(site);
+
+				} else {
+					throw new CompanyDetailsException("site not present");
 				}
-				if (!flag) {
-					throw new CompanyDetailsException("data not present");
-				}
+			} else {
+				throw new CompanyDetailsException(" specified clientName departmentName not matched");
 			}
-	
+
 		} else {
-			throw new CompanyDetailsException("invalid required");
-		}		
+			throw new CompanyDetailsException("invalid inputs");
+		}
 	}
 
 	@Override
-	public void deleteSite(Site site) throws CompanyDetailsException {
-		if (site.getDepartmentName() != null && site.getClientName() != null
-				&& site.getUserName() != null) {
- 			List<Site> username = siteRepository.findByUserNameAndClientNameAndDepartmentName(site.getUserName(),site.getClientName(),site.getDepartmentName());
- 			logger.info("called updateDepartment function clientName: {}", username);
-			for (Site siteRepo : username) {
-				if (siteRepo.getSiteId().equals(site.getSiteId())) {
-					if (siteRepo.getUserName().equalsIgnoreCase(site.getUserName())) {
-						if (siteRepo.getClientName().equalsIgnoreCase(site.getClientName())) {
-							siteRepository.delete(site);
-							flag = true;
-							break;
-						} 
-					} 
-				}
-				if (!flag) {
-					throw new CompanyDetailsException("data not present");
-				}
+	public void deleteSite(Integer siteId) throws CompanyDetailsException {
+		if (siteId != null && siteId != 0) {
+			Optional<Site> site = siteRepository.findById(siteId);
+
+			if (site.get().getSiteId().equals(siteId)) {
+				siteRepository.deleteById(siteId);
+			} else {
+				throw new CompanyDetailsException("invaild site");
 			}
-	
+
 		} else {
-			throw new CompanyDetailsException("invalid required");
+			throw new CompanyDetailsException("invalid input");
 		}
-		
+
 	}
 
 	@Override

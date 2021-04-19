@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,8 +47,7 @@ public class SiteController {
 				clientNameDeptCompanrison_Site);
 
 		siteService.insertSite(site, clientNameDeptCompanrison_Site);
-		return new ResponseEntity<String>(site.getClientName() + " " + site.getDepartmentName() + "  " + site.getSite(),
-				HttpStatus.OK);
+		return new ResponseEntity<String>("successfully added Site", HttpStatus.OK);
 
 	}
 
@@ -54,23 +55,25 @@ public class SiteController {
 	public ResponseEntity<String> updateSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.info("called updateSite function clientName: {},Department : {}, Site : {}", site.getUserName(),
 				site.getDepartmentName(), site.getSite());
-		siteService.updateSite(site);
-		return new ResponseEntity<String>("Record Updated", HttpStatus.OK);
+		Boolean clientNameDeptCompanrison_Site = ComparingCompanyDetailsUtil.clientNameDeptCompanrison_Site(
+				site.getClientName(), site.getDepartmentName(), companyRepository, departmentRepository);
+		siteService.updateSite(site,clientNameDeptCompanrison_Site);
+		return new ResponseEntity<String>("Site Updated", HttpStatus.OK);
 	}
 
-	@PostMapping("/deleteSite")
-	public ResponseEntity<String> deleteSite(@RequestBody Site site) throws CompanyDetailsException {
-		logger.info("called deleteSite function clientName: {},Department : {}, Site : {}", site.getUserName(),
-				site.getDepartmentName(), site.getSite());
-		siteService.deleteSite(site);
-		return new ResponseEntity<String>("Record Updated", HttpStatus.OK);
+	@GetMapping("/deleteSite/{siteId}")
+	public ResponseEntity<String> deleteSite(@PathVariable Integer siteId) throws CompanyDetailsException {
+		logger.info("called deleteSite function siteId: {}",siteId);
+		siteService.deleteSite(siteId);
+		return new ResponseEntity<String>("Site Updated", HttpStatus.OK);
 	}
 
- 	@PostMapping("/retriveSite")
-	public ResponseEntity<List> retriveSite(@RequestBody Site site) throws CompanyDetailsException {
-		logger.info("called retriveSite function clientName: {},Department : {}, Site : {}", site.getUserName(),
-				site.getDepartmentName(), site.getSite());
-		return new ResponseEntity<List>(siteService.retriveSite(site), HttpStatus.OK);
-	}
+	/*
+	 * @PostMapping("/retriveSite") public ResponseEntity<List>
+	 * retriveSite(@RequestBody Site site) throws CompanyDetailsException { logger.
+	 * info("called retriveSite function clientName: {},Department : {}, Site : {}",
+	 * site.getUserName(), site.getDepartmentName(), site.getSite()); return new
+	 * ResponseEntity<List>(siteService.retriveSite(site), HttpStatus.OK); }
+	 */
 
 }

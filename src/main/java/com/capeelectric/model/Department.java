@@ -2,9 +2,21 @@ package com.capeelectric.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * The persistent class for the department_table database table.
@@ -50,14 +62,14 @@ public class Department implements Serializable {
 	@JoinColumn(name="COMPANY_ID")
 	private Company company;
 	
-	@OneToMany(mappedBy="department",  cascade = CascadeType.ALL,targetEntity = Site.class)
-	private List<Site> site;
+	@OneToMany(mappedBy="department",fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+	private Set<Site> site;
 
-	public List<Site> getSite() {
+	public Set<Site> getSite() {
 		return site;
 	}
 
-	public void setSite(List<Site> site) {
+	public void setSite(Set<Site> site) {
 		this.site = site;
 	}
 
@@ -125,13 +137,13 @@ public class Department implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
-	public Company getCompany() {
-		return company;
-	}
+	
+//	public Company getCompany() {
+//		return company;
+//	}
 
 	public void setCompany(Company company) {
 		this.company = company;
 	}
-	
 
 }
