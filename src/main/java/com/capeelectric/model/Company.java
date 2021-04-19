@@ -2,11 +2,12 @@ package com.capeelectric.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,22 +52,22 @@ public class Company implements Serializable {
 	private LocalDateTime createdDate;
 
 	@Column(name = "IN_ACTIVE")
-	private boolean inactive;
+	private boolean inActive;
 
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 	
-	@OneToMany(mappedBy="company", cascade = CascadeType.ALL,targetEntity = Department.class)
-	private List<Department> department;
+	@OneToMany(mappedBy="company", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private Set<Department> department;
 
 	public Company() {
 	}
 
-	public List<Department> getDepartment() {
+	public Set<Department> getDepartment() {
 		return department;
 	}
 
-	public void setDepartment(List<Department> department) {
+	public void setDepartment(Set<Department> department) {
 		this.department = department;
 	}
 
@@ -118,12 +119,12 @@ public class Company implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public Boolean getInactive() {
-		return inactive;
+	public Boolean getInActive() {
+		return inActive;
 	}
 
-	public void setInactive(Boolean inactive) {
-		this.inactive = inactive;
+	public void setInActive(Boolean inActive) {
+		this.inActive = inActive;
 	}
 
 	public LocalDateTime getUpdatedDate() {
