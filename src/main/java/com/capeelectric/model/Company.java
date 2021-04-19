@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +24,7 @@ import javax.persistence.Table;
 @Table(name = "COMPANY_TABLE")
 @NamedQueries(value = {
 		@NamedQuery(name = "Company.findByClientName", query = "select c.clientName from Company c where c.clientName=?1"),
-		@NamedQuery(name = "CompanyRepository.findByUserName", query = "select c from Company c")})
+		@NamedQuery(name = "CompanyRepository.findByUserName", query = "select c from Company c where c.userName=:userName")})
 
 public class Company implements Serializable {
 	
@@ -51,12 +51,12 @@ public class Company implements Serializable {
 	private LocalDateTime createdDate;
 
 	@Column(name = "IN_ACTIVE")
-	private boolean inActive;
+	private boolean inactive;
 
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 	
-	@OneToMany(mappedBy="company", fetch=FetchType.EAGER,targetEntity = Department.class)
+	@OneToMany(mappedBy="company", cascade = CascadeType.ALL,targetEntity = Department.class)
 	private List<Department> department;
 
 	public Company() {
@@ -118,12 +118,12 @@ public class Company implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public Boolean getInActive() {
-		return inActive;
+	public Boolean getInactive() {
+		return inactive;
 	}
 
-	public void setInActive(Boolean inActive) {
-		this.inActive = inActive;
+	public void setInactive(Boolean inactive) {
+		this.inactive = inactive;
 	}
 
 	public LocalDateTime getUpdatedDate() {

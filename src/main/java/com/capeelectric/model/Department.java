@@ -2,6 +2,7 @@ package com.capeelectric.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -48,17 +49,17 @@ public class Department implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="COMPANY_ID")
 	private Company company;
-//	
-//	@OneToMany(mappedBy="department", fetch=FetchType.EAGER,targetEntity = Site.class)
-//	private List<Site> site;
-//
-//	public List<Site> getSite() {
-//		return site;
-//	}
-//
-//	public void setSite(List<Site> site) {
-//		this.site = site;
-//	}
+	
+	@OneToMany(mappedBy="department",  cascade = CascadeType.ALL,targetEntity = Site.class)
+	private List<Site> site;
+
+	public List<Site> getSite() {
+		return site;
+	}
+
+	public void setSite(List<Site> site) {
+		this.site = site;
+	}
 
 	public Integer getDepartmentId() {
 		return departmentId;

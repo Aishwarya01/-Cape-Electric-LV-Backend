@@ -7,7 +7,7 @@ import com.capeelectric.model.Company;
  
 public interface CompanyService {
 
-	public Company addcompany(Company clientname) throws CompanyDetailsException;
+	public void addcompany(Company clientname) throws CompanyDetailsException;
 
 	public void updateCompany(Company userName) throws CompanyDetailsException;
 

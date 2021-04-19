@@ -30,7 +30,7 @@ public class Site implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "SITE_ID")
 	private Integer siteId;
 
@@ -88,18 +88,10 @@ public class Site implements Serializable {
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 	
-	public Department getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
-	}
-
 	@ManyToOne
 	@JoinColumn(name="DEPARTMENT_ID")
 	private Department department;
-
+	
 	public Integer getSiteId() {
 		return siteId;
 	}
@@ -250,5 +242,13 @@ public class Site implements Serializable {
 
 	public void setUpdatedDate(LocalDateTime updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 }

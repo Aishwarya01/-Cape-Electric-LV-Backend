@@ -17,27 +17,41 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
 	private CompanyRepository companyRepository;
 	
-	Boolean flag=false;
+	
 
 	@Override
-	public Company addcompany(Company company) throws CompanyDetailsException {
+	public void addcompany(Company company) throws CompanyDetailsException {
+		Boolean flag=false;
+		if (company.getClientName() != null) {
+			List<Company> userNamelist = companyRepository.findByUserName(company.getUserName());
+			for (Company companys : userNamelist) {
+				if (companys.getClientName().equalsIgnoreCase(company.getClientName())) {
+					flag = true;
+					break;
+				}
+			}
+			if (!flag) {
+				company.setCreatedDate(LocalDateTime.now());
+				company.setUpdatedDate(LocalDateTime.now());
+				companyRepository.save(company);
+			} else if (flag) {
+				throw new CompanyDetailsException("ClientName already present");
+			}
 
-		if (company.getClientName() == null) {
-			throw new CompanyDetailsException("ClientName Required");
 		} else {
-			company.setCreatedDate(LocalDateTime.now());
-			company.setUpdatedDate(LocalDateTime.now());
+			throw new CompanyDetailsException("invalid input");
 		}
 
-		return companyRepository.save(company);
 	}
 
 	@Override
 	public void updateCompany(Company company) throws CompanyDetailsException {
+		Boolean flag=false;
 		if (company.getUserName() != null) {
 			List<Company> companyDetails = companyRepository.findByUserName(company.getUserName());
 			for (Company companyUserName : companyDetails) {
 				if (companyUserName.getUserName().equalsIgnoreCase(company.getUserName())) {
+					company.setUpdatedDate(LocalDateTime.now());
 					companyRepository.save(company);
 					flag = true;
 					break;
@@ -55,6 +69,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public void deleteCompany(String userName) throws CompanyDetailsException {
+		Boolean flag=false;
 		if (userName != null) {
 			List<Company> companyDetails = companyRepository.findByUserName(userName);
 			for (Company company : companyDetails) {
