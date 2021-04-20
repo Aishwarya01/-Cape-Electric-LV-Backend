@@ -68,18 +68,18 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	public void deleteCompany(String userName) throws CompanyDetailsException {
-		Boolean flag=false;
+	public void deleteCompany(String userName, String clientName) throws CompanyDetailsException {
+
 		if (userName != null) {
-			List<Company> companyDetails = companyRepository.findByUserName(userName);
-			for (Company company : companyDetails) {
-				if (company.getUserName().equalsIgnoreCase(userName)) {
-					companyRepository.delete(company);
-					flag = true;
-					break;
+			Company clientRepo = companyRepository.findByClientName(clientName);
+
+			if (clientRepo.getUserName().equalsIgnoreCase(userName)) {
+				if (clientRepo.getClientName().equalsIgnoreCase(clientName)) {
+					companyRepository.delete(clientRepo);
+				} else {
+					throw new CompanyDetailsException("client not present");
 				}
-			}
-			if (!flag) {
+			} else {
 				throw new CompanyDetailsException("username not present");
 			}
 

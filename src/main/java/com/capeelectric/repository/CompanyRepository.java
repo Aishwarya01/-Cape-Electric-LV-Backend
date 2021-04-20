@@ -9,7 +9,7 @@ import com.capeelectric.model.Company;
 
 @Repository
 public interface CompanyRepository extends CrudRepository<Company, Integer> {
-	List<String> findByClientName(String clientName);
+	Company findByClientName(String clientName);
 
 	List<Company> findByUserName(String userName);
 }

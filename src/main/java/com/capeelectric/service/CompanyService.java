@@ -11,7 +11,7 @@ public interface CompanyService {
 
 	public void updateCompany(Company userName) throws CompanyDetailsException;
 
-	public void deleteCompany(String userName) throws CompanyDetailsException;
+	public void deleteCompany(String userName,String clientname) throws CompanyDetailsException;
 
 	public List<Company> retriveCompany(String userName) throws CompanyDetailsException;
 

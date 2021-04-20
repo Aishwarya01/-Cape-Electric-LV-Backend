@@ -31,21 +31,21 @@ public class CompanyController {
 	public ResponseEntity<String> addCompany(@RequestBody Company company) throws CompanyDetailsException {
 		logger.info("called InsertCompany function clientName: {}", company.getClientName());
 		companyService.addcompany(company);
-		return new ResponseEntity<String>("successfully added Company", HttpStatus.OK);
+		return new ResponseEntity<String>( HttpStatus.CREATED);
 	}
 
 	@PostMapping("/updateCompany")
 	public ResponseEntity<String> updateCompany(@RequestBody Company company) throws CompanyDetailsException {
 		logger.info("called updateCompany function clientName: {}", company.getUserName());
 		companyService.updateCompany(company);
-		return new ResponseEntity<String>("Company Updated", HttpStatus.OK);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
-	@GetMapping("/deleteCompany/{userName}")
-	public ResponseEntity<String> deleteCompany(@PathVariable String userName) throws CompanyDetailsException {
-		logger.info("called updateCompany function clientName: {}", userName);
-		companyService.deleteCompany(userName);
-		return new ResponseEntity<String>("Company Deleted", HttpStatus.OK);
+	@GetMapping("/deleteCompany/{userName}/{clientName}")
+	public ResponseEntity<String> deleteCompany(@PathVariable String userName,@PathVariable String clientName) throws CompanyDetailsException {
+		logger.info("called updateCompany function userName: {},clientName: {}", userName,clientName);
+		companyService.deleteCompany(userName,clientName);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	@GetMapping("/retriveCompany/{userName}")

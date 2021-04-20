@@ -34,4 +34,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
+	@ExceptionHandler({ CompanyDetailsException.class })
+	public ResponseEntity<ErrorMessage> handleCompanyDetailsException(CompanyDetailsException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+	}
+
 }
