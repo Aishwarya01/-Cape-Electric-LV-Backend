@@ -16,28 +16,21 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	private CompanyRepository companyRepository;
-	
-	
 
 	@Override
 	public void addcompany(Company company) throws CompanyDetailsException {
-		Boolean flag=false;
+
 		if (company.getClientName() != null) {
-			List<Company> userNamelist = companyRepository.findByUserName(company.getUserName());
-			for (Company companys : userNamelist) {
-				if (companys.getClientName().equalsIgnoreCase(company.getClientName())) {
-					flag = true;
-					break;
-				}
-			}
-			if (!flag) {
+			Company client = companyRepository.findByClientName(company.getClientName());
+
+			if (client != null && client.getClientName().equalsIgnoreCase(company.getClientName())) {
+				throw new CompanyDetailsException("ClientName already present");
+			} else {
 				company.setCreatedDate(LocalDateTime.now());
 				company.setUpdatedDate(LocalDateTime.now());
 				companyRepository.save(company);
-			} else if (flag) {
-				throw new CompanyDetailsException("ClientName already present");
 			}
-
+			
 		} else {
 			throw new CompanyDetailsException("invalid input");
 		}
@@ -46,23 +39,18 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public void updateCompany(Company company) throws CompanyDetailsException {
-		Boolean flag=false;
 		if (company.getUserName() != null) {
-			List<Company> companyDetails = companyRepository.findByUserName(company.getUserName());
-			for (Company companyUserName : companyDetails) {
-				if (companyUserName.getUserName().equalsIgnoreCase(company.getUserName())) {
-					company.setUpdatedDate(LocalDateTime.now());
-					companyRepository.save(company);
-					flag = true;
-					break;
-				}
-			}
-			if (!flag) {
-				throw new CompanyDetailsException("username not present");
+
+			Company client = companyRepository.findByClientName(company.getClientName());
+			if (client != null && client.getClientName().equalsIgnoreCase(company.getClientName())) {
+				throw new CompanyDetailsException("ClientName not present");
+			} else {
+				company.setUpdatedDate(LocalDateTime.now());
+				companyRepository.save(company);
 			}
 
 		} else {
-			throw new CompanyDetailsException("username required");
+			throw new CompanyDetailsException("ClientName required");
 		}
 
 	}
@@ -70,17 +58,13 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public void deleteCompany(String userName, String clientName) throws CompanyDetailsException {
 
-		if (userName != null) {
+		if (userName != null && clientName != null) {
 			Company clientRepo = companyRepository.findByClientName(clientName);
 
-			if (clientRepo.getUserName().equalsIgnoreCase(userName)) {
-				if (clientRepo.getClientName().equalsIgnoreCase(clientName)) {
-					companyRepository.delete(clientRepo);
-				} else {
-					throw new CompanyDetailsException("client not present");
-				}
+			if (clientRepo != null && clientRepo.getClientName().equalsIgnoreCase(clientName)) {
+				companyRepository.delete(clientRepo);
 			} else {
-				throw new CompanyDetailsException("username not present");
+				throw new CompanyDetailsException("client not present");
 			}
 
 		} else {

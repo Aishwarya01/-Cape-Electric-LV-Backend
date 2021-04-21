@@ -13,11 +13,11 @@ import com.capeelectric.repository.DepartmentRepository;
 public class ComparingCompanyDetailsUtil {
 	private static final Logger logger = LoggerFactory.getLogger(ComparingCompanyDetailsUtil.class);
 
-	public static Boolean clientNameCompanrison_Department(String clientName, CompanyRepository companyRepository)
+	public static Boolean clientNameCompanrison_Department(String departmentClientName, CompanyRepository companyRepository)
 			throws CompanyDetailsException {
-		Company company = companyRepository.findByClientName(clientName);
+		Company company = companyRepository.findByClientName(departmentClientName);
 
-		if (company.getClientName().equalsIgnoreCase(clientName)) {
+		if (company.getClientName().equalsIgnoreCase(departmentClientName)) {
 			logger.info(
 					"ComparingCompanyDetailsUtil class :  DepartmentClientNameComparingFromCompany_Department Company CompanyClientname: {}",
 					company.getClientName());
