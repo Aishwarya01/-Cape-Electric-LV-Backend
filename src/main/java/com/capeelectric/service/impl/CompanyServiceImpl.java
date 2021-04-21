@@ -39,18 +39,26 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public void updateCompany(Company company) throws CompanyDetailsException {
-		if (company.getUserName() != null) {
+		Boolean flag = false;
 
-			Company client = companyRepository.findByClientName(company.getClientName());
-			if (client != null && client.getClientName().equalsIgnoreCase(company.getClientName())) {
-				throw new CompanyDetailsException("ClientName not present");
-			} else {
-				company.setUpdatedDate(LocalDateTime.now());
-				companyRepository.save(company);
+		if (company.getUserName() != null && company.getClientName() != null && company.getCompanyId() != null) {
+
+			List<Company> findByUserName = companyRepository.findByUserName(company.getUserName());
+			for (Company companys : findByUserName) {
+				if (companys.getUserName().equalsIgnoreCase(company.getUserName())
+						&& companys.getCompanyId().equals(company.getCompanyId())) {
+					company.setUpdatedDate(LocalDateTime.now());
+					companyRepository.save(company);
+					flag = true;
+					break;
+				}
+			}
+			if (!flag) {
+				throw new CompanyDetailsException("User not present");
 			}
 
 		} else {
-			throw new CompanyDetailsException("ClientName required");
+			throw new CompanyDetailsException("Client and username required");
 		}
 
 	}
