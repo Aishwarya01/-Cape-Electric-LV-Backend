@@ -35,6 +35,7 @@ public class CompanyServiceImpl implements CompanyService {
 				company.setCreatedDate(LocalDateTime.now());
 				company.setUpdatedDate(LocalDateTime.now());
 				company.setCreatedBy(generateFullName(company.getUserName()));
+				company.setUpdatedBy(generateFullName(company.getUserName()));
 				companyRepository.save(company);
 			}
 			
