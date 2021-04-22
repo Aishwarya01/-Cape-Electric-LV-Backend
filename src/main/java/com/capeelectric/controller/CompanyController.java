@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +36,7 @@ public class CompanyController {
 		return new ResponseEntity<String>( HttpStatus.CREATED);
 	}
 
-	@PostMapping("/updateCompany")
+	@PutMapping("/updateCompany")
 	public ResponseEntity<String> updateCompany(@RequestBody Company company) throws CompanyDetailsException {
 		logger.info("called updateCompany function clientName: {}", company.getUserName());
 		companyService.updateCompany(company);
@@ -50,8 +51,8 @@ public class CompanyController {
 	}
 
 	@GetMapping("/retriveCompany/{userName}")
-	public ResponseEntity<List> retriveCompany(@PathVariable String userName) throws CompanyDetailsException {
+	public ResponseEntity<List<Company>> retriveCompany(@PathVariable String userName) throws CompanyDetailsException {
 		logger.info("called updateCompany function clientName: {}", userName);
-		return new ResponseEntity<List>(companyService.retriveCompany(userName), HttpStatus.OK);
+		return new ResponseEntity<List<Company>>(companyService.retriveCompany(userName), HttpStatus.OK);
 	}
 }
