@@ -2,13 +2,16 @@ package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Company;
+import com.capeelectric.model.User;
 import com.capeelectric.repository.CompanyRepository;
+import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.CompanyService;
 
 @Service
@@ -16,6 +19,9 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	private CompanyRepository companyRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@Override
 	public void addcompany(Company company) throws CompanyDetailsException {
@@ -28,6 +34,7 @@ public class CompanyServiceImpl implements CompanyService {
 			} else {
 				company.setCreatedDate(LocalDateTime.now());
 				company.setUpdatedDate(LocalDateTime.now());
+				company.setCreatedBy(generateFullName(company.getUserName()));
 				companyRepository.save(company);
 			}
 			
@@ -90,6 +97,18 @@ public class CompanyServiceImpl implements CompanyService {
 		} else {
 			throw new CompanyDetailsException("username required");
 		}
+	}
+	
+	/**
+	 * 
+	 * @param userName
+	 * @return
+	 */
+	private String generateFullName(String userName) {
+		Optional<User> user = userRepository.findByUsername(userName);
+		if(user.isPresent() && user.get()!= null) 
+			return user.get().getFirstname() + " "+ user.get().getLastname();
+		return "";
 	}
 
 }
