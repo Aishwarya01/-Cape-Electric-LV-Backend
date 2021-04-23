@@ -55,6 +55,7 @@ public class CompanyServiceImpl implements CompanyService {
 			for (Company companys : findByUserName) {
 				if (companys.getUserName().equalsIgnoreCase(company.getUserName())
 						&& companys.getCompanyId().equals(company.getCompanyId())) {
+					company.setUpdatedBy(generateFullName(company.getUserName()));
 					company.setUpdatedDate(LocalDateTime.now());
 					companyRepository.save(company);
 					flag = true;
