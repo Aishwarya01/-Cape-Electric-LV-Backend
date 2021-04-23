@@ -38,6 +38,9 @@ public class Company implements Serializable {
 	@Column(name = "COMPANY_ID")
 	private Integer companyId;
 	
+	@Column(name="COMPANY_CODE")
+	private String companyCd;
+	
 	@Column(name = "USER_NAME")
 	private String userName;
 
@@ -137,4 +140,11 @@ public class Company implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
+	public String getCompanyCd() {
+		return companyCd;
+	}
+
+	public void setCompanyCd(String companyCd) {
+		this.companyCd = companyCd;
+	}
 }

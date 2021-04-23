@@ -24,6 +24,7 @@ create table applicationtypes(id integer not null, application varchar(255), pri
 
  CREATE TABLE COMPANY_TABLE (
     COMPANY_ID INT AUTO_INCREMENT PRIMARY KEY,
+    COMPANY_CODE VARCHAR(255),
     USER_NAME VARCHAR(255),
     CLIENT_NAME VARCHAR(255),
 	IN_ACTIVE boolean,

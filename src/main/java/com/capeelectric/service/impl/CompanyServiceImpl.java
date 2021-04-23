@@ -26,12 +26,14 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public void addcompany(Company company) throws CompanyDetailsException {
 
+		int count = 0;
 		if (company.getClientName() != null) {
 			Company client = companyRepository.findByClientName(company.getClientName());
 
 			if (client != null && client.getClientName().equalsIgnoreCase(company.getClientName())) {
 				throw new CompanyDetailsException("ClientName already present");
 			} else {
+				company.setCompanyCd(company.getClientName().substring(0, 3).concat("_0")+(count+1));
 				company.setCreatedDate(LocalDateTime.now());
 				company.setUpdatedDate(LocalDateTime.now());
 				company.setCreatedBy(generateFullName(company.getUserName()));
