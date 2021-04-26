@@ -18,6 +18,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 /**
  * The persistent class for the department_table database table.
  * 
@@ -25,10 +28,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "department_table")
 @NamedQueries(value = {
-		  @NamedQuery(name = "Department.findByClientName", query = "select d.clientName from Department d where d.clientName=:clientName"),
-		 @NamedQuery(name = "Department.findByDepartmentName", query = "select d.departmentName from Department d where d.departmentName=:departmentName"),
-		 @NamedQuery(name = "DepartmentRepository.findByUserNameAndClientName", query = "select d from Department d where d.userName=:userName and d.clientName=:clientName")
-})
+		@NamedQuery(name = "DepartmentRepository.findByClientName", query = "select  d from Department d where d.clientName=:clientName"),
+		@NamedQuery(name = "Department.findByDepartmentName", query = "select d.departmentName,d.departmentId from Department d where d.departmentName=:departmentName"),
+		@NamedQuery(name = "DepartmentRepository.findByClientNameAndDepartmentName", query = "select d.departmentName from Department d where d.clientName=:clientName and d.departmentName=:departmentName"), })
 public class Department implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -58,10 +60,12 @@ public class Department implements Serializable {
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="COMPANY_ID")
 	private Company company;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="department",fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	private Set<Site> site;
 
@@ -138,9 +142,9 @@ public class Department implements Serializable {
 	}
 
 	
-//	public Company getCompany() {
-//		return company;
-//	}
+	public Company getCompany() {
+		return company;
+	}
 
 	public void setCompany(Company company) {
 		this.company = company;

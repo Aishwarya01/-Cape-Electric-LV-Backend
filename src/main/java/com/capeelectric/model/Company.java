@@ -16,6 +16,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 /**
  * The persistent class for the company_table database table.
@@ -24,9 +26,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "COMPANY_TABLE")
 @NamedQueries(value = {
-	//	@NamedQuery(name = "Company.findByClientName", query = "select c.clientName from Company c where c.clientName=?1"),
+	@NamedQuery(name = "CompanyRepository.findByUserNameAndClientName", query = "select c.clientName from Company c where c.userName=:userName and c.clientName=:clientName"),
 		@NamedQuery(name = "CompanyRepository.findByUserName", query = "select c from Company c where c.userName=:userName"),
-		@NamedQuery(name = "CompanyRepository.findByClientName", query = "select c from Company c where c.clientName=:clientName")		
+		@NamedQuery(name = "CompanyRepository.findByClientName", query = "select c.clientName from Company c where c.clientName=:clientName")		
 })
 
 public class Company implements Serializable {
@@ -34,13 +36,13 @@ public class Company implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "COMPANY_ID")
 	private Integer companyId;
 	
-	@Column(name="COMPANY_CODE")
-	private String companyCd;
-	
+	@Column(name = "COMPANY_CD")						 
+	private String companyCd;			  
+ 
 	@Column(name = "USER_NAME")
 	private String userName;
 
@@ -62,6 +64,7 @@ public class Company implements Serializable {
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="company", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	private Set<Department> department;
 
@@ -124,11 +127,11 @@ public class Company implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public Boolean getInActive() {
+	public boolean getInActive() {
 		return inActive;
 	}
 
-	public void setInActive(Boolean inActive) {
+	public void setInActive(boolean inActive) {
 		this.inActive = inActive;
 	}
 
@@ -147,4 +150,5 @@ public class Company implements Serializable {
 	public void setCompanyCd(String companyCd) {
 		this.companyCd = companyCd;
 	}
+
 }

@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import com.capeelectric.model.Site;
 
 public interface SiteRepository extends CrudRepository<Site, Integer> {
-
-	List<Site> findByUserNameAndClientNameAndDepartmentName(String userName, String clientName,String departmentName);
+	Site findByClientNameAndDepartmentNameAndSite(String clientName, String departmentName,String site);
+	
+	List<Site> findByClientNameAndDepartmentName(String clientName, String departmentName);
 }

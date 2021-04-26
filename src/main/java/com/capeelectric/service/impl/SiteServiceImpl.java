@@ -4,83 +4,140 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CompanyDetailsException;
+import com.capeelectric.model.Company;
+import com.capeelectric.model.Department;
 import com.capeelectric.model.Site;
+import com.capeelectric.model.User;
+import com.capeelectric.repository.CompanyRepository;
+import com.capeelectric.repository.DepartmentRepository;
 import com.capeelectric.repository.SiteRepository;
+import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.SiteService;
 
 @Service
 public class SiteServiceImpl implements SiteService {
-	
-	private static final Logger logger = LoggerFactory.getLogger(SiteServiceImpl.class);
 
 	@Autowired
 	private SiteRepository siteRepository;
-	
-	Boolean flag=false;
 
+	@Autowired
+	private CompanyRepository companyRepository;
+
+	@Autowired
+	private DepartmentRepository departmentRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	/*
+	 * @param Site addSite method to c comparing department client_name, comparing
+	 * department_name,checking site_name
+	 */
 	@Override
-	public void insertSite(Site site, Boolean clientNameDeptCompanrison_Site) throws CompanyDetailsException {
-		logger.debug("called SiteServiceImpl_class insertSite_function");
+	public void addSite(Site site) throws CompanyDetailsException {
+
 		if (site.getClientName() != null && site.getDepartmentName() != null) {
-			if (clientNameDeptCompanrison_Site != false) {
-				List<Site> siteRepo = siteRepository.findByUserNameAndClientNameAndDepartmentName(site.getUserName(),
-						site.getClientName(), site.getDepartmentName());
-				for (Site sites : siteRepo) {
-					if (sites.getSite().equalsIgnoreCase(site.getSite())) {
-						flag = true;
-						throw new CompanyDetailsException("site already present");
+			Optional<Company> companyRepo = companyRepository.findByClientName(site.getClientName());
+			if (companyRepo.isPresent() && companyRepo.get() != null
+					&& companyRepo.get().getClientName().equalsIgnoreCase(site.getClientName())) {
+				Department department = departmentRepository.findByClientNameAndDepartmentName(site.getClientName(),
+						site.getDepartmentName());
+
+				if (department != null && department.getClientName().equalsIgnoreCase(site.getClientName())
+						&& department.getDepartmentName().equalsIgnoreCase(site.getDepartmentName())) {
+
+					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
+							site.getDepartmentName(), site.getSite());
+					if (siteRepo == null || !siteRepo.getSite().equalsIgnoreCase(site.getSite())) {
+						site.setCreatedDate(LocalDateTime.now());
+						site.setUpdatedDate(LocalDateTime.now());
+						site.setCreatedBy(generateFullName(department.getUserName()));
+						site.setUpdatedBy(generateFullName(department.getUserName()));
+						siteRepository.save(site);
+					} else {
+						throw new CompanyDetailsException(site.getSite() + ": site already present");
 					}
-				}
-			}
-			if (!false) {
-				site.setCreatedDate(LocalDateTime.now());
-				site.setUpdatedDate(LocalDateTime.now());
-				siteRepository.save(site);
-
-			}
-		} else {
-			throw new CompanyDetailsException("invalid inputs");
-		}
-
-	}
-
-	@Override
-	public void updateSite(Site site, Boolean clientNameDeptCompanrison_Site) throws CompanyDetailsException {
-		if (site.getDepartmentName() != null && site.getClientName() != null && site.getUserName() != null
-				&& site.getSiteId() != null) {
-			Optional<Site> siteRepo = siteRepository.findById(site.getSiteId());
-			if (clientNameDeptCompanrison_Site) {
-				if (siteRepo.get().getSiteId().equals(site.getSiteId())) {
-					site.setUpdatedDate(LocalDateTime.now());
-					siteRepository.save(site);
 
 				} else {
-					throw new CompanyDetailsException("site not present");
+					throw new CompanyDetailsException(site.getDepartmentName() + " : department not present  "
+							+ site.getClientName() + " company");
 				}
 			} else {
-				throw new CompanyDetailsException(" specified clientName departmentName not matched");
+				throw new CompanyDetailsException("clientName  " + site.getClientName() + "  not present "
+						+ site.getDepartmentName() + " department");
 			}
-
 		} else {
 			throw new CompanyDetailsException("invalid inputs");
 		}
 	}
 
+	/*
+	 * @param Site 
+	 * updateSite method to comparing department_ClientName,
+	 * department_name comparing, then comparing site  
+	 */
+	@Override
+	public void updateSite(Site site) throws CompanyDetailsException {
+		Boolean flag = true;
+		if (site.getDepartmentName() != null && site.getClientName() != null && site.getUserName() != null
+				&& site.getSiteId() != null) {
+			Department department = departmentRepository.findByClientNameAndDepartmentName(site.getClientName(),
+					site.getDepartmentName());
+			if (department != null && department.getClientName().equalsIgnoreCase(site.getClientName())) {
+				if (department != null && department.getDepartmentName().equalsIgnoreCase(site.getDepartmentName())) {
+
+					List<Site> siteRepo = siteRepository.findByClientNameAndDepartmentName(site.getClientName(),
+							site.getDepartmentName());
+
+					for (Site siteList : siteRepo) {
+						if (siteList.getSite().equalsIgnoreCase(site.getSite())
+								&& siteList.getSiteId().equals(site.getSiteId())) {
+							department.setUpdatedDate(LocalDateTime.now());
+							department.setUpdatedBy(generateFullName(department.getUserName()));
+							siteRepository.save(site);
+							flag = false;
+							break;
+						} 
+						if (siteList.getSite().equalsIgnoreCase(site.getSite())) {
+							throw new CompanyDetailsException(site.getSite()+" : site Already present");
+						}
+					}
+					if (flag) {
+						department.setUpdatedDate(LocalDateTime.now());
+						department.setUpdatedBy(generateFullName(department.getUserName()));
+						siteRepository.save(site);
+					}
+				} else {
+					throw new CompanyDetailsException(site.getDepartmentName() + "  department not present for "
+							+ site.getClientName() + " company");
+				}
+
+			} else {
+				throw new CompanyDetailsException("clientName  " + site.getClientName() + "  not present "
+						+ site.getDepartmentName() + " department");
+			}
+		} else {
+			throw new CompanyDetailsException("invalid inputs");
+		}
+	}
+
+	/*
+	 * @param siteId deleteSite method to comparing siteId in site_table and @param siteId is true
+	 * then site_object will be delete
+	 */
 	@Override
 	public void deleteSite(Integer siteId) throws CompanyDetailsException {
 		if (siteId != null && siteId != 0) {
 			Optional<Site> site = siteRepository.findById(siteId);
 
-			if (site.get().getSiteId().equals(siteId)) {
+			if (site != null && site.get().getSiteId().equals(siteId)) {
 				siteRepository.deleteById(siteId);
 			} else {
-				throw new CompanyDetailsException("invaild site");
+				throw new CompanyDetailsException(site.get().getSite()+" : this site not present");
 			}
 
 		} else {
@@ -89,13 +146,24 @@ public class SiteServiceImpl implements SiteService {
 
 	}
 
+	/*
+	 * @param clientName,departmentName
+	 * retriveSite method to retrieving site from DB
+	 */
 	@Override
-	public List<Site> retriveSite(Site site) throws CompanyDetailsException {
-		if (site.getUserName() != null && site.getClientName() != null) {
-			return siteRepository.findByUserNameAndClientNameAndDepartmentName(site.getUserName(), site.getClientName(),
-					site.getDepartmentName());
+	public List<Site> retriveSite(String clientName, String departmentName) throws CompanyDetailsException {
+		if (clientName != null && departmentName != null) {
+			return siteRepository.findByClientNameAndDepartmentName(clientName, departmentName);
 		} else {
 			throw new CompanyDetailsException("invalid inputs");
 		}
 	}
+
+	private String generateFullName(String userName) {
+		Optional<User> user = userRepository.findByUsername(userName);
+		if (user.isPresent() && user.get() != null)
+			return user.get().getFirstname() + " " + user.get().getLastname();
+		return "";
+	}
+
 }

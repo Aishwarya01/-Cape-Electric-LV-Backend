@@ -4,48 +4,60 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CompanyDetailsException;
+import com.capeelectric.model.Company;
 import com.capeelectric.model.Department;
+import com.capeelectric.model.User;
+import com.capeelectric.repository.CompanyRepository;
 import com.capeelectric.repository.DepartmentRepository;
+import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.DepartmentService;
-import com.capeelectric.util.ComparingCompanyDetailsUtil;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
-	private static final Logger logger = LoggerFactory.getLogger(DepartmentServiceImpl.class);
+ 
 	@Autowired
 	private DepartmentRepository departmentRepository;
 	
+	@Autowired
+	private CompanyRepository companyRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+
+	/*
+	 * @param Department
+	 * addDepartment method to comparing clientName, comparing department_Name
+	 */
 	@Override
-	public void insertDepartment(Department department, Boolean clientNameCompanrison_Department)
-			throws CompanyDetailsException {
-		Boolean flag = false;
+	public void addDepartment(Department department) throws CompanyDetailsException {
 		if (department.getDepartmentName() != null && department.getClientName() != null) {
 
-			List<Department> repoDepartments = departmentRepository
-					.findByUserNameAndClientName(department.getUserName(), department.getClientName());
+			Optional<Company> companyRepo = companyRepository.findByUserNameAndClientName(department.getUserName(),
+					department.getClientName());
 
-			for (Department departments : repoDepartments) {
-				if (departments.getDepartmentName().equalsIgnoreCase(department.getDepartmentName())) {
-					flag = true;
-					throw new CompanyDetailsException("DepartmentName already present");
+			if (companyRepo.isPresent() && companyRepo.get() != null
+					&& companyRepo.get().getClientName().equalsIgnoreCase(department.getClientName())) {
+
+				if (departmentRepository.findByClientNameAndDepartmentName(department.getClientName(),
+						department.getDepartmentName()) != null) {
+
+					throw new CompanyDetailsException(
+							department.getDepartmentName() + " DepartmentName already present :"+department.getClientName());
+
 				} else {
-					if (clientNameCompanrison_Department == false) {
-						flag = true;
-						throw new CompanyDetailsException("given_clientName not present in company");
-					}
+					department.setCreatedDate(LocalDateTime.now());
+					department.setUpdatedDate(LocalDateTime.now());
+					department.setCreatedBy(generateFullName(department.getUserName()));
+					department.setUpdatedBy(generateFullName(department.getUserName()));
+					departmentRepository.save(department);
 				}
-
-			}
-			if (!flag) {
-				department.setCreatedDate(LocalDateTime.now());
-				department.setUpdatedDate(LocalDateTime.now());
-				departmentRepository.save(department);
+			} else {
+				throw new CompanyDetailsException(
+						department.getClientName() + " :  clientname not present in company");
 			}
 		}
 
@@ -54,44 +66,72 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 
 	}
-
+	
+	/*
+	 * @param Department
+	 * updateDepartment method to comparing clientName clientName,comparing departmentName
+	 * 
+	 */
 	@Override
-	public void updateCompany(Department department, Boolean clientNameCompanrison_Department)
-			throws CompanyDetailsException {
+	public void updateDepartment(Department department) throws CompanyDetailsException {
+		Boolean flag = true;
+
 		if (department.getClientName() != null && department.getUserName() != null
-				&& department.getDepartmentId() != null ) {
-			if (clientNameCompanrison_Department) {
-				Optional<Department> departmentRepo = departmentRepository.findById(department.getDepartmentId());
+				&& department.getDepartmentId() != null && department.getDepartmentName() != null) {
+			Optional<Company> companyRepo = companyRepository.findByUserNameAndClientName(department.getUserName(),
+					department.getClientName());
 
-				if (departmentRepo.get().getDepartmentId().equals(department.getDepartmentId())) {
-					department.setUpdatedDate(LocalDateTime.now());
-					departmentRepository.save(department);
-				}
+			if (companyRepo.isPresent() && companyRepo.get() != null
+					&& companyRepo.get().getClientName().equalsIgnoreCase(department.getClientName())) {
 
-				else {
-					throw new CompanyDetailsException("department not present");
+				List<Department> deptRepo = departmentRepository.findByClientName(department.getClientName());
 
+				for (Department clientName : deptRepo) {
+					if (clientName.getDepartmentName().equalsIgnoreCase(department.getDepartmentName())
+							&& clientName.getDepartmentId().equals(department.getDepartmentId())) {
+						department.setUpdatedDate(LocalDateTime.now());
+						department.setUpdatedBy(generateFullName(department.getUserName()));
+						departmentRepository.save(department);
+						flag = false;
+						break;
+					}
+					if (clientName.getDepartmentName().equalsIgnoreCase(department.getDepartmentName())) {
+						throw new CompanyDetailsException(
+								"DepartmentName Already present user :" + clientName.getClientName());
+					}
 				}
 
 			} else {
-				throw new CompanyDetailsException("given_clientName not present in company");
+				throw new CompanyDetailsException("Company not present user :" + department.getUserName());
+			}
+
+			if (flag) {
+				department.setUpdatedDate(LocalDateTime.now());
+				department.setUpdatedBy(generateFullName(department.getUserName()));
+				departmentRepository.save(department);
 			}
 
 		} else {
-			throw new CompanyDetailsException("department details invalid ");
+			throw new CompanyDetailsException("Inavlid inputs");
 		}
 
 	}
 
+	/*
+	 * @param departmentId
+	 * deleteDepartment method comparing departmentId and input_departmentId 
+	 * if matched department will be deleted
+	 * 
+	 */
 	@Override
 	public void deleteDepartment(Integer departmentId) throws CompanyDetailsException {
 		if (departmentId != null && departmentId != 0) {
-			Optional<Department> username = departmentRepository.findById(departmentId);
+			Optional<Department> department = departmentRepository.findById(departmentId);
 
-			if (username.get().getDepartmentId() == departmentId) {
+			if (department.isPresent() && department.get().getDepartmentId() == departmentId) {
 				departmentRepository.deleteById(departmentId);
 			} else {
-				throw new CompanyDetailsException("invalid details");
+				throw new CompanyDetailsException(departmentId + " : department ID not present");
 			}
 
 		} else {
@@ -100,11 +140,23 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	/*
-	 * @Override public List<Department> retriveDepartment(Department department)
-	 * throws CompanyDetailsException { if (department.getUserName() != null &&
-	 * department.getClientName() != null) { return
-	 * departmentRepository.findByUserNameAndClientName(department.getUserName(),
-	 * department.getClientName()); } else { throw new
-	 * CompanyDetailsException("invalid inputs"); } }
+	 * @param clientName
+	 * fetching data from DB
 	 */
+	@Override
+	public List<Department> retriveDepartment(String clientName) throws CompanyDetailsException {
+		if (clientName != null) {
+			return departmentRepository.findByClientName(clientName);
+		} else {
+			throw new CompanyDetailsException("invalid inputs");
+		}
+	}
+	
+	
+	private String generateFullName(String userName) {
+		Optional<User> user = userRepository.findByUsername(userName);
+		if (user.isPresent() && user.get() != null)
+			return user.get().getFirstname() + " " + user.get().getLastname();
+		return "";
+	}
 }

@@ -31,17 +31,17 @@ public class CompanyController {
 
 	@PostMapping("/addCompany")
 	public ResponseEntity<String> addCompany(@RequestBody Company company) throws CompanyDetailsException {
-		logger.info("called InsertCompany function clientName: {}", company.getClientName());
-		companyService.addcompany(company);
+		logger.info("called InsertCompany function userName: {},clientName: {}",company.getUserName(), company.getClientName());
+		companyService.addCompany(company);
 		return new ResponseEntity<String>( HttpStatus.CREATED);
-	}
+	} 
 
 	@PutMapping("/updateCompany")
 	public ResponseEntity<String> updateCompany(@RequestBody Company company) throws CompanyDetailsException {
-		logger.info("called updateCompany function clientName: {}", company.getUserName());
+		logger.info("called updateCompany function userName: {},clientName: {}",company.getUserName(), company.getClientName());
 		companyService.updateCompany(company);
 		return new ResponseEntity<String>(HttpStatus.OK);
-	}
+	} 
 
 	@DeleteMapping("/deleteCompany/{userName}/{clientName}")
 	public ResponseEntity<String> deleteCompany(@PathVariable String userName,@PathVariable String clientName) throws CompanyDetailsException {
@@ -53,6 +53,6 @@ public class CompanyController {
 	@GetMapping("/retriveCompany/{userName}")
 	public ResponseEntity<List<Company>> retriveCompany(@PathVariable String userName) throws CompanyDetailsException {
 		logger.info("called updateCompany function clientName: {}", userName);
-		return new ResponseEntity<List<Company>>(companyService.retriveCompany(userName), HttpStatus.OK);
+		return new ResponseEntity<List<Company>>(companyService.retrieveCompany(userName), HttpStatus.OK);
 	}
 }

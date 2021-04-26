@@ -23,35 +23,48 @@ public class CompanyServiceImpl implements CompanyService {
 	@Autowired
 	private UserRepository userRepository;
 
+	/*
+	 * @param company
+	 * addCompany method to retrieve the company based on userName,clientName
+	 * if client not there company will be saved 
+	 * if client available return exception
+	 * 
+	 */
 	@Override
-	public void addcompany(Company company) throws CompanyDetailsException {
-
+	public void addCompany(Company company) throws CompanyDetailsException {
 		int count = 0;
+				
 		if (company.getClientName() != null) {
-			Company client = companyRepository.findByClientName(company.getClientName());
+			 Optional<Company> clientRepo = companyRepository.findByUserNameAndClientName(company.getUserName(),company.getClientName());
 
-			if (client != null && client.getClientName().equalsIgnoreCase(company.getClientName())) {
-				throw new CompanyDetailsException("ClientName already present");
-			} else {
-				company.setCompanyCd(company.getClientName().substring(0, 3).concat("_0")+(count+1));
+			if (clientRepo.isPresent() && clientRepo.get() != null && clientRepo.get().getClientName().equalsIgnoreCase(company.getClientName())) {
+				throw new CompanyDetailsException(company.getClientName()+" : this ClientName already present");
+			} else { 
+				company.setCompanyCd(company.getClientName().substring(0, 3).concat("_0")+(count+1));																	 
 				company.setCreatedDate(LocalDateTime.now());
 				company.setUpdatedDate(LocalDateTime.now());
 				company.setCreatedBy(generateFullName(company.getUserName()));
 				company.setUpdatedBy(generateFullName(company.getUserName()));
 				companyRepository.save(company);
 			}
-			
+
 		} else {
 			throw new CompanyDetailsException("invalid input");
 		}
 
 	}
-
+	
+	/*
+	 * @param company
+	 * updateCompany method to retrieve the company based on companyID
+ 	 * if client available company will be updated 
+	 * 
+	 */
 	@Override
 	public void updateCompany(Company company) throws CompanyDetailsException {
 		Boolean flag = false;
 
-		if (company.getUserName() != null && company.getClientName() != null && company.getCompanyId() != null) {
+		if (company.getUserName() != null && company.getClientName() != null) {
 
 			List<Company> findByUserName = companyRepository.findByUserName(company.getUserName());
 			for (Company companys : findByUserName) {
@@ -65,8 +78,8 @@ public class CompanyServiceImpl implements CompanyService {
 				}
 			}
 			if (!flag) {
-				throw new CompanyDetailsException("User not present");
-			}
+				throw new CompanyDetailsException(company.getClientName()+" client not present user :"+company.getUserName());
+			} 
 
 		} else {
 			throw new CompanyDetailsException("Client and username required");
@@ -74,26 +87,38 @@ public class CompanyServiceImpl implements CompanyService {
 
 	}
 
+	/*
+	 * @param userName,clientName
+	 * deleteCompany method to retrieve the company based on userName,clientName
+	 * if client not there return exception
+	 * if client available company will be delete
+	 * 
+	 */
 	@Override
 	public void deleteCompany(String userName, String clientName) throws CompanyDetailsException {
 
 		if (userName != null && clientName != null) {
-			Company clientRepo = companyRepository.findByClientName(clientName);
+ 			 Optional<Company> clientRepo = companyRepository.findByUserNameAndClientName(userName,clientName);
 
-			if (clientRepo != null && clientRepo.getClientName().equalsIgnoreCase(clientName)) {
-				companyRepository.delete(clientRepo);
+			if (clientRepo.isPresent() && clientRepo.get() != null && clientRepo.get().getClientName().equalsIgnoreCase(clientName)) {
+				companyRepository.deleteById(clientRepo.get().getCompanyId());
 			} else {
-				throw new CompanyDetailsException("client not present");
+				throw new CompanyDetailsException(clientName +" :client not present");
 			}
 
 		} else {
-			throw new CompanyDetailsException("username required");
+			throw new CompanyDetailsException("username clientName required");
 		}
 
 	}
-
+	
+	/*
+	 * @param userName
+	 * retrieveCompany method to fetch data 
+	 * 
+	 */
 	@Override
-	public List<Company> retriveCompany(String userName) throws CompanyDetailsException {
+	public List<Company> retrieveCompany(String userName) throws CompanyDetailsException {
 
 		if (userName != null) {
 			return companyRepository.findByUserName(userName);

@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 
 /**
@@ -24,7 +26,7 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Table(name = "site_table")
 @NamedQueries(value = {
-		 @NamedQuery(name = "siteRepository.findByUserNameAndClientNameAndSite", query = "select s from Site s where s.userName=:userName and s.clientName=:clientName and s.departmentName=:departmentName")
+		 @NamedQuery(name = "siteRepository.findByClientNameAndDepartmentName", query = "select s from Site s where s.clientName=:clientName and s.departmentName=:departmentName")
 })
 public class Site implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -88,6 +90,7 @@ public class Site implements Serializable {
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="DEPARTMENT_ID")
 	private Department department;
@@ -245,9 +248,9 @@ public class Site implements Serializable {
 	}
 
 	
-//	public Department getDepartment() {
-//		return department;
-//	}
+	public Department getDepartment() {
+		return department;
+	}
 
 	public void setDepartment(Department department) {
 		this.department = department;

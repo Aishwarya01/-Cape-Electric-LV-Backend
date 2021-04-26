@@ -7,12 +7,12 @@ import com.capeelectric.model.Company;
  
 public interface CompanyService {
 
-	public void addcompany(Company clientname) throws CompanyDetailsException;
+	public void addCompany(Company clientname) throws CompanyDetailsException;
 
 	public void updateCompany(Company userName) throws CompanyDetailsException;
 
 	public void deleteCompany(String userName,String clientname) throws CompanyDetailsException;
 
-	public List<Company> retriveCompany(String userName) throws CompanyDetailsException;
+	public List<Company> retrieveCompany(String userName) throws CompanyDetailsException;
 
 }
