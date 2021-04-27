@@ -42,9 +42,9 @@ public class UserDetailsServiceTest {
 
 	{
 		user = new User();
-		user.setUsername("moorthy@capeindia.net");
-		user.setPassword("moorthy");
-		user.setEmail("moorthy@capeindia.net");
+		user.setUsername("lvsystem@capeindia.net");
+		user.setPassword("cape");
+		user.setEmail("lvsystem@capeindia.net");
 		user.setUserexist(true);
 		user.setActive(true);
 
@@ -54,63 +54,63 @@ public class UserDetailsServiceTest {
 	@Test
 	public void testFindByUserName() throws UserException {
 
-		when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
-		ResponseEntity<String> findByUserName = userDetailsServiceImpl.findByUserName("moorthy@capeindia.net");
+		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionaluser);
+		ResponseEntity<String> findByUserName = userDetailsServiceImpl.findByUserName("lvsystem@capeindia.net");
 		assertEquals(200, findByUserName.getStatusCodeValue());
 
 		UserException assertThrows = Assertions.assertThrows(UserException.class,
 				() -> userDetailsServiceImpl.findByUserName(null));
 		assertEquals("Email is required", assertThrows.getMessage());
 
-		when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(null);
+		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(null);
 		UserException assertThrows2 = Assertions.assertThrows(UserException.class,
-				() -> userDetailsServiceImpl.findByUserName("moorthy@capeindia.net"));
+				() -> userDetailsServiceImpl.findByUserName("lvsystem@capeindia.net"));
 		assertEquals("Email is not available with us", assertThrows2.getMessage());
 
-	}
+	} 
 
 	@Test
 	public void testChangePassword() throws ChangePasswordException {
 		BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
 
-		String encodePass = encode.encode("moorthy");
+		String encodePass = encode.encode("cape");
 		optionaluser.get().setPassword(encodePass);
 
-		when(passwordEncoder.matches("moorthy", encodePass)).thenReturn(true);
+		when(passwordEncoder.matches("cape", encodePass)).thenReturn(true);
 
-		when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
-		User changePassword = userDetailsServiceImpl.changePassword("moorthy@capeindia.net", "moorthy", "moorthy123");
+		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionaluser);
+		User changePassword = userDetailsServiceImpl.changePassword("lvsystem@capeindia.net", "cape", "cape123");
 		assertNull(changePassword);
 
 		ChangePasswordException assertThrows1 = Assertions.assertThrows(ChangePasswordException.class,
-				() -> userDetailsServiceImpl.changePassword("moorthy@capeindia.net", "moorthy1", "moorthy123"));
+				() -> userDetailsServiceImpl.changePassword("lvsystem@capeindia.net", "cape1", "cape123"));
 		assertEquals("Old password is not matching with encoded password", assertThrows1.getMessage());
 
 		optionaluser.get().setPassword(encodePass);
 		ChangePasswordException assertThrows2 = Assertions.assertThrows(ChangePasswordException.class,
-				() -> userDetailsServiceImpl.changePassword("moorthy@capeindia.net", "moorthy", "moorthy"));
+				() -> userDetailsServiceImpl.changePassword("lvsystem@capeindia.net", "cape", "cape"));
 		assertEquals("Old password cannot be entered as new password", assertThrows2.getMessage());
 
 		user.setUserexist(false);
-		User changePassword2 = userDetailsServiceImpl.changePassword("moorthy@capeindia.net", "moorthy", "moorthy123");
+		User changePassword2 = userDetailsServiceImpl.changePassword("lvsystem@capeindia.net", "cape", "cape123");
 		assertNull(changePassword2);
 	}
 
 	@Test
 	public void testUpdatedPassword() throws UserException {
 
-		when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
+		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionaluser);
 
-		User updatePassword = userDetailsServiceImpl.updatePassword("moorthy@capeindia.net", "moorthy123");
+		User updatePassword = userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "cape123");
 		assertNull(updatePassword);
 
 		UsernameNotFoundException assertThrows = Assertions.assertThrows(UsernameNotFoundException.class,
-				() -> userDetailsServiceImpl.updatePassword(null, "moorthy123"));
+				() -> userDetailsServiceImpl.updatePassword(null, "cape123"));
 		assertEquals("username not valid", assertThrows.getMessage());
 
 		user.setUserexist(false);
 		UserException assertThrows2 = Assertions.assertThrows(UserException.class,
-				() -> userDetailsServiceImpl.updatePassword("moorthy@capeindia.net", "moorthy123"));
+				() -> userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "cape123"));
 		assertEquals("User Not available", assertThrows2.getMessage());
 
 	}
@@ -118,7 +118,7 @@ public class UserDetailsServiceTest {
 	@Test
 	public void testSaveUser() throws UserException {
 
-		when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
+		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionaluser);
 		UserException assertThrows = Assertions.assertThrows(UserException.class,
 				() -> userDetailsServiceImpl.saveUser(user));
 		assertEquals("User already available", assertThrows.getMessage());
@@ -130,9 +130,9 @@ public class UserDetailsServiceTest {
 
 	@Test
 	public void testRetrieveUserInformation() throws UserException {
-		when(userRepository.findByUsername("moorthy@capeindia.net")).thenReturn(optionaluser);
+		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionaluser);
 		User retrieveUserInformation = userDetailsServiceImpl.retrieveUserInformation(user.getEmail());
-		assertEquals("moorthy@capeindia.net", retrieveUserInformation.getEmail());
+		assertEquals("lvsystem@capeindia.net", retrieveUserInformation.getEmail());
 
 		user.setUserexist(false);
 		UserException assertThrows = Assertions.assertThrows(UserException.class,
