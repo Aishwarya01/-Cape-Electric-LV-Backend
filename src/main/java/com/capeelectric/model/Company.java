@@ -40,7 +40,7 @@ public class Company implements Serializable {
 	@Column(name = "COMPANY_ID")
 	private Integer companyId;
 	
-	@Column(name = "COMPANY_CD")						 
+	@Column(name = "COMPANY_CODE")						 
 	private String companyCd;			  
  
 	@Column(name = "USER_NAME")
