@@ -55,11 +55,11 @@ public class DepartmentController {
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
-	@GetMapping("/retriveDepartment/{clientName}")
-	public ResponseEntity<List<Department>> retriveDepartment(@PathVariable String clientName)
+	@GetMapping("/retriveDepartment/{userName}/{clientName}")
+	public ResponseEntity<List<Department>> retriveDepartment(@PathVariable String userName,@PathVariable String clientName)
 			throws CompanyDetailsException {
-		logger.info("called retriveDepartment function clientName :{}", clientName);
-		return new ResponseEntity<List<Department>>(departmentService.retriveDepartment(clientName), HttpStatus.OK);
+		logger.info("called retriveDepartment function userName{} ,clientName :{}",userName, clientName);
+		return new ResponseEntity<List<Department>>(departmentService.retriveDepartment(userName,clientName), HttpStatus.OK);
 	}
 
 }

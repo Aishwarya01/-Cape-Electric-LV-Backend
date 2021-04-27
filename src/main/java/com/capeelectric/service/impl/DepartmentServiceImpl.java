@@ -116,7 +116,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		}
 
 	}
-
+ 
 	/*
 	 * @param departmentId
 	 * deleteDepartment method comparing departmentId and input_departmentId 
@@ -144,9 +144,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 	 * fetching data from DB
 	 */
 	@Override
-	public List<Department> retriveDepartment(String clientName) throws CompanyDetailsException {
+	public List<Department> retriveDepartment(String userName, String clientName) throws CompanyDetailsException {
 		if (clientName != null) {
-			return departmentRepository.findByClientName(clientName);
+			return departmentRepository.findByUserNameAndClientName(userName,clientName);
 		} else {
 			throw new CompanyDetailsException("invalid inputs");
 		}

@@ -12,5 +12,5 @@ public interface DepartmentService {
 
 	public void deleteDepartment(Integer departmentId) throws CompanyDetailsException;
 
-	public List<Department> retriveDepartment(String clientName) throws CompanyDetailsException;
+	public List<Department> retriveDepartment(String userName,String clientName) throws CompanyDetailsException;
 }

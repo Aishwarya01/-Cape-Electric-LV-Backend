@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Table(name = "department_table")
 @NamedQueries(value = {
 		@NamedQuery(name = "DepartmentRepository.findByClientName", query = "select  d from Department d where d.clientName=:clientName"),
+		@NamedQuery(name = "DepartmentRepository.findByUserNameAndClientName", query = "select  d from Department d where d.userName=:userName and d.clientName=:clientName"),
 		@NamedQuery(name = "Department.findByDepartmentName", query = "select d.departmentName,d.departmentId from Department d where d.departmentName=:departmentName"),
 		@NamedQuery(name = "DepartmentRepository.findByClientNameAndDepartmentName", query = "select d.departmentName from Department d where d.clientName=:clientName and d.departmentName=:departmentName"), })
 public class Department implements Serializable {
