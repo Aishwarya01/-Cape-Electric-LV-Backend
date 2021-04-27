@@ -51,7 +51,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 							department.getDepartmentName() + " DepartmentName already present :"+department.getClientName());
 
 				} else {
-					department.setDepartmentCd(department.getClientName().substring(0, 3).concat("_0")+(count+1));
+					department.setDepartmentCd(department.getDepartmentName().substring(0, 3).concat("_0")+(count+1));
 					department.setCreatedDate(LocalDateTime.now());
 					department.setUpdatedDate(LocalDateTime.now());
 					department.setCreatedBy(generateFullName(department.getUserName()));
