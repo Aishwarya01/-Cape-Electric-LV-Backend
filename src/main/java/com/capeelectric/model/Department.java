@@ -41,7 +41,7 @@ public class Department implements Serializable {
 	private Integer departmentId;
 	
 	@Column(name = "DEPARTMENT_CD")
-	private String DepartmentCd;
+	private String departmentCd;
 	
 	@Column(name = "USER_NAME")
 	private String userName;
@@ -155,11 +155,13 @@ public class Department implements Serializable {
 	}
 
 	public String getDepartmentCd() {
-		return DepartmentCd;
+		return departmentCd;
 	}
 
 	public void setDepartmentCd(String departmentCd) {
-		DepartmentCd = departmentCd;
+		this.departmentCd = departmentCd;
 	}
+
+	
 
 }
