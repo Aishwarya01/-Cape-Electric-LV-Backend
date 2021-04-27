@@ -46,13 +46,12 @@ public class SiteServiceImpl implements SiteService {
 					&& companyRepo.get().getClientName().equalsIgnoreCase(site.getClientName())) {
 				Department department = departmentRepository.findByClientNameAndDepartmentName(site.getClientName(),
 						site.getDepartmentName());
-
 				if (department != null && department.getClientName().equalsIgnoreCase(site.getClientName())
 						&& department.getDepartmentName().equalsIgnoreCase(site.getDepartmentName())) {
-
 					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
 							site.getDepartmentName(), site.getSite());
 					if (siteRepo == null || !siteRepo.getSite().equalsIgnoreCase(site.getSite())) {
+						site.setDepartment(department);
 						site.setCreatedDate(LocalDateTime.now());
 						site.setUpdatedDate(LocalDateTime.now());
 						site.setCreatedBy(generateFullName(department.getUserName()));

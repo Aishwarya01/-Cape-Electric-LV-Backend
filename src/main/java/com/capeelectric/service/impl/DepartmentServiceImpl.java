@@ -37,20 +37,16 @@ public class DepartmentServiceImpl implements DepartmentService {
 		int count = 0;																	 
 
 		if (department.getDepartmentName() != null && department.getClientName() != null) {
- 
 			Optional<Company> companyRepo = companyRepository.findByUserNameAndClientName(department.getUserName(),
 					department.getClientName());
-
 			if (companyRepo.isPresent() && companyRepo.get() != null
 					&& companyRepo.get().getClientName().equalsIgnoreCase(department.getClientName())) {
-
 				if (departmentRepository.findByClientNameAndDepartmentName(department.getClientName(),
 						department.getDepartmentName()) != null) {
-
 					throw new CompanyDetailsException(
 							department.getDepartmentName() + " DepartmentName already present :"+department.getClientName());
-
 				} else {
+					department.setCompany(companyRepo.get());
 					department.setDepartmentCd(department.getDepartmentName().substring(0, 3).concat("_0")+(count+1)); 
 					department.setCreatedDate(LocalDateTime.now());
 					department.setUpdatedDate(LocalDateTime.now());
@@ -63,7 +59,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 						department.getClientName() + " :  clientname not present in company");
 			}
 		}
-
 		else {
 			throw new CompanyDetailsException("invalid inputs");
 		}
