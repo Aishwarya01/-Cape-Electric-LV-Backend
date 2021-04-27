@@ -47,8 +47,8 @@ public class DepartmentController {
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
-	@DeleteMapping("/deleteDepartment/{departmentId}")
-	public ResponseEntity<String> deleteDepartment(@PathVariable Integer departmentId)
+	@DeleteMapping("/deleteDepartment/{userName}/{departmentId}")
+	public ResponseEntity<String> deleteDepartment(@PathVariable String userName, @PathVariable Integer departmentId)
 			throws CompanyDetailsException {
 		logger.info("called deleteDepartment function departmentId: {}", departmentId);
 		departmentService.deleteDepartment(departmentId);
