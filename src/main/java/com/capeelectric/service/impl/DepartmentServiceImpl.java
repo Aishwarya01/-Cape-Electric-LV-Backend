@@ -34,8 +34,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 	 */
 	@Override
 	public void addDepartment(Department department) throws CompanyDetailsException {
-		if (department.getDepartmentName() != null && department.getClientName() != null) {
+		int count = 0;																	 
 
+		if (department.getDepartmentName() != null && department.getClientName() != null) {
+ 
 			Optional<Company> companyRepo = companyRepository.findByUserNameAndClientName(department.getUserName(),
 					department.getClientName());
 
@@ -49,6 +51,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 							department.getDepartmentName() + " DepartmentName already present :"+department.getClientName());
 
 				} else {
+					department.setDepartmentCd(department.getClientName().substring(0, 3).concat("_0")+(count+1));
 					department.setCreatedDate(LocalDateTime.now());
 					department.setUpdatedDate(LocalDateTime.now());
 					department.setCreatedBy(generateFullName(department.getUserName()));

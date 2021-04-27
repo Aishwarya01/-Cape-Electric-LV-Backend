@@ -40,6 +40,9 @@ public class Department implements Serializable {
 	@Column(name = "DEPARTMENT_ID")
 	private Integer departmentId;
 	
+	@Column(name = "DEPARTMENT_CD")
+	private String DepartmentCd;
+	
 	@Column(name = "USER_NAME")
 	private String userName;
 	
@@ -149,6 +152,14 @@ public class Department implements Serializable {
 
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+
+	public String getDepartmentCd() {
+		return DepartmentCd;
+	}
+
+	public void setDepartmentCd(String departmentCd) {
+		DepartmentCd = departmentCd;
 	}
 
 }
