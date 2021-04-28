@@ -39,6 +39,7 @@ public class SiteServiceImpl implements SiteService {
 	 */
 	@Override
 	public void addSite(Site site) throws CompanyDetailsException {
+		int count = 0;						 
 
 		if (site.getClientName() != null && site.getDepartmentName() != null) {
 			Optional<Company> companyRepo = companyRepository.findByClientName(site.getClientName());
@@ -52,6 +53,7 @@ public class SiteServiceImpl implements SiteService {
 							site.getDepartmentName(), site.getSite());
 					if (siteRepo == null || !siteRepo.getSite().equalsIgnoreCase(site.getSite())) {
 						site.setDepartment(department);
+						site.setSiteCd(site.getSite().substring(0, 3).concat("_0")+(count+1));
 						site.setCreatedDate(LocalDateTime.now());
 						site.setUpdatedDate(LocalDateTime.now());
 						site.setCreatedBy(generateFullName(department.getUserName()));

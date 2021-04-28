@@ -35,6 +35,9 @@ public class Site implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "SITE_ID")
 	private Integer siteId;
+	
+	@Column(name = "SITE_CODE")
+	private String siteCd;
 
 	@Column(name = "USER_NAME")
 	private String userName;
@@ -254,6 +257,14 @@ public class Site implements Serializable {
 
 	public void setDepartment(Department department) {
 		this.department = department;
+	}
+
+	public String getSiteCd() {
+		return siteCd;
+	}
+
+	public void setSiteCd(String siteCd) {
+		this.siteCd = siteCd;
 	}
 
 }
