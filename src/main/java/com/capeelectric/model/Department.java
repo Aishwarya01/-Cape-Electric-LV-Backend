@@ -40,7 +40,7 @@ public class Department implements Serializable {
 	@Column(name = "DEPARTMENT_ID")
 	private Integer departmentId;
 	
-	@Column(name = "DEPARTMENT_CD")
+	@Column(name = "DEPARTMENT_CODE")
 	private String departmentCd;
 	
 	@Column(name = "USER_NAME")
