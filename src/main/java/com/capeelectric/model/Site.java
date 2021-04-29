@@ -55,7 +55,7 @@ public class Site implements Serializable {
 	private String personIncharge;
 	
 	@Column(name = "E_MAIL")
- 	private String email;
+ 	private String personInchargeEmail;
 
 	@Column(name = "ADDRESSLINE_1")
 	private String addressLine_1;
@@ -146,12 +146,12 @@ public class Site implements Serializable {
 		this.personIncharge = personIncharge;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getPersonInchargeEmail() {
+		return personInchargeEmail;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setPersonInchargeEmail(String personInchargeEmail) {
+		this.personInchargeEmail = personInchargeEmail;
 	}
 
 	public String getAddressLine_1() {
