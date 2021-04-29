@@ -72,6 +72,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	 */
 	@Override
 	public void updateDepartment(Department department) throws CompanyDetailsException {
+		int count = 0;
 		Boolean flag = true;
 
 		if (department.getClientName() != null && department.getUserName() != null
@@ -87,6 +88,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 				for (Department clientName : deptRepo) {
 					if (clientName.getDepartmentName().equalsIgnoreCase(department.getDepartmentName())
 							&& clientName.getDepartmentId().equals(department.getDepartmentId())) {
+						department.setDepartmentCd(
+								department.getDepartmentName().substring(0, 3).concat("_0") + (count + 1));
 						department.setUpdatedDate(LocalDateTime.now());
 						department.setUpdatedBy(generateFullName(department.getUserName()));
 						departmentRepository.save(department);

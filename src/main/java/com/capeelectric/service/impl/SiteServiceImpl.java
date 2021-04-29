@@ -83,6 +83,7 @@ public class SiteServiceImpl implements SiteService {
 	 */
 	@Override
 	public void updateSite(Site site) throws CompanyDetailsException {
+		int count = 0;
 		Boolean flag = true;
 		if (site.getDepartmentName() != null && site.getClientName() != null && site.getUserName() != null
 				&& site.getSiteId() != null) {
@@ -97,14 +98,15 @@ public class SiteServiceImpl implements SiteService {
 					for (Site siteList : siteRepo) {
 						if (siteList.getSite().equalsIgnoreCase(site.getSite())
 								&& siteList.getSiteId().equals(site.getSiteId())) {
+							site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
 							department.setUpdatedDate(LocalDateTime.now());
 							department.setUpdatedBy(generateFullName(department.getUserName()));
 							siteRepository.save(site);
 							flag = false;
 							break;
-						} 
+						}
 						if (siteList.getSite().equalsIgnoreCase(site.getSite())) {
-							throw new CompanyDetailsException(site.getSite()+" : site Already present");
+							throw new CompanyDetailsException(site.getSite() + " : site Already present");
 						}
 					}
 					if (flag) {

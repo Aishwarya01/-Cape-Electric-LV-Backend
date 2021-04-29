@@ -62,27 +62,33 @@ public class CompanyServiceImpl implements CompanyService {
 	 */
 	@Override
 	public void updateCompany(Company company) throws CompanyDetailsException {
+		int count = 0;
 		Boolean flag = false;
 
 		if (company.getUserName() != null && company.getClientName() != null) {
 
 			List<Company> findByUserName = companyRepository.findByUserName(company.getUserName());
-			for (Company companys : findByUserName) {
-				if (companys.getUserName().equalsIgnoreCase(company.getUserName())
-						&& companys.getCompanyId().equals(company.getCompanyId())) {
-					company.setUpdatedBy(generateFullName(company.getUserName()));
-					company.setUpdatedDate(LocalDateTime.now());
-					companyRepository.save(company);
-					flag = true;
-					break;
+			if (findByUserName != null && !findByUserName.isEmpty()) {
+				for (Company companys : findByUserName) {
+					if (companys != null && companys.getUserName().equalsIgnoreCase(company.getUserName())
+							&& companys.getCompanyId().equals(company.getCompanyId())) {
+						company.setCompanyCd(company.getClientName().substring(0, 3).concat("_0") + (count + 1));
+						company.setUpdatedBy(generateFullName(company.getUserName()));
+						company.setUpdatedDate(LocalDateTime.now());
+						companyRepository.save(company);
+						flag = true;
+						break;
+					}
 				}
+				if (!flag) {
+					throw new CompanyDetailsException(
+							company.getClientName() + " client not present user :" + company.getUserName());
+				}
+			} else {
+				throw new CompanyDetailsException(company.getUserName() + "user not having company");
 			}
-			if (!flag) {
-				throw new CompanyDetailsException(company.getClientName()+" client not present user :"+company.getUserName());
-			} 
-
 		} else {
-			throw new CompanyDetailsException("Client and username required");
+			throw new CompanyDetailsException("invalid input");
 		}
 
 	}
@@ -107,7 +113,7 @@ public class CompanyServiceImpl implements CompanyService {
 			}
 
 		} else {
-			throw new CompanyDetailsException("username clientName required");
+			throw new CompanyDetailsException("invalid inputs");
 		}
 
 	}
