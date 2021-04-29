@@ -36,7 +36,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	public void addDepartment(Department department) throws CompanyDetailsException {
 		int count = 0;																	 
 
-		if (department.getDepartmentName() != null && department.getClientName() != null) {
+		if (department.getDepartmentName() != null && !department.getClientName().isEmpty() && department.getClientName() != null) {
 			Optional<Company> companyRepo = companyRepository.findByUserNameAndClientName(department.getUserName(),
 					department.getClientName());
 			if (companyRepo.isPresent() && companyRepo.get() != null
@@ -143,7 +143,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	 */
 	@Override
 	public List<Department> retriveDepartment(String userName, String clientName) throws CompanyDetailsException {
-		if (clientName != null) {
+		if (clientName != null && !clientName.isEmpty() && userName !=null && !userName.isEmpty()) {
 			return departmentRepository.findByUserNameAndClientName(userName,clientName);
 		} else {
 			throw new CompanyDetailsException("invalid inputs");
