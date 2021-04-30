@@ -14,6 +14,11 @@ import com.capeelectric.repository.CompanyRepository;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.CompanyService;
 
+/**
+ * 
+ * @author capeelectricsoftware
+ *
+ */
 @Service
 public class CompanyServiceImpl implements CompanyService {
 

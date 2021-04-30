@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capeelectric.exception.CountryDetailsException;
+import com.capeelectric.model.Country;
 import com.capeelectric.model.State;
 import com.capeelectric.service.CountryDetailsService;
 
@@ -19,9 +20,14 @@ public class CountryDetailsController {
 	@Autowired(required=true)
 	private CountryDetailsService countryDetailsService;
 
-	@GetMapping("/fetchStatesByCountryName/{countryName}")
-	public List<State> fetchStatesByCountryName(@PathVariable String countryName) throws CountryDetailsException {
-		return countryDetailsService.fetchStatesByCountryName(countryName);
+	@GetMapping("/fetchStatesByCountryName/{code}")
+	public List<State> fetchStatesByCountryName(@PathVariable String code) throws CountryDetailsException {
+		return countryDetailsService.fetchStatesByCountryCode(code);
+	}
+	
+	@GetMapping("/fetchCountries")
+	public List<Country> fetchCountries() throws CountryDetailsException{
+		return countryDetailsService.fetchCountries();
 	}
 }
 

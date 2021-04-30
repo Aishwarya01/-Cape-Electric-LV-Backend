@@ -13,13 +13,16 @@ public class State {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "STATE_ID")
 	private int id;
 	
+	@Column(name = "NAME")
 	private String name;
 	
+	@Column(name = "CODE")
 	private String code;
 	
-	@Column(name="CountryID")
+	@Column(name="COUNTRY_ID")
 	private int countryId;
 
 	public int getId() {
