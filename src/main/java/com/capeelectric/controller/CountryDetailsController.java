@@ -20,7 +20,7 @@ public class CountryDetailsController {
 	@Autowired(required=true)
 	private CountryDetailsService countryDetailsService;
 
-	@GetMapping("/fetchStatesByCountryName/{code}")
+	@GetMapping("/fetchStatesByCountryCode/{code}")
 	public List<State> fetchStatesByCountryName(@PathVariable String code) throws CountryDetailsException {
 		return countryDetailsService.fetchStatesByCountryCode(code);
 	}
