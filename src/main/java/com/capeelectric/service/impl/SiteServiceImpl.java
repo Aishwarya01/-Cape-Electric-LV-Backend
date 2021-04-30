@@ -99,8 +99,8 @@ public class SiteServiceImpl implements SiteService {
 						if (siteList.getSite().equalsIgnoreCase(site.getSite())
 								&& siteList.getSiteId().equals(site.getSiteId())) {
 							site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
-							department.setUpdatedDate(LocalDateTime.now());
-							department.setUpdatedBy(generateFullName(department.getUserName()));
+							site.setUpdatedDate(LocalDateTime.now());
+							site.setUpdatedBy(generateFullName(department.getUserName()));
 							siteRepository.save(site);
 							flag = false;
 							break;

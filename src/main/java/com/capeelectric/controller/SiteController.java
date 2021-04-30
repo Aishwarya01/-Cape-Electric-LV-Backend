@@ -50,7 +50,7 @@ public class SiteController {
 	public ResponseEntity<String> deleteSite(@PathVariable Integer siteId) throws CompanyDetailsException {
 		logger.info("called deleteSite function siteId: {}", siteId);
 		siteService.deleteSite(siteId);
-		return new ResponseEntity<String>("Site Updated", HttpStatus.OK);
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
 	
