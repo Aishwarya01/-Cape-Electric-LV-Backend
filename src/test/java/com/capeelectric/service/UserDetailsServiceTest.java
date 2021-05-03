@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.ChangePasswordException;
+import com.capeelectric.exception.ForgotPasswordException;
+import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.User;
 import com.capeelectric.repository.UserRepository;
@@ -52,7 +54,7 @@ public class UserDetailsServiceTest {
 	}
 
 	@Test
-	public void testFindByUserName() throws UserException {
+	public void testFindByUserName() throws ForgotPasswordException {
 
 		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionaluser);
 		ResponseEntity<String> findByUserName = userDetailsServiceImpl.findByUserName("lvsystem@capeindia.net");
@@ -97,7 +99,7 @@ public class UserDetailsServiceTest {
 	}
 
 	@Test
-	public void testUpdatedPassword() throws UserException {
+	public void testUpdatedPassword() throws UpdatePasswordException {
 
 		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionaluser);
 

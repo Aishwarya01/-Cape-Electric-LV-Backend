@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.ChangePasswordException;
+import com.capeelectric.exception.ForgotPasswordException;
+import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.User;
 import com.capeelectric.repository.UserRepository;
@@ -50,7 +52,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	/**
 	 * Method to retrieve the user
 	 */
-	public ResponseEntity<String> findByUserName(String email) throws UserException{
+	public ResponseEntity<String> findByUserName(String email) throws ForgotPasswordException{
 		// TODO: Email triggering
 		logger.debug("Find By User Name Starts");
 		if (email != null) {
@@ -60,11 +62,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				return new ResponseEntity<String>(optionalUser.get().getUsername(), HttpStatus.OK);
 			} else {
 				logger.debug("Find By User Name Ends");
-				throw new UserException("Email is not available with us");
+				throw new ForgotPasswordException("Email is not available with us");
 			}
 		} else {
 			logger.debug("Find By User Name Ends");
-			throw new UserException("Email is required");
+			throw new ForgotPasswordException("Email is required");
 		}
 	}
 	
@@ -72,7 +74,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 * Method to update the user after changing the password
 	 * @throws UserException 
 	 */
-	public User updatePassword(String email, String password) throws UserException {
+	public User updatePassword(String email, String password) throws UpdatePasswordException {
 		// TODO: Email triggering
 		logger.debug("Update User Starts");
 		if (email != null && password != null) {
@@ -85,7 +87,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 			else {
 				logger.debug("Update User Ends");
-				throw new UserException("User Not available");
+				throw new UpdatePasswordException("User Not available");
 			}
 		} else {
 			logger.debug("Update User Ends");
