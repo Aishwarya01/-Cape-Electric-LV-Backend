@@ -51,7 +51,7 @@ public class Site implements Serializable {
 	private String departmentName;
 
 	@Column(name = "SITE_NAME")
-	private String siteName;
+	private String site;
 
 	@Column(name = "ADDRESSLINE_1")
 	private String addressLine_1;
@@ -73,9 +73,6 @@ public class Site implements Serializable {
 
 	@Column(name = "ZIP_CODE")
 	private String zipCode;
-
-	@Column(name = "PHONE_NUMBER")
-	private String phoneNumber;
 
 	@Column(name = "CREATED_BY")
 	private String createdBy;
@@ -130,12 +127,12 @@ public class Site implements Serializable {
 		this.departmentName = departmentName;
 	}
 
-	public String getSiteName() {
-		return siteName;
+	public String getSite() {
+		return site;
 	}
 
-	public void setSiteName(String siteName) {
-		this.siteName = siteName;
+	public void setSiteName(String site) {
+		this.site = site;
 	}
 
 	public String getAddressLine_1() {
@@ -192,14 +189,6 @@ public class Site implements Serializable {
 
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
 	}
 
 	public String getCreatedBy() {
