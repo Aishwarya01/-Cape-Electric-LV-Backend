@@ -31,7 +31,7 @@ public class SiteController {
 	@PostMapping("/addSite")
 	public ResponseEntity<String> addSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.info("called addSite function ClientName : {},Department : {}, Site : {}",
-				site.getClientName(), site.getDepartmentName(), site.getSite());
+				site.getClientName(), site.getDepartmentName(), site.getSiteName());
  
 		siteService.addSite(site);
 		return new ResponseEntity<String>("successfully added Site", HttpStatus.OK);
@@ -41,7 +41,7 @@ public class SiteController {
 	@PutMapping("/updateSite")
 	public ResponseEntity<String> updateSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.info("called updateSite function clientName: {},Department : {}, Site : {}", site.getUserName(),
-				site.getDepartmentName(), site.getSite());
+				site.getDepartmentName(), site.getSiteName());
 		siteService.updateSite(site);
 		return new ResponseEntity<String>("Site Updated", HttpStatus.OK);
 	}

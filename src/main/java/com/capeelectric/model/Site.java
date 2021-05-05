@@ -2,22 +2,25 @@ package com.capeelectric.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
-
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * The persistent class for the site_table database table.
@@ -26,8 +29,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "site_table")
 @NamedQueries(value = {
-		 @NamedQuery(name = "siteRepository.findByClientNameAndDepartmentName", query = "select s from Site s where s.clientName=:clientName and s.departmentName=:departmentName")
-})
+		@NamedQuery(name = "SiteRepository.findByClientNameAndDepartmentName", query = "select s from Site s where s.clientName=:clientName and s.departmentName=:departmentName") })
 public class Site implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -35,27 +37,21 @@ public class Site implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "SITE_ID")
 	private Integer siteId;
-	
+
 	@Column(name = "SITE_CODE")
 	private String siteCd;
 
 	@Column(name = "USER_NAME")
 	private String userName;
 
- 	@Column(name = "CLIENT_NAME")
+	@Column(name = "CLIENT_NAME")
 	private String clientName;
 
 	@Column(name = "DEPARTMENT_NAME")
- 	private String departmentName;
+	private String departmentName;
 
-	@Column(name = "SITE")
- 	private String site;
-
-	@Column(name = "PERSON_INCHARGE")
-	private String personIncharge;
-	
-	@Column(name = "E_MAIL")
- 	private String personInchargeEmail;
+	@Column(name = "SITE_NAME")
+	private String siteName;
 
 	@Column(name = "ADDRESSLINE_1")
 	private String addressLine_1;
@@ -92,11 +88,15 @@ public class Site implements Serializable {
 
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
-	
+
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name="DEPARTMENT_ID")
+	@JoinColumn(name = "DEPARTMENT_ID")
 	private Department department;
+
+	@JsonManagedReference
+	@OneToMany(mappedBy="Site",fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+	private Set<SitePersons> sitePersons;
 	
 	public Integer getSiteId() {
 		return siteId;
@@ -130,28 +130,12 @@ public class Site implements Serializable {
 		this.departmentName = departmentName;
 	}
 
-	public String getSite() {
-		return site;
+	public String getSiteName() {
+		return siteName;
 	}
 
-	public void setSite(String site) {
-		this.site = site;
-	}
-
-	public String getPersonIncharge() {
-		return personIncharge;
-	}
-
-	public void setPersonIncharge(String personIncharge) {
-		this.personIncharge = personIncharge;
-	}
-
-	public String getPersonInchargeEmail() {
-		return personInchargeEmail;
-	}
-
-	public void setPersonInchargeEmail(String personInchargeEmail) {
-		this.personInchargeEmail = personInchargeEmail;
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
 	}
 
 	public String getAddressLine_1() {
@@ -250,7 +234,6 @@ public class Site implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
-	
 	public Department getDepartment() {
 		return department;
 	}
@@ -267,4 +250,11 @@ public class Site implements Serializable {
 		this.siteCd = siteCd;
 	}
 
+	public Set<SitePersons> getSitePersons() {
+		return sitePersons;
+	}
+
+	public void setSitePersons(Set<SitePersons> sitePersons) {
+		this.sitePersons = sitePersons;
+	}
 }

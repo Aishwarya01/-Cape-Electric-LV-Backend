@@ -16,6 +16,7 @@ import com.capeelectric.repository.CompanyRepository;
 import com.capeelectric.repository.DepartmentRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.UserRepository;
+import com.capeelectric.service.SitePersonsService;
 import com.capeelectric.service.SiteService;
 
 @Service
@@ -33,6 +34,8 @@ public class SiteServiceImpl implements SiteService {
 	@Autowired
 	private UserRepository userRepository;
 
+	@Autowired
+	private SitePersonsService sitePersonsService;
 	/*
 	 * @param Site addSite method to c comparing department client_name, comparing
 	 * department_name,checking site_name
@@ -49,18 +52,19 @@ public class SiteServiceImpl implements SiteService {
 						site.getDepartmentName());
 				if (department != null && department.getClientName().equalsIgnoreCase(site.getClientName())
 						&& department.getDepartmentName().equalsIgnoreCase(site.getDepartmentName())) {
-					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
-							site.getDepartmentName(), site.getSite());
-					if (siteRepo == null || !siteRepo.getSite().equalsIgnoreCase(site.getSite())) {
+					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSiteName(site.getClientName(),
+							site.getDepartmentName(), site.getSiteName());
+					if (siteRepo == null || !siteRepo.getSiteName().equalsIgnoreCase(site.getSiteName())) {
 						site.setDepartment(department);
-						site.setSiteCd(site.getSite().substring(0, 3).concat("_0")+(count+1));
+						site.setSiteCd(site.getSiteName().substring(0, 3).concat("_0")+(count+1));
 						site.setCreatedDate(LocalDateTime.now());
 						site.setUpdatedDate(LocalDateTime.now());
 						site.setCreatedBy(generateFullName(department.getUserName()));
 						site.setUpdatedBy(generateFullName(department.getUserName()));
+						sitePersonsService.addSitePerson(site);
 						siteRepository.save(site);
 					} else {
-						throw new CompanyDetailsException(site.getSite() + ": site already present");
+						throw new CompanyDetailsException(site.getSiteName() + ": site already present");
 					}
 
 				} else {
@@ -96,17 +100,18 @@ public class SiteServiceImpl implements SiteService {
 							site.getDepartmentName());
 
 					for (Site siteList : siteRepo) {
-						if (siteList.getSite().equalsIgnoreCase(site.getSite())
+						if (siteList.getSiteName().equalsIgnoreCase(site.getSiteName())
 								&& siteList.getSiteId().equals(site.getSiteId())) {
-							site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
+							site.setSiteCd(site.getSiteName().substring(0, 3).concat("_0") + (count + 1));
 							site.setUpdatedDate(LocalDateTime.now());
 							site.setUpdatedBy(generateFullName(department.getUserName()));
+							sitePersonsService.updateSitePerson(site);
 							siteRepository.save(site);
 							flag = false;
 							break;
 						}
-						if (siteList.getSite().equalsIgnoreCase(site.getSite())) {
-							throw new CompanyDetailsException(site.getSite() + " : site Already present");
+						if (siteList.getSiteName().equalsIgnoreCase(site.getSiteName())) {
+							throw new CompanyDetailsException(site.getSiteName() + " : site Already present");
 						}
 					}
 					if (flag) {
@@ -140,7 +145,7 @@ public class SiteServiceImpl implements SiteService {
 			if (site != null && site.get().getSiteId().equals(siteId)) {
 				siteRepository.deleteById(siteId);
 			} else {
-				throw new CompanyDetailsException(site.get().getSite()+" : this site not present");
+				throw new CompanyDetailsException(site.get().getSiteName()+" : this site not present");
 			}
 
 		} else {
