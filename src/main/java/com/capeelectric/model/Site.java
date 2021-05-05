@@ -50,7 +50,7 @@ public class Site implements Serializable {
 	@Column(name = "DEPARTMENT_NAME")
 	private String departmentName;
 
-	@Column(name = "SITE_NAME")
+	@Column(name = "SITE")
 	private String site;
 
 	@Column(name = "ADDRESSLINE_1")
