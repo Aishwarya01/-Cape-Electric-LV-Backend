@@ -3,7 +3,6 @@ package com.capeelectric.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,14 +11,12 @@ import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Company;
 import com.capeelectric.model.Department;
 import com.capeelectric.model.Site;
-import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.User;
 import com.capeelectric.repository.CompanyRepository;
 import com.capeelectric.repository.DepartmentRepository;
 import com.capeelectric.repository.SitePersonsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.UserRepository;
-import com.capeelectric.service.SitePersonsService;
 import com.capeelectric.service.SiteService;
 
 @Service
@@ -108,7 +105,6 @@ public class SiteServiceImpl implements SiteService {
 							site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
 							site.setUpdatedDate(LocalDateTime.now());
 							site.setUpdatedBy(generateFullName(department.getUserName()));
-							deleteSitePerson(site);
 							siteRepository.save(site);
 							flag = false;
 							break;
@@ -120,7 +116,6 @@ public class SiteServiceImpl implements SiteService {
 					if (flag) {
 						department.setUpdatedDate(LocalDateTime.now());
 						department.setUpdatedBy(generateFullName(department.getUserName()));
-						deleteSitePerson(site);
 						siteRepository.save(site);
 					}
 				} else {
@@ -176,14 +171,5 @@ public class SiteServiceImpl implements SiteService {
 		if (user.isPresent() && user.get() != null)
 			return user.get().getFirstname() + " " + user.get().getLastname();
 		return "";
-	}
-
-	public void deleteSitePerson(Site site) {
-		Set<SitePersons> sitePersonrepo = siteRepository.findById(site.getSiteId()).get().getSitePersons();
-		for (SitePersons sitePersons : sitePersonrepo) {
-			
-			sitePersonsRepository.delete(sitePersons);
-		}
-
 	}
 }

@@ -40,6 +40,9 @@ public class SitePersons implements Serializable {
 
 	@Column(name = "DESIGNATION")
 	private String designation;
+	
+	@Column(name = "IN_ACTIVE")
+	private Boolean inActive;
 
 	@Column(name = "CONTACT_NO")
 	private String contactNo;
@@ -97,4 +100,11 @@ public class SitePersons implements Serializable {
 		Site = site;
 	}
 
+	public Boolean getInActive() {
+		return inActive;
+	}
+
+	public void setInActive(Boolean inActive) {
+		this.inActive = inActive;
+	}
 }
