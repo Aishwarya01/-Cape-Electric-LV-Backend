@@ -241,7 +241,6 @@ public class Site implements Serializable {
 	}
 
 	@JsonManagedReference
-	@JsonIgnore
 	public Set<SitePersons> getSitePersons() {
 		return sitePersons;
 	}
