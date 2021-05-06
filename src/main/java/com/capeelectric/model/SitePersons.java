@@ -47,7 +47,7 @@ public class SitePersons implements Serializable {
 	@Column(name = "CONTACT_NO")
 	private String contactNo;
 
-	@JsonBackReference
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "SITE_ID")
 	private Site Site;
@@ -92,6 +92,7 @@ public class SitePersons implements Serializable {
 		this.contactNo = contactNo;
 	}
 
+	@JsonBackReference
 	public Site getSite() {
 		return Site;
 	}

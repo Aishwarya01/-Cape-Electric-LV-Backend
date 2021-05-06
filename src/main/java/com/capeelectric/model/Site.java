@@ -20,6 +20,7 @@ import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
@@ -91,7 +92,7 @@ public class Site implements Serializable {
 	@JoinColumn(name = "DEPARTMENT_ID")
 	private Department department;
 
-	@JsonManagedReference
+	
 	@OneToMany(mappedBy="Site",fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	private Set<SitePersons> sitePersons;
 	
@@ -239,6 +240,8 @@ public class Site implements Serializable {
 		this.siteCd = siteCd;
 	}
 
+	@JsonManagedReference
+	@JsonIgnore
 	public Set<SitePersons> getSitePersons() {
 		return sitePersons;
 	}
