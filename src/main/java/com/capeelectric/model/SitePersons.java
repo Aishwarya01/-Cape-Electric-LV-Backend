@@ -45,7 +45,7 @@ public class SitePersons implements Serializable {
 	private String contactNo;
 
 	@JsonBackReference
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "SITE_ID")
 	private Site Site;
 
