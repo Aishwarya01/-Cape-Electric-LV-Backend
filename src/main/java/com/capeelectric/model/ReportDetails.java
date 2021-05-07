@@ -22,8 +22,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "REPORT_DETAILS_TABLE")
 @NamedQueries(value = {
-		 @NamedQuery(name = "installationReportRepository.retrieveInstallationReport", query = "select r from ReportDetails r where r.userName=:userName")
-})
+		@NamedQuery(name = "installationReportRepository.retrieveInstallationReport", query = "select r from ReportDetails r where r.userName=:userName") })
 public class ReportDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -32,9 +31,6 @@ public class ReportDetails implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "REPORT_ID")
 	private Integer reportId;
-	
-	@Column(name = "SITE_ID")
-	private Integer siteId;
 
 	@Column(name = "USER_NAME")
 	private String userName;
@@ -92,7 +88,7 @@ public class ReportDetails implements Serializable {
 
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
-	
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "reportDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<SignatorDetails> SignatorDetails;
@@ -103,14 +99,6 @@ public class ReportDetails implements Serializable {
 
 	public void setReportId(Integer reportId) {
 		this.reportId = reportId;
-	}
-
-	public Integer getSiteId() {
-		return siteId;
-	}
-
-	public void setSiteId(Integer siteId) {
-		this.siteId = siteId;
 	}
 
 	public String getUserName() {
