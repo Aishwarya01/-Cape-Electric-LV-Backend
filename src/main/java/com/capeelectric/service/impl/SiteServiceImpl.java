@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CompanyDetailsException;
@@ -137,7 +138,7 @@ public class SiteServiceImpl implements SiteService {
 	 * then site_object will be delete
 	 */
 	@Override
-	public void deleteSite(Integer siteId) throws CompanyDetailsException {
+	public void deleteSite(Integer siteId) throws CompanyDetailsException,EmptyResultDataAccessException {
 		if (siteId != null && siteId != 0) {
 			Optional<Site> site = siteRepository.findById(siteId);
 
