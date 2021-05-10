@@ -22,6 +22,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.capeelectric.config.JwtTokenUtil;
 import com.capeelectric.exception.ChangePasswordException;
+import com.capeelectric.exception.ForgotPasswordException;
+import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.CustomUserDetails;
 import com.capeelectric.model.User;
@@ -76,12 +78,12 @@ public class UserController {
 	}
 	
 	@GetMapping("/forgotPassword/{email}")
-	public ResponseEntity<String> forgotPassword(@PathVariable String email) throws UserException{
+	public ResponseEntity<String> forgotPassword(@PathVariable String email) throws ForgotPasswordException{
  		return userService.findByUserName(email);
 	}
 	
 	@PutMapping("/updatePassword")
-	public ResponseEntity<String> updatePassword(@RequestBody AuthenticationRequest request) throws UserException{
+	public ResponseEntity<String> updatePassword(@RequestBody AuthenticationRequest request) throws UpdatePasswordException{
 		logger.debug("Update Password starts");
 		User user  = userService.updatePassword(request.getEmail(), request.getPassword());
 		logger.debug("Update Password ends");

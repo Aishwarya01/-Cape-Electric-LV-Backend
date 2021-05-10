@@ -23,6 +23,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.capeelectric.config.JwtTokenUtil;
 import com.capeelectric.exception.ChangePasswordException;
+import com.capeelectric.exception.ForgotPasswordException;
+import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.CustomUserDetails;
 import com.capeelectric.model.User;
@@ -99,7 +101,7 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testForgotPassword() throws UserException {
+	public void testForgotPassword() throws ForgotPasswordException {
 
 		ResponseEntity<String> responseEntity = new ResponseEntity<>(HttpStatus.ACCEPTED);
 
@@ -109,7 +111,7 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testUpdatePassword() throws UserException {
+	public void testUpdatePassword() throws UpdatePasswordException {
 		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
 		authenticationRequest.setEmail("lvsystem@capeindia.net");
 		authenticationRequest.setPassword("abcd12345");

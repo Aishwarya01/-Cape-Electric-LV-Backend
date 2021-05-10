@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CompanyDetailsException;
@@ -14,6 +15,7 @@ import com.capeelectric.model.Site;
 import com.capeelectric.model.User;
 import com.capeelectric.repository.CompanyRepository;
 import com.capeelectric.repository.DepartmentRepository;
+import com.capeelectric.repository.SitePersonsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.SiteService;
@@ -32,6 +34,9 @@ public class SiteServiceImpl implements SiteService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	SitePersonsRepository sitePersonsRepository;
 
 	/*
 	 * @param Site addSite method to c comparing department client_name, comparing
@@ -133,7 +138,7 @@ public class SiteServiceImpl implements SiteService {
 	 * then site_object will be delete
 	 */
 	@Override
-	public void deleteSite(Integer siteId) throws CompanyDetailsException {
+	public void deleteSite(Integer siteId) throws CompanyDetailsException,EmptyResultDataAccessException {
 		if (siteId != null && siteId != 0) {
 			Optional<Site> site = siteRepository.findById(siteId);
 
@@ -168,5 +173,4 @@ public class SiteServiceImpl implements SiteService {
 			return user.get().getFirstname() + " " + user.get().getLastname();
 		return "";
 	}
-
 }
