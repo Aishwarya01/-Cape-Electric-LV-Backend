@@ -3,8 +3,10 @@ package com.capeelectric.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Company;
 import com.capeelectric.model.Department;
 import com.capeelectric.model.Site;
+import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.User;
 import com.capeelectric.repository.CompanyRepository;
 import com.capeelectric.repository.DepartmentRepository;
@@ -36,7 +39,7 @@ public class SiteServiceImpl implements SiteService {
 	private UserRepository userRepository;
 	
 	@Autowired
-	SitePersonsRepository sitePersonsRepository;
+	private SitePersonsRepository sitePersonsRepository;
 
 	/*
 	 * @param Site addSite method to c comparing department client_name, comparing
@@ -45,6 +48,7 @@ public class SiteServiceImpl implements SiteService {
 	@Override
 	public void addSite(Site site) throws CompanyDetailsException {
 		int count = 0;
+		Boolean flag = true;
 
 		if (site.getClientName() != null && site.getDepartmentName() != null) {
 			Optional<Company> companyRepo = companyRepository.findByClientName(site.getClientName());
@@ -56,18 +60,27 @@ public class SiteServiceImpl implements SiteService {
 						&& department.getDepartmentName().equalsIgnoreCase(site.getDepartmentName())) {
 					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
 							site.getDepartmentName(), site.getSite());
+					Set<SitePersons> sitePersonsRepo = site.getSitePersons();
+
 					if (siteRepo == null || !siteRepo.getSite().equalsIgnoreCase(site.getSite())) {
-						site.setDepartment(department);
-						site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
-						site.setCreatedDate(LocalDateTime.now());
-						site.setUpdatedDate(LocalDateTime.now());
-						site.setCreatedBy(generateFullName(department.getUserName()));
-						site.setUpdatedBy(generateFullName(department.getUserName()));
-						try {
-							siteRepository.save(site);
-						} catch (Exception e) {
-							throw new CompanyDetailsException(e.getMessage() + " :duplicate entry not allowed");
+						for (SitePersons sitePersons : sitePersonsRepo) {
+							Optional<SitePersons> inchargeEmail = sitePersonsRepository
+									.findByPersonInchargeEmail(sitePersons.getPersonInchargeEmail());
+							if (inchargeEmail.isPresent() && inchargeEmail != null) {
+								throw new CompanyDetailsException(
+										sitePersons.getPersonInchargeEmail() + ": site_person Email already present");
+							}
 						}
+						if (flag) {
+							site.setDepartment(department);
+							site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
+							site.setCreatedDate(LocalDateTime.now());
+							site.setUpdatedDate(LocalDateTime.now());
+							site.setCreatedBy(generateFullName(department.getUserName()));
+							site.setUpdatedBy(generateFullName(department.getUserName()));
+							siteRepository.save(site);
+						}
+
 					} else {
 						throw new CompanyDetailsException(site.getSite() + ": site already present");
 					}
@@ -112,11 +125,12 @@ public class SiteServiceImpl implements SiteService {
 							site.setUpdatedBy(generateFullName(department.getUserName()));
 							try {
 								siteRepository.save(site);
-							} catch (Exception e) {
+								flag = false;
+								break;
+							} catch (DataIntegrityViolationException e) {
 								throw new CompanyDetailsException(e.getMessage() + " :duplicate entry not allowed");
 							}
-							flag = false;
-							break;
+
 						}
 						if (siteList.getSite().equalsIgnoreCase(site.getSite())) {
 							throw new CompanyDetailsException(site.getSite() + " : site Already present");
@@ -127,7 +141,7 @@ public class SiteServiceImpl implements SiteService {
 						department.setUpdatedBy(generateFullName(department.getUserName()));
 						try {
 							siteRepository.save(site);
-						} catch (Exception e) {
+						} catch (DataIntegrityViolationException e) {
 							throw new CompanyDetailsException(e.getMessage() + " :duplicate entry not allowed");
 						}
 					}
