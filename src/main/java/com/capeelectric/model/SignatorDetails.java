@@ -60,13 +60,13 @@ public class SignatorDetails implements Serializable {
 	private String landMark;
 
 	@Column(name = "STATE")
-	private String State;
+	private String state;
 
 	@Column(name = "PIN_CODE")
 	private String pinCode;
 
 	@Column(name = "COUNTRY")
-	private String Country;
+	private String country;
 
 	@Column(name = "DECLARATION_DATE")
 	private String declarationDate;
@@ -176,11 +176,11 @@ public class SignatorDetails implements Serializable {
 	}
 
 	public String getState() {
-		return State;
+		return state;
 	}
 
 	public void setState(String state) {
-		State = state;
+		this.state = state;
 	}
 
 	public String getPinCode() {
@@ -192,11 +192,11 @@ public class SignatorDetails implements Serializable {
 	}
 
 	public String getCountry() {
-		return Country;
+		return country;
 	}
 
 	public void setCountry(String country) {
-		Country = country;
+		this.country = country;
 	}
 
 	public String getDeclarationDate() {

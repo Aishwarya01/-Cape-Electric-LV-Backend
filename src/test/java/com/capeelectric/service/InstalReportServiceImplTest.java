@@ -1,10 +1,13 @@
 package com.capeelectric.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
@@ -18,6 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.SignatorDetails;
+import com.capeelectric.model.User;
 import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.impl.InstalReportServiceImpl;
@@ -37,6 +41,21 @@ public class InstalReportServiceImplTest {
 
 	private ReportDetails reportDetails;
 	
+	private User user;
+
+	private Optional<User> optionaluser;
+
+	{
+		user = new User();
+		user.setUsername("lvsystem@capeindia.net");
+		user.setPassword("cape");
+		user.setEmail("lvsystem@capeindia.net");
+		user.setUserexist(true);
+		user.setActive(true);
+
+		optionaluser = Optional.of(user);
+	}
+		
 	{
 		Set<SignatorDetails> set = new HashSet<SignatorDetails>();
 
@@ -73,12 +92,15 @@ public class InstalReportServiceImplTest {
 		when(installationReportRepository.save(reportDetails)).thenReturn(reportDetails);
 		instalReportServiceImpl.addInstallationReport(reportDetails);
 
+		when(userRepository.findByUsername("software@capeindia.com")).thenReturn(optionaluser);
+		instalReportServiceImpl.addInstallationReport(reportDetails);
+
 		InstalReportException exception = Assertions.assertThrows(InstalReportException.class,
 				() -> instalReportServiceImpl.addInstallationReport(null));
 		assertEquals(exception.getMessage(), "invalid inputs");
 
 	}
-
+ 
 	@Test
 	public void testRetrieveInstallationReport() throws InstalReportException {
 		reportDetails.setUserName("software@capeindia.com");
@@ -86,7 +108,9 @@ public class InstalReportServiceImplTest {
 		ArrayList<ReportDetails> list = new ArrayList<ReportDetails>();
 		list.add(reportDetails);
 		when(installationReportRepository.findByUserName("software@capeindia.com")).thenReturn(list);
-		instalReportServiceImpl.retrieveInstallationReport("software@capeindia.com");
+		List<ReportDetails> installationReport = instalReportServiceImpl
+				.retrieveInstallationReport("software@capeindia.com");
+		assertNotNull(installationReport);
 
 		InstalReportException exception = Assertions.assertThrows(InstalReportException.class,
 				() -> instalReportServiceImpl.retrieveInstallationReport(null));
