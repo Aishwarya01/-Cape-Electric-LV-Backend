@@ -69,6 +69,8 @@ public class SiteServiceImpl implements SiteService {
 						boolean email = checkSitePersonEmail(site.getSitePersons());
 						if (email) {
 							siteRepository.save(site);
+						}else {
+							throw new CompanyDetailsException("PersonInchargEmail already present");
 						}
 					} else {
 						throw new CompanyDetailsException(site.getSite() + ": site already present");
@@ -95,7 +97,6 @@ public class SiteServiceImpl implements SiteService {
 	@Override
 	public void updateSite(Site site) throws CompanyDetailsException {
 		int count = 0;
-		Boolean flag = true;
 		if (site.getDepartmentName() != null && site.getClientName() != null && site.getUserName() != null
 				&& site.getSiteId() != null) {
 			Department department = departmentRepository.findByClientNameAndDepartmentName(site.getClientName(),
@@ -103,35 +104,24 @@ public class SiteServiceImpl implements SiteService {
 			if (department != null && department.getClientName().equalsIgnoreCase(site.getClientName())) {
 				if (department != null && department.getDepartmentName().equalsIgnoreCase(site.getDepartmentName())) {
 
-					List<Site> siteRepo = siteRepository.findByClientNameAndDepartmentName(site.getClientName(),
-							site.getDepartmentName());
+					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
+							site.getDepartmentName(), site.getSite());
 
-					for (Site siteList : siteRepo) {
-						if (siteList.getSite().equalsIgnoreCase(site.getSite())
-								&& siteList.getSiteId().equals(site.getSiteId())) {
-							site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
-							site.setUpdatedDate(LocalDateTime.now());
-							site.setUpdatedBy(generateFullName(department.getUserName()));
-							boolean email = checkSitePersonEmail(site.getSitePersons());
-							if (email) {
-								siteRepository.save(site);
-								flag = false;
-								break;
-							}
-						}
-						if (siteList.getSite().equalsIgnoreCase(site.getSite())) {
-							throw new CompanyDetailsException(site.getSite() + " : site Already present");
-						}
-					}
-					if (flag) {
-						department.setUpdatedDate(LocalDateTime.now());
-						department.setUpdatedBy(generateFullName(department.getUserName()));
+					if (siteRepo != null && siteRepo.getSite().equalsIgnoreCase(site.getSite())
+							&& siteRepo.getSiteId().equals(site.getSiteId())) {
+						site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
+						site.setUpdatedDate(LocalDateTime.now());
+						site.setUpdatedBy(generateFullName(department.getUserName()));
 						boolean email = checkSitePersonEmail(site.getSitePersons());
 						if (email) {
 							siteRepository.save(site);
+						}else {
+							throw new CompanyDetailsException("PersonInchargEmail already present");
 						}
-
+					} else {
+						throw new CompanyDetailsException(site.getSite() + " site not present");
 					}
+
 				} else {
 					throw new CompanyDetailsException(site.getDepartmentName() + "  department not present for "
 							+ site.getClientName() + " company");
@@ -147,8 +137,8 @@ public class SiteServiceImpl implements SiteService {
 	}
 
 	/*
-	 * @param siteId deleteSite method to comparing siteId in site_table and @param siteId is true
-	 * then site_object will be delete
+	 * @param siteId deleteSite method to comparing siteId in site_table and @param
+	 * siteId is true then site_object will be delete
 	 */
 	@Override
 	public void deleteSite(Integer siteId) throws CompanyDetailsException,EmptyResultDataAccessException {
@@ -193,11 +183,17 @@ public class SiteServiceImpl implements SiteService {
 	 */
 	private boolean checkSitePersonEmail(Set<SitePersons> sitePersons) throws CompanyDetailsException {
 		boolean emailAvailable = true;
-		for (SitePersons sitePersons2 : sitePersons) {
-			if (sitePersons2.getPersonId() == null) {
-				Optional<SitePersons> inchargeEmail = sitePersonsRepository
-						.findByPersonInchargeEmail(sitePersons2.getPersonInchargeEmail());
-				if (inchargeEmail.isPresent() && inchargeEmail != null) {
+		for (SitePersons sitePersonsItr : sitePersons) {
+
+			Optional<SitePersons> inchargeEmail = sitePersonsRepository
+					.findByPersonInchargeEmail(sitePersonsItr.getPersonInchargeEmail());
+
+			if (inchargeEmail.isPresent() && inchargeEmail != null) {
+				if (inchargeEmail.get().getPersonInchargeEmail()
+						.equalsIgnoreCase(sitePersonsItr.getPersonInchargeEmail())
+						&& inchargeEmail.get().getPersonId().equals(sitePersonsItr.getPersonId())) {
+					emailAvailable = true;
+				} else {
 					emailAvailable = false;
 				}
 			}
