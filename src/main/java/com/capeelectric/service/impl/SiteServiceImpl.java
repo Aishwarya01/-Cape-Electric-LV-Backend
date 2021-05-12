@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -48,8 +47,7 @@ public class SiteServiceImpl implements SiteService {
 	@Override
 	public void addSite(Site site) throws CompanyDetailsException {
 		int count = 0;
-		Boolean flag = true;
-
+ 
 		if (site.getClientName() != null && site.getDepartmentName() != null) {
 			Optional<Company> companyRepo = companyRepository.findByClientName(site.getClientName());
 			if (companyRepo.isPresent() && companyRepo.get() != null
@@ -60,27 +58,18 @@ public class SiteServiceImpl implements SiteService {
 						&& department.getDepartmentName().equalsIgnoreCase(site.getDepartmentName())) {
 					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
 							site.getDepartmentName(), site.getSite());
-					Set<SitePersons> sitePersonsRepo = site.getSitePersons();
 
 					if (siteRepo == null || !siteRepo.getSite().equalsIgnoreCase(site.getSite())) {
-						for (SitePersons sitePersons : sitePersonsRepo) {
-							Optional<SitePersons> inchargeEmail = sitePersonsRepository
-									.findByPersonInchargeEmail(sitePersons.getPersonInchargeEmail());
-							if (inchargeEmail.isPresent() && inchargeEmail != null) {
-								throw new CompanyDetailsException(
-										sitePersons.getPersonInchargeEmail() + ": site_person Email already present");
-							}
-						}
-						if (flag) {
-							site.setDepartment(department);
-							site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
-							site.setCreatedDate(LocalDateTime.now());
-							site.setUpdatedDate(LocalDateTime.now());
-							site.setCreatedBy(generateFullName(department.getUserName()));
-							site.setUpdatedBy(generateFullName(department.getUserName()));
+						site.setDepartment(department);
+						site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
+						site.setCreatedDate(LocalDateTime.now());
+						site.setUpdatedDate(LocalDateTime.now());
+						site.setCreatedBy(generateFullName(department.getUserName()));
+						site.setUpdatedBy(generateFullName(department.getUserName()));
+						boolean email = checkSitePersonEmail(site.getSitePersons());
+						if (email) {
 							siteRepository.save(site);
 						}
-
 					} else {
 						throw new CompanyDetailsException(site.getSite() + ": site already present");
 					}
@@ -123,14 +112,12 @@ public class SiteServiceImpl implements SiteService {
 							site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
 							site.setUpdatedDate(LocalDateTime.now());
 							site.setUpdatedBy(generateFullName(department.getUserName()));
-							try {
+							boolean email = checkSitePersonEmail(site.getSitePersons());
+							if (email) {
 								siteRepository.save(site);
 								flag = false;
 								break;
-							} catch (DataIntegrityViolationException e) {
-								throw new CompanyDetailsException(e.getMessage() + " :duplicate entry not allowed");
 							}
-
 						}
 						if (siteList.getSite().equalsIgnoreCase(site.getSite())) {
 							throw new CompanyDetailsException(site.getSite() + " : site Already present");
@@ -139,11 +126,11 @@ public class SiteServiceImpl implements SiteService {
 					if (flag) {
 						department.setUpdatedDate(LocalDateTime.now());
 						department.setUpdatedBy(generateFullName(department.getUserName()));
-						try {
+						boolean email = checkSitePersonEmail(site.getSitePersons());
+						if (email) {
 							siteRepository.save(site);
-						} catch (DataIntegrityViolationException e) {
-							throw new CompanyDetailsException(e.getMessage() + " :duplicate entry not allowed");
 						}
+
 					}
 				} else {
 					throw new CompanyDetailsException(site.getDepartmentName() + "  department not present for "
@@ -198,5 +185,23 @@ public class SiteServiceImpl implements SiteService {
 		if (user.isPresent() && user.get() != null)
 			return user.get().getFirstname() + " " + user.get().getLastname();
 		return "";
+	}
+
+	/*
+	 * @param sitePersons
+	 * checkSitePersonEmail method to finding duplicate personInchargeMail entry
+	 */
+	private boolean checkSitePersonEmail(Set<SitePersons> sitePersons) throws CompanyDetailsException {
+		for (SitePersons sitePersons2 : sitePersons) {
+			if (sitePersons2.getPersonId() == null) {
+				Optional<SitePersons> inchargeEmail = sitePersonsRepository
+						.findByPersonInchargeEmail(sitePersons2.getPersonInchargeEmail());
+				if (inchargeEmail.isPresent() && inchargeEmail != null) {
+					throw new CompanyDetailsException(
+							inchargeEmail.get().getPersonInchargeEmail() + " : PersonInchargeEmail already present");
+				}
+			}
+		}
+		return true;
 	}
 }
