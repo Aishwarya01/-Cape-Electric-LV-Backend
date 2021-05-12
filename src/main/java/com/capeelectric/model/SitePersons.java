@@ -14,14 +14,10 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "SITE_PERSON_TABLE")
-@JsonIdentityInfo(
-		   generator = ObjectIdGenerators.PropertyGenerator.class,
-		   property = "personId")
 @NamedQueries(value = {
 		@NamedQuery(name = "SitePersonsRepository.RepositoryfindByPersonInchargeEmail", query = "select p.personInchargeEmail from SitePersons p where p.personInchargeEmail=:personInchargeEmail") })
 public class SitePersons implements Serializable {
@@ -51,6 +47,7 @@ public class SitePersons implements Serializable {
 	@Column(name = "CONTACT_NO")
 	private String contactNo;
 
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "SITE_ID")
 	private Site Site;
@@ -95,6 +92,7 @@ public class SitePersons implements Serializable {
 		this.contactNo = contactNo;
 	}
 
+	@JsonBackReference
 	public Site getSite() {
 		return Site;
 	}
