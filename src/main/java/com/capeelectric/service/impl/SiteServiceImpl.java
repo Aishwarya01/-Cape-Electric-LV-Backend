@@ -192,16 +192,16 @@ public class SiteServiceImpl implements SiteService {
 	 * checkSitePersonEmail method to finding duplicate personInchargeMail entry
 	 */
 	private boolean checkSitePersonEmail(Set<SitePersons> sitePersons) throws CompanyDetailsException {
+		boolean emailAvailable = true;
 		for (SitePersons sitePersons2 : sitePersons) {
 			if (sitePersons2.getPersonId() == null) {
 				Optional<SitePersons> inchargeEmail = sitePersonsRepository
 						.findByPersonInchargeEmail(sitePersons2.getPersonInchargeEmail());
 				if (inchargeEmail.isPresent() && inchargeEmail != null) {
-					throw new CompanyDetailsException(
-							inchargeEmail.get().getPersonInchargeEmail() + " : PersonInchargeEmail already present");
+					emailAvailable = false;
 				}
 			}
 		}
-		return true;
+		return emailAvailable;
 	}
 }
