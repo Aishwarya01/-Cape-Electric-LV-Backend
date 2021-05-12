@@ -18,8 +18,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * The persistent class for the department_table database table.
@@ -27,6 +27,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  */
 @Entity
 @Table(name = "department_table")
+@JsonIdentityInfo(
+		   generator = ObjectIdGenerators.PropertyGenerator.class,
+		   property = "departmentId")
 @NamedQueries(value = {
 		@NamedQuery(name = "DepartmentRepository.findByClientName", query = "select  d from Department d where d.clientName=:clientName"),
 		@NamedQuery(name = "DepartmentRepository.findByUserNameAndClientName", query = "select  d from Department d where d.userName=:userName and d.clientName=:clientName"),
@@ -64,12 +67,10 @@ public class Department implements Serializable {
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 	
-	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="COMPANY_ID")
 	private Company company;
 	
-	@JsonManagedReference
 	@OneToMany(mappedBy="department",fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	private Set<Site> site;
 
@@ -145,7 +146,6 @@ public class Department implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
-	
 	public Company getCompany() {
 		return company;
 	}

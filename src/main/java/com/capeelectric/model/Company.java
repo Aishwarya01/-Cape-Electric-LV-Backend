@@ -16,7 +16,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 
 /**
@@ -25,6 +26,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  */
 @Entity
 @Table(name = "COMPANY_TABLE")
+@JsonIdentityInfo(
+		   generator = ObjectIdGenerators.PropertyGenerator.class,
+		   property = "companyId")
+
 @NamedQueries(value = {
 	@NamedQuery(name = "CompanyRepository.findByUserNameAndClientName", query = "select c.clientName from Company c where c.userName=:userName and c.clientName=:clientName"),
 		@NamedQuery(name = "CompanyRepository.findByUserName", query = "select c from Company c where c.userName=:userName"),
@@ -64,7 +69,6 @@ public class Company implements Serializable {
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 	
-	@JsonManagedReference
 	@OneToMany(mappedBy="company", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	private Set<Department> department;
 

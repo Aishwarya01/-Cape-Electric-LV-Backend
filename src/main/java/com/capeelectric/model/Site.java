@@ -19,9 +19,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * The persistent class for the site_table database table.
@@ -29,6 +28,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  */
 @Entity
 @Table(name = "site_table")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "siteId")
+
 @NamedQueries(value = {
 		@NamedQuery(name = "SiteRepository.findByClientNameAndDepartmentName", query = "select s from Site s where s.clientName=:clientName and s.departmentName=:departmentName") })
 public class Site implements Serializable {
@@ -87,15 +88,13 @@ public class Site implements Serializable {
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 
-	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "DEPARTMENT_ID")
 	private Department department;
 
-	
-	@OneToMany(mappedBy="Site",fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "Site", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<SitePersons> sitePersons;
-	
+
 	public Integer getSiteId() {
 		return siteId;
 	}
@@ -240,7 +239,6 @@ public class Site implements Serializable {
 		this.siteCd = siteCd;
 	}
 
-	@JsonManagedReference
 	public Set<SitePersons> getSitePersons() {
 		return sitePersons;
 	}
