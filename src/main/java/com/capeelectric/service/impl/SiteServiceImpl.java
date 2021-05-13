@@ -106,6 +106,8 @@ public class SiteServiceImpl implements SiteService {
 
 					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
 							site.getDepartmentName(), site.getSite());
+					
+					deleteSitePersonDetails(site.getSitePersons());
 
 					if (siteRepo != null && siteRepo.getSite().equalsIgnoreCase(site.getSite())
 							&& siteRepo.getSiteId().equals(site.getSiteId())) {
@@ -200,4 +202,15 @@ public class SiteServiceImpl implements SiteService {
 		}
 		return emailAvailable;
 	}
+	
+
+	private void deleteSitePersonDetails(Set<SitePersons> sitePersons) {
+
+		for (SitePersons sitePersonsItr : sitePersons) {
+			if(!sitePersonsItr.getInActive()) {
+				sitePersonsRepository.deleteById(sitePersonsItr.getPersonId());
+			}
+		}
+	}
+
 }
