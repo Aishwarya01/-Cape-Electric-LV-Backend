@@ -1,6 +1,7 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -107,8 +108,10 @@ public class SiteServiceImpl implements SiteService {
 					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
 							site.getDepartmentName(), site.getSite());
 					
-					deleteSitePersonDetails(site.getSitePersons());
-
+					Set<SitePersons> sitePersons = deleteSitePersonDetails(site.getSitePersons());
+					if(!sitePersons.isEmpty()) {
+						site.getSitePersons().removeAll(sitePersons);
+					}
 					if (siteRepo != null && siteRepo.getSite().equalsIgnoreCase(site.getSite())
 							&& siteRepo.getSiteId().equals(site.getSiteId())) {
 						site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
@@ -205,13 +208,19 @@ public class SiteServiceImpl implements SiteService {
 	}
 	
 
-	private void deleteSitePersonDetails(Set<SitePersons> sitePersons) {
-
+	/**
+	 * 
+	 * @param sitePersons
+	 */
+	private Set<SitePersons> deleteSitePersonDetails(Set<SitePersons> sitePersons) {
+		Set<SitePersons> sitePersonSet = new HashSet<SitePersons>();
 		for (SitePersons sitePersonsItr : sitePersons) {
 			if(!sitePersonsItr.getInActive()) {
 				sitePersonsRepository.deleteById(sitePersonsItr.getPersonId());
+				sitePersonSet.add(sitePersonsItr);
 			}
 		}
+		return sitePersonSet;
 	}
 
 }
