@@ -116,6 +116,7 @@ public class SiteServiceImpl implements SiteService {
 						site.setUpdatedBy(generateFullName(department.getUserName()));
 						boolean email = checkSitePersonEmail(site.getSitePersons());
 						if (email) {
+							site.setDepartment(department);
 							siteRepository.save(site);
 						}else {
 							throw new CompanyDetailsException("PersonInchargEmail already present");
