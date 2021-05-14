@@ -108,7 +108,7 @@ public class SiteServiceImpl implements SiteService {
 					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
 							site.getDepartmentName(), site.getSite());
 					
-					Set<SitePersons> sitePersons = deleteSitePersonDetails(site.getSitePersons());
+		 			Set<SitePersons> sitePersons = deleteSitePersonDetails(site.getSitePersons());
 					if(!sitePersons.isEmpty()) {
 						site.getSitePersons().removeAll(sitePersons);
 					}
@@ -147,14 +147,15 @@ public class SiteServiceImpl implements SiteService {
 	 * siteId is true then site_object will be delete
 	 */
 	@Override
-	public void deleteSite(Integer siteId) throws CompanyDetailsException,EmptyResultDataAccessException {
+	public void deleteSite(Integer siteId) throws CompanyDetailsException, EmptyResultDataAccessException {
 		if (siteId != null && siteId != 0) {
 			Optional<Site> site = siteRepository.findById(siteId);
 
-			if (site != null && site.get().getSiteId().equals(siteId)) {
+			if (site.isPresent() && site != null && site.get().getSiteId().equals(siteId)) {
+
 				siteRepository.deleteById(siteId);
 			} else {
-				throw new CompanyDetailsException(site.get().getSite()+" : this site not present");
+				throw new CompanyDetailsException(siteId + " : this siteId not present");
 			}
 
 		} else {
@@ -198,9 +199,8 @@ public class SiteServiceImpl implements SiteService {
 				if (inchargeEmail.get().getPersonInchargeEmail()
 						.equalsIgnoreCase(sitePersonsItr.getPersonInchargeEmail())
 						&& inchargeEmail.get().getPersonId().equals(sitePersonsItr.getPersonId())) {
-					emailAvailable = true;
 				} else {
-					emailAvailable = false;
+					emailAvailable = false; 
 				}
 			}
 		}
@@ -215,7 +215,7 @@ public class SiteServiceImpl implements SiteService {
 	private Set<SitePersons> deleteSitePersonDetails(Set<SitePersons> sitePersons) {
 		Set<SitePersons> sitePersonSet = new HashSet<SitePersons>();
 		for (SitePersons sitePersonsItr : sitePersons) {
-			if(!sitePersonsItr.getInActive()) {
+			if(sitePersonsItr !=null && !sitePersonsItr.getInActive()) {
 				sitePersonsRepository.deleteById(sitePersonsItr.getPersonId());
 				sitePersonSet.add(sitePersonsItr);
 			}

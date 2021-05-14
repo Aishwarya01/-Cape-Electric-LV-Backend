@@ -131,7 +131,7 @@ public class Site implements Serializable {
 		return site;
 	}
 
-	public void setSiteName(String site) {
+	public void setSite(String site) {
 		this.site = site;
 	}
 

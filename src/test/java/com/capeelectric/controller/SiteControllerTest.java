@@ -41,7 +41,7 @@ public class SiteControllerTest {
 		site.setClientName("nissan");
 		site.setDepartmentName("Accounts");
 		site.setSiteId(1);
-		site.setSiteName("user");
+		site.setSite("user");
 
 	}
 
