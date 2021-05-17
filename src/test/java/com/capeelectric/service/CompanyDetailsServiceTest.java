@@ -1,21 +1,25 @@
 package com.capeelectric.service;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Company;
+import com.capeelectric.model.Site;
 import com.capeelectric.model.User;
 import com.capeelectric.repository.CompanyRepository;
 import com.capeelectric.repository.UserRepository;
@@ -33,7 +37,7 @@ public class CompanyDetailsServiceTest {
 
 	@MockBean
 	private UserRepository userRepository;
-	
+
 	@MockBean
 	private CompanyDetailsException companyDetailsException;
 
@@ -74,39 +78,43 @@ public class CompanyDetailsServiceTest {
 	}
 
 	@Test
-	public void testUpdateCompany_Client_Not_Present() throws CompanyDetailsException {
-		when(companyRepository.findByUserName(company.getUserName())).thenReturn(null);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException(company.getUserName() + "user not having company");
-		});
+	public void testUpdateCompany_Invalid_Inputs() throws CompanyDetailsException {
+		List<Company> companylist = new ArrayList<>();
+		company.setUserName(null);
+		when(companyRepository.findByUserName(company.getUserName())).thenReturn(companylist);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> companyServiceimp.updateCompany(company));
+		equals(assertThrows.getMessage());
 	}
 
 	@Test
 	public void testUpdateCompany_Client_Not_Present2() throws CompanyDetailsException {
-		company.setUserName(null);
+		List<Company> companyList = new ArrayList<>();
 
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException("invalid input");
-		});
+		when(companyRepository.findByUserName(company.getUserName())).thenReturn(companyList);
+
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> companyServiceimp.updateCompany(company));
+		equals(assertThrows.getMessage());
 	}
 
 	@Test
 	public void testUpdateCompany_Client_Not_Present3() throws CompanyDetailsException {
 		List<Company> companyList = new ArrayList<>();
-
+		Company company2 = null;
+		companyList.add(company2);
 		when(companyRepository.findByUserName(company.getUserName())).thenReturn(companyList);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException(
-					company.getClientName() + " client not present user :" + company.getUserName());
-		});
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> companyServiceimp.updateCompany(company));
+		equals(assertThrows.getMessage());
+
 	}
 
-
 	@Test
-	public void testaddCompany() throws CompanyDetailsException {
-		Optional<Company> companyList=null ;
+	public void testaddCompany_Success_Flow() throws CompanyDetailsException {
+		Optional<Company> companyList = null;
 		companyList = Optional.of(company1);
-		
+
 		User user = new User();
 		user.setFirstname("firstName");
 		user.setLastname("lastName");
@@ -120,63 +128,79 @@ public class CompanyDetailsServiceTest {
 
 	@Test
 	public void testaddCompany_invalid_input() throws CompanyDetailsException {
-		company.setUserName(null);
-
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException("invalid input");
-		});
+		Optional<Company> companyList;
+		company.setClientName(null);
+		companyList = Optional.of(company);
+		when(companyRepository.findByUserNameAndClientName(company.getUserName(), company.getClientName()))
+				.thenReturn(companyList);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> companyServiceimp.addCompany(company));
+		equals(assertThrows.getMessage());
 	}
 
 	@Test
 	public void testaddCompany_Client_is_Present() throws CompanyDetailsException {
-		Optional<Company> companyList=null ;
-		companyList = Optional.of(company1);
+		company.setClientName("cape");
+		company.setUserName("user@capeindia.net");
+		Optional<Company> companyList;
+		companyList = Optional.of(company);
+		when(companyRepository.findByUserNameAndClientName(company.getUserName(), company.getClientName()))
+				.thenReturn(companyList);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> companyServiceimp.addCompany(company));
+		equals(assertThrows.getMessage());
 
-		when(companyRepository.findByUserNameAndClientName(company.getUserName(),company.getClientName())).thenReturn(companyList);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException(company.getClientName() + " : this ClientName already present");
-		});
 	}
-	
+
 	@Test
 	public void testRetriveCompany_Success_Flow() throws CompanyDetailsException {
 		List<Company> companyList = new ArrayList<>();
 		companyList.add(company);
-		
+
 		when(companyRepository.findByUserName(company.getUserName())).thenReturn(companyList);
 		companyServiceimp.retrieveCompany("user@capeindia.net");
 	}
-	
+
 	@Test
 	public void testRetriveCompany_Unuser() throws CompanyDetailsException {
-			when(companyRepository.findByUserName(company.getUserName())).thenReturn(null);
-			assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-				throw new CompanyDetailsException(("username required"));
-			});
-		}
-	
+		List<Company> companylist = new ArrayList<>();
+		company.setUserName(null);
+		when(companyRepository.findByUserName(company.getUserName())).thenReturn(companylist);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> companyServiceimp.retrieveCompany(null));
+		equals(assertThrows.getMessage());
+	}
+
 	@Test
 	public void testdeleteCompany_Success_Flow() throws CompanyDetailsException {
-		Optional<Company> companyList ;
+		Optional<Company> companyList;
 		companyList = Optional.of(company);
-		when(companyRepository.findByUserNameAndClientName(company.getUserName(),company.getClientName())).thenReturn(companyList);
+		when(companyRepository.findByUserNameAndClientName(company.getUserName(), company.getClientName()))
+				.thenReturn(companyList);
 	}
-	
+
 	@Test
 	public void testdeleteCompany_Invalid_Input_Flow() throws CompanyDetailsException {
-		when(companyRepository.findByUserNameAndClientName(company.getUserName(),company.getClientName())).thenReturn(null);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException("invalid inputs");
-		});
-}
+		Optional<Company> companyList;
+		companyList = Optional.of(company);
+		company.setUserName(null);
+		when(companyRepository.findByUserNameAndClientName(company.getUserName(), company.getClientName()))
+				.thenReturn(companyList);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> companyServiceimp.deleteCompany(null, null));
+		equals(assertThrows.getMessage());
+	}
+
 	@Test
 	public void testdeleteCompany_Client_Not_Present() throws CompanyDetailsException {
-		Optional<Company> companyList ;
+		Optional<Company> companyList;
 		companyList = Optional.of(company);
-		when(companyRepository.findByUserNameAndClientName(company.getUserName(),company.getClientName())).thenReturn(companyList);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException(company.getClientName() +" :client not present");
-		});
+		when(companyRepository.findByUserNameAndClientName(company.getUserName(), company.getClientName()))
+				.thenReturn(companyList);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> companyServiceimp.deleteCompany("cape", ";lvsystem"));
+		equals(assertThrows.getMessage());
+
 	}
-	
+
 }
