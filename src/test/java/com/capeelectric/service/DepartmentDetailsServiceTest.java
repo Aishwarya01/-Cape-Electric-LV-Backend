@@ -1,12 +1,13 @@
 package com.capeelectric.service;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Company;
 import com.capeelectric.model.Department;
+import com.capeelectric.model.User;
 import com.capeelectric.repository.CompanyRepository;
 import com.capeelectric.repository.DepartmentRepository;
 import com.capeelectric.repository.UserRepository;
@@ -25,6 +27,7 @@ import com.capeelectric.service.impl.DepartmentServiceImpl;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 public class DepartmentDetailsServiceTest {
+
 
 	@MockBean
 	private DepartmentRepository departmentRepository;
@@ -41,11 +44,10 @@ public class DepartmentDetailsServiceTest {
 	@MockBean
 	private CompanyDetailsException companyDetailsException;
 
-	private Department department;
+	private Department department= new Department();
 
 	{
-		department = new Department();
-		department.setUserName("hasan");
+ 		department.setUserName("hasan");
 		department.setClientName("HCL");
 		department.setDepartmentId(1);
 		department.setDepartmentName("Electrical");
@@ -62,12 +64,10 @@ public class DepartmentDetailsServiceTest {
 	public void testUpdateDepartment_Success_Flow() throws CompanyDetailsException {
 		List<Department> deptlist = new ArrayList<>();
 		deptlist.add(department);
-
 		Optional<Company> optional_user = Optional.ofNullable(company);
 
 		when(companyRepository.findByUserNameAndClientName(department.getUserName(), department.getClientName()))
 				.thenReturn(optional_user);
-
 		when(departmentRepository.findByClientName(department.getClientName())).thenReturn(deptlist);
 		departmentServiceImpl.updateDepartment(department);
 	}
@@ -75,44 +75,54 @@ public class DepartmentDetailsServiceTest {
 	@Test
 	public void testUpdateDepartment_Invalid_Inputs_Flow() throws CompanyDetailsException {
 		Optional<Company> deptlist;
-		deptlist = null;
+		department.setClientName(null);
+		deptlist = Optional.empty();
+		
 		when(companyRepository.findByUserNameAndClientName(department.getUserName(), department.getClientName()))
 				.thenReturn(deptlist);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException("invalid input");
-		});
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> departmentServiceImpl.updateDepartment(department));
+		equals(assertThrows.getMessage());
 	}
 
 	@Test
 	public void testUpdateDepartment_Company_not_Present_user() throws CompanyDetailsException {
-		Optional<Company> deptList = null;
-		when(companyRepository.findByUserNameAndClientName(department.getUserName(), department.getClientName()))
-				.thenReturn(deptList);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException("Company not present user :" + department.getUserName());
-		});
+		Optional<Company> companylist;
+		companylist = Optional.of(company);
+		
+		when(companyRepository.findByUserNameAndClientName(company.getUserName(), company.getClientName()))
+				.thenReturn(companylist);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> departmentServiceImpl.updateDepartment(department));
+		equals(assertThrows.getMessage());
 	}
 
 	@Test
-	public void testUpdateDepartment_Client_Not_Present3() throws CompanyDetailsException {
+	public void testUpdateDepartment_DepartmentName_Already_present_user() throws CompanyDetailsException {
 		List<Department> deptList = new ArrayList<>();
 		deptList.add(department);
+	
+ 		when(departmentRepository.findByClientName(department.getClientName())).thenReturn(deptList);
 		when(companyRepository.findByUserNameAndClientName(department.getUserName(), department.getClientName()))
-				.thenReturn(null);
-		when(departmentRepository.findByClientName(department.getClientName())).thenReturn(deptList);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException("DepartmentName Already present user :" + department.getClientName());
+		.thenReturn(Optional.of(company));
 
-		});
-	}
+		Department department2 = new Department();
+		department2.setUserName("hasan");
+		department2.setClientName("HCL");
+ 		department2.setDepartmentName("Electrical");
+		department2.setDepartmentId(3);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> departmentServiceImpl.updateDepartment(department2));
+
+	} 
 
 	@Test
 	public void testaddDepartment_Success_Flow() throws CompanyDetailsException {
 		Optional<Company> companyList;
 		companyList = Optional.of(company);
+		
 		when(companyRepository.findByUserNameAndClientName(department.getUserName(), department.getClientName()))
 				.thenReturn(companyList);
-
 		when(departmentRepository.findByClientNameAndDepartmentName(department.getClientName(),
 				department.getDepartmentName())).thenReturn(department);
 		departmentServiceImpl.updateDepartment(department);
@@ -120,49 +130,84 @@ public class DepartmentDetailsServiceTest {
 
 	@Test
 	public void testaddDepartment_Invalid_Inputs_Flow() throws CompanyDetailsException {
-		Optional<Company> deptlist;
-		deptlist = null;
-		when(companyRepository.findByUserNameAndClientName(department.getUserName(), department.getClientName()))
-				.thenReturn(deptlist);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException("invalid inputs");
-		});
+		department.setDepartmentName(null);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> departmentServiceImpl.addDepartment(department));
+		equals(assertThrows.getMessage());
 	}
 
 	@Test
 	public void testaddDepartment_Client_Not_Present() throws CompanyDetailsException {
-		when(companyRepository.findByUserNameAndClientName(department.getUserName(), department.getClientName()))
-				.thenReturn(null);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException(department.getClientName() + " : clientname not present in company");
-		});
+		Optional<Company> deptlist;
+		deptlist = Optional.of(company);
+		
+		when(companyRepository.findByUserNameAndClientName(company.getUserName(),
+				company.getClientName())).thenReturn(deptlist);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> departmentServiceImpl.addDepartment(department));
+		equals(assertThrows.getMessage());
 	}
 
 	@Test
 	public void testaddDepartment_Department_Already_Exist() throws CompanyDetailsException {
+		Optional<Company> companylist;
+		companylist = Optional.of(company);
 
+		User user = new User();
+		user.setFirstname("firstName");
+		user.setLastname("lastName");
+		Optional<User> optional_user = Optional.empty();
+
+		when(companyRepository.findByUserNameAndClientName(department.getUserName(), department.getClientName()))
+				.thenReturn(companylist);
 		when(departmentRepository.findByClientNameAndDepartmentName(department.getClientName(),
 				department.getDepartmentName())).thenReturn(department);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException(
-					department.getDepartmentName() + " DepartmentName already present :" + department.getClientName());
-		});
+		when(userRepository.findByUsername(company.getUserName())).thenReturn(optional_user);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> departmentServiceImpl.addDepartment(department));
+	}
+
+	
+	@Test
+	public void testaddDepartment_Department_Already_Exist1() throws CompanyDetailsException {
+		// for writing this test case to cover the code
+		Optional<Company> companylist;
+		companylist = Optional.of(company);
+
+		User user = new User ();
+		user.setFirstname("firstName");
+		user.setLastname("lastName");
+		Optional<User> optional_user = Optional.empty();
+
+		when(companyRepository.findByUserNameAndClientName(department.getUserName(), department.getClientName()))
+				.thenReturn(companylist);
+		when(departmentRepository.findByClientNameAndDepartmentName(department.getClientName(),
+				department.getDepartmentName())).thenReturn(null);
+ 		when(userRepository.findByUsername(user.getFirstname())).thenReturn(optional_user);
+ 		CompanyDetailsException assertThrows =  Assertions.assertThrows(CompanyDetailsException.class,
+				() -> departmentServiceImpl.addDepartment(department));
+		  
 	}
 
 	@Test
 	public void testdeleteDepartment_Success_Flow() throws CompanyDetailsException {
 		Optional<Department> companyList;
 		companyList = Optional.of(department);
+		
 		when(departmentRepository.findById(department.getDepartmentId())).thenReturn(companyList);
-
+ 		departmentServiceImpl.deleteDepartment(1);
 	}
 
 	@Test
 	public void testdeleteDepartment_Invalid_Inputs_Flow() throws CompanyDetailsException {
-		department.setDepartmentId(0);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException("invalid inputs");
-		});
+		Optional<Department> deptlist;
+		deptlist = Optional.of(department);
+		
+		when(departmentRepository.findById(department.getDepartmentId())).thenReturn(deptlist);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> departmentServiceImpl.deleteDepartment(null));
+		equals(assertThrows.getMessage());
+
 	}
 
 	@Test
@@ -171,11 +216,10 @@ public class DepartmentDetailsServiceTest {
 		deptlist = Optional.of(department);
 
 		when(departmentRepository.findById(department.getDepartmentId())).thenReturn(deptlist);
-		// when(departmentRepository.deleteById(department.getdepartmentId())).thenReturn(department);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException(department + " : department ID not present");
-		});
-	}
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> departmentServiceImpl.deleteDepartment(2));
+		assertEquals("2 : department ID not present", assertThrows.getMessage());
+ 	}
 
 	@Test
 	public void testretriveDepartment_Success_Flow() throws CompanyDetailsException {
@@ -189,11 +233,14 @@ public class DepartmentDetailsServiceTest {
 
 	@Test
 	public void testretriveDepartment_Invalid_Input() throws CompanyDetailsException {
+		List<Department> deptList = new ArrayList<>();
+		department.setClientName(null);
+		
 		when(departmentRepository.findByUserNameAndClientName(department.getClientName(), department.getUserName()))
-				.thenReturn(null);
-		assertThatExceptionOfType(CompanyDetailsException.class).isThrownBy(() -> {
-			throw new CompanyDetailsException("invalid inputs");
-		});
+				.thenReturn(deptList);
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> departmentServiceImpl.retriveDepartment(null, null));
+		equals(assertThrows.getMessage());
 	}
 
 }
