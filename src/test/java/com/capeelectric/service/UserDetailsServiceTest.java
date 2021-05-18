@@ -60,12 +60,12 @@ public class UserDetailsServiceTest {
 		ResponseEntity<String> findByUserName = userDetailsServiceImpl.findByUserName("lvsystem@capeindia.net");
 		assertEquals(200, findByUserName.getStatusCodeValue());
 
-		UserException assertThrows = Assertions.assertThrows(UserException.class,
+		ForgotPasswordException assertThrows = Assertions.assertThrows(ForgotPasswordException.class,
 				() -> userDetailsServiceImpl.findByUserName(null));
 		assertEquals("Email is required", assertThrows.getMessage());
 
 		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(null);
-		UserException assertThrows2 = Assertions.assertThrows(UserException.class,
+		ForgotPasswordException assertThrows2 = Assertions.assertThrows(ForgotPasswordException.class,
 				() -> userDetailsServiceImpl.findByUserName("lvsystem@capeindia.net"));
 		assertEquals("Email is not available with us", assertThrows2.getMessage());
 
@@ -111,7 +111,7 @@ public class UserDetailsServiceTest {
 		assertEquals("username not valid", assertThrows.getMessage());
 
 		user.setUserexist(false);
-		UserException assertThrows2 = Assertions.assertThrows(UserException.class,
+		  UpdatePasswordException assertThrows2 = Assertions.assertThrows(UpdatePasswordException.class,
 				() -> userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "cape123"));
 		assertEquals("User Not available", assertThrows2.getMessage());
 
