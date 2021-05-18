@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  * 
  */
 @Entity
-@Table(name = "site_table")
+@Table(name = "SITE_TABLE")
 @NamedQueries(value = {
 		@NamedQuery(name = "SiteRepository.findByClientNameAndDepartmentName", query = "select s from Site s where s.clientName=:clientName and s.departmentName=:departmentName") })
 public class Site implements Serializable {
