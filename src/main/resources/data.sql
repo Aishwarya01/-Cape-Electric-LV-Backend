@@ -1,4 +1,5 @@
 CREATE DATABASE lv_safety_verification;
+use lv_safety_verification;
 
 create table USERS 
 (user_id integer not null, 
@@ -36,7 +37,6 @@ CREATE TABLE COMPANY_TABLE (
     CREATED_DATE datetime NOT NULL,    
     UPDATED_DATE datetime NOT NULL,
     CONSTRAINT PK_COMPANY_ID PRIMARY KEY(COMPANY_ID)
-     
 );
 CREATE TABLE DEPARTMENT_TABLE (
     DEPARTMENT_ID INT AUTO_INCREMENT,
