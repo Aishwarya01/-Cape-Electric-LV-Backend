@@ -1,9 +1,4 @@
-insert into APPLICATIONTYPES values (1,'Verification Of LV Systems (IEC 60364-6)');
-insert into APPLICATIONTYPES values (2,'Verification of HV system (up to 33 kV) (IEC 61936-1)');
-insert into APPLICATIONTYPES values (3,'Lightning protection conformity assessment, risk assessment, inspection and maintenance (IEC 62305-3 & 4)');
-insert into APPLICATIONTYPES values (4,'EMC assessment of an installation (IEC 61000-5-1)');
-insert into APPLICATIONTYPES values (5,'Failure analysis of electronic systems');
-insert into APPLICATIONTYPES values (6,'Conformity and project analysis');
+CREATE DATABASE lv_safety_verification;
 
 create table USERS 
 (user_id integer not null, 
@@ -21,6 +16,13 @@ updated_date datetime,
 primary key (user_id));
 
 create table APPLICATIONTYPES(id integer not null, application varchar(255), primary key(id))
+
+insert into APPLICATIONTYPES values (1,'Verification Of LV Systems (IEC 60364-6)');
+insert into APPLICATIONTYPES values (2,'Verification of HV system (up to 33 kV) (IEC 61936-1)');
+insert into APPLICATIONTYPES values (3,'Lightning protection conformity assessment, risk assessment, inspection and maintenance (IEC 62305-3 & 4)');
+insert into APPLICATIONTYPES values (4,'EMC assessment of an installation (IEC 61000-5-1)');
+insert into APPLICATIONTYPES values (5,'Failure analysis of electronic systems');
+insert into APPLICATIONTYPES values (6,'Conformity and project analysis');
 
 
 CREATE TABLE COMPANY_TABLE (
