@@ -22,4 +22,22 @@ public class GlobalExceptionHandler {
     		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
     }
     
+	@ExceptionHandler({ CompanyDetailsException.class })
+	public ResponseEntity<ErrorMessage> handleCompanyDetailsException(CompanyDetailsException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "400");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler({ForgotPasswordException.class})
+    public ResponseEntity<ErrorMessage> handleForgotPasswordException(ForgotPasswordException e){
+    		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+    		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+    }
+	
+	@ExceptionHandler({UpdatePasswordException.class})
+    public ResponseEntity<ErrorMessage> handleUpdatePasswordException(UpdatePasswordException e){
+    		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+    		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+    }
+
 }
