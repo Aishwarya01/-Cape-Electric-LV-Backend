@@ -82,7 +82,7 @@
         <configuration> 
           <schemaVersion>V2</schemaVersion>  
           <resourceGroup>LV-Safety-Verification-1621428243054-rg</resourceGroup>  
-          <appName>RushServiceApp</appName>  
+          <appName>RushAppService</appName>  
           <pricingTier>F1</pricingTier>  
           <region>westeurope</region>  
           <appSettings> 
@@ -110,4 +110,21 @@
       </plugin> 
     </plugins> 
   </build> 
+  <profiles>
+  	<profile>
+  		 <id>dev</id>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+         <properties>
+            <activatedProperties>dev</activatedProperties>
+         </properties>
+  	</profile>
+  	<profile>
+         <id>prod</id>
+         <properties>
+            <activatedProperties>prod</activatedProperties>
+         </properties>
+    </profile>
+  </profiles>
 </project>
