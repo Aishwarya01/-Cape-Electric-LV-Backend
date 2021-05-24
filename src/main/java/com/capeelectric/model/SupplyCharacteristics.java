@@ -22,7 +22,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "supply_characteristics_table")
 @NamedQueries(value = {
-		@NamedQuery(name = "SupplyCharacteristicsRepository.findByUserNameAndSiteId", query = "select s from Site s where s.userName=:userName and s.siteId=:siteId") })
+		@NamedQuery(name = "SupplyCharacteristicsRepository.findByUserNameAndSiteId", query = "select s from SupplyCharacteristics s where s.userName=:userName and s.siteId=:siteId"),
+		@NamedQuery(name = "SupplyCharacteristicsRepository.findBySiteId", query = "select s from SupplyCharacteristics s where s.siteId=:siteId")
+
+})
 
 public class SupplyCharacteristics implements Serializable {
 

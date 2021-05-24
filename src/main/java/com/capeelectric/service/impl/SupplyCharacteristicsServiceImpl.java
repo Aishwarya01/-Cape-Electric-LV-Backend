@@ -3,6 +3,7 @@ package com.capeelectric.service.impl;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,60 +21,48 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	@Autowired
 	private SupplyCharacteristicsRepository supplyCharacteristicsRepository;
 
-	DecimalFormat decimalFormat;
-
 	@Override
 	public void addCharacteristics(SupplyCharacteristics supplyCharacteristics) throws SupplyCharacteristicsException {
 		if (supplyCharacteristics != null) {
-			
-			if (supplyCharacteristics.getMainNominalCurrent() != null) {
-				decimalFormat = new DecimalFormat("0.00");
-				supplyCharacteristics.setMainNominalCurrent(
-						doubleValue(supplyCharacteristics.getMainNominalCurrent(), decimalFormat));
-			}
-			if (supplyCharacteristics.getMainNominalFrequency() != null) {
-				decimalFormat = new DecimalFormat("0.00");
-				supplyCharacteristics.setMainNominalFrequency(
-						doubleValue(supplyCharacteristics.getMainNominalFrequency(), decimalFormat));
-			}
-			if (supplyCharacteristics.getMainNominalVoltage() != null) {
-				decimalFormat = new DecimalFormat("0.00");
-				supplyCharacteristics.setMainNominalVoltage(
-						doubleValue(supplyCharacteristics.getMainNominalVoltage(), decimalFormat));
-			}
-			if (supplyCharacteristics.getMainLoopImpedance() != null) {
-				decimalFormat = new DecimalFormat("0.000");
-				supplyCharacteristics
-						.setMainLoopImpedance(doubleValue(supplyCharacteristics.getMainLoopImpedance(), decimalFormat));
-			}
-			if (supplyCharacteristics.getSupplyParameters() != null) {
-				List<SupplyParameters> supplyParameters = supplyCharacteristics.getSupplyParameters();
-				for (SupplyParameters supplyParametersItr : supplyParameters) {
-					if (supplyParametersItr.getNominalFrequency() != null) {
-						decimalFormat = new DecimalFormat("0.00");
-						supplyParametersItr.setNominalFrequency(
-								doubleValue(supplyParametersItr.getNominalFrequency(), decimalFormat));
-					}
-					if (supplyParametersItr.getNominalVoltage() != null) {
-						decimalFormat = new DecimalFormat("0.00");
-						supplyParametersItr
-								.setNominalVoltage(doubleValue(supplyParametersItr.getNominalVoltage(), decimalFormat));
-					}
-					if (supplyParametersItr.getFaultCurrent() != null) {
-						decimalFormat = new DecimalFormat("0.00");
-						supplyParametersItr
-								.setFaultCurrent(doubleValue(supplyParametersItr.getFaultCurrent(), decimalFormat));
-					}
-					if (supplyParametersItr.getLoopImpedance() != null) {
-						decimalFormat = new DecimalFormat("0.000");
-						supplyParametersItr
-								.setLoopImpedance(doubleValue(supplyParametersItr.getLoopImpedance(), decimalFormat));
-					}
-
+			Optional<SupplyCharacteristics> siteId = supplyCharacteristicsRepository
+					.findBySiteId(supplyCharacteristics.getSiteId());
+			if (siteId.isEmpty() || !siteId.get().getSiteId().equals(supplyCharacteristics.getSiteId())) {
+				if (supplyCharacteristics.getMainNominalCurrent() != null
+						&& supplyCharacteristics.getMainNominalFrequency() != null
+						&& supplyCharacteristics.getMainNominalVoltage() != null
+						&& supplyCharacteristics.getMainLoopImpedance() != null) {
+					supplyCharacteristics.setMainNominalCurrent(
+							doubleValue(supplyCharacteristics.getMainNominalCurrent(), new DecimalFormat("0.00")));
+					supplyCharacteristics.setMainNominalFrequency(
+							doubleValue(supplyCharacteristics.getMainNominalFrequency(), new DecimalFormat("0.00")));
+					supplyCharacteristics.setMainNominalVoltage(
+							doubleValue(supplyCharacteristics.getMainNominalVoltage(), new DecimalFormat("0.00")));
+					supplyCharacteristics.setMainLoopImpedance(
+							doubleValue(supplyCharacteristics.getMainLoopImpedance(), new DecimalFormat("0.000")));
 				}
+				if (supplyCharacteristics.getSupplyParameters() != null) {
+					List<SupplyParameters> supplyParameters = supplyCharacteristics.getSupplyParameters();
+					for (SupplyParameters supplyParametersItr : supplyParameters) {
+						if (supplyParametersItr.getNominalFrequency() != null
+								&& supplyParametersItr.getNominalVoltage() != null
+								&& supplyParametersItr.getFaultCurrent() != null
+								&& supplyParametersItr.getLoopImpedance() != null) {
+							supplyParametersItr.setNominalFrequency(
+									doubleValue(supplyParametersItr.getNominalFrequency(), new DecimalFormat("0.00")));
+							supplyParametersItr.setNominalVoltage(
+									doubleValue(supplyParametersItr.getNominalVoltage(), new DecimalFormat("0.00")));
+							supplyParametersItr.setFaultCurrent(
+									doubleValue(supplyParametersItr.getFaultCurrent(), new DecimalFormat("0.00")));
+							supplyParametersItr.setLoopImpedance(
+									doubleValue(supplyParametersItr.getLoopImpedance(), new DecimalFormat("0.000")));
+						}
+					}
+				}
+				supplyCharacteristics.setCreatedDate(LocalDateTime.now());
+				supplyCharacteristicsRepository.save(supplyCharacteristics);
+			} else {
+				throw new SupplyCharacteristicsException("siteId already present");
 			}
-			supplyCharacteristics.setCreatedDate(LocalDateTime.now());
-			supplyCharacteristicsRepository.save(supplyCharacteristics);
 		}
 
 		else {
