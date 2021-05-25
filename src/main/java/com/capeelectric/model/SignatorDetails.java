@@ -2,6 +2,7 @@
 package com.capeelectric.model;
 
 import java.io.Serializable;
+import java.sql.Blob;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -73,6 +74,9 @@ public class SignatorDetails implements Serializable {
 
 	@Column(name = "DECLARATION_NAME")
 	private String declarationName;
+	
+	@Column(name = "DECLARATION_SIGNATURE")
+	private Blob declarationSignature;
 
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -213,6 +217,14 @@ public class SignatorDetails implements Serializable {
 
 	public void setDeclarationName(String declarationName) {
 		this.declarationName = declarationName;
+	}
+	
+	public Blob getDeclarationSignature() {
+		return declarationSignature;
+	}
+
+	public void setDeclarationSignature(Blob declarationSignature) {
+		this.declarationSignature = declarationSignature;
 	}
 
 	public ReportDetails getReportDetails() {
