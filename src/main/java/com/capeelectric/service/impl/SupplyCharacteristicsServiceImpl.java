@@ -26,7 +26,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		if (supplyCharacteristics != null) {
 			Optional<SupplyCharacteristics> siteId = supplyCharacteristicsRepository
 					.findBySiteId(supplyCharacteristics.getSiteId());
-			if (siteId.isEmpty() || !siteId.get().getSiteId().equals(supplyCharacteristics.getSiteId())) {
+			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(supplyCharacteristics.getSiteId())) {
 				if (supplyCharacteristics.getMainNominalCurrent() != null
 						&& supplyCharacteristics.getMainNominalFrequency() != null
 						&& supplyCharacteristics.getMainNominalVoltage() != null
