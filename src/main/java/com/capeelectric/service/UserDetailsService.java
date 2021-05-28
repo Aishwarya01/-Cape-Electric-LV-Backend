@@ -1,6 +1,6 @@
 package com.capeelectric.service;
 
-import org.springframework.http.ResponseEntity;
+import java.io.IOException;
 
 import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.ForgotPasswordException;
@@ -12,7 +12,7 @@ public interface UserDetailsService {
 
 	public User saveUser(User user) throws UserException;
 	
-	public ResponseEntity<String> findByUserName(String email) throws ForgotPasswordException;
+	public User findByUserName(String email) throws ForgotPasswordException, IOException;
 	
 	public User updatePassword(String email, String password) throws UpdatePasswordException;
 	
