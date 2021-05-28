@@ -160,7 +160,15 @@ public class SupplyCharacteristics implements Serializable {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<LocationReports> locationReports;
+	private List<InstalLocationReport> instalLocationReport;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<BoundingLocationReport> boundingLocationReport;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<EarthingLocationReport> earthingLocationReport;
 
 	public Integer getSupplyCharacteristicsId() {
 		return supplyCharacteristicsId;
@@ -482,12 +490,29 @@ public class SupplyCharacteristics implements Serializable {
 		this.circuitBreaker = circuitBreaker;
 	}
 
-	public List<LocationReports> getLocationReports() {
-		return locationReports;
+	public List<InstalLocationReport> getInstalLocationReport() {
+		return instalLocationReport;
 	}
 
-	public void setLocationReports(List<LocationReports> locationReports) {
-		this.locationReports = locationReports;
+	public void setInstalLocationReport(List<InstalLocationReport> instalLocationReport) {
+		this.instalLocationReport = instalLocationReport;
 	}
 
+	public List<BoundingLocationReport> getBoundingLocationReport() {
+		return boundingLocationReport;
+	}
+
+	public void setBoundingLocationReport(List<BoundingLocationReport> boundingLocationReport) {
+		this.boundingLocationReport = boundingLocationReport;
+	}
+
+	public List<EarthingLocationReport> getEarthingLocationReport() {
+		return earthingLocationReport;
+	}
+
+	public void setEarthingLocationReport(List<EarthingLocationReport> earthingLocationReport) {
+		this.earthingLocationReport = earthingLocationReport;
+	}
+
+ 
 }
