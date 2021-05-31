@@ -90,7 +90,7 @@ public class UserController {
  		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().
 				path("/{id}").buildAndExpand(optionalUser.getId()).toUri();
  		emailService.sendEmail(email, "You can update your password here." + "\n"
-				+uri.getScheme()+"://"+(uri.getAuthority().contains("localhost") ? uri.getHost()+":4200": "" +uri.getAuthority())+
+				+(uri.getAuthority().contains("localhost") ? uri.getScheme() +"://" + uri.getHost()+":4200": "https://rushforsafetyapp.azurewebsites.net")+
 				"/updatepassword"+";email="+email);
  		return new ResponseEntity<String>(optionalUser.getUsername(), HttpStatus.OK);
 	}
