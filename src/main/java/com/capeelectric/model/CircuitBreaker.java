@@ -13,13 +13,15 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+/**
+*
+* @author capeelectricsoftware
+*
+*/
 @Entity
 @Table(name = "CIRCUIT_BREAKER_TABLE")
 public class CircuitBreaker implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id

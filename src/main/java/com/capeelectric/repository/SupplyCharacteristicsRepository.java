@@ -7,6 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.capeelectric.model.SupplyCharacteristics;
 
+/**
+ **
+  * @author capeelectricsoftware
+ *
+ */
 public interface SupplyCharacteristicsRepository extends CrudRepository<SupplyCharacteristics, Integer> {
 
 	public List<SupplyCharacteristics> findByUserNameAndSiteId(String userName, Integer siteId);

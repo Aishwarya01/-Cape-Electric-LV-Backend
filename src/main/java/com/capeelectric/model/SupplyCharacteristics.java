@@ -19,6 +19,11 @@ import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+/**
+ *
+ * @author capeelectricsoftware
+ *
+ */
 @Entity
 @Table(name = "supply_characteristics_table")
 @NamedQueries(value = {

@@ -12,6 +12,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+/**
+*
+* @author capeelectricsoftware
+*
+*/
 @Entity
 @Table(name = "BOUNDING_LOCATION_REPORTS_TABLE")
 public class BoundingLocationReport implements Serializable {

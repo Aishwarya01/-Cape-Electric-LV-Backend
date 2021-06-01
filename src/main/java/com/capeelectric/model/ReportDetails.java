@@ -19,6 +19,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+/**
+ *
+ * @author capeelectricsoftware
+ *
+ */
 @Entity
 @Table(name = "REPORT_DETAILS_TABLE")
 @NamedQueries(value = {

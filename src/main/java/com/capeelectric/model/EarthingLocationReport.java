@@ -13,6 +13,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+/**
+*
+* @author capeelectricsoftware
+*
+*/
 @Entity
 @Table(name = "EARTHING_LOCATION_REPORTS_TABLE")
 public class EarthingLocationReport implements Serializable {

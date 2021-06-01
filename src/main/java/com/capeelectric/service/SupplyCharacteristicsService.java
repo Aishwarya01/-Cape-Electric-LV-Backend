@@ -5,6 +5,11 @@ import java.util.List;
 import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.SupplyCharacteristics;
 
+/**
+  *
+  * @author capeelectricsoftware
+  *
+  */
 public interface SupplyCharacteristicsService {
 	public void addCharacteristics(SupplyCharacteristics site) throws SupplyCharacteristicsException;
 

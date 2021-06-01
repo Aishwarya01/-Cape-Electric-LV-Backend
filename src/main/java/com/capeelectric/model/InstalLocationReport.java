@@ -13,6 +13,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+/**
+*
+* @author capeelectricsoftware
+*
+*/
 @Entity
 @Table(name = "INSTALLATION_LOCATION_TABLE")
 public class InstalLocationReport implements Serializable {

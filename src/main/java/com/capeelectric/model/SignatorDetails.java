@@ -15,6 +15,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+/**
+ **
+  * @author capeelectricsoftware
+ *
+ */
 @Entity
 @Table(name = "SIGN_DETAILS_TABLE")
 public class SignatorDetails implements Serializable {
