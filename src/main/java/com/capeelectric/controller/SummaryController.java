@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
-import com.capeelectric.service.SummeryService;
+import com.capeelectric.service.SummaryService;
 
 /**
  * 
@@ -25,26 +25,26 @@ import com.capeelectric.service.SummeryService;
  */
 @RestController()
 @RequestMapping("/api/v1")
-public class SummeryController {
+public class SummaryController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(SiteController.class);
 
 	@Autowired
-	private SummeryService summeryService;
+	private SummaryService summaryService;
 
-	@PostMapping("/addSummery")
+	@PostMapping("/addSummary")
 	public ResponseEntity<String> addSummary(@RequestBody Summary summary) throws SummaryException {
 		logger.info("started addSummary function userName: {},siteId : {}", summary.getUserName(),summary.getSiteId());
-		summeryService.addSummary(summary);
-		logger.info("ended addSummery function");
-		return new ResponseEntity<String>("successfully added Summery", HttpStatus.OK);
+		summaryService.addSummary(summary);
+		logger.info("ended addSummary function");
+		return new ResponseEntity<String>("successfully added Summary", HttpStatus.OK);
 
 	}
 	
-	@GetMapping("/retrieveSummery/{userName}/{siteId}")
+	@GetMapping("/retrieveSummary/{userName}/{siteId}")
 	public ResponseEntity<Optional<Summary>> retrieveSummary(@PathVariable String userName,@PathVariable Integer siteId) throws SummaryException {
 		logger.info("called retrieveSummary function userName: {},siteId : {}", userName,siteId);
-		return new ResponseEntity<Optional<Summary>>(summeryService.retrieveSummary(userName,siteId), HttpStatus.OK);
+		return new ResponseEntity<Optional<Summary>>(summaryService.retrieveSummary(userName,siteId), HttpStatus.OK);
 	}
 
 }

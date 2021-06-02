@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  */
 @Entity
 @Table(name = "DECLARATION_TABLE")
-public class SummeryDeclaration implements Serializable {
+public class SummaryDeclaration implements Serializable {
  
 	private static final long serialVersionUID = 1L;
 	
@@ -49,8 +49,8 @@ public class SummeryDeclaration implements Serializable {
 	
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "SUMMERY_ID")
-	private Summary summery;
+	@JoinColumn(name = "SUMMARY_ID")
+	private Summary summary;
 
 	public Integer getDeclarationId() {
 		return declarationId;
@@ -108,12 +108,12 @@ public class SummeryDeclaration implements Serializable {
 		this.date = date;
 	}
 
-	public Summary getSummery() {
-		return summery;
+	public Summary getSummary() {
+		return summary;
 	}
 
-	public void setSummery(Summary summery) {
-		this.summery = summery;
+	public void setSummary(Summary summary) {
+		this.summary = summary;
 	}
 
 }

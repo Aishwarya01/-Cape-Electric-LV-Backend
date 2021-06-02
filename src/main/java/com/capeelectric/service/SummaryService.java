@@ -10,7 +10,7 @@ import com.capeelectric.model.Summary;
  * @author capeelectricsoftware
  *
  */
-public interface SummeryService {
+public interface SummaryService {
 
 	public void addSummary(Summary summary) throws SummaryException;
 

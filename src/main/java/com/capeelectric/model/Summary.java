@@ -28,15 +28,15 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @NamedQueries(value = {
 		@NamedQuery(name = "SummaryRepository.findByUserNameAndSiteId", query = "select s from Summary s where s.userName=:userName and s.siteId=:siteId") })
 @Entity
-@Table(name = "SUMMERY_TABLE")
+@Table(name = "SUMMARY_TABLE")
 public class Summary implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "SUMMERY_ID")
-	private Integer summeryId;
+	@Column(name = "SUMMARY_ID")
+	private Integer summaryId;
 
 	@Column(name = "SITE_ID")
 	private Integer siteId;
@@ -75,19 +75,19 @@ public class Summary implements Serializable {
 	private LocalDateTime createdDate;
 
 	@JsonManagedReference
-	@OneToOne(mappedBy = "summery", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private SummeryObervation summeryObervation;
+	@OneToOne(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private SummaryObervation summaryObervation;
 
 	@JsonManagedReference
-	@OneToMany(mappedBy = "summery", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<SummeryDeclaration> summeryDeclaration;
+	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<SummaryDeclaration> summaryDeclaration;
 
-	public Integer getSummeryId() {
-		return summeryId;
+	public Integer getSummaryId() {
+		return summaryId;
 	}
 
-	public void setSummeryId(Integer summeryId) {
-		this.summeryId = summeryId;
+	public void setSummaryId(Integer summaryId) {
+		this.summaryId = summaryId;
 	}
 
 	public Integer getSiteId() {
@@ -186,20 +186,20 @@ public class Summary implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public SummeryObervation getSummeryObervation() {
-		return summeryObervation;
+	public SummaryObervation getSummaryObervation() {
+		return summaryObervation;
 	}
 
-	public void setSummeryObervation(SummeryObervation summeryObervation) {
-		this.summeryObervation = summeryObervation;
+	public void setSummaryObervation(SummaryObervation summaryObervation) {
+		this.summaryObervation = summaryObervation;
 	}
 
-	public List<SummeryDeclaration> getSummeryDeclaration() {
-		return summeryDeclaration;
+	public List<SummaryDeclaration> getSummaryDeclaration() {
+		return summaryDeclaration;
 	}
 
-	public void setSummeryDeclaration(List<SummeryDeclaration> summeryDeclaration) {
-		this.summeryDeclaration = summeryDeclaration;
+	public void setSummaryDeclaration(List<SummaryDeclaration> summaryDeclaration) {
+		this.summaryDeclaration = summaryDeclaration;
 	}
  
 }

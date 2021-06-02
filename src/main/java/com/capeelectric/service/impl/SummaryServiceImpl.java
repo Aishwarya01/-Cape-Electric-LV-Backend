@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
 import com.capeelectric.repository.SummaryRepository;
-import com.capeelectric.service.SummeryService;
+import com.capeelectric.service.SummaryService;
 
 /**
- * This SummeryServiceImpl service class doing add and retrieve operation related to Summary_model(SummeryObervation,SummeryDeclaration)
+ * This SummaryServiceImpl service class doing add and retrieve operation related to Summary_model(SummaryObervation,SummaryDeclaration)
  * @author capeelectricsoftware
  *
  */
 @Service
-public class SummeryServiceImpl implements SummeryService {
+public class SummaryServiceImpl implements SummaryService {
 
 	@Autowired
 	private SummaryRepository summaryRepository;
