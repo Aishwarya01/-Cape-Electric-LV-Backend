@@ -16,14 +16,14 @@ user_type varchar(255),
 updated_date datetime,
 primary key (user_id));
 
-create table APPLICATIONTYPES(id integer not null, application varchar(255), primary key(id))
+create table APPLICATIONTYPES(id integer not null, application varchar(255), code varchar(5), primary key(id))
 
-insert into APPLICATIONTYPES values (1,'Verification Of LV Systems (IEC 60364-6)');
-insert into APPLICATIONTYPES values (2,'Verification of HV system (up to 33 kV) (IEC 61936-1)');
-insert into APPLICATIONTYPES values (3,'Lightning protection conformity assessment, risk assessment, inspection and maintenance (IEC 62305-3 & 4)');
-insert into APPLICATIONTYPES values (4,'EMC assessment of an installation (IEC 61000-5-1)');
-insert into APPLICATIONTYPES values (5,'Failure analysis of electronic systems');
-insert into APPLICATIONTYPES values (6,'Conformity and project analysis');
+insert into APPLICATIONTYPES values (1,'Verification Of LV Systems (IEC 60364-6)', 'LVS');
+insert into APPLICATIONTYPES values (2,'Verification Of HV System (up to 33 kV) (IEC 61936-1)', 'HVS');
+insert into APPLICATIONTYPES values (3,'Lightning Protection Conformity Assessment, Risk Assessment, Inspection And Maintenance (IEC 62305-3 & 4)', 'RISK');
+insert into APPLICATIONTYPES values (4,'EMC Assessment Of An Installation (IEC 61000-5-1)', 'EMC');
+insert into APPLICATIONTYPES values (5,'Failure Analysis Of Electronic Systems', 'FAES');
+insert into APPLICATIONTYPES values (6,'Conformity And Project Analysis', 'CPA');
 
 
 CREATE TABLE COMPANY_TABLE (

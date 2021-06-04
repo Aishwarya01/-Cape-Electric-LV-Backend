@@ -18,6 +18,9 @@ public class ApplicationTypes {
 	
 	@Column(name = "APPLICATION")
 	private String type;
+	
+	@Column(name = "CODE")
+	private String code;
 
 	public int getId() {
 		return id;
@@ -34,4 +37,14 @@ public class ApplicationTypes {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
+	
 }
