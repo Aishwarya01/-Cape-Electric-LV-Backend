@@ -24,9 +24,9 @@ import com.capeelectric.service.InstalReportService;
  */
 @RestController
 @RequestMapping("/api/v1")
-public class InstalReportController {
+public class InstallReportController {
 
-	private static final Logger logger = LoggerFactory.getLogger(InstalReportController.class);
+	private static final Logger logger = LoggerFactory.getLogger(InstallReportController.class);
 
 	@Autowired
 	private InstalReportService instalReportService;
