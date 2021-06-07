@@ -53,8 +53,8 @@ public class InstallReportControllerTest {
 		reportDetails.setReportId(12);
 		reportDetails.setSignatorDetails(set);
 		reportDetails.setUserName("software@capeindia.com");
-		reportDetails.setVerficationDate("20-03-2023");
-		reportDetails.setVerifedEngineer("cape");
+		reportDetails.setVerificationDate("20-03-2023");
+		reportDetails.setVerifiedEngineer("cape");
 		reportDetails.setClientDetails(""); 
 	}
 	

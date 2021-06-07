@@ -76,11 +76,11 @@ public class ReportDetails implements Serializable {
 	@Column(name = "INSTALLATION_DETAILS")
 	private String installationDetails;
 
-	@Column(name = "VERFICATION_DATE")
-	private String verficationDate;
+	@Column(name = "VERIFICATION_DATE")
+	private String verificationDate;
 
-	@Column(name = "VERIFED_ENGINEER")
-	private String verifedEngineer;
+	@Column(name = "VERIFIED_ENGINEER")
+	private String verifiedEngineer;
 
 	@Column(name = "DESIGNATION")
 	private String designation;
@@ -210,20 +210,20 @@ public class ReportDetails implements Serializable {
 		this.installationDetails = installationDetails;
 	}
 
-	public String getVerficationDate() {
-		return verficationDate;
+	public String getVerificationDate() {
+		return verificationDate;
 	}
 
-	public void setVerficationDate(String verficationDate) {
-		this.verficationDate = verficationDate;
+	public void setVerificationDate(String verificationDate) {
+		this.verificationDate = verificationDate;
 	}
 
-	public String getVerifedEngineer() {
-		return verifedEngineer;
+	public String getVerifiedEngineer() {
+		return verifiedEngineer;
 	}
 
-	public void setVerifedEngineer(String verifedEngineer) {
-		this.verifedEngineer = verifedEngineer;
+	public void setVerifiedEngineer(String verifiedEngineer) {
+		this.verifiedEngineer = verifiedEngineer;
 	}
 
 	public String getDesignation() {
