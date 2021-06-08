@@ -5,17 +5,17 @@ package com.capeelectric.exception;
  * @author capeelectricsoftware
  *
  */
-public class TestInfoException extends Throwable {
+public class PeriodicTestingException extends Throwable {
 
 	private static final long serialVersionUID = 1L;
 
 	private String message;
 
-	public TestInfoException() {
+	public PeriodicTestingException() {
 
 	}
 
-	public TestInfoException(String message) {
+	public PeriodicTestingException(String message) {
 		super();
 		this.message = message;
 	}

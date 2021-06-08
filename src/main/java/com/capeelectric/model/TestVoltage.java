@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.capeelectric.exception.PeriodicTestingException;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
@@ -77,71 +78,71 @@ public class TestVoltage implements Serializable {
 	}
 
 	public void setRyVoltage(String ryVoltage) {
-		this.ryVoltage = ryVoltage;
+		this.ryVoltage = String.format("%.2f", Double.parseDouble(ryVoltage));
 	}
 
 	public String getRbVoltage() {
 		return rbVoltage;
 	}
 
-	public void setRbVoltage(String rbVoltage) {
-		this.rbVoltage = rbVoltage;
+	public void setRbVoltage(String rbVoltage) throws PeriodicTestingException {
+		this.rbVoltage = decimalFormate(rbVoltage);
 	}
 
 	public String getYbVoltage() {
 		return ybVoltage;
 	}
 
-	public void setYbVoltage(String ybVoltage) {
-		this.ybVoltage = ybVoltage;
+	public void setYbVoltage(String ybVoltage) throws PeriodicTestingException {
+		this.ybVoltage = decimalFormate(ybVoltage);
 	}
 
 	public String getRnVoltage() {
 		return rnVoltage;
 	}
 
-	public void setRnVoltage(String rnVoltage) {
-		this.rnVoltage = rnVoltage;
+	public void setRnVoltage(String rnVoltage) throws PeriodicTestingException {
+		this.rnVoltage = decimalFormate(rnVoltage);
 	}
 
 	public String getYnVoltage() {
 		return ynVoltage;
 	}
 
-	public void setYnVoltage(String ynVoltage) {
-		this.ynVoltage = ynVoltage;
+	public void setYnVoltage(String ynVoltage) throws PeriodicTestingException {
+		this.ynVoltage = decimalFormate(ynVoltage);
 	}
 
 	public String getBnVoltage() {
 		return bnVoltage;
 	}
 
-	public void setBnVoltage(String bnVoltage) {
-		this.bnVoltage = bnVoltage;
+	public void setBnVoltage(String bnVoltage) throws PeriodicTestingException {
+		this.bnVoltage = decimalFormate(bnVoltage);
 	}
 
 	public String getRpeVoltage() {
 		return rpeVoltage;
 	}
 
-	public void setRpeVoltage(String rpeVoltage) {
-		this.rpeVoltage = rpeVoltage;
+	public void setRpeVoltage(String rpeVoltage) throws PeriodicTestingException {
+		this.rpeVoltage = decimalFormate(rpeVoltage);
 	}
 
 	public String getYpeVoltage() {
 		return ypeVoltage;
 	}
 
-	public void setYpeVoltage(String ypeVoltage) {
-		this.ypeVoltage = ypeVoltage;
+	public void setYpeVoltage(String ypeVoltage) throws PeriodicTestingException {
+		this.ypeVoltage = decimalFormate(ypeVoltage);
 	}
 
 	public String getBpeVoltage() {
 		return bpeVoltage;
 	}
 
-	public void setBpeVoltage(String bpeVoltage) {
-		this.bpeVoltage = bpeVoltage;
+	public void setBpeVoltage(String bpeVoltage) throws PeriodicTestingException {
+		this.bpeVoltage = decimalFormate(bpeVoltage);
 	}
 
 	public Testing getTesting() {
@@ -150,6 +151,15 @@ public class TestVoltage implements Serializable {
 
 	public void setTesting(Testing testing) {
 		this.testing = testing;
-	}	
- 	
+	}
+
+	private String decimalFormate(String values) throws PeriodicTestingException {
+		if (values != null && !values.isEmpty()) {
+			return String.format("%.2f", Double.parseDouble(values));
+		} else {
+			throw new PeriodicTestingException("invalid input of Voltage value");
+		}
+
+	}
+
 }

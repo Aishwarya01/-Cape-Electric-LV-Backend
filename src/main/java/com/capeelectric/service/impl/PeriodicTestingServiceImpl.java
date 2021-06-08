@@ -5,10 +5,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.capeelectric.exception.TestInfoException;
+import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.Testing;
 import com.capeelectric.repository.TestInfoRepository;
-import com.capeelectric.service.TestInfoService;
+import com.capeelectric.service.PeriodicTestingService;
 
 /**
  * This TestInfoServiceImpl service class doing save and retrieve operation based on Testing
@@ -16,7 +16,7 @@ import com.capeelectric.service.TestInfoService;
  *
  */
 @Service
-public class TestInfoServiceImpl implements TestInfoService {
+public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 
 	@Autowired
 	private TestInfoRepository testInfoRepository;
@@ -26,7 +26,7 @@ public class TestInfoServiceImpl implements TestInfoService {
 	 * addTestInfo method to Testing object will be storing corresponding tables
 	*/
 	@Override
-	public void addTestInfo(Testing testing) throws TestInfoException {
+	public void addTestInfo(Testing testing) throws PeriodicTestingException {
 		if (testing.getUserName() != null && testing.getSiteId() != null) {
 
 			Optional<Testing> testingRepo = testInfoRepository.findByUserNameAndSiteId(testing.getUserName(),
@@ -34,10 +34,10 @@ public class TestInfoServiceImpl implements TestInfoService {
 			if (!testingRepo.isPresent() || !testingRepo.get().getSiteId().equals(testing.getSiteId())) {
 				testInfoRepository.save(testing);
 			} else {
-				throw new TestInfoException("SiteId Already Present");
+				throw new PeriodicTestingException("SiteId Already Present");
 			}
 		} else {
-			throw new TestInfoException("UserName and SiteId Invalid Input");
+			throw new PeriodicTestingException("UserName and SiteId Invalid Input");
 		}
 	}
 
@@ -47,11 +47,11 @@ public class TestInfoServiceImpl implements TestInfoService {
 	 * @return Optional<Testing>
 	 */
 	@Override
-	public Optional<Testing> retrieveSummary(String userName, Integer siteId) throws TestInfoException {
+	public Optional<Testing> retrieveSummary(String userName, Integer siteId) throws PeriodicTestingException {
 		if (userName != null && siteId != null) {
 			return testInfoRepository.findByUserNameAndSiteId(userName, siteId);
 		} else {
-			throw new TestInfoException("UserName and SiteId Invalid Input");
+			throw new PeriodicTestingException("UserName and SiteId Invalid Input");
 		}
 	}
 
