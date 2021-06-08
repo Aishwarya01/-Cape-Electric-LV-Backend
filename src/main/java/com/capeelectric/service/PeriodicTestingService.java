@@ -14,6 +14,6 @@ public interface PeriodicTestingService {
 
 	public void addTestInfo(Testing testing) throws PeriodicTestingException;
 
-	public Optional<Testing> retrieveSummary(String userName, Integer siteId) throws PeriodicTestingException;
+	public Optional<Testing> retrieveTestInfo(String userName, Integer siteId) throws PeriodicTestingException;
 
 }

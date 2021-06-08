@@ -49,7 +49,7 @@ public class PeriodicTestingController {
 			@PathVariable Integer siteId) throws PeriodicTestingException {
 		logger.info("Started retrieveTestInfo function userName: {},siteId : {}", userName, siteId);
 
-		return new ResponseEntity<Optional<Testing>>(testService.retrieveSummary(userName, siteId), HttpStatus.OK);
+		return new ResponseEntity<Optional<Testing>>(testService.retrieveTestInfo(userName, siteId), HttpStatus.OK);
 	}
 
 }
