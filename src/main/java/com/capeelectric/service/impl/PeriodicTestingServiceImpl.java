@@ -48,7 +48,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	 */
 	@Override
 	public Optional<Testing> retrieveSummary(String userName, Integer siteId) throws PeriodicTestingException {
-		if (userName != null && siteId != null) {
+		if (userName != null && userName.isEmpty() && siteId != null && siteId != 0) {
 			return testInfoRepository.findByUserNameAndSiteId(userName, siteId);
 		} else {
 			throw new PeriodicTestingException("UserName and SiteId Invalid Input");
