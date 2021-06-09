@@ -15,6 +15,11 @@ import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.InstalReportService;
 
+/**
+ * This InstalReportServiceImpl service class doing save and retrieve operation related to ReportDetails
+ * @author capeelectricsoftware
+ *
+ */
 @Service
 public class InstalReportServiceImpl implements InstalReportService {
 
@@ -24,6 +29,11 @@ public class InstalReportServiceImpl implements InstalReportService {
 	@Autowired
 	private UserRepository userRepository;
 
+	/**
+	 * @param ReportDetails
+	 * addInstallationReport method to will be save ReportDetails object
+	 * 
+	*/
 	@Override
 	public void addInstallationReport(ReportDetails reportDetails) throws InstalReportException {
 		if (reportDetails != null && reportDetails.getUserName() != null) {
@@ -36,6 +46,11 @@ public class InstalReportServiceImpl implements InstalReportService {
 		}
 	}
 
+	/**
+	 * @param userName
+	 * retrieveInstallationReport method to will be save retrieve object based on userName
+	 * 
+	*/
 	@Override
 	public List<ReportDetails> retrieveInstallationReport(String userName) throws InstalReportException {
 		if (userName != null) {
@@ -47,6 +62,11 @@ public class InstalReportServiceImpl implements InstalReportService {
 		}
 	}
 
+	/**
+	 * Method to return Full Name based on UserName
+	 * @param userName
+	 * @return
+	 */
 	private String generateFullName(String userName) {
 		Optional<User> user = userRepository.findByUsername(userName);
 		if (user.isPresent() && user.get() != null)

@@ -64,6 +64,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.sendgrid/sendgrid-java -->
+		<dependency>
+			<groupId>com.sendgrid</groupId>
+			<artifactId>sendgrid-java</artifactId>
+			<version>4.7.1</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
