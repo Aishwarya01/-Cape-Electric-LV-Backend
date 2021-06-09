@@ -1,6 +1,6 @@
 package com.capeelectric.controller;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +42,9 @@ public class SummaryController {
 	}
 	
 	@GetMapping("/retrieveSummary/{userName}/{siteId}")
-	public ResponseEntity<Optional<Summary>> retrieveSummary(@PathVariable String userName,@PathVariable Integer siteId) throws SummaryException {
+	public ResponseEntity<List<Summary>> retrieveSummary(@PathVariable String userName,@PathVariable Integer siteId) throws SummaryException {
 		logger.info("called retrieveSummary function userName: {},siteId : {}", userName,siteId);
-		return new ResponseEntity<Optional<Summary>>(summaryService.retrieveSummary(userName,siteId), HttpStatus.OK);
+		return new ResponseEntity<List<Summary>>(summaryService.retrieveSummary(userName,siteId), HttpStatus.OK);
 	}
 
 }

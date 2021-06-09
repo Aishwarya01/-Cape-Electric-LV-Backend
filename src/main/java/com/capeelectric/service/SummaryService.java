@@ -1,6 +1,6 @@
 package com.capeelectric.service;
 
-import java.util.Optional;
+import java.util.List;
 
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
@@ -14,6 +14,6 @@ public interface SummaryService {
 
 	public void addSummary(Summary summary) throws SummaryException;
 
-	public Optional<Summary> retrieveSummary(String userName, Integer siteId) throws SummaryException;
+	public List<Summary> retrieveSummary(String userName, Integer siteId) throws SummaryException;
 
 }

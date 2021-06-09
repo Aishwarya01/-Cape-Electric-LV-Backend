@@ -12,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedQueries;
@@ -26,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  *
  */
 @NamedQueries(value = {
+		@NamedQuery(name = "SummaryRepository.findBySiteId", query = "select s from Summary s where s.siteId=:siteId"),
 		@NamedQuery(name = "SummaryRepository.findByUserNameAndSiteId", query = "select s from Summary s where s.userName=:userName and s.siteId=:siteId") })
 @Entity
 @Table(name = "SUMMARY_TABLE")
@@ -75,8 +75,8 @@ public class Summary implements Serializable {
 	private LocalDateTime createdDate;
 
 	@JsonManagedReference
-	@OneToOne(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private SummaryObervation summaryObervation;
+	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<SummaryObervation> summaryObervation;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -186,11 +186,11 @@ public class Summary implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public SummaryObervation getSummaryObervation() {
+	public List<SummaryObervation> getSummaryObervation() {
 		return summaryObervation;
 	}
 
-	public void setSummaryObervation(SummaryObervation summaryObervation) {
+	public void setSummaryObervation(List<SummaryObervation> summaryObervation) {
 		this.summaryObervation = summaryObervation;
 	}
 

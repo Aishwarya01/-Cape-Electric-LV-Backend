@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -42,7 +42,7 @@ public class SummaryObervation implements Serializable {
 	private String coment;
 
 	@JsonBackReference
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "SUMMARY_ID")
 	private Summary summary;
 

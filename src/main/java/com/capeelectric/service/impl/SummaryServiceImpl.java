@@ -1,6 +1,7 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,7 @@ public class SummaryServiceImpl implements SummaryService {
 	@Override
 	public void addSummary(Summary summary) throws SummaryException {
 		if (summary.getUserName() != null && summary.getSiteId() != null) {
-			Optional<Summary> summaryRepo = summaryRepository.findByUserNameAndSiteId(summary.getUserName(),
-					summary.getSiteId());
+			Optional<Summary> summaryRepo = summaryRepository.findBySiteId(summary.getSiteId());
 			if (!summaryRepo.isPresent() || !summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
 				summary.setCreatedDate(LocalDateTime.now());
 				summaryRepository.save(summary);
@@ -54,7 +54,7 @@ public class SummaryServiceImpl implements SummaryService {
 	 * @return summary object
 	*/
 	@Override
-	public Optional<Summary> retrieveSummary(String userName, Integer siteId) throws SummaryException {
+	public List<Summary> retrieveSummary(String userName, Integer siteId) throws SummaryException {
 		if (userName != null && siteId != null) {
 			return summaryRepository.findByUserNameAndSiteId(userName, siteId);
 		} else {

@@ -1,5 +1,6 @@
 package com.capeelectric.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -14,6 +15,8 @@ import com.capeelectric.model.Summary;
 @Repository
 public interface SummaryRepository extends CrudRepository<Summary, Integer> {
 
-	public Optional<Summary> findByUserNameAndSiteId(String userName, Integer siteId);
+	public Optional<Summary> findBySiteId(Integer siteId);
+	
+	public List<Summary> findByUserNameAndSiteId(String userName, Integer siteId);
 
 }
