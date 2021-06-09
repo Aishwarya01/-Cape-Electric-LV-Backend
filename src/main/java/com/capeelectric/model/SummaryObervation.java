@@ -38,8 +38,8 @@ public class SummaryObervation implements Serializable {
 	@Column(name = "FURTHER_ACTIONS")
 	private String furtherActions;
 
-	@Column(name = "COMENT")
-	private String coment;
+	@Column(name = "COMMENT")
+	private String comment;
 
 	@JsonBackReference
 	@ManyToOne
@@ -78,12 +78,12 @@ public class SummaryObervation implements Serializable {
 		this.furtherActions = furtherActions;
 	}
 
-	public String getComent() {
-		return coment;
+	public String getComment() {
+		return comment;
 	}
 
-	public void setComent(String coment) {
-		this.coment = coment;
+	public void setComment(String Comment) {
+		this.comment = Comment;
 	}
 
 	public Summary getSummary() {

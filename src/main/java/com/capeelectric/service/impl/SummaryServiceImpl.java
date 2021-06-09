@@ -32,7 +32,7 @@ public class SummaryServiceImpl implements SummaryService {
 	*/
 	@Override
 	public void addSummary(Summary summary) throws SummaryException {
-		if (summary.getUserName() != null && summary.getSiteId() != null) {
+		if (summary.getUserName() != null && !summary.getUserName().isEmpty() && summary.getSiteId() != null && summary.getSiteId() != 0) {
 			Optional<Summary> summaryRepo = summaryRepository.findBySiteId(summary.getSiteId());
 			if (!summaryRepo.isPresent() || !summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
 				summary.setCreatedDate(LocalDateTime.now());
@@ -55,7 +55,7 @@ public class SummaryServiceImpl implements SummaryService {
 	*/
 	@Override
 	public List<Summary> retrieveSummary(String userName, Integer siteId) throws SummaryException {
-		if (userName != null && siteId != null) {
+		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			return summaryRepository.findByUserNameAndSiteId(userName, siteId);
 		} else {
 			throw new SummaryException("UserName and SiteId are Invalid Inputs");
