@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.capeelectric.exception.PeriodicTestingException;
+import com.capeelectric.util.DecimalConversion;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
@@ -72,7 +73,7 @@ public class TestLoopImpedance implements Serializable {
 	}
 
 	public void setRbLoopImpedance(String rbLoopImpedance) throws PeriodicTestingException {
-		this.rbLoopImpedance = decimalFormate(rbLoopImpedance);
+		this.rbLoopImpedance =  DecimalConversion.convertToDecimal(rbLoopImpedance, "%.3f");
 	}
 
 	public String getYbLoopImpedance() {
@@ -80,7 +81,7 @@ public class TestLoopImpedance implements Serializable {
 	}
 
 	public void setYbLoopImpedance(String ybLoopImpedance) throws PeriodicTestingException {
-		this.ybLoopImpedance = decimalFormate(ybLoopImpedance);
+		this.ybLoopImpedance =  DecimalConversion.convertToDecimal(ybLoopImpedance, "%.3f");
 	}
 
 	public String getRnLoopImpedance() {
@@ -88,7 +89,7 @@ public class TestLoopImpedance implements Serializable {
 	}
 
 	public void setRnLoopImpedance(String rnLoopImpedance) throws PeriodicTestingException {
-		this.rnLoopImpedance = decimalFormate(rnLoopImpedance);
+		this.rnLoopImpedance =  DecimalConversion.convertToDecimal(rnLoopImpedance, "%.3f");
 	}
 
 	public String getYnLoopImpedance() {
@@ -96,7 +97,7 @@ public class TestLoopImpedance implements Serializable {
 	}
 
 	public void setYnLoopImpedance(String ynLoopImpedance) throws PeriodicTestingException {
-		this.ynLoopImpedance = decimalFormate(ynLoopImpedance);
+		this.ynLoopImpedance =  DecimalConversion.convertToDecimal(ynLoopImpedance, "%.3f");
 	}
 
 	public String getBnLoopImpedance() {
@@ -104,7 +105,7 @@ public class TestLoopImpedance implements Serializable {
 	}
 
 	public void setBnLoopImpedance(String bnLoopImpedance) throws PeriodicTestingException {
-		this.bnLoopImpedance = decimalFormate(bnLoopImpedance);
+		this.bnLoopImpedance =  DecimalConversion.convertToDecimal(bnLoopImpedance, "%.3f");
 	}
 
 	public String getRpeLoopImpedance() {
@@ -112,7 +113,7 @@ public class TestLoopImpedance implements Serializable {
 	}
 
 	public void setRpeLoopImpedance(String rpeLoopImpedance) throws PeriodicTestingException {
-		this.rpeLoopImpedance = decimalFormate(rpeLoopImpedance);
+		this.rpeLoopImpedance =  DecimalConversion.convertToDecimal(rpeLoopImpedance, "%.3f");
 	}
 
 	public String getYpeLoopImpedance() {
@@ -120,7 +121,7 @@ public class TestLoopImpedance implements Serializable {
 	}
 
 	public void setYpeLoopImpedance(String ypeLoopImpedance) throws PeriodicTestingException {
-		this.ypeLoopImpedance = decimalFormate(ypeLoopImpedance);
+		this.ypeLoopImpedance = DecimalConversion.convertToDecimal(ypeLoopImpedance, "%.3f");
 	}
 
 	public String getBpeLoopImpedance() {
@@ -128,7 +129,7 @@ public class TestLoopImpedance implements Serializable {
 	}
 
 	public void setBpeLoopImpedance(String bpeLoopImpedance) throws PeriodicTestingException {
-		this.bpeLoopImpedance = decimalFormate(bpeLoopImpedance);
+		this.bpeLoopImpedance = DecimalConversion.convertToDecimal(bpeLoopImpedance, "%.3f");
 	}
 
 	public Testing getTesting() {
@@ -138,14 +139,5 @@ public class TestLoopImpedance implements Serializable {
 	public void setTesting(Testing testing) {
 		this.testing = testing;
 	}
-
-	private String decimalFormate(String values) throws PeriodicTestingException {
-		if (values != null && !values.isEmpty()) {
-			return String.format("%.3f", Double.parseDouble(values));
-		} else {
-			throw new PeriodicTestingException("invalid input of LoopImpedance value");
-		}
-
-	}
-
+ 
 }

@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.capeelectric.exception.PeriodicTestingException;
+import com.capeelectric.util.DecimalConversion;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
@@ -75,7 +76,7 @@ public class TestFaultCurrent implements Serializable {
 	}
 
 	public void setRbFaultCurrent(String rbFaultCurrent) throws PeriodicTestingException {
-		this.rbFaultCurrent = decimalFormate(rbFaultCurrent);
+		this.rbFaultCurrent = DecimalConversion.convertToDecimal(rbFaultCurrent, "%.2f");
 	}
 
 	public String getYbFaultCurrent() {
@@ -83,7 +84,7 @@ public class TestFaultCurrent implements Serializable {
 	}
 
 	public void setYbFaultCurrent(String ybFaultCurrent) throws PeriodicTestingException {
-		this.ybFaultCurrent = decimalFormate(ybFaultCurrent);
+		this.ybFaultCurrent = DecimalConversion.convertToDecimal(ybFaultCurrent, "%.2f");
 	}
 
 	public String getRnFaultCurrent() {
@@ -91,7 +92,7 @@ public class TestFaultCurrent implements Serializable {
 	}
 
 	public void setRnFaultCurrent(String rnFaultCurrent) throws PeriodicTestingException {
-		this.rnFaultCurrent = decimalFormate(rnFaultCurrent);
+		this.rnFaultCurrent = DecimalConversion.convertToDecimal(rnFaultCurrent, "%.2f");
 	}
 
 	public String getYnFaultCurrent() {
@@ -99,7 +100,7 @@ public class TestFaultCurrent implements Serializable {
 	}
 
 	public void setYnFaultCurrent(String ynFaultCurrent) throws PeriodicTestingException {
-		this.ynFaultCurrent = decimalFormate(ynFaultCurrent);
+		this.ynFaultCurrent = DecimalConversion.convertToDecimal(ynFaultCurrent, "%.2f");
 	}
 
 	public String getBnFaultCurrent() {
@@ -107,7 +108,7 @@ public class TestFaultCurrent implements Serializable {
 	}
 
 	public void setBnFaultCurrent(String bnFaultCurrent) throws PeriodicTestingException {
-		this.bnFaultCurrent = decimalFormate(bnFaultCurrent);
+		this.bnFaultCurrent = DecimalConversion.convertToDecimal(bnFaultCurrent, "%.2f");
 	}
 
 	public String getRpeFaultCurrent() {
@@ -115,7 +116,7 @@ public class TestFaultCurrent implements Serializable {
 	}
 
 	public void setRpeFaultCurrent(String rpeFaultCurrent) throws PeriodicTestingException {
-		this.rpeFaultCurrent = decimalFormate(rpeFaultCurrent);
+		this.rpeFaultCurrent = DecimalConversion.convertToDecimal(rpeFaultCurrent, "%.2f");
 	}
 
 	public String getYpeFaultCurrent() {
@@ -123,7 +124,7 @@ public class TestFaultCurrent implements Serializable {
 	}
 
 	public void setYpeFaultCurrent(String ypeFaultCurrent) throws PeriodicTestingException {
-		this.ypeFaultCurrent = decimalFormate(ypeFaultCurrent);
+		this.ypeFaultCurrent = DecimalConversion.convertToDecimal(ypeFaultCurrent, "%.2f");
 	}
 
 	public String getBpeFaultCurrent() {
@@ -131,7 +132,7 @@ public class TestFaultCurrent implements Serializable {
 	}
 
 	public void setBpeFaultCurrent(String bpeFaultCurrent) throws PeriodicTestingException {
-		this.bpeFaultCurrent = decimalFormate(bpeFaultCurrent);
+		this.bpeFaultCurrent = DecimalConversion.convertToDecimal(bpeFaultCurrent, "%.2f");
 	}
 
 	public Testing getTesting() {
@@ -142,12 +143,4 @@ public class TestFaultCurrent implements Serializable {
 		this.testing = testing;
 	}
 
-	private String decimalFormate(String values) throws PeriodicTestingException {
-		if (values != null && !values.isEmpty()) {
-			return String.format("%.2f", Double.parseDouble(values));
-		} else {
-			throw new PeriodicTestingException("invalid input of FaultCurrent value");
-		}
-
-	}
 }
