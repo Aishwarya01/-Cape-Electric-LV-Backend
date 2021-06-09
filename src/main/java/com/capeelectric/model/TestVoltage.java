@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.capeelectric.exception.PeriodicTestingException;
+import com.capeelectric.util.DecimalConversion;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
@@ -76,72 +78,72 @@ public class TestVoltage implements Serializable {
 		return ryVoltage;
 	}
 
-	public void setRyVoltage(String ryVoltage) {
-		this.ryVoltage = ryVoltage;
+	public void setRyVoltage(String ryVoltage) throws PeriodicTestingException {
+		this.ryVoltage = DecimalConversion.convertToDecimal(ryVoltage, "%.2f");
 	}
 
 	public String getRbVoltage() {
 		return rbVoltage;
 	}
 
-	public void setRbVoltage(String rbVoltage) {
-		this.rbVoltage = rbVoltage;
+	public void setRbVoltage(String rbVoltage) throws PeriodicTestingException {
+		this.rbVoltage = DecimalConversion.convertToDecimal(rbVoltage, "%.2f");
 	}
 
 	public String getYbVoltage() {
 		return ybVoltage;
 	}
 
-	public void setYbVoltage(String ybVoltage) {
-		this.ybVoltage = ybVoltage;
+	public void setYbVoltage(String ybVoltage) throws PeriodicTestingException {
+		this.ybVoltage = DecimalConversion.convertToDecimal(ybVoltage, "%.2f");
 	}
 
 	public String getRnVoltage() {
 		return rnVoltage;
 	}
 
-	public void setRnVoltage(String rnVoltage) {
-		this.rnVoltage = rnVoltage;
+	public void setRnVoltage(String rnVoltage) throws PeriodicTestingException {
+		this.rnVoltage = DecimalConversion.convertToDecimal(rnVoltage, "%.2f");
 	}
 
 	public String getYnVoltage() {
 		return ynVoltage;
 	}
 
-	public void setYnVoltage(String ynVoltage) {
-		this.ynVoltage = ynVoltage;
+	public void setYnVoltage(String ynVoltage) throws PeriodicTestingException {
+		this.ynVoltage = DecimalConversion.convertToDecimal(ynVoltage, "%.2f");
 	}
 
 	public String getBnVoltage() {
 		return bnVoltage;
 	}
 
-	public void setBnVoltage(String bnVoltage) {
-		this.bnVoltage = bnVoltage;
+	public void setBnVoltage(String bnVoltage) throws PeriodicTestingException {
+		this.bnVoltage = DecimalConversion.convertToDecimal(bnVoltage, "%.2f");
 	}
 
 	public String getRpeVoltage() {
 		return rpeVoltage;
 	}
 
-	public void setRpeVoltage(String rpeVoltage) {
-		this.rpeVoltage = rpeVoltage;
+	public void setRpeVoltage(String rpeVoltage) throws PeriodicTestingException {
+		this.rpeVoltage = DecimalConversion.convertToDecimal(rpeVoltage, "%.2f");
 	}
 
 	public String getYpeVoltage() {
 		return ypeVoltage;
 	}
 
-	public void setYpeVoltage(String ypeVoltage) {
-		this.ypeVoltage = ypeVoltage;
+	public void setYpeVoltage(String ypeVoltage) throws PeriodicTestingException {
+		this.ypeVoltage = DecimalConversion.convertToDecimal(ypeVoltage, "%.2f");
 	}
 
 	public String getBpeVoltage() {
 		return bpeVoltage;
 	}
 
-	public void setBpeVoltage(String bpeVoltage) {
-		this.bpeVoltage = bpeVoltage;
+	public void setBpeVoltage(String bpeVoltage) throws PeriodicTestingException {
+		this.bpeVoltage = DecimalConversion.convertToDecimal(bpeVoltage, "%.2f");
 	}
 
 	public Testing getTesting() {
@@ -150,6 +152,6 @@ public class TestVoltage implements Serializable {
 
 	public void setTesting(Testing testing) {
 		this.testing = testing;
-	}	
- 	
+	}
+
 }

@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capeelectric.exception.TestInfoException;
+import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.Testing;
-import com.capeelectric.service.TestInfoService;
+import com.capeelectric.service.PeriodicTestingService;
 
 /**
  * 
@@ -25,15 +25,15 @@ import com.capeelectric.service.TestInfoService;
  */
 @RestController()
 @RequestMapping("/api/v1")
-public class TestInfoController {
+public class PeriodicTestingController {
 
 	private static final Logger logger = LoggerFactory.getLogger(SiteController.class);
 
 	@Autowired
-	private TestInfoService testService;
+	private PeriodicTestingService testService;
 
 	@PostMapping("/addTestInfo")
-	public ResponseEntity<String> addTestInfo(@RequestBody Testing testing) throws TestInfoException {
+	public ResponseEntity<String> addTestInfo(@RequestBody Testing testing) throws PeriodicTestingException {
 		logger.info("started addTestInfo function userName: {},siteId : {}", testing.getUserName(),
 				testing.getSiteId());
 
@@ -46,10 +46,10 @@ public class TestInfoController {
 
 	@GetMapping("/retrieveTestInfo/{userName}/{siteId}")
 	public ResponseEntity<Optional<Testing>> retrieveTestInfo(@PathVariable String userName,
-			@PathVariable Integer siteId) throws TestInfoException {
+			@PathVariable Integer siteId) throws PeriodicTestingException {
 		logger.info("Started retrieveTestInfo function userName: {},siteId : {}", userName, siteId);
 
-		return new ResponseEntity<Optional<Testing>>(testService.retrieveSummary(userName, siteId), HttpStatus.OK);
+		return new ResponseEntity<Optional<Testing>>(testService.retrieveTestInfo(userName, siteId), HttpStatus.OK);
 	}
 
 }
