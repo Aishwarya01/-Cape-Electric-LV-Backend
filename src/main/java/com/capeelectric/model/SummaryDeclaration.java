@@ -32,6 +32,9 @@ public class SummaryDeclaration implements Serializable {
 	@Column(name = "DECLARATION_ROLE")
 	private String declarationRole;
 	
+	@Column(name = "NAME")
+	private String name;
+	
 	@Column(name = "SIGNATURE")
 	private String signature;
 	
@@ -66,6 +69,14 @@ public class SummaryDeclaration implements Serializable {
 
 	public void setDeclarationRole(String declarationRole) {
 		this.declarationRole = declarationRole;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getSignature() {
