@@ -32,7 +32,6 @@ import com.capeelectric.repository.UserRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
 import com.capeelectric.service.impl.CustomUserDetailsServiceImpl;
-import com.capeelectric.service.impl.EmailService;
 import com.capeelectric.service.impl.UserDetailsServiceImpl;
 
 @ExtendWith(SpringExtension.class)
@@ -57,8 +56,8 @@ public class UserControllerTest {
 	@MockBean
 	private JwtTokenUtil jwtTokenUtil;
 
-	@MockBean
-	private EmailService emailService;
+//	@MockBean
+//	private EmailService emailService;
 
 	@MockBean
 	private UserRepository userRepository;
