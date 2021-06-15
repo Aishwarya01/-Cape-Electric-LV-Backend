@@ -2,7 +2,6 @@ package com.capeelectric.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -33,6 +32,7 @@ import com.capeelectric.repository.UserRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
 import com.capeelectric.service.impl.CustomUserDetailsServiceImpl;
+import com.capeelectric.service.impl.EmailService;
 import com.capeelectric.service.impl.UserDetailsServiceImpl;
 
 @ExtendWith(SpringExtension.class)
@@ -58,6 +58,9 @@ public class UserControllerTest {
 	private JwtTokenUtil jwtTokenUtil;
 
 	@MockBean
+	private EmailService emailService;
+
+	@MockBean
 	private UserRepository userRepository;
 
 	private User user;
@@ -72,17 +75,18 @@ public class UserControllerTest {
 		user.setId(0);
 	}
 
-//	@Test
-//	public void testSaveUser() throws UserException, URISyntaxException, IOException {
-//		MockHttpServletRequest request = new MockHttpServletRequest();
-//		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-//
-//		when(userDetailsServiceImpl.saveUser(user)).thenReturn(user);
-//		ResponseEntity<Void> addUser = userController.addUser(user);
-//
-//		assertEquals(addUser.getStatusCode(), HttpStatus.CREATED);
-//
-//	}
+	@Test
+	public void testSaveUser() throws UserException, URISyntaxException, IOException {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+		when(userDetailsServiceImpl.saveUser(user)).thenReturn(user);
+
+		ResponseEntity<Void> addUser = userController.addUser(user);
+
+		assertEquals(addUser.getStatusCode(), HttpStatus.CREATED);
+
+	}
 
 	@Test
 	public void testCreateAuthenticationToken() throws Exception {
@@ -101,40 +105,40 @@ public class UserControllerTest {
 		assertNotNull(token);
 	}
 
-//	@Test
-//	public void testForgotPassword() throws ForgotPasswordException, IOException {
-//
-//		ResponseEntity<String> responseEntity = new ResponseEntity<>(HttpStatus.ACCEPTED);
-//
-//		when(userDetailsServiceImpl.findByUserName("lvsystem@capeindia.net")).thenReturn(responseEntity);
-//		ResponseEntity<String> forgotPassword = userController.forgotPassword("123");
-//		assertNull(forgotPassword);
-//	}
+	@Test
+	public void testForgotPassword() throws ForgotPasswordException, IOException {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-//	@Test
-//	public void testUpdatePassword() throws UpdatePasswordException, IOException {
-//		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-//		authenticationRequest.setEmail("lvsystem@capeindia.net");
-//		authenticationRequest.setPassword("abcd12345");
-//
-//		when(userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "abcd12345")).thenReturn(user);
-//		ResponseEntity<String> updatePassword = userController.updatePassword(authenticationRequest);
-//		assertEquals(updatePassword.getBody(), "lvsystem@capeindia.net");
-//	}
+		when(userDetailsServiceImpl.findByUserName("lvsystem@capeindia.net")).thenReturn(user);
+		ResponseEntity<String> forgotPassword = userController.forgotPassword("lvsystem@capeindia.net");
+		assertEquals(forgotPassword.getStatusCode(), HttpStatus.OK);
+	}
 
-//	@Test
-//	public void testChangePassword() throws ChangePasswordException, IOException {
-//		ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
-//		changePasswordRequest.setOldPassword("abcd12345");
-//		changePasswordRequest.setEmail("lvsystem@capeindia.net");
-//		changePasswordRequest.setPassword("abcd");
-//
-//		when(userDetailsServiceImpl.changePassword("lvsystem@capeindia.net", "abcd12345", "abcd")).thenReturn(user);
-//
-//		ResponseEntity<String> changePassword = userController.changePassword(changePasswordRequest);
-//		assertEquals(changePassword.getBody(), "lvsystem@capeindia.net");
-//
-//	}
+	@Test
+	public void testUpdatePassword() throws UpdatePasswordException, IOException {
+		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+		authenticationRequest.setEmail("lvsystem@capeindia.net");
+		authenticationRequest.setPassword("abcd12345");
+
+		when(userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "abcd12345")).thenReturn(user);
+		ResponseEntity<String> updatePassword = userController.updatePassword(authenticationRequest);
+		assertEquals(updatePassword.getBody(), "lvsystem@capeindia.net");
+	}
+
+	@Test
+	public void testChangePassword() throws ChangePasswordException, IOException {
+		ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
+		changePasswordRequest.setOldPassword("abcd12345");
+		changePasswordRequest.setEmail("lvsystem@capeindia.net");
+		changePasswordRequest.setPassword("abcd");
+
+		when(userDetailsServiceImpl.changePassword("lvsystem@capeindia.net", "abcd12345", "abcd")).thenReturn(user);
+
+		ResponseEntity<String> changePassword = userController.changePassword(changePasswordRequest);
+		assertEquals(changePassword.getBody(), "lvsystem@capeindia.net");
+
+	}
 
 	@Test
 	public void testRetrieveUserInformation() throws UserException {
@@ -145,11 +149,11 @@ public class UserControllerTest {
 
 	}
 
-//	@Test
-//	public void testUpdateUserProfile() throws IOException {
-//		when(userDetailsServiceImpl.updateUserProfile(user)).thenReturn(user);
-//		ResponseEntity<String> updateUserProfile = userController.updateUserProfile(user);
-//		assertEquals(updateUserProfile.getBody(), "lvsystem@capeindia.net");
-//	}
+	@Test
+	public void testUpdateUserProfile() throws IOException {
+		when(userDetailsServiceImpl.updateUserProfile(user)).thenReturn(user);
+		ResponseEntity<String> updateUserProfile = userController.updateUserProfile(user);
+		assertEquals(updateUserProfile.getBody(), "lvsystem@capeindia.net");
+	}
 
 }
