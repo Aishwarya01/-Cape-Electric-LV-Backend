@@ -78,50 +78,13 @@
 	</dependencies>
 	<build>
 		<plugins>
-			<!-- <plugin>don't pack the war <groupId>org.apache.maven.plugins</groupId> 
-				<artifactId>maven-war-plugin</artifactId> <executions> <execution> <id>default-war</id> 
-				<phase>none</phase> </execution> <execution> <id>war-exploded</id> <configuration> 
-				<webappDirectory>target/deploy</webappDirectory> <archiveClasses>true</archiveClasses> 
-				</configuration> <phase>prepare-package</phase> <goals> <goal>exploded</goal> 
-				</goals> </execution> </executions> </plugin> -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>com.microsoft.azure</groupId>
-				<artifactId>azure-webapp-maven-plugin</artifactId>
-				<version>1.7.0</version>
-				<configuration>
-					<schemaVersion>V2</schemaVersion>
-					<resourceGroup>LV-Safety-Verification-1622005802939-rg</resourceGroup>
-					<appName>RushAppService</appName>
-					<pricingTier>F1</pricingTier>
-					<appSettings>
-						<property>
-							<name>JAVA_OPTS</name>
-							<value>-Dserver.port=80</value>
-						</property>
-					</appSettings>
-					<region>centralindia</region>
-					<runtime>
-						<os>linux</os>
-						<javaVersion>jre8</javaVersion>
-						<webContainer>jre8</webContainer>
-					</runtime>
-					<deployment>
-						<resources>
-							<resource>
-								<directory>${project.basedir}/target</directory>
-								<includes>
-									<include>*.jar</include>
-								</includes>
-							</resource>
-						</resources>
-					</deployment>
-				</configuration>
-			</plugin>
 		</plugins>
+		<finalName>RushAppService</finalName>
+		
 	</build>
 	<profiles>
 		<profile>
