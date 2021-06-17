@@ -34,9 +34,6 @@ public class CircuitBreaker implements Serializable {
 
 	@Column(name = "TYPE")
 	private String type;
-	
-	@Column(name = "CURRENT_CURVE_TYPE")
-	private String currentCurveType;
 
 	@Column(name = "POLES_NO")
 	private String noPoles;
@@ -83,14 +80,6 @@ public class CircuitBreaker implements Serializable {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public String getCurrentCurveType() {
-		return currentCurveType;
-	}
-
-	public void setCurrentCurveType(String currentCurveType) {
-		this.currentCurveType = currentCurveType;
 	}
 
 	public String getNoPoles() {

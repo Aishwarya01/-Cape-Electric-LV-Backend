@@ -71,6 +71,9 @@ public class SupplyParameters implements Serializable {
 	@Column(name = "AL_ACTUAL_LOAD")
 	private String actualLoad;
 
+	@Column(name = "AL_PROTECTIVE_DEVICE")
+	private String protectiveDevice;
+	
 	@Column(name = "AL_RATED_CURRNT")
 	private String ratedCurrent;
 
@@ -200,6 +203,14 @@ public class SupplyParameters implements Serializable {
 
 	public void setActualLoad(String actualLoad) {
 		this.actualLoad = actualLoad;
+	}
+
+	public String getProtectiveDevice() {
+		return protectiveDevice;
+	}
+
+	public void setProtectiveDevice(String protectiveDevice) {
+		this.protectiveDevice = protectiveDevice;
 	}
 
 	public String getRatedCurrent() {
