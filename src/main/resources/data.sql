@@ -16,14 +16,18 @@ user_type varchar(255),
 updated_date datetime,
 primary key (user_id));
 
-create table APPLICATIONTYPES(id integer not null, application varchar(255), code varchar(20), primary key(id))
+create table APPLICATIONTYPES(id integer not null, application varchar(255), code varchar(20), primary key(id),application_Name varchar(10));
 
-insert into APPLICATIONTYPES values (1,'Verification Of LV Systems (IEC 60364-6)', 'LV Systems');
-insert into APPLICATIONTYPES values (2,'Verification Of HV Systems (up to 33 kV) (IEC 61936-1)', 'HV Systems');
-insert into APPLICATIONTYPES values (3,'Lightning Protection Conformity Assessment, Risk Assessment, Inspection And Maintenance (IEC 62305-3 & 4)', 'Risk Assessment');
-insert into APPLICATIONTYPES values (4,'EMC Assessment Of An Installation (IEC 61000-5-1)', 'EMC Assessment');
-insert into APPLICATIONTYPES values (5,'Failure Analysis Of Electronic Systems', 'Failure Analysis');
-insert into APPLICATIONTYPES values (6,'Conformity And Project Analysis', 'Conformity Project');
+insert into APPLICATIONTYPES values (1,'Verification Of LV Systems (IEC 60364-6)', 'LV Systems','LV');
+insert into APPLICATIONTYPES values (2,'Verification Of HV Systems (up to 33 kV) (IEC 61936-1)', 'HV Systems','HV');
+insert into APPLICATIONTYPES values (3,'Lightning Protection Conformity Assessment, Risk Assessment, Inspection And Maintenance (IEC 62305-3 & 4)', 'Risk Assessment', 'LPS');
+insert into APPLICATIONTYPES values (4,'EMC Assessment Of An Installation (IEC 61000-5-1)', 'EMC Assessment','EMC');
+insert into APPLICATIONTYPES values (5,'Failure Analysis Of Electronic Systems', 'Failure Analysis','FAS');
+insert into APPLICATIONTYPES values (6,'Conformity And Project Analysis', 'Conformity Project','CPA');
+
+
+insert into APPLICATIONTYPES values (5,'Failure analysis of electronic systems'
+insert into APPLICATIONTYPES values (6,'Conformity and project analysis'
 
 
 CREATE TABLE COMPANY_TABLE (
