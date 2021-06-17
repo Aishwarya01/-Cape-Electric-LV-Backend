@@ -31,6 +31,9 @@ public class TestDisconnectionTime implements Serializable {
 	@Column(name = "TESTING_DISCONNECTIONTIME_ID")
 	private Integer disconnectionTimeId;
 	
+	@Column(name = "R-Y")
+	private String ryDisconnect;
+	
 	@Column(name = "R_B")
 	private String rbDisconnect;
 	
@@ -66,6 +69,14 @@ public class TestDisconnectionTime implements Serializable {
 
 	public void setDisconnectionTimeId(Integer disconnectionTimeId) {
 		this.disconnectionTimeId = disconnectionTimeId;
+	}
+
+	public String getRyDisconnect() {
+		return ryDisconnect;
+	}
+
+	public void setRyDisconnect(String ryDisconnect) {
+		this.ryDisconnect = ryDisconnect;
 	}
 
 	public String getRbDisconnect() {

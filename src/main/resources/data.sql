@@ -26,10 +26,6 @@ insert into APPLICATIONTYPES values (5,'Failure Analysis Of Electronic Systems',
 insert into APPLICATIONTYPES values (6,'Conformity And Project Analysis', 'Conformity Project','CPA');
 
 
-insert into APPLICATIONTYPES values (5,'Failure analysis of electronic systems'
-insert into APPLICATIONTYPES values (6,'Conformity and project analysis'
-
-
 CREATE TABLE COMPANY_TABLE (
     COMPANY_ID INT AUTO_INCREMENT ,
     COMPANY_CODE VARCHAR(255) NOT NULL,

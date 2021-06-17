@@ -31,6 +31,9 @@ public class TestLoopImpedance implements Serializable {
 	@Column(name = "TESTING_LOOPIMPEDANCE_ID")
 	private Integer loopImpedanceId;
 
+	@Column(name = "R-Y")
+	private String ryLoopImpedance;
+	
 	@Column(name = "R_B")
 	private String rbLoopImpedance;
 
@@ -70,6 +73,14 @@ public class TestLoopImpedance implements Serializable {
 
 	public String getRbLoopImpedance() {
 		return rbLoopImpedance;
+	}
+
+	public String getRyLoopImpedance() {
+		return ryLoopImpedance;
+	}
+
+	public void setRyLoopImpedance(String ryLoopImpedance) {
+		this.ryLoopImpedance = ryLoopImpedance;
 	}
 
 	public void setRbLoopImpedance(String rbLoopImpedance) throws PeriodicTestingException {
