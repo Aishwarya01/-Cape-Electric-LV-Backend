@@ -22,7 +22,7 @@ public class ApplicationTypes {
 	@Column(name = "CODE")
 	private String code;
 	
-	@Column(name = "application_Name")
+	@Column(name = "application_name")
 	private String applicationName;
 
 	public int getId() {

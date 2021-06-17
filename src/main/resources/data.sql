@@ -16,7 +16,7 @@ user_type varchar(255),
 updated_date datetime,
 primary key (user_id));
 
-create table APPLICATIONTYPES(id integer not null, application varchar(255), code varchar(20), primary key(id),application_Name varchar(10));
+create table APPLICATIONTYPES(id integer not null, application varchar(255), code varchar(20), primary key(id),application_name varchar(10));
 
 insert into APPLICATIONTYPES values (1,'Verification Of LV Systems (IEC 60364-6)', 'LV Systems','LV');
 insert into APPLICATIONTYPES values (2,'Verification Of HV Systems (up to 33 kV) (IEC 61936-1)', 'HV Systems','HV');
