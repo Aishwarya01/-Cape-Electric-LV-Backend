@@ -95,7 +95,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	 * @return List<SupplyCharacteristics>
 	 * 	
 	*/
-	@Override
+	@Override 
 	public List<SupplyCharacteristics> retrieveCharacteristics(String userName, Integer siteId)
 			throws SupplyCharacteristicsException {
 
