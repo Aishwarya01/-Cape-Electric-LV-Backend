@@ -90,7 +90,7 @@ public class SupplyCharacteristics implements Serializable {
 	private String mainCurrentDisconnection;
 
 	@Column(name = "AL_AVILABLE_SUPPLY")
-	private Boolean alternativeSupply;
+	private String alternativeSupply;
 
 	@Column(name = "AL_NUM_SUPPLY")
 	private String supplyNumber;
@@ -120,7 +120,7 @@ public class SupplyCharacteristics implements Serializable {
 	private String conductormaterial;
 
 	@Column(name = "CONDUCTOR_VERIFY")
-	private Boolean conductorVerify;
+	private String conductorVerify;
 
 	@Column(name = "BONDING_CONDUCTOR_SIZE")
 	private String bondingConductorSize;
@@ -129,7 +129,7 @@ public class SupplyCharacteristics implements Serializable {
 	private String bondingConductorMaterial;
 
 	@Column(name = "BONDING_CONDUCTOR_VERIFY")
-	private Boolean bondingConductorVerify;
+	private String bondingConductorVerify;
 
 	@Column(name = "BONDING_JOINTS_TYPE")
 	private String bondingJointsType;
@@ -144,7 +144,7 @@ public class SupplyCharacteristics implements Serializable {
 	private String earthingConductorMaterial;
 
 	@Column(name = "EARTHING_CONDUCTOR_VERIFY")
-	private Boolean earthingConductorVerify;
+	private String earthingConductorVerify;
 
 	@Column(name = "EARTHING_JOINTS_TYPE")
 	private String earthingJointsType;
@@ -303,11 +303,11 @@ public class SupplyCharacteristics implements Serializable {
 		this.mainCurrentDisconnection = mainCurrentDisconnection;
 	}
 
-	public Boolean getAlternativeSupply() {
+	public String getAlternativeSupply() {
 		return alternativeSupply;
 	}
 
-	public void setAlternativeSupply(Boolean alternativeSupply) {
+	public void setAlternativeSupply(String alternativeSupply) {
 		this.alternativeSupply = alternativeSupply;
 	}
 
@@ -383,11 +383,11 @@ public class SupplyCharacteristics implements Serializable {
 		this.conductormaterial = conductormaterial;
 	}
 
-	public Boolean getConductorVerify() {
+	public String getConductorVerify() {
 		return conductorVerify;
 	}
 
-	public void setConductorVerify(Boolean conductorVerify) {
+	public void setConductorVerify(String conductorVerify) {
 		this.conductorVerify = conductorVerify;
 	}
 
@@ -407,11 +407,11 @@ public class SupplyCharacteristics implements Serializable {
 		this.bondingConductorMaterial = bondingConductorMaterial;
 	}
 
-	public Boolean getBondingConductorVerify() {
+	public String getBondingConductorVerify() {
 		return bondingConductorVerify;
 	}
 
-	public void setBondingConductorVerify(Boolean bondingConductorVerify) {
+	public void setBondingConductorVerify(String bondingConductorVerify) {
 		this.bondingConductorVerify = bondingConductorVerify;
 	}
 
@@ -447,11 +447,11 @@ public class SupplyCharacteristics implements Serializable {
 		this.earthingConductorMaterial = earthingConductorMaterial;
 	}
 
-	public Boolean getEarthingConductorVerify() {
+	public String getEarthingConductorVerify() {
 		return earthingConductorVerify;
 	}
 
-	public void setEarthingConductorVerify(Boolean earthingConductorVerify) {
+	public void setEarthingConductorVerify(String earthingConductorVerify) {
 		this.earthingConductorVerify = earthingConductorVerify;
 	}
 

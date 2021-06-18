@@ -60,7 +60,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				if (supplyCharacteristics.getSupplyParameters() != null) {
 					List<SupplyParameters> supplyParameters = supplyCharacteristics.getSupplyParameters();
 					for (SupplyParameters supplyParametersItr : supplyParameters) {
-						if (supplyParametersItr.getNominalFrequency() != null
+						if (supplyParametersItr.getaLLiveConductorAC() !=null && !supplyParametersItr.getaLLiveConductorAC().isEmpty() && supplyParametersItr.getNominalFrequency() != null
 								&& supplyParametersItr.getNominalVoltage() != null
 								&& supplyParametersItr.getFaultCurrent() != null
 								&& supplyParametersItr.getLoopImpedance() != null) {
@@ -95,7 +95,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	 * @return List<SupplyCharacteristics>
 	 * 	
 	*/
-	@Override
+	@Override 
 	public List<SupplyCharacteristics> retrieveCharacteristics(String userName, Integer siteId)
 			throws SupplyCharacteristicsException {
 

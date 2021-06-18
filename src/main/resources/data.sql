@@ -16,14 +16,14 @@ user_type varchar(255),
 updated_date datetime,
 primary key (user_id));
 
-create table APPLICATIONTYPES(id integer not null, application varchar(255), code varchar(20), primary key(id))
+create table APPLICATIONTYPES(id integer not null, application varchar(255), code varchar(20), primary key(id),application_name varchar(10));
 
-insert into APPLICATIONTYPES values (1,'Verification Of LV Systems (IEC 60364-6)', 'LV Systems');
-insert into APPLICATIONTYPES values (2,'Verification Of HV Systems (up to 33 kV) (IEC 61936-1)', 'HV Systems');
-insert into APPLICATIONTYPES values (3,'Lightning Protection Conformity Assessment, Risk Assessment, Inspection And Maintenance (IEC 62305-3 & 4)', 'Risk Assessment');
-insert into APPLICATIONTYPES values (4,'EMC Assessment Of An Installation (IEC 61000-5-1)', 'EMC Assessment');
-insert into APPLICATIONTYPES values (5,'Failure Analysis Of Electronic Systems', 'Failure Analysis');
-insert into APPLICATIONTYPES values (6,'Conformity And Project Analysis', 'Conformity Project');
+insert into APPLICATIONTYPES values (1,'Verification Of LV Systems (IEC 60364-6)', 'LV Systems','LV');
+insert into APPLICATIONTYPES values (2,'Verification Of HV Systems (up to 33 kV) (IEC 61936-1)', 'HV Systems','HV');
+insert into APPLICATIONTYPES values (3,'Lightning Protection Conformity Assessment, Risk Assessment, Inspection And Maintenance (IEC 62305-3 & 4)', 'Risk Assessment', 'LPS');
+insert into APPLICATIONTYPES values (4,'EMC Assessment Of An Installation (IEC 61000-5-1)', 'EMC Assessment','EMC');
+insert into APPLICATIONTYPES values (5,'Failure Analysis Of Electronic Systems', 'Failure Analysis','FAS');
+insert into APPLICATIONTYPES values (6,'Conformity And Project Analysis', 'Conformity Project','CPA');
 
 
 CREATE TABLE COMPANY_TABLE (
@@ -220,7 +220,7 @@ CREATE TABLE SUPPLY_CHARACTERISTICS_TABLE (
             MAIN_CURRENT_PROTECTIVE_DEVICE VARCHAR(255),
             MAIN_RATED_CURRENT VARCHAR(255),
             MAIN_CURRENT_DISCONNECTION VARCHAR(255),
-            AL_AVILABLE_SUPPLY BIT,
+            AL_AVILABLE_SUPPLY VARCHAR(255),
             AL_NUM_SUPPLY VARCHAR(255),
             MAXIMUM_DEMAND VARCHAR(255),
             MAXIMUM_LOAD VARCHAR(255),
@@ -230,15 +230,15 @@ CREATE TABLE SUPPLY_CHARACTERISTICS_TABLE (
             NUM_LOCATION INT,
             CONDUCTOR_SIZE VARCHAR(255),
             CONDUCTOR_MATERIAL VARCHAR(255),
-            CONDUCTOR_VERIFY BIT,
+            CONDUCTOR_VERIFY VARCHAR(255),
             BONDING_CONDUCTOR_SIZE VARCHAR(255),
             BONDING_CONDUCTOR_MATERIAL VARCHAR(255),
-            BONDING_CONDUCTOR_VERIFY BIT,
+            BONDING_CONDUCTOR_VERIFY VARCHAR(255),
             BONDING_JOINTS_TYPE VARCHAR(255),
             BONDING_NO_OF_JOINTS INT,
             EARTHING_CONDUCTOR_SIZE VARCHAR(255),
             EARTHING_CONDUCTOR_MATERIAL VARCHAR(255),
-            EARTHING_CONDUCTOR_VERIFY BIT,
+            EARTHING_CONDUCTOR_VERIFY VARCHAR(255),
             EARTHING_JOINTS_TYPE VARCHAR(255),
             EARTHING_NO_OF_JOINTS INT,
             CREATED_DATE datetime,
@@ -264,6 +264,7 @@ CREATE TABLE SUPPLY_PARAMETERS_TABLE (
             AL_LOOP_IMPEDANCE VARCHAR(255),
             AL_INSTALLED_CAPACITY VARCHAR(255),
             AL_ACTUAL_LOAD VARCHAR(255) ,
+            AL_PROTECTIVE_DEVICE VARCHAR(255),
             AL_RATED_CURRNT VARCHAR(255),
             AL_CURRENT_DISCONNECTION VARCHAR(255),
             CONSTRAINT PK_SUPPLY_PARAMETERS_ID PRIMARY KEY(SUPPLY_PARAMETERS_ID),
@@ -277,7 +278,6 @@ CREATE TABLE SUPPLY_PARAMETERS_TABLE (
             SUPPLY_CHARACTERISTICS_ID INT,
             LOCATION VARCHAR(255),
             TYPE VARCHAR(255),
-			CURRENT_CURVE_TYPE VARCHAR(255),
             POLES_NO VARCHAR(255),
             CURRRENT VARCHAR(255),
             VOLTAGE VARCHAR(255),

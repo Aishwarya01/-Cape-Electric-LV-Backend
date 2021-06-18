@@ -34,6 +34,9 @@ public class TestFaultCurrent implements Serializable {
 	@Column(name = "TESTING_FAULTCURRENT_ID")
 	private Integer faultCurrentId;
 
+	@Column(name = "R-Y")
+	private String ryFaultCurrent;
+	
 	@Column(name = "R_B")
 	private String rbFaultCurrent;
 
@@ -69,6 +72,14 @@ public class TestFaultCurrent implements Serializable {
 
 	public void setFaultCurrentId(Integer faultCurrentId) {
 		this.faultCurrentId = faultCurrentId;
+	}
+
+	public String getRyFaultCurrent() {
+		return ryFaultCurrent;
+	}
+
+	public void setRyFaultCurrent(String ryFaultCurrent) {
+		this.ryFaultCurrent = ryFaultCurrent;
 	}
 
 	public String getRbFaultCurrent() {
