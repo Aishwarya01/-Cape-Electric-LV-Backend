@@ -36,10 +36,17 @@ public class InstalReportServiceImpl implements InstalReportService {
 	*/
 	@Override
 	public void addInstallationReport(ReportDetails reportDetails) throws InstalReportException {
-		if (reportDetails != null && reportDetails.getUserName() != null) {
-			reportDetails.setCreatedDate(LocalDateTime.now());
-			reportDetails.setCreatedBy(generateFullName(reportDetails.getUserName()));
-			installationReportRepository.save(reportDetails);
+		if (reportDetails != null && reportDetails.getUserName() != null && reportDetails.getSiteId() != null) {
+			Optional<ReportDetails> reportDetailsRepo = installationReportRepository
+					.findBySiteId(reportDetails.getSiteId());
+			if (!reportDetailsRepo.isPresent()
+					|| reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
+				reportDetails.setCreatedDate(LocalDateTime.now());
+				reportDetails.setCreatedBy(generateFullName(reportDetails.getUserName()));
+				installationReportRepository.save(reportDetails);
+			} else {
+				throw new InstalReportException("SiteId already present");
+			}
 
 		} else {
 			throw new InstalReportException("invalid inputs");
@@ -52,10 +59,10 @@ public class InstalReportServiceImpl implements InstalReportService {
 	 * 
 	*/
 	@Override
-	public List<ReportDetails> retrieveInstallationReport(String userName) throws InstalReportException {
+	public List<ReportDetails> retrieveInstallationReport(String userName,Integer siteId) throws InstalReportException {
 		if (userName != null) {
 
-			return installationReportRepository.findByUserName(userName);
+			return installationReportRepository.findByUserNameAndSiteId(userName,siteId);
 
 		} else {
 			throw new InstalReportException("invalid inputs");
