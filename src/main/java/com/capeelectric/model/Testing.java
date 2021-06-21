@@ -27,8 +27,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Table(name = "TESTING_TABLE")
 
 @NamedQueries(value = {
-		@NamedQuery(name = "TestInfoRepository.findByUserNameAndSiteId", query = "select s from Testing s where s.userName=:userName and s.siteId=:siteId"),
-        @NamedQuery(name = "TestInfoRepository.findBySiteId", query = "select s from Testing s where s.siteId=:siteId") })
+		@NamedQuery(name = "TestInfoRepository.findByUserNameAndSiteId", query = "Select s From Testing s Where s.userName=:userName and s.siteId=:siteId"),
+        @NamedQuery(name = "TestInfoRepository.findBySiteId", query = "Select s From Testing s Where s.siteId=:siteId") })
 public class Testing implements Serializable {
 
 	private static final long serialVersionUID = 1L;
