@@ -95,7 +95,12 @@ public class InstalReportServiceImplTest {
 
 		when(userRepository.findByUsername("software@capeindia.com")).thenReturn(optionaluser);
 		instalReportServiceImpl.addInstallationReport(reportDetails);
-
+		
+		when(installationReportRepository.findBySiteId(12)).thenReturn(Optional.of(reportDetails));
+		InstalReportException exception_SiteId = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.addInstallationReport(reportDetails));
+		assertEquals(exception_SiteId.getMessage(), "SiteId already present");
+				
 		InstalReportException exception = Assertions.assertThrows(InstalReportException.class,
 				() -> instalReportServiceImpl.addInstallationReport(null));
 		assertEquals(exception.getMessage(), "invalid inputs");
