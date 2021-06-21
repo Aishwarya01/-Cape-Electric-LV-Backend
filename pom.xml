@@ -65,16 +65,10 @@
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.sendgrid/sendgrid-java -->
-		<!-- <dependency>
-			<groupId>com.sendgrid</groupId>
-			<artifactId>sendgrid-java</artifactId>
-			<version>4.7.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.azure.spring</groupId>
-			<artifactId>azure-spring-boot-starter-keyvault-secrets</artifactId>
-			<version>3.5.0</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>com.sendgrid</groupId> <artifactId>sendgrid-java</artifactId> 
+			<version>4.7.1</version> </dependency> <dependency> <groupId>com.azure.spring</groupId> 
+			<artifactId>azure-spring-boot-starter-keyvault-secrets</artifactId> <version>3.5.0</version> 
+			</dependency> -->
 	</dependencies>
 	<build>
 		<plugins>
@@ -82,9 +76,37 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>prepare</id>
+						<phase>package</phase>
+						<configuration>
+							<tasks>
+								<unzip
+									src="${project.build.directory}/${project.build.finalName}.jar"
+									dest="${project.build.directory}/${project.build.finalName}" />
+								<copy
+									todir="${project.build.directory}/${project.build.finalName}/"
+									overwrite="false">
+									<fileset dir="./" includes=".ebextensions/**" />
+								</copy>
+								<zip compress="false"
+									destfile="${project.build.directory}/${project.build.finalName}.jar"
+									basedir="${project.build.directory}/${project.build.finalName}" />
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 		<finalName>RushAppService</finalName>
-		
+
 	</build>
 	<profiles>
 		<profile>
