@@ -31,7 +31,7 @@ public class TestLoopImpedance implements Serializable {
 	@Column(name = "TESTING_LOOPIMPEDANCE_ID")
 	private Integer loopImpedanceId;
 
-	@Column(name = "R-Y")
+	@Column(name = "R_Y")
 	private String ryLoopImpedance;
 	
 	@Column(name = "R_B")

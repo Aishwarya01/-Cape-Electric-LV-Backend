@@ -1,6 +1,6 @@
 package com.capeelectric.controller;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ import com.capeelectric.service.PeriodicTestingService;
 @RequestMapping("/api/v1")
 public class PeriodicTestingController {
 
-	private static final Logger logger = LoggerFactory.getLogger(SiteController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PeriodicTestingController.class);
 
 	@Autowired
 	private PeriodicTestingService testService;
@@ -45,11 +45,11 @@ public class PeriodicTestingController {
 	}
 
 	@GetMapping("/retrieveTestInfo/{userName}/{siteId}")
-	public ResponseEntity<Optional<Testing>> retrieveTestInfo(@PathVariable String userName,
+	public ResponseEntity<List<Testing>> retrieveTestInfo(@PathVariable String userName,
 			@PathVariable Integer siteId) throws PeriodicTestingException {
 		logger.info("Started retrieveTestInfo function userName: {},siteId : {}", userName, siteId);
 
-		return new ResponseEntity<Optional<Testing>>(testService.retrieveTestInfo(userName, siteId), HttpStatus.OK);
+		return new ResponseEntity<List<Testing>>(testService.retrieveTestInfo(userName, siteId), HttpStatus.OK);
 	}
 
 }
