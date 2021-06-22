@@ -31,7 +31,7 @@ public class TestDisconnectionTime implements Serializable {
 	@Column(name = "TESTING_DISCONNECTIONTIME_ID")
 	private Integer disconnectionTimeId;
 	
-	@Column(name = "R-Y")
+	@Column(name = "R_Y")
 	private String ryDisconnect;
 	
 	@Column(name = "R_B")
