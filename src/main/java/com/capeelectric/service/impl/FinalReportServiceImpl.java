@@ -17,7 +17,7 @@ import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
-import com.capeelectric.repository.TestInfoRepository;
+import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.FinalReportService;
 
 
@@ -44,7 +44,7 @@ public class FinalReportServiceImpl implements FinalReportService {
 	private InspectionRepository inspectionRepository;
 
 	@Autowired
-	private TestInfoRepository testInfoRepository;
+	private TestingReportRepository testingReportRepository;
 
 	@Autowired
 	private SummaryRepository summaryRepository;
@@ -104,7 +104,7 @@ public class FinalReportServiceImpl implements FinalReportService {
 			logger.info("PriodicInspection_fetching ended");
 
 			logger.info("fetching process started for PriodicTesting");
-			finalReport.setTesting(testInfoRepository.findByUserNameAndSiteId(userName, siteId).get(0));
+			finalReport.setTestingReport(testingReportRepository.findByUserNameAndSiteId(userName, siteId).get(0));
 			logger.info("PriodicTesting_fetching ended");
 
 			logger.info("fetching process started for Summary");

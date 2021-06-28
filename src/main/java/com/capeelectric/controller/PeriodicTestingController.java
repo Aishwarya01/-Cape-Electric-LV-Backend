@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capeelectric.exception.PeriodicTestingException;
-import com.capeelectric.model.Testing;
+import com.capeelectric.model.TestingReport;
 import com.capeelectric.service.PeriodicTestingService;
 
 /**
@@ -32,24 +32,27 @@ public class PeriodicTestingController {
 	@Autowired
 	private PeriodicTestingService testService;
 
-	@PostMapping("/addTestInfo")
-	public ResponseEntity<String> addTestInfo(@RequestBody Testing testing) throws PeriodicTestingException {
-		logger.info("started addTestInfo function userName: {},siteId : {}", testing.getUserName(),
-				testing.getSiteId());
+	@PostMapping("/addTestingReport")
+	public ResponseEntity<String> addTestingReport(@RequestBody TestingReport testingReport)
+			throws PeriodicTestingException {
+		logger.info("started addTestingReport function userName: {},siteId : {}", testingReport.getUserName(),
+				testingReport.getSiteId());
 
-		testService.addTestInfo(testing);
-		logger.info("ended addTestInfo function");
+		testService.addTestingReport(testingReport);
+		logger.info("ended addTestingReport function");
 
-		return new ResponseEntity<String>("successfully added TestInfo", HttpStatus.OK);
+		return new ResponseEntity<String>("successfully added TestingReport", HttpStatus.OK);
 
 	}
 
-	@GetMapping("/retrieveTestInfo/{userName}/{siteId}")
-	public ResponseEntity<List<Testing>> retrieveTestInfo(@PathVariable String userName,
+	@GetMapping("/retrieveTestingReport/{userName}/{siteId}")
+	public ResponseEntity<List<TestingReport>> retrieveTestingReport(@PathVariable String userName,
 			@PathVariable Integer siteId) throws PeriodicTestingException {
-		logger.info("Started retrieveTestInfo function userName: {},siteId : {}", userName, siteId);
+		logger.info("Started retrieveTestingReport function userName: {},siteId : {}", userName, siteId);
+		List<TestingReport> retrieveTestingReport = testService.retrieveTestingReport(userName, siteId);
+		logger.info("ended retrieveTestingReport function");
 
-		return new ResponseEntity<List<Testing>>(testService.retrieveTestInfo(userName, siteId), HttpStatus.OK);
+		return new ResponseEntity<List<TestingReport>>(retrieveTestingReport, HttpStatus.OK);
 	}
 
 }

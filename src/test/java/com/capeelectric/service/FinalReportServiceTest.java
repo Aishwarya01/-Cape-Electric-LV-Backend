@@ -26,13 +26,13 @@ import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SupplyCharacteristics;
-import com.capeelectric.model.Testing;
+import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
-import com.capeelectric.repository.TestInfoRepository;
+import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.FinalReportServiceImpl;
 
 /**
@@ -61,7 +61,7 @@ public class FinalReportServiceTest {
 	private InspectionRepository inspectionRepository;
 
 	@MockBean
-	private TestInfoRepository testInfoRepository;
+	private TestingReportRepository testingReportRepository;
 
 	@MockBean
 	private SummaryRepository summaryRepository;
@@ -78,7 +78,7 @@ public class FinalReportServiceTest {
 		finalReport.setReportDetails(retrieveReportDetails());
 		finalReport.setSupplyCharacteristics(retrieveSupplyCharacteristics());
 		finalReport.setIpaoInspection(retrieveIpaoInspection());
-		finalReport.setTesting(retrieveTesting());
+		finalReport.setTestingReport(retrieveTestingReport());
 		finalReport.setSummary(retrieveSummary());
 
 	}
@@ -123,9 +123,9 @@ public class FinalReportServiceTest {
 		inspection.add(retrieveIpaoInspection());
 		when(inspectionRepository.findByUserNameAndSiteId("LVsystem@gmail.com", 1)).thenReturn(inspection);
 
-		ArrayList<Testing> testing = new ArrayList<>();
-		testing.add(retrieveTesting());
-		when(testInfoRepository.findByUserNameAndSiteId("LVsystem@gmail.com", 1)).thenReturn(testing);
+		ArrayList<TestingReport> testingReport = new ArrayList<>();
+		testingReport.add(retrieveTestingReport());
+		when(testingReportRepository.findByUserNameAndSiteId("LVsystem@gmail.com", 1)).thenReturn(testingReport);
 
 		ArrayList<Summary> summary = new ArrayList<>();
 		summary.add(retrieveSummary());
@@ -162,11 +162,11 @@ public class FinalReportServiceTest {
 		return ipaoInspection;
 	}
 
-	private Testing retrieveTesting() {
-		Testing testing = new Testing();
-		testing.setUserName("LVsystem@gmail.com");
-		testing.setSiteId(1);
-		return testing;
+	private TestingReport retrieveTestingReport() {
+		TestingReport testingReport = new TestingReport();
+		testingReport.setUserName("LVsystem@gmail.com");
+		testingReport.setSiteId(1);
+		return testingReport;
 	}
 
 	private Summary retrieveSummary() {
