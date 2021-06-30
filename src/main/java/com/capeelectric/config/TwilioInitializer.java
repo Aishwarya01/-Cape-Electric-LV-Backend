@@ -9,15 +9,15 @@ import com.twilio.Twilio;
 @Configuration
 public class TwilioInitializer {
 
-	private final TwilioProperties twilioproperties;
+	private final TwilioProperties twilioProperties;
 
 	@Autowired
-	public TwilioInitializer(TwilioProperties twilioproperties) {
-		this.twilioproperties = twilioproperties;
-		Twilio.init(twilioproperties.getAccountSid(), twilioproperties.getAuthToken());
+	public TwilioInitializer(TwilioProperties twilioProperties) {
+		this.twilioProperties = twilioProperties;
+		Twilio.init(twilioProperties.getAccountSid(), twilioProperties.getAuthToken());
 	}
 
-	public TwilioProperties getTwilioproperties() {
-		return twilioproperties;
+	public TwilioProperties getTwilioProperties() {
+		return twilioProperties;
 	}
 }
