@@ -1,5 +1,6 @@
 package com.capeelectric.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.PeriodicTestingException;
-import com.capeelectric.model.Testing;
-import com.capeelectric.repository.TestInfoRepository;
+import com.capeelectric.model.TestingReport;
+import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.PeriodicTestingService;
 
 /**
@@ -20,19 +21,20 @@ import com.capeelectric.service.PeriodicTestingService;
 public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 
 	@Autowired
-	private TestInfoRepository testInfoRepository;
+	private TestingReportRepository testingReportRepository;
 
 	/**
 	 * @param Testing
-	 * addTestInfo method to Testing object will be storing corresponding tables
+	 * addTestingReport method to Testing object will be storing corresponding tables
 	*/
 	@Override
-	public void addTestInfo(Testing testing) throws PeriodicTestingException {
-		if (testing.getUserName() != null && testing.getSiteId() != null) {
+	public void addTestingReport(TestingReport testingReport) throws PeriodicTestingException {
+		if (testingReport.getUserName() != null && testingReport.getSiteId() != null) {
 
-			Optional<Testing> testingRepo = testInfoRepository.findBySiteId(testing.getSiteId());
-			if (!testingRepo.isPresent() || !testingRepo.get().getSiteId().equals(testing.getSiteId())) {
-				testInfoRepository.save(testing);
+			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(testingReport.getSiteId());
+			if (!testingRepo.isPresent() || !testingRepo.get().getSiteId().equals(testingReport.getSiteId())) {
+				testingReport.setCreatedDate(LocalDateTime.now());
+				testingReportRepository.save(testingReport);
 			} else {
 				throw new PeriodicTestingException("SiteId Already Present");
 			}
@@ -43,13 +45,13 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 
 	/**
 	 * @param userName,siteId
-	 * retrieveSummary method to retrieve based on userName and siteId
+	 * retrieveTestingReport method to retrieve based on userName and siteId
 	 * @return Optional<Testing>
 	 */
 	@Override
-	public List<Testing> retrieveTestInfo(String userName, Integer siteId) throws PeriodicTestingException {
+	public List<TestingReport> retrieveTestingReport(String userName, Integer siteId) throws PeriodicTestingException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
-			return testInfoRepository.findByUserNameAndSiteId(userName, siteId);
+			return testingReportRepository.findByUserNameAndSiteId(userName, siteId);
 		} else {
 			throw new PeriodicTestingException("UserName and SiteId Invalid Input");
 		}

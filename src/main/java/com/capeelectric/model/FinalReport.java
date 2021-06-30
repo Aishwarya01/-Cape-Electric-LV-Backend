@@ -18,7 +18,7 @@ public class FinalReport {
 
 	private IpaoInspection ipaoInspection;
 
-	private Testing testing;
+	private TestingReport testingReport;
 
 	private Summary summary;
 
@@ -62,12 +62,12 @@ public class FinalReport {
 		this.ipaoInspection = ipaoInspection;
 	}
 
-	public Testing getTesting() {
-		return testing;
+	public TestingReport getTestingReport() {
+		return testingReport;
 	}
 
-	public void setTesting(Testing testing) {
-		this.testing = testing;
+	public void setTestingReport(TestingReport testingReport) {
+		this.testingReport = testingReport;
 	}
 
 	public Summary getSummary() {

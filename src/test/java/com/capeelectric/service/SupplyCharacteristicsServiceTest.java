@@ -47,11 +47,13 @@ public class SupplyCharacteristicsServiceTest {
 		supplyCharacteristics.setMainNominalFrequency("2.00,122.12,455,566");
 		supplyCharacteristics.setMainNominalVoltage("3.00,152.1212,455.051,56.9459");
 		supplyCharacteristics.setMainLoopImpedance("4.000,12.12245,455.21265,56.766456");
+		supplyCharacteristics.setLiveConductorAC("3");
+		
 	}
 
 	@Test
 	public void testAddCharacteristics_Succes_Flow() throws SupplyCharacteristicsException {
-
+		
 		supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics);
 		when(supplyCharacteristicsRepository.save(supplyCharacteristics)).thenReturn(supplyCharacteristics);
 		assertNotNull(supplyCharacteristics);
@@ -69,6 +71,7 @@ public class SupplyCharacteristicsServiceTest {
 		supplyParameters.setNominalVoltage("2.050,12.1452,45545,5546");
 		supplyParameters.setFaultCurrent("3.005,12.1542,44555.01,56.99");
 		supplyParameters.setLoopImpedance("4.000,12.12254,455.21245,56.766");
+		supplyParameters.setaLLiveConductorAC("3");
 
 		List<SupplyParameters> list = new ArrayList<>();
 		list.add(supplyParameters);

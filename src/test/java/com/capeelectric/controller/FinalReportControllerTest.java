@@ -25,7 +25,7 @@ import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SupplyCharacteristics;
-import com.capeelectric.model.Testing;
+import com.capeelectric.model.TestingReport;
 import com.capeelectric.service.impl.FinalReportServiceImpl;
 
 /**
@@ -62,7 +62,7 @@ public class FinalReportControllerTest {
 		finalReport.setIpaoInspection(new IpaoInspection());
 		finalReport.setReportDetails(new ReportDetails());
 		finalReport.setSummary(new Summary());
-		finalReport.setTesting(new Testing());
+		finalReport.setTestingReport(new TestingReport());
 		finalReport.setSupplyCharacteristics(new SupplyCharacteristics());
 	}
 	@Test

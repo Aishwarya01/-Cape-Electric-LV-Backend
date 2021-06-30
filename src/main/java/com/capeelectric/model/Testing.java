@@ -1,7 +1,7 @@
 package com.capeelectric.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,12 +10,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
@@ -25,10 +25,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  */
 @Entity
 @Table(name = "TESTING_TABLE")
-
-@NamedQueries(value = {
-		@NamedQuery(name = "TestInfoRepository.findByUserNameAndSiteId", query = "Select t From Testing t Where t.userName=:userName and t.siteId=:siteId"),
-        @NamedQuery(name = "TestInfoRepository.findBySiteId", query = "Select t From Testing t Where t.siteId=:siteId") })
 public class Testing implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,12 +33,6 @@ public class Testing implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "TESTING_ID")
 	private Integer testingId;
-	
-	@Column(name = "SITE_ID")
-	private Integer siteId;
-	
-	@Column(name = "USER_NAME")
-	private String userName;
 	
 	@Column(name = "TEST_ENGINEER_NAME")
 	private String testEngineerName;
@@ -74,44 +64,46 @@ public class Testing implements Serializable {
 	@Column(name = "COMPANY_NAME")
 	private String companyName;
 	
-	@Column(name = "CREATED_DATE")
-	private LocalDateTime createdDate;
+	@JsonManagedReference
+	@OneToMany(mappedBy = "testing", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<TestDistribution> testDistribution;
 	
 	@JsonManagedReference
-	@OneToOne(mappedBy = "testing", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private TestDistribution testDistribution;
+	@OneToMany(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private  List<TestCircuit> testCircuit;
 	
 	@JsonManagedReference
-	@OneToOne(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private  TestCircuit testCircuit;
+	@OneToMany(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private  List<TestConductor> testConductor;
 	
 	@JsonManagedReference
-	@OneToOne(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private  TestConductor testConductor;
+	@OneToMany(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private  List<TestContinuity> testContinuity;
 	
 	@JsonManagedReference
-	@OneToOne(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private  TestContinuity testContinuity;
+	@OneToMany(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private  List<TestVoltage> testVoltage;
 	
 	@JsonManagedReference
-	@OneToOne(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private  TestVoltage testVoltage;
+	@OneToMany(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private  List<TestLoopImpedance> testLoopImpedance;
 	
 	@JsonManagedReference
-	@OneToOne(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private  TestLoopImpedance testLoopImpedance;
+	@OneToMany(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private  List<TestFaultCurrent> testFaultCurrent;
 	
 	@JsonManagedReference
-	@OneToOne(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private  TestFaultCurrent testFaultCurrent;
+	@OneToMany(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private  List<TestDisconnectionTime> testDisconnectionTime;
 	
 	@JsonManagedReference
-	@OneToOne(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private  TestDisconnectionTime testDisconnectionTime;
+	@OneToMany(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+	private  List<TestRcd> testRcd;
 	
-	@JsonManagedReference
-	@OneToOne(mappedBy="testing", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-	private  TestRcd testRcd;
+	@JsonBackReference
+	@ManyToOne
+	@JoinColumn(name="TESTING_REPORT_ID")
+ 	private TestingReport testingReport;
 
 	public Integer getTestingId() {
 		return testingId;
@@ -119,22 +111,6 @@ public class Testing implements Serializable {
 
 	public void setTestingId(Integer testingId) {
 		this.testingId = testingId;
-	}
-
-	public Integer getSiteId() {
-		return siteId;
-	}
-
-	public void setSiteId(Integer siteId) {
-		this.siteId = siteId;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
 	}
 
 	public String getTestEngineerName() {
@@ -217,84 +193,84 @@ public class Testing implements Serializable {
 		this.companyName = companyName;
 	}
 
-	public LocalDateTime getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(LocalDateTime createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public TestDistribution getTestDistribution() {
+	public List<TestDistribution> getTestDistribution() {
 		return testDistribution;
 	}
 
-	public void setTestDistribution(TestDistribution testDistribution) {
+	public void setTestDistribution(List<TestDistribution> testDistribution) {
 		this.testDistribution = testDistribution;
 	}
 
-	public TestCircuit getTestCircuit() {
+	public List<TestCircuit> getTestCircuit() {
 		return testCircuit;
 	}
 
-	public void setTestCircuit(TestCircuit testCircuit) {
+	public void setTestCircuit(List<TestCircuit> testCircuit) {
 		this.testCircuit = testCircuit;
 	}
 
-	public TestConductor getTestConductor() {
+	public List<TestConductor> getTestConductor() {
 		return testConductor;
 	}
 
-	public void setTestConductor(TestConductor testConductor) {
+	public void setTestConductor(List<TestConductor> testConductor) {
 		this.testConductor = testConductor;
 	}
 
-	public TestContinuity getTestContinuity() {
+	public List<TestContinuity> getTestContinuity() {
 		return testContinuity;
 	}
 
-	public void setTestContinuity(TestContinuity testContinuity) {
+	public void setTestContinuity(List<TestContinuity> testContinuity) {
 		this.testContinuity = testContinuity;
 	}
 
-	public TestVoltage getTestVoltage() {
+	public List<TestVoltage> getTestVoltage() {
 		return testVoltage;
 	}
 
-	public void setTestVoltage(TestVoltage testVoltage) {
+	public void setTestVoltage(List<TestVoltage> testVoltage) {
 		this.testVoltage = testVoltage;
 	}
 
-	public TestLoopImpedance getTestLoopImpedance() {
+	public List<TestLoopImpedance> getTestLoopImpedance() {
 		return testLoopImpedance;
 	}
 
-	public void setTestLoopImpedance(TestLoopImpedance testLoopImpedance) {
+	public void setTestLoopImpedance(List<TestLoopImpedance> testLoopImpedance) {
 		this.testLoopImpedance = testLoopImpedance;
 	}
 
-	public TestFaultCurrent getTestFaultCurrent() {
+	public List<TestFaultCurrent> getTestFaultCurrent() {
 		return testFaultCurrent;
 	}
 
-	public void setTestFaultCurrent(TestFaultCurrent testFaultCurrent) {
+	public void setTestFaultCurrent(List<TestFaultCurrent> testFaultCurrent) {
 		this.testFaultCurrent = testFaultCurrent;
 	}
 
-	public TestDisconnectionTime getTestDisconnectionTime() {
+	public List<TestDisconnectionTime> getTestDisconnectionTime() {
 		return testDisconnectionTime;
 	}
 
-	public void setTestDisconnectionTime(TestDisconnectionTime testDisconnectionTime) {
+	public void setTestDisconnectionTime(List<TestDisconnectionTime> testDisconnectionTime) {
 		this.testDisconnectionTime = testDisconnectionTime;
 	}
 
-	public TestRcd getTestRcd() {
+	public List<TestRcd> getTestRcd() {
 		return testRcd;
 	}
 
-	public void setTestRcd(TestRcd testRcd) {
+	public void setTestRcd(List<TestRcd> testRcd) {
 		this.testRcd = testRcd;
 	}
-	
+
+	public TestingReport getTestingReport() {
+		return testingReport;
+	}
+
+	public void setTestingReport(TestingReport testingReport) {
+		this.testingReport = testingReport;
+	}
+
 }
