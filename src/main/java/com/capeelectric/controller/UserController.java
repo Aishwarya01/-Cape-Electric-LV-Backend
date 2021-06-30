@@ -57,9 +57,6 @@ public class UserController {
 	private AuthenticationManager authenticationManager;
 	
 	@Autowired
-	private EmailService emailService;
-	
-	@Autowired
 	private AWSEmailService awsEmailService;
 
 	@Autowired
