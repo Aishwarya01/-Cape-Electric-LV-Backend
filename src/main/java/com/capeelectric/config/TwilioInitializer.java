@@ -7,14 +7,17 @@ import com.capeelectric.util.TwilioProperties;
 import com.twilio.Twilio;
 
 @Configuration
-public class TwilioInitiazer {
+public class TwilioInitializer {
 
 	private final TwilioProperties twilioproperties;
 
 	@Autowired
-	public TwilioInitiazer(TwilioProperties twilioproperties) {
+	public TwilioInitializer(TwilioProperties twilioproperties) {
 		this.twilioproperties = twilioproperties;
 		Twilio.init(twilioproperties.getAccountSid(), twilioproperties.getAuthToken());
-		System.out.println("Twilio initialized with account-" + twilioproperties.getAccountSid());
+	}
+
+	public TwilioProperties getTwilioproperties() {
+		return twilioproperties;
 	}
 }

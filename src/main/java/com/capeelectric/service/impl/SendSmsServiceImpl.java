@@ -22,7 +22,6 @@ public class SendSmsServiceImpl implements SendSmsService{
 		this.twilioproperties=twilioproperties;
 	}
 	
-	// method to send to otp
  	@Override
 	public VerificationResult startVerification(String phone) {
 		try {
@@ -39,8 +38,6 @@ public class SendSmsServiceImpl implements SendSmsService{
 		}
 		return null;
 	}
-
-	// mehtod to verifiy the otp
 
 	@Override
 	public VerificationResult checkverification(String phone, String code) {
