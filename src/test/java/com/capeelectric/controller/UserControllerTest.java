@@ -33,6 +33,7 @@ import com.capeelectric.model.User;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
+import com.capeelectric.service.impl.AWSEmailService;
 import com.capeelectric.service.impl.CustomUserDetailsServiceImpl;
 import com.capeelectric.service.impl.UserDetailsServiceImpl;
 
@@ -58,8 +59,8 @@ public class UserControllerTest {
 	@MockBean
 	private JwtTokenUtil jwtTokenUtil;
 
-//	@MockBean
-//	private EmailService emailService;
+	@MockBean
+	private AWSEmailService emailService;
 
 	@MockBean
 	private UserRepository userRepository;
