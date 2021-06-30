@@ -7,6 +7,8 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import javax.mail.MessagingException;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,8 +33,8 @@ import com.capeelectric.model.User;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
+import com.capeelectric.service.impl.AWSEmailService;
 import com.capeelectric.service.impl.CustomUserDetailsServiceImpl;
-import com.capeelectric.service.impl.EmailService;
 import com.capeelectric.service.impl.UserDetailsServiceImpl;
 
 @ExtendWith(SpringExtension.class)
@@ -58,7 +60,7 @@ public class UserControllerTest {
 	private JwtTokenUtil jwtTokenUtil;
 
 	@MockBean
-	private EmailService emailService;
+	private AWSEmailService emailService;
 
 	@MockBean
 	private UserRepository userRepository;
@@ -76,7 +78,7 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testSaveUser() throws UserException, URISyntaxException, IOException {
+	public void testSaveUser() throws UserException, URISyntaxException, IOException, MessagingException {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
@@ -106,7 +108,7 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testForgotPassword() throws ForgotPasswordException, IOException {
+	public void testForgotPassword() throws ForgotPasswordException, IOException, MessagingException {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
@@ -116,7 +118,7 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testUpdatePassword() throws UpdatePasswordException, IOException {
+	public void testUpdatePassword() throws UpdatePasswordException, IOException, MessagingException {
 		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
 		authenticationRequest.setEmail("lvsystem@capeindia.net");
 		authenticationRequest.setPassword("abcd12345");
@@ -127,7 +129,7 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testChangePassword() throws ChangePasswordException, IOException {
+	public void testChangePassword() throws ChangePasswordException, IOException, MessagingException {
 		ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
 		changePasswordRequest.setOldPassword("abcd12345");
 		changePasswordRequest.setEmail("lvsystem@capeindia.net");
@@ -150,7 +152,7 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testUpdateUserProfile() throws IOException {
+	public void testUpdateUserProfile() throws IOException, MessagingException {
 		when(userDetailsServiceImpl.updateUserProfile(user)).thenReturn(user);
 		ResponseEntity<String> updateUserProfile = userController.updateUserProfile(user);
 		assertEquals(updateUserProfile.getBody(), "lvsystem@capeindia.net");
