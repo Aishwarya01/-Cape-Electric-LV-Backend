@@ -27,7 +27,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "REPORT_DETAILS_TABLE")
 @NamedQueries(value = {
-		@NamedQuery(name = "installationReportRepository.retrieveInstallationReport", query = "select r from ReportDetails r where r.userName=:userName") })
+		@NamedQuery(name = "InstalReportDetailsRepository.findByUserNameAndSiteId", query = "select r from ReportDetails r where r.userName=:userName and r.siteId=:siteId"),
+		@NamedQuery(name = "InstalReportDetailsRepository.findBySiteId", query = "select r from ReportDetails r where r.siteId=:siteId")
+
+})
 public class ReportDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -40,6 +43,9 @@ public class ReportDetails implements Serializable {
 	@Column(name = "USER_NAME")
 	private String userName;
 
+	@Column(name = "SITE_ID")
+	private Integer siteId;
+	
 	@Column(name = "DESCRIPTION_REPORT")
 	private String descriptionReport;
 
@@ -112,6 +118,14 @@ public class ReportDetails implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public Integer getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(Integer siteId) {
+		this.siteId = siteId;
 	}
 
 	public String getDescriptionReport() {

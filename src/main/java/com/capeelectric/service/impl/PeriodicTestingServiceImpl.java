@@ -1,5 +1,6 @@
 package com.capeelectric.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	public void addTestInfo(Testing testing) throws PeriodicTestingException {
 		if (testing.getUserName() != null && testing.getSiteId() != null) {
 
-			Optional<Testing> testingRepo = testInfoRepository.findByUserNameAndSiteId(testing.getUserName(),
-					testing.getSiteId());
+			Optional<Testing> testingRepo = testInfoRepository.findBySiteId(testing.getSiteId());
 			if (!testingRepo.isPresent() || !testingRepo.get().getSiteId().equals(testing.getSiteId())) {
 				testInfoRepository.save(testing);
 			} else {
@@ -47,7 +47,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	 * @return Optional<Testing>
 	 */
 	@Override
-	public Optional<Testing> retrieveTestInfo(String userName, Integer siteId) throws PeriodicTestingException {
+	public List<Testing> retrieveTestInfo(String userName, Integer siteId) throws PeriodicTestingException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			return testInfoRepository.findByUserNameAndSiteId(userName, siteId);
 		} else {

@@ -34,7 +34,7 @@ public class TestFaultCurrent implements Serializable {
 	@Column(name = "TESTING_FAULTCURRENT_ID")
 	private Integer faultCurrentId;
 
-	@Column(name = "R-Y")
+	@Column(name = "R_Y")
 	private String ryFaultCurrent;
 	
 	@Column(name = "R_B")

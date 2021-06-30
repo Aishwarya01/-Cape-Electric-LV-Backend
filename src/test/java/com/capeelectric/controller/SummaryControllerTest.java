@@ -23,8 +23,12 @@ import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
 import com.capeelectric.service.impl.SummaryServiceImpl;
 
+/**
+ * 
+ * @author capeelectricsoftware
+ *
+ */
 @ExtendWith(SpringExtension.class)
-
 @ExtendWith(MockitoExtension.class)
 public class SummaryControllerTest {
 
