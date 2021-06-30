@@ -4,8 +4,8 @@ package com.capeelectric.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.capeelectric.model.Twilioproperties;
-import com.capeelectric.service.SendSmsEmailService;
+import com.capeelectric.service.SendSmsService;
+import com.capeelectric.util.TwilioProperties;
 import com.capeelectric.util.VerificationResult;
 import com.twilio.exception.ApiException;
 import com.twilio.rest.verify.v2.service.Verification;
@@ -13,12 +13,12 @@ import com.twilio.rest.verify.v2.service.VerificationCheck;
 import com.twilio.rest.verify.v2.service.VerificationCreator;
 
 @Service
-public class SendSmsEmailServiceImpl implements SendSmsEmailService{
+public class SendSmsServiceImpl implements SendSmsService{
 
-	private Twilioproperties twilioproperties;
+	private TwilioProperties twilioproperties;
 
 	@Autowired
-	public SendSmsEmailServiceImpl(Twilioproperties twilioproperties) {
+	public SendSmsServiceImpl(TwilioProperties twilioproperties) {
 		this.twilioproperties=twilioproperties;
 	}
 	
