@@ -95,9 +95,7 @@ public class UserController {
 // 		emailService.sendEmail(email, "You can update your password here." + "\n"
 //				+(uri.getAuthority().contains("localhost") ? uri.getScheme() +"://" + uri.getHost()+":4200": "https://rushforsafetyapp.azurewebsites.net")+
 //				"/updatepassword"+";email="+email);
- 		awsEmailService.sendEmail(email, "You can update your password here." + "\n"
-				+(uri.getAuthority().contains("localhost") ? uri.getScheme() +"://" + uri.getHost()+":4200": "https://www.rushforsafety.com")+
-				"/updatepassword"+";email="+email);
+ 		awsEmailService.sendEmail(email, "You have initiated an change in password."+email);
  		return new ResponseEntity<String>(optionalUser.getUsername(), HttpStatus.OK);
 	}
 	
