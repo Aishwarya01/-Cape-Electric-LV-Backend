@@ -64,7 +64,7 @@ public class AWSEmailService {
 		message.setFrom(new InternetAddress(FROM));
 		message.setRecipient(Message.RecipientType.TO, new InternetAddress(TO));
 
-		transport.connect(emailConfig.getSMTP_HOST_NAME(), emailConfig.getSMTP_HOST_PORT(), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
+		transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(emailConfig.getSMTP_HOST_PORT()), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
 		transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 		transport.close();
 		System.out.println("email sent successfully........");
