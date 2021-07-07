@@ -79,8 +79,8 @@ public class TestLoopImpedance implements Serializable {
 		return ryLoopImpedance;
 	}
 
-	public void setRyLoopImpedance(String ryLoopImpedance) {
-		this.ryLoopImpedance = ryLoopImpedance;
+	public void setRyLoopImpedance(String ryLoopImpedance) throws PeriodicTestingException {
+		this.ryLoopImpedance = DecimalConversion.convertToDecimal(ryLoopImpedance, "%.3f");
 	}
 
 	public void setRbLoopImpedance(String rbLoopImpedance) throws PeriodicTestingException {
