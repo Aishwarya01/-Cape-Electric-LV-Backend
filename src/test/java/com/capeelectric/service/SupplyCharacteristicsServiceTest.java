@@ -43,8 +43,8 @@ public class SupplyCharacteristicsServiceTest {
 		supplyCharacteristics.setSupplyCharacteristicsId(1);
 		supplyCharacteristics.setUserName("cape");
 		supplyCharacteristics.setSiteId(1);
-		supplyCharacteristics.setMainNominalCurrent("1.2012,12.1212,455,566");
-		supplyCharacteristics.setMainNominalFrequency("2.00,122.12,455,566");
+		supplyCharacteristics.setMainNominalCurrent("1.2012,na,455,566");
+		supplyCharacteristics.setMainNominalFrequency("NA,122.12,455,566");
 		supplyCharacteristics.setMainNominalVoltage("3.00,152.1212,455.051,56.9459");
 		supplyCharacteristics.setMainLoopImpedance("4.000,12.12245,455.21265,56.766456");
 		supplyCharacteristics.setLiveConductorAC("3");
@@ -130,5 +130,14 @@ public class SupplyCharacteristicsServiceTest {
 		SupplyCharacteristicsException assertThrows = Assertions.assertThrows(SupplyCharacteristicsException.class,
 				() -> supplyCharacteristicsServiceImpl.retrieveCharacteristics(null, 1));
 		equals(assertThrows.getMessage());
+	}
+	
+	@Test
+	public void testAddCharacteristics_With_NA_Value() throws SupplyCharacteristicsException {
+		supplyCharacteristics.setMainNominalCurrent("1.2012,na,455,566");
+		supplyCharacteristics.setMainNominalFrequency("NA,122.12,455,566");
+		
+		when(supplyCharacteristicsRepository.save(supplyCharacteristics)).thenReturn(supplyCharacteristics);
+		supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics);
 	}
 }
