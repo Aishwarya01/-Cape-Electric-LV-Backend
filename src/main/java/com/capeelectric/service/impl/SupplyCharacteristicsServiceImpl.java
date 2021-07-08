@@ -114,13 +114,18 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	*/
 	private String doubleValue(String string, DecimalFormat decimalFormat) {
 		String nominalValues = "";
-
+		String decimalValue = "NA";
 		StringTokenizer stringTokenizer = new StringTokenizer(string, ",");
 
 		while (stringTokenizer.hasMoreElements()) {
 			String token = stringTokenizer.nextToken();
-			String decimalValue = decimalFormat.format(Double.parseDouble(token));
-			nominalValues = nominalValues.concat(decimalValue).concat(",");
+			if (token.equalsIgnoreCase("NA")) {
+				nominalValues = nominalValues.concat("NA").concat(",");
+			} else {
+				decimalValue = decimalFormat.format(Double.parseDouble(token));
+				nominalValues = nominalValues.concat(decimalValue).concat(",");
+			}
+
 		}
 		return nominalValues.substring(0, nominalValues.length() - 1);
 	}
