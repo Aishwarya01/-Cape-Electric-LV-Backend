@@ -1,5 +1,8 @@
 package com.capeelectric.util;
 
+import java.text.DecimalFormat;
+import java.util.StringTokenizer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,21 +24,32 @@ public class DecimalConversion {
 	 *               convert to StringDecimal
 	 * @return string
 	 */
-	public static String convertToDecimal(String value, String decimalSize) throws PeriodicTestingException {
+	public static String convertToDecimal(String value, DecimalFormat decimalSize) throws PeriodicTestingException {
 
-		if (!value.equalsIgnoreCase("NA")) {
+		String nominalValues = "";
+		String decimalValue = "NA";
+		if (value !=null && !value.isEmpty()) {
+			StringTokenizer stringTokenizer = new StringTokenizer(value, ",");
 
-			if (value != null && !value.isEmpty()) {
-				logger.info("started DecimalConversion process");
-				return String.format(decimalSize, Double.parseDouble(value));
+			logger.info("started DecimalConversion process");
+			while (stringTokenizer.hasMoreElements()) {
+				String token = stringTokenizer.nextToken();
+				if (token.equalsIgnoreCase("NA")) {
+					nominalValues = nominalValues.concat("NA").concat(",");
+				} else {
+					decimalValue = decimalSize.format(Double.parseDouble(token));
+					nominalValues = nominalValues.concat(decimalValue).concat(",");
+				}
 
-			} else {
-				logger.info("throwing Exception for DecimalConversion process");
-				throw new PeriodicTestingException("invalid input of value for DecimalConversion");
 			}
+		} else {
+			logger.info("failed DecimalConversion process");
+			throw new PeriodicTestingException("invalid input of value for DecimalConversion");
 
 		}
-		return "NA";
+
+		logger.info("ended DecimalConversion process");
+		return nominalValues.substring(0, nominalValues.length() - 1);
 	}
 
 }

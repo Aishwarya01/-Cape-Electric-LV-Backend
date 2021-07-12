@@ -18,8 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.PeriodicTestingException;
-import com.capeelectric.model.TestLoopImpedance;
-import com.capeelectric.model.TestVoltage;
 import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.TestingReportRepository;
@@ -111,27 +109,27 @@ public class PeriodicTestingServiceTest {
 	private Testing utill() throws PeriodicTestingException {
 		logger.info("Added 'NA' with testing Object");
 		
-		List<TestVoltage> testVoltageList = new ArrayList<TestVoltage>();
-		List<TestLoopImpedance> loopImpedanceList = new ArrayList<TestLoopImpedance>();
+	//	List<TestVoltage> testVoltageList = new ArrayList<TestVoltage>();
+	//	List<TestLoopImpedance> loopImpedanceList = new ArrayList<TestLoopImpedance>();
 
-		TestVoltage testVoltage = new TestVoltage();
-		testVoltage.setBnVoltage("122");
-		testVoltage.setBpeVoltage("na");
-		testVoltage.setRbVoltage("1212");
-		testVoltage.setRpeVoltage("NA");
+	//	TestVoltage testVoltage = new TestVoltage();
+	//	testVoltage.setBnVoltage("122");
+	//	testVoltage.setBpeVoltage("na");
+	//	testVoltage.setRbVoltage("1212");
+	//	testVoltage.setRpeVoltage("NA");
 
-		TestLoopImpedance loopImpedance = new TestLoopImpedance();
-		loopImpedance.setBnLoopImpedance("na");
-		loopImpedance.setBpeLoopImpedance("12312");
-		loopImpedance.setRbLoopImpedance("Na");
-		loopImpedance.setRnLoopImpedance("NA");
+	//	TestLoopImpedance loopImpedance = new TestLoopImpedance();
+	//	loopImpedance.setBnLoopImpedance("na");
+	//	loopImpedance.setBpeLoopImpedance("12312");
+	//	loopImpedance.setRbLoopImpedance("Na");
+	//	loopImpedance.setRnLoopImpedance("NA");
 
-		loopImpedanceList.add(loopImpedance);
+	//	loopImpedanceList.add(loopImpedance);
 		testing = new Testing();
-		testing.setTestLoopImpedance(loopImpedanceList);
+	//	testing.setTestLoopImpedance(loopImpedanceList);
 
-		testVoltageList.add(testVoltage);
-		testing.setTestVoltage(testVoltageList);
+	//	testVoltageList.add(testVoltage);
+	//	testing.setTestVoltage(testVoltageList);
 		return testing;
 	}
 
