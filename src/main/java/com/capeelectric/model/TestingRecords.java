@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.capeelectric.exception.PeriodicTestingException;
+import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.util.DecimalConversion;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -241,7 +241,7 @@ public class TestingRecords implements Serializable {
 		return testVoltage;
 	}
 
-	public void setTestVoltage(String testVoltage) throws PeriodicTestingException {
+	public void setTestVoltage(String testVoltage) throws DecimalConversionException {
 		this.testVoltage = DecimalConversion.convertToDecimal(testVoltage, new DecimalFormat("0.00"));
 	}
 
@@ -249,7 +249,7 @@ public class TestingRecords implements Serializable {
 		return testLoopImpedance;
 	}
 
-	public void setTestLoopImpedance(String testLoopImpedance) throws PeriodicTestingException {
+	public void setTestLoopImpedance(String testLoopImpedance) throws DecimalConversionException {
 		this.testLoopImpedance = DecimalConversion.convertToDecimal(testLoopImpedance, new DecimalFormat("0.000"));
 	}
 
@@ -257,7 +257,7 @@ public class TestingRecords implements Serializable {
 		return testFaultCurrent;
 	}
 
-	public void setTestFaultCurrent(String testFaultCurrent) throws PeriodicTestingException {
+	public void setTestFaultCurrent(String testFaultCurrent) throws DecimalConversionException {
 		this.testFaultCurrent = DecimalConversion.convertToDecimal(testFaultCurrent, new DecimalFormat("0.00"));
 	}
 

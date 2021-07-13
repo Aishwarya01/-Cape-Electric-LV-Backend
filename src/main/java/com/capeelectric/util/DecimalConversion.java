@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.capeelectric.exception.PeriodicTestingException;
+import com.capeelectric.exception.DecimalConversionException;
 
 /**
  * This DecimalConversion Util class doing StringInt value convert to
@@ -24,7 +24,7 @@ public class DecimalConversion {
 	 *               convert to StringDecimal
 	 * @return string
 	 */
-	public static String convertToDecimal(String value, DecimalFormat decimalSize) throws PeriodicTestingException {
+	public static String convertToDecimal(String value, DecimalFormat decimalSize) throws DecimalConversionException {
 
 		String nominalValues = "";
 		String decimalValue = "NA";
@@ -44,7 +44,7 @@ public class DecimalConversion {
 			}
 		} else {
 			logger.info("failed DecimalConversion process");
-			throw new PeriodicTestingException("invalid input of value for DecimalConversion");
+			throw new DecimalConversionException("invalid input of value for DecimalConversion");
 
 		}
 

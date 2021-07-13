@@ -67,7 +67,7 @@ public class Testing implements Serializable {
 
 	@JsonManagedReference
 	@OneToOne(mappedBy = "testing", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<TestDistribution> testDistribution;
+	private TestDistribution testDistribution;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "testing", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -166,11 +166,11 @@ public class Testing implements Serializable {
 		this.companyName = companyName;
 	}
 
-	public List<TestDistribution> getTestDistribution() {
+	public TestDistribution getTestDistribution() {
 		return testDistribution;
 	}
 
-	public void setTestDistribution(List<TestDistribution> testDistribution) {
+	public void setTestDistribution(TestDistribution testDistribution) {
 		this.testDistribution = testDistribution;
 	}
 

@@ -1,7 +1,6 @@
 package com.capeelectric.model;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,8 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -69,7 +66,7 @@ public class TestDistribution implements Serializable {
 
 	@JsonManagedReference
 	@OneToOne(mappedBy = "testDistribution", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<DistributionIncomingValue> distributionIncomingValue;
+	private DistributionIncomingValue distributionIncomingValue;
 
 	public Integer getDistributionId() {
 		return distributionId;
@@ -151,11 +148,11 @@ public class TestDistribution implements Serializable {
 		this.testing = testing;
 	}
 
-	public Set<DistributionIncomingValue> getDistributionIncomingValue() {
+	public DistributionIncomingValue getDistributionIncomingValue() {
 		return distributionIncomingValue;
 	}
 
-	public void setDistributionIncomingValue(Set<DistributionIncomingValue> distributionIncomingValue) {
+	public void setDistributionIncomingValue(DistributionIncomingValue distributionIncomingValue) {
 		this.distributionIncomingValue = distributionIncomingValue;
 	}
 
