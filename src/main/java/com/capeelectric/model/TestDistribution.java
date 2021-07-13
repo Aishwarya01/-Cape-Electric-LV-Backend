@@ -2,10 +2,8 @@ package com.capeelectric.model;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,7 +12,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * 
@@ -58,15 +55,20 @@ public class TestDistribution implements Serializable {
 
 	@Column(name = "INSTALLED_EQUIPMENT_VULNARABLE")
 	private String installedEquipmentVulnarable;
+	
+	@Column(name = "INCOMING_VOLTAGE")
+	private String incomingVoltage;
+
+	@Column(name = "INCOMING_ZS")
+	private String incomingZs;
+
+	@Column(name = "INCOMING_IPF")
+	private String incomingIpf;
 
 	@JsonBackReference
 	@OneToOne
 	@JoinColumn(name = "TESTING_ID")
 	private Testing testing;
-
-	@JsonManagedReference
-	@OneToOne(mappedBy = "testDistribution", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private DistributionIncomingValue distributionIncomingValue;
 
 	public Integer getDistributionId() {
 		return distributionId;
@@ -148,12 +150,28 @@ public class TestDistribution implements Serializable {
 		this.testing = testing;
 	}
 
-	public DistributionIncomingValue getDistributionIncomingValue() {
-		return distributionIncomingValue;
+	public String getIncomingVoltage() {
+		return incomingVoltage;
 	}
 
-	public void setDistributionIncomingValue(DistributionIncomingValue distributionIncomingValue) {
-		this.distributionIncomingValue = distributionIncomingValue;
+	public void setIncomingVoltage(String incomingVoltage) {
+		this.incomingVoltage = incomingVoltage;
+	}
+
+	public String getIncomingZs() {
+		return incomingZs;
+	}
+
+	public void setIncomingZs(String incomingZs) {
+		this.incomingZs = incomingZs;
+	}
+
+	public String getIncomingIpf() {
+		return incomingIpf;
+	}
+
+	public void setIncomingIpf(String incomingIpf) {
+		this.incomingIpf = incomingIpf;
 	}
 
 }
