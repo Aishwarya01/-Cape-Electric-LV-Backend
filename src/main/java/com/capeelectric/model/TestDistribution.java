@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -62,12 +63,12 @@ public class TestDistribution implements Serializable {
 	private String installedEquipmentVulnarable;
 
 	@JsonBackReference
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "TESTING_ID")
 	private Testing testing;
 
 	@JsonManagedReference
-	@OneToMany(mappedBy = "testDistribution", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "testDistribution", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<DistributionIncomingValue> distributionIncomingValue;
 
 	public Integer getDistributionId() {

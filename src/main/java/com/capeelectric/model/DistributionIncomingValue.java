@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -39,7 +40,7 @@ public class DistributionIncomingValue implements Serializable {
 	private String incomingIpf;
 
 	@JsonBackReference
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name="DISTRIBUTION_ID")
 	private TestDistribution testDistribution;
 
