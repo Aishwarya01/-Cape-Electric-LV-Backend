@@ -83,7 +83,7 @@ public class FinalReportControllerTest {
 		List<Site> arrayList = new ArrayList<>();
 		when(finalReportServiceImpl.retrieveListOfSite("LVsystem@gmail.com", "cape")).thenReturn(arrayList);
 
-		 ResponseEntity<Optional<FinalReport>> finalReport = finalReportController.retrieveFinalReport("LVsystem@gmail.com", 1);
+		 ResponseEntity<Optional<FinalReport>> finalReport = finalReportController.retrieveReports("LVsystem@gmail.com", 1);
 		assertEquals(finalReport.getStatusCode() , HttpStatus.OK);
 		logger.info("FinalReportControllerTest retrieveFinalReport Function Started");
 	}
