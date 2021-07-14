@@ -32,25 +32,25 @@ public class PeriodicTestingController {
 	@Autowired
 	private PeriodicTestingService testService;
 
-	@PostMapping("/addTestingReport")
-	public ResponseEntity<String> addTestingReport(@RequestBody TestingReport testingReport)
+	@PostMapping("/savePeriodicTesting")
+	public ResponseEntity<String> savePeriodicTesting(@RequestBody TestingReport testingReport)
 			throws PeriodicTestingException {
-		logger.info("started addTestingReport function userName: {},siteId : {}", testingReport.getUserName(),
+		logger.info("started savePeriodicTesting function userName: {},siteId : {}", testingReport.getUserName(),
 				testingReport.getSiteId());
 
 		testService.addTestingReport(testingReport);
-		logger.info("ended addTestingReport function");
+		logger.info("ended savePeriodicTesting function");
 
 		return new ResponseEntity<String>("successfully added TestingReport", HttpStatus.OK);
 
 	}
 
-	@GetMapping("/retrieveTestingReport/{userName}/{siteId}")
-	public ResponseEntity<List<TestingReport>> retrieveTestingReport(@PathVariable String userName,
+	@GetMapping("/retrievePeriodicTesting/{userName}/{siteId}")
+	public ResponseEntity<List<TestingReport>> retrievePeriodicTesting(@PathVariable String userName,
 			@PathVariable Integer siteId) throws PeriodicTestingException {
-		logger.info("Started retrieveTestingReport function userName: {},siteId : {}", userName, siteId);
+		logger.info("Started retrievePeriodicTesting function userName: {},siteId : {}", userName, siteId);
 		List<TestingReport> retrieveTestingReport = testService.retrieveTestingReport(userName, siteId);
-		logger.info("ended retrieveTestingReport function");
+		logger.info("ended retrievePeriodicTesting function");
 
 		return new ResponseEntity<List<TestingReport>>(retrieveTestingReport, HttpStatus.OK);
 	}
