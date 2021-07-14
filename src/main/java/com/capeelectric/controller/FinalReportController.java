@@ -44,8 +44,8 @@ public class FinalReportController {
 
 	}
 
-	@GetMapping("/retrieveFinalReport/{userName}/{siteId}")
-	public ResponseEntity<Optional<FinalReport>> retrieveFinalReport(@PathVariable String userName,
+	@GetMapping("/retrieveReport/{userName}/{siteId}")
+	public ResponseEntity<Optional<FinalReport>> retrieveReports(@PathVariable String userName,
 			@PathVariable Integer siteId) throws FinalReportException {
 		logger.info("FinalReportAPI_started retrieveFinalReport function userName: {},siteId : {}", userName, siteId);
 		
