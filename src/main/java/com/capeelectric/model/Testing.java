@@ -34,6 +34,12 @@ public class Testing implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "TESTING_ID")
 	private Integer testingId;
+	
+	@Column(name = "LOCATION_NUMBER")
+	private Integer locationNumber;
+	
+	@Column(name = "LOCATION_NAME")
+	private String locationName;
 
 	@Column(name = "TEST_ENGINEER_NAME")
 	private String testEngineerName;
@@ -84,6 +90,22 @@ public class Testing implements Serializable {
 
 	public void setTestingId(Integer testingId) {
 		this.testingId = testingId;
+	}
+
+ 	public Integer getLocationNumber() {
+		return locationNumber;
+	}
+
+	public void setLocationNumber(Integer locationNumber) {
+		this.locationNumber = locationNumber;
+	}
+
+	public String getLocationName() {
+		return locationName;
+	}
+
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
 	}
 
 	public String getTestEngineerName() {

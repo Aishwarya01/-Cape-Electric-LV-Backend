@@ -1,5 +1,6 @@
 package com.capeelectric.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.InspectionException;
-import com.capeelectric.model.IpaoInspection;
+import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.service.InspectionService;
 /**
@@ -27,11 +28,12 @@ public class InspectionServiceImpl implements InspectionService {
 	 * 
 	*/
 	@Override
-	public void addInspectionDetails(IpaoInspection ipaoInspection) throws InspectionException {
-		if (ipaoInspection.getUserName() != null && ipaoInspection.getSiteId() != null) {
-			Optional<IpaoInspection> siteId = inspectionRepository.findBySiteId(ipaoInspection.getSiteId());
-			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(ipaoInspection.getSiteId())) {
-				inspectionRepository.save(ipaoInspection);
+	public void addInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException {
+		if (periodicInspection.getUserName() != null && periodicInspection.getSiteId() != null) {
+			Optional<PeriodicInspection> siteId = inspectionRepository.findBySiteId(periodicInspection.getSiteId());
+			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(periodicInspection.getSiteId())) {
+				periodicInspection.setCreatedDate(LocalDateTime.now());
+				inspectionRepository.save(periodicInspection);
 			} else {
 				throw new InspectionException("siteId present");
 			}
@@ -48,7 +50,7 @@ public class InspectionServiceImpl implements InspectionService {
 	 * @return List<IpaoInspection> object 
 	*/
 	@Override
-	public List<IpaoInspection> retrieveInspectionDetails(String userName, Integer siteId)
+	public List<PeriodicInspection> retrieveInspectionDetails(String userName, Integer siteId)
 			throws InspectionException {
 
 		if (userName != null && !userName.isEmpty() && siteId != null) {

@@ -20,7 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.FinalReportException;
 import com.capeelectric.model.FinalReport;
-import com.capeelectric.model.IpaoInspection;
+import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.Summary;
@@ -59,7 +59,7 @@ public class FinalReportControllerTest {
 		finalReport = new FinalReport();
 		finalReport.setSiteId(1);
 		finalReport.setUserName("LVsystem@gmail.com");
-		finalReport.setIpaoInspection(new IpaoInspection());
+		finalReport.setPeriodicInspection(new PeriodicInspection());
 		finalReport.setReportDetails(new ReportDetails());
 		finalReport.setSummary(new Summary());
 		finalReport.setTestingReport(new TestingReport());

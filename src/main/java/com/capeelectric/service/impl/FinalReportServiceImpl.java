@@ -100,7 +100,7 @@ public class FinalReportServiceImpl implements FinalReportService {
 			logger.info("SupplyCharacteristic_fetching ended");
 
 			logger.info("fetching process started for PriodicInspection");
-			finalReport.setIpaoInspection(inspectionRepository.findByUserNameAndSiteId(userName, siteId).get(0));
+			finalReport.setPeriodicInspection(inspectionRepository.findByUserNameAndSiteId(userName, siteId).get(0));
 			logger.info("PriodicInspection_fetching ended");
 
 			logger.info("fetching process started for PriodicTesting");

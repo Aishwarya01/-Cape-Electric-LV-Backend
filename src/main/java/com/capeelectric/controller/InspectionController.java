@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capeelectric.exception.InspectionException;
-import com.capeelectric.model.IpaoInspection;
+import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.service.InspectionService;
 /**
  * 
@@ -28,18 +28,18 @@ public class InspectionController {
 	private InspectionService inspectionService;
 
 	@PostMapping("/addInspectionDetails")
-	public ResponseEntity<String> addInspectionDetails(@RequestBody IpaoInspection ipaoInspection)
+	public ResponseEntity<String> addInspectionDetails(@RequestBody PeriodicInspection periodicInspection)
 			throws InspectionException {
 
-		inspectionService.addInspectionDetails(ipaoInspection);
+		inspectionService.addInspectionDetails(periodicInspection);
 		return new ResponseEntity<String>(HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/retrieveInspectionDetails/{userName}/{siteId}")
-	public ResponseEntity<List<IpaoInspection>> retrieveInspectionDetails(@PathVariable String userName,
+	public ResponseEntity<List<PeriodicInspection>> retrieveInspectionDetails(@PathVariable String userName,
 			@PathVariable Integer siteId) throws InspectionException {
 
-		return new ResponseEntity<List<IpaoInspection>>(inspectionService.retrieveInspectionDetails(userName, siteId),
+		return new ResponseEntity<List<PeriodicInspection>>(inspectionService.retrieveInspectionDetails(userName, siteId),
 				HttpStatus.OK);
 	}
 }

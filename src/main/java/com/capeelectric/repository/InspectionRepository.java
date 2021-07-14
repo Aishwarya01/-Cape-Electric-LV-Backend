@@ -5,16 +5,16 @@ import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.capeelectric.model.IpaoInspection;
+import com.capeelectric.model.PeriodicInspection;
 /**
  * 
  * @author capeelectricsoftware
  *
  */
-public interface InspectionRepository extends CrudRepository<IpaoInspection, Integer>{
+public interface InspectionRepository extends CrudRepository<PeriodicInspection, Integer>{
 
-	public Optional<IpaoInspection> findBySiteId(Integer siteId);
+	public Optional<PeriodicInspection> findBySiteId(Integer siteId);
 
-	public List<IpaoInspection> findByUserNameAndSiteId(String userName, Integer siteId);
+	public List<PeriodicInspection> findByUserNameAndSiteId(String userName, Integer siteId);
 
 }
