@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -146,15 +146,15 @@ public class IpaoInspection implements Serializable {
 	private String supplementaryBonding;
 
 	@JsonManagedReference
-	@OneToOne(mappedBy = "ipaoInspection", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
 	private ConsumerUnit consumerUnit;
 
 	@JsonManagedReference
-	@OneToOne(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Circuit circuit;
 
 	@JsonManagedReference
-	@OneToOne(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private IsolationCurrent isolationCurrent;
 	
 	@JsonBackReference

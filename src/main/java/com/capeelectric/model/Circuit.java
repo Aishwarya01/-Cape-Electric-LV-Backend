@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -125,7 +125,7 @@ public class Circuit implements Serializable {
 	private String isolationSwitching;
 	
 	@JsonBackReference
-	@OneToOne
+	@ManyToOne
     @JoinColumn(name = "IPAO_INSPECTION_ID")
 	private IpaoInspection ipaoInspection;
 
