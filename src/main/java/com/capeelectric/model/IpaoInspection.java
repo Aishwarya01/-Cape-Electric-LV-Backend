@@ -1,6 +1,7 @@
 package com.capeelectric.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -147,15 +148,15 @@ public class IpaoInspection implements Serializable {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-	private ConsumerUnit consumerUnit;
+	private List<ConsumerUnit> consumerUnit;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Circuit circuit;
+	private List<Circuit> circuit;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private IsolationCurrent isolationCurrent;
+	private List<IsolationCurrent> isolationCurrent;
 	
 	@JsonBackReference
 	@ManyToOne
@@ -466,30 +467,31 @@ public class IpaoInspection implements Serializable {
 		this.supplementaryBonding = supplementaryBonding;
 	}
 
-	public ConsumerUnit getConsumerUnit() {
+	
+	public List<ConsumerUnit> getConsumerUnit() {
 		return consumerUnit;
 	}
 
-	public void setConsumerUnit(ConsumerUnit consumerUnit) {
+	public void setConsumerUnit(List<ConsumerUnit> consumerUnit) {
 		this.consumerUnit = consumerUnit;
 	}
 
-	public Circuit getCircuit() {
+	public List<Circuit> getCircuit() {
 		return circuit;
 	}
 
-	public void setCircuit(Circuit circuit) {
+	public void setCircuit(List<Circuit> circuit) {
 		this.circuit = circuit;
 	}
 
-	public IsolationCurrent getIsolationCurrent() {
+	public List<IsolationCurrent> getIsolationCurrent() {
 		return isolationCurrent;
 	}
 
-	public void setIsolationCurrent(IsolationCurrent isolationCurrent) {
+	public void setIsolationCurrent(List<IsolationCurrent> isolationCurrent) {
 		this.isolationCurrent = isolationCurrent;
 	}
-	
+
 	public PeriodicInspection getPeriodicInspection() {
 		return periodicInspection;
 	}
