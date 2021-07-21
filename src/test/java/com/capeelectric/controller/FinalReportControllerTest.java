@@ -51,7 +51,7 @@ public class FinalReportControllerTest {
 
 	{
 		site = new Site();
-		site.setUserName("LVsystem@gmail.com");
+		site.setClientName("LVsystem@gmail.com");
 		site.setDepartmentName("cape");
 	}
 

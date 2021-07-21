@@ -24,11 +24,11 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  * @author capeelectricsoftware
  *
  */
+@Entity
+@Table(name = "summary_table")
 @NamedQueries(value = {
 		@NamedQuery(name = "SummaryRepository.findBySiteId", query = "select s from Summary s where s.siteId=:siteId"),
 		@NamedQuery(name = "SummaryRepository.findByUserNameAndSiteId", query = "select s from Summary s where s.userName=:userName and s.siteId=:siteId") })
-@Entity
-@Table(name = "summary_table")
 public class Summary implements Serializable {
 
 	private static final long serialVersionUID = 1L;

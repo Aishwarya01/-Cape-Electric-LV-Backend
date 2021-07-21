@@ -33,13 +33,13 @@ public class FinalReportController {
 	@Autowired
 	FinalReportServiceImpl finalReportServiceImpl;
 
-	@GetMapping("/retrieveListOfSite/{userName}/{departmentName}")
-	public ResponseEntity<List<Site>> retrieveListOfSite(@PathVariable String userName,
+	@GetMapping("/retrieveListOfSite/{clientName}/{departmentName}")
+	public ResponseEntity<List<Site>> retrieveListOfSite(@PathVariable String clientName,
 			@PathVariable String departmentName) throws FinalReportException {
-		logger.info("FinalReportAPI_started retrieveSiteDetails function userName: {},departmentName : {}", userName,
+		logger.info("FinalReportAPI_started retrieveSiteDetails function userName: {},departmentName : {}", clientName,
 				departmentName);
 		
-		return new ResponseEntity<List<Site>>(finalReportServiceImpl.retrieveListOfSite(userName, departmentName),
+		return new ResponseEntity<List<Site>>(finalReportServiceImpl.retrieveListOfSite(clientName, departmentName),
 				HttpStatus.OK);
 
 	}
