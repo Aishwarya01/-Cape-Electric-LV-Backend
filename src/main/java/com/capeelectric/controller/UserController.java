@@ -90,12 +90,12 @@ public class UserController {
 	@GetMapping("/forgotPassword/{email}")
 	public ResponseEntity<String> forgotPassword(@PathVariable String email) throws ForgotPasswordException, IOException, MessagingException{
  		User optionalUser =  userService.findByUserName(email);
- 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().
-				path("/{id}").buildAndExpand(optionalUser.getId()).toUri();
+// 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().
+//				path("/{id}").buildAndExpand(optionalUser.getId()).toUri();
 // 		emailService.sendEmail(email, "You can update your password here." + "\n"
 //				+(uri.getAuthority().contains("localhost") ? uri.getScheme() +"://" + uri.getHost()+":4200": "https://rushforsafetyapp.azurewebsites.net")+
 //				"/updatepassword"+";email="+email);
- 		awsEmailService.sendEmail(email, "You have initiated an change in password."+email);
+ 		awsEmailService.sendEmail(email, "You have initiated an change in password."+ "\n"+email);
  		return new ResponseEntity<String>(optionalUser.getUsername(), HttpStatus.OK);
 	}
 	

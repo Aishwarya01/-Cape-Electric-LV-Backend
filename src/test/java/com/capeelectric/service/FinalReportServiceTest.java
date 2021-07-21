@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.FinalReportException;
 import com.capeelectric.model.FinalReport;
-import com.capeelectric.model.IpaoInspection;
+import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.Summary;
@@ -77,7 +77,7 @@ public class FinalReportServiceTest {
 
 		finalReport.setReportDetails(retrieveReportDetails());
 		finalReport.setSupplyCharacteristics(retrieveSupplyCharacteristics());
-		finalReport.setIpaoInspection(retrieveIpaoInspection());
+		finalReport.setPeriodicInspection(retrievePeriodicInspection());
 		finalReport.setTestingReport(retrieveTestingReport());
 		finalReport.setSummary(retrieveSummary());
 
@@ -119,8 +119,8 @@ public class FinalReportServiceTest {
 		when(supplyCharacteristicsRepository.findByUserNameAndSiteId("LVsystem@gmail.com", 1))
 				.thenReturn(SupplyCharacteristics);
 
-		ArrayList<IpaoInspection> inspection = new ArrayList<>();
-		inspection.add(retrieveIpaoInspection());
+		ArrayList<PeriodicInspection> inspection = new ArrayList<>();
+		inspection.add(retrievePeriodicInspection());
 		when(inspectionRepository.findByUserNameAndSiteId("LVsystem@gmail.com", 1)).thenReturn(inspection);
 
 		ArrayList<TestingReport> testingReport = new ArrayList<>();
@@ -155,11 +155,11 @@ public class FinalReportServiceTest {
 		return supplyCharacteristics;
 	}
 
-	private IpaoInspection retrieveIpaoInspection() {
-		IpaoInspection ipaoInspection = new IpaoInspection();
-		ipaoInspection.setUserName("LVsystem@gmail.com");
-		ipaoInspection.setSiteId(1);
-		return ipaoInspection;
+	private PeriodicInspection retrievePeriodicInspection() {
+		PeriodicInspection periodicInspection = new PeriodicInspection();
+		periodicInspection.setUserName("LVsystem@gmail.com");
+		periodicInspection.setSiteId(1);
+		return periodicInspection;
 	}
 
 	private TestingReport retrieveTestingReport() {

@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 *
 */
 @Entity
-@Table(name = "BOUNDING_LOCATION_REPORTS_TABLE")
+@Table(name = "bounding_location_reports_table")
 public class BoundingLocationReport implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  *
  */
 @Entity
-@Table(name = "OBSERVATIONS_TABLE")
+@Table(name = "observations_table")
 public class SummaryObervation implements Serializable {
 
 	private static final long serialVersionUID = 1L;

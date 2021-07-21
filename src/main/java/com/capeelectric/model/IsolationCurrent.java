@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  *
  */
 @Entity
-@Table(name = "ISOLATION_CURRENT_TABLE")
+@Table(name = "isolation_current_table")
 public class IsolationCurrent implements Serializable {
 
 	 
@@ -129,7 +129,7 @@ public class IsolationCurrent implements Serializable {
 	private String overheatConductors;
 	
 	@JsonBackReference
-	@OneToOne
+	@ManyToOne
     @JoinColumn(name = "IPAO_INSPECTION_ID")
 	private IpaoInspection ipaoInspection;
 

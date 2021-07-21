@@ -51,29 +51,29 @@ public class PeriodicTestingControllerTest {
 	}
 
 	@Test
-	public void testAddTestingReport() throws PeriodicTestingException {
-		logger.info("testAddTestingReport Function Started");
+	public void testSavePeriodicTesting() throws PeriodicTestingException {
+		logger.info("testSavePeriodicTesting Function Started");
 
 		doNothing().when(periodicTestingServiceImpl).addTestingReport(testingReport);
-		ResponseEntity<String> addTestingReport = periodicTestingController.addTestingReport(testingReport);
-		assertEquals(addTestingReport.getBody(), "successfully added TestingReport");
+		ResponseEntity<String> savePeriodicTesting = periodicTestingController.savePeriodicTesting(testingReport);
+		assertEquals(savePeriodicTesting.getBody(), "successfully added TestingReport");
 
-		logger.info("testAddTestingReport Function Ended");
+		logger.info("testSavePeriodicTesting Function Ended");
 	}
 
 	@Test
-	public void testRetrieveTestingReport() throws PeriodicTestingException {
+	public void testRetrievePeriodicTesting() throws PeriodicTestingException {
 		List<TestingReport> arrayList = new ArrayList<>();
 		arrayList.add(testingReport);
 
-		logger.info("testRetrieveTestingReport Function Started");
+		logger.info("testRetrievePeriodicTesting Function Started");
 
 		when(periodicTestingServiceImpl.retrieveTestingReport("LVsystem@gmail.com", 12)).thenReturn(arrayList);
 		ResponseEntity<List<TestingReport>> retrieveTestingReport = periodicTestingController
-				.retrieveTestingReport("LVsystem@gmail.com", 12);
+				.retrievePeriodicTesting("LVsystem@gmail.com", 12);
 		assertEquals(HttpStatus.OK, retrieveTestingReport.getStatusCode());
 
-		logger.info("testRetrieveTestingReport Function Ended");
+		logger.info("testRetrievePeriodicTesting Function Ended");
 
 	}
 

@@ -11,11 +11,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -25,42 +24,38 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  *
  */
 @Entity
-@Table(name = "testing_reports_table")
-
+@Table(name = "periodic_inspection_table")
 @NamedQueries(value = {
-		@NamedQuery(name = "TestingReportRepository.findByUserNameAndSiteId", query = "Select t From TestingReport t Where t.userName=:userName and t.siteId=:siteId"),
-        @NamedQuery(name = "TestingReportRepository.findBySiteId", query = "Select t From TestingReport t Where t.siteId=:siteId") })
-public class TestingReport implements Serializable {
+		@NamedQuery(name = "InspectionRepository.findBySiteId", query = "select i.siteId from PeriodicInspection i where i.siteId=:siteId"),
+		@NamedQuery(name = "InspectionRepository.findByUserNameAndSiteId", query = "select i from PeriodicInspection i where i.userName=:userName and i.siteId=:siteId"), })
+public class PeriodicInspection implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "TESTING_REPORT_ID")
-	private Integer testingReportId;
-	
+	@Column(name = "PERIODIC_INSPECTION_ID")
+	private Integer periodicInspectionId;
+
 	@Column(name = "SITE_ID")
 	private Integer siteId;
-	
+
 	@Column(name = "USER_NAME")
 	private String userName;
-	
+
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
-	
-	@JsonManagedReference
-	@OneToMany(mappedBy = "testingReport", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Testing> testing;
 
-	public Integer getTestingReportId() {
-		return testingReportId;
+	@JsonManagedReference
+	@OneToMany(mappedBy = "periodicInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<IpaoInspection> ipaoInspection;
+
+	public Integer getPeriodicInspectionId() {
+		return periodicInspectionId;
 	}
 
-	public void setTestingReportId(Integer testingReportId) {
-		this.testingReportId = testingReportId;
+	public void setPeriodicInspectionId(Integer periodicInspectionId) {
+		this.periodicInspectionId = periodicInspectionId;
 	}
 
 	public Integer getSiteId() {
@@ -87,12 +82,12 @@ public class TestingReport implements Serializable {
 		this.createdDate = createdDate;
 	}
 
-	public List<Testing> getTesting() {
-		return testing;
+	public List<IpaoInspection> getIpaoInspection() {
+		return ipaoInspection;
 	}
 
-	public void setTesting(List<Testing> testing) {
-		this.testing = testing;
+	public void setIpaoInspection(List<IpaoInspection> ipaoInspection) {
+		this.ipaoInspection = ipaoInspection;
 	}
-
+ 
 }

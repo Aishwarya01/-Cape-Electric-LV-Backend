@@ -17,10 +17,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.PeriodicTestingException;
-import com.capeelectric.model.TestLoopImpedance;
-import com.capeelectric.model.TestVoltage;
 import com.capeelectric.model.Testing;
+import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.PeriodicTestingServiceImpl;
@@ -94,45 +94,48 @@ public class PeriodicTestingServiceTest {
 	}
 
 	@Test
-	public void testTesting_NA_Value() throws PeriodicTestingException {
+	public void testTesting_NA_Value() throws DecimalConversionException, PeriodicTestingException {
 		logger.info("'NA'value checking processes started");
 		ArrayList<Testing> testingList = new ArrayList<Testing>();
-		testingList.add(utill());
+		testingList.add(utill_withDemcimal_Records());
 		testingReport.setTesting(testingList);
 
 		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
 		logger.info("Successfully added Summary_Object flow");
 		testingReport.setSiteId(2);
 		periodicTestingServiceImpl.addTestingReport(testingReport);
+		
+		utill_withOutDemcimal_Records();		
+ 		 
 		logger.info("'NA'value checking processes started");
 
 	}
 
-	private Testing utill() throws PeriodicTestingException {
-		logger.info("Added 'NA' with testing Object");
-		
-		List<TestVoltage> testVoltageList = new ArrayList<TestVoltage>();
-		List<TestLoopImpedance> loopImpedanceList = new ArrayList<TestLoopImpedance>();
+	private Testing utill_withDemcimal_Records() throws DecimalConversionException {
+		logger.info("Demcimal_Conversion success case");
+		List<TestingRecords> testingRecordsList = new ArrayList<TestingRecords>();
 
-		TestVoltage testVoltage = new TestVoltage();
-		testVoltage.setBnVoltage("122");
-		testVoltage.setBpeVoltage("na");
-		testVoltage.setRbVoltage("1212");
-		testVoltage.setRpeVoltage("NA");
+		TestingRecords records = new TestingRecords();
+		records.setTestVoltage("212,na,21,534,212");
+		records.setTestLoopImpedance("na,12423,413,na");
+		records.setTestFaultCurrent("312,122,na,234");
 
-		TestLoopImpedance loopImpedance = new TestLoopImpedance();
-		loopImpedance.setBnLoopImpedance("na");
-		loopImpedance.setBpeLoopImpedance("12312");
-		loopImpedance.setRbLoopImpedance("Na");
-		loopImpedance.setRnLoopImpedance("NA");
-
-		loopImpedanceList.add(loopImpedance);
+		testingRecordsList.add(records);
 		testing = new Testing();
-		testing.setTestLoopImpedance(loopImpedanceList);
+		testing.setTestingRecords(testingRecordsList);
 
-		testVoltageList.add(testVoltage);
-		testing.setTestVoltage(testVoltageList);
 		return testing;
+	}
+
+	private Testing utill_withOutDemcimal_Records() throws DecimalConversionException {
+		logger.info("Demcimal_Conversion faild case");
+		TestingRecords testingRecords = new TestingRecords();
+
+		DecimalConversionException decimalConversionException = Assertions
+				.assertThrows(DecimalConversionException.class, () -> testingRecords.setTestVoltage(""));
+
+		assertEquals(decimalConversionException.getMessage(), "invalid input of value for DecimalConversion");
+		return null;
 	}
 
 }

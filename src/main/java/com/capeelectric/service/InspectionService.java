@@ -3,7 +3,7 @@ package com.capeelectric.service;
 import java.util.List;
 
 import com.capeelectric.exception.InspectionException;
-import com.capeelectric.model.IpaoInspection;
+import com.capeelectric.model.PeriodicInspection;
 
 /**
  * 
@@ -12,8 +12,8 @@ import com.capeelectric.model.IpaoInspection;
  */
 public interface InspectionService {
 
-	public void addInspectionDetails(IpaoInspection ipaoInspection) throws InspectionException;
+	public void addInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException;
 	
-	public List<IpaoInspection> retrieveInspectionDetails(String userName, Integer siteId) throws InspectionException;
+	public List<PeriodicInspection> retrieveInspectionDetails(String userName, Integer siteId) throws InspectionException;
 
 }

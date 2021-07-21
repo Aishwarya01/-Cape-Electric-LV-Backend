@@ -10,7 +10,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "APPLICATIONTYPES")
+@Table(name = "applicationtypes")
 public class ApplicationTypes {
 
 	@Id

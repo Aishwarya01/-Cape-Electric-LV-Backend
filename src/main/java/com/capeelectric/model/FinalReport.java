@@ -16,7 +16,7 @@ public class FinalReport {
 
 	private SupplyCharacteristics supplyCharacteristics;
 
-	private IpaoInspection ipaoInspection;
+	private PeriodicInspection periodicInspection;
 
 	private TestingReport testingReport;
 
@@ -54,12 +54,12 @@ public class FinalReport {
 		this.supplyCharacteristics = supplyCharacteristics;
 	}
 
-	public IpaoInspection getIpaoInspection() {
-		return ipaoInspection;
+	public PeriodicInspection getPeriodicInspection() {
+		return periodicInspection;
 	}
 
-	public void setIpaoInspection(IpaoInspection ipaoInspection) {
-		this.ipaoInspection = ipaoInspection;
+	public void setPeriodicInspection(PeriodicInspection periodicInspection) {
+		this.periodicInspection = periodicInspection;
 	}
 
 	public TestingReport getTestingReport() {

@@ -1,6 +1,7 @@
 package com.capeelectric.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,11 +10,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
@@ -23,11 +25,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  */
 
 @Entity
-@Table(name = "IPAO_INSPECTION_TABLE")
-@NamedQueries(value = {
-		@NamedQuery(name = "InspectionRepository.findBySiteId", query = "select i.siteId from IpaoInspection i where i.siteId=:siteId"),
-		@NamedQuery(name = "InspectionRepository.findByUserNameAndSiteId", query = "select i from IpaoInspection i where i.userName=:userName and i.siteId=:siteId"),
-	})
+@Table(name = "ipao_inspection_table")
 public class IpaoInspection implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,11 +35,11 @@ public class IpaoInspection implements Serializable {
 	@Column(name = "IPAO_INSPECTION_ID")
 	private Integer ipaoInspectionId;
 	
-	@Column(name = "USER_NAME")
-	private String userName;
+	@Column(name = "LOCATION_NUMBER")
+	private Integer locationNumber;
 	
-	@Column(name = "SITE_ID")
-	private Integer siteId;
+	@Column(name = "LOCATION_NAME")
+	private String locationName;
 
 	@Column(name = "I_SERVICE_CABLE")
 	private String serviceCable;
@@ -149,16 +147,21 @@ public class IpaoInspection implements Serializable {
 	private String supplementaryBonding;
 
 	@JsonManagedReference
-	@OneToOne(mappedBy = "ipaoInspection", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
-	private ConsumerUnit consumerUnit;
+	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+	private List<ConsumerUnit> consumerUnit;
 
 	@JsonManagedReference
-	@OneToOne(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Circuit circuit;
+	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Circuit> circuit;
 
 	@JsonManagedReference
-	@OneToOne(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private IsolationCurrent isolationCurrent;
+	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<IsolationCurrent> isolationCurrent;
+	
+	@JsonBackReference
+	@ManyToOne
+	@JoinColumn(name = "PERIODIC_INSPECTION_ID")
+	private PeriodicInspection periodicInspection;
 
 	public Integer getIpaoInspectionId() {
 		return ipaoInspectionId;
@@ -168,20 +171,20 @@ public class IpaoInspection implements Serializable {
 		this.ipaoInspectionId = ipaoInspectionId;
 	}
 
-	public String getUserName() {
-		return userName;
+	public Integer getLocationNumber() {
+		return locationNumber;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setLocationNumber(Integer locationNumber) {
+		this.locationNumber = locationNumber;
 	}
 
-	public Integer getSiteId() {
-		return siteId;
+	public String getLocationName() {
+		return locationName;
 	}
 
-	public void setSiteId(Integer siteId) {
-		this.siteId = siteId;
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
 	}
 
 	public String getServiceCable() {
@@ -464,28 +467,37 @@ public class IpaoInspection implements Serializable {
 		this.supplementaryBonding = supplementaryBonding;
 	}
 
-	public ConsumerUnit getConsumerUnit() {
+	
+	public List<ConsumerUnit> getConsumerUnit() {
 		return consumerUnit;
 	}
 
-	public void setConsumerUnit(ConsumerUnit consumerUnit) {
+	public void setConsumerUnit(List<ConsumerUnit> consumerUnit) {
 		this.consumerUnit = consumerUnit;
 	}
 
-	public Circuit getCircuit() {
+	public List<Circuit> getCircuit() {
 		return circuit;
 	}
 
-	public void setCircuit(Circuit circuit) {
+	public void setCircuit(List<Circuit> circuit) {
 		this.circuit = circuit;
 	}
 
-	public IsolationCurrent getIsolationCurrent() {
+	public List<IsolationCurrent> getIsolationCurrent() {
 		return isolationCurrent;
 	}
 
-	public void setIsolationCurrent(IsolationCurrent isolationCurrent) {
+	public void setIsolationCurrent(List<IsolationCurrent> isolationCurrent) {
 		this.isolationCurrent = isolationCurrent;
+	}
+
+	public PeriodicInspection getPeriodicInspection() {
+		return periodicInspection;
+	}
+
+	public void setPeriodicInspection(PeriodicInspection periodicInspection) {
+		this.periodicInspection = periodicInspection;
 	}
 
 }

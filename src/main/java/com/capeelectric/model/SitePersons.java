@@ -17,7 +17,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "SITE_PERSON_TABLE")
+@Table(name = "site_person_table")
 @NamedQueries(value = {
 		@NamedQuery(name = "SitePersonsRepository.RepositoryfindByPersonInchargeEmail", query = "select p.personInchargeEmail from SitePersons p where p.personInchargeEmail=:personInchargeEmail") })
 public class SitePersons implements Serializable {
