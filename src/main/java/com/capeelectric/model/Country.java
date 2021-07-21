@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "COUNTRY_TABLE")
+@Table(name = "country_table")
 public class Country implements Serializable{
 	/**
 	 * 

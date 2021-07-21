@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  */
 
 @Entity
-@Table(name = "IPAO_INSPECTION_TABLE")
+@Table(name = "ipao_inspection_table")
 public class IpaoInspection implements Serializable {
 
 	private static final long serialVersionUID = 1L;

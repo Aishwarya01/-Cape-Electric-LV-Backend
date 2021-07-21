@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  *
  */
 @Entity
-@Table(name = "DECLARATION_TABLE")
+@Table(name = "declaration_table")
 public class SummaryDeclaration implements Serializable {
  
 	private static final long serialVersionUID = 1L;

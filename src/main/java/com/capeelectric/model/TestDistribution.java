@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  *
  */
 @Entity
-@Table(name = "TESTING_DISTRIBUTION_TABLE")
+@Table(name = "testing_distribution_table")
 public class TestDistribution implements Serializable {
 
 	/**

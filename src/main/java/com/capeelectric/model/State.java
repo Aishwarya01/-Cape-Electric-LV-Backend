@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "STATE_TABLE")
+@Table(name = "state_table")
 public class State implements Serializable{
 
 	/**

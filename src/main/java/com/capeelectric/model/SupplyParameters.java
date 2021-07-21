@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  *
  */
 @Entity
-@Table(name = "SUPPLY_PARAMETERS_TABLE")
+@Table(name = "supply_parameters_table")
 public class SupplyParameters implements Serializable {
 
 	private static final long serialVersionUID = 1L;

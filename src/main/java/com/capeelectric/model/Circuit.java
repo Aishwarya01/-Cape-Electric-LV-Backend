@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  *
  */
 @Entity
-@Table(name = "CIRCUIT_TABLE")
+@Table(name = "circuit_table")
 public class Circuit implements Serializable {
 
 	/**

@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  *
  */
 @Entity
-@Table(name = "ISOLATION_CURRENT_TABLE")
+@Table(name = "isolation_current_table")
 public class IsolationCurrent implements Serializable {
 
 	 

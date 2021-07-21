@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 *
 */
 @Entity
-@Table(name = "EARTHING_LOCATION_REPORTS_TABLE")
+@Table(name = "earthing_location_reports_table")
 public class EarthingLocationReport implements Serializable {
 
 	private static final long serialVersionUID = 1L;

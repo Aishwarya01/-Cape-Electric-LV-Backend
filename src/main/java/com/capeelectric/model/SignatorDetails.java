@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  *
  */
 @Entity
-@Table(name = "SIGN_DETAILS_TABLE")
+@Table(name = "sign_details_table")
 public class SignatorDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;

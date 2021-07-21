@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  *
  */
 @Entity
-@Table(name = "CONSUMER_TABLE")
+@Table(name = "consumer_table")
 public class ConsumerUnit implements Serializable {
 
 	/**

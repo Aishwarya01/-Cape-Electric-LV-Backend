@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 *
 */
 @Entity
-@Table(name = "INSTALLATION_LOCATION_TABLE")
+@Table(name = "installation_location_table")
 public class InstalLocationReport implements Serializable {
 
 	private static final long serialVersionUID = 1L;

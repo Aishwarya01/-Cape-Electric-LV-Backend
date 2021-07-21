@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  *
  */
 @Entity
-@Table(name = "REPORT_DETAILS_TABLE")
+@Table(name = "report_details_table")
 @NamedQueries(value = {
 		@NamedQuery(name = "InstalReportDetailsRepository.findByUserNameAndSiteId", query = "select r from ReportDetails r where r.userName=:userName and r.siteId=:siteId"),
 		@NamedQuery(name = "InstalReportDetailsRepository.findBySiteId", query = "select r from ReportDetails r where r.siteId=:siteId")

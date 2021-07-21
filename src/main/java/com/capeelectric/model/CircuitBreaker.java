@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 *
 */
 @Entity
-@Table(name = "CIRCUIT_BREAKER_TABLE")
+@Table(name = "circuit_breaker_table")
 public class CircuitBreaker implements Serializable {
 
 	private static final long serialVersionUID = 1L;

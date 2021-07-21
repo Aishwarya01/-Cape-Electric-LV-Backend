@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  *
  */
 @Entity
-@Table(name = "TESTING_TABLE")
+@Table(name = "testing_table")
 public class Testing implements Serializable {
 
 	private static final long serialVersionUID = 1L;
