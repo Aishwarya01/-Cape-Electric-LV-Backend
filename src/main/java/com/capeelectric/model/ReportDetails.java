@@ -102,7 +102,7 @@ public class ReportDetails implements Serializable {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "reportDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<SignatorDetails> SignatorDetails;
+	private Set<SignatorDetails> signatorDetails;
 
 	public Integer getReportId() {
 		return reportId;
@@ -273,11 +273,11 @@ public class ReportDetails implements Serializable {
 	}
 
 	public Set<SignatorDetails> getSignatorDetails() {
-		return SignatorDetails;
+		return signatorDetails;
 	}
 
 	public void setSignatorDetails(Set<SignatorDetails> signatorDetails) {
-		SignatorDetails = signatorDetails;
+		this.signatorDetails = signatorDetails;
 	}
 
 }
