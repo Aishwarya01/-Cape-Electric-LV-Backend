@@ -76,5 +76,15 @@ public class PeriodicTestingControllerTest {
 		logger.info("testRetrievePeriodicTesting Function Ended");
 
 	}
+	
+	@Test
+	public void testUpdatePeriodicTesting() throws PeriodicTestingException {
+		logger.info("testUpdatePeriodicTesting Function Started");
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
+		ResponseEntity<String> actualResponseEntity = periodicTestingController
+				.updatePeriodicTesting(testingReport);
+		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
+		logger.info("testUpdatePeriodicTesting Function Ended");
+	}
 
 }

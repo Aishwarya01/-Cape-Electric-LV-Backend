@@ -10,10 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.model.ReportDetails;
-import com.capeelectric.model.User;
 import com.capeelectric.repository.InstalReportDetailsRepository;
-import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.InstalReportService;
+import com.capeelectric.util.UserFullName;
 
 /**
  * This InstalReportServiceImpl service class doing save and retrieve operation related to ReportDetails
@@ -27,8 +26,8 @@ public class InstalReportServiceImpl implements InstalReportService {
 	private InstalReportDetailsRepository installationReportRepository;
 
 	@Autowired
-	private UserRepository userRepository;
-
+	private UserFullName userFullName;
+	
 	/**
 	 * @param ReportDetails
 	 * addInstallationReport method to will be save ReportDetails object
@@ -41,15 +40,16 @@ public class InstalReportServiceImpl implements InstalReportService {
 					.findBySiteId(reportDetails.getSiteId());
 			if (!reportDetailsRepo.isPresent()
 					|| !reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
-				reportDetails.setCreatedDate(LocalDateTime.now());
-				reportDetails.setCreatedBy(generateFullName(reportDetails.getUserName()));
+				reportDetails.setUpdatedDate(LocalDateTime.now());
+				reportDetails.setCreatedBy(userFullName.getFullName(reportDetails.getUserName()));
+				reportDetails.setUpdatedBy(userFullName.getFullName(reportDetails.getUserName()));
 				installationReportRepository.save(reportDetails);
 			} else {
 				throw new InstalReportException("SiteId already present");
 			}
 
 		} else {
-			throw new InstalReportException("invalid inputs");
+			throw new InstalReportException("Invalid inputs");
 		}
 	}
 
@@ -69,15 +69,32 @@ public class InstalReportServiceImpl implements InstalReportService {
 		}
 	}
 
+	
 	/**
-	 * Method to return Full Name based on UserName
-	 * @param userName
-	 * @return
-	 */
-	private String generateFullName(String userName) {
-		Optional<User> user = userRepository.findByUsername(userName);
-		if (user.isPresent() && user.get() != null)
-			return user.get().getFirstname() + " " + user.get().getLastname();
-		return "";
+	 * @reportId,siteId must required
+	 * @param ReportDetails Object
+	 * updateInstallationReport method to finding the given reportId is available or not in DB,
+	 * if available only allowed for updating 
+	 * 
+	*/
+	@Override
+	public void updateInstallationReport(ReportDetails reportDetails) throws InstalReportException {
+
+		if (reportDetails != null && reportDetails.getReportId() != null && reportDetails.getReportId() != 0
+				&& reportDetails.getSiteId() != null && reportDetails.getSiteId() != 0) {
+			Optional<ReportDetails> reportDetailsRepo = installationReportRepository
+					.findById(reportDetails.getReportId());
+			if (reportDetailsRepo.isPresent()
+					&& reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
+				reportDetails.setUpdatedDate(LocalDateTime.now());
+				reportDetails.setUpdatedBy(userFullName.getFullName(reportDetails.getUserName()));
+				installationReportRepository.save(reportDetails);
+			} else {
+				throw new InstalReportException("Given SiteId and ReportId is Invalid");
+			}
+
+		} else {
+			throw new InstalReportException("Invalid inputs");
+		}
 	}
 }

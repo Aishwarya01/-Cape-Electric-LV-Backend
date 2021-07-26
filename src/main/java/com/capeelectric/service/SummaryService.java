@@ -16,4 +16,6 @@ public interface SummaryService {
 
 	public List<Summary> retrieveSummary(String userName, Integer siteId) throws SummaryException;
 
+	public void updateSummary(Summary summary) throws SummaryException;
+
 }

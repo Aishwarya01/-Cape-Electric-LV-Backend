@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,6 +54,17 @@ public class PeriodicTestingController {
 		logger.info("ended retrievePeriodicTesting function");
 
 		return new ResponseEntity<List<TestingReport>>(retrieveTestingReport, HttpStatus.OK);
+	}
+
+
+	@PutMapping("/updatePeriodicTesting")
+	public ResponseEntity<String> updatePeriodicTesting(@RequestBody TestingReport testingReport)
+			throws PeriodicTestingException {
+		logger.info("called updatePeriodicTesting function UserName : {},SiteId : {},TestingReportId : {}",
+				testingReport.getUserName(), testingReport.getSiteId(),
+				testingReport.getTestingReportId());
+		testService.updatePeriodicTesting(testingReport);
+		return new ResponseEntity<String>("PeriodicTesting successfully Updated", HttpStatus.CREATED);
 	}
 
 }
