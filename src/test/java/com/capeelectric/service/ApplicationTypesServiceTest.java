@@ -1,14 +1,11 @@
 package com.capeelectric.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,11 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.ApplicationTypes;
 import com.capeelectric.repository.ApplicationTypesRepository;
 import com.capeelectric.service.impl.ApplicationTypesServiceImpl;
-import com.fasterxml.jackson.datatype.jdk8.OptionalDoubleSerializer;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
