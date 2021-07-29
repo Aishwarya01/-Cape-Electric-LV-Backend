@@ -74,7 +74,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 * Method to update the user after changing the password
 	 * @throws UserException 
 	 */
-	public User updatePassword(String email, String password) throws UpdatePasswordException {
+	public User updatePassword(String email, String password, Integer otp) throws UpdatePasswordException {
 		// TODO: Email triggering
 		logger.debug("Update User Starts");
 		if (email != null && password != null) {

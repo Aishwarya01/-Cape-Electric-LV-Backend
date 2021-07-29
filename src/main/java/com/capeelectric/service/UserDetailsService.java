@@ -14,7 +14,7 @@ public interface UserDetailsService {
 	
 	public User findByUserName(String email) throws ForgotPasswordException, IOException;
 	
-	public User updatePassword(String email, String password) throws UpdatePasswordException;
+	public User updatePassword(String email, String password, Integer otp) throws UpdatePasswordException;
 	
 	public User changePassword(String email, String oldPassword, String password) throws ChangePasswordException;
 	
