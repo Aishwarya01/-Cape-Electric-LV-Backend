@@ -36,8 +36,8 @@ public class CountryDetailsControllerTest {
 	@MockBean
 	private StateRepository stateRepository;
 	private String code = "IND";
-	private List<Country> country;
-	private List<State> statelist;
+//	private List<Country> country;
+//	private List<State> statelist;
 
 	@Test
 	public void testfetchCountries()throws Exception  {
