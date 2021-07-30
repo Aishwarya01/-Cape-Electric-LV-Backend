@@ -97,9 +97,9 @@ public class UserController {
  		Integer generatedOTP = Utility.generateOTP(email);
  		awsEmailService.sendEmail(email, "You can update the password with this link"+ "\n"
  					+(resetUrl.contains("localhost:5000") ? resetUrl.replace("http://localhost:5000", "http://localhost:4200") : "https://www.rushforsafety.com") + "/updatepassword" + ";email="+email
- 					 + " and OTP is"+generatedOTP);
+ 					 + " and OTP is "+generatedOTP);
  		optionalUser.setOtp(generatedOTP);
- 		userService.saveUser(optionalUser);
+ 		userService.updateUserProfile(optionalUser);
  		return new ResponseEntity<String>(optionalUser.getUsername(), HttpStatus.OK);
 	}
 	
