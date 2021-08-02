@@ -1,6 +1,24 @@
 CREATE DATABASE lv_safety_verification;
 use lv_safety_verification;
 
+
+
+
+---------> Admin Table <------------
+  CREATE TABLE ADMIN_TABLE
+                
+        (    ADMIN_ID INTEGER NOT NULL,
+            FIRST_NAME VARCHAR(255),
+            LAST_NAME VARCHAR(255),
+            EMAIL VARCHAR(255),
+            ADMIN_NAME VARCHAR(255),
+            USER_TYPE VARCHAR(255),
+            PASSWORD VARCHAR(255),
+            ADMIN_EXIST BOOLEAN,
+            CREATION_DATE DATETIME,
+            UPDATED_DATE DATETIME,
+            PRIMARY KEY (ADMIN_ID)
+    );
 ---------> Users Table <------------
 
 CREATE TABLE users(    

@@ -69,6 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				// dont authenticate this particular request
 				.authorizeRequests().antMatchers("/api/v1/authenticate",
 						"/api/v1/registerUser",
+						"/api/v2/registerAdmin",
 						"/api/v1/forgotPassword/**",
 						"/api/v1/updatePassword/**"
 						).permitAll()
