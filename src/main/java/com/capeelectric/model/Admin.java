@@ -15,7 +15,7 @@ public class Admin {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="admin_id")
-	private int id;
+	private int adminId;
     @Column(name="first_name")
 	private String firstname;
 	@Column(name="last_name")
@@ -39,9 +39,9 @@ public class Admin {
 		super();
 	}
 	
-	public Admin(int id, String firstname, String lastname, String email, String usertype, String password, String adminname, boolean adminexist,  LocalDateTime creationdate, LocalDateTime updateddate) {
+	public Admin(int adminId, String firstname, String lastname, String email, String usertype, String password, String username, boolean adminexist,  LocalDateTime creationdate, LocalDateTime updateddate) {
 		super();
-		this.id = id;
+		this.adminId = adminId;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.email = email;
@@ -53,12 +53,15 @@ public class Admin {
 		this.updateddate = updateddate;
 	}
 
-	public int getId() {
-		return id;
+	
+	public int getAdminId() {
+		return adminId;
 	}
-	public void setId(int id) {
-		this.id = id;
+
+	public void setAdminId(int adminId) {
+		this.adminId = adminId;
 	}
+
 	public String getFirstname() {
 		return firstname;
 	}

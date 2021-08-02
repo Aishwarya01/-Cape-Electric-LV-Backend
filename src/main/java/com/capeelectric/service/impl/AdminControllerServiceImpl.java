@@ -46,7 +46,7 @@ public class AdminControllerServiceImpl implements AdminControllService {
 		}
 	}
 
-	public Admin retrieveManagementInformation(String email) throws UserException {
+	public Admin retrieveAdminInformation(String email) throws UserException {
 		logger.debug("Retrieve Admin Starts");
 		Optional<Admin> retrievedAdmin = adminControllRepositary.findByUsername(email);
 		if (retrievedAdmin.isPresent() && retrievedAdmin.get() != null && retrievedAdmin.get().isAdminexist()) {
@@ -57,7 +57,7 @@ public class AdminControllerServiceImpl implements AdminControllService {
 	}
 
 	@Override
-	public Admin updateManagementDetails(Admin admin) throws UserException  {
+	public Admin updateAdminDetails(Admin admin) throws UserException  {
 		logger.debug("Update Management Profile Starts");
 		admin.setUpdateddate(LocalDateTime.now());
 		logger.debug("Update Management Profile Ends");
@@ -65,7 +65,7 @@ public class AdminControllerServiceImpl implements AdminControllService {
 	}
 
 	@Override
-	public void deleteById(Integer adminId) throws UserException {
+	public void deleteByAdmin(Integer adminId) throws UserException {
 		if (adminId != null && adminId != 0) {
 
 			Optional<Admin> adminRepo = adminControllRepositary.findById(adminId);

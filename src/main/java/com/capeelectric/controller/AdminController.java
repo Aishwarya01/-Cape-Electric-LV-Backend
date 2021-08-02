@@ -1,10 +1,6 @@
 package com.capeelectric.controller;
 
-import java.io.IOException;
 import java.net.URI;
-import java.util.List;
-
-import javax.mail.MessagingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.Admin;
-import com.capeelectric.model.Company;
-import com.capeelectric.model.User;
-import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.service.AdminControllService;
 import com.capeelectric.service.impl.AdminControllerServiceImpl;
 
@@ -39,13 +31,17 @@ public class AdminController {
 	
     @Autowired
 	private AdminControllService adminControllService;
+    
+    @Autowired
+	private AdminControllerServiceImpl adminControllerServiceImpl;
+    
 
 	@PostMapping("/registerAdmin")
 	public ResponseEntity<Void> addAdmin(@RequestBody Admin admin)  throws UserException {
 		logger.debug("Add Managemnet starts");
-		Admin createdAdmin = adminControllService.saveAdmin(admin);
+		Admin createdAdmin = adminControllerServiceImpl.saveAdmin(admin);
 		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdAdmin.getId())
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdAdmin.getAdminId())
 				.toUri();
 		
 		logger.debug("Add Managemnet ends");
@@ -53,26 +49,27 @@ public class AdminController {
 	}
 	
 
-	@PutMapping("/updateManagementDetails")
-	public ResponseEntity<String> updateManagementDetails(@RequestBody Admin admin)
-			throws UserException, IOException, MessagingException {
+	@PutMapping("/updateAdminDetails")
+	public ResponseEntity<String> updateAdminDetails(@RequestBody Admin admin)
+			throws UserException {
 		logger.debug("Update management details starts");
-		adminControllService.updateManagementDetails(admin);
+		adminControllService.updateAdminDetails(admin);
 		logger.debug("Update management details Ends");
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 
-	@GetMapping("/retrieveManagementInformation/{email}")
-	public Admin retrieveManagementInformation(@PathVariable String email) throws UserException {
-		return adminControllService.retrieveManagementInformation(email);
+	@GetMapping("/retrieveAdminInformation/{email}")
+	public Admin retrieveAdminInformation(@PathVariable String email) throws UserException {
+		return adminControllService.retrieveAdminInformation(email);
 	}
 
 	@DeleteMapping("/deleteAdmin/{adminId}")
-	public ResponseEntity<String> deleteAdmin(@PathVariable Integer adminId) throws UserException {
+	public ResponseEntity<String> deleteByAdminId(@PathVariable Integer adminId) throws UserException {
 		logger.info("called deleteAdmin function adminId: {}", adminId);
-		adminControllService.deleteById(adminId);
+		adminControllService.deleteByAdmin(adminId);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
+
 
 //	@GetMapping("/fetchUserslist")
 //	public ResponseEntity<List<User>> getAllUser() throws UserException {

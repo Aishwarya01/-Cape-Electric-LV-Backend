@@ -11,11 +11,11 @@ public interface AdminControllService {
 
 	public Admin saveAdmin(Admin admin) throws UserException;
 
-	public Admin updateManagementDetails(Admin admin) throws UserException;
+	public Admin updateAdminDetails(Admin admin) throws UserException;
 
-	public void deleteById(Integer adminId) throws UserException;
+	public void deleteByAdmin(Integer adminId) throws UserException;
 
-	public Admin retrieveManagementInformation(String email) throws UserException;
+	public Admin retrieveAdminInformation(String email) throws UserException;
 
 
 
