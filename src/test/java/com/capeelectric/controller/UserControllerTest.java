@@ -125,7 +125,7 @@ public class UserControllerTest {
 		authenticationRequest.setPassword("abcd12345");
 		authenticationRequest.setOtp(1234);
 
-		when(userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "abcd12345",123)).thenReturn(user);
+		when(userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "abcd12345",1234)).thenReturn(user);
 		ResponseEntity<String> updatePassword = userController.updatePassword(authenticationRequest);
 		assertEquals(updatePassword.getBody(), "lvsystem@capeindia.net");
 	}
