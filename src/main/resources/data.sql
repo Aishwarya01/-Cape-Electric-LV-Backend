@@ -11,7 +11,7 @@ use lv_safety_verification;
             FIRST_NAME VARCHAR(255),
             LAST_NAME VARCHAR(255),
             EMAIL VARCHAR(255),
-            ADMIN_NAME VARCHAR(255),
+            USER_NAME VARCHAR(255),
             USER_TYPE VARCHAR(255),
             PASSWORD VARCHAR(255),
             ADMIN_EXIST BOOLEAN,

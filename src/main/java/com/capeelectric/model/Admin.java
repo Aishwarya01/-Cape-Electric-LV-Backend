@@ -22,8 +22,8 @@ public class Admin {
 	private String lastname;
 	@Column(name="email")
 	private String email;
-	@Column(name="admin_name")
-	private String adminname;
+	@Column(name="user_name")
+	private String username;
 	@Column(name="user_type")
 	private String usertype;
 	@Column(name="password")
@@ -47,7 +47,7 @@ public class Admin {
 		this.email = email;
 		this.usertype = usertype;
 		this.password = password;
-		this.adminname = adminname;
+		this.username = username;
 		this.adminexist = adminexist;
 		this.creationdate = creationdate;
 		this.updateddate = updateddate;
@@ -90,12 +90,12 @@ public class Admin {
 		this.password = password;
 	}
 
-	public String getAdminname() {
-		return adminname;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setAdminname(String adminname) {
-		this.adminname = adminname;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public boolean isAdminexist() {
@@ -121,6 +121,7 @@ public class Admin {
 	public void setUpdateddate(LocalDateTime updateddate) {
 		this.updateddate = updateddate;
 	}
+
 	
 	
 }

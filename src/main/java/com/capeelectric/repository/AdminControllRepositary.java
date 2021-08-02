@@ -8,6 +8,6 @@ import com.capeelectric.model.Admin;
 
 public interface AdminControllRepositary  extends CrudRepository<Admin, Integer>{
 
-	Optional<Admin> findByAdminname(String Adminname);
+	Optional<Admin> findByUsername(String Adminname);
 
 }

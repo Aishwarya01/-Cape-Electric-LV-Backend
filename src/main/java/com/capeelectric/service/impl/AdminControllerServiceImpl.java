@@ -27,8 +27,8 @@ public class AdminControllerServiceImpl implements AdminControllService {
 
 	public Admin saveAdmin(Admin admin) throws UserException {
 		logger.debug("Save Admin Starts");
-		if (admin.getAdminname() != null) {
-			Optional<Admin> createdAdmin = adminControllRepositary.findByAdminname(admin.getAdminname());
+		if (admin.getUsername() != null) {
+			Optional<Admin> createdAdmin = adminControllRepositary.findByUsername(admin.getUsername	());
 			if (createdAdmin.isPresent() && createdAdmin.get() != null && createdAdmin.get().isAdminexist()) {
 				logger.debug("Save Admin Ends");
 				throw new UserException("Admin already available");
@@ -48,7 +48,7 @@ public class AdminControllerServiceImpl implements AdminControllService {
 
 	public Admin retrieveManagementInformation(String email) throws UserException {
 		logger.debug("Retrieve Admin Starts");
-		Optional<Admin> retrievedAdmin = adminControllRepositary.findByAdminname(email);
+		Optional<Admin> retrievedAdmin = adminControllRepositary.findByUsername(email);
 		if (retrievedAdmin.isPresent() && retrievedAdmin.get() != null && retrievedAdmin.get().isAdminexist()) {
 			return retrievedAdmin.get();
 		} else {
