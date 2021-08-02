@@ -25,22 +25,22 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         CustomUserDetails userDetails = null;
         if (user != null) {
 
-            if (user.getAuthorisedUser() != null) {
-                if (!(user.getAuthorisedUser().equalsIgnoreCase("Declined"))) {
+//            if (user.getAuthorisedUser() != null) {
+//                if (!(user.getAuthorisedUser().equalsIgnoreCase("Declined"))) {
 
                     userDetails = new CustomUserDetails(user);
 
-                } else {
-                    logger.debug("Authenticating Declined ");
-                    throw new UsernameNotFoundException(
-                            " Your Account will be Declined : " + username);
-                }
-
-            } else {
-                logger.debug("After Registration Process authenticatting the UserPermission");
-                throw new UsernameNotFoundException(
-                        " Please Wait Your Account will be Authenticatting : " + username);
-            }
+//                } else {
+//                    logger.debug("Authenticating Declined ");
+//                    throw new UsernameNotFoundException(
+//                            " Your Account will be Declined : " + username);
+//                }
+//
+//            } else {
+//                logger.debug("After Registration Process authenticatting the UserPermission");
+//                throw new UsernameNotFoundException(
+//                        " Please Wait Your Account will be Authenticatting : " + username);
+//            }
         } else {
             logger.debug("Load User By UserName ends");
             throw new UsernameNotFoundException("User not exist with name : " + username);
