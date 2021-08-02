@@ -75,7 +75,7 @@ public class LoginServiceImpl implements LoginService {
 			}
 		} else {
 			logger.debug("UpdatePassword Ends");
-			throw new UsernameNotFoundException("username not valid");
+			throw new UsernameNotFoundException("Username not valid");
 		}
 	}
 

@@ -91,7 +91,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 			Optional<Register> registerRepo = registerRepository.findById(register.getRegisterId());
 
-			if (registerRepo.get().getRegisterId().equals(register.getRegisterId())
+			if (registerRepo.isPresent() && registerRepo.get().getRegisterId().equals(register.getRegisterId())
 					&& registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
 				logger.debug("UpdatingRegistration Started");
 				register.setPassword(passwordEncoder.encode(register.getPassword()));
