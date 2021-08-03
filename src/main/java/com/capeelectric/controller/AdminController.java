@@ -45,49 +45,68 @@ public class AdminController {
 	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
 	@Autowired
-	private CustomUserDetailsServiceImpl userDetailsService;
-	
+	private CustomUserDetailsServiceImpl adminDetailsService;
+
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
-	
-    @Autowired
+	@Autowired
 	private AdminControllService adminControllService;
-    
-    @Autowired
+
+	@Autowired
 	private AdminControllerServiceImpl adminControllerServiceImpl;
-    
-//    @PostMapping("/authenticate")
+
+	@PostMapping("/authenticate")
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
+			throws Exception {
+		logger.debug("Create Authenticate Token starts");
+		authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
+
+		final CustomUserDetails userDetails = adminDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+
+		final String token = jwtTokenUtil.generateToken(userDetails);
+		logger.debug("Create Authenticate Token ends");
+		return ResponseEntity.ok(new AuthenticationResponse(token, userDetails.getAdmin()));
+	}
+
+	private void authenticate(String username, String password) throws Exception {
+		try {
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		} catch (DisabledException e) {
+			throw new Exception("USER_DISABLED", e);
+		} catch (BadCredentialsException e) {
+			throw new Exception("INVALID_CREDENTIALS", e);
+		}
+	}
+//	@PostMapping("/authenticate")
 //	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 //		logger.debug("Create Authenticate Token starts");
 //		authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
 //
-//		final Admin adminDetails = adminControllService.findByAdmin(authenticationRequest.getEmail());
+//		final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
 //
-//		final String token = jwtTokenUtil.generateToken(adminDetails);
+//		final String token = jwtTokenUtil.generateToken(userDetails);
 //		logger.debug("Create Authenticate Token ends");
-//		return ResponseEntity.ok(new AuthenticationResponse(token, adminDetails.getUsername()));
-//    }
-   
+//		return ResponseEntity.ok(new AuthenticationResponse(token, userDetails.getUser()));
+//	}
 
-    @PostMapping("/registerAdmin")
-	public ResponseEntity<Void> addAdmin(@RequestBody Admin admin)  throws UserException {
+	@PostMapping("/registerAdmin")
+	public ResponseEntity<Void> addAdmin(@RequestBody Admin admin) throws UserException {
 		logger.debug("Add Managemnet starts");
 		Admin createdAdmin = adminControllerServiceImpl.saveAdmin(admin);
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdAdmin.getAdminId())
-				.toUri();
-		
+
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(createdAdmin.getAdminId()).toUri();
+
 		logger.debug("Add Managemnet ends");
 		return ResponseEntity.created(uri).build();
 	}
-	
-    @PutMapping("/updateAdminDetails")
-	public ResponseEntity<String> updateAdminDetails(@RequestBody Admin admin)
-			throws UserException {
+
+	@PutMapping("/updateAdminDetails")
+	public ResponseEntity<String> updateAdminDetails(@RequestBody Admin admin) throws UserException {
 		logger.debug("Update management details starts");
 		adminControllService.updateAdminDetails(admin);
 		logger.debug("Update management details Ends");
@@ -107,25 +126,33 @@ public class AdminController {
 	}
 
 	@PutMapping("/changePassword")
-	public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) throws ChangePasswordException{
+	public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request)
+			throws ChangePasswordException {
 		logger.debug("Change Password Starts");
-		Admin adminDetails = adminControllService.changePassword(request.getEmail(), request.getOldPassword(), request.getPassword());
+		Admin adminDetails = adminControllService.changePassword(request.getEmail(), request.getOldPassword(),
+				request.getPassword());
 //		emailService.sendEmail(userDetails.getEmail(), "You have successfully updated your password");
-		//awsEmailService.sendEmail(userDetails.getEmail(), "You have successfully updated your password");
+		// awsEmailService.sendEmail(userDetails.getEmail(), "You have successfully
+		// updated your password");
 		logger.debug("Change Password Ends");
 		return new ResponseEntity<String>(adminDetails.getUsername(), HttpStatus.OK);
 	}
+
 	@PutMapping("/updatePassword")
-	public ResponseEntity<String> updatePassword(@RequestBody AuthenticationRequest request) throws UpdatePasswordException{
+	public ResponseEntity<String> updatePassword(@RequestBody AuthenticationRequest request)
+			throws UpdatePasswordException {
 		logger.debug("Update Password starts");
-		Admin admin  = adminControllService.updatePassword(request.getEmail(), request.getPassword());
-        //awsEmailService.sendEmail(admin.getEmail(), "You have successfully updated your password");
+		Admin admin = adminControllService.updatePassword(request.getEmail(), request.getPassword());
+		// awsEmailService.sendEmail(admin.getEmail(), "You have successfully updated
+		// your password");
 		logger.debug("Update Password ends");
 		return new ResponseEntity<String>(admin.getUsername(), HttpStatus.OK);
 	}
+
 	@GetMapping("/forgotPassword/{email}")
-	public ResponseEntity<String> forgotPassword(@PathVariable String email) throws ForgotPasswordException, IOException, MessagingException{
- 		Admin optionalAdmin=  adminControllService.findByAdmin(email);
- 		return new ResponseEntity<String>(optionalAdmin.getUsername(), HttpStatus.OK);
+	public ResponseEntity<String> forgotPassword(@PathVariable String email)
+			throws ForgotPasswordException, IOException, MessagingException {
+		Admin optionalAdmin = adminControllService.findByAdmin(email);
+		return new ResponseEntity<String>(optionalAdmin.getUsername(), HttpStatus.OK);
 	}
 }

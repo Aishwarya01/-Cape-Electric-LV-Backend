@@ -9,16 +9,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.capeelectric.model.User;
+import com.capeelectric.model.Admin;
 
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
+	
 	@Autowired
-	private com.capeelectric.repository.UserRepository userDao;
+	private com.capeelectric.repository.AdminControllRepositary userDao;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<User> optionalUser = userDao.findByUsername(username);
+		Optional<Admin> optionalUser = userDao.findByUsername(username);
 		if(optionalUser != null && optionalUser.isPresent() && optionalUser.get() == null) {
 			throw new UsernameNotFoundException("User not found with username: " + username);
 		}

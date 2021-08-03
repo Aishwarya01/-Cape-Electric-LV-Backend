@@ -8,49 +8,48 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class CustomUserDetails extends User implements UserDetails {
+public class CustomUserDetails extends Admin implements UserDetails {
 
     /**
      * @author capeelectricsoftware
      */
 	private static final long serialVersionUID = 1L;
 
-	private User user;
+	private Admin admin;
 	
-    public User getUser() {
-		return user;
+	public Admin getAdmin() {
+		return admin;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
 	}
 
-	
 	public CustomUserDetails() {
 		super();
 	}
 
 	
-	public CustomUserDetails(User user) {
-		this.user = user;
+	public CustomUserDetails(Admin admin) {
+		this.admin = admin;
 	}
 
 	@Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        return Arrays.stream(user.getRole().split(","))
+        return Arrays.stream(admin.getUsertype().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return admin.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return admin.getUsername();
     }
 
     @Override
@@ -72,4 +71,5 @@ public class CustomUserDetails extends User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

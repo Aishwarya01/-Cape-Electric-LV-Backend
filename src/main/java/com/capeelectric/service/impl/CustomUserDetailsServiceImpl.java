@@ -7,28 +7,29 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.model.Admin;
 import com.capeelectric.model.CustomUserDetails;
-import com.capeelectric.model.User;
-import com.capeelectric.repository.UserRepository;
+import com.capeelectric.repository.AdminControllRepositary;
 
 @Service
 public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
 	private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsServiceImpl.class);
+
 	@Autowired
-	private UserRepository usersRepository;
+	private AdminControllRepositary adminControllRepositary;
 
 	@Override
 	public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		logger.debug("Load User By UserName starts");
-        User user = usersRepository.findByUsername(username).get();
+        Admin admin = adminControllRepositary.findByUsername(username).get();
         CustomUserDetails userDetails = null;
-        if (user != null) {
+        if (admin != null) {
 
 //            if (user.getAuthorisedUser() != null) {
 //                if (!(user.getAuthorisedUser().equalsIgnoreCase("Declined"))) {
 
-                    userDetails = new CustomUserDetails(user);
+                    userDetails = new CustomUserDetails(admin);
 
 //                } else {
 //                    logger.debug("Authenticating Declined ");

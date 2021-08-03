@@ -75,17 +75,17 @@ public class UserController {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@PostMapping("/authenticate")
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-		logger.debug("Create Authenticate Token starts");
-		authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
-
-		final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
-
-		final String token = jwtTokenUtil.generateToken(userDetails);
-		logger.debug("Create Authenticate Token ends");
-		return ResponseEntity.ok(new AuthenticationResponse(token, userDetails.getUser()));
-	}
+//	@PostMapping("/authenticate")
+//	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+//		logger.debug("Create Authenticate Token starts");
+//		authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
+//
+//		final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+//
+//		final String token = jwtTokenUtil.generateToken(userDetails);
+//		logger.debug("Create Authenticate Token ends");
+//		return ResponseEntity.ok(new AuthenticationResponse(token, userDetails.getUsername()));
+//	}
 	
 	@GetMapping("/forgotPassword/{email}")
 	public ResponseEntity<String> forgotPassword(@PathVariable String email) throws ForgotPasswordException, IOException, MessagingException{
@@ -134,13 +134,13 @@ public class UserController {
 		return new ResponseEntity<String>(updatedUser.getEmail(), HttpStatus.OK);
 	}
 	
-	private void authenticate(String username, String password) throws Exception {
-		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-		} catch (DisabledException e) {
-			throw new Exception("USER_DISABLED", e);
-		} catch (BadCredentialsException e) {
-			throw new Exception("INVALID_CREDENTIALS", e);
-		}
-	}
+//	private void authenticate(String username, String password) throws Exception {
+//		try {
+//			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+//		} catch (DisabledException e) {
+//			throw new Exception("USER_DISABLED", e);
+//		} catch (BadCredentialsException e) {
+//			throw new Exception("INVALID_CREDENTIALS", e);
+//		}
+//	}
 }

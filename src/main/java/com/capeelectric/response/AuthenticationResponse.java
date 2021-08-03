@@ -2,7 +2,7 @@ package com.capeelectric.response;
 
 import java.io.Serializable;
 
-import com.capeelectric.model.User;
+import com.capeelectric.model.Admin;
 
 /**
  * 
@@ -13,16 +13,16 @@ public class AuthenticationResponse implements Serializable {
 
 	private static final long serialVersionUID = -8091879091924046844L;
 	private final String jwttoken;
-	private final User users;
-	public AuthenticationResponse(String jwttoken, User users) {
+	private final Admin admin;
+	public AuthenticationResponse(String jwttoken, Admin admin) {
 		this.jwttoken = jwttoken;
-		this.users = users;
+		this.admin = admin;
 	}
 	public String getToken() {
 		return this.jwttoken;
 	}
-	public User getUsers() {
-		return users;
+	public Admin getUsers() {
+		return admin;
 	}
 	
 }
