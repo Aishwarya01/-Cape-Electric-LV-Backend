@@ -2,6 +2,7 @@ package com.capeelectric.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
@@ -61,6 +62,12 @@ public class RegistrationController {
 	public Optional<Register> retrieveRegistration(@PathVariable String userName) throws RegistrationException {
 		logger.info("called retrieveRegistration function UserName : {}", userName);
 		return registrationService.retrieveRegistration(userName);
+	}
+
+	@GetMapping("/retrieveAllRegistration")
+	public List<Register> retrieveAllRegistration() throws RegistrationException {
+		logger.info("called retrieveAllRegistration function");
+		return registrationService.retrieveAllRegistration();
 	}
 
 	@PutMapping("/updateRegistration")

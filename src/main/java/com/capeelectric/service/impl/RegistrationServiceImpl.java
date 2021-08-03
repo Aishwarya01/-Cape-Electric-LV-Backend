@@ -1,6 +1,7 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -146,6 +147,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 			throw new RegisterPermissionRequestException("Invaild Input for RegisterPermissionRequest");
 		}
 
+	}
+
+	@Override
+	public List<Register> retrieveAllRegistration() throws RegistrationException {
+		try {
+			return (List<Register>) registerRepository.findAll();
+
+		} catch (Exception e) {
+			throw new RegistrationException("Retrieve function faild ExceptionMessage is : " + e.getMessage());
+		}
 	}
 
 }

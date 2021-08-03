@@ -1,5 +1,6 @@
 package com.capeelectric.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.capeelectric.exception.RegisterPermissionRequestException;
@@ -21,5 +22,7 @@ public interface RegistrationService {
 	public void updateRegistration(Register inspector) throws RegistrationException;
 
 	public Register updatePermission(RegisterPermissionRequest registerPermissionRequest) throws RegisterPermissionRequestException;
+
+	public List<Register> retrieveAllRegistration() throws RegistrationException;
 
 }

@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -116,6 +118,20 @@ public class RegistrationServiceTest {
 
 	}
 
+	@Test
+	public void testRetrieveAllRegistration() throws RegistrationException {
+
+		List<Register> listOfRegistration = new ArrayList<Register>();
+		listOfRegistration.add(register);
+		listOfRegistration.add(register());
+
+		when(registrationRepository.findAll()).thenReturn(listOfRegistration);
+
+		List<Register> retrieveAllRegistration = registrationServiceImpl.retrieveAllRegistration();
+		assertNotNull(retrieveAllRegistration);
+
+	}
+	
 	private Register register() {
 		Register register2 = new Register();
 		register2.setRegisterId(2);

@@ -1,11 +1,14 @@
 package com.capeelectric.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
@@ -74,8 +77,7 @@ public class RegistrationControllerTest {
 	}
 	
 	@Test
-	public void testRetrieveRegistration() throws UserException, URISyntaxException, IOException, MessagingException, RegistrationException {
-        doNothing().when(registrationService).updateRegistration(register);
+	public void testRetrieveRegistration() throws RegistrationException {
 		 
 		when(registrationService.retrieveRegistration("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
 
@@ -97,5 +99,13 @@ public class RegistrationControllerTest {
 
 	}
 	
+	@Test
+	public void testRetrieveAllRegistration() throws RegistrationException {
+		List<Register> listOfRegister = new ArrayList<Register>();
+		when(registrationService.retrieveAllRegistration()).thenReturn(listOfRegister);
+
+		List<Register> allRegistration = registrationController.retrieveAllRegistration();
+		assertNotNull(allRegistration);
+	}
 	
 }
