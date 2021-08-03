@@ -4,20 +4,20 @@ use lv_safety_verification;
 ---------> Users Table <------------
 
 CREATE TABLE users(    
-			USER_ID INTEGER NOT NULL, 
-			USER_ACTIVE BOOLEAN,
-			CREATION_DATE DATETIME,
-			EMAIL VARCHAR(255),
-			FIRST_NAME VARCHAR(255),
-			LAST_NAME VARCHAR(255),
-			PASSWORD VARCHAR(255),
-			USER_ROLE VARCHAR(255),
-			USER_EXIST BOOLEAN,
-			USER_NAME VARCHAR(255),
-			USER_TYPE VARCHAR(255),
-			UPDATED_DATE DATETIME,
-			ONE_TIME_PASSWORD INTEGER
-			PRIMARY KEY (USER_ID)
+			user_id INTEGER NOT NULL, 
+			user_active BOOLEAN,
+			creation_date DATETIME,
+			email VARCHAR(255),
+			first_name VARCHAR(255),
+			last_name VARCHAR(255),
+			password VARCHAR(255),
+			user_role VARCHAR(255),
+			user_exist BOOLEAN,
+			user_name VARCHAR(255),
+			user_type VARCHAR(255),
+			updated_date DATETIME,
+			one_time_password INTEGER
+			PRIMARY KEY (user_id)
 	);
 	
 --------> Country Table with insert queries <------------
