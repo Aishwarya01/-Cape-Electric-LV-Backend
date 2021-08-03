@@ -73,6 +73,9 @@ public class Register {
 
 	@Column(name = "INTERESTED_AREAS")
 	private String interestedAreas;
+	
+	@Column(name = "COMMENT")
+	private String comment;
 
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
@@ -220,6 +223,14 @@ public class Register {
 
 	public void setInterestedAreas(String interestedAreas) {
 		this.interestedAreas = interestedAreas;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public LocalDateTime getCreatedDate() {

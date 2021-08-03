@@ -6,7 +6,9 @@ public class RegisterPermissionRequest {
 
 	private String permission;
 
-	private Integer RegisterId;
+	private Integer registerId;
+	
+	private String comment;
 
 	public String getAdminUserName() {
 		return adminUserName;
@@ -25,11 +27,19 @@ public class RegisterPermissionRequest {
 	}
 
 	public Integer getRegisterId() {
-		return RegisterId;
+		return registerId;
 	}
 
 	public void setRegisterId(Integer registerId) {
-		RegisterId = registerId;
+		this.registerId = registerId;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 }

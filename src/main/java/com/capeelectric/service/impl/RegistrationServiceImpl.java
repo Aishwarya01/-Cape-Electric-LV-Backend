@@ -48,7 +48,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					|| !registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
 			//	register.setPassword(passwordEncoder.encode(register.getPassword()));
 				register.setCreatedDate(LocalDateTime.now());
-				register.setPermission("NO");
+				register.setPermission("NOT_AUTHORIZED");
 				register.setRole("Inspector");
 				register.setUpdatedDate(LocalDateTime.now());
 				register.setCreatedBy(register.getUsername());
@@ -113,6 +113,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Override
 	public Register updatePermission(RegisterPermissionRequest registerPermissionRequest)
 			throws RegisterPermissionRequestException {
+		logger.debug("updatePermission_function called");
 
 		if (registerPermissionRequest != null && registerPermissionRequest.getAdminUserName() != null
 				&& !registerPermissionRequest.getAdminUserName().isEmpty()
@@ -126,6 +127,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			if (registerRepo.isPresent() && !registerRepo.isEmpty()) {
 				if (registerPermissionRequest.getPermission().equalsIgnoreCase("YES")) {
 
+					logger.debug("Admin accepted Registration Permission");
 					register.setPermission(registerPermissionRequest.getPermission());
 					register.setPermissionBy(registerPermissionRequest.getAdminUserName());
 					register.setUpdatedBy(registerPermissionRequest.getAdminUserName());
@@ -133,17 +135,22 @@ public class RegistrationServiceImpl implements RegistrationService {
 					registerRepository.save(register);
 					return register;
 				} else {
+					logger.debug("Admin Not-acepted Registration Permission");
+					register.setComment(registerPermissionRequest.getComment());
 					register.setPermission(registerPermissionRequest.getPermission());
 					register.setUpdatedBy(registerPermissionRequest.getAdminUserName());
 					registerRepository.save(register);
 					return register;
+
 				}
 
 			} else {
+				logger.debug("Given RegisterId not Avilable in DB");
 				throw new RegisterPermissionRequestException("Given User not avilable");
 			}
 
 		} else {
+			logger.debug("Given RegisterId not Avilable in DB");
 			throw new RegisterPermissionRequestException("Invaild Input for RegisterPermissionRequest");
 		}
 
@@ -152,6 +159,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Override
 	public List<Register> retrieveAllRegistration() throws RegistrationException {
 		try {
+			logger.debug("Started retrieveAllRegistration");
 			return (List<Register>) registerRepository.findAll();
 
 		} catch (Exception e) {
