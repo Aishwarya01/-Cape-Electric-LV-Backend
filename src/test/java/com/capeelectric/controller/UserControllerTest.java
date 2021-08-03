@@ -33,6 +33,7 @@ import com.capeelectric.model.User;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
+import com.capeelectric.request.UpdatePasswordRequest;
 import com.capeelectric.service.impl.AWSEmailService;
 import com.capeelectric.service.impl.CustomUserDetailsServiceImpl;
 import com.capeelectric.service.impl.UserDetailsServiceImpl;
@@ -108,7 +109,7 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testForgotPassword() throws ForgotPasswordException, IOException, MessagingException {
+	public void testForgotPassword() throws ForgotPasswordException, IOException, MessagingException, UserException {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
@@ -119,11 +120,12 @@ public class UserControllerTest {
 
 	@Test
 	public void testUpdatePassword() throws UpdatePasswordException, IOException, MessagingException {
-		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+		UpdatePasswordRequest authenticationRequest = new UpdatePasswordRequest();
 		authenticationRequest.setEmail("lvsystem@capeindia.net");
 		authenticationRequest.setPassword("abcd12345");
+		authenticationRequest.setOtp(1234);
 
-		when(userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "abcd12345")).thenReturn(user);
+		when(userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "abcd12345",1234)).thenReturn(user);
 		ResponseEntity<String> updatePassword = userController.updatePassword(authenticationRequest);
 		assertEquals(updatePassword.getBody(), "lvsystem@capeindia.net");
 	}

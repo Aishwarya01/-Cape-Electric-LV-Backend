@@ -74,12 +74,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 * Method to update the user after changing the password
 	 * @throws UserException 
 	 */
-	public User updatePassword(String email, String password) throws UpdatePasswordException {
+	public User updatePassword(String email, String password, Integer otp) throws UpdatePasswordException {
 		// TODO: Email triggering
 		logger.debug("Update User Starts");
-		if (email != null && password != null) {
+		if (email != null && password != null && otp != null) {
 			User user = userRepository.findByUsername(email).get();
-			if (user != null && user.isUserexist()) {
+			if (user != null && user.isUserexist() && otp.intValue() == user.getOtp()) {
+				user.setOtp(null);
 				user.setPassword(passwordEncoder.encode(password));
 				user.setUpdateddate(LocalDateTime.now());
 				logger.debug("Update User Ends");

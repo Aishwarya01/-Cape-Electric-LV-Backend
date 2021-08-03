@@ -18,6 +18,8 @@ import javax.persistence.Table;
 @Table(name="users")
 public class User {
 	
+//	private static final long OTP_VALID_DURATION = 5 * 60 * 1000;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="user_id")
@@ -44,11 +46,13 @@ public class User {
 	private LocalDateTime updateddate;
 	@Column(name="user_exist")
 	private boolean userexist;
+	@Column(name = "one_time_password")
+	private Integer otp;
 	public User() {
     }
 	public User(int id, String password, boolean active, String email, String firstname, String lastname,
 			String username, String usertype, String role, LocalDateTime creationdate, LocalDateTime updateddate,
-			boolean userexist) {
+			boolean userexist, Integer otp) {
 		super();
 		this.id = id;
 		this.password = password;
@@ -62,6 +66,7 @@ public class User {
 		this.creationdate = creationdate;
 		this.updateddate = updateddate;
 		this.userexist = userexist;
+		this.otp = otp;
 	}
 	public int getId() {
 		return id;
@@ -135,7 +140,11 @@ public class User {
 	public void setUserexist(boolean userexist) {
 		this.userexist = userexist;
 	}
-
-	
+	public Integer getOtp() {
+		return otp;
+	}
+	public void setOtp(Integer otp) {
+		this.otp = otp;
+	}
 	
 }
