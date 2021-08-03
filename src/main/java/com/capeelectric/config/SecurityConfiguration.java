@@ -67,11 +67,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		httpSecurity.csrf().disable();
 		httpSecurity.cors().and()
 				// dont authenticate this particular request
-				.authorizeRequests().antMatchers("/api/v1/authenticate",
+				.authorizeRequests().antMatchers("/api/v2/authenticate",
 						"/api/v1/registerUser",
 						"/api/v2/registerAdmin",
-						"/api/v1/forgotPassword/**",
-						"/api/v1/updatePassword/**"
+						"/api/v2/changePassword",
+						"/api/v2/forgotPassword/**",
+						"/api/v2/updatePassword/**"
 						).permitAll()
 				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll().
 				// all other requests need to be authenticated

@@ -1,16 +1,22 @@
 package com.capeelectric.service.impl;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.ChangePasswordException;
+import com.capeelectric.exception.ForgotPasswordException;
+import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.Admin;
+import com.capeelectric.model.User;
 import com.capeelectric.repository.AdminControllRepositary;
 import com.capeelectric.service.AdminControllService;
 
@@ -65,7 +71,7 @@ public class AdminControllerServiceImpl implements AdminControllService {
 	}
 
 	@Override
-	public void deleteByAdmin(Integer adminId) throws UserException {
+	public void deleteAdmin(Integer adminId) throws UserException {
 		if (adminId != null && adminId != 0) {
 
 			Optional<Admin> adminRepo = adminControllRepositary.findById(adminId);
@@ -83,35 +89,63 @@ public class AdminControllerServiceImpl implements AdminControllService {
 
 	}
 
-//	@Override
-//    public List<User> getAllUser() throws UserException {
-//        logger.debug("Fetching The User&Viewer Data Starts");
-//        List<User> list = (List<User>) userRepository.findAll();
-//
-//        List<User> list1 = list.stream()
-//                .filter(user -> user.getAuthorisedUser() == null)
-//
-//               || user.getUserpermission().equalsIgnoreCase("Declined"))
-//
-//                .collect(Collectors.toList());
-//        return list1;
-
-//        List<User> list1 = list.stream()
-//                .filter(user -> (user.getUsertype().equalsIgnoreCase("user")
-//                        || user.getUsertype().equalsIgnoreCase("viewer")
-//                        || user.getUsertype().equalsIgnoreCase("admin"))
-//                        && user.getUserpermission() == null)
-//                .collect(Collectors.toList());
-//        return list1;
-//
-//    }
-
-//    @Override
-//    public void updateAccessUserslist(List<User> user) throws UserException {
-//        logger.debug("Updating The Access of User&Viewer Details Starts ");
-//        for (User user1 : user) {
-//            userRepository.save(user1);
-//        }
-//   }
+	@Override
+   public Admin updatePassword(String email, String password) throws UpdatePasswordException {
+		// TODO: Email triggering
+		logger.debug("Update Admin Starts");
+		if (email != null && password != null) {
+			Admin admin = adminControllRepositary.findByUsername(email).get();
+			if (admin != null && admin.isAdminexist()) {
+				admin.setPassword(passwordEncoder.encode(password));
+				admin.setUpdateddate(LocalDateTime.now());
+				logger.debug("Update Admin Ends");
+				return adminControllRepositary.save(admin);
+			}
+			else {
+				logger.debug("Update Admin Ends");
+				throw new UpdatePasswordException("Admin Not available");
+			}
+		} else {
+			logger.debug("Update Admin Ends");
+			throw new UsernameNotFoundException("adminname not valid");
+		}
+	}
+	@Override
+	public Admin changePassword(String email, String oldPassword, String password) throws ChangePasswordException {
+		logger.debug("Change Password Starts");
+		Admin retrieveAdmin = adminControllRepositary.findByUsername(email).get();
+		if(!passwordEncoder.matches(oldPassword, retrieveAdmin.getPassword())) {
+			logger.debug("Change Password Ends");
+			throw new ChangePasswordException("Old password is not matching with encoded password");
+		} else if(oldPassword.equalsIgnoreCase(password)) {
+			logger.debug("Change Password Ends");
+			throw new ChangePasswordException("Old password cannot be entered as new password");
+		} else {
+			if (retrieveAdmin != null && retrieveAdmin.isAdminexist()) {
+				retrieveAdmin.setPassword(passwordEncoder.encode(password));
+				retrieveAdmin.setUpdateddate(LocalDateTime.now());
+				logger.debug("Update Admin Ends");
+				return adminControllRepositary.save(retrieveAdmin);
+			}
+		}
+		return null;
+	}
+	@Override
+	public Admin findByAdmin(String email) throws ForgotPasswordException{
+		logger.debug("Find By Admin Name Starts");
+		if (email != null) {
+			Optional<Admin> optionalAdmin = adminControllRepositary.findByUsername(email);
+			if (optionalAdmin != null && optionalAdmin.isPresent() && optionalAdmin.get()!= null) {
+				logger.debug("Find By User Name Ends");
+				return optionalAdmin.get();
+			} else {
+				logger.debug("Find By Admin Name Ends");
+				throw new ForgotPasswordException("Email is not available with us");
+			}
+		} else {
+			logger.debug("Find By Admin Name Ends");
+			throw new ForgotPasswordException("Email is required");
+		}
+	}
 
 }
