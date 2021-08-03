@@ -5,7 +5,6 @@ import com.capeelectric.exception.ForgotPasswordException;
 import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.Admin;
-import com.capeelectric.model.CustomAdminDetails;
 
 public interface AdminControllService {
 

@@ -30,7 +30,6 @@ import com.capeelectric.exception.ForgotPasswordException;
 import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.Admin;
-import com.capeelectric.model.CustomAdminDetails;
 import com.capeelectric.model.CustomUserDetails;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
@@ -61,17 +60,17 @@ public class AdminController {
     @Autowired
 	private AdminControllerServiceImpl adminControllerServiceImpl;
     
-    @PostMapping("/authenticate")
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-		logger.debug("Create Authenticate Token starts");
-		authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
-
-		final Admin adminDetails = adminControllService.findByAdmin(authenticationRequest.getEmail());
-
-		final String token = jwtTokenUtil.generateToken(adminDetails);
-		logger.debug("Create Authenticate Token ends");
-		return ResponseEntity.ok(new AuthenticationResponse(token, adminDetails.getUsername()));
-    }
+//    @PostMapping("/authenticate")
+//	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+//		logger.debug("Create Authenticate Token starts");
+//		authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
+//
+//		final Admin adminDetails = adminControllService.findByAdmin(authenticationRequest.getEmail());
+//
+//		final String token = jwtTokenUtil.generateToken(adminDetails);
+//		logger.debug("Create Authenticate Token ends");
+//		return ResponseEntity.ok(new AuthenticationResponse(token, adminDetails.getUsername()));
+//    }
    
 
     @PostMapping("/registerAdmin")
