@@ -81,17 +81,6 @@ public class AdminController {
 			throw new Exception("INVALID_CREDENTIALS", e);
 		}
 	}
-//	@PostMapping("/authenticate")
-//	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-//		logger.debug("Create Authenticate Token starts");
-//		authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
-//
-//		final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
-//
-//		final String token = jwtTokenUtil.generateToken(userDetails);
-//		logger.debug("Create Authenticate Token ends");
-//		return ResponseEntity.ok(new AuthenticationResponse(token, userDetails.getUser()));
-//	}
 
 	@PostMapping("/registerAdmin")
 	public ResponseEntity<Void> addAdmin(@RequestBody Admin admin) throws UserException {

@@ -90,22 +90,22 @@ public class UserControllerTest {
 
 	}
 
-	@Test
-	public void testCreateAuthenticationToken() throws Exception {
-		CustomUserDetails customUserDetails = new CustomUserDetails();
-		customUserDetails.setEmail("lvsystem@capeindia.net");
-		customUserDetails.setPassword("abcd12345");
-
-		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-		authenticationRequest.setEmail("lvsystem@capeindia.net");
-		authenticationRequest.setPassword("abcd12345");
-
-		when(userDetailsService.loadUserByUsername("lvsystem@capeindia.net")).thenReturn(customUserDetails);
-
-		ResponseEntity<?> token = userController.createAuthenticationToken(authenticationRequest);
-
-		assertNotNull(token);
-	}
+//	@Test
+//	public void testCreateAuthenticationToken() throws Exception {
+//		CustomUserDetails customUserDetails = new CustomUserDetails();
+//		customUserDetails.setEmail("lvsystem@capeindia.net");
+//		customUserDetails.setPassword("abcd12345");
+//
+//		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+//		authenticationRequest.setEmail("lvsystem@capeindia.net");
+//		authenticationRequest.setPassword("abcd12345");
+//
+//		when(userDetailsService.loadUserByUsername("lvsystem@capeindia.net")).thenReturn(customUserDetails);
+//
+//		ResponseEntity<?> token = userController.createAuthenticationToken(authenticationRequest);
+//
+//		assertNotNull(token);
+//	}
 
 	@Test
 	public void testForgotPassword() throws ForgotPasswordException, IOException, MessagingException {
