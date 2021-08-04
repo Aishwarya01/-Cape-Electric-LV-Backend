@@ -82,7 +82,7 @@ public class RegistrationController {
 	@PutMapping("/updatePermission")
 	public ResponseEntity<String> updatePermission(@RequestBody RegisterPermissionRequest registerPermissionRequest)
 			throws RegistrationException, RegisterPermissionRequestException, MessagingException {
-		logger.info("called updatePermission function UserName : {}", registerPermissionRequest.getAdminUserName());
+		logger.info("called updatePermission function AdminUserName : {}", registerPermissionRequest.getAdminUserName());
 		Register register = registrationService.updatePermission(registerPermissionRequest);
 		if (register != null && register.getPermission().equalsIgnoreCase("YES")) {
 			awsEmailService.sendEmail(register.getUsername(),

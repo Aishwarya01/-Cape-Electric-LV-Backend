@@ -123,8 +123,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 				&& registerPermissionRequest.getRegisterId() != 0) {
 
 			Optional<Register> registerRepo = registerRepository.findById(registerPermissionRequest.getRegisterId());
-			Register register = registerRepo.get();
+			
 			if (registerRepo.isPresent() && !registerRepo.isEmpty()) {
+				Register register = registerRepo.get();
+				
 				if (registerPermissionRequest.getPermission().equalsIgnoreCase("YES")) {
 
 					logger.debug("Admin accepted Registration Permission");
@@ -151,7 +153,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 		} else {
 			logger.debug("Given RegisterId not Avilable in DB");
-			throw new RegisterPermissionRequestException("Invaild Input for RegisterPermissionRequest");
+			throw new RegisterPermissionRequestException("RegisterPermissionRequest has Invaild Input");
 		}
 
 	}
