@@ -1,5 +1,6 @@
 package com.capeelectric.controller;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -16,20 +17,24 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.capeelectric.config.JwtTokenUtil;
 import com.capeelectric.exception.ChangePasswordException;
-import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.ForgotPasswordException;
 import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.Admin;
+import com.capeelectric.model.CustomUserDetails;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
 import com.capeelectric.service.AdminControllService;
 import com.capeelectric.service.impl.AdminControllerServiceImpl;
+import com.capeelectric.service.impl.CustomUserDetailsServiceImpl;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -44,6 +49,18 @@ public class AdminControllerTest {
 	@MockBean
 	private AdminControllerServiceImpl adminControllerServiceImpl;
 	
+	@MockBean
+    private CustomUserDetailsServiceImpl adminDetailsService;
+
+    @MockBean
+    private AuthenticationManager authenticationManager;
+
+    @MockBean
+    private UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken;
+
+    @MockBean
+    private JwtTokenUtil jwtTokenUtil;
+	
 	private Admin admin;
 
 	{
@@ -56,6 +73,25 @@ public class AdminControllerTest {
 	    admin.setAdminId(1);
 	   
 	}
+	
+	@Test
+    public void testCreateAuthenticationToken() throws Exception {
+        CustomUserDetails customUserDetails = new CustomUserDetails();
+        customUserDetails.setEmail("abc@capeindia.net");
+        customUserDetails.setPassword("123456789");
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+        authenticationRequest.setEmail("abc@capeindia.net");
+        authenticationRequest.setPassword("123456789");
+
+        when(adminDetailsService.loadUserByUsername("abc@capeindia.net")).thenReturn(customUserDetails);
+
+        ResponseEntity<?> token = adminController.createAuthenticationToken(authenticationRequest);
+ 
+        assertNotNull(token);
+        
+    }
+	
 	@Test
 	public void testsaveAdmin() throws UserException, URISyntaxException{
 		
