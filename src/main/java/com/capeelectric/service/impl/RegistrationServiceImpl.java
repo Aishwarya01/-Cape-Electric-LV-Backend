@@ -130,6 +130,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 				if (registerPermissionRequest.getPermission().equalsIgnoreCase("YES")) {
 
 					logger.debug("Admin accepted Registration Permission");
+					register.setApplicationType(registerPermissionRequest.getApplicationType());
 					register.setPermission(registerPermissionRequest.getPermission());
 					register.setPermissionBy(registerPermissionRequest.getAdminUserName());
 					register.setUpdatedBy(registerPermissionRequest.getAdminUserName());
@@ -138,6 +139,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 					return register;
 				} else {
 					logger.debug("Admin Not-acepted Registration Permission");
+					
+					register.setApplicationType(registerPermissionRequest.getApplicationType());
 					register.setComment(registerPermissionRequest.getComment());
 					register.setPermission(registerPermissionRequest.getPermission());
 					register.setUpdatedBy(registerPermissionRequest.getAdminUserName());

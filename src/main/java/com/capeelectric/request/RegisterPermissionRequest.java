@@ -9,6 +9,8 @@ public class RegisterPermissionRequest {
 	private Integer registerId;
 	
 	private String comment;
+	
+	private String applicationType;
 
 	public String getAdminUserName() {
 		return adminUserName;
@@ -40,6 +42,14 @@ public class RegisterPermissionRequest {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public String getApplicationType() {
+		return applicationType;
+	}
+
+	public void setApplicationType(String applicationType) {
+		this.applicationType = applicationType;
 	}
 
 }
