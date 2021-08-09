@@ -32,7 +32,7 @@ public class InspectionController {
 			throws InspectionException {
 
 		inspectionService.addInspectionDetails(periodicInspection);
-		return new ResponseEntity<String>(HttpStatus.CREATED);
+		return new ResponseEntity<String>("Inspection Details Are Successfully Saved",HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/retrieveInspectionDetails/{userName}/{siteId}")

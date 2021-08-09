@@ -80,12 +80,12 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				supplyCharacteristics.setCreatedDate(LocalDateTime.now());
 				supplyCharacteristicsRepository.save(supplyCharacteristics);
 			} else {
-				throw new SupplyCharacteristicsException("siteId already present");
+				throw new SupplyCharacteristicsException("Site-Id Already Available");
 			}
 		}
 
 		else {
-			throw new SupplyCharacteristicsException("Invalid inputs");
+			throw new SupplyCharacteristicsException("Invalid Inputs");
 		}
 	}
 	
@@ -102,7 +102,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		if (userName != null && !userName.isEmpty() && siteId != null) {
 			return supplyCharacteristicsRepository.findByUserNameAndSiteId(userName, siteId);
 		} else {
-			throw new SupplyCharacteristicsException("Invalid inputs");
+			throw new SupplyCharacteristicsException("Invalid Inputs");
 		}
 	}
 

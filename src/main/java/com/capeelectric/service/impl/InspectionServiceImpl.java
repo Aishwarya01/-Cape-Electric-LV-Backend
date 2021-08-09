@@ -35,11 +35,11 @@ public class InspectionServiceImpl implements InspectionService {
 				periodicInspection.setCreatedDate(LocalDateTime.now());
 				inspectionRepository.save(periodicInspection);
 			} else {
-				throw new InspectionException("siteId present");
+				throw new InspectionException("Site-Id Already Available");
 			}
 
 		} else {
-			throw new InspectionException("invalid input");
+			throw new InspectionException("Invalid Input");
 		}
 
 	}
@@ -56,7 +56,7 @@ public class InspectionServiceImpl implements InspectionService {
 		if (userName != null && !userName.isEmpty() && siteId != null) {
 			return inspectionRepository.findByUserNameAndSiteId(userName, siteId);
 		} else {
-			throw new InspectionException("Invalid inputs");
+			throw new InspectionException("Invalid Inputs");
 		}
 	}
 

@@ -37,7 +37,7 @@ public class SupplyCharacteristicsController {
 			throws SupplyCharacteristicsException {
 		logger.info("called addCharacteristics function UserName : {}", supplyCharacteristics.getUserName());
 		supplyCharacteristicsService.addCharacteristics(supplyCharacteristics);
-		return new ResponseEntity<String>(" SupplyCharacteristics and earthing properties sucessfully added",
+		return new ResponseEntity<String>("SupplyCharacteristics and Earthing Properties Sucessfully Saved",
 				HttpStatus.OK);
 	}
 

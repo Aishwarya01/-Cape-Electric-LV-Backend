@@ -35,7 +35,7 @@ public class DepartmentController {
 		logger.info("called addDepartment function clientName: {},DepartmentName :{}", department.getUserName(),
 				department.getDepartmentName());
 		departmentService.addDepartment(department);
-		return new ResponseEntity<String>(HttpStatus.CREATED);
+		return new ResponseEntity<String>("Department Successfully Added",HttpStatus.CREATED);
 	}
 
 	@PutMapping("/updateDepartment")
@@ -44,7 +44,7 @@ public class DepartmentController {
 		logger.info("called updateDepartment function clientName: {},DepartmentName :{}", department.getUserName(),
 				department.getDepartmentName());
 		departmentService.updateDepartment(department);
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<String>("Department Successfully Updated",HttpStatus.OK);
 	}
 
 	@DeleteMapping("/deleteDepartment/{userName}/{departmentId}")
@@ -52,7 +52,7 @@ public class DepartmentController {
 			throws CompanyDetailsException {
 		logger.info("called deleteDepartment function departmentId: {}", departmentId);
 		departmentService.deleteDepartment(departmentId);
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<String>("Department Successfully Deleted",HttpStatus.OK);
 	}
 
 	@GetMapping("/retriveDepartment/{userName}/{clientName}")

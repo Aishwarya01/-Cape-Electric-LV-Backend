@@ -38,11 +38,11 @@ public class SummaryServiceImpl implements SummaryService {
 				summary.setCreatedDate(LocalDateTime.now());
 				summaryRepository.save(summary);
 			} else {
-				throw new SummaryException("Given SiteId already present");
+				throw new SummaryException("Site-Id Already Available");
 			}
 
 		} else {
-			throw new SummaryException("UserName and SiteId are Invalid Inputs");
+			throw new SummaryException("Invalid Inputs");
 
 		}
 
@@ -58,7 +58,7 @@ public class SummaryServiceImpl implements SummaryService {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			return summaryRepository.findByUserNameAndSiteId(userName, siteId);
 		} else {
-			throw new SummaryException("UserName and SiteId are Invalid Inputs");
+			throw new SummaryException("Invalid Inputs");
 
 		}
 	}

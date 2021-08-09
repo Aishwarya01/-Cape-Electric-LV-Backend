@@ -43,7 +43,7 @@ public class CompanyServiceImpl implements CompanyService {
 			 Optional<Company> clientRepo = companyRepository.findByUserNameAndClientName(company.getUserName(),company.getClientName());
 
 			if (clientRepo.isPresent() && clientRepo.get() != null && clientRepo.get().getClientName().equalsIgnoreCase(company.getClientName())) {
-				throw new CompanyDetailsException(company.getClientName()+" : this ClientName already present");
+				throw new CompanyDetailsException(company.getClientName()+" : This ClientName Is Already Present, Create New Client Name");
 			} else { 
 				company.setCompanyCd(company.getClientName().substring(0, 3).concat("_0")+(count+1));																	 
 				company.setCreatedDate(LocalDateTime.now());
@@ -54,7 +54,7 @@ public class CompanyServiceImpl implements CompanyService {
 			}
 
 		} else {
-			throw new CompanyDetailsException("invalid input");
+			throw new CompanyDetailsException("Invalid Input");
 		}
 
 	}
@@ -86,14 +86,13 @@ public class CompanyServiceImpl implements CompanyService {
 					}
 				}
 				if (!flag) {
-					throw new CompanyDetailsException(
-							company.getClientName() + " client not present user :" + company.getUserName());
+					throw new CompanyDetailsException("Client Not Available");
 				}
 			} else {
-				throw new CompanyDetailsException(company.getUserName() + "user not having company");
+				throw new CompanyDetailsException("Client Not Available For Given UserName");
 			}
 		} else {
-			throw new CompanyDetailsException("invalid input");
+			throw new CompanyDetailsException("Invalid Input");
 		}
 
 	}
@@ -114,7 +113,7 @@ public class CompanyServiceImpl implements CompanyService {
 			if (clientRepo.isPresent() && clientRepo.get() != null && clientRepo.get().getClientName().equalsIgnoreCase(clientName)) {
 				companyRepository.deleteById(clientRepo.get().getCompanyId());
 			} else {
-				throw new CompanyDetailsException(clientName +" :client not present");
+				throw new CompanyDetailsException("Client Not Available");
 			}
 
 		} else {
@@ -135,7 +134,7 @@ public class CompanyServiceImpl implements CompanyService {
 			return companyRepository.findByUserName(userName);
 
 		} else {
-			throw new CompanyDetailsException("username required");
+			throw new CompanyDetailsException("UserName Required");
 		}
 	}
 	

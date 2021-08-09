@@ -45,11 +45,11 @@ public class InstalReportServiceImpl implements InstalReportService {
 				reportDetails.setCreatedBy(generateFullName(reportDetails.getUserName()));
 				installationReportRepository.save(reportDetails);
 			} else {
-				throw new InstalReportException("SiteId already present");
+				throw new InstalReportException("Site-Id Details Already Available,Create New Site-Id");
 			}
 
 		} else {
-			throw new InstalReportException("invalid inputs");
+			throw new InstalReportException("Invalid Inputs");
 		}
 	}
 

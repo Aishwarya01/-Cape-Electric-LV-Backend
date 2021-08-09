@@ -41,7 +41,7 @@ public class PeriodicTestingController {
 		testService.addTestingReport(testingReport);
 		logger.info("ended savePeriodicTesting function");
 
-		return new ResponseEntity<String>("successfully added TestingReport", HttpStatus.OK);
+		return new ResponseEntity<String>("Testing Report Successfully Saved", HttpStatus.OK);
 
 	}
 
