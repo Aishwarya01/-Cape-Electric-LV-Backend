@@ -93,12 +93,21 @@ public class ReportDetails implements Serializable {
 
 	@Column(name = "COMPANY")
 	private String company;
+	
+	@Column(name = "LIMITATIONS")
+	private String limitations;
 
 	@Column(name = "CREATED_BY")
 	private String createdBy;
 
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
+		
+	@Column(name = "UPDATED_BY")
+	private String updatedBy;
+	
+	@Column(name = "UPDATED_DATE")
+	private LocalDateTime updatedDate;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "reportDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -256,6 +265,14 @@ public class ReportDetails implements Serializable {
 		this.company = company;
 	}
 
+	public String getLimitations() {
+		return limitations;
+	}
+
+	public void setLimitations(String limitations) {
+		this.limitations = limitations;
+	}
+
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -266,6 +283,22 @@ public class ReportDetails implements Serializable {
 
 	public LocalDateTime getCreatedDate() {
 		return createdDate;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public LocalDateTime getUpdatedDate() {
+		return updatedDate;
+	}
+
+	public void setUpdatedDate(LocalDateTime updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 
 	public void setCreatedDate(LocalDateTime createdDate) {
