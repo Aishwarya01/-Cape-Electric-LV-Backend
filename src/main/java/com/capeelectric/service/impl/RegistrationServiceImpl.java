@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.RegisterPermissionRequestException;
@@ -30,23 +29,17 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Autowired
 	private RegistrationRepository registerRepository;
 	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
-
-	// TODO Email Trigger
 	@Override
 	public Register addRegistration(Register register) throws RegistrationException {
 		logger.debug("AddingRegistration Starts with User : {} ", register.getUsername());
 		if (register.getUsername() != null && register.getCompanyName() != null && register.getAddress() != null
 				&& register.getApplicationType() != null && register.getContactNumber() != null
 				&& register.getDepartment() != null && register.getDesignation() != null
-				&& !register.getCountry().isEmpty() && register.getInterestedAreas() != null
-				&& register.getName() != null && register.getState() != null) {
+				&& register.getInterestedAreas() != null && register.getName() != null && register.getState() != null) {
 
 			Optional<Register> registerRepo = registerRepository.findByUsername(register.getUsername());
 			if (!registerRepo.isPresent()
 					|| !registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
-			//	register.setPassword(passwordEncoder.encode(register.getPassword()));
 				register.setCreatedDate(LocalDateTime.now());
 				register.setPermission("NOT_AUTHORIZED");
 				register.setRole("Inspector");
@@ -68,7 +61,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public Optional<Register> retrieveRegistration(String userName) throws RegistrationException {
-		if (userName != null && !userName.isEmpty()) {
+		if (userName != null) {
 			logger.debug("RetrieveRegistration Started with User : {} ", userName);
 			return registerRepository.findByUsername(userName);
 
@@ -86,16 +79,14 @@ public class RegistrationServiceImpl implements RegistrationService {
 				&& register.getCompanyName() != null && register.getAddress() != null
 				&& register.getApplicationType() != null && register.getContactNumber() != null
 				&& register.getDepartment() != null && register.getDesignation() != null
-				&& register.getPassword() != null && !register.getPassword().isEmpty() && register.getCountry() != null
-				&& !register.getCountry().isEmpty() && register.getInterestedAreas() != null
-				&& register.getName() != null && register.getState() != null) {
+				&& register.getPassword() != null && register.getCountry() != null
+				&& register.getInterestedAreas() != null && register.getName() != null && register.getState() != null) {
 
 			Optional<Register> registerRepo = registerRepository.findById(register.getRegisterId());
 
 			if (registerRepo.isPresent() && registerRepo.get().getRegisterId().equals(register.getRegisterId())
 					&& registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
 				logger.debug("UpdatingRegistration Started");
-				register.setPassword(passwordEncoder.encode(register.getPassword()));
 				register.setUpdatedDate(LocalDateTime.now());
 				register.setUpdatedBy(register.getUsername());
 				registerRepository.save(register);
@@ -116,15 +107,13 @@ public class RegistrationServiceImpl implements RegistrationService {
 		logger.debug("updatePermission_function called");
 
 		if (registerPermissionRequest != null && registerPermissionRequest.getAdminUserName() != null
-				&& !registerPermissionRequest.getAdminUserName().isEmpty()
 				&& registerPermissionRequest.getPermission() != null
-				&& !registerPermissionRequest.getPermission().isEmpty()
 				&& registerPermissionRequest.getRegisterId() != null
 				&& registerPermissionRequest.getRegisterId() != 0) {
 
 			Optional<Register> registerRepo = registerRepository.findById(registerPermissionRequest.getRegisterId());
 			
-			if (registerRepo.isPresent() && !registerRepo.isEmpty()) {
+			if (registerRepo.isPresent()) {
 				Register register = registerRepo.get();
 				
 				if (registerPermissionRequest.getPermission().equalsIgnoreCase("YES")) {
@@ -167,8 +156,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 			logger.debug("Started retrieveAllRegistration");
 			return (List<Register>) registerRepository.findAll();
 
-		} catch (Exception e) {
-			throw new RegistrationException("Retrieve function faild ExceptionMessage is : " + e.getMessage());
+		} catch (Exception exception) {
+			throw new RegistrationException("Retrieve function faild ExceptionMessage is : " + exception.getMessage());
 		}
 	}
 
