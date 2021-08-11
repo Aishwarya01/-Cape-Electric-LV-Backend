@@ -15,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.CompanyDetailsException;
-import com.capeelectric.model.Department;
 import com.capeelectric.model.Site;
-import com.capeelectric.service.impl.DepartmentServiceImpl;
 import com.capeelectric.service.impl.SiteServiceImpl;
 
 @ExtendWith(SpringExtension.class)

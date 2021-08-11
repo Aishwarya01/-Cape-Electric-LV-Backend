@@ -13,7 +13,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.capeelectric.controller.CountryDetailsController;
 import com.capeelectric.model.Country;
 import com.capeelectric.model.State;
 import com.capeelectric.repository.CountryRepository;
@@ -31,10 +30,10 @@ public class CountryDetailsServiceTest {
 	private StateRepository stateRepository;
 
 	private String code = "IND";
-	private List<Country> country;
-	private List<State> statelist;
+//	private List<Country> country;
+//	private List<State> statelist;
 
-	private State state;
+//	private State state;
 
 	@Test
 	public void testfetchCountries() {

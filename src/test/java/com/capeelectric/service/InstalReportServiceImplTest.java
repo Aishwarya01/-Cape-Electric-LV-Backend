@@ -83,6 +83,7 @@ public class InstalReportServiceImplTest {
 		reportDetails.setVerificationDate("20-03-2023");
 		reportDetails.setVerifiedEngineer("cape");
 		reportDetails.setClientDetails("");
+		reportDetails.setSiteId(12);
 	}
 
 	@Test
@@ -94,7 +95,12 @@ public class InstalReportServiceImplTest {
 
 		when(userRepository.findByUsername("software@capeindia.com")).thenReturn(optionaluser);
 		instalReportServiceImpl.addInstallationReport(reportDetails);
-
+		
+		when(installationReportRepository.findBySiteId(12)).thenReturn(Optional.of(reportDetails));
+		InstalReportException exception_SiteId = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.addInstallationReport(reportDetails));
+		assertEquals(exception_SiteId.getMessage(), "SiteId already present");
+				
 		InstalReportException exception = Assertions.assertThrows(InstalReportException.class,
 				() -> instalReportServiceImpl.addInstallationReport(null));
 		assertEquals(exception.getMessage(), "invalid inputs");
@@ -107,13 +113,12 @@ public class InstalReportServiceImplTest {
 
 		ArrayList<ReportDetails> list = new ArrayList<ReportDetails>();
 		list.add(reportDetails);
-		when(installationReportRepository.findByUserName("software@capeindia.com")).thenReturn(list);
 		List<ReportDetails> installationReport = instalReportServiceImpl
-				.retrieveInstallationReport("software@capeindia.com");
+				.retrieveInstallationReport("software@capeindia.com",12);
 		assertNotNull(installationReport);
 
 		InstalReportException exception = Assertions.assertThrows(InstalReportException.class,
-				() -> instalReportServiceImpl.retrieveInstallationReport(null));
+				() -> instalReportServiceImpl.retrieveInstallationReport(null,12));
 		assertEquals(exception.getMessage(), "invalid inputs");
 	}
 }

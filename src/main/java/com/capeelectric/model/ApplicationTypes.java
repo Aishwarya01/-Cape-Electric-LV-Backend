@@ -10,7 +10,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "APPLICATIONTYPES")
+@Table(name = "applicationtypes")
 public class ApplicationTypes {
 
 	@Id
@@ -18,6 +18,12 @@ public class ApplicationTypes {
 	
 	@Column(name = "APPLICATION")
 	private String type;
+	
+	@Column(name = "CODE")
+	private String code;
+	
+	@Column(name = "application_name")
+	private String applicationName;
 
 	public int getId() {
 		return id;
@@ -34,4 +40,21 @@ public class ApplicationTypes {
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getApplicationName() {
+		return applicationName;
+	}
+
+	public void setApplicationName(String applicationName) {
+		this.applicationName = applicationName;
+	}
+	
 }

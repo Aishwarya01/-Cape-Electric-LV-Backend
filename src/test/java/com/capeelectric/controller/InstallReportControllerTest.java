@@ -22,10 +22,10 @@ import com.capeelectric.service.InstalReportService;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
-public class InstalReportControllerTest {
+public class InstallReportControllerTest {
 
 	@InjectMocks
-	private InstalReportController instalReportController;
+	private InstallReportController instalReportController;
 	
 	@MockBean
 	private InstalReportService instalReportService;
@@ -68,9 +68,9 @@ public class InstalReportControllerTest {
 	}
 	
 	@Test
-	public void testRetrieveInstallationReport() throws InstalReportException {
+	public void testRetrieveInstallationReport() throws InstalReportException { 
 
-		ResponseEntity<List<ReportDetails>> report = instalReportController.retrieveInstallationReport(reportDetails.getUserName());
+		ResponseEntity<List<ReportDetails>> report = instalReportController.retrieveInstallationReport(reportDetails.getUserName(),reportDetails.getSiteId());
 		assertEquals(report.getStatusCode(), HttpStatus.OK);
 	}
 }

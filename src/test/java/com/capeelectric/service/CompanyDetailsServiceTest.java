@@ -1,7 +1,5 @@
 package com.capeelectric.service;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -14,12 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Company;
-import com.capeelectric.model.Site;
 import com.capeelectric.model.User;
 import com.capeelectric.repository.CompanyRepository;
 import com.capeelectric.repository.UserRepository;

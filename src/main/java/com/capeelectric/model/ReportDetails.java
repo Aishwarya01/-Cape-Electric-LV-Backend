@@ -19,10 +19,18 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+/**
+ *
+ * @author capeelectricsoftware
+ *
+ */
 @Entity
-@Table(name = "REPORT_DETAILS_TABLE")
+@Table(name = "report_details_table")
 @NamedQueries(value = {
-		@NamedQuery(name = "installationReportRepository.retrieveInstallationReport", query = "select r from ReportDetails r where r.userName=:userName") })
+		@NamedQuery(name = "InstalReportDetailsRepository.findByUserNameAndSiteId", query = "select r from ReportDetails r where r.userName=:userName and r.siteId=:siteId"),
+		@NamedQuery(name = "InstalReportDetailsRepository.findBySiteId", query = "select r from ReportDetails r where r.siteId=:siteId")
+
+})
 public class ReportDetails implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -35,6 +43,9 @@ public class ReportDetails implements Serializable {
 	@Column(name = "USER_NAME")
 	private String userName;
 
+	@Column(name = "SITE_ID")
+	private Integer siteId;
+	
 	@Column(name = "DESCRIPTION_REPORT")
 	private String descriptionReport;
 
@@ -91,7 +102,7 @@ public class ReportDetails implements Serializable {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "reportDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<SignatorDetails> SignatorDetails;
+	private Set<SignatorDetails> signatorDetails;
 
 	public Integer getReportId() {
 		return reportId;
@@ -107,6 +118,14 @@ public class ReportDetails implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public Integer getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(Integer siteId) {
+		this.siteId = siteId;
 	}
 
 	public String getDescriptionReport() {
@@ -254,11 +273,11 @@ public class ReportDetails implements Serializable {
 	}
 
 	public Set<SignatorDetails> getSignatorDetails() {
-		return SignatorDetails;
+		return signatorDetails;
 	}
 
 	public void setSignatorDetails(Set<SignatorDetails> signatorDetails) {
-		SignatorDetails = signatorDetails;
+		this.signatorDetails = signatorDetails;
 	}
 
 }

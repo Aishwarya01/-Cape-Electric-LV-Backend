@@ -2,10 +2,12 @@ package com.capeelectric.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
+
+import javax.mail.MessagingException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +33,8 @@ import com.capeelectric.model.User;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
+import com.capeelectric.request.UpdatePasswordRequest;
+import com.capeelectric.service.impl.AWSEmailService;
 import com.capeelectric.service.impl.CustomUserDetailsServiceImpl;
 import com.capeelectric.service.impl.UserDetailsServiceImpl;
 
@@ -57,6 +61,9 @@ public class UserControllerTest {
 	private JwtTokenUtil jwtTokenUtil;
 
 	@MockBean
+	private AWSEmailService emailService;
+
+	@MockBean
 	private UserRepository userRepository;
 
 	private User user;
@@ -72,11 +79,12 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testSaveUser() throws UserException, URISyntaxException {
+	public void testSaveUser() throws UserException, URISyntaxException, IOException, MessagingException {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
 		when(userDetailsServiceImpl.saveUser(user)).thenReturn(user);
+
 		ResponseEntity<Void> addUser = userController.addUser(user);
 
 		assertEquals(addUser.getStatusCode(), HttpStatus.CREATED);
@@ -101,28 +109,29 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testForgotPassword() throws ForgotPasswordException {
+	public void testForgotPassword() throws ForgotPasswordException, IOException, MessagingException, UserException {
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-		ResponseEntity<String> responseEntity = new ResponseEntity<>(HttpStatus.ACCEPTED);
-
-		when(userDetailsServiceImpl.findByUserName("lvsystem@capeindia.net")).thenReturn(responseEntity);
-		ResponseEntity<String> forgotPassword = userController.forgotPassword("123");
-		assertNull(forgotPassword);
+		when(userDetailsServiceImpl.findByUserName("lvsystem@capeindia.net")).thenReturn(user);
+		ResponseEntity<String> forgotPassword = userController.forgotPassword("lvsystem@capeindia.net");
+		assertEquals(forgotPassword.getStatusCode(), HttpStatus.OK);
 	}
 
 	@Test
-	public void testUpdatePassword() throws UpdatePasswordException {
-		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+	public void testUpdatePassword() throws UpdatePasswordException, IOException, MessagingException {
+		UpdatePasswordRequest authenticationRequest = new UpdatePasswordRequest();
 		authenticationRequest.setEmail("lvsystem@capeindia.net");
 		authenticationRequest.setPassword("abcd12345");
+		authenticationRequest.setOtp(1234);
 
-		when(userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "abcd12345")).thenReturn(user);
+		when(userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "abcd12345",1234)).thenReturn(user);
 		ResponseEntity<String> updatePassword = userController.updatePassword(authenticationRequest);
 		assertEquals(updatePassword.getBody(), "lvsystem@capeindia.net");
 	}
 
 	@Test
-	public void testChangePassword() throws ChangePasswordException {
+	public void testChangePassword() throws ChangePasswordException, IOException, MessagingException {
 		ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
 		changePasswordRequest.setOldPassword("abcd12345");
 		changePasswordRequest.setEmail("lvsystem@capeindia.net");
@@ -145,7 +154,7 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void testUpdateUserProfile() {
+	public void testUpdateUserProfile() throws IOException, MessagingException {
 		when(userDetailsServiceImpl.updateUserProfile(user)).thenReturn(user);
 		ResponseEntity<String> updateUserProfile = userController.updateUserProfile(user);
 		assertEquals(updateUserProfile.getBody(), "lvsystem@capeindia.net");

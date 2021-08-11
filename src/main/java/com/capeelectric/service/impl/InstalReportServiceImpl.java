@@ -15,6 +15,11 @@ import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.InstalReportService;
 
+/**
+ * This InstalReportServiceImpl service class doing save and retrieve operation related to ReportDetails
+ * @author capeelectricsoftware
+ *
+ */
 @Service
 public class InstalReportServiceImpl implements InstalReportService {
 
@@ -24,29 +29,51 @@ public class InstalReportServiceImpl implements InstalReportService {
 	@Autowired
 	private UserRepository userRepository;
 
+	/**
+	 * @param ReportDetails
+	 * addInstallationReport method to will be save ReportDetails object
+	 * 
+	*/
 	@Override
 	public void addInstallationReport(ReportDetails reportDetails) throws InstalReportException {
-		if (reportDetails != null && reportDetails.getUserName() != null) {
-			reportDetails.setCreatedDate(LocalDateTime.now());
-			reportDetails.setCreatedBy(generateFullName(reportDetails.getUserName()));
-			installationReportRepository.save(reportDetails);
+		if (reportDetails != null && reportDetails.getUserName() != null && reportDetails.getSiteId() != null) {
+			Optional<ReportDetails> reportDetailsRepo = installationReportRepository
+					.findBySiteId(reportDetails.getSiteId());
+			if (!reportDetailsRepo.isPresent()
+					|| !reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
+				reportDetails.setCreatedDate(LocalDateTime.now());
+				reportDetails.setCreatedBy(generateFullName(reportDetails.getUserName()));
+				installationReportRepository.save(reportDetails);
+			} else {
+				throw new InstalReportException("SiteId already present");
+			}
 
 		} else {
 			throw new InstalReportException("invalid inputs");
 		}
 	}
 
+	/**
+	 * @param userName
+	 * retrieveInstallationReport method to will be save retrieve object based on userName
+	 * 
+	*/
 	@Override
-	public List<ReportDetails> retrieveInstallationReport(String userName) throws InstalReportException {
+	public List<ReportDetails> retrieveInstallationReport(String userName,Integer siteId) throws InstalReportException {
 		if (userName != null) {
 
-			return installationReportRepository.findByUserName(userName);
+			return installationReportRepository.findByUserNameAndSiteId(userName,siteId);
 
 		} else {
 			throw new InstalReportException("invalid inputs");
 		}
 	}
 
+	/**
+	 * Method to return Full Name based on UserName
+	 * @param userName
+	 * @return
+	 */
 	private String generateFullName(String userName) {
 		Optional<User> user = userRepository.findByUsername(userName);
 		if (user.isPresent() && user.get() != null)

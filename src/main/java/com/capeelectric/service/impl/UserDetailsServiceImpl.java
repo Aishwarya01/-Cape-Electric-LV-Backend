@@ -1,13 +1,12 @@
 package com.capeelectric.service.impl;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +28,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
 	/**
 	 * Method to save the user during the registration
 	 */
@@ -51,15 +51,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	/**
 	 * Method to retrieve the user
+	 * @throws IOException 
 	 */
-	public ResponseEntity<String> findByUserName(String email) throws ForgotPasswordException{
-		// TODO: Email triggering
+	public User findByUserName(String email) throws ForgotPasswordException, IOException{
 		logger.debug("Find By User Name Starts");
 		if (email != null) {
 			Optional<User> optionalUser = userRepository.findByUsername(email);
 			if (optionalUser != null && optionalUser.isPresent() && optionalUser.get()!= null) {
 				logger.debug("Find By User Name Ends");
-				return new ResponseEntity<String>(optionalUser.get().getUsername(), HttpStatus.OK);
+				return optionalUser.get();
 			} else {
 				logger.debug("Find By User Name Ends");
 				throw new ForgotPasswordException("Email is not available with us");
@@ -74,12 +74,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 * Method to update the user after changing the password
 	 * @throws UserException 
 	 */
-	public User updatePassword(String email, String password) throws UpdatePasswordException {
+	public User updatePassword(String email, String password, Integer otp) throws UpdatePasswordException {
 		// TODO: Email triggering
 		logger.debug("Update User Starts");
-		if (email != null && password != null) {
+		if (email != null && password != null && otp != null) {
 			User user = userRepository.findByUsername(email).get();
-			if (user != null && user.isUserexist()) {
+			if (user != null && user.isUserexist() && otp.intValue() == user.getOtp()) {
+				user.setOtp(null);
 				user.setPassword(passwordEncoder.encode(password));
 				user.setUpdateddate(LocalDateTime.now());
 				logger.debug("Update User Ends");

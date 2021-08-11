@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -49,17 +49,20 @@ public class UserDetailsServiceTest {
 		user.setEmail("lvsystem@capeindia.net");
 		user.setUserexist(true);
 		user.setActive(true);
+		user.setOtp(1234);
 
 		optionaluser = Optional.of(user);
 	}
 
 	@Test
-	public void testFindByUserName() throws ForgotPasswordException {
+	public void testFindByUserName() throws ForgotPasswordException, IOException {
+		Optional<User> userlist = null;
+		userlist = Optional.ofNullable(user);
 
-		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionaluser);
-		ResponseEntity<String> findByUserName = userDetailsServiceImpl.findByUserName("lvsystem@capeindia.net");
-		assertEquals(200, findByUserName.getStatusCodeValue());
-
+		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(userlist);
+		User findByUserName = userDetailsServiceImpl.findByUserName("lvsystem@capeindia.net");
+		assertEquals("lvsystem@capeindia.net", findByUserName.getUsername());
+		
 		ForgotPasswordException assertThrows = Assertions.assertThrows(ForgotPasswordException.class,
 				() -> userDetailsServiceImpl.findByUserName(null));
 		assertEquals("Email is required", assertThrows.getMessage());
@@ -103,16 +106,16 @@ public class UserDetailsServiceTest {
 
 		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionaluser);
 
-		User updatePassword = userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "cape123");
+		User updatePassword = userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "cape123", 1234);
 		assertNull(updatePassword);
 
 		UsernameNotFoundException assertThrows = Assertions.assertThrows(UsernameNotFoundException.class,
-				() -> userDetailsServiceImpl.updatePassword(null, "cape123"));
+				() -> userDetailsServiceImpl.updatePassword(null, "cape123", 1234));
 		assertEquals("username not valid", assertThrows.getMessage());
 
 		user.setUserexist(false);
 		  UpdatePasswordException assertThrows2 = Assertions.assertThrows(UpdatePasswordException.class,
-				() -> userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "cape123"));
+				() -> userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "cape123", 1234));
 		assertEquals("User Not available", assertThrows2.getMessage());
 
 	}
