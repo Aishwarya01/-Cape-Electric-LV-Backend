@@ -10,10 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.service.SupplyCharacteristicsService;
@@ -34,8 +36,9 @@ public class SupplyCharacteristicsController {
 
 	@PostMapping("/addCharacteristics")
 	public ResponseEntity<String> addCharacteristics(@RequestBody SupplyCharacteristics supplyCharacteristics)
-			throws SupplyCharacteristicsException {
-		logger.info("called addCharacteristics function UserName : {}", supplyCharacteristics.getUserName());
+			throws SupplyCharacteristicsException, DecimalConversionException {
+		logger.info("called addCharacteristics function UserName : {}, SiteId : {}",
+				supplyCharacteristics.getUserName(), supplyCharacteristics.getSiteId());
 		supplyCharacteristicsService.addCharacteristics(supplyCharacteristics);
 		return new ResponseEntity<String>("SupplyCharacteristics and Earthing Properties Sucessfully Saved",
 				HttpStatus.OK);
@@ -44,9 +47,19 @@ public class SupplyCharacteristicsController {
 	@GetMapping("/retrieveCharacteristics/{userName}/{siteId}")
 	public ResponseEntity<List<SupplyCharacteristics>> retrieveCharacteristics(@PathVariable String userName,
 			@PathVariable Integer siteId) throws SupplyCharacteristicsException {
-		logger.info("started retrieveCharacteristics function UserName : {}",userName);
+		logger.info("started retrieveCharacteristics function UserName : {}, SiteId : {}", userName, siteId);
 		return new ResponseEntity<List<SupplyCharacteristics>>(
 				supplyCharacteristicsService.retrieveCharacteristics(userName, siteId), HttpStatus.OK);
+	}
+
+	@PutMapping("/updateCharacteristics")
+	public ResponseEntity<String> updateCharacteristics(@RequestBody SupplyCharacteristics supplyCharacteristics)
+			throws SupplyCharacteristicsException {
+		logger.info("called updateCharacteristics function UserName : {},SiteId : {},SupplyCharacteristicsId : {}",
+				supplyCharacteristics.getUserName(), supplyCharacteristics.getSiteId(),
+				supplyCharacteristics.getSupplyCharacteristicsId());
+		supplyCharacteristicsService.updateCharacteristics(supplyCharacteristics);
+		return new ResponseEntity<String>("SupplyCharacteristics Data successfully Updated", HttpStatus.CREATED);
 	}
 
 }

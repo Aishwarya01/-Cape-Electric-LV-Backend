@@ -11,6 +11,7 @@ import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.PeriodicTestingService;
+import com.capeelectric.util.UserFullName;
 
 /**
  * This TestInfoServiceImpl service class doing save and retrieve operation based on Testing
@@ -22,6 +23,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 
 	@Autowired
 	private TestingReportRepository testingReportRepository;
+	
+	@Autowired
+	private UserFullName userFullName;
 
 	/**
 	 * @param Testing
@@ -55,6 +59,34 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		} else {
 			throw new PeriodicTestingException("Invalid Inputs");
 		}
+	}
+	
+	/**
+	 * @reportId,siteId must required
+	 * @param TestingReport Object
+	 * updatePeriodicTesting method to finding the given TestingReportId is available or not in DB,
+	 * if available only allowed for updating 
+	 * 
+	*/
+	@Override
+	public void updatePeriodicTesting(TestingReport testingReport) throws PeriodicTestingException {
+		if (testingReport != null && testingReport.getTestingReportId() != null && testingReport.getTestingReportId() != 0
+				&& testingReport.getSiteId() != null && testingReport.getSiteId() != 0) {
+			Optional<TestingReport> periodicInspectionRepo = testingReportRepository
+					.findById(testingReport.getTestingReportId());
+			if (periodicInspectionRepo.isPresent()
+					&& periodicInspectionRepo.get().getSiteId().equals(testingReport.getSiteId())) {
+				testingReport.setUpdatedDate(LocalDateTime.now());
+				testingReport.setUpdatedBy(userFullName.getFullName(testingReport.getUserName()));
+				testingReportRepository.save(testingReport);
+			} else {
+				throw new PeriodicTestingException("Given SiteId and ReportId is Invalid");
+			}
+
+		} else {
+			throw new PeriodicTestingException("Invalid inputs");
+		}
+		
 	}
 
 }

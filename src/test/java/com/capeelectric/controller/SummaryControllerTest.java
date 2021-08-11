@@ -76,4 +76,15 @@ public class SummaryControllerTest {
 		logger.info("testRetrieveSummary Function Ended");
 
 	}
+	
+	@Test
+	public void testUpdateSummary() throws SummaryException{
+		
+		logger.info("testUpdateSummary Function Started");
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
+		ResponseEntity<String> actualResponseEntity = summaryController
+				.updateSummary(summary);
+		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
+		logger.info("testUpdateSummary Function Ended");
+	}
 }
