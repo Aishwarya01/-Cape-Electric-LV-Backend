@@ -37,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		Optional<User> createdUser = userRepository.findByUsername(user.getUsername());
 		if(createdUser.isPresent() && createdUser.get() != null && createdUser.get().isUserexist()) {
 			logger.debug("Save User Ends");
-			throw new UserException("User already available");
+			throw new UserException("Given email-Id is Already Existing");
 		} else {
 			String password = user.getPassword();
 			user.setPassword(passwordEncoder.encode(password));
@@ -62,11 +62,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 				return optionalUser.get();
 			} else {
 				logger.debug("Find By User Name Ends");
-				throw new ForgotPasswordException("Email is not available with us");
+				throw new ForgotPasswordException("Given Email-Id Is Not Available");
 			}
 		} else {
 			logger.debug("Find By User Name Ends");
-			throw new ForgotPasswordException("Email is required");
+			throw new ForgotPasswordException("Email-Id Is Required");
 		}
 	}
 	
@@ -74,12 +74,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 * Method to update the user after changing the password
 	 * @throws UserException 
 	 */
-	public User updatePassword(String email, String password) throws UpdatePasswordException {
+	public User updatePassword(String email, String password, Integer otp) throws UpdatePasswordException {
 		// TODO: Email triggering
 		logger.debug("Update User Starts");
-		if (email != null && password != null) {
+		if (email != null && password != null && otp != null) {
 			User user = userRepository.findByUsername(email).get();
-			if (user != null && user.isUserexist()) {
+			if (user != null && user.isUserexist() && otp.intValue() == user.getOtp()) {
+				user.setOtp(null);
 				user.setPassword(passwordEncoder.encode(password));
 				user.setUpdateddate(LocalDateTime.now());
 				logger.debug("Update User Ends");
@@ -87,11 +88,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			}
 			else {
 				logger.debug("Update User Ends");
-				throw new UpdatePasswordException("User Not available");
+				throw new UpdatePasswordException("User Not Available");
 			}
 		} else {
 			logger.debug("Update User Ends");
-			throw new UsernameNotFoundException("username not valid");
+			throw new UsernameNotFoundException("Username Not Valid");
 		}
 	}
 
@@ -103,7 +104,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		User retrieveUser = userRepository.findByUsername(email).get();
 		if(!passwordEncoder.matches(oldPassword, retrieveUser.getPassword())) {
 			logger.debug("Change Password Ends");
-			throw new ChangePasswordException("Old password is not matching with encoded password");
+			throw new ChangePasswordException("Old password is ot matching with encoded password");
 		} else if(oldPassword.equalsIgnoreCase(password)) {
 			logger.debug("Change Password Ends");
 			throw new ChangePasswordException("Old password cannot be entered as new password");
@@ -127,7 +128,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if(retrievedUser.isPresent() && retrievedUser.get() != null && retrievedUser.get().isUserexist()) {
 			return retrievedUser.get();
 		} else {
-			throw new UserException("User not available");
+			throw new UserException("User Not Available");
 		}
 	}
 	

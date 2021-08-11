@@ -43,8 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 					&& companyRepo.get().getClientName().equalsIgnoreCase(department.getClientName())) {
 				if (departmentRepository.findByClientNameAndDepartmentName(department.getClientName(),
 						department.getDepartmentName()) != null) {
-					throw new CompanyDetailsException(
-							department.getDepartmentName() + " DepartmentName already present :"+department.getClientName());
+					throw new CompanyDetailsException("This DepartmentName Already Available In "+department.getClientName());
 				} else {
 					department.setCompany(companyRepo.get());
 					department.setDepartmentCd(department.getDepartmentName().substring(0, 3).concat("_0")+(count+1)); 
@@ -55,12 +54,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 					departmentRepository.save(department);
 				}
 			} else {
-				throw new CompanyDetailsException(
-						department.getClientName() + " :  clientname not present in company");
+				throw new CompanyDetailsException("This ClientName Is Not Available");
 			}
 		}
 		else {
-			throw new CompanyDetailsException("invalid inputs");
+			throw new CompanyDetailsException("Invalid Inputs");
 		}
 
 	}
@@ -97,13 +95,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 						break;
 					}
 					if (clientName.getDepartmentName().equalsIgnoreCase(department.getDepartmentName())) {
-						throw new CompanyDetailsException(
-								"DepartmentName Already present user :" + clientName.getClientName());
+						throw new CompanyDetailsException("DepartmentName Already Available For This Client " + clientName.getClientName());
 					}
 				}
 
 			} else {
-				throw new CompanyDetailsException("Company not present user :" + department.getUserName());
+				throw new CompanyDetailsException("Company Not Available");
 			}
 
 			if (flag) {
@@ -132,11 +129,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 			if (department.isPresent() && department.get().getDepartmentId() == departmentId) {
 				departmentRepository.deleteById(departmentId);
 			} else {
-				throw new CompanyDetailsException(departmentId + " : department ID not present");
+				throw new CompanyDetailsException("Department Not Available");
 			}
 
 		} else {
-			throw new CompanyDetailsException("invaild inputs");
+			throw new CompanyDetailsException("Invaild inputs");
 		}
 	}
 
@@ -149,10 +146,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 		if (clientName != null && !clientName.isEmpty() && userName !=null && !userName.isEmpty()) {
 			return departmentRepository.findByUserNameAndClientName(userName,clientName);
 		} else {
-			throw new CompanyDetailsException("invalid inputs");
+			throw new CompanyDetailsException("Invalid inputs");
 		}
 	}
-	
 	
 	private String generateFullName(String userName) {
 		Optional<User> user = userRepository.findByUsername(userName);

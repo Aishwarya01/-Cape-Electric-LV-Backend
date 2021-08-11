@@ -4,17 +4,17 @@ package com.capeelectric.exception;
  * @author capeelectricsoftware
  *
  */
-public class CountryDetailsException extends Exception {
+public class ApplicationTypesException extends Exception {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private String message;
 
-	public CountryDetailsException() {
+	public ApplicationTypesException() {
 
 	}
-	public CountryDetailsException(String message) {
+	public ApplicationTypesException(String message) {
 		super();
 		this.message = message;
 	}

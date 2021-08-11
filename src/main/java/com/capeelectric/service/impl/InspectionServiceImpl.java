@@ -46,7 +46,9 @@ public class InspectionServiceImpl implements InspectionService {
 
 		} else {
 			throw new InspectionException("Invalid input");
+
 		}
+
 
 	}
 
@@ -62,7 +64,7 @@ public class InspectionServiceImpl implements InspectionService {
 		if (userName != null && !userName.isEmpty() && siteId != null) {
 			return inspectionRepository.findByUserNameAndSiteId(userName, siteId);
 		} else {
-			throw new InspectionException("Invalid inputs");
+			throw new InspectionException("Invalid Inputs");
 		}
 	}
 	

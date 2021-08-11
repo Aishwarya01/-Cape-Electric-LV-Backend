@@ -49,6 +49,7 @@ public class UserDetailsServiceTest {
 		user.setEmail("lvsystem@capeindia.net");
 		user.setUserexist(true);
 		user.setActive(true);
+		user.setOtp(1234);
 
 		optionaluser = Optional.of(user);
 	}
@@ -105,16 +106,16 @@ public class UserDetailsServiceTest {
 
 		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionaluser);
 
-		User updatePassword = userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "cape123");
+		User updatePassword = userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "cape123", 1234);
 		assertNull(updatePassword);
 
 		UsernameNotFoundException assertThrows = Assertions.assertThrows(UsernameNotFoundException.class,
-				() -> userDetailsServiceImpl.updatePassword(null, "cape123"));
+				() -> userDetailsServiceImpl.updatePassword(null, "cape123", 1234));
 		assertEquals("username not valid", assertThrows.getMessage());
 
 		user.setUserexist(false);
 		  UpdatePasswordException assertThrows2 = Assertions.assertThrows(UpdatePasswordException.class,
-				() -> userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "cape123"));
+				() -> userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "cape123", 1234));
 		assertEquals("User Not available", assertThrows2.getMessage());
 
 	}

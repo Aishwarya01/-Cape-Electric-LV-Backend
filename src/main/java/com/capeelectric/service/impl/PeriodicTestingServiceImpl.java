@@ -40,10 +40,10 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 				testingReport.setCreatedDate(LocalDateTime.now());
 				testingReportRepository.save(testingReport);
 			} else {
-				throw new PeriodicTestingException("SiteId Already Present");
+				throw new PeriodicTestingException("Site-Id Already Present");
 			}
 		} else {
-			throw new PeriodicTestingException("UserName and SiteId Invalid Input");
+			throw new PeriodicTestingException("Invalid Inputs");
 		}
 	}
 
@@ -57,7 +57,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			return testingReportRepository.findByUserNameAndSiteId(userName, siteId);
 		} else {
-			throw new PeriodicTestingException("UserName and SiteId Invalid Input");
+			throw new PeriodicTestingException("Invalid Inputs");
 		}
 	}
 	

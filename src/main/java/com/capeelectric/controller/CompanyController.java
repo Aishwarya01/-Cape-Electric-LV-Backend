@@ -33,21 +33,21 @@ public class CompanyController {
 	public ResponseEntity<String> addCompany(@RequestBody Company company) throws CompanyDetailsException {
 		logger.info("called InsertCompany function userName: {},clientName: {}",company.getUserName(), company.getClientName());
 		companyService.addCompany(company);
-		return new ResponseEntity<String>( HttpStatus.CREATED);
+		return new ResponseEntity<String>("Client Successfully Created", HttpStatus.CREATED);
 	} 
 
 	@PutMapping("/updateCompany")
 	public ResponseEntity<String> updateCompany(@RequestBody Company company) throws CompanyDetailsException {
 		logger.info("called updateCompany function userName: {},clientName: {}",company.getUserName(), company.getClientName());
 		companyService.updateCompany(company);
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<String>("Client Successfully Updated",HttpStatus.OK);
 	} 
 
 	@DeleteMapping("/deleteCompany/{userName}/{clientName}")
 	public ResponseEntity<String> deleteCompany(@PathVariable String userName,@PathVariable String clientName) throws CompanyDetailsException {
 		logger.info("called updateCompany function userName: {},clientName: {}", userName,clientName);
 		companyService.deleteCompany(userName,clientName);
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<String>("Client Successfully Deleted",HttpStatus.OK);
 	}
 
 	@GetMapping("/retriveCompany/{userName}")

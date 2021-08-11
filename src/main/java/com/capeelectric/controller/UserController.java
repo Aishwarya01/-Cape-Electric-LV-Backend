@@ -32,10 +32,12 @@ import com.capeelectric.model.CustomUserDetails;
 import com.capeelectric.model.User;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
+import com.capeelectric.request.UpdatePasswordRequest;
 import com.capeelectric.response.AuthenticationResponse;
 import com.capeelectric.service.impl.AWSEmailService;
 import com.capeelectric.service.impl.CustomUserDetailsServiceImpl;
 import com.capeelectric.service.impl.UserDetailsServiceImpl;
+import com.capeelectric.util.Utility;
 
 /**
  * 
@@ -66,7 +68,6 @@ public class UserController {
 	public ResponseEntity<Void> addUser(@RequestBody User user) throws UserException, IOException, MessagingException {
 		logger.debug("Add User starts");
 		User createdUser = userService.saveUser(user);
-		//emailService.sendEmail(user.getEmail(), "You have been successfully Registered with Rush for Safety App. You may need to wait for 2hrs for getting approved from Admin.");
 		awsEmailService.sendEmail(user.getEmail(), "You have been successfully Registered with Rush for Safety App. You may need to wait for 2hrs for getting approved from Admin.");
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().
 				path("/{id}").buildAndExpand(createdUser.getId()).toUri();
@@ -88,35 +89,36 @@ public class UserController {
 	}
 	
 	@GetMapping("/forgotPassword/{email}")
-	public ResponseEntity<String> forgotPassword(@PathVariable String email) throws ForgotPasswordException, IOException, MessagingException{
+	public ResponseEntity<String> forgotPassword(@PathVariable String email) throws ForgotPasswordException, IOException, MessagingException, UserException{
  		User optionalUser =  userService.findByUserName(email);
-// 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().
-//				path("/{id}").buildAndExpand(optionalUser.getId()).toUri();
-// 		emailService.sendEmail(email, "You can update your password here." + "\n"
-//				+(uri.getAuthority().contains("localhost") ? uri.getScheme() +"://" + uri.getHost()+":4200": "https://rushforsafetyapp.azurewebsites.net")+
-//				"/updatepassword"+";email="+email);
- 		awsEmailService.sendEmail(email, "You have initiated an change in password."+ "\n"+email);
- 		return new ResponseEntity<String>(optionalUser.getUsername(), HttpStatus.OK);
+ 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().
+				path("/{id}").buildAndExpand(optionalUser.getId()).toUri();
+ 		String resetUrl = Utility.getSiteURL(uri.toURL());
+ 		Integer generatedOTP = Utility.generateOTP(email);
+ 		awsEmailService.sendEmail(email, "You can update the password with this link"+ "\n"
+ 					+(resetUrl.contains("localhost:5000") ? resetUrl.replace("http://localhost:5000", "http://localhost:4200") : "https://www.rushforsafety.com") + "/updatepassword" + ";email="+email
+ 					 + " and OTP is "+generatedOTP);
+ 		optionalUser.setOtp(generatedOTP);
+ 		userService.updateUserProfile(optionalUser);
+ 		return new ResponseEntity<String>("You have Successfully Changed Your Password", HttpStatus.OK);
 	}
 	
 	@PutMapping("/updatePassword")
-	public ResponseEntity<String> updatePassword(@RequestBody AuthenticationRequest request) throws UpdatePasswordException, IOException, MessagingException{
+	public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequest request) throws UpdatePasswordException, IOException, MessagingException{
 		logger.debug("Update Password starts");
-		User user  = userService.updatePassword(request.getEmail(), request.getPassword());
-//		emailService.sendEmail(user.getEmail(), "You have successfully updated your password");
+		User user  = userService.updatePassword(request.getEmail(), request.getPassword(), request.getOtp());
 		awsEmailService.sendEmail(user.getEmail(), "You have successfully updated your password");
 		logger.debug("Update Password ends");
-		return new ResponseEntity<String>(user.getUsername(), HttpStatus.OK);
+		return new ResponseEntity<String>("You have Successfully Updated Your Password", HttpStatus.OK);
 	}
 	
 	@PutMapping("/changePassword")
 	public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) throws ChangePasswordException, IOException, MessagingException{
 		logger.debug("Change Password Starts");
 		User userDetails = userService.changePassword(request.getEmail(), request.getOldPassword(), request.getPassword());
-//		emailService.sendEmail(userDetails.getEmail(), "You have successfully updated your password");
-		awsEmailService.sendEmail(userDetails.getEmail(), "You have successfully updated your password");
+		awsEmailService.sendEmail(userDetails.getEmail(), "You have successfully changed your password");
 		logger.debug("Change Password Ends");
-		return new ResponseEntity<String>(userDetails.getUsername(), HttpStatus.OK);
+		return new ResponseEntity<String>("You Have Successfuly Changed Your Password", HttpStatus.OK);
 	}
 	
 	@GetMapping("/retrieveUserInformation/{email}")
@@ -127,11 +129,10 @@ public class UserController {
 	@PutMapping("/updateUserProfile")
 	public ResponseEntity<String> updateUserProfile(@RequestBody User user) throws IOException, MessagingException{
 		logger.debug("Update User Profile starts");
-		User updatedUser = userService.updateUserProfile(user);
-//		emailService.sendEmail(user.getEmail(), "You have successfully updated your profile");
+		userService.updateUserProfile(user);
 		awsEmailService.sendEmail(user.getEmail(), "You have successfully updated your profile");
 		logger.debug("Update Password ends");
-		return new ResponseEntity<String>(updatedUser.getEmail(), HttpStatus.OK);
+		return new ResponseEntity<String>("Your Profile Successfully Updated", HttpStatus.OK);
 	}
 	
 	private void authenticate(String username, String password) throws Exception {
@@ -141,6 +142,9 @@ public class UserController {
 			throw new Exception("USER_DISABLED", e);
 		} catch (BadCredentialsException e) {
 			throw new Exception("INVALID_CREDENTIALS", e);
+		}
+		catch (Exception e) {
+			throw new Exception("Please Check Your Email-Id and Password");
 		}
 	}
 }

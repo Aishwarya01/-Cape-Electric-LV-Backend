@@ -93,6 +93,9 @@ public class ReportDetails implements Serializable {
 
 	@Column(name = "COMPANY")
 	private String company;
+	
+	@Column(name = "LIMITATIONS")
+	private String limitations;
 
 	@Column(name = "CREATED_BY")
 	private String createdBy;
@@ -260,6 +263,14 @@ public class ReportDetails implements Serializable {
 
 	public void setCompany(String company) {
 		this.company = company;
+	}
+
+	public String getLimitations() {
+		return limitations;
+	}
+
+	public void setLimitations(String limitations) {
+		this.limitations = limitations;
 	}
 
 	public String getCreatedBy() {

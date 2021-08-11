@@ -35,17 +35,17 @@ public class InstallReportController {
 	@PostMapping("/addInstalReport")
 	public ResponseEntity<String> addInstallationReport(@RequestBody ReportDetails reportDetails)
 			throws InstalReportException {
-		logger.info("called addInstallationReport function UserName : {},siteeId", reportDetails.getUserName(),
+		logger.info("called addInstallationReport function UserName : {}, SiteId", reportDetails.getUserName(),
 				reportDetails.getSiteId());
 		instalReportService.addInstallationReport(reportDetails);
-		return new ResponseEntity<String>("Report successfully saved", HttpStatus.CREATED);
+		return new ResponseEntity<String>("Basic Information Successfully Saved", HttpStatus.CREATED);
 	}
 
 	@GetMapping("/retrieveInstalReport/{userName}/{siteId}")
 	public ResponseEntity<List<ReportDetails>> retrieveInstallationReport(@PathVariable String userName,
 			@PathVariable Integer siteId)
 			throws InstalReportException {
-		logger.info("called retrieveInstallationReport function userName: {},siteId : {}", userName, siteId);
+		logger.info("called retrieveInstallationReport function UserName: {}, SiteId : {}", userName, siteId);
 		return new ResponseEntity<List<ReportDetails>>(instalReportService.retrieveInstallationReport(userName,siteId),
 				HttpStatus.OK);
 	}

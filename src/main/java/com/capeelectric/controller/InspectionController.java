@@ -38,7 +38,7 @@ public class InspectionController {
 		logger.info("called addInspectionDetails function UserName : {},SiteId : {}", periodicInspection.getUserName(),
 				periodicInspection.getSiteId());
 		inspectionService.addInspectionDetails(periodicInspection);
-		return new ResponseEntity<String>(HttpStatus.CREATED);
+		return new ResponseEntity<String>("Inspection Details Are Successfully Saved",HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/retrieveInspectionDetails/{userName}/{siteId}")
