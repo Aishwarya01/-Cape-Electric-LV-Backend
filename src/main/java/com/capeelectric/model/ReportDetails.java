@@ -63,6 +63,9 @@ public class ReportDetails implements Serializable {
 
 	@Column(name = "EVIDANCE_ADDITION")
 	private String evidanceAddition;
+	
+	@Column(name = "EVIDANCE_WIRE_AGE")
+	private String evidanceWireAge;
 
 	@Column(name = "PREVIOUS_RECORDS")
 	private String previousRecords;
@@ -183,6 +186,14 @@ public class ReportDetails implements Serializable {
 
 	public void setEvidanceAddition(String evidanceAddition) {
 		this.evidanceAddition = evidanceAddition;
+	}
+
+	public String getEvidanceWireAge() {
+		return evidanceWireAge;
+	}
+
+	public void setEvidanceWireAge(String evidanceWireAge) {
+		this.evidanceWireAge = evidanceWireAge;
 	}
 
 	public String getPreviousRecords() {
