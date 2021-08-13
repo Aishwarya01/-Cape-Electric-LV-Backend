@@ -38,6 +38,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(testingReport.getSiteId());
 			if (!testingRepo.isPresent() || !testingRepo.get().getSiteId().equals(testingReport.getSiteId())) {
 				testingReport.setCreatedDate(LocalDateTime.now());
+				testingReport.setCreatedBy(userFullName.getFullName(testingReport.getUserName()));
+				testingReport.setUpdatedDate(LocalDateTime.now());
+				testingReport.setUpdatedBy(userFullName.getFullName(testingReport.getUserName()));
 				testingReportRepository.save(testingReport);
 			} else {
 				throw new PeriodicTestingException("Site-Id Already Present");
