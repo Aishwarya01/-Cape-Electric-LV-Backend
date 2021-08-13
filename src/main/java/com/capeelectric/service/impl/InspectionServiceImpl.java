@@ -36,6 +36,7 @@ public class InspectionServiceImpl implements InspectionService {
 		if (periodicInspection.getUserName() != null && periodicInspection.getSiteId() != null) {
 			Optional<PeriodicInspection> siteId = inspectionRepository.findBySiteId(periodicInspection.getSiteId());
 			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(periodicInspection.getSiteId())) {
+				periodicInspection.setCreatedDate(LocalDateTime.now());
 				periodicInspection.setUpdatedDate(LocalDateTime.now());
 				periodicInspection.setCreatedBy(userFullName.getFullName(periodicInspection.getUserName()));
 				periodicInspection.setUpdatedBy(userFullName.getFullName(periodicInspection.getUserName()));

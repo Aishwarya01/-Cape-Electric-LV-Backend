@@ -40,6 +40,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 					.findBySiteId(reportDetails.getSiteId());
 			if (!reportDetailsRepo.isPresent()
 					|| !reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
+				reportDetails.setCreatedDate(LocalDateTime.now());
 				reportDetails.setUpdatedDate(LocalDateTime.now());
 				reportDetails.setCreatedBy(userFullName.getFullName(reportDetails.getUserName()));
 				reportDetails.setUpdatedBy(userFullName.getFullName(reportDetails.getUserName()));
