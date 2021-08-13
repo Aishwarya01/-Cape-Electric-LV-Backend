@@ -42,6 +42,7 @@ public class SummaryServiceImpl implements SummaryService {
 				summary.setCreatedDate(LocalDateTime.now());
 				summary.setUpdatedDate(LocalDateTime.now());
 				summary.setCreatedBy(userFullName.getFullName(summary.getUserName()));
+				summary.setUpdatedBy(userFullName.getFullName(summary.getUserName()));
 				summaryRepository.save(summary);
 			} else {
 				throw new SummaryException("Site-Id Already Available");
