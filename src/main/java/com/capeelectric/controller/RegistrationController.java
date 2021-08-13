@@ -2,7 +2,6 @@ package com.capeelectric.controller;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
@@ -21,10 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
-import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.AWSEmailService;
 
@@ -64,12 +61,6 @@ public class RegistrationController {
 		return registrationService.retrieveRegistration(userName);
 	}
 
-	@GetMapping("/retrieveAllRegistration")
-	public List<Register> retrieveAllRegistration() throws RegistrationException {
-		logger.info("called retrieveAllRegistration function");
-		return registrationService.retrieveAllRegistration();
-	}
-
 	@PutMapping("/updateRegistration")
 	public ResponseEntity<String> updateRegistration(@RequestBody Register register)
 			throws IOException, MessagingException, RegistrationException {
@@ -77,21 +68,6 @@ public class RegistrationController {
 		registrationService.updateRegistration(register);
 		awsEmailService.sendEmail(register.getUsername(), "You have successfully updated your profile");
 		return new ResponseEntity<String>("Successfully Updated Registration", HttpStatus.OK);
-	}
-
-	@PutMapping("/updatePermission")
-	public ResponseEntity<String> updatePermission(@RequestBody RegisterPermissionRequest registerPermissionRequest)
-			throws RegistrationException, RegisterPermissionRequestException, MessagingException {
-		logger.info("called updatePermission function AdminUserName : {}", registerPermissionRequest.getAdminUserName());
-		Register register = registrationService.updatePermission(registerPermissionRequest);
-		if (register != null && register.getPermission().equalsIgnoreCase("YES")) {
-			awsEmailService.sendEmail(register.getUsername(),
-					"Your Registration has been Approved Successfully, Now You Can Login Rush for Safety App");
-		} else {
-			awsEmailService.sendEmail(register.getUsername(),
-					"Your Registration has not Approved, So You Can't Access Rush for Safety App");
-		}
-		return new ResponseEntity<String>("Successfully Updated RegisterPermission", HttpStatus.OK);
 	}
 
 }
