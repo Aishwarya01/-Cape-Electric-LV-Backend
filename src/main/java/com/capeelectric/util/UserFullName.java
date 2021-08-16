@@ -25,7 +25,7 @@ public class UserFullName {
 	 * @param userName
 	 * @return
 	 */
-	public String getFullName(String userName) {
+	public String getFullName(String userName) { 
 		Optional<User> user = userRepository.findByUsername(userName);
 		if (user.isPresent() && user.get() != null)
 			return user.get().getFirstname() + " " + user.get().getLastname();
