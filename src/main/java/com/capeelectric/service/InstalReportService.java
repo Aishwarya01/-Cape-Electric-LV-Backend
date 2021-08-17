@@ -16,4 +16,6 @@ public interface InstalReportService {
 
 	public List<ReportDetails> retrieveInstallationReport(String userName, Integer SiteId) throws InstalReportException;
 
+	public void updateInstallationReport(ReportDetails reportDetails) throws InstalReportException;
+
 }

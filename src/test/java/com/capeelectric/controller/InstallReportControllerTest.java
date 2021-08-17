@@ -73,4 +73,12 @@ public class InstallReportControllerTest {
 		ResponseEntity<List<ReportDetails>> report = instalReportController.retrieveInstallationReport(reportDetails.getUserName(),reportDetails.getSiteId());
 		assertEquals(report.getStatusCode(), HttpStatus.OK);
 	}
+	
+	@Test
+	public void testUpdateInstallationReport() throws InstalReportException {
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
+		ResponseEntity<String> actualResponseEntity = instalReportController
+				.updateInstallationReport(reportDetails);
+		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
+	}
 }

@@ -71,22 +71,20 @@ public class SiteServiceImpl implements SiteService {
 						if (email) {
 							siteRepository.save(site);
 						}else {
-							throw new CompanyDetailsException("PersonInchargEmail already present");
+							throw new CompanyDetailsException("Email-Id Already Existing");
 						}
 					} else {
-						throw new CompanyDetailsException(site.getSite() + ": site already present");
+						throw new CompanyDetailsException("Site_Name Already Available");
 					}
 
 				} else {
-					throw new CompanyDetailsException(site.getDepartmentName() + " : department not present  "
-							+ site.getClientName() + " company");
+					throw new CompanyDetailsException("Department_Name Not Available");
 				}
 			} else {
-				throw new CompanyDetailsException("clientName  " + site.getClientName() + "  not present "
-						+ site.getDepartmentName() + " department");
+				throw new CompanyDetailsException("Client_Name Not Available");
 			}
 		} else {
-			throw new CompanyDetailsException("invalid inputs");
+			throw new CompanyDetailsException("Invalid Inputs");
 		}
 	}
 
@@ -122,23 +120,21 @@ public class SiteServiceImpl implements SiteService {
 							site.setDepartment(department);
 							siteRepository.save(site);
 						}else {
-							throw new CompanyDetailsException("PersonInchargEmail already present");
+							throw new CompanyDetailsException("PersonInchargEmail Already Available");
 						}
 					} else {
-						throw new CompanyDetailsException(site.getSite() + " site not present");
+						throw new CompanyDetailsException("Site_Name Not Available");
 					}
 
 				} else {
-					throw new CompanyDetailsException(site.getDepartmentName() + "  department not present for "
-							+ site.getClientName() + " company");
+					throw new CompanyDetailsException("Department_Name Not Available");
 				}
 
 			} else {
-				throw new CompanyDetailsException("clientName  " + site.getClientName() + "  not present "
-						+ site.getDepartmentName() + " department");
+				throw new CompanyDetailsException("Client_Name Not Available");
 			}
 		} else {
-			throw new CompanyDetailsException("invalid inputs");
+			throw new CompanyDetailsException("Invalid Inputs");
 		}
 	}
 
@@ -155,11 +151,11 @@ public class SiteServiceImpl implements SiteService {
 
 				siteRepository.deleteById(siteId);
 			} else {
-				throw new CompanyDetailsException(siteId + " : this siteId not present");
+				throw new CompanyDetailsException("Site_Name Not Available");
 			}
 
 		} else {
-			throw new CompanyDetailsException("invalid input");
+			throw new CompanyDetailsException("Invalid Input");
 		}
 
 	}
@@ -173,7 +169,7 @@ public class SiteServiceImpl implements SiteService {
 		if (clientName != null && departmentName != null) {
 			return siteRepository.findByClientNameAndDepartmentName(clientName, departmentName);
 		} else {
-			throw new CompanyDetailsException("invalid inputs");
+			throw new CompanyDetailsException("Invalid Inputs");
 		}
 	}
 

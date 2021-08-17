@@ -16,4 +16,6 @@ public interface PeriodicTestingService {
 
 	public List<TestingReport> retrieveTestingReport(String userName, Integer siteId) throws PeriodicTestingException;
 
+	public void updatePeriodicTesting(TestingReport testingReport) throws PeriodicTestingException;
+
 }

@@ -1,5 +1,6 @@
 package com.capeelectric.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
@@ -15,11 +16,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.SupplyParameters;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.service.impl.SupplyCharacteristicsServiceImpl;
+import com.capeelectric.util.UserFullName;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +40,9 @@ public class SupplyCharacteristicsServiceTest {
 	private SupplyParameters supplyParameters;
 
 	private SupplyCharacteristics supplyCharacteristics;
+	
+	@MockBean
+	private UserFullName userFullName;
 
 	{
 		supplyCharacteristics = new SupplyCharacteristics();
@@ -52,7 +58,7 @@ public class SupplyCharacteristicsServiceTest {
 	}
 
 	@Test
-	public void testAddCharacteristics_Succes_Flow() throws SupplyCharacteristicsException {
+	public void testAddCharacteristics_Succes_Flow() throws SupplyCharacteristicsException, DecimalConversionException {
 		
 		supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics);
 		when(supplyCharacteristicsRepository.save(supplyCharacteristics)).thenReturn(supplyCharacteristics);
@@ -60,7 +66,7 @@ public class SupplyCharacteristicsServiceTest {
 	}
 
 	@Test
-	public void testAddCharacteristics_Supply_Parameters_Succes_Flow() throws SupplyCharacteristicsException {
+	public void testAddCharacteristics_Supply_Parameters_Succes_Flow() throws SupplyCharacteristicsException, DecimalConversionException {
 
 		supplyCharacteristics.setMainNominalCurrent("1.2012,12.1212,455,566");
 		supplyCharacteristics.setMainNominalFrequency("2.00,122.12,455,566");
@@ -89,7 +95,7 @@ public class SupplyCharacteristicsServiceTest {
 		when(supplyCharacteristicsRepository.save(supplyCharacteristics)).thenReturn(supplyCharacteristics);
 		SupplyCharacteristicsException assertThrows = Assertions.assertThrows(SupplyCharacteristicsException.class,
 				() -> supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics));
-		equals(assertThrows.getMessage());
+		assertEquals(assertThrows.getMessage(),"Invalid inputs");
 	}
 
 	@Test
@@ -101,7 +107,7 @@ public class SupplyCharacteristicsServiceTest {
 		when(supplyCharacteristicsRepository.findBySiteId(supplyCharacteristics.getSiteId())).thenReturn(supplylist);
 		SupplyCharacteristicsException assertThrows = Assertions.assertThrows(SupplyCharacteristicsException.class,
 				() -> supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics));
-		equals(assertThrows.getMessage());
+		assertEquals(assertThrows.getMessage(),"siteId already present");
 	}
 
 	@Test
@@ -114,8 +120,7 @@ public class SupplyCharacteristicsServiceTest {
 				supplyCharacteristics.getSiteId())).thenReturn(supplylist);
 		List<SupplyCharacteristics> installationReport = supplyCharacteristicsServiceImpl
 				.retrieveCharacteristics("cape", 1);
-		assertNotNull(supplyCharacteristics);
-		equals(installationReport);
+		assertNotNull(installationReport);
 	}
 
 	@Test
@@ -129,15 +134,40 @@ public class SupplyCharacteristicsServiceTest {
 				supplyCharacteristics.getSiteId())).thenReturn(supplylist);
 		SupplyCharacteristicsException assertThrows = Assertions.assertThrows(SupplyCharacteristicsException.class,
 				() -> supplyCharacteristicsServiceImpl.retrieveCharacteristics(null, 1));
-		equals(assertThrows.getMessage());
+		assertEquals(assertThrows.getMessage(), "Invalid inputs");
 	}
 	
 	@Test
-	public void testAddCharacteristics_With_NA_Value() throws SupplyCharacteristicsException {
+	public void testAddCharacteristics_With_NA_Value() throws SupplyCharacteristicsException, DecimalConversionException {
 		supplyCharacteristics.setMainNominalCurrent("1.2012,na,455,566");
 		supplyCharacteristics.setMainNominalFrequency("NA,122.12,455,566");
 		
 		when(supplyCharacteristicsRepository.save(supplyCharacteristics)).thenReturn(supplyCharacteristics);
 		supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics);
+	}
+	 
+	@Test
+	public void testUpdateCharacteristics() throws SupplyCharacteristicsException, DecimalConversionException {
+		
+		when(supplyCharacteristicsRepository.findById(1)).thenReturn(Optional.of(supplyCharacteristics));
+		supplyCharacteristicsServiceImpl.updateCharacteristics(supplyCharacteristics);
+		
+		SupplyCharacteristics supplyCharacteristics_2 = new SupplyCharacteristics();
+		supplyCharacteristics_2.setSiteId(12);
+		supplyCharacteristics_2.setUserName("cape");
+		supplyCharacteristics_2.setSupplyCharacteristicsId(1);
+		
+		when(supplyCharacteristicsRepository.findById(2)).thenReturn(Optional.of(supplyCharacteristics));
+		SupplyCharacteristicsException assertThrows = Assertions.assertThrows(SupplyCharacteristicsException.class,
+				() -> supplyCharacteristicsServiceImpl.updateCharacteristics(supplyCharacteristics_2));
+		
+		assertEquals(assertThrows.getMessage(),"Given SiteId and ReportId is Invalid");
+		
+		supplyCharacteristics_2.setSiteId(null);
+		when(supplyCharacteristicsRepository.findById(2)).thenReturn(Optional.of(supplyCharacteristics));
+		SupplyCharacteristicsException assertThrows_1 = Assertions.assertThrows(SupplyCharacteristicsException.class,
+				() -> supplyCharacteristicsServiceImpl.updateCharacteristics(supplyCharacteristics_2));
+		
+		assertEquals(assertThrows_1.getMessage(),"Invalid inputs");
 	}
 }

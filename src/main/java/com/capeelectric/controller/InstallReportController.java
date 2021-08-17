@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,18 +35,27 @@ public class InstallReportController {
 	@PostMapping("/addInstalReport")
 	public ResponseEntity<String> addInstallationReport(@RequestBody ReportDetails reportDetails)
 			throws InstalReportException {
-		logger.info("called addInstallationReport function UserName : {},siteeId", reportDetails.getUserName(),
+		logger.info("called addInstallationReport function UserName : {}, SiteId", reportDetails.getUserName(),
 				reportDetails.getSiteId());
 		instalReportService.addInstallationReport(reportDetails);
-		return new ResponseEntity<String>("Report successfully saved", HttpStatus.CREATED);
+		return new ResponseEntity<String>("Basic Information Successfully Saved", HttpStatus.CREATED);
 	}
 
 	@GetMapping("/retrieveInstalReport/{userName}/{siteId}")
 	public ResponseEntity<List<ReportDetails>> retrieveInstallationReport(@PathVariable String userName,
 			@PathVariable Integer siteId)
 			throws InstalReportException {
-		logger.info("called retrieveInstallationReport function userName: {},siteId : {}", userName, siteId);
+		logger.info("called retrieveInstallationReport function UserName: {}, SiteId : {}", userName, siteId);
 		return new ResponseEntity<List<ReportDetails>>(instalReportService.retrieveInstallationReport(userName,siteId),
 				HttpStatus.OK);
+	}
+	
+	@PutMapping("/updateInstalReport")
+	public ResponseEntity<String> updateInstallationReport(@RequestBody ReportDetails reportDetails)
+			throws InstalReportException {
+		logger.info("called updateInstallationReport function UserName : {},SiteId : {},ReportId : {}", reportDetails.getUserName(),
+				reportDetails.getSiteId(),reportDetails.getReportId());
+		instalReportService.updateInstallationReport(reportDetails);
+		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.CREATED);
 	}
 }

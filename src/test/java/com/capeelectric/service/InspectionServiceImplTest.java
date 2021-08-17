@@ -1,5 +1,6 @@
 package com.capeelectric.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import com.capeelectric.exception.InspectionException;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.service.impl.InspectionServiceImpl;
+import com.capeelectric.util.UserFullName;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +33,9 @@ public class InspectionServiceImplTest {
 
 	@MockBean
 	private InspectionException inspectionException;
+	
+	@MockBean
+	private UserFullName userFullName;
 
 	private PeriodicInspection periodicInspection;
 
@@ -88,5 +93,29 @@ public class InspectionServiceImplTest {
 		InspectionException assertThrows = Assertions.assertThrows(InspectionException.class,
 				() -> inspectionServiceImpl.retrieveInspectionDetails(null, 1));
 		equals(assertThrows.getMessage());
+	}
+	
+	@Test
+	public void testUpdateInspectionDetails() throws InspectionException {
+		periodicInspection.setUserName("LVsystem@gmail.com");
+		periodicInspection.setPeriodicInspectionId(1);
+		when(inspectionRepository.findById(1)).thenReturn(Optional.of(periodicInspection));
+		inspectionServiceImpl.updateInspectionDetails(periodicInspection);
+
+		PeriodicInspection periodicInspection_1 = new PeriodicInspection();
+		periodicInspection_1.setSiteId(12);
+		periodicInspection_1.setUserName("cape");
+		periodicInspection_1.setPeriodicInspectionId(12);
+
+		when(inspectionRepository.findById(4)).thenReturn(Optional.of(periodicInspection));
+		InspectionException assertThrows = Assertions.assertThrows(InspectionException.class,
+				() -> inspectionServiceImpl.updateInspectionDetails(periodicInspection_1));
+		assertEquals(assertThrows.getMessage(), "Given SiteId and ReportId is Invalid");
+
+		periodicInspection.setSiteId(null);
+		when(inspectionRepository.findById(2)).thenReturn(Optional.of(periodicInspection));
+		InspectionException assertThrows_1 = Assertions.assertThrows(InspectionException.class,
+				() -> inspectionServiceImpl.updateInspectionDetails(periodicInspection));
+		assertEquals(assertThrows_1.getMessage(), "Invalid inputs");
 	}
 }
