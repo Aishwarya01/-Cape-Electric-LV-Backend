@@ -135,7 +135,7 @@ public class IpaoInspection implements Serializable {
 	private String faultNonConductLocation;
 
 	@Column(name = "O_FAULT_ELECTRICAL_SEPARTION")
-	private String faultElectricalSepartion;
+	private String faultElectricalSepartion; 
 
 	@Column(name = "O_OPERATING_CURRENT")
 	private String operatingCurrent;
