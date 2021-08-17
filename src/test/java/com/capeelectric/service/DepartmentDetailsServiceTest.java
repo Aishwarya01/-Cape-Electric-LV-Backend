@@ -229,7 +229,7 @@ public class DepartmentDetailsServiceTest {
 		when(departmentRepository.findById(department.getDepartmentId())).thenReturn(deptlist);
 		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
 				() -> departmentServiceImpl.deleteDepartment(2));
-		assertEquals("2 : department ID not present", assertThrows.getMessage());
+		assertEquals("Department Not Available", assertThrows.getMessage());
 	}
 
 	@Test

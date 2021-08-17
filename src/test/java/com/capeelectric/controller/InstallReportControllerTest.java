@@ -63,7 +63,7 @@ public class InstallReportControllerTest {
 	public void testAddInstallationReport() throws InstalReportException {
 		
 		ResponseEntity<String> response = instalReportController.addInstallationReport(reportDetails);
-		assertEquals(response.getBody(), "Report successfully saved");
+		assertEquals(response.getBody(), "Basic Information Successfully Saved");
 		
 	}
 	

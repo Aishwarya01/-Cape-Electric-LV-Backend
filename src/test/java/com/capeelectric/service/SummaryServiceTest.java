@@ -58,7 +58,7 @@ public class SummaryServiceTest {
 		logger.info("SiteId already Present_flow");
 		SummaryException summaryException_1 = Assertions.assertThrows(SummaryException.class,
 				() -> summaryServiceImpl.addSummary(summary));
-		assertEquals(summaryException_1.getMessage(), "Given SiteId already present");
+		assertEquals(summaryException_1.getMessage(), "Site-Id Already Available");
 
 		logger.info("Successfully added Summary_Object flow");
 		summary.setSiteId(1);
@@ -68,7 +68,7 @@ public class SummaryServiceTest {
 		summary.setUserName(null);
 		SummaryException summaryException_2 = Assertions.assertThrows(SummaryException.class,
 				() -> summaryServiceImpl.addSummary(summary));
-		assertEquals(summaryException_2.getMessage(), "UserName and SiteId are Invalid Inputs");
+		assertEquals(summaryException_2.getMessage(), "Invalid Inputs");
 
 	}
 
@@ -85,7 +85,7 @@ public class SummaryServiceTest {
 		logger.info("Invalid Input flow");
 		SummaryException summaryException = Assertions.assertThrows(SummaryException.class,
 				() -> summaryServiceImpl.retrieveSummary(null, 12));
-		assertEquals(summaryException.getMessage(), "UserName and SiteId are Invalid Inputs");
+		assertEquals(summaryException.getMessage(), "Invalid Inputs");
 
 	}
 

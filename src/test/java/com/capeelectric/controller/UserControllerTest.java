@@ -127,7 +127,7 @@ public class UserControllerTest {
 
 		when(userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "abcd12345",1234)).thenReturn(user);
 		ResponseEntity<String> updatePassword = userController.updatePassword(authenticationRequest);
-		assertEquals(updatePassword.getBody(), "lvsystem@capeindia.net");
+		assertEquals(updatePassword.getBody(), "You have Successfully Updated Your Password");
 	}
 
 	@Test
@@ -140,7 +140,7 @@ public class UserControllerTest {
 		when(userDetailsServiceImpl.changePassword("lvsystem@capeindia.net", "abcd12345", "abcd")).thenReturn(user);
 
 		ResponseEntity<String> changePassword = userController.changePassword(changePasswordRequest);
-		assertEquals(changePassword.getBody(), "lvsystem@capeindia.net");
+		assertEquals(changePassword.getBody(), "You Have Successfuly Changed Your Password");
 
 	}
 
@@ -157,7 +157,7 @@ public class UserControllerTest {
 	public void testUpdateUserProfile() throws IOException, MessagingException {
 		when(userDetailsServiceImpl.updateUserProfile(user)).thenReturn(user);
 		ResponseEntity<String> updateUserProfile = userController.updateUserProfile(user);
-		assertEquals(updateUserProfile.getBody(), "lvsystem@capeindia.net");
+		assertEquals(updateUserProfile.getBody(), "Your Profile Successfully Updated");
 	}
 
 }

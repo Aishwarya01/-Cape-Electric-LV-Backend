@@ -104,7 +104,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		User retrieveUser = userRepository.findByUsername(email).get();
 		if(!passwordEncoder.matches(oldPassword, retrieveUser.getPassword())) {
 			logger.debug("Change Password Ends");
-			throw new ChangePasswordException("Old password is ot matching with encoded password");
+			throw new ChangePasswordException("Old password is not matching with encoded password");
 		} else if(oldPassword.equalsIgnoreCase(password)) {
 			logger.debug("Change Password Ends");
 			throw new ChangePasswordException("Old password cannot be entered as new password");

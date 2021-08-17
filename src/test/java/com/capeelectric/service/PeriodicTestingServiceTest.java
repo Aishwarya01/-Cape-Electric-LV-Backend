@@ -65,7 +65,7 @@ public class PeriodicTestingServiceTest {
 		logger.info("SiteId already Present_flow");
 		PeriodicTestingException periodicTestingException_1 = Assertions.assertThrows(PeriodicTestingException.class,
 				() -> periodicTestingServiceImpl.addTestingReport(testingReport));
-		assertEquals(periodicTestingException_1.getMessage(), "SiteId Already Present");
+		assertEquals(periodicTestingException_1.getMessage(), "Site-Id Already Present");
 
 		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
 		logger.info("Successfully added Summary_Object flow");
@@ -76,7 +76,7 @@ public class PeriodicTestingServiceTest {
 		testingReport.setUserName(null);
 		PeriodicTestingException periodicTestingException_2 = Assertions.assertThrows(PeriodicTestingException.class,
 				() -> periodicTestingServiceImpl.addTestingReport(testingReport));
-		assertEquals(periodicTestingException_2.getMessage(), "UserName and SiteId Invalid Input");
+		assertEquals(periodicTestingException_2.getMessage(), "Invalid Inputs");
 
 	}
 
@@ -93,7 +93,7 @@ public class PeriodicTestingServiceTest {
 		logger.info("Invalid Input flow");
 		PeriodicTestingException periodicTestingException = Assertions.assertThrows(PeriodicTestingException.class,
 				() -> periodicTestingServiceImpl.retrieveTestingReport(null, 12));
-		assertEquals(periodicTestingException.getMessage(), "UserName and SiteId Invalid Input");
+		assertEquals(periodicTestingException.getMessage(), "Invalid Inputs");
 
 	}
 

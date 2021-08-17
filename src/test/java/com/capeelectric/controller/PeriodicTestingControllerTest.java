@@ -56,7 +56,7 @@ public class PeriodicTestingControllerTest {
 
 		doNothing().when(periodicTestingServiceImpl).addTestingReport(testingReport);
 		ResponseEntity<String> savePeriodicTesting = periodicTestingController.savePeriodicTesting(testingReport);
-		assertEquals(savePeriodicTesting.getBody(), "successfully added TestingReport");
+		assertEquals(savePeriodicTesting.getBody(), "Testing Report Successfully Saved");
 
 		logger.info("testSavePeriodicTesting Function Ended");
 	}

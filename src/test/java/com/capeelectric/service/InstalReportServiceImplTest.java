@@ -103,11 +103,11 @@ public class InstalReportServiceImplTest {
 		when(installationReportRepository.findBySiteId(12)).thenReturn(Optional.of(reportDetails));
 		InstalReportException exception_SiteId = Assertions.assertThrows(InstalReportException.class,
 				() -> instalReportServiceImpl.addInstallationReport(reportDetails));
-		assertEquals(exception_SiteId.getMessage(), "SiteId already present");
+		assertEquals(exception_SiteId.getMessage(), "Site-Id Details Already Available,Create New Site-Id");
 				
 		InstalReportException exception = Assertions.assertThrows(InstalReportException.class,
 				() -> instalReportServiceImpl.addInstallationReport(null));
-		assertEquals(exception.getMessage(), "Invalid inputs");
+		assertEquals(exception.getMessage(), "Invalid Inputs");
 
 	}
  

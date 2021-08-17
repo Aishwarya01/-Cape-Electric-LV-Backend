@@ -95,7 +95,7 @@ public class SupplyCharacteristicsServiceTest {
 		when(supplyCharacteristicsRepository.save(supplyCharacteristics)).thenReturn(supplyCharacteristics);
 		SupplyCharacteristicsException assertThrows = Assertions.assertThrows(SupplyCharacteristicsException.class,
 				() -> supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics));
-		assertEquals(assertThrows.getMessage(),"Invalid inputs");
+		assertEquals(assertThrows.getMessage(),"Invalid Inputs");
 	}
 
 	@Test
@@ -107,7 +107,7 @@ public class SupplyCharacteristicsServiceTest {
 		when(supplyCharacteristicsRepository.findBySiteId(supplyCharacteristics.getSiteId())).thenReturn(supplylist);
 		SupplyCharacteristicsException assertThrows = Assertions.assertThrows(SupplyCharacteristicsException.class,
 				() -> supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics));
-		assertEquals(assertThrows.getMessage(),"siteId already present");
+		assertEquals(assertThrows.getMessage(),"Site-Id Already Available");
 	}
 
 	@Test
@@ -134,7 +134,7 @@ public class SupplyCharacteristicsServiceTest {
 				supplyCharacteristics.getSiteId())).thenReturn(supplylist);
 		SupplyCharacteristicsException assertThrows = Assertions.assertThrows(SupplyCharacteristicsException.class,
 				() -> supplyCharacteristicsServiceImpl.retrieveCharacteristics(null, 1));
-		assertEquals(assertThrows.getMessage(), "Invalid inputs");
+		assertEquals(assertThrows.getMessage(), "Invalid Inputs");
 	}
 	
 	@Test
