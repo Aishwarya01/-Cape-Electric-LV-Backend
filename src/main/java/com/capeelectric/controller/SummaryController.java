@@ -38,7 +38,7 @@ public class SummaryController {
 		logger.info("started addSummary function userName: {},siteId : {}", summary.getUserName(),summary.getSiteId());
 		summaryService.addSummary(summary);
 		logger.info("ended addSummary function");
-		return new ResponseEntity<String>("Summary Details Successfully Saved", HttpStatus.OK);
+		return new ResponseEntity<String>("Summary Details Successfully Saved", HttpStatus.CREATED);
 
 	}
 	
@@ -54,7 +54,7 @@ public class SummaryController {
 		logger.info("called updateSummary function UserName : {},SiteId : {},SummaryId : {}", summary.getUserName(),
 				summary.getSiteId(), summary.getSummaryId());
 		summaryService.updateSummary(summary);
-		return new ResponseEntity<String>("Summary successfully Updated", HttpStatus.CREATED);
+		return new ResponseEntity<String>("Summary successfully Updated", HttpStatus.OK);
 	}
 
 }

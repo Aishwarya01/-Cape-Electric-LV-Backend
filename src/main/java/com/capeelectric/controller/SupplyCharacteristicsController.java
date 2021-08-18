@@ -41,7 +41,7 @@ public class SupplyCharacteristicsController {
 				supplyCharacteristics.getUserName(), supplyCharacteristics.getSiteId());
 		supplyCharacteristicsService.addCharacteristics(supplyCharacteristics);
 		return new ResponseEntity<String>("SupplyCharacteristics and Earthing Properties Sucessfully Saved",
-				HttpStatus.OK);
+				HttpStatus.CREATED);
 	}
 
 	@GetMapping("/retrieveCharacteristics/{userName}/{siteId}")
@@ -59,7 +59,7 @@ public class SupplyCharacteristicsController {
 				supplyCharacteristics.getUserName(), supplyCharacteristics.getSiteId(),
 				supplyCharacteristics.getSupplyCharacteristicsId());
 		supplyCharacteristicsService.updateCharacteristics(supplyCharacteristics);
-		return new ResponseEntity<String>("SupplyCharacteristics Data successfully Updated", HttpStatus.CREATED);
+		return new ResponseEntity<String>("SupplyCharacteristics Data successfully Updated", HttpStatus.OK);
 	}
 
 }

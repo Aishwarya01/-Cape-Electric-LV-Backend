@@ -64,7 +64,7 @@ public class PeriodicTestingController {
 				testingReport.getUserName(), testingReport.getSiteId(),
 				testingReport.getTestingReportId());
 		testService.updatePeriodicTesting(testingReport);
-		return new ResponseEntity<String>("PeriodicTesting successfully Updated", HttpStatus.CREATED);
+		return new ResponseEntity<String>("PeriodicTesting successfully Updated", HttpStatus.OK);
 	}
 
 }

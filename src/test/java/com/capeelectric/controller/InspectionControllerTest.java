@@ -55,7 +55,7 @@ public class InspectionControllerTest {
 	
 	@Test
 	public void testUpdateInspectionDetails() throws InspectionException{
-		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		ResponseEntity<String> actualResponseEntity = inspectionController
 				.updateInspectionDetails(periodicInspection);
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());

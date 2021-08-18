@@ -56,6 +56,6 @@ public class InstallReportController {
 		logger.info("called updateInstallationReport function UserName : {},SiteId : {},ReportId : {}", reportDetails.getUserName(),
 				reportDetails.getSiteId(),reportDetails.getReportId());
 		instalReportService.updateInstallationReport(reportDetails);
-		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.CREATED);
+		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.OK);
 	}
 }

@@ -76,7 +76,7 @@ public class InstallReportControllerTest {
 	
 	@Test
 	public void testUpdateInstallationReport() throws InstalReportException {
-		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		ResponseEntity<String> actualResponseEntity = instalReportController
 				.updateInstallationReport(reportDetails);
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());

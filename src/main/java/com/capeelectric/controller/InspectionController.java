@@ -56,6 +56,6 @@ public class InspectionController {
 				periodicInspection.getUserName(), periodicInspection.getSiteId(),
 				periodicInspection.getPeriodicInspectionId());
 		inspectionService.updateInspectionDetails(periodicInspection);
-		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.CREATED);
+		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.OK);
 	}
 }

@@ -81,7 +81,7 @@ public class SummaryControllerTest {
 	public void testUpdateSummary() throws SummaryException{
 		
 		logger.info("testUpdateSummary Function Started");
-		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		ResponseEntity<String> actualResponseEntity = summaryController
 				.updateSummary(summary);
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());

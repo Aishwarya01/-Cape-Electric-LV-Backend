@@ -42,7 +42,7 @@ public class SupplyCharacteristicsControllerTest {
 
 	@Test
 	public void testAddCharacteristics() throws SupplyCharacteristicsException, DecimalConversionException {
-		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
 		ResponseEntity<String> actualResponseEntity = supplyCharacteristicsController
 				.addCharacteristics(supplyCharacteristics);
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
@@ -59,7 +59,7 @@ public class SupplyCharacteristicsControllerTest {
 	
 	@Test
 	public void testUpdateCharacteristics() throws SupplyCharacteristicsException {
-		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>("SupplyCharacteristics Data successfully Updated",HttpStatus.CREATED);
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>("SupplyCharacteristics Data successfully Updated",HttpStatus.OK);
 		ResponseEntity<String> actualResponseEntity = supplyCharacteristicsController
 				.updateCharacteristics(supplyCharacteristics);
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());

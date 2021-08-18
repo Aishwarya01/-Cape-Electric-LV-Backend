@@ -34,7 +34,7 @@ public class SiteController {
 				site.getClientName(), site.getDepartmentName(), site.getSite());
  
 		siteService.addSite(site);
-		return new ResponseEntity<String>("Site Successfully Saved", HttpStatus.OK);
+		return new ResponseEntity<String>("Site Successfully Saved", HttpStatus.CREATED);
 
 	}
 
