@@ -108,44 +108,37 @@ public class FinalReportServiceTest {
 
 	@Test
 	public void testRetriveFinalReport() throws FinalReportException {
-		/*
-		 * logger.info("testRetriveListOfSite method started"); ArrayList<ReportDetails>
-		 * reportDetailsList_1 = new ArrayList<ReportDetails>();
-		 * reportDetailsList_1.add(retrieveReportDetails());
-		 * when(instalReportDetailsRepository.findByUserNameAndSiteId(
-		 * "LVsystem@gmail.com", 1)) .thenReturn(reportDetailsList_1);
-		 * 
-		 * ArrayList<SupplyCharacteristics> SupplyCharacteristics = new ArrayList<>();
-		 * SupplyCharacteristics.add(retrieveSupplyCharacteristics());
-		 * when(supplyCharacteristicsRepository.findByUserNameAndSiteId(
-		 * "LVsystem@gmail.com", 1)) .thenReturn(SupplyCharacteristics);
-		 * 
-		 * ArrayList<PeriodicInspection> inspection = new ArrayList<>();
-		 * inspection.add(retrievePeriodicInspection());
-		 * when(inspectionRepository.findByUserNameAndSiteId("LVsystem@gmail.com",
-		 * 1)).thenReturn(inspection);
-		 * 
-		 * ArrayList<TestingReport> testingReport = new ArrayList<>();
-		 * testingReport.add(retrieveTestingReport());
-		 * when(testingReportRepository.findByUserNameAndSiteId("LVsystem@gmail.com",
-		 * 1)).thenReturn(testingReport);
-		 * 
-		 * ArrayList<Summary> summary = new ArrayList<>();
-		 * summary.add(retrieveSummary());
-		 * when(summaryRepository.findByUserNameAndSiteId("LVsystem@gmail.com",
-		 * 1)).thenReturn(summary);
-		 * 
-		 * Optional<FinalReport> retrieveFinalReport =
-		 * finalReportServiceImpl.retrieveFinalReport("LVsystem@gmail.com", 1);
-		 * assertNotNull(retrieveFinalReport);
-		 * 
-		 * FinalReportException finalReportException =
-		 * Assertions.assertThrows(FinalReportException.class, () ->
-		 * finalReportServiceImpl.retrieveFinalReport(null, 1));
-		 * assertEquals(finalReportException.getMessage(), "Invalid Input");
-		 * logger.info("testRetriveListOfSite method ended");
-		 * 
-		 */}
+
+		logger.info("testRetriveListOfSite method started");
+
+		when(instalReportDetailsRepository.findBySiteId(1)).thenReturn(Optional.of(retrieveReportDetails()));
+		when(supplyCharacteristicsRepository.findBySiteId(1)).thenReturn(Optional.of(retrieveSupplyCharacteristics()));
+		when(inspectionRepository.findBySiteId(1)).thenReturn(Optional.of(retrievePeriodicInspection()));
+		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(retrieveTestingReport()));
+		when(summaryRepository.findBySiteId(1)).thenReturn(Optional.of(retrieveSummary()));
+
+		Optional<FinalReport> retrieveFinalReport = finalReportServiceImpl.retrieveFinalReport("LVsystem@gmail.com", 1);
+		assertNotNull(retrieveFinalReport);
+
+		FinalReportException finalReportException = Assertions.assertThrows(FinalReportException.class,
+				() -> finalReportServiceImpl.retrieveFinalReport(null, 1));
+		assertEquals(finalReportException.getMessage(), "Invalid Input");
+		logger.info("testRetriveListOfSite method ended");
+
+	}
+	
+	@Test
+	public void testRetriveFinalReport_NotHaveingAllStepData() throws FinalReportException {
+
+		logger.info("testRetriveFinalReport_NotHaveingAllStepData method started");
+
+		when(instalReportDetailsRepository.findBySiteId(1)).thenReturn(Optional.of(retrieveReportDetails()));
+		when(supplyCharacteristicsRepository.findBySiteId(1)).thenReturn(Optional.of(retrieveSupplyCharacteristics()));
+
+		Optional<FinalReport> retrieveFinalReport = finalReportServiceImpl.retrieveFinalReport("LVsystem@gmail.com", 1);
+		assertNotNull(retrieveFinalReport);
+
+	}
 
 	private ReportDetails retrieveReportDetails() {
 		ReportDetails reportDetails = new ReportDetails();

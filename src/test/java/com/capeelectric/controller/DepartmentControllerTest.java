@@ -1,6 +1,7 @@
 package com.capeelectric.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,33 +44,36 @@ public class DepartmentControllerTest {
 		department.setDepartmentName("Electrical");
 	}
 	
-//	@Test
-//	public void testupdateDepartment() throws  CompanyDetailsException {
-//		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
-//		ResponseEntity<String> actualResponseEntity = departmentController.updateDepartment(department);;
-//		assertEquals(actualResponseEntity, "200 OK OK,Department Successfully Updated,[]");
-//	}
-//	@Test
-//	public void testaddDepartment() throws CompanyDetailsException {
-//		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
-//		ResponseEntity<String> actualResponseEntity = departmentController.addDepartment(department);
-//		assertEquals(actualResponseEntity, "201 CREATED Created,Department Successfully Added,[]");
-//}
-//
-//	@Test
-//	public void testdeleteDepartment() throws CompanyDetailsException {
-//		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
-//		ResponseEntity<String> actualResponseEntity = departmentController.deleteDepartment("hasan",1);
-//		assertEquals(actualResponseEntity, "200 OK OK,Department Successfully Deleted,[]");
-//
-//	}
-	 @Test
-	    public void testretriveCompany() throws CompanyDetailsException {
-	    	 List<Department> list = new ArrayList<>();
-	    	 list.add(department);
-	    	 ResponseEntity<List<Department>> expectedResponseEntity =new ResponseEntity<List<Department>>(list, HttpStatus.OK);
-		     ResponseEntity<List<Department>> actualResponseEntity = departmentController.retriveDepartment("hasan","HCL");
-		     assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
+	@Test
+	public void testupdateDepartment() throws CompanyDetailsException {
+		doNothing().when(departmentServiceImpl).updateDepartment(department);
+		ResponseEntity<String> actualResponseEntity = departmentController.updateDepartment(department);
 
-	    }
+		assertEquals(actualResponseEntity.getBody(), "Department Successfully Updated");
+	}
+
+	@Test
+	public void testaddDepartment() throws CompanyDetailsException {
+		doNothing().when(departmentServiceImpl).addDepartment(department);
+		ResponseEntity<String> actualResponseEntity = departmentController.addDepartment(department);
+		assertEquals(actualResponseEntity.getBody(), "Department Successfully Added");
+	}
+
+	@Test
+	public void testdeleteDepartment() throws CompanyDetailsException {
+		doNothing().when(departmentServiceImpl).deleteDepartment(1);
+		ResponseEntity<String> actualResponseEntity = departmentController.deleteDepartment("hasan", 1);
+		assertEquals(actualResponseEntity.getBody(), "Department Successfully Deleted");
+	}
+
+	@Test
+	public void testretriveCompany() throws CompanyDetailsException {
+		List<Department> list = new ArrayList<>();
+		list.add(department);
+		ResponseEntity<List<Department>> expectedResponseEntity = new ResponseEntity<List<Department>>(list,
+				HttpStatus.OK);
+		ResponseEntity<List<Department>> actualResponseEntity = departmentController.retriveDepartment("hasan", "HCL");
+		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
+
+	}
 }

@@ -1,6 +1,7 @@
 package com.capeelectric.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,29 +45,28 @@ public class CompanyControllerTest {
 		
 	}
 
-//	@Test
-//	public void testUpdateCompany() throws CompanyDetailsException {
-//		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
-//		// when(companyserviceImpl.updateCompany(company));
-//		ResponseEntity<String> actualResponseEntity = companyController.updateCompany(company);
-//		assertEquals(actualResponseEntity, "200 OK OK,Client Successfully Updated,[]");
-//	}
-//
-//	@Test
-//	public void testaddCompany() throws CompanyDetailsException {
-//		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
-//		ResponseEntity<String> actualResponseEntity = companyController.addCompany(company);
-//		assertEquals(actualResponseEntity, "201 CREATED Created,Client Successfully Created,[]");
-//
-//	}
-//
-//	@Test
-//	public void testdeleteCompany() throws CompanyDetailsException {
-//		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
-//		ResponseEntity<String> actualResponseEntity = companyController.deleteCompany("lvsystem@capeindia.net", "cape");
-//		assertEquals(actualResponseEntity, "200 OK OK,Client Successfully Deleted,[]");
-//
-//	}
+	@Test
+	public void testUpdateCompany() throws CompanyDetailsException {
+		doNothing().when(companyserviceImp).updateCompany(company);
+		ResponseEntity<String> actualResponseEntity = companyController.updateCompany(company);
+		assertEquals(actualResponseEntity.getBody(), "Client Successfully Updated");
+	}
+
+	@Test
+	public void testaddCompany() throws CompanyDetailsException {
+		doNothing().when(companyserviceImp).addCompany(company);
+		ResponseEntity<String> actualResponseEntity = companyController.addCompany(company);
+		assertEquals(actualResponseEntity.getBody(), "Client Successfully Created");
+
+	}
+
+	@Test
+	public void testdeleteCompany() throws CompanyDetailsException {
+		doNothing().when(companyserviceImp).deleteCompany("lvsystem@capeindia.net", "cape");
+		ResponseEntity<String> actualResponseEntity = companyController.deleteCompany("lvsystem@capeindia.net", "cape");
+		assertEquals(actualResponseEntity.getBody(), "Client Successfully Deleted");
+
+	}
 
     @Test
     public void testretriveCompany() throws CompanyDetailsException {

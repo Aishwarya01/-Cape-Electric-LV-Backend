@@ -1,6 +1,7 @@
 package com.capeelectric.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,26 +44,26 @@ public class SiteControllerTest {
 
 	}
 
-//	@Test
-//	public void tesupdateSite() throws CompanyDetailsException {
-//		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>("Site Updated", HttpStatus.OK);
-//		ResponseEntity<String> actualResponseEntity = siteController.updateSite(site);
-//		assertEquals(actualResponseEntity, "200 OK OK,Site Successfully Updated,[]");
-//	}
-//
-//	@Test
-//	public void testaddSite() throws CompanyDetailsException {
-//		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>("successfully added Site", HttpStatus.OK);
-//		ResponseEntity<String> actualResponseEntity = siteController.addSite(site);;
-//		assertEquals(actualResponseEntity, "200 OK OK,Site Successfully Saved,[]");
-//	}
-//	
-//	@Test
-//	public void testdeleteSite() throws CompanyDetailsException {
-//		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
-//		ResponseEntity<String> actualResponseEntity = siteController.deleteSite(1);
-//		assertEquals(actualResponseEntity, "200 OK OK,Site Succesfully Deleted,[]");
-//	}
+	@Test
+	public void tesupdateSite() throws CompanyDetailsException {
+		doNothing().when(siteServiceImpl).updateSite(site);
+		ResponseEntity<String> actualResponseEntity = siteController.updateSite(site);
+		assertEquals(actualResponseEntity.getBody(), "Site Successfully Updated");
+	}
+
+	@Test
+	public void testaddSite() throws CompanyDetailsException {
+		doNothing().when(siteServiceImpl).addSite(site);
+		ResponseEntity<String> actualResponseEntity = siteController.addSite(site);
+		assertEquals(actualResponseEntity.getBody(), "Site Successfully Saved");
+	}
+
+	@Test
+	public void testdeleteSite() throws CompanyDetailsException {
+		doNothing().when(siteServiceImpl).deleteSite(1);
+		ResponseEntity<String> actualResponseEntity = siteController.deleteSite(1);
+		assertEquals(actualResponseEntity.getBody(), "Site Succesfully Deleted");
+	}
     
 	 @Test
 	    public void testretriveSite() throws CompanyDetailsException {
