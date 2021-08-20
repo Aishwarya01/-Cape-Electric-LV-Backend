@@ -54,7 +54,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setUpdatedBy(register.getUsername());
 					registerRepository.save(register);
 					logger.debug("Sucessfully Registration Information Saved");
-					return otpSend(register);
+					return otpSend(register.getContactNumber());
 				} else {
 					logger.debug(isValidIndianMobileNumber(register.getContactNumber())+"  Given MobileNumber is Invalid");
 					throw new RegistrationException("Invalid MobileNumber");
@@ -113,16 +113,30 @@ public class RegistrationServiceImpl implements RegistrationService {
 		}
 	}
 
+	@Override
+	public String resendOtp(String mobileNumber) throws RegistrationException {
+		if (mobileNumber != null) {
+			if (isValidIndianMobileNumber(mobileNumber)) {
+				return otpSend(mobileNumber);
+			} else {
+				throw new RegistrationException("Invalid MobileNumber");
+			}
+		} else {
+			throw new RegistrationException("Invalid Input");
+		}
+
+	}
+	
 	private boolean isValidIndianMobileNumber(String mobileNumber) {
 		Pattern p = Pattern.compile("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$");
 		Matcher m = p.matcher(mobileNumber);
 		return (m.find() && m.group().equals(mobileNumber));
 	}
 	
-	private String otpSend(Register register) throws RegistrationException {
+	private String otpSend(String mobileNumber) throws RegistrationException {
 
 		ResponseEntity<String> sendOtpResponse = restTemplate.exchange(
-				"http://localhost:6000/api/v1/sendOtp/" + register.getContactNumber(), HttpMethod.GET, null,
+				"http://localhost:6000/api/v1/sendOtp/" + mobileNumber, HttpMethod.GET, null,
 				String.class);
 
 		if (!sendOtpResponse.getBody().matches("(.*)Success(.*)")) {
@@ -131,4 +145,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 		return sendOtpResponse.getBody();
 	}
+
+
 }

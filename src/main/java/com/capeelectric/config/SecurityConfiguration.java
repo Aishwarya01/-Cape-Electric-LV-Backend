@@ -72,6 +72,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 						"/api/v2/forgotPassword/**", 
 						"/api/v2/updatePassword/**",
 						"/api/v2/createPassword/**",
+						"/api/v2/resendOtp/**",
 						"/api/v2/fetchStatesByCountryCode/**",
 						"/api/v2/retrieveApplicationTypes",
 						"/api/v2/fetchCountries")

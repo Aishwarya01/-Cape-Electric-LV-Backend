@@ -76,5 +76,11 @@ public class RegistrationController {
 		awsEmailService.sendEmail(register.getUsername(), "You have successfully updated your profile");
 		return new ResponseEntity<String>("Successfully Updated Registration", HttpStatus.OK);
 	}
-
+	
+	@PutMapping("/resendOtp/{mobileNumber}")
+	public ResponseEntity<String> resendOtp(@PathVariable String mobileNumber)
+			throws IOException, MessagingException, RegistrationException {
+		logger.debug("called resendOtp function mobileNumber : {}", mobileNumber);
+		return new ResponseEntity<String>(registrationService.resendOtp(mobileNumber), HttpStatus.OK);
+	}
 }
