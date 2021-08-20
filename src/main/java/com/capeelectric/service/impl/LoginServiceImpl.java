@@ -65,9 +65,8 @@ public class LoginServiceImpl implements LoginService {
 	 * @throws UserException
 	 */
 	@Override
-	public Register updatePassword(AuthenticationRequest request) throws UpdatePasswordException {
-		// TODO: Email triggering
-		logger.debug("UpdatePassword Starts");
+	public Register createPassword(AuthenticationRequest request) throws UpdatePasswordException {
+		logger.debug("createPassword Starts");
 		if (request.getEmail() != null && request.getPassword() != null) {
 			Register register = registrationRepository.findByUsername(request.getEmail()).get();
 			if (register != null && register.getUsername().equalsIgnoreCase(request.getEmail())) {
@@ -76,14 +75,14 @@ public class LoginServiceImpl implements LoginService {
 				register.setPassword(passwordEncoder.encode(request.getPassword()));
 				register.setUpdatedDate(LocalDateTime.now());
 				register.setUpdatedBy(request.getEmail());
-				logger.debug("UpdatePassword Ends");
+				logger.debug("createPassword Ends");
 				return registrationRepository.save(register);
 			} else {
-				logger.debug("UpdatePassword Ends");
+				logger.debug("createPassword Ends");
 				throw new UpdatePasswordException("User Not available");
 			}
 		} else {
-			logger.debug("UpdatePassword Ends");
+			logger.debug("createPassword Ends");
 			throw new UsernameNotFoundException("Username not valid");
 		}
 	}

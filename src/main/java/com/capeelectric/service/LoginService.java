@@ -16,6 +16,6 @@ public interface LoginService {
 
 	public Register changePassword(String email, String oldPassword, String password) throws ChangePasswordException;
 
-	public Register updatePassword(AuthenticationRequest request) throws UpdatePasswordException;
+	public Register createPassword(AuthenticationRequest request) throws UpdatePasswordException;
 
 }
