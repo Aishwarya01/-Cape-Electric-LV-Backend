@@ -6,6 +6,7 @@ import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.ForgotPasswordException;
 import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.model.Register;
+import com.capeelectric.request.AuthenticationRequest;
 
 public interface LoginService {
 
@@ -14,5 +15,7 @@ public interface LoginService {
 	public Register updatePassword(String email, String password) throws UpdatePasswordException;
 
 	public Register changePassword(String email, String oldPassword, String password) throws ChangePasswordException;
+
+	public Register updatePassword(AuthenticationRequest request) throws UpdatePasswordException;
 
 }

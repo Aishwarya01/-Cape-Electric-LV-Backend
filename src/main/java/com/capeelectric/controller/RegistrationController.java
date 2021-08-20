@@ -1,6 +1,7 @@
 package com.capeelectric.controller;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.Optional;
 
@@ -24,6 +25,7 @@ import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.AWSEmailService;
+import com.capeelectric.util.Utility;
 
 /**
  * 
@@ -43,16 +45,21 @@ public class RegistrationController {
 	private RegistrationService registrationService;
 
 	@PostMapping("/addRegistration")
-	public ResponseEntity<Void> addRegistration(@RequestBody Register register)
-			throws RegistrationException, MessagingException {
+	public ResponseEntity<String> addRegistration(@RequestBody Register register)
+			throws RegistrationException, MessagingException, MalformedURLException {
 		logger.info("called addRegistration function UserName : {}", register.getUsername());
-		Register registrationCreated = registrationService.addRegistration(register);
-
-		awsEmailService.sendEmail(register.getUsername(),
-				"You have been successfully Registered with Rush for Safety App. You may need to wait for 2hrs for getting approved from Admin.");
+		String OtpResponse = registrationService.addRegistration(register);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(registrationCreated.getRegisterId()).toUri();
-		return ResponseEntity.created(uri).build();
+				.buildAndExpand(register.getRegisterId()).toUri();
+		String resetUrl = Utility.getSiteURL(uri.toURL());
+		awsEmailService.sendEmail(register.getUsername(),
+				"You have been successfully Registered with Rush for Safety App. You may need to wait for 2hrs for getting approved from Admin."
+						+ "\n" + "\n" + "You can create the password with this link " + "\n"
+						+ (resetUrl.contains("localhost:5000")
+								? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
+								: "https://www.rushforsafety.com")
+						+ "/createPassword" + ";email=" + register.getUsername());
+		return new ResponseEntity<String>(OtpResponse, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/retrieveRegistration/{userName}")

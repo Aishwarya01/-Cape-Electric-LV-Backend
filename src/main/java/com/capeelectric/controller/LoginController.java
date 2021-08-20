@@ -87,17 +87,30 @@ public class LoginController {
 		return new ResponseEntity<String>(registerUser.getUsername(), HttpStatus.OK);
 		
 	}
+	
+	@PutMapping("/createPassword")
+	public ResponseEntity<String> createPassword(@RequestBody AuthenticationRequest request)
+			throws UpdatePasswordException, IOException, MessagingException {
 
+		logger.debug("CreatePassword starts");
+		Register updatedUser = loginService.updatePassword(request.getEmail(), request.getPassword());
+		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully created your password");
+		logger.debug("CreatePassword ends");
+		return new ResponseEntity<String>("You have Successfully Created Your Password", HttpStatus.OK);
+
+	}
+	
 	@PutMapping("/updatePassword")
 	public ResponseEntity<String> updatePassword(@RequestBody AuthenticationRequest request)
 			throws UpdatePasswordException, IOException, MessagingException {
-		
+
 		logger.debug("Update Password starts");
+
 		Register updatedUser = loginService.updatePassword(request.getEmail(), request.getPassword());
 		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully updated your password");
 		logger.debug("Update Password ends");
-		return new ResponseEntity<String>(updatedUser.getUsername(), HttpStatus.OK);
-		
+		return new ResponseEntity<String>("You have Successfully Updated Your Password", HttpStatus.OK);
+
 	}
 
 	@PutMapping("/changePassword")
@@ -132,5 +145,5 @@ public class LoginController {
 
 		}
 	}
-
+	
 }

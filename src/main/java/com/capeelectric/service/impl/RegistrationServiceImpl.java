@@ -2,11 +2,16 @@ package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
@@ -26,8 +31,11 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Autowired
 	private RegistrationRepository registerRepository;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+	
 	@Override
-	public Register addRegistration(Register register) throws RegistrationException {
+	public String addRegistration(Register register) throws RegistrationException {
 		logger.debug("AddingRegistration Starts with User : {} ", register.getUsername());
 		if (register.getUsername() != null && register.getCompanyName() != null && register.getAddress() != null
 				&& register.getApplicationType() != null && register.getContactNumber() != null
@@ -37,14 +45,21 @@ public class RegistrationServiceImpl implements RegistrationService {
 			Optional<Register> registerRepo = registerRepository.findByUsername(register.getUsername());
 			if (!registerRepo.isPresent()
 					|| !registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
-				register.setCreatedDate(LocalDateTime.now());
-				register.setPermission("NOT_AUTHORIZED");
-				register.setRole("Inspector");
-				register.setUpdatedDate(LocalDateTime.now());
-				register.setCreatedBy(register.getUsername());
-				register.setUpdatedBy(register.getUsername());
-				logger.debug("AddingRegistration Ended");
-				return registerRepository.save(register);
+				if (isValidIndianMobileNumber(register.getContactNumber())) {
+					register.setCreatedDate(LocalDateTime.now());
+					register.setPermission("NOT_AUTHORIZED");
+					register.setRole("Inspector");
+					register.setUpdatedDate(LocalDateTime.now());
+					register.setCreatedBy(register.getUsername());
+					register.setUpdatedBy(register.getUsername());
+					registerRepository.save(register);
+					logger.debug("Sucessfully Registration Information Saved");
+					return otpSend(register);
+				} else {
+					logger.debug(isValidIndianMobileNumber(register.getContactNumber())+"  Given MobileNumber is Invalid");
+					throw new RegistrationException("Invalid MobileNumber");
+				}
+
 			} else {
 				logger.debug("Given UserName Already Present");
 				throw new RegistrationException("Given UserName Already Present");
@@ -96,5 +111,24 @@ public class RegistrationServiceImpl implements RegistrationService {
 			logger.debug("UpdatingRegistration is Faild , Because Invalid Inputs");
 			throw new RegistrationException("Invalid Inputs");
 		}
+	}
+
+	private boolean isValidIndianMobileNumber(String mobileNumber) {
+		Pattern p = Pattern.compile("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$");
+		Matcher m = p.matcher(mobileNumber);
+		return (m.find() && m.group().equals(mobileNumber));
+	}
+	
+	private String otpSend(Register register) throws RegistrationException {
+
+		ResponseEntity<String> sendOtpResponse = restTemplate.exchange(
+				"http://localhost:6000/api/v1/sendOtp/" + register.getContactNumber(), HttpMethod.GET, null,
+				String.class);
+
+		if (!sendOtpResponse.getBody().matches("(.*)Success(.*)")) {
+			throw new RegistrationException(sendOtpResponse.getBody());
+		}
+
+		return sendOtpResponse.getBody();
 	}
 }

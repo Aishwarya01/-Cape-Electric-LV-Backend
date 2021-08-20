@@ -7,9 +7,12 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.ForgotPasswordException;
@@ -17,6 +20,7 @@ import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
+import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.service.LoginService;
 
 @Service
@@ -28,6 +32,9 @@ public class LoginServiceImpl implements LoginService {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	/**
 	 * Method to retrieve the user
@@ -49,6 +56,35 @@ public class LoginServiceImpl implements LoginService {
 		} else {
 			logger.debug("Find By User Name Ends");
 			throw new ForgotPasswordException("Email is required");
+		}
+	}
+	
+	/**
+	 * Method to update the user after changing the password
+	 * 
+	 * @throws UserException
+	 */
+	@Override
+	public Register updatePassword(AuthenticationRequest request) throws UpdatePasswordException {
+		// TODO: Email triggering
+		logger.debug("UpdatePassword Starts");
+		if (request.getEmail() != null && request.getPassword() != null) {
+			Register register = registrationRepository.findByUsername(request.getEmail()).get();
+			if (register != null && register.getUsername().equalsIgnoreCase(request.getEmail())) {
+				OtpVerify(request);
+				logger.debug("Successfully Otp Verified");
+				register.setPassword(passwordEncoder.encode(request.getPassword()));
+				register.setUpdatedDate(LocalDateTime.now());
+				register.setUpdatedBy(request.getEmail());
+				logger.debug("UpdatePassword Ends");
+				return registrationRepository.save(register);
+			} else {
+				logger.debug("UpdatePassword Ends");
+				throw new UpdatePasswordException("User Not available");
+			}
+		} else {
+			logger.debug("UpdatePassword Ends");
+			throw new UsernameNotFoundException("Username not valid");
 		}
 	}
 
@@ -102,6 +138,31 @@ public class LoginServiceImpl implements LoginService {
 			}
 		}
 		return null;
+	}
+	
+	private void OtpVerify(AuthenticationRequest request) throws UpdatePasswordException {
+
+		if (request.getEmail() != null && request.getOtp() != null && request.getOtpSession() != null
+				&& request.getPassword() != null) {
+
+			Optional<Register> registerRepo = registrationRepository.findByUsername(request.getEmail());
+
+			if (registerRepo.isPresent() && registerRepo.get().getPermission() != null
+					&& registerRepo.get().getPermission().equalsIgnoreCase("YES")) {
+				ResponseEntity<String> otpVerifyResponse = restTemplate.exchange(
+						"http://localhost:6000/api/v1/verifyOtp/" + request.getOtpSession() + "/" + request.getOtp(),
+						HttpMethod.GET, null, String.class);
+
+				if (!otpVerifyResponse.getBody().matches("(.*)Success(.*)")) {
+					throw new UpdatePasswordException("OTP Mismatched");
+				}
+			} else {
+				throw new UpdatePasswordException("You may need to wait for getting approved from Admin");
+			}
+
+		} else {
+			throw new UpdatePasswordException("Invaild Inputs");
+		}
 	}
 
 }
