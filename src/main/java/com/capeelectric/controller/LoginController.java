@@ -93,7 +93,7 @@ public class LoginController {
 			throws UpdatePasswordException, IOException, MessagingException {
 
 		logger.debug("CreatePassword starts");
-		Register updatedUser = loginService.createPassword(request);
+		Register updatedUser = loginService.updatePassword(request.getEmail(), request.getPassword());
 		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully created your password");
 		logger.debug("CreatePassword ends");
 		return new ResponseEntity<String>("You have Successfully Created Your Password", HttpStatus.OK);

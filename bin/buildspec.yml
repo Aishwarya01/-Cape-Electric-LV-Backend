@@ -1,14 +1,16 @@
 version: 0.2
-
 phases:
+  pre_build:
+    commands:
+    - echo "Entered the pre-build phase"
   build:
     commands:
-      - echo Entered the build phase...
-      - mvn clean package
+     - echo "Entered build phase"
+     - mvn clean prepare-package war:exploded
   post_build:
     commands:
-      - echo Build completed successfully
+     - echo "Entered the post-build phase"
+     - mv target/deploy ./
 artifacts:
   files:
-    - target/RushAppService.jar
-  discard-paths: yes
+    - deploy/**/*

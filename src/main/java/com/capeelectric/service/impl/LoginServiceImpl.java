@@ -65,7 +65,7 @@ public class LoginServiceImpl implements LoginService {
 	 * @throws UserException
 	 */
 	@Override
-	public Register createPassword(AuthenticationRequest request) throws UpdatePasswordException {
+	public Register updatePassword(AuthenticationRequest request) throws UpdatePasswordException {
 		// TODO: Email triggering
 		logger.debug("UpdatePassword Starts");
 		if (request.getEmail() != null && request.getPassword() != null) {
