@@ -59,6 +59,7 @@ public class RegistrationController {
 								? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
 								: "https://www.rushforsafety.com")
 						+ "/createPassword" + ";email=" + register.getUsername());
+		awsEmailService.sendMultiplePerson("Please Approve or Reject the inspector by Logging to Admin Portal");
 		return new ResponseEntity<String>(OtpResponse, HttpStatus.CREATED);
 	}
 

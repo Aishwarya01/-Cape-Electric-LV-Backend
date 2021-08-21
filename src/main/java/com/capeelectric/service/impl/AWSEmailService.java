@@ -29,6 +29,15 @@ public class AWSEmailService {
 
 	@Value("${app.email.from}")
 	private String FROM;
+	
+	@Value("${app.email.multiple.person.first}")
+	private String firstPersonEmail;
+	
+	@Value("${app.email.multiple.person.second}")
+	private String secondPersonEmail;
+	
+	@Value("${app.email.multiple.person.third}")
+	private String thirdPersonEmail;
 
 	private static final Logger logger = LoggerFactory.getLogger(AWSEmailService.class);
 
@@ -63,6 +72,40 @@ public class AWSEmailService {
 		message.setSentDate(new Date());
 		message.setFrom(new InternetAddress(FROM));
 		message.setRecipient(Message.RecipientType.TO, new InternetAddress(TO));
+		transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(emailConfig.getSMTP_HOST_PORT()), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
+		transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
+		transport.close();
+		System.out.println("email sent successfully........");
+
+
+	}
+	
+	public  void sendMultiplePerson(String content) throws MessagingException {
+
+		logger.debug("Inside AWS Email");
+		final String TO = firstPersonEmail+","+secondPersonEmail+","+thirdPersonEmail; // {YOUR_RECIPIENT_EMAIL_ADDRESS}
+
+		Properties props = new Properties();
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.host", emailConfig.getSMTP_HOST_NAME());
+		props.put("mail.smtp.auth", "false");
+		props.put("mail.smtp.starttls.enable", "true");
+
+		Session mailSession = Session.getDefaultInstance(props);
+		mailSession.setDebug(true);
+
+		Transport transport = mailSession.getTransport("smtp");
+
+		MimeMessage message = new MimeMessage(mailSession);
+
+		message.setSubject("Approval For Inspector");
+		message.setContent(content, "text/plain");
+		message.setSentDate(new Date());
+		message.setFrom(new InternetAddress(FROM));
+//		message.setRecipient(Message.RecipientType.TO, new InternetAddress(TO_1));
+//		message.setRecipient(Message.RecipientType.TO, new InternetAddress(TO_2));
+//		message.setRecipient(Message.RecipientType.TO, new InternetAddress(TO_3));
+		message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(TO) );
 		transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(emailConfig.getSMTP_HOST_PORT()), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
 		transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 		transport.close();
