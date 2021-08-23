@@ -109,7 +109,7 @@ public class LoginControllerTest {
 
 		when(loginServiceImpl.updatePassword("lvsystem@capeindia.net", "abcd12345")).thenReturn(register);
 		ResponseEntity<String> updatePassword = loginController.updatePassword(authenticationRequest);
-		assertEquals(updatePassword.getBody(), "lvsystem@capeindia.net");
+		assertEquals(updatePassword.getBody(), "You have Successfully Updated Your Password");
 	}
 
 	@Test
@@ -123,6 +123,20 @@ public class LoginControllerTest {
 
 		ResponseEntity<String> changePassword = loginController.changePassword(changePasswordRequest);
 		assertEquals(changePassword.getBody(), "lvsystem@capeindia.net");
+
+	}
+	
+	@Test
+	public void testCreatePassword()
+			throws  UpdatePasswordException, IOException, MessagingException {
+		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+		authenticationRequest.setEmail("lvsystem@capeindia.net");
+		authenticationRequest.setPassword("abcd");
+
+		when(loginServiceImpl.createPassword(authenticationRequest)).thenReturn(register);
+
+		ResponseEntity<String> createPassword = loginController.createPassword(authenticationRequest);
+		assertEquals(createPassword.getBody(), "You have Successfully Created Your Password");
 
 	}
 }

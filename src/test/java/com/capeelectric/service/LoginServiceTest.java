@@ -11,11 +11,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.client.RestTemplate;
 
 import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.ForgotPasswordException;
@@ -43,6 +48,9 @@ public class LoginServiceTest {
 	
 	@MockBean
 	private UsernameNotFoundException usernameNotFoundException;
+	
+	@Mock
+	private RestTemplate restTemplate;
 
 	private Register register;
 
@@ -117,5 +125,48 @@ public class LoginServiceTest {
 		assertEquals("Username not valid", assertThrows2.getMessage());
 
 	}
-	 
+	
+	@Test
+	public void testCreatePassword() throws UpdatePasswordException, UsernameNotFoundException {
+		Optional<Register> optionalRegister = Optional.of(register);
+
+		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+		authenticationRequest.setEmail("lvsystem@capeindia.net");
+		authenticationRequest.setPassword("abcd");
+		authenticationRequest.setOtp("123212");
+		authenticationRequest
+				.setOtpSession("{\"Status\":\"Success\",\"Details\":\"a2075b4a-25f8-44c1-824a-fd89cc310821\"}");
+
+		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionalRegister);
+
+		when(restTemplate.exchange("http://localhost:6000/api/v1/verifyOtp/"
+				+ authenticationRequest.getOtpSession() + "/" + authenticationRequest.getOtp(),
+				HttpMethod.GET, null, String.class))
+						.thenReturn(new ResponseEntity<String>(
+								"{\"Status\":\"Success\",\"Details\":\"a2075b4a-25f8-44c1-824a-fd89cc310821\"}",
+								HttpStatus.ACCEPTED));
+		
+		register.setPermission("YES");
+		Register createPassword_1 = loginServiceImpl.createPassword(authenticationRequest);
+		assertNull(createPassword_1);
+		
+		register.setPermission("NO");
+		UpdatePasswordException createPassword_2 = Assertions.assertThrows(UpdatePasswordException.class,
+				() -> loginServiceImpl.createPassword(authenticationRequest));
+
+		assertEquals("You may need to wait for getting approved from Admin", createPassword_2.getMessage());
+
+		register.setUsername("lvsystem123@capeindia.net");
+		Optional<Register> optionalRegister_1 = Optional.of(register);
+		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionalRegister_1);
+		UpdatePasswordException assertThrows_1 = Assertions.assertThrows(UpdatePasswordException.class,
+				() -> loginServiceImpl.createPassword(authenticationRequest));
+		assertEquals("User Not available", assertThrows_1.getMessage());
+
+		authenticationRequest.setEmail(null);
+		UsernameNotFoundException assertThrows2 = Assertions.assertThrows(UsernameNotFoundException.class,
+				() -> loginServiceImpl.createPassword(authenticationRequest));
+		assertEquals("Username not valid", assertThrows2.getMessage());
+		
+	}
 }

@@ -1,7 +1,6 @@
 package com.capeelectric.util;
 
 import java.net.URL;
-import java.util.Random;
 /**
  * 
  * @author capeelectricsoftware
