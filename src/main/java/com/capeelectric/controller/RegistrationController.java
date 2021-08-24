@@ -57,9 +57,10 @@ public class RegistrationController {
 						+ "\n" + "\n" + "You can create the password with this link " + "\n"
 						+ (resetUrl.contains("localhost:5000")
 								? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-								: "https://www.rushforsafety.com")
+										: "https://www.rushforsafety.com")
 						+ "/createPassword" + ";email=" + createdRegister.getUsername());
-		awsEmailService.sendMultiplePerson("Please Approve or Reject the inspector by Logging to Admin Portal");
+		awsEmailService.sendEmailToAdmin("Please Approve or Reject the inspector by Logging to Admin Portal for User"+register.getName() 
+								+" and Company "+ register.getCompanyName() +" with their Email "+register.getUsername());
 		return ResponseEntity.created(uri).build();
 	}
 

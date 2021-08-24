@@ -80,7 +80,7 @@ public class AWSEmailService {
 
 	}
 	
-	public  void sendMultiplePerson(String content) throws MessagingException {
+	public  void sendEmailToAdmin(String content) throws MessagingException {
 
 		logger.debug("Inside AWS Email");
 		final String TO = firstPersonEmail+","+secondPersonEmail+","+thirdPersonEmail; // {YOUR_RECIPIENT_EMAIL_ADDRESS}
