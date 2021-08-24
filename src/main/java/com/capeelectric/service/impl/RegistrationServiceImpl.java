@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,9 @@ import com.capeelectric.service.RegistrationService;
 public class RegistrationServiceImpl implements RegistrationService {
 
 	private static final Logger logger = LoggerFactory.getLogger(RegistrationServiceImpl.class);
+	
+	@Value("${sms.otp.send}")
+	private String sendOtp;
 
 	private static final String SESSION_TITLE = ".*\"Details\":\"(.+)\".*";
 	
@@ -50,7 +54,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 				if (isValidIndianMobileNumber(register.getContactNumber())) {
 					register.setCreatedDate(LocalDateTime.now());
 					register.setPermission("NOT_AUTHORIZED");
-					register.setRole("Inspector");
+					register.setRole("ROLE");
 					register.setUpdatedDate(LocalDateTime.now());
 					register.setCreatedBy(register.getUsername());
 					register.setUpdatedBy(register.getUsername());
@@ -138,8 +142,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	
 	private String otpSend(String mobileNumber) throws RegistrationException {
 
-		ResponseEntity<String> sendOtpResponse = restTemplate.exchange(
-				"http://localhost:6000/api/v1/sendOtp/" + mobileNumber, HttpMethod.GET, null,
+		ResponseEntity<String> sendOtpResponse = restTemplate.exchange(sendOtp + mobileNumber, HttpMethod.GET, null,
 				String.class);
 
 		if (!sendOtpResponse.getBody().matches("(.*)Success(.*)")) {

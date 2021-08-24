@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,6 +28,10 @@ import com.capeelectric.service.LoginService;
 public class LoginServiceImpl implements LoginService {
 
 	private static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+	
+	@Value("${sms.otp.verify}")
+	private String verifyOtp;
+	
 	@Autowired
 	private RegistrationRepository registrationRepository;
 
@@ -146,7 +151,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	private boolean verifyOtp(AuthenticationRequest request) throws UpdatePasswordException {
-		
+
 		boolean success = false;
 
 		if (request.getEmail() != null && request.getOtp() != null && request.getOtpSession() != null
@@ -157,8 +162,8 @@ public class LoginServiceImpl implements LoginService {
 			if (registerRepo.isPresent() && registerRepo.get().getPermission() != null
 					&& registerRepo.get().getPermission().equalsIgnoreCase("YES")) {
 				ResponseEntity<String> otpVerifyResponse = restTemplate.exchange(
-						"http://localhost:6000/api/v1/verifyOtp/" + request.getOtpSession() + "/" + request.getOtp(),
-						HttpMethod.GET, null, String.class);
+						verifyOtp + request.getOtpSession() + "/" + request.getOtp(), HttpMethod.GET, null,
+						String.class);
 
 				if (!otpVerifyResponse.getBody().matches("(.*)Success(.*)")) {
 					throw new UpdatePasswordException("OTP Mismatched");
@@ -172,7 +177,7 @@ public class LoginServiceImpl implements LoginService {
 		} else {
 			throw new UpdatePasswordException("Invalid Inputs");
 		}
-		
+
 		return success;
 	}
 
