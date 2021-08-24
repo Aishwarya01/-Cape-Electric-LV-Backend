@@ -70,13 +70,18 @@ public class LoginServiceImpl implements LoginService {
 		if (request.getEmail() != null && request.getPassword() != null) {
 			Register register = registrationRepository.findByUsername(request.getEmail()).get();
 			if (register != null && register.getUsername().equalsIgnoreCase(request.getEmail())) {
-				OtpVerify(request);
-				logger.debug("Successfully Otp Verified");
-				register.setPassword(passwordEncoder.encode(request.getPassword()));
-				register.setUpdatedDate(LocalDateTime.now());
-				register.setUpdatedBy(request.getEmail());
-				logger.debug("createPassword Ends");
-				return registrationRepository.save(register);
+				boolean value = verifyOtp(request);
+				if(value) {
+					logger.debug("Successfully Otp Verified");
+					register.setPassword(passwordEncoder.encode(request.getPassword()));
+					register.setUpdatedDate(LocalDateTime.now());
+					register.setUpdatedBy(request.getEmail());
+					logger.debug("createPassword Ends");
+					return registrationRepository.save(register);
+				}
+				else {
+					logger.debug("Otp Verification Failed");
+				}
 			} else {
 				logger.debug("createPassword Ends");
 				throw new UpdatePasswordException("User Not available");
@@ -85,6 +90,7 @@ public class LoginServiceImpl implements LoginService {
 			logger.debug("createPassword Ends");
 			throw new UsernameNotFoundException("Username not valid");
 		}
+		return null;
 	}
 
 	/**
@@ -139,7 +145,9 @@ public class LoginServiceImpl implements LoginService {
 		return null;
 	}
 	
-	private void OtpVerify(AuthenticationRequest request) throws UpdatePasswordException {
+	private boolean verifyOtp(AuthenticationRequest request) throws UpdatePasswordException {
+		
+		boolean success = false;
 
 		if (request.getEmail() != null && request.getOtp() != null && request.getOtpSession() != null
 				&& request.getPassword() != null) {
@@ -154,14 +162,18 @@ public class LoginServiceImpl implements LoginService {
 
 				if (!otpVerifyResponse.getBody().matches("(.*)Success(.*)")) {
 					throw new UpdatePasswordException("OTP Mismatched");
+				} else {
+					success = true;
 				}
 			} else {
 				throw new UpdatePasswordException("You may need to wait for getting approved from Admin");
 			}
 
 		} else {
-			throw new UpdatePasswordException("Invaild Inputs");
+			throw new UpdatePasswordException("Invalid Inputs");
 		}
+		
+		return success;
 	}
 
 }
