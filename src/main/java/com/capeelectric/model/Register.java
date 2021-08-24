@@ -76,6 +76,9 @@ public class Register {
 	
 	@Column(name = "COMMENT")
 	private String comment;
+	
+	@Column(name = "OTP_SESSION_KEY")
+	private String otpSessionKey;
 
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
@@ -231,6 +234,14 @@ public class Register {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public String getOtpSessionKey() {
+		return otpSessionKey;
+	}
+
+	public void setOtpSessionKey(String otpSessionKey) {
+		this.otpSessionKey = otpSessionKey;
 	}
 
 	public LocalDateTime getCreatedDate() {

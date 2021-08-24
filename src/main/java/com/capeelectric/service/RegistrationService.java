@@ -12,7 +12,7 @@ import com.capeelectric.model.Register;
  */
 public interface RegistrationService {
 
-	public String addRegistration(Register inspector) throws RegistrationException;
+	public Register addRegistration(Register inspector) throws RegistrationException;
 
 	public Optional<Register> retrieveRegistration(String userName) throws RegistrationException;
 

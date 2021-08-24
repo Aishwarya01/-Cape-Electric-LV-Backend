@@ -28,6 +28,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	private static final Logger logger = LoggerFactory.getLogger(RegistrationServiceImpl.class);
 
+	private static final String SESSION_TITLE = ".*\"Details\":\"(.+)\".*";
+	
 	@Autowired
 	private RegistrationRepository registerRepository;
 	
@@ -35,7 +37,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	private RestTemplate restTemplate;
 	
 	@Override
-	public String addRegistration(Register register) throws RegistrationException {
+	public Register addRegistration(Register register) throws RegistrationException {
 		logger.debug("AddingRegistration Starts with User : {} ", register.getUsername());
 		if (register.getUsername() != null && register.getCompanyName() != null && register.getAddress() != null
 				&& register.getApplicationType() != null && register.getContactNumber() != null
@@ -52,9 +54,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setUpdatedDate(LocalDateTime.now());
 					register.setCreatedBy(register.getUsername());
 					register.setUpdatedBy(register.getUsername());
+					register.setOtpSessionKey(otpSend(register.getContactNumber()));
 					registerRepository.save(register);
 					logger.debug("Sucessfully Registration Information Saved");
-					return otpSend(register.getContactNumber());
+					return registerRepository.save(register);
 				} else {
 					logger.debug(isValidIndianMobileNumber(register.getContactNumber())+"  Given MobileNumber is Invalid");
 					throw new RegistrationException("Invalid MobileNumber");
@@ -143,7 +146,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			throw new RegistrationException(sendOtpResponse.getBody());
 		}
 
-		return sendOtpResponse.getBody();
+		return sendOtpResponse.getBody().replaceAll(SESSION_TITLE, "$1");
 	}
 
 

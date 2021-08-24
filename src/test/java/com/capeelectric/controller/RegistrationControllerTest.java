@@ -76,7 +76,7 @@ public class RegistrationControllerTest {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
-		when(registrationService.addRegistration(register)).thenReturn("");
+		when(registrationService.addRegistration(register)).thenReturn(register);
 
 		doNothing().when(awsEmailService).sendEmail(register.getUsername(),
 				"You have been successfully Registered with Rush for Safety App. You may need to wait for 2hrs for getting approved from Admin."
@@ -85,7 +85,7 @@ public class RegistrationControllerTest {
 								? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
 								: "https://www.rushforsafety.com"));
 
-		ResponseEntity<String> addRegistration = registrationController.addRegistration(register);
+		  ResponseEntity<Void> addRegistration = registrationController.addRegistration(register);
 
 		assertEquals(addRegistration.getStatusCode(), HttpStatus.CREATED);
 		logger.info("RegistrationControllerTest testAddRegistration_funcion Ended");

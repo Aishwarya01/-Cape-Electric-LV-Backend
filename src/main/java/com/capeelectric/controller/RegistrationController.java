@@ -45,22 +45,22 @@ public class RegistrationController {
 	private RegistrationService registrationService;
 
 	@PostMapping("/addRegistration")
-	public ResponseEntity<String> addRegistration(@RequestBody Register register)
+	public ResponseEntity<Void> addRegistration(@RequestBody Register register)
 			throws RegistrationException, MessagingException, MalformedURLException {
 		logger.info("called addRegistration function UserName : {}", register.getUsername());
-		String OtpResponse = registrationService.addRegistration(register);
+		Register createdRegister = registrationService.addRegistration(register);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(register.getRegisterId()).toUri();
+				.buildAndExpand(createdRegister.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());
-		awsEmailService.sendEmail(register.getUsername(),
+		awsEmailService.sendEmail(createdRegister.getUsername(),
 				"You have been successfully Registered with Rush for Safety App. You may need to wait for 2hrs for getting approved from Admin."
 						+ "\n" + "\n" + "You can create the password with this link " + "\n"
 						+ (resetUrl.contains("localhost:5000")
 								? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
 								: "https://www.rushforsafety.com")
-						+ "/createPassword" + ";email=" + register.getUsername());
+						+ "/createPassword" + ";email=" + createdRegister.getUsername());
 		awsEmailService.sendMultiplePerson("Please Approve or Reject the inspector by Logging to Admin Portal");
-		return new ResponseEntity<String>(OtpResponse, HttpStatus.CREATED);
+		return ResponseEntity.created(uri).build();
 	}
 
 	@GetMapping("/retrieveRegistration/{userName}")

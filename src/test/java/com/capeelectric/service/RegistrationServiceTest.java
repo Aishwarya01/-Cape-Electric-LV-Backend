@@ -45,7 +45,7 @@ public class RegistrationServiceTest {
 
 	private Register register;
 
-	{
+	{ 
 		register = new Register();
 		register.setRegisterId(1);
 		register.setAddress("chennai");
@@ -79,8 +79,8 @@ public class RegistrationServiceTest {
 
 		// Success flow
 		register.setUsername("lvsystem123@capeindia.net");
-		String addRegistration = registrationServiceImpl.addRegistration(register);
-		assertEquals(addRegistration, "{\"Status\":\"Success\",\"Details\":\"a2075b4a-25f8-44c1-824a-fd89cc310821\"}");
+		Register addRegistration = registrationServiceImpl.addRegistration(register);
+		assertEquals(addRegistration.getUsername(), "lvsystem123@capeindia.net");
 
 		// Exception --> Invalid MobileNumber
 		register.setContactNumber("89988");
@@ -167,7 +167,7 @@ public class RegistrationServiceTest {
 
 		// Success flow
 		String resendOtp = registrationServiceImpl.resendOtp("9023092802");
-		assertEquals(resendOtp, "{\"Status\":\"Success\",\"Details\":\"a2075b4a-25f8-44c1-824a-fd89cc310821\"}");
+		assertEquals(resendOtp, "a2075b4a-25f8-44c1-824a-fd89cc310821");
 		
 		// Throwing Exception --> Invalid MobileNumber
 		RegistrationException assertThrows_1 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.resendOtp("9023092"));
