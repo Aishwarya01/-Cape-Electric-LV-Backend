@@ -8,12 +8,12 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
@@ -29,10 +29,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	private static final Logger logger = LoggerFactory.getLogger(RegistrationServiceImpl.class);
 	
-	@Value("${sms.otp.send}")
-	private String sendOtp;
-
 	private static final String SESSION_TITLE = ".*\"Details\":\"(.+)\".*";
+	
+	@Autowired
+	private OtpConfig otpConfig;
 	
 	@Autowired
 	private RegistrationRepository registerRepository;
@@ -59,9 +59,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setCreatedBy(register.getUsername());
 					register.setUpdatedBy(register.getUsername());
 					register.setOtpSessionKey(otpSend(register.getContactNumber()));
-					registerRepository.save(register);
+					Register createdRegister = registerRepository.save(register);
 					logger.debug("Sucessfully Registration Information Saved");
-					return registerRepository.save(register);
+					return createdRegister;
 				} else {
 					logger.debug(isValidIndianMobileNumber(register.getContactNumber())+"  Given MobileNumber is Invalid");
 					throw new RegistrationException("Invalid MobileNumber");
@@ -142,7 +142,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	
 	private String otpSend(String mobileNumber) throws RegistrationException {
 
-		ResponseEntity<String> sendOtpResponse = restTemplate.exchange(sendOtp + mobileNumber, HttpMethod.GET, null,
+		ResponseEntity<String> sendOtpResponse = restTemplate.exchange(otpConfig.getSendOtp() + mobileNumber, HttpMethod.GET, null,
 				String.class);
 
 		if (!sendOtpResponse.getBody().matches("(.*)Success(.*)")) {

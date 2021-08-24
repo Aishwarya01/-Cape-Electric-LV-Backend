@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.ForgotPasswordException;
 import com.capeelectric.exception.UpdatePasswordException;
@@ -29,8 +29,8 @@ public class LoginServiceImpl implements LoginService {
 
 	private static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 	
-	@Value("${sms.otp.verify}")
-	private String verifyOtp;
+	@Autowired
+	private OtpConfig otpConfig;
 	
 	@Autowired
 	private RegistrationRepository registrationRepository;
@@ -162,7 +162,7 @@ public class LoginServiceImpl implements LoginService {
 			if (registerRepo.isPresent() && registerRepo.get().getPermission() != null
 					&& registerRepo.get().getPermission().equalsIgnoreCase("YES")) {
 				ResponseEntity<String> otpVerifyResponse = restTemplate.exchange(
-						verifyOtp + request.getOtpSession() + "/" + request.getOtp(), HttpMethod.GET, null,
+						otpConfig.getVerifyOtp() + request.getOtpSession() + "/" + request.getOtp(), HttpMethod.GET, null,
 						String.class);
 
 				if (!otpVerifyResponse.getBody().matches("(.*)Success(.*)")) {

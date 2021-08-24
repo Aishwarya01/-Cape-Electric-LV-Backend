@@ -78,7 +78,7 @@ public class RegistrationController {
 		return new ResponseEntity<String>("Successfully Updated Registration", HttpStatus.OK);
 	}
 	
-	@PutMapping("/resendOtp/{mobileNumber}")
+	@GetMapping("/resendOtp/{mobileNumber}")
 	public ResponseEntity<String> resendOtp(@PathVariable String mobileNumber)
 			throws IOException, MessagingException, RegistrationException {
 		logger.debug("called resendOtp function mobileNumber : {}", mobileNumber);
