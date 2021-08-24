@@ -77,6 +77,7 @@ public class LoginServiceImpl implements LoginService {
 			if (register != null && register.getUsername().equalsIgnoreCase(request.getEmail())) {
 				boolean value = verifyOtp(request);
 				if(value) {
+					register.setOtpSessionKey(null);
 					logger.debug("Successfully Otp Verified");
 					register.setPassword(passwordEncoder.encode(request.getPassword()));
 					register.setUpdatedDate(LocalDateTime.now());
