@@ -59,7 +59,7 @@ public class RegistrationController {
 								? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
 										: "https://www.rushforsafety.com")
 						+ "/createPassword" + ";email=" + createdRegister.getUsername());
-		awsEmailService.sendEmailToAdmin("Please Approve or Reject the inspector by Logging to Admin Portal for User"+register.getName() 
+		awsEmailService.sendEmailToAdmin("Please Approve or Reject the inspector by Logging to Admin Portal for User "+register.getName() 
 								+" and Company "+ register.getCompanyName() +" with their Email "+register.getUsername());
 		return ResponseEntity.created(uri).build();
 	}
