@@ -75,7 +75,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 						"/api/v2/resendOtp/**",
 						"/api/v2/fetchStatesByCountryCode/**",
 						"/api/v2/retrieveApplicationTypes",
-						"/api/v2/fetchCountries")
+						"/api/v2/fetchCountries",
+						"/api/v2/retrieveRegistration/**")
 				.permitAll().antMatchers(HttpMethod.OPTIONS, "/**").permitAll().
 				// all other requests need to be authenticated
 				anyRequest().authenticated().and().
