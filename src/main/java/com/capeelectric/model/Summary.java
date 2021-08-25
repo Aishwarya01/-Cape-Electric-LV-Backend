@@ -61,6 +61,9 @@ public class Summary implements Serializable {
 
 	@Column(name = "INSPECTION_TESTING_DETAILED")
 	private String inspectionTestingDetailed;
+	
+	@Column(name = "INSPECTION_REPORT_TESTRESULT")
+	private String inspectionReportTestResult;
 
 	@Column(name = "RECOMMENDATIONS_DATE")
 	private String recommendationsDate;
@@ -161,6 +164,14 @@ public class Summary implements Serializable {
 
 	public void setInspectionTestingDetailed(String inspectionTestingDetailed) {
 		this.inspectionTestingDetailed = inspectionTestingDetailed;
+	}
+
+	public String getInspectionReportTestResult() {
+		return inspectionReportTestResult;
+	}
+
+	public void setInspectionReportTestResult(String inspectionReportTestResult) {
+		this.inspectionReportTestResult = inspectionReportTestResult;
 	}
 
 	public String getRecommendationsDate() {
