@@ -18,6 +18,6 @@ public interface RegistrationService {
 
 	public void updateRegistration(Register inspector) throws RegistrationException;
 
-	public String resendOtp(String mobileNumber) throws RegistrationException;
+	public void sendOtp(String userName, String mobileNumber) throws RegistrationException;
 
 }

@@ -63,6 +63,7 @@ public class RegistrationServiceTest {
 		register.setName("Cape");
 		register.setUsername("lvsystem@capeindia.net");
 		register.setState("TN");
+		register.setPermission("yes");
 	}
 
 	@Test
@@ -74,11 +75,12 @@ public class RegistrationServiceTest {
 		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionalRegister);
 		when(registrationRepository.save(register)).thenReturn(register);
 
-		when(restTemplate.exchange(otpConfig.getSendOtp() + "9023092802", HttpMethod.GET, null,
-				String.class))
-						.thenReturn(new ResponseEntity<String>(
-								"{\"Status\":\"Success\",\"Details\":\"a2075b4a-25f8-44c1-824a-fd89cc310821\"}",
-								HttpStatus.ACCEPTED));  
+		/*
+		 * when(restTemplate.exchange(otpConfig.getSendOtp() + "9023092802",
+		 * HttpMethod.GET, null, String.class)) .thenReturn(new ResponseEntity<String>(
+		 * "{\"Status\":\"Success\",\"Details\":\"a2075b4a-25f8-44c1-824a-fd89cc310821\"}",
+		 * HttpStatus.ACCEPTED));
+		 */
 
 		// Success flow
 		register.setUsername("lvsystem123@capeindia.net");
@@ -159,8 +161,8 @@ public class RegistrationServiceTest {
 	}
 	
 	@Test
-	public void testResendOtp() throws RegistrationException {
-		logger.info("RegistrationServiceTest testResendOtp_funcion Started");
+	public void testSendOtp() throws RegistrationException {
+		logger.info("RegistrationServiceTest testSendOtp_funcion Started");
 
 		when(restTemplate.exchange(otpConfig.getSendOtp() + "9023092802", HttpMethod.GET, null,
 				String.class))
@@ -168,19 +170,30 @@ public class RegistrationServiceTest {
 								"{\"Status\":\"Success\",\"Details\":\"a2075b4a-25f8-44c1-824a-fd89cc310821\"}",
 								HttpStatus.ACCEPTED));
 
+		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
+		
 		// Success flow
-		String resendOtp = registrationServiceImpl.resendOtp("9023092802");
-		assertEquals(resendOtp, "a2075b4a-25f8-44c1-824a-fd89cc310821");
+		registrationServiceImpl.sendOtp("lvsystem@capeindia.net", "9023092802");
 		
 		// Throwing Exception --> Invalid MobileNumber
-		RegistrationException assertThrows_1 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.resendOtp("9023092"));
+		RegistrationException assertThrows_1 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", "92802"));
 		assertEquals(assertThrows_1.getMessage(), "Invalid MobileNumber");
 		
-		// Throwing Exception --> Invalid Input
-		RegistrationException assertThrows_2 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.resendOtp(null));
-		assertEquals(assertThrows_2.getMessage(), "Invalid Input");
+		// Throwing Exception --> Enter registered MobileNumber
+		RegistrationException assertThrows_2 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", "9053092802"));
+		assertEquals(assertThrows_2.getMessage(), "Enter registered MobileNumber");
 		
-		logger.info("RegistrationServiceTest testResendOtp_funcion End");
+		// Throwing Exception --> Admin not approved for Your registration
+		register.setPermission("NO");
+		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
+		RegistrationException assertThrows_3 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", "9023092802"));
+		assertEquals(assertThrows_3.getMessage(), "Admin not approved for Your registration");
+		
+		// Throwing Exception --> Invalid Input
+		RegistrationException assertThrows_4 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", null));
+		assertEquals(assertThrows_4.getMessage(), "Invalid Input");
+		
+		logger.info("RegistrationServiceTest testSendOtp_funcion End");
 
 	}
 

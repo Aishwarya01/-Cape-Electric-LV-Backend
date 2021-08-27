@@ -54,11 +54,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 				if (isValidIndianMobileNumber(register.getContactNumber())) {
 					register.setCreatedDate(LocalDateTime.now());
 					register.setPermission("NOT_AUTHORIZED");
-					register.setRole("ROLE");
 					register.setUpdatedDate(LocalDateTime.now());
 					register.setCreatedBy(register.getUsername());
 					register.setUpdatedBy(register.getUsername());
-					register.setOtpSessionKey(otpSend(register.getContactNumber()));
 					Register createdRegister = registerRepository.save(register);
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
@@ -121,17 +119,35 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 
 	@Override
-	public String resendOtp(String mobileNumber) throws RegistrationException {
-		if (mobileNumber != null) {
-			if (isValidIndianMobileNumber(mobileNumber)) {
-				return otpSend(mobileNumber);
-			} else {
-				throw new RegistrationException("Invalid MobileNumber");
+	public void sendOtp(String userName, String mobileNumber) throws RegistrationException {
+
+		if (userName != null && mobileNumber != null) {
+
+			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
+			if (registerRepo.isPresent() && registerRepo.get() != null) {
+				if (registerRepo.get().getPermission().equalsIgnoreCase("Yes")) {
+					if (registerRepo.get().getContactNumber().contains(mobileNumber)) {
+						if (isValidIndianMobileNumber(mobileNumber)) {
+							String SessionKey = otpSend(mobileNumber);
+							Register register = registerRepo.get();
+							register.setOtpSessionKey(SessionKey);
+							register.setUpdatedDate(LocalDateTime.now());
+							register.setUpdatedBy(userName);
+							registerRepository.save(register);
+						} else {
+							throw new RegistrationException("Invalid MobileNumber");
+						}
+					} else {
+						throw new RegistrationException("Enter registered MobileNumber");
+					}
+				} else {
+					throw new RegistrationException("Admin not approved for Your registration");
+				}
 			}
+
 		} else {
 			throw new RegistrationException("Invalid Input");
 		}
-
 	}
 	
 	private boolean isValidIndianMobileNumber(String mobileNumber) {

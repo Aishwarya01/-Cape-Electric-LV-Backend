@@ -123,10 +123,10 @@ public class RegistrationControllerTest {
 	public void testResendOtp() throws RegistrationException, MessagingException, IOException {
 		logger.info("RegistrationControllerTest testResendOtp_funcion Started");
 
-		when(registrationService.resendOtp("+91-9878789788")).thenReturn("");
+		doNothing().when(registrationService).sendOtp("lvsystem@capeindia.net","+91-9878789788");
 
-		ResponseEntity<String> resendOtp = registrationController.resendOtp("+91-9878789788");
-		assertEquals(resendOtp.getStatusCode(), HttpStatus.OK);
+		 ResponseEntity<Void> sendOtp = registrationController.sendOtp("lvsystem@capeindia.net","+91-9878789788");
+		assertEquals(sendOtp.getStatusCode(), HttpStatus.OK);
 
 		logger.info("RegistrationControllerTest testResendOtp_funcion Ended");
 
