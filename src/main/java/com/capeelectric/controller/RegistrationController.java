@@ -52,15 +52,14 @@ public class RegistrationController {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(createdRegister.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());
-		awsEmailService.sendEmail(createdRegister.getUsername(),
-				"You have been successfully Registered with Rush for Safety App. You may need to wait for 2hrs for getting approved from Admin."
-						+ "\n" + "\n" + "You can create the password with this link " + "\n"
-						+ (resetUrl.contains("localhost:5000")
-								? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-										: "https://www.rushforsafety.com")
-						+ "/createPassword" + ";email=" + createdRegister.getUsername());
-		awsEmailService.sendEmailToAdmin("Please Approve or Reject the inspector by Logging to Admin Portal for User "+register.getName() 
-								+" and Company "+ register.getCompanyName() +" with their Email "+register.getUsername());
+		awsEmailService.sendEmailToAdmin("Please Approve or Reject the inspector by Logging to "
+				+ "Admin Portal for User "+register.getName()+ " and Company "+ register.getCompanyName() + " with their Email "
+				+ register.getUsername()
+				+ ". You can login to admin Portal with this link " + "\n"
+				+ (resetUrl.contains("localhost:5000")
+						? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
+								: "https://www.rushforsafety.com")
+				+ "/admin");
 		return ResponseEntity.created(uri).build();
 	}
 
