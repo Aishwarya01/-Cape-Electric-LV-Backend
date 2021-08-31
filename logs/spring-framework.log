@@ -9813,3 +9813,15 @@ Method [public org.springframework.http.ResponseEntity<java.lang.String> com.cap
 2021-08-31T19:06:09.820+0530 DEBUG Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
 2021-08-31T19:06:09.840+0530 DEBUG ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
 2021-08-31T19:06:09.846+0530 DEBUG ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2021-08-31T19:09:06.301+0530 DEBUG 49 mappings in 'requestMappingHandlerMapping'
+2021-08-31T19:09:06.329+0530 DEBUG Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2021-08-31T19:09:06.348+0530 DEBUG ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2021-08-31T19:09:06.354+0530 DEBUG ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2021-08-31T19:36:29.485+0530 DEBUG 49 mappings in 'requestMappingHandlerMapping'
+2021-08-31T19:36:29.587+0530 DEBUG Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2021-08-31T19:36:29.642+0530 DEBUG ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2021-08-31T19:36:29.658+0530 DEBUG ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice
+2021-08-31T19:36:40.832+0530 DEBUG 49 mappings in 'requestMappingHandlerMapping'
+2021-08-31T19:36:40.910+0530 DEBUG Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2021-08-31T19:36:40.962+0530 DEBUG ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2021-08-31T19:36:40.977+0530 DEBUG ControllerAdvice beans: 1 @ExceptionHandler, 1 ResponseBodyAdvice

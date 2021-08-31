@@ -3712,3 +3712,24 @@
 2021-08-31T19:06:09.046+0530 INFO No active profile set, falling back to default profiles: default
 2021-08-31T19:06:09.552+0530 DEBUG Filter 'jwtRequestFilter' configured for use
 2021-08-31T19:06:09.879+0530 INFO Started LvSafetyVerificationApplication in 0.851 seconds (JVM running for 28793.175)
+2021-08-31T19:09:05.534+0530 INFO Starting LvSafetyVerificationApplication using Java 15.0.2 on DESKTOP-EQ8CCC7 with PID 13028 (C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd\target\classes started by capeelectricsoftware in C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd)
+2021-08-31T19:09:05.534+0530 DEBUG Running with Spring Boot v2.4.1, Spring v5.3.2
+2021-08-31T19:09:05.534+0530 INFO No active profile set, falling back to default profiles: default
+2021-08-31T19:09:06.053+0530 DEBUG Filter 'jwtRequestFilter' configured for use
+2021-08-31T19:09:06.387+0530 INFO Started LvSafetyVerificationApplication in 0.872 seconds (JVM running for 28969.683)
+2021-08-31T19:36:27.524+0530 INFO Starting LvSafetyVerificationApplication using Java 15.0.2 on DESKTOP-EQ8CCC7 with PID 13028 (C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd\target\classes started by capeelectricsoftware in C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd)
+2021-08-31T19:36:27.525+0530 DEBUG Running with Spring Boot v2.4.1, Spring v5.3.2
+2021-08-31T19:36:27.525+0530 INFO No active profile set, falling back to default profiles: default
+2021-08-31T19:36:28.924+0530 DEBUG Filter 'jwtRequestFilter' configured for use
+2021-08-31T19:36:29.746+0530 INFO Started LvSafetyVerificationApplication in 2.266 seconds (JVM running for 30613.043)
+2021-08-31T19:36:38.859+0530 INFO Starting LvSafetyVerificationApplication using Java 15.0.2 on DESKTOP-EQ8CCC7 with PID 13028 (C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd\target\classes started by capeelectricsoftware in C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd)
+2021-08-31T19:36:38.859+0530 DEBUG Running with Spring Boot v2.4.1, Spring v5.3.2
+2021-08-31T19:36:38.859+0530 INFO No active profile set, falling back to default profiles: default
+2021-08-31T19:36:40.225+0530 DEBUG Filter 'jwtRequestFilter' configured for use
+2021-08-31T19:36:41.072+0530 INFO Started LvSafetyVerificationApplication in 2.261 seconds (JVM running for 30624.369)
+2021-08-31T19:37:31.241+0530 INFO Starting LvSafetyVerificationApplication using Java 15.0.2 on DESKTOP-EQ8CCC7 with PID 13028 (C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd\target\classes started by capeelectricsoftware in C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd)
+2021-08-31T19:37:31.241+0530 DEBUG Running with Spring Boot v2.4.1, Spring v5.3.2
+2021-08-31T19:37:31.241+0530 INFO The following profiles are active: dev
+2021-08-31T19:37:32.975+0530 INFO Starting LvSafetyVerificationApplication using Java 15.0.2 on DESKTOP-EQ8CCC7 with PID 13028 (C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd\target\classes started by capeelectricsoftware in C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd)
+2021-08-31T19:37:32.975+0530 DEBUG Running with Spring Boot v2.4.1, Spring v5.3.2
+2021-08-31T19:37:32.975+0530 INFO The following profiles are active: dev
