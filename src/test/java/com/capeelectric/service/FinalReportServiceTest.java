@@ -94,8 +94,7 @@ public class FinalReportServiceTest {
 		logger.info("testRetriveListOfSite method started");
 		ArrayList<Site> sites = new ArrayList<Site>();
 		sites.add(site);
-		when(siteRepository.findByClientNameAndDepartmentName("LVsystem@gmail.com", "IT")).thenReturn(sites);
-
+		when(siteRepository.findByUserName("LVsystem@gmail.com")).thenReturn(sites);
 		List<Site> retrieveListOfSite = finalReportServiceImpl.retrieveListOfSite("LVsystem@gmail.com", "IT");
 		assertTrue(retrieveListOfSite.contains(site));
 

@@ -63,7 +63,7 @@ public class FinalReportServiceImpl implements FinalReportService {
 		if (userName != null && departmentName != null) {
 			try {
 				logger.info("Site fetching process started");
-				return siteRepository.findByClientNameAndDepartmentName(userName, departmentName);
+				return siteRepository.findByUserName(userName);
 			} catch (Exception e) {
 				logger.info("Site fetching process faild");
 				throw new FinalReportException("Fetching site process faild");

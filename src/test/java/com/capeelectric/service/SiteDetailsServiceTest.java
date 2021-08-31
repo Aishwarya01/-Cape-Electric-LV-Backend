@@ -18,13 +18,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.CompanyDetailsException;
-import com.capeelectric.model.Company;
-import com.capeelectric.model.Department;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.User;
-import com.capeelectric.repository.CompanyRepository;
-import com.capeelectric.repository.DepartmentRepository;
 import com.capeelectric.repository.SitePersonsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.UserRepository;
@@ -41,13 +37,7 @@ public class SiteDetailsServiceTest {
 	private SiteServiceImpl siteServiceImpl;
 
 	@MockBean
-	private DepartmentRepository departmentRepository;
-
-	@MockBean
 	private UserRepository userRepository;
-
-	@MockBean
-	private CompanyRepository companyRepository;
 
 	@MockBean
 	private CompanyDetailsException companyDetailsException;
@@ -65,25 +55,11 @@ public class SiteDetailsServiceTest {
 
 	private Site site;
 
-	private Department department;
-
-	private Company company;
 	{
-		company = new Company();
-		company.setUserName("hasan");
-		company.setClientName("nissan");
-
-		department = new Department();
-		department.setClientName("nissan");
-		department.setDepartmentName("Accounts");
-
 		site = new Site();
 		site.setUserName("hasan");
-		site.setClientName("nissan");
-		site.setDepartmentName("Accounts");
 		site.setSiteId(1);
 		site.setSite("user");
-		site.setClientName("nissan");
 
 		sitePersons1.setPersonId(1);
 		sitePersons1.setPersonInchargeEmail("LVsystem@gmail.com");
@@ -129,10 +105,7 @@ public class SiteDetailsServiceTest {
 		test();
 		Site site2 = new Site();
 		site2.setUserName("hasan");
-		site2.setClientName("nissan");
-		site2.setDepartmentName("Accounts");
 		site2.setSite("user");
-		site2.setClientName("nissan");
 
 		site2.setSitePersons(sitePersonsSet);
 		site2.setSiteId(2);
@@ -157,7 +130,7 @@ public class SiteDetailsServiceTest {
 
 	@Test
 	public void testupdateSite_InvalidInputsException() throws CompanyDetailsException {
-		site.setDepartmentName(null);
+		site.setUserName(null);
 		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
 				() -> siteServiceImpl.updateSite(site));
 		assertEquals(assertThrows.getMessage(), "invalid inputs");
@@ -165,47 +138,11 @@ public class SiteDetailsServiceTest {
 	}
 
 	@Test
-	public void testupdateSite_ClientNameNotPresentException() throws CompanyDetailsException {
-
-		when(departmentRepository.findByClientNameAndDepartmentName(site.getClientName(), site.getDepartmentName()))
-				.thenReturn(department);
-		department.setClientName("Test");
-		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
-				() -> siteServiceImpl.updateSite(site));
-		assertEquals(assertThrows.getMessage(), "clientName  nissan  not present Accounts department");
-
-	}
-
-	@Test
-	public void testupdateSite_DepartmentNotPresentException() throws CompanyDetailsException {
-
-		when(departmentRepository.findByClientNameAndDepartmentName(site.getClientName(), site.getDepartmentName()))
-				.thenReturn(department);
-		department.setDepartmentName("mech");
-		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
-				() -> siteServiceImpl.updateSite(site));
-		assertEquals(assertThrows.getMessage(), "Accounts  department not present for nissan company");
-
-	}
-
-	@Test
 	public void testaddSite_Success_Flow() throws CompanyDetailsException {
-		Optional<Company> companyList = null;
-		companyList = Optional.of(company);
 
 		User user = new User();
 		user.setFirstname("firstName");
 		user.setLastname("lastName");
-
-		when(companyRepository.findByUserNameAndClientName(department.getUserName(), department.getClientName()))
-				.thenReturn(companyList);
-
-		when(departmentRepository.findByClientNameAndDepartmentName(site.getClientName(), site.getDepartmentName()))
-				.thenReturn(department);
-
-		when(userRepository.findByUsername(department.getUserName())).thenReturn(Optional.of(user));
-		when(companyRepository.findByClientName(site.getClientName())).thenReturn(Optional.of(company));
-
 		sitePersonsSet.add(sitePersons1);
 		site.setSitePersons(sitePersonsSet);
 		siteServiceImpl.addSite(site);
@@ -214,18 +151,16 @@ public class SiteDetailsServiceTest {
 	@Test
 	public void testaddSite_Exception() throws CompanyDetailsException {
 
-		when(companyRepository.findByClientName(site.getClientName())).thenReturn(Optional.of(company));
-		when(departmentRepository.findByClientNameAndDepartmentName(site.getClientName(), site.getDepartmentName()))
-				.thenReturn(department);
-		when(siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(), site.getDepartmentName(),
-				site.getSite())).thenReturn(site);
+		ArrayList<Site> list = new ArrayList<Site>();
+		list.add(site);
+		when(siteRepository.findByUserName(site.getUserName())).thenReturn(list);
 		when(sitePersonsRepository.findByPersonInchargeEmail(sitePersons2.getPersonInchargeEmail()))
 				.thenReturn(Optional.of(sitePersons2));
+		when(siteRepository.findByUserNameAndSite("hasan", "user1")).thenReturn(Optional.of(site));
 
 		Site site2 = new Site();
-		site2.setClientName("nissan");
-		site2.setDepartmentName("Accounts");
 		site2.setSite("user1");
+		site2.setUserName("hasan");
 		sitePersons3.setPersonInchargeEmail("Cape@gmail.com");
 		sitePersons3.setInActive(true);
 		sitePersonsSet.add(sitePersons3);
@@ -234,21 +169,12 @@ public class SiteDetailsServiceTest {
 				() -> siteServiceImpl.addSite(site2));
 		assertEquals(assertThrows5.getMessage(), "PersonInchargEmail already present");
 
+		when(siteRepository.findByUserNameAndSite("hasan", "user")).thenReturn(Optional.of(site));
 		CompanyDetailsException assertThrows1 = Assertions.assertThrows(CompanyDetailsException.class,
 				() -> siteServiceImpl.addSite(site));
 		assertEquals(assertThrows1.getMessage(), "user: site already present");
 
-		department.setDepartmentName("mech");
-		CompanyDetailsException assertThrows2 = Assertions.assertThrows(CompanyDetailsException.class,
-				() -> siteServiceImpl.addSite(site));
-		assertEquals(assertThrows2.getMessage(), "Accounts : department not present  nissan company");
-
-		site.setClientName("HCL Tech");
-		CompanyDetailsException assertThrows3 = Assertions.assertThrows(CompanyDetailsException.class,
-				() -> siteServiceImpl.addSite(site));
-		assertEquals(assertThrows3.getMessage(), "clientName  HCL Tech  not present Accounts department");
-
-		site.setClientName(null);
+		site.setUserName(null);
 		CompanyDetailsException assertThrows4 = Assertions.assertThrows(CompanyDetailsException.class,
 				() -> siteServiceImpl.addSite(site));
 		assertEquals(assertThrows4.getMessage(), "invalid inputs");
@@ -282,13 +208,13 @@ public class SiteDetailsServiceTest {
 	public void testretriveSite_Success_Flow() throws CompanyDetailsException {
 		List<Site> siteList = new ArrayList<>();
 		siteList.add(site);
-		when(siteRepository.findByClientNameAndDepartmentName(site.getClientName(), site.getDepartmentName()))
-				.thenReturn(siteList);
 
-		siteServiceImpl.retriveSite("nissan", "Accounts");
+		when(siteRepository.findByUserName(site.getUserName())).thenReturn(siteList);
+
+		siteServiceImpl.retriveSite("nissan");
 
 		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
-				() -> siteServiceImpl.retriveSite("nissan", null));
+				() -> siteServiceImpl.retriveSite(null));
 		assertEquals(assertThrows.getMessage(), "invalid inputs");
 
 	}
@@ -297,13 +223,8 @@ public class SiteDetailsServiceTest {
 		List<Site> deptlist = new ArrayList<>();
 		deptlist.add(site);
 
-		when(departmentRepository.findByClientNameAndDepartmentName(site.getClientName(), site.getDepartmentName()))
-				.thenReturn(department);
-
-		when(siteRepository.findByClientNameAndDepartmentName(site.getClientName(), site.getDepartmentName()))
-				.thenReturn(deptlist);
-		when(siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(), site.getDepartmentName(),
-				site.getSite())).thenReturn(site);
+		when(siteRepository.findByUserName(site.getUserName())).thenReturn(deptlist);
+		when(siteRepository.findByUserNameAndSite(site.getUserName(), site.getSite())).thenReturn(Optional.of(site));
 		when(sitePersonsRepository.findByPersonInchargeEmail(sitePersons1.getPersonInchargeEmail()))
 				.thenReturn(Optional.of(sitePersons1));
 		when(sitePersonsRepository.findByPersonInchargeEmail(sitePersons2.getPersonInchargeEmail()))
