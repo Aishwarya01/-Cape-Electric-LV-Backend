@@ -2,13 +2,14 @@ package com.capeelectric.repository;
 
  
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
 import com.capeelectric.model.Site;
 
 public interface SiteRepository extends CrudRepository<Site, Integer> {
-	Site findByClientNameAndDepartmentNameAndSite(String clientName, String departmentName,String site);
-	
-	List<Site> findByClientNameAndDepartmentName(String clientName, String departmentName);
+	Optional<Site> findByUserNameAndSite(String userName, String site);
+
+	List<Site> findByUserName(String userName);
 }

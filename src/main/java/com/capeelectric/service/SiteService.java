@@ -12,5 +12,5 @@ public interface SiteService {
 
 	public void deleteSite(Integer site) throws CompanyDetailsException;
 
-	public List<Site> retriveSite(String clientName,String departmentName)throws CompanyDetailsException;
+	public List<Site> retriveSite(String userName) throws CompanyDetailsException;
 }

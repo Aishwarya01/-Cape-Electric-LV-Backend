@@ -51,8 +51,7 @@ public class FinalReportControllerTest {
 
 	{
 		site = new Site();
-		site.setClientName("LVsystem@gmail.com");
-		site.setDepartmentName("cape");
+		site.setUserName("LVsystem@gmail.com");
 	}
 
 	{
@@ -70,9 +69,9 @@ public class FinalReportControllerTest {
 		logger.info("FinalReportControllerTest testRetrieveListOfSite Function Started");
 		List<Site> arrayList = new ArrayList<>();
 		arrayList.add(site);
-		when(finalReportServiceImpl.retrieveListOfSite("LVsystem@gmail.com", "cape")).thenReturn(arrayList);
+		when(finalReportServiceImpl.retrieveListOfSite("LVsystem@gmail.com")).thenReturn(arrayList);
 
-		ResponseEntity<List<Site>> listOfSite = finalReportController.retrieveListOfSite("LVsystem@gmail.com", "cape");
+		ResponseEntity<List<Site>> listOfSite = finalReportController.retrieveListOfSite("LVsystem@gmail.com");
 		assertEquals(listOfSite.getStatusCode() , HttpStatus.OK);
 		logger.info("FinalReportControllerTest testRetrieveListOfSite Function Started");
 	}
@@ -81,7 +80,7 @@ public class FinalReportControllerTest {
 	public void retrieveFinalReport() throws FinalReportException {
 		logger.info("FinalReportControllerTest retrieveFinalReport Function Started");
 		List<Site> arrayList = new ArrayList<>();
-		when(finalReportServiceImpl.retrieveListOfSite("LVsystem@gmail.com", "cape")).thenReturn(arrayList);
+		when(finalReportServiceImpl.retrieveListOfSite("LVsystem@gmail.com")).thenReturn(arrayList);
 
 		 ResponseEntity<Optional<FinalReport>> finalReport = finalReportController.retrieveReports("LVsystem@gmail.com", 1);
 		assertEquals(finalReport.getStatusCode() , HttpStatus.OK);

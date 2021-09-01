@@ -11,15 +11,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
@@ -29,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "site_table")
 @NamedQueries(value = {
-		@NamedQuery(name = "SiteRepository.findByClientNameAndDepartmentName", query = "select s from Site s where s.clientName=:clientName and s.departmentName=:departmentName") })
+		@NamedQuery(name = "SiteRepository.findByUserNameAndSite", query = "select s from Site s where s.userName=:userName and s.site=:site") })
 public class Site implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -43,12 +40,6 @@ public class Site implements Serializable {
 
 	@Column(name = "USER_NAME")
 	private String userName;
-
-	@Column(name = "CLIENT_NAME")
-	private String clientName;
-
-	@Column(name = "DEPARTMENT_NAME")
-	private String departmentName;
 
 	@Column(name = "SITE")
 	private String site;
@@ -86,12 +77,6 @@ public class Site implements Serializable {
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 
-	@JsonBackReference
-	@ManyToOne
-	@JoinColumn(name = "DEPARTMENT_ID")
-	private Department department;
-
-	
 	@OneToMany(mappedBy="Site",fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	private Set<SitePersons> sitePersons;
 	
@@ -109,22 +94,6 @@ public class Site implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	public String getClientName() {
-		return clientName;
-	}
-
-	public void setClientName(String clientName) {
-		this.clientName = clientName;
-	}
-
-	public String getDepartmentName() {
-		return departmentName;
-	}
-
-	public void setDepartmentName(String departmentName) {
-		this.departmentName = departmentName;
 	}
 
 	public String getSite() {
@@ -221,14 +190,6 @@ public class Site implements Serializable {
 
 	public void setUpdatedDate(LocalDateTime updatedDate) {
 		this.updatedDate = updatedDate;
-	}
-
-	public Department getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
 	}
 
 	public String getSiteCd() {

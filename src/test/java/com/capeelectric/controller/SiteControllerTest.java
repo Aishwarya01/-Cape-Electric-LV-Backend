@@ -37,8 +37,6 @@ public class SiteControllerTest {
 	{
 		site = new Site();
 		site.setUserName("hasan");
-		site.setClientName("nissan");
-		site.setDepartmentName("Accounts");
 		site.setSiteId(1);
 		site.setSite("user");
 
@@ -70,7 +68,7 @@ public class SiteControllerTest {
 	    	 List<Site> list = new ArrayList<>();
 	    	 list.add(site);
 	    	 ResponseEntity<List<Site>> expectedResponseEntity =new  ResponseEntity<List<Site>>(list, HttpStatus.OK);
-		     ResponseEntity<List<Site>> actualResponseEntity = siteController.retriveSite("HCL","Electrical");
+		     ResponseEntity<List<Site>> actualResponseEntity = siteController.retriveSite(site.getUserName());
 		     assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
 
 	    }
