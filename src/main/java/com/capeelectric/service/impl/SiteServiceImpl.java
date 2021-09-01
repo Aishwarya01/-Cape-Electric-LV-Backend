@@ -38,34 +38,6 @@ public class SiteServiceImpl implements SiteService {
 	@Override
 	public void addSite(Site site) throws CompanyDetailsException {
 		int count = 0;
- 
-		if (site.getClientName() != null && site.getDepartmentName() != null) {
-			Optional<Company> companyRepo = companyRepository.findByClientName(site.getClientName());
-			if (companyRepo.isPresent() && companyRepo.get() != null
-					&& companyRepo.get().getClientName().equalsIgnoreCase(site.getClientName())) {
-				Department department = departmentRepository.findByClientNameAndDepartmentName(site.getClientName(),
-						site.getDepartmentName());
-				if (department != null && department.getClientName().equalsIgnoreCase(site.getClientName())
-						&& department.getDepartmentName().equalsIgnoreCase(site.getDepartmentName())) {
-					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
-							site.getDepartmentName(), site.getSite());
-
-					if (siteRepo == null || !siteRepo.getSite().equalsIgnoreCase(site.getSite())) {
-						site.setDepartment(department);
-						site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
-						site.setCreatedDate(LocalDateTime.now());
-						site.setUpdatedDate(LocalDateTime.now());
-						site.setCreatedBy(generateFullName(department.getUserName()));
-						site.setUpdatedBy(generateFullName(department.getUserName()));
-						boolean email = checkSitePersonEmail(site.getSitePersons());
-						if (email) {
-							siteRepository.save(site);
-						}else {
-							throw new CompanyDetailsException("Email-Id Already Existing");
-						}
-					} else {
-						throw new CompanyDetailsException("Site_Name Already Available");
-					}
 
 		if (site.getUserName() != null && site.getSite() != null) {
 			Optional<Site> siteRepo = siteRepository.findByUserNameAndSite(site.getUserName(), site.getSite());
@@ -80,10 +52,10 @@ public class SiteServiceImpl implements SiteService {
 				if (email) {
 					siteRepository.save(site);
 				} else {
-					throw new CompanyDetailsException("Department_Name Not Available");
+					throw new CompanyDetailsException("PersonInchargEmail already present");
 				}
 			} else {
-				throw new CompanyDetailsException("Client_Name Not Available");
+				throw new CompanyDetailsException(site.getSite() + ": site already present");
 			}
 
 		} else {
@@ -99,36 +71,8 @@ public class SiteServiceImpl implements SiteService {
 	@Override
 	public void updateSite(Site site) throws CompanyDetailsException {
 		int count = 0;
-		if (site.getDepartmentName() != null && site.getClientName() != null && site.getUserName() != null
-				&& site.getSiteId() != null) {
-			Department department = departmentRepository.findByClientNameAndDepartmentName(site.getClientName(),
-					site.getDepartmentName());
-			if (department != null && department.getClientName().equalsIgnoreCase(site.getClientName())) {
-				if (department != null && department.getDepartmentName().equalsIgnoreCase(site.getDepartmentName())) {
 
-					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
-							site.getDepartmentName(), site.getSite());
-					
-		 			Set<SitePersons> sitePersons = deleteSitePersonDetails(site.getSitePersons());
-					if(!sitePersons.isEmpty()) {
-						site.getSitePersons().removeAll(sitePersons);
-					}
-					if (siteRepo != null && siteRepo.getSite().equalsIgnoreCase(site.getSite())
-							&& siteRepo.getSiteId().equals(site.getSiteId())) {
-						site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
-						site.setUpdatedDate(LocalDateTime.now());
-						site.setUpdatedBy(generateFullName(department.getUserName()));
-						boolean email = checkSitePersonEmail(site.getSitePersons());
-						if (email) {
-							site.setDepartment(department);
-							siteRepository.save(site);
-						}else {
-							throw new CompanyDetailsException("PersonInchargEmail Already Available");
-						}
-					} else {
-						throw new CompanyDetailsException("Site_Name Not Available");
-					}
-
+		if (site.getUserName() != null && site.getSite() != null) {
 			Optional<Site> siteRepo = siteRepository.findByUserNameAndSite(site.getUserName(), site.getSite());
 			Set<SitePersons> sitePersons = deleteSitePersonDetails(site.getSitePersons());
 			if (!sitePersons.isEmpty()) {
@@ -143,10 +87,10 @@ public class SiteServiceImpl implements SiteService {
 				if (email) {
 					siteRepository.save(site);
 				} else {
-					throw new CompanyDetailsException("Department_Name Not Available");
+					throw new CompanyDetailsException("PersonInchargEmail already present");
 				}
 			} else {
-				throw new CompanyDetailsException("Client_Name Not Available");
+				throw new CompanyDetailsException(site.getSite() + " site not present");
 			}
 		} else {
 			throw new CompanyDetailsException("Invalid Inputs");
@@ -166,11 +110,11 @@ public class SiteServiceImpl implements SiteService {
 
 				siteRepository.deleteById(siteId);
 			} else {
-				throw new CompanyDetailsException("Site_Name Not Available");
+				throw new CompanyDetailsException(siteId + " : this siteId not present");
 			}
 
 		} else {
-			throw new CompanyDetailsException("Invalid Input");
+			throw new CompanyDetailsException("Invalid Inputs");
 		}
 
 	}

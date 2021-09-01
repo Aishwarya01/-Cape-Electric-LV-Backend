@@ -30,8 +30,8 @@ public class SiteController {
 
 	@PostMapping("/addSite")
 	public ResponseEntity<String> addSite(@RequestBody Site site) throws CompanyDetailsException {
-		logger.info("called addSite function ClientName : {}, Department : {}, Site : {}",
-				site.getClientName(), site.getDepartmentName(), site.getSite());
+		logger.info("called addSite function UserName : {}, Site : {}",
+				 site.getSite());
  
 		siteService.addSite(site);
 		return new ResponseEntity<String>("Site Successfully Saved", HttpStatus.CREATED);
