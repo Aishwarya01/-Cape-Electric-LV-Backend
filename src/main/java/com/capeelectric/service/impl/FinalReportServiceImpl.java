@@ -58,9 +58,9 @@ public class FinalReportServiceImpl implements FinalReportService {
 	 * 
 	 */
 	@Override
-	public List<Site> retrieveListOfSite(String userName, String departmentName) throws FinalReportException {
+	public List<Site> retrieveListOfSite(String userName) throws FinalReportException {
 
-		if (userName != null && departmentName != null) {
+		if (userName != null) {
 			try {
 				logger.info("Site fetching process started");
 				return siteRepository.findByUserName(userName);

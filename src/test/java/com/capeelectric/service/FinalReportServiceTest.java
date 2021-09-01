@@ -95,11 +95,11 @@ public class FinalReportServiceTest {
 		ArrayList<Site> sites = new ArrayList<Site>();
 		sites.add(site);
 		when(siteRepository.findByUserName("LVsystem@gmail.com")).thenReturn(sites);
-		List<Site> retrieveListOfSite = finalReportServiceImpl.retrieveListOfSite("LVsystem@gmail.com", "IT");
+		List<Site> retrieveListOfSite = finalReportServiceImpl.retrieveListOfSite("LVsystem@gmail.com");
 		assertTrue(retrieveListOfSite.contains(site));
 
 		FinalReportException finalReportException = Assertions.assertThrows(FinalReportException.class,
-				() -> finalReportServiceImpl.retrieveListOfSite(null, "IT"));
+				() -> finalReportServiceImpl.retrieveListOfSite(null));
 		assertEquals(finalReportException.getMessage(), "Invaild Input");
 		logger.info("testRetriveListOfSite method ended");
 
