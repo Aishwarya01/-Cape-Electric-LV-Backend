@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +38,7 @@ public class SummaryController {
 		logger.info("started addSummary function userName: {},siteId : {}", summary.getUserName(),summary.getSiteId());
 		summaryService.addSummary(summary);
 		logger.info("ended addSummary function");
-		return new ResponseEntity<String>("successfully added Summary", HttpStatus.OK);
+		return new ResponseEntity<String>("Summary Details Successfully Saved", HttpStatus.CREATED);
 
 	}
 	
@@ -45,6 +46,15 @@ public class SummaryController {
 	public ResponseEntity<List<Summary>> retrieveSummary(@PathVariable String userName,@PathVariable Integer siteId) throws SummaryException {
 		logger.info("called retrieveSummary function userName: {},siteId : {}", userName,siteId);
 		return new ResponseEntity<List<Summary>>(summaryService.retrieveSummary(userName,siteId), HttpStatus.OK);
+	}
+	
+	@PutMapping("/updateSummary")
+	public ResponseEntity<String> updateSummary(@RequestBody Summary summary)
+			throws SummaryException {
+		logger.info("called updateSummary function UserName : {},SiteId : {},SummaryId : {}", summary.getUserName(),
+				summary.getSiteId(), summary.getSummaryId());
+		summaryService.updateSummary(summary);
+		return new ResponseEntity<String>("Summary successfully Updated", HttpStatus.OK);
 	}
 
 }

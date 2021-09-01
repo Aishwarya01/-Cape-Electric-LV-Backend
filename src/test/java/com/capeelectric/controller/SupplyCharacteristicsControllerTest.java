@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.service.impl.SupplyCharacteristicsServiceImpl;
@@ -40,8 +41,8 @@ public class SupplyCharacteristicsControllerTest {
 	}
 
 	@Test
-	public void testAddCharacteristics() throws SupplyCharacteristicsException {
-		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
+	public void testAddCharacteristics() throws SupplyCharacteristicsException, DecimalConversionException {
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
 		ResponseEntity<String> actualResponseEntity = supplyCharacteristicsController
 				.addCharacteristics(supplyCharacteristics);
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
@@ -53,6 +54,14 @@ public class SupplyCharacteristicsControllerTest {
 				HttpStatus.OK);
 		ResponseEntity<List<SupplyCharacteristics>> actualResponseEntity = supplyCharacteristicsController
 				.retrieveCharacteristics(supplyCharacteristics.getUserName(), supplyCharacteristics.getSiteId());
+		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
+	}
+	
+	@Test
+	public void testUpdateCharacteristics() throws SupplyCharacteristicsException {
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>("SupplyCharacteristics Data successfully Updated",HttpStatus.OK);
+		ResponseEntity<String> actualResponseEntity = supplyCharacteristicsController
+				.updateCharacteristics(supplyCharacteristics);
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
 	}
 }

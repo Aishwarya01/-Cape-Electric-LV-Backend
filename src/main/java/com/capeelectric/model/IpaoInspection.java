@@ -131,14 +131,11 @@ public class IpaoInspection implements Serializable {
 	@Column(name = "O_PLACING_OUT_REACH")
 	private String placingOutReach;
 
-	@Column(name = "O_NON_CONDUCT_LOCATION")
-	private String nonConductLocation;
-
-	@Column(name = "O_FAULT_ELECTRICAL_SEPARTION")
-	private String faultElectricalSepartion;
-
 	@Column(name = "O_FAULT_NON_CONDUCT_LOCATION")
 	private String faultNonConductLocation;
+
+	@Column(name = "O_FAULT_ELECTRICAL_SEPARTION")
+	private String faultElectricalSepartion; 
 
 	@Column(name = "O_OPERATING_CURRENT")
 	private String operatingCurrent;
@@ -425,14 +422,6 @@ public class IpaoInspection implements Serializable {
 
 	public void setPlacingOutReach(String placingOutReach) {
 		this.placingOutReach = placingOutReach;
-	}
-
-	public String getNonConductLocation() {
-		return nonConductLocation;
-	}
-
-	public void setNonConductLocation(String nonConductLocation) {
-		this.nonConductLocation = nonConductLocation;
 	}
 
 	public String getFaultElectricalSepartion() {

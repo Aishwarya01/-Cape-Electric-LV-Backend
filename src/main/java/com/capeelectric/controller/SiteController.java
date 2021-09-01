@@ -30,10 +30,11 @@ public class SiteController {
 
 	@PostMapping("/addSite")
 	public ResponseEntity<String> addSite(@RequestBody Site site) throws CompanyDetailsException {
-		logger.info("called addSite function UserName: {},Site : {}", site.getUserName(), site.getSite());
-
+		logger.info("called addSite function ClientName : {}, Department : {}, Site : {}",
+				site.getClientName(), site.getDepartmentName(), site.getSite());
+ 
 		siteService.addSite(site);
-		return new ResponseEntity<String>("successfully added Site", HttpStatus.OK);
+		return new ResponseEntity<String>("Site Successfully Saved", HttpStatus.CREATED);
 
 	}
 
@@ -41,14 +42,14 @@ public class SiteController {
 	public ResponseEntity<String> updateSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.info("called updateSite function UserName: {},Site : {}", site.getUserName(), site.getSite());
 		siteService.updateSite(site);
-		return new ResponseEntity<String>("Site Updated", HttpStatus.OK);
+		return new ResponseEntity<String>("Site Successfully Updated", HttpStatus.OK);
 	}
 
 	@DeleteMapping("/deleteSite/{siteId}")
 	public ResponseEntity<String> deleteSite(@PathVariable Integer siteId) throws CompanyDetailsException {
 		logger.info("called deleteSite function siteId: {}", siteId);
 		siteService.deleteSite(siteId);
-		return new ResponseEntity<String>(HttpStatus.OK);
+		return new ResponseEntity<String>("Site Succesfully Deleted",HttpStatus.OK);
 	}
 
 	

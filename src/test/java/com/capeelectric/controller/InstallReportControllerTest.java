@@ -63,7 +63,7 @@ public class InstallReportControllerTest {
 	public void testAddInstallationReport() throws InstalReportException {
 		
 		ResponseEntity<String> response = instalReportController.addInstallationReport(reportDetails);
-		assertEquals(response.getBody(), "Report successfully saved");
+		assertEquals(response.getBody(), "Basic Information Successfully Saved");
 		
 	}
 	
@@ -72,5 +72,13 @@ public class InstallReportControllerTest {
 
 		ResponseEntity<List<ReportDetails>> report = instalReportController.retrieveInstallationReport(reportDetails.getUserName(),reportDetails.getSiteId());
 		assertEquals(report.getStatusCode(), HttpStatus.OK);
+	}
+	
+	@Test
+	public void testUpdateInstallationReport() throws InstalReportException {
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
+		ResponseEntity<String> actualResponseEntity = instalReportController
+				.updateInstallationReport(reportDetails);
+		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
 	}
 }

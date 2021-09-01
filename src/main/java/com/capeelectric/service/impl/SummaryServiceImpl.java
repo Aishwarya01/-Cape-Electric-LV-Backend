@@ -11,6 +11,7 @@ import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.service.SummaryService;
+import com.capeelectric.util.UserFullName;
 
 /**
  * This SummaryServiceImpl service class doing add and retrieve operation related to Summary_model(SummaryObervation,SummaryDeclaration)
@@ -22,6 +23,9 @@ public class SummaryServiceImpl implements SummaryService {
 
 	@Autowired
 	private SummaryRepository summaryRepository;
+	
+	@Autowired
+	private UserFullName userFullName;
 
 	/**
 	 * @ siteId unique for summary object
@@ -36,13 +40,16 @@ public class SummaryServiceImpl implements SummaryService {
 			Optional<Summary> summaryRepo = summaryRepository.findBySiteId(summary.getSiteId());
 			if (!summaryRepo.isPresent() || !summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
 				summary.setCreatedDate(LocalDateTime.now());
+				summary.setUpdatedDate(LocalDateTime.now());
+				summary.setCreatedBy(userFullName.getFullName(summary.getUserName()));
+				summary.setUpdatedBy(userFullName.getFullName(summary.getUserName()));
 				summaryRepository.save(summary);
 			} else {
-				throw new SummaryException("Given SiteId already present");
+				throw new SummaryException("Site-Id Already Available");
 			}
 
 		} else {
-			throw new SummaryException("UserName and SiteId are Invalid Inputs");
+			throw new SummaryException("Invalid Inputs");
 
 		}
 
@@ -58,9 +65,34 @@ public class SummaryServiceImpl implements SummaryService {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			return summaryRepository.findByUserNameAndSiteId(userName, siteId);
 		} else {
-			throw new SummaryException("UserName and SiteId are Invalid Inputs");
+			throw new SummaryException("Invalid Inputs");
 
 		}
 	}
 
+	/**
+	 * @reportId,siteId must required
+	 * @param Summary Object
+	 * updateSummary method to finding the given SummaryId is available or not in DB,
+	 * if available only allowed for updating 
+	 * 
+	*/
+	@Override
+	public void updateSummary(Summary summary) throws SummaryException {
+
+		if (summary != null && summary.getSummaryId() != null && summary.getSummaryId() != 0
+				&& summary.getSiteId() != null && summary.getSiteId() != 0) {
+			Optional<Summary> summaryRepo = summaryRepository.findById(summary.getSummaryId());
+			if (summaryRepo.isPresent() && summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
+				summary.setUpdatedDate(LocalDateTime.now());
+				summary.setUpdatedBy(userFullName.getFullName(summary.getUserName()));
+				summaryRepository.save(summary);
+			} else {
+				throw new SummaryException("Given SiteId and ReportId is Invalid");
+			}
+
+		} else {
+			throw new SummaryException("Invalid inputs");
+		}
+	}
 }

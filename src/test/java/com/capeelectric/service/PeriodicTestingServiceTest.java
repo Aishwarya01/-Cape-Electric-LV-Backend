@@ -24,6 +24,7 @@ import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.PeriodicTestingServiceImpl;
+import com.capeelectric.util.UserFullName;
 
 /**
  * 
@@ -42,6 +43,9 @@ public class PeriodicTestingServiceTest {
 
 	@InjectMocks
 	private PeriodicTestingServiceImpl periodicTestingServiceImpl;
+	
+	@MockBean
+	private UserFullName userFullName;
 
 	private TestingReport testingReport;
 	
@@ -61,7 +65,7 @@ public class PeriodicTestingServiceTest {
 		logger.info("SiteId already Present_flow");
 		PeriodicTestingException periodicTestingException_1 = Assertions.assertThrows(PeriodicTestingException.class,
 				() -> periodicTestingServiceImpl.addTestingReport(testingReport));
-		assertEquals(periodicTestingException_1.getMessage(), "SiteId Already Present");
+		assertEquals(periodicTestingException_1.getMessage(), "Site-Id Already Present");
 
 		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
 		logger.info("Successfully added Summary_Object flow");
@@ -72,7 +76,7 @@ public class PeriodicTestingServiceTest {
 		testingReport.setUserName(null);
 		PeriodicTestingException periodicTestingException_2 = Assertions.assertThrows(PeriodicTestingException.class,
 				() -> periodicTestingServiceImpl.addTestingReport(testingReport));
-		assertEquals(periodicTestingException_2.getMessage(), "UserName and SiteId Invalid Input");
+		assertEquals(periodicTestingException_2.getMessage(), "Invalid Inputs");
 
 	}
 
@@ -89,7 +93,7 @@ public class PeriodicTestingServiceTest {
 		logger.info("Invalid Input flow");
 		PeriodicTestingException periodicTestingException = Assertions.assertThrows(PeriodicTestingException.class,
 				() -> periodicTestingServiceImpl.retrieveTestingReport(null, 12));
-		assertEquals(periodicTestingException.getMessage(), "UserName and SiteId Invalid Input");
+		assertEquals(periodicTestingException.getMessage(), "Invalid Inputs");
 
 	}
 
@@ -136,6 +140,30 @@ public class PeriodicTestingServiceTest {
 
 		assertEquals(decimalConversionException.getMessage(), "invalid input of value for DecimalConversion");
 		return null;
+	}
+	
+	@Test
+	public void testUpdateTesting() throws DecimalConversionException, PeriodicTestingException {
+		testingReport.setUserName("LVsystem@gmail.com");
+		testingReport.setTestingReportId(1);
+		when(testingReportRepository.findById(1)).thenReturn(Optional.of(testingReport));
+		periodicTestingServiceImpl.updatePeriodicTesting(testingReport);
+
+		TestingReport testingReport_1 = new TestingReport();
+		testingReport_1.setSiteId(12);
+		testingReport_1.setUserName("cape");
+		testingReport_1.setTestingReportId(12);
+
+		when(testingReportRepository.findById(4)).thenReturn(Optional.of(testingReport));
+		PeriodicTestingException assertThrows = Assertions.assertThrows(PeriodicTestingException.class,
+				() -> periodicTestingServiceImpl.updatePeriodicTesting(testingReport_1));
+		assertEquals(assertThrows.getMessage(), "Given SiteId and ReportId is Invalid");
+
+		testingReport.setSiteId(null);
+		when(testingReportRepository.findById(2)).thenReturn(Optional.of(testingReport));
+		PeriodicTestingException assertThrows_1 = Assertions.assertThrows(PeriodicTestingException.class,
+				() -> periodicTestingServiceImpl.updatePeriodicTesting(testingReport));
+		assertEquals(assertThrows_1.getMessage(), "Invalid inputs");
 	}
 
 }

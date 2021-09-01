@@ -57,7 +57,7 @@ public class SummaryControllerTest {
 
 		doNothing().when(summaryServiceImpl).addSummary(summary);
 		ResponseEntity<String> addSummary = summaryController.addSummary(summary);
-		assertEquals(addSummary.getBody(), "successfully added Summary");
+		assertEquals(addSummary.getBody(), "Summary Details Successfully Saved");
 
 		logger.info("testAddSummary Function Ended");
 	}
@@ -75,5 +75,16 @@ public class SummaryControllerTest {
 
 		logger.info("testRetrieveSummary Function Ended");
 
+	}
+	
+	@Test
+	public void testUpdateSummary() throws SummaryException{
+		
+		logger.info("testUpdateSummary Function Started");
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
+		ResponseEntity<String> actualResponseEntity = summaryController
+				.updateSummary(summary);
+		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
+		logger.info("testUpdateSummary Function Ended");
 	}
 }

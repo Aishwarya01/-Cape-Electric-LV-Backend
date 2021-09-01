@@ -18,10 +18,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.service.impl.SummaryServiceImpl;
+import com.capeelectric.util.UserFullName;
 
 @ExtendWith(SpringExtension.class)
 
@@ -35,6 +37,9 @@ public class SummaryServiceTest {
 
 	@InjectMocks
 	private SummaryServiceImpl summaryServiceImpl;
+	
+	@MockBean
+	private UserFullName userFullName;
 
 	private Summary summary;
 
@@ -42,6 +47,7 @@ public class SummaryServiceTest {
 		summary = new Summary();
 		summary.setUserName("LVsystem@gmail.com");
 		summary.setSiteId(12);
+		summary.setSummaryId(1);
 	}
 
 	@Test
@@ -52,7 +58,7 @@ public class SummaryServiceTest {
 		logger.info("SiteId already Present_flow");
 		SummaryException summaryException_1 = Assertions.assertThrows(SummaryException.class,
 				() -> summaryServiceImpl.addSummary(summary));
-		assertEquals(summaryException_1.getMessage(), "Given SiteId already present");
+		assertEquals(summaryException_1.getMessage(), "Site-Id Already Available");
 
 		logger.info("Successfully added Summary_Object flow");
 		summary.setSiteId(1);
@@ -62,7 +68,7 @@ public class SummaryServiceTest {
 		summary.setUserName(null);
 		SummaryException summaryException_2 = Assertions.assertThrows(SummaryException.class,
 				() -> summaryServiceImpl.addSummary(summary));
-		assertEquals(summaryException_2.getMessage(), "UserName and SiteId are Invalid Inputs");
+		assertEquals(summaryException_2.getMessage(), "Invalid Inputs");
 
 	}
 
@@ -79,8 +85,33 @@ public class SummaryServiceTest {
 		logger.info("Invalid Input flow");
 		SummaryException summaryException = Assertions.assertThrows(SummaryException.class,
 				() -> summaryServiceImpl.retrieveSummary(null, 12));
-		assertEquals(summaryException.getMessage(), "UserName and SiteId are Invalid Inputs");
+		assertEquals(summaryException.getMessage(), "Invalid Inputs");
 
 	}
 
+	
+	@Test
+	public void testUpdateSummary() throws DecimalConversionException, SummaryException {
+		summary.setUserName("LVsystem@gmail.com");
+		when(summaryRepository.findById(1)).thenReturn(Optional.of(summary));
+		summaryServiceImpl.updateSummary(summary);
+		
+		Summary summary_1 = new Summary();
+		summary_1.setSiteId(12);
+		summary_1.setUserName("cape");
+		summary_1.setSummaryId(12);
+		
+		when(summaryRepository.findById(4)).thenReturn(Optional.of(summary));
+		SummaryException assertThrows = Assertions.assertThrows(SummaryException.class,
+				() -> summaryServiceImpl.updateSummary(summary_1));
+		
+		assertEquals(assertThrows.getMessage(),"Given SiteId and ReportId is Invalid");
+		
+		summary.setSiteId(null);
+		when(summaryRepository.findById(2)).thenReturn(Optional.of(summary));
+		SummaryException assertThrows_1 = Assertions.assertThrows(SummaryException.class,
+				() -> summaryServiceImpl.updateSummary(summary));
+		
+		assertEquals(assertThrows_1.getMessage(),"Invalid inputs");
+	}
 }

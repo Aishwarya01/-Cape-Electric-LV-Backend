@@ -111,7 +111,7 @@ public class SiteDetailsServiceTest {
 		site2.setSiteId(2);
 		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
 				() -> siteServiceImpl.updateSite(site2));
-		assertEquals(assertThrows.getMessage(), "user site not present");
+		assertEquals(assertThrows.getMessage(), "Site_Name Not Available");
 	}
 
 	@Test
@@ -124,7 +124,7 @@ public class SiteDetailsServiceTest {
 		site.setSitePersons(sitePersonsSet);
 		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
 				() -> siteServiceImpl.updateSite(site));
-		assertEquals(assertThrows.getMessage(), "PersonInchargEmail already present");
+		assertEquals(assertThrows.getMessage(), "PersonInchargEmail Already Available");
 
 	}
 
@@ -133,7 +133,31 @@ public class SiteDetailsServiceTest {
 		site.setUserName(null);
 		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
 				() -> siteServiceImpl.updateSite(site));
-		assertEquals(assertThrows.getMessage(), "invalid inputs");
+		assertEquals(assertThrows.getMessage(), "Invalid Inputs");
+
+	}
+
+	@Test
+	public void testupdateSite_ClientNameNotPresentException() throws CompanyDetailsException {
+
+		when(departmentRepository.findByClientNameAndDepartmentName(site.getClientName(), site.getDepartmentName()))
+				.thenReturn(department);
+		department.setClientName("Test");
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> siteServiceImpl.updateSite(site));
+		assertEquals(assertThrows.getMessage(), "Client_Name Not Available");
+
+	}
+
+	@Test
+	public void testupdateSite_DepartmentNotPresentException() throws CompanyDetailsException {
+
+		when(departmentRepository.findByClientNameAndDepartmentName(site.getClientName(), site.getDepartmentName()))
+				.thenReturn(department);
+		department.setDepartmentName("mech");
+		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> siteServiceImpl.updateSite(site));
+		assertEquals(assertThrows.getMessage(), "Department_Name Not Available");
 
 	}
 
@@ -167,17 +191,27 @@ public class SiteDetailsServiceTest {
 		site2.setSitePersons(sitePersonsSet);
 		CompanyDetailsException assertThrows5 = Assertions.assertThrows(CompanyDetailsException.class,
 				() -> siteServiceImpl.addSite(site2));
-		assertEquals(assertThrows5.getMessage(), "PersonInchargEmail already present");
+		assertEquals(assertThrows5.getMessage(), "Email-Id Already Existing");
 
 		when(siteRepository.findByUserNameAndSite("hasan", "user")).thenReturn(Optional.of(site));
 		CompanyDetailsException assertThrows1 = Assertions.assertThrows(CompanyDetailsException.class,
 				() -> siteServiceImpl.addSite(site));
-		assertEquals(assertThrows1.getMessage(), "user: site already present");
+		assertEquals(assertThrows1.getMessage(), "Site_Name Already Available");
 
-		site.setUserName(null);
+		department.setDepartmentName("mech");
+		CompanyDetailsException assertThrows2 = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> siteServiceImpl.addSite(site));
+		assertEquals(assertThrows2.getMessage(), "Department_Name Not Available");
+
+		site.setClientName("HCL Tech");
+		CompanyDetailsException assertThrows3 = Assertions.assertThrows(CompanyDetailsException.class,
+				() -> siteServiceImpl.addSite(site));
+		assertEquals(assertThrows3.getMessage(), "Client_Name Not Available");
+
+		site.setClientName(null);
 		CompanyDetailsException assertThrows4 = Assertions.assertThrows(CompanyDetailsException.class,
 				() -> siteServiceImpl.addSite(site));
-		assertEquals(assertThrows4.getMessage(), "invalid inputs");
+		assertEquals(assertThrows4.getMessage(), "Invalid Inputs");
 
 	}
 
@@ -195,12 +229,12 @@ public class SiteDetailsServiceTest {
 		when(siteRepository.findById(site.getSiteId())).thenReturn(Optional.of(site));
 		CompanyDetailsException assertThrows1 = Assertions.assertThrows(CompanyDetailsException.class,
 				() -> siteServiceImpl.deleteSite(2));
-		assertEquals(assertThrows1.getMessage(), "2 : this siteId not present");
+		assertEquals(assertThrows1.getMessage(), "Site_Name Not Available");
 
 		site.setSiteId(null);
 		CompanyDetailsException assertThrows2 = Assertions.assertThrows(CompanyDetailsException.class,
 				() -> siteServiceImpl.deleteSite(site.getSiteId()));
-		assertEquals(assertThrows2.getMessage(), "invalid input");
+		assertEquals(assertThrows2.getMessage(), "Invalid Input");
 
 	}
 
@@ -214,8 +248,8 @@ public class SiteDetailsServiceTest {
 		siteServiceImpl.retriveSite("nissan");
 
 		CompanyDetailsException assertThrows = Assertions.assertThrows(CompanyDetailsException.class,
-				() -> siteServiceImpl.retriveSite(null));
-		assertEquals(assertThrows.getMessage(), "invalid inputs");
+				() -> siteServiceImpl.retriveSite("nissan", null));
+		assertEquals(assertThrows.getMessage(), "Invalid Inputs");
 
 	}
 

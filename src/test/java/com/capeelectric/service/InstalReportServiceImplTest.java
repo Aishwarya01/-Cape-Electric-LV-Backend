@@ -25,6 +25,7 @@ import com.capeelectric.model.User;
 import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.impl.InstalReportServiceImpl;
+import com.capeelectric.util.UserFullName;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -38,6 +39,9 @@ public class InstalReportServiceImplTest {
 
 	@MockBean
 	private UserRepository userRepository;
+	
+	@MockBean
+	private UserFullName userFullName;
 
 	private ReportDetails reportDetails;
 	
@@ -99,11 +103,11 @@ public class InstalReportServiceImplTest {
 		when(installationReportRepository.findBySiteId(12)).thenReturn(Optional.of(reportDetails));
 		InstalReportException exception_SiteId = Assertions.assertThrows(InstalReportException.class,
 				() -> instalReportServiceImpl.addInstallationReport(reportDetails));
-		assertEquals(exception_SiteId.getMessage(), "SiteId already present");
+		assertEquals(exception_SiteId.getMessage(), "Site-Id Details Already Available,Create New Site-Id");
 				
 		InstalReportException exception = Assertions.assertThrows(InstalReportException.class,
 				() -> instalReportServiceImpl.addInstallationReport(null));
-		assertEquals(exception.getMessage(), "invalid inputs");
+		assertEquals(exception.getMessage(), "Invalid Inputs");
 
 	}
  
@@ -120,5 +124,29 @@ public class InstalReportServiceImplTest {
 		InstalReportException exception = Assertions.assertThrows(InstalReportException.class,
 				() -> instalReportServiceImpl.retrieveInstallationReport(null,12));
 		assertEquals(exception.getMessage(), "invalid inputs");
+	}
+	
+	@Test
+	public void testUpdateInstallationReport() throws InstalReportException {
+		reportDetails.setUserName("LVsystem@gmail.com");
+		reportDetails.setReportId(1);
+		when(installationReportRepository.findById(1)).thenReturn(Optional.of(reportDetails));
+		instalReportServiceImpl.updateInstallationReport(reportDetails);
+
+		ReportDetails reportDetails_1 = new ReportDetails();
+		reportDetails_1.setSiteId(12);
+		reportDetails_1.setUserName("cape");
+		reportDetails_1.setReportId(12);
+
+		when(installationReportRepository.findById(4)).thenReturn(Optional.of(reportDetails));
+		InstalReportException assertThrows = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.updateInstallationReport(reportDetails_1));
+		assertEquals(assertThrows.getMessage(), "Given SiteId and ReportId is Invalid");
+
+		reportDetails.setSiteId(null);
+		when(installationReportRepository.findById(2)).thenReturn(Optional.of(reportDetails));
+		InstalReportException assertThrows_1 = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.updateInstallationReport(reportDetails));
+		assertEquals(assertThrows_1.getMessage(), "Invalid inputs");
 	}
 }

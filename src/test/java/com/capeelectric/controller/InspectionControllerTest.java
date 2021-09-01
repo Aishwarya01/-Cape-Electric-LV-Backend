@@ -52,5 +52,13 @@ public class InspectionControllerTest {
 				.retrieveInspectionDetails(periodicInspection.getUserName(), periodicInspection.getSiteId());
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
 	}
+	
+	@Test
+	public void testUpdateInspectionDetails() throws InspectionException{
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
+		ResponseEntity<String> actualResponseEntity = inspectionController
+				.updateInspectionDetails(periodicInspection);
+		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
+	}
 
 }

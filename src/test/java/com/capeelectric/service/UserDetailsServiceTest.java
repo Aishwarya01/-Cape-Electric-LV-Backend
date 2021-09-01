@@ -65,12 +65,12 @@ public class UserDetailsServiceTest {
 		
 		ForgotPasswordException assertThrows = Assertions.assertThrows(ForgotPasswordException.class,
 				() -> userDetailsServiceImpl.findByUserName(null));
-		assertEquals("Email is required", assertThrows.getMessage());
+		assertEquals("Email-Id Is Required", assertThrows.getMessage());
 
 		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(null);
 		ForgotPasswordException assertThrows2 = Assertions.assertThrows(ForgotPasswordException.class,
 				() -> userDetailsServiceImpl.findByUserName("lvsystem@capeindia.net"));
-		assertEquals("Email is not available with us", assertThrows2.getMessage());
+		assertEquals("Given Email-Id Is Not Available", assertThrows2.getMessage());
 
 	} 
 
@@ -111,12 +111,12 @@ public class UserDetailsServiceTest {
 
 		UsernameNotFoundException assertThrows = Assertions.assertThrows(UsernameNotFoundException.class,
 				() -> userDetailsServiceImpl.updatePassword(null, "cape123", 1234));
-		assertEquals("username not valid", assertThrows.getMessage());
+		assertEquals("Username Not Valid", assertThrows.getMessage());
 
 		user.setUserexist(false);
 		  UpdatePasswordException assertThrows2 = Assertions.assertThrows(UpdatePasswordException.class,
 				() -> userDetailsServiceImpl.updatePassword("lvsystem@capeindia.net", "cape123", 1234));
-		assertEquals("User Not available", assertThrows2.getMessage());
+		assertEquals("User Not Available", assertThrows2.getMessage());
 
 	}
 
@@ -126,7 +126,7 @@ public class UserDetailsServiceTest {
 		when(userRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionaluser);
 		UserException assertThrows = Assertions.assertThrows(UserException.class,
 				() -> userDetailsServiceImpl.saveUser(user));
-		assertEquals("User already available", assertThrows.getMessage());
+		assertEquals("Given email-Id is Already Existing", assertThrows.getMessage());
 		user.setUserexist(false);
 		User saveUser = userDetailsServiceImpl.saveUser(user);
 		assertNull(saveUser);
@@ -142,7 +142,7 @@ public class UserDetailsServiceTest {
 		user.setUserexist(false);
 		UserException assertThrows = Assertions.assertThrows(UserException.class,
 				() -> userDetailsServiceImpl.retrieveUserInformation(user.getEmail()));
-		assertEquals("User not available", assertThrows.getMessage());
+		assertEquals("User Not Available", assertThrows.getMessage());
 
 	}
 
