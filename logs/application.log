@@ -3787,3 +3787,9 @@
 2021-08-31T20:02:31.047+0530 INFO Starting LvSafetyVerificationApplication using Java 15.0.2 on DESKTOP-EQ8CCC7 with PID 13028 (C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd\target\classes started by capeelectricsoftware in C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd)
 2021-08-31T20:02:31.047+0530 DEBUG Running with Spring Boot v2.4.1, Spring v5.3.2
 2021-08-31T20:02:31.047+0530 INFO The following profiles are active: dev
+2021-08-31T20:06:10.466+0530 INFO Starting LvSafetyVerificationApplication using Java 15.0.2 on DESKTOP-EQ8CCC7 with PID 13028 (C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd\target\classes started by capeelectricsoftware in C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd)
+2021-08-31T20:06:10.466+0530 DEBUG Running with Spring Boot v2.4.1, Spring v5.3.2
+2021-08-31T20:06:10.466+0530 INFO The following profiles are active: dev
+2021-09-01T08:26:46.861+0530 INFO Starting LvSafetyVerificationApplication using Java 15.0.2 on DESKTOP-EQ8CCC7 with PID 13028 (C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd\target\classes started by capeelectricsoftware in C:\Users\capeelectricsoftware\Documents\GitHub\Cape-Electric-Software-BackEnd)
+2021-09-01T08:26:46.861+0530 DEBUG Running with Spring Boot v2.4.1, Spring v5.3.2
+2021-09-01T08:26:46.861+0530 INFO The following profiles are active: dev
