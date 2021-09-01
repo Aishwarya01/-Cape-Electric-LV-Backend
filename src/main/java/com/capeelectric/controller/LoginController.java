@@ -141,7 +141,7 @@ public class LoginController {
 				throw new Exception("INVALID_CREDENTIALS", e);
 			}
 		} else {
-			throw new AuthenticationException("Authentication faild");
+			throw new AuthenticationException("Admin not approved for Your registration");
 
 		}
 	}

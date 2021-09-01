@@ -28,7 +28,7 @@ import com.capeelectric.service.SummaryService;
 @RequestMapping("/api/v1")
 public class SummaryController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(SiteController.class);
+	private static final Logger logger = LoggerFactory.getLogger(SummaryController.class);
 
 	@Autowired
 	private SummaryService summaryService;

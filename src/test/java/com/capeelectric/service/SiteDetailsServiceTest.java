@@ -62,9 +62,11 @@ public class SiteDetailsServiceTest {
 		site.setSite("user");
 
 		sitePersons1.setPersonId(1);
+		sitePersons1.setSiteName("user");
 		sitePersons1.setPersonInchargeEmail("LVsystem@gmail.com");
 		sitePersons1.setInActive(true);
 		sitePersons2.setPersonId(2);
+		sitePersons2.setSiteName("user");
 		sitePersons2.setPersonInchargeEmail("Cape@gmail.com");
 		sitePersons2.setInActive(true);
 		sitePersonsSet = new HashSet<SitePersons>();
@@ -94,6 +96,7 @@ public class SiteDetailsServiceTest {
 		when(siteRepository.save(site)).thenReturn(site);
 
 		sitePersons3.setPersonInchargeEmail("Cape1@gmail.com");
+		sitePersons3.setSiteName("user");
 		sitePersons3.setInActive(true);
 		sitePersonsSet.add(sitePersons3);
 		site.setSitePersons(sitePersonsSet);
@@ -154,13 +157,14 @@ public class SiteDetailsServiceTest {
 		ArrayList<Site> list = new ArrayList<Site>();
 		list.add(site);
 		when(siteRepository.findByUserName(site.getUserName())).thenReturn(list);
-		when(sitePersonsRepository.findByPersonInchargeEmail(sitePersons2.getPersonInchargeEmail()))
+		when(sitePersonsRepository.findBySiteNameAndPersonInchargeEmail("user1","Cape@gmail.com"))
 				.thenReturn(Optional.of(sitePersons2));
 		when(siteRepository.findByUserNameAndSite("hasan", "user1")).thenReturn(Optional.of(site));
 
 		Site site2 = new Site();
 		site2.setSite("user1");
 		site2.setUserName("hasan");
+		sitePersons3.setSiteName("user1");
 		sitePersons3.setPersonInchargeEmail("Cape@gmail.com");
 		sitePersons3.setInActive(true);
 		sitePersonsSet.add(sitePersons3);
@@ -225,9 +229,9 @@ public class SiteDetailsServiceTest {
 
 		when(siteRepository.findByUserName(site.getUserName())).thenReturn(deptlist);
 		when(siteRepository.findByUserNameAndSite(site.getUserName(), site.getSite())).thenReturn(Optional.of(site));
-		when(sitePersonsRepository.findByPersonInchargeEmail(sitePersons1.getPersonInchargeEmail()))
+		when(sitePersonsRepository.findBySiteNameAndPersonInchargeEmail(site.getSite(),sitePersons1.getPersonInchargeEmail()))
 				.thenReturn(Optional.of(sitePersons1));
-		when(sitePersonsRepository.findByPersonInchargeEmail(sitePersons2.getPersonInchargeEmail()))
+		when(sitePersonsRepository.findBySiteNameAndPersonInchargeEmail(site.getSite(),sitePersons2.getPersonInchargeEmail()))
 				.thenReturn(Optional.of(sitePersons2));
 	}
 

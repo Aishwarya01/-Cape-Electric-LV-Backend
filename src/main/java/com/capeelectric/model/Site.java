@@ -77,7 +77,7 @@ public class Site implements Serializable {
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 
-	@OneToMany(mappedBy="Site",fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="site",fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	private Set<SitePersons> sitePersons;
 	
 	public Integer getSiteId() {

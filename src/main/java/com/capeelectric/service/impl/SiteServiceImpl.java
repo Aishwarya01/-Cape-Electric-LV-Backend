@@ -48,7 +48,7 @@ public class SiteServiceImpl implements SiteService {
 				site.setUpdatedDate(LocalDateTime.now());
 				site.setCreatedBy(generateFullName(site.getUserName()));
 				site.setUpdatedBy(generateFullName(site.getUserName()));
-				boolean email = checkSitePersonEmail(site.getSitePersons());
+				boolean email = checkSitePersonEmail(site.getSite(),site.getSitePersons());
 				if (email) {
 					siteRepository.save(site);
 				} else {
@@ -78,12 +78,12 @@ public class SiteServiceImpl implements SiteService {
 			if (!sitePersons.isEmpty()) {
 				site.getSitePersons().removeAll(sitePersons);
 			}
-			if (siteRepo != null && siteRepo.get().getSite().equalsIgnoreCase(site.getSite())
+			if (siteRepo.isPresent() && siteRepo.get().getSite().equalsIgnoreCase(site.getSite())
 					&& siteRepo.get().getSiteId().equals(site.getSiteId())) {
 				site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
 				site.setUpdatedDate(LocalDateTime.now());
 				site.setUpdatedBy(generateFullName(site.getUserName()));
-				boolean email = checkSitePersonEmail(site.getSitePersons());
+				boolean email = checkSitePersonEmail(site.getSite(),site.getSitePersons());
 				if (email) {
 					siteRepository.save(site);
 				} else {
@@ -143,12 +143,12 @@ public class SiteServiceImpl implements SiteService {
 	 * @param sitePersons
 	 * checkSitePersonEmail method to finding duplicate personInchargeMail entry
 	 */
-	private boolean checkSitePersonEmail(Set<SitePersons> sitePersons) throws CompanyDetailsException {
+	private boolean checkSitePersonEmail(String siteName,Set<SitePersons> sitePersons) throws CompanyDetailsException {
 		boolean emailAvailable = true;
 		for (SitePersons sitePersonsItr : sitePersons) {
-
+			sitePersonsItr.setSiteName(siteName);
 			Optional<SitePersons> inchargeEmail = sitePersonsRepository
-					.findByPersonInchargeEmail(sitePersonsItr.getPersonInchargeEmail());
+						.findBySiteNameAndPersonInchargeEmail(siteName,sitePersonsItr.getPersonInchargeEmail());
 
 			if (inchargeEmail.isPresent() && inchargeEmail != null) {
 				if (inchargeEmail.get().getPersonInchargeEmail()
