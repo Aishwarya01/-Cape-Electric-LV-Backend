@@ -11,4 +11,7 @@ public interface SiteRepository extends CrudRepository<Site, Integer> {
 	Site findByClientNameAndDepartmentNameAndSite(String clientName, String departmentName,String site);
 	
 	List<Site> findByClientNameAndDepartmentName(String clientName, String departmentName);
+
+	List<Site> findBysiteId(Integer siteId);
+	
 }
