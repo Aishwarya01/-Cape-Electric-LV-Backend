@@ -74,6 +74,15 @@ public class Summary implements Serializable {
 	@Column(name = "OVERALL_ASSESSMENT_INSTALLATION")
 	private String overallAssessmentInstallation;
 
+	@Column(name = "VIEWER_COMMENT")
+	private String viewerComment;
+	
+	@Column(name = "INSPECTOR_COMMENT")
+	private String inspectorComment;
+
+	@Column(name = "COMMENT_APPROVE_OR_REJECT")
+	private String commentApproveOrReject;
+	
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 	
@@ -196,6 +205,30 @@ public class Summary implements Serializable {
 
 	public void setOverallAssessmentInstallation(String overallAssessmentInstallation) {
 		this.overallAssessmentInstallation = overallAssessmentInstallation;
+	}
+
+	public String getViewerComment() {
+		return viewerComment;
+	}
+
+	public void setViewerComment(String viewerComment) {
+		this.viewerComment = viewerComment;
+	}
+
+	public String getInspectorComment() {
+		return inspectorComment;
+	}
+
+	public void setInspectorComment(String inspectorComment) {
+		this.inspectorComment = inspectorComment;
+	}
+
+	public String getCommentApproveOrReject() {
+		return commentApproveOrReject;
+	}
+
+	public void setCommentApproveOrReject(String commentApproveOrReject) {
+		this.commentApproveOrReject = commentApproveOrReject;
 	}
 
 	public LocalDateTime getCreatedDate() {

@@ -48,6 +48,15 @@ public class TestingReport implements Serializable {
 	@Column(name = "USER_NAME")
 	private String userName;
 	
+	@Column(name = "VIEWER_COMMENT")
+	private String viewerComment;
+	
+	@Column(name = "INSPECTOR_COMMENT")
+	private String inspectorComment;
+
+	@Column(name = "COMMENT_APPROVE_OR_REJECT")
+	private String commentApproveOrReject;
+	
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 	
@@ -86,6 +95,30 @@ public class TestingReport implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getViewerComment() {
+		return viewerComment;
+	}
+
+	public void setViewerComment(String viewerComment) {
+		this.viewerComment = viewerComment;
+	}
+
+	public String getInspectorComment() {
+		return inspectorComment;
+	}
+
+	public void setInspectorComment(String inspectorComment) {
+		this.inspectorComment = inspectorComment;
+	}
+
+	public String getCommentApproveOrReject() {
+		return commentApproveOrReject;
+	}
+
+	public void setCommentApproveOrReject(String commentApproveOrReject) {
+		this.commentApproveOrReject = commentApproveOrReject;
 	}
 
 	public LocalDateTime getCreatedDate() {
