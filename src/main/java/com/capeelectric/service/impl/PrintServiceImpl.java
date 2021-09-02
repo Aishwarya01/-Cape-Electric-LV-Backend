@@ -1,5 +1,6 @@
 package com.capeelectric.service.impl;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.FileOutputStream;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.SummaryException;
+import com.capeelectric.model.BoundingLocationReport;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryDeclaration;
 import com.capeelectric.model.SummaryObervation;
@@ -52,19 +54,18 @@ public class PrintServiceImpl implements PrintService {
 			Document document = new Document(PageSize.A4, 36, 36, 50, 36);
 
 			try {
-				PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("PrintData.pdf"));
+				PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("Summary.pdf"));
 				document.open();
 
-				Optional<Summary> s = summaryRepository.findById(siteId);
-				Summary summary = s.get();
-				// System.out.println(summary);
-				List<SummaryObervation> observation1 = summary.getSummaryObervation();
+				List<Summary> s = summaryRepository.findByUserNameAndSiteId(userName, siteId);
+	          	Summary summary = s.get(0);
+             	List<SummaryObervation> observation1 = summary.getSummaryObervation();
 				List<SummaryDeclaration> declaration1 = summary.getSummaryDeclaration();
 				SummaryDeclaration declaration = declaration1.get(0);
 				SummaryDeclaration declaration11 = declaration1.get(1);
-				SummaryObervation observation = observation1.get(0);
-
-				// SummaryObervation observation11 = observation1.get(1);
+//				SummaryObervation observation = observation1.get(0);
+//
+//			 SummaryObervation observation11 = observation1.get(1);
 
 				Font font = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.ITALIC | Font.BOLD | Font.UNDERLINE,
 						BaseColor.BLACK);
@@ -90,7 +91,7 @@ public class PrintServiceImpl implements PrintService {
 				document.add(paragraphOne2);
 				document.add(paragraphOne7);
 				document.add(paragraphOne3);
-
+		 
 				float[] pointColumnWidths = { 200F, 100F };
 				PdfPTable table4 = new PdfPTable(pointColumnWidths);
 				table4.setWidthPercentage(100); // Width 100%
@@ -101,7 +102,7 @@ public class PrintServiceImpl implements PrintService {
 
 				PdfPCell cell = new PdfPCell(new Paragraph(summary.getExtentInstallation(),
 						new Font(BaseFont.createFont(), 12, Font.NORMAL)));
-				table4.addCell(new Phrase("Extent Of Installation Covered By This Report:",
+				table4.addCell(new Phrase("Extent of installation covered by this Report:",
 						new Font(BaseFont.createFont(), 12, Font.ITALIC)));
 				cell.setFixedHeight(30f);
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -110,7 +111,7 @@ public class PrintServiceImpl implements PrintService {
 
 				PdfPCell cell1 = new PdfPCell(new Paragraph(summary.getAgreedLimitations(),
 						new Font(BaseFont.createFont(), 12, Font.NORMAL)));
-				table4.addCell(new Phrase("Agreed Limitations Including The Reasons:",
+				table4.addCell(new Phrase("Agreed limitations including the reasons:",
 						new Font(BaseFont.createFont(), 12, Font.ITALIC)));
 				cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell1.setFixedHeight(30f);
@@ -119,7 +120,7 @@ public class PrintServiceImpl implements PrintService {
 
 				PdfPCell cell2 = new PdfPCell(
 						new Paragraph(summary.getAgreedWith(), new Font(BaseFont.createFont(), 12, Font.NORMAL)));
-				table4.addCell(new Phrase("Agreed With:", new Font(BaseFont.createFont(), 12, Font.ITALIC)));
+				table4.addCell(new Phrase("Agreed with:", new Font(BaseFont.createFont(), 12, Font.ITALIC)));
 				cell2.setFixedHeight(30f);
 				cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell2.setBorder(PdfPCell.NO_BORDER);
@@ -127,7 +128,8 @@ public class PrintServiceImpl implements PrintService {
 
 				PdfPCell cell3 = new PdfPCell(new Paragraph(summary.getOperationalLimitations(),
 						new Font(BaseFont.createFont(), 12, Font.NORMAL)));
-				table4.addCell(new Phrase("Operational Limitations Including The Reasons:",
+				table4.addCell(new Phrase("Operational limitations including the reasons:",
+					
 						new Font(BaseFont.createFont(), 12, Font.ITALIC)));
 				cell3.setFixedHeight(30f);
 				cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -137,20 +139,13 @@ public class PrintServiceImpl implements PrintService {
 				PdfPCell cell4 = new PdfPCell(new Paragraph(summary.getInspectionTestingDetailed(),
 						new Font(BaseFont.createFont(), 12, Font.NORMAL)));
 				table4.addCell(new Phrase(
-						"The inspection and testing detailed in this report have been carried out in accordance with IEC60364. It should be note that cables concealed within trunk/trench and conduits, under floors and generally within the fabric of the building or underground, have not been inspected unless specifically agreed between the client and inspector prior to inspection:",
+						"The inspection and testing detailed in this report have been carried out in accordance with IEC60364. It should be note that cables concealed within trunk/trench and conduits, under floors which are generally within the fabric of the building or underground, have not been inspected unless it is specifically agreed between the client and inspector prior to the inspection :",
 						new Font(BaseFont.createFont(), 12, Font.ITALIC)));
 				cell4.setFixedHeight(80f);
 				cell4.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell4.setBorder(PdfPCell.NO_BORDER);
 				table4.addCell(cell4);
 				document.add(table4);
-
-				PdfPTable table6 = new PdfPTable(4);
-				table6.setWidthPercentage(100); // Width 100%
-				table6.setSpacingBefore(10f); // Space before table
-				table6.setSpacingAfter(10f); // Space after table
-				table6.setWidthPercentage(100);
-				table6.getDefaultCell().setBorder(0);
 
 				Font font3 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.ITALIC | Font.BOLD, BaseColor.BLACK);
 				Paragraph paragraphOne9 = new Paragraph(30, "Sectction-2", font5);
@@ -159,86 +154,81 @@ public class PrintServiceImpl implements PrintService {
 				document.add(paragraphOne9);
 				document.add(paragraphOne4);
 
-				Paragraph paragraphOne5 = new Paragraph(
-						"Referring to attached inspection report and test results and subject to the limitations specified at the extent and limitations of inspection and testing",
-						new Font(BaseFont.createFont(), 12, Font.ITALIC));
-				document.add(paragraphOne5);
-//				PdfPCell cell13 = new PdfPCell(new Paragraph(summary.getRecommendationsDate(),new Font(BaseFont.createFont(), 12,Font.NORMAL)));
-////				table4.addCell(
-////						"Where the overall assessment of the suitability of the installation for continuous use above is stated as unsatisfactory, I/We recommend that any observations classified as “danger present” (Code C1) or “potentially dangerous” (Code C2) are acted upon the matter of urgency. Investigation without delay is recommended for observations identified as “Required further investigation”. Observations classified as “Improvement recommended” (Code C3) should be given due consideration. Subject to necessary remedial action being taken, I/We recommended that the installation is further inspected and tested by …………Date.:");
-//				
-//				cell13.setFixedHeight(30f);
-//				cell13.setHorizontalAlignment(Element.ALIGN_CENTER);
-//				cell13.setBorder(PdfPCell.NO_BORDER);
-//				table6.addCell(cell13);
-//				PdfPCell cell22 = new PdfPCell(new Paragraph(summary.get(),new Font(BaseFont.createFont(), 12,Font.NORMAL)));
-//				table6.addCell(new Phrase("Referring to attached inspection report and test results and subject to the limitations specified at the extent and limitations of inspection and testing:", new Font(BaseFont.createFont(), 14,Font.ITALIC)));
-//				cell22.setFixedHeight(30f);
-//				cell22.setHorizontalAlignment(Element.ALIGN_CENTER);
-//				cell22.setBorder(PdfPCell.NO_BORDER);
-//				table6.addCell(cell22);
+				PdfPTable table8 = new PdfPTable(2);
+				table8.setWidthPercentage(100); // Width 100%
+				table8.setSpacingBefore(10f); // Space before table
+				table8.setSpacingAfter(10f); // Space after table
+				table8.setWidthPercentage(100);
+				table8.getDefaultCell().setBorder(0);
 
-				addRow(table6, "Observations", "Further actions", "Reference number in report", "Comment");
-				addRow(table6, observation.getObservations(), observation.getFurtherActions(),
-						observation.getFurtherActions(), observation.getComment());
-				// addRow(table6,
-				// observation11.getObservations(),observation11.getFurtherActions(),
-				// observation11.getFurtherActions(),observation11.getComment());
+				PdfPCell cell22 = new PdfPCell(new Paragraph(summary.getInspectionReportTestResult(),
+						new Font(BaseFont.createFont(), 12, Font.NORMAL)));
+				table8.addCell(new Phrase("Referring to attached inspection report and test results and subject to the limitations specified at the extent and limitations of inspection and testing:",
+						new Font(BaseFont.createFont(), 12, Font.ITALIC)));
+				cell22.setFixedHeight(30f);
+				cell22.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell22.setBorder(PdfPCell.NO_BORDER);
+				table8.addCell(cell22);
+				document.add(table8);
+				PdfPCell cell13 = new PdfPCell(new Paragraph(summary.getRecommendationsDate(),
+						new Font(BaseFont.createFont(), 12, Font.NORMAL)));
 
-//				PdfPCell cell9 = new PdfPCell(new Paragraph(observation.getObservations(),new Font(BaseFont.createFont(), 12,Font.NORMAL)));
-//				table6.addCell(new Phrase("Observations:", new Font(BaseFont.createFont(), 14,Font.ITALIC)));
-//				cell9.setFixedHeight(30f);
-//				cell9.setHorizontalAlignment(Element.ALIGN_CENTER);
-//				cell9.setBorder(PdfPCell.NO_BORDER);
-//				table6.addCell(cell9);
-//		
-//				//PdfPCell cell10 = new PdfPCell(new Paragraph(observation.getFurtherActions(), new Font(BaseFont.createFont(), 12,Font.DEFAULTSIZE)));
-//				PdfPCell cell10 = new PdfPCell(new Paragraph(observation.getFurtherActions(), new Font(BaseFont.createFont(), 12,Font.NORMAL)));
-//				table6.addCell(new Phrase("Further actions:", new Font(BaseFont.createFont(), 12,Font.ITALIC)));
-//				cell10.setFixedHeight(30f);
-//				cell10.setHorizontalAlignment(Element.ALIGN_CENTER);
-//				cell10.setBorder(PdfPCell.NO_BORDER);
-//				table6.addCell(cell10);
-//				PdfPCell cell11 = new PdfPCell(new Paragraph(observation.getFurtherActions(),new Font(BaseFont.createFont(), 12,Font.NORMAL)));
-//				//table4.addCell("Reference number in report");
-//				table6.addCell(new Phrase("Reference number in report:", new Font(BaseFont.createFont(), 12,Font.ITALIC)));
-//				cell11.setFixedHeight(30f);
-//				cell11.setHorizontalAlignment(Element.ALIGN_CENTER);
-//				cell11.setBorder(PdfPCell.NO_BORDER);
-//				table6.addCell(cell11);
-//				PdfPCell cell12 = new PdfPCell(new Paragraph(observation.getComment(),new Font(BaseFont.createFont(), 12,Font.NORMAL)));
-//				//table4.addCell("Comment");
-//				table6.addCell(new Phrase("Comment:", new Font(BaseFont.createFont(), 12,Font.ITALIC)));
-//				cell12.setFixedHeight(30f);
-//				cell12.setHorizontalAlignment(Element.ALIGN_CENTER);
-//				cell12.setBorder(PdfPCell.NO_BORDER);
-//				table6.addCell(cell12);
-
-				document.add(table6);
-				PdfPTable table5 = new PdfPTable(pointColumnWidths);
-				table5.setWidthPercentage(100); // Width 100%
-				table5.setSpacingBefore(10f); // Space before table
-				table5.setSpacingAfter(10f); // Space after table
-				table5.setWidthPercentage(100);
-				table5.getDefaultCell().setBorder(0);
-
+				PdfPTable table6 = new PdfPTable(4);
+				table6.setWidthPercentage(100); // Width 100%
+				table6.setSpacingBefore(10f); // Space before table
+				table6.setSpacingAfter(5f); // Space after table
+				table6.setWidthPercentage(100);
+				// table6.getDefaultCell().setBorder(0);
+				TableHeader(table6);
+				TableData(table6, observation1);
+                 document.add(table6);
+                document.newPage();
 				Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.ITALIC | Font.BOLD, BaseColor.BLACK);
 				Paragraph paragraphOne10 = new Paragraph(30, "Section-3", font5);
 				paragraphOne10.setAlignment(Element.ALIGN_CENTER);
 				Paragraph paragraphOne8 = new Paragraph("Recommendations", font6);
 				document.add(paragraphOne10);
 				document.add(paragraphOne8);
-
-				PdfPCell cell21 = new PdfPCell(new Paragraph(summary.getRecommendationsDate(),
+				Paragraph paragraphThree22 = new Paragraph(
+						"The overall assessment of the suitability of installation for continuous use is stated as unsatisfactory, I/We recommend that any observations that are classified as “danger present” (Code C1) or “potentially dangerous” (Code C2) should be acted upon as a matter of urgency.\r\n"
+						+ "Investigation without delay is recommended for observations which are identified as “Required further investigation”. Observations classified as “Improvement recommended” (Code C3) should be given due consideration. Subject to necessary remedial action being taken, I/We recommended that the installations should be further inspected and tested.	\r\n"
+						,
+						new Font(BaseFont.createFont(), 12, Font.ITALIC));
+				document.add(paragraphThree22);
+				PdfPTable table11= new PdfPTable(pointColumnWidths);
+				table11.setWidthPercentage(100); // Width 100%
+				table11.setSpacingBefore(10f); // Space before table
+				table11.setSpacingAfter(5f); // Space after table
+				table11.setWidthPercentage(100);
+				table11.getDefaultCell().setBorder(0);
+			 
+				PdfPCell cell23 = new PdfPCell(new Paragraph(summary.getRecommendationsDate(),
 						new Font(BaseFont.createFont(), 12, Font.NORMAL)));
-				table5.addCell(new Phrase(
-						"Where the overall assessment of the suitability of the installation for continuous use above is stated as unsatisfactory, I/We recommend that any observations classified as “danger present” (Code C1) or “potentially dangerous” (Code C2) are acted upon the matter of urgency. Investigation without delay is recommended for observations identified as “Required further investigation”. Observations classified as “Improvement recommended” (Code C3) should be given due consideration. Subject to necessary remedial action being taken, I/We recommended that the installation is further inspected and tested by …………Date.:",
-						new Font(BaseFont.createFont(), 12, Font.ITALIC)));
-				cell21.setFixedHeight(145f);
-				cell21.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell21.setBorder(PdfPCell.NO_BORDER);
-				table5.addCell(cell21);
-				document.add(table5);
+				table11.addCell(new Phrase(" Date:",
+					 new Font(BaseFont.createFont(), 12, Font.ITALIC)));
+			 
+				cell23.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell23.setBorder(PdfPCell.NO_BORDER);
+				table11.addCell(cell23);
+				document.add(table11);
+				// document.add(paragraphThree1);
+				PdfPTable table22 = new PdfPTable(pointColumnWidths);
+				table22.setWidthPercentage(100); // Width 100%
+				table22.setSpacingBefore(10f); // Space before table
+				table22.setSpacingAfter(10f); // Space after table
+				table22.setWidthPercentage(100);
+				table22.getDefaultCell().setBorder(0);
+
+//				PdfPCell cell21 = new PdfPCell(new Paragraph(summary.getRecommendationsDate(),
+//						new Font(BaseFont.createFont(), 12, Font.NORMAL)));
+//				table22.addCell(new Phrase(
+//						"Where the overall assessment of the suitability of the installation for continuous use above is stated as unsatisfactory, I/We recommend that any observations classified as “danger present” (Code C1) or “potentially dangerous” (Code C2) are acted upon the matter of urgency. Investigation without delay is recommended for observations identified as “Required further investigation”. Observations classified as “Improvement recommended” (Code C3) should be given due consideration. Subject to necessary remedial action being taken, I/We recommended that the installation is further inspected and tested by …………Date.:",
+//						new Font(BaseFont.createFont(), 12, Font.ITALIC)));
+//				cell21.setFixedHeight(145f);
+//				cell21.setHorizontalAlignment(Element.ALIGN_CENTER);
+//				cell21.setBorder(PdfPCell.NO_BORDER);
+//				table22.addCell(cell21);
+//				document.add(table22);
 
 				PdfPTable table7 = new PdfPTable(pointColumnWidths); // 3 columns.
 				table7.setWidthPercentage(100); // Width 100%
@@ -246,7 +236,7 @@ public class PrintServiceImpl implements PrintService {
 				table7.setSpacingAfter(10f); // Space after table
 				table7.setWidthPercentage(100);
 				table7.getDefaultCell().setBorder(0);
-
+//				document.newPage();
 				Paragraph paragraphThree11 = new Paragraph(40, "Section-4 ", font5);
 				paragraphThree11.setAlignment(Element.ALIGN_CENTER);
 				Paragraph paragraphThree1 = new Paragraph("Summary And Conditions Of The Installation ", font3);
@@ -256,7 +246,7 @@ public class PrintServiceImpl implements PrintService {
 				PdfPCell cell19 = new PdfPCell(new Paragraph(summary.getGeneralConditionInstallation(),
 						new Font(BaseFont.createFont(), 12, Font.NORMAL)));
 				table7.addCell(new Phrase("General condition of the installation in terms of electrical safety:",
-						new Font(BaseFont.createFont(), 12, Font.ITALIC)));
+					 new Font(BaseFont.createFont(), 12, Font.ITALIC)));
 				cell19.setFixedHeight(30f);
 				cell19.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell19.setBorder(PdfPCell.NO_BORDER);
@@ -264,19 +254,13 @@ public class PrintServiceImpl implements PrintService {
 				PdfPCell cell20 = new PdfPCell(new Paragraph(summary.getOverallAssessmentInstallation(),
 						new Font(BaseFont.createFont(), 12, Font.NORMAL)));
 				table7.addCell(
-						new Phrase("Overall assessment of the installation in terms of suitability of continuous use:",
-								new Font(BaseFont.createFont(), 12, Font.ITALIC)));
+						new Phrase("Overall assessment of the installation in terms of suitability on continuous use:",
+						 new Font(BaseFont.createFont(), 12, Font.ITALIC)));
 				cell20.setFixedHeight(30f);
 				cell20.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell20.setBorder(PdfPCell.NO_BORDER);
 				table7.addCell(cell20);
 				document.add(table7);
-
-				PdfPTable table = new PdfPTable(3); // 3 columns.
-				table.setWidthPercentage(100); // Width 100%
-				table.setSpacingBefore(10f); // Space before table
-				table.setSpacingAfter(10f); // Space after table
-				table.setWidthPercentage(100);
 
 				Paragraph paragraphThree = new Paragraph(40, "Section 5", font5);
 				paragraphThree.setAlignment(Element.ALIGN_CENTER);
@@ -290,15 +274,27 @@ public class PrintServiceImpl implements PrintService {
 
 				document.add(paragraph1);
 
-				addRow(table, "DeclarationName", "Inspected and tested value", "Authorised value");
-				addRow(table, "Name", declaration.getName(), declaration11.getName());
-				addRow(table, "Company", declaration.getCompany(), declaration11.getCompany());
-				addRow(table, "Signature	", declaration.getSignature(), declaration11.getSignature());
-				addRow(table, "Company", declaration.getCompany(), declaration11.getCompany());
-				addRow(table, "Position", declaration.getPosition(), declaration11.getPosition());
-				addRow(table, "Address", declaration.getAddress(), declaration11.getAddress());
-				addRow(table, "Date", declaration.getDate(), declaration11.getDate());
+				PdfPTable table9 = new PdfPTable(2);
+				table9.setWidthPercentage(100); // Width 100%
+				table9.setSpacingBefore(20f); // Space before table
+				table9.setWidthPercentage(100);
+				table9.getDefaultCell().setBorder(0);
 
+				addRow(table9, "Inspected and Tested  By ", "Authorised By");
+
+				PdfPTable table = new PdfPTable(4); // 3 columns.
+				table.setWidthPercentage(100); // Width 100%
+				table.setWidthPercentage(100);
+
+				addRow(table, "Name", declaration.getName(), "Name", declaration11.getName());
+				addRow(table, "Company", declaration.getCompany(), "Company", declaration11.getCompany());
+				addRow(table, "Signature	", declaration.getSignature(), "Signature	",
+						declaration11.getSignature());
+				addRow(table, "Company", declaration.getCompany(), "Company", declaration11.getCompany());
+				addRow(table, "Position", declaration.getPosition(), "Position", declaration11.getPosition());
+				addRow(table, "Address", declaration.getAddress(), "Address", declaration11.getAddress());
+				addRow(table, "Date", declaration.getDate(), "Date", declaration11.getDate());
+				document.add(table9);
 				document.add(table);
 
 				document.close();
@@ -312,7 +308,61 @@ public class PrintServiceImpl implements PrintService {
 		}
 	}
 
+	private void addRow(PdfPTable table9, String string, String string2) {
+		PdfPCell nameCell = new PdfPCell(new Paragraph(string));
+		PdfPCell nameCell1 = new PdfPCell(new Paragraph(string2));
+
+		nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		nameCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+		table9.addCell(nameCell);
+		table9.addCell(nameCell1);
+	}
+
+	private void TableData(PdfPTable table6, List<SummaryObervation> observation1) {
+		for (SummaryObervation arr : observation1) {
+			PdfPCell cell = new PdfPCell();
+			cell.setPhrase(new Phrase(arr.getObservations()));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table6.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getFurtherActions()));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table6.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getReferanceNumberReport()));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table6.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getComment()));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table6.addCell(cell);
+		}
+
+	}
+
+	private void TableHeader(PdfPTable table6) {
+		PdfPCell cell = new PdfPCell();
+//	        cell.setBorderColor(Color.BLUE);
+		cell.setPadding(4);
+
+		Font font = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC | Font.BOLD, BaseColor.BLACK);
+
+		// font.setColor(Color.WHITE);
+		cell.setPhrase(new Phrase("Observations", font));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table6.addCell(cell);
+		cell.setPhrase(new Phrase("Further actions", font));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table6.addCell(cell);
+		cell.setPhrase(new Phrase("Reference number in report", font));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table6.addCell(cell);
+		cell.setPhrase(new Phrase("Comment", font));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table6.addCell(cell);
+
+	}
+
 	private void addRow(PdfPTable table6, String string, String string2, String string3, String string4) {
+
 		PdfPCell nameCell = new PdfPCell(new Paragraph(string));
 		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2));
 		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3));
