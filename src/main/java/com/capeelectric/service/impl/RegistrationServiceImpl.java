@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Autowired
 	private RestTemplate restTemplate;
 	
+	@Value("${number.of.licence}")
+	private String numberOfLicence;
+	
 	@Override
 	public Register addRegistration(Register register) throws RegistrationException {
 		logger.debug("AddingRegistration Starts with User : {} ", register.getUsername());
@@ -52,6 +56,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 			if (!registerRepo.isPresent()
 					|| !registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
 				if (isValidIndianMobileNumber(register.getContactNumber())) {
+					if (register.getRole().equalsIgnoreCase("INSPECTOR")) {
+						register.setNoOfLicence(numberOfLicence);
+					}
 					register.setCreatedDate(LocalDateTime.now());
 					register.setPermission("NOT_AUTHORIZED");
 					register.setUpdatedDate(LocalDateTime.now());
@@ -77,11 +84,51 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 
 	@Override
+	public Register addViewerRegistration(Register register) throws RegistrationException {
+		logger.debug("AddingRegistration Starts with User : {} ", register.getUsername());
+		if (register.getUsername() != null && register.getCompanyName() != null && register.getAddress() != null
+				&& register.getApplicationType() != null && register.getContactNumber() != null
+				&& register.getDepartment() != null && register.getDesignation() != null
+				&& register.getInterestedAreas() != null && register.getName() != null && register.getState() != null) {
+
+			Optional<Register> registerRepo = registerRepository.findByUsername(register.getUsername());
+			if (!registerRepo.isPresent()
+					|| !registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
+				if (isValidIndianMobileNumber(register.getContactNumber())) {
+					register.setCreatedDate(LocalDateTime.now());
+					register.setPermission("YES");
+					register.setUpdatedDate(LocalDateTime.now());
+					register.setCreatedBy(register.getUsername());
+					register.setUpdatedBy(register.getUsername());
+					Register createdRegister = registerRepository.save(register);
+					logger.debug("Sucessfully Registration Information Saved");
+					return createdRegister;
+				} else {
+					logger.debug(isValidIndianMobileNumber(register.getContactNumber())+"  Given MobileNumber is Invalid");
+					throw new RegistrationException("Invalid MobileNumber");
+				}
+
+			} else {
+				logger.debug("Given UserName Already Present");
+				throw new RegistrationException("Given UserName Already Present");
+			}
+
+		} else {
+			logger.debug("AddingRegistration is Faild , Because Invalid Inputs");
+			throw new RegistrationException("Invalid Inputs");
+		}
+	}
+	
+	@Override
 	public Optional<Register> retrieveRegistration(String userName) throws RegistrationException {
 		if (userName != null) {
 			logger.debug("RetrieveRegistration Started with User : {} ", userName);
-			return registerRepository.findByUsername(userName);
-
+			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
+			if (registerRepo.isPresent()) {
+				return registerRepository.findByUsername(userName);
+			} else {
+				throw new RegistrationException("Email Id doesn't exist!");
+			}
 		} else {
 			logger.debug("RetrieveRegistration is Faild , Because Invalid Inputs");
 			throw new RegistrationException("Invalid Inputs");
@@ -167,6 +214,5 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 		return sendOtpResponse.getBody().replaceAll(SESSION_TITLE, "$1");
 	}
-
 
 }

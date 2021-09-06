@@ -79,6 +79,12 @@ public class Register {
 	
 	@Column(name = "OTP_SESSION_KEY")
 	private String otpSessionKey;
+	
+	@Column(name = "ASSIGNED_BY")
+	private String assignedBy;
+	
+	@Column(name = "NO_OF_LICENCE")
+	private String noOfLicence;
 
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
@@ -242,6 +248,22 @@ public class Register {
 
 	public void setOtpSessionKey(String otpSessionKey) {
 		this.otpSessionKey = otpSessionKey;
+	}
+
+	public String getAssignedBy() {
+		return assignedBy;
+	}
+
+	public void setAssignedBy(String assignedBy) {
+		this.assignedBy = assignedBy;
+	}
+
+	public String getNoOfLicence() {
+		return noOfLicence;
+	}
+
+	public void setNoOfLicence(String noOfLicence) {
+		this.noOfLicence = noOfLicence;
 	}
 
 	public LocalDateTime getCreatedDate() {

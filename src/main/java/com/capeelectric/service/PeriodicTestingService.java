@@ -18,4 +18,8 @@ public interface PeriodicTestingService {
 
 	public void updatePeriodicTesting(TestingReport testingReport) throws PeriodicTestingException;
 
+	public TestingReport sendComments(String userName, Integer siteId, String comments) throws PeriodicTestingException;
+
+	public String replyComments(String userName, Integer siteId, String comments) throws PeriodicTestingException;
+
 }

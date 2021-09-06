@@ -18,4 +18,8 @@ public interface InstalReportService {
 
 	public void updateInstallationReport(ReportDetails reportDetails) throws InstalReportException;
 
+	public ReportDetails sendComments(String userName, Integer siteId, String comments) throws InstalReportException;
+	
+	public String replyComments(String userName, Integer siteId, String comments) throws InstalReportException;
+
 }

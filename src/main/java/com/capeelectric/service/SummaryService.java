@@ -18,4 +18,8 @@ public interface SummaryService {
 
 	public void updateSummary(Summary summary) throws SummaryException;
 
+	public Summary sendComments(String userName, Integer siteId, String comments) throws SummaryException;
+
+	public String replyComments(String userName, Integer siteId, String comments) throws SummaryException;
+
 }

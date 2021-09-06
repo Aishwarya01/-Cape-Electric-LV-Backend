@@ -3,13 +3,17 @@ package com.capeelectric.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.model.PeriodicInspection;
+import com.capeelectric.model.Site;
+import com.capeelectric.model.SitePersons;
 import com.capeelectric.repository.InspectionRepository;
+import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.InspectionService;
 import com.capeelectric.util.UserFullName;
 /**
@@ -25,6 +29,9 @@ public class InspectionServiceImpl implements InspectionService {
 
 	@Autowired
 	private UserFullName userFullName;
+	
+	@Autowired
+	private SiteRepository siteRepository;
 
 	/**
 	 * @param IpaoInspection object 
@@ -97,5 +104,53 @@ public class InspectionServiceImpl implements InspectionService {
 		
 	}
 
+	@Override
+	public PeriodicInspection sendComments(String userName, Integer siteId, String comments) throws InspectionException {
+		if (userName != null && siteId != null && comments != null) {
+			Optional<PeriodicInspection> periodicInspectionRepo = inspectionRepository.findBySiteId(siteId);
+			if (periodicInspectionRepo.isPresent() && periodicInspectionRepo.get().getUserName().equalsIgnoreCase(userName)) {
+				PeriodicInspection periodicInspection = periodicInspectionRepo.get();
+				periodicInspection.setUpdatedDate(LocalDateTime.now());
+				periodicInspection.setUpdatedBy(userName);
+				periodicInspection.setViewerComment(comments);
+				return inspectionRepository.save(periodicInspection);
+			} else {
+				throw new InspectionException("Given SiteId is Invalid");
+			}
+		} else {
+			throw new InspectionException("Invalid inputs");
+		}
+	}
+
+	@Override
+	public String replyComments(String inspectorUserName, Integer siteId, String comments) throws InspectionException {
+		
+		if (inspectorUserName != null && siteId != null && comments != null) {
+			Optional<Site> siteRepo = siteRepository.findById(siteId);
+			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
+				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+				for (SitePersons sitePersons2 : sitePersons) {
+					Optional<PeriodicInspection> periodicInspectionRepo = inspectionRepository
+							.findBySiteId(siteId);
+					if (periodicInspectionRepo.isPresent() && periodicInspectionRepo.get().getUserName()
+							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
+						PeriodicInspection periodicInspection = periodicInspectionRepo.get();
+						periodicInspection.setUpdatedDate(LocalDateTime.now());
+						periodicInspection.setUpdatedBy(inspectorUserName);
+						periodicInspection.setInspectorComment(comments);
+						inspectionRepository.save(periodicInspection);
+						return periodicInspection.getUserName();
+					} 
+				}
+
+			} else {
+				throw new InspectionException("Invalid Site-Id");
+			}
+
+		} else {
+			throw new InspectionException("Invalid inputs");
+		}
+		return null;
+	}
 
 }

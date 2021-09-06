@@ -20,4 +20,6 @@ public interface RegistrationService {
 
 	public void sendOtp(String userName, String mobileNumber) throws RegistrationException;
 
+	public Register addViewerRegistration(Register register) throws RegistrationException;;
+
 }

@@ -4,13 +4,17 @@ package com.capeelectric.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.model.ReportDetails;
+import com.capeelectric.model.Site;
+import com.capeelectric.model.SitePersons;
 import com.capeelectric.repository.InstalReportDetailsRepository;
+import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.InstalReportService;
 import com.capeelectric.util.UserFullName;
 
@@ -27,6 +31,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 
 	@Autowired
 	private UserFullName userFullName;
+	
+	@Autowired
+	private SiteRepository siteRepository;
 	
 	/**
 	 * @param ReportDetails
@@ -97,5 +104,55 @@ public class InstalReportServiceImpl implements InstalReportService {
 		} else {
 			throw new InstalReportException("Invalid inputs");
 		}
+	}
+
+	@Override
+	public ReportDetails sendComments(String userName, Integer siteId, String comments) throws InstalReportException {
+		if (userName != null && siteId != null && comments != null) {
+			Optional<ReportDetails> reportDetailRepo = installationReportRepository.findBySiteId(siteId);
+			if (reportDetailRepo.isPresent() && reportDetailRepo.get().getUserName().equalsIgnoreCase(userName)) {
+				ReportDetails reportDetails = reportDetailRepo.get();
+				reportDetails.setUpdatedDate(LocalDateTime.now());
+				reportDetails.setUpdatedBy(userName);
+				reportDetails.setViewerComment(comments);
+				return installationReportRepository.save(reportDetails);
+			} else {
+				throw new InstalReportException("Given SiteId is Invalid");
+			}
+		} else {
+			throw new InstalReportException("Invalid inputs");
+		}
+	}
+
+	@Override
+	public String replyComments(String inspectorUserName, Integer siteId, String comments)
+			throws InstalReportException {
+		if (inspectorUserName != null && siteId != null && comments != null) {
+			Optional<Site> siteRepo = siteRepository.findById(siteId);
+			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
+				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+				for (SitePersons sitePersons2 : sitePersons) {
+					Optional<ReportDetails> reportDetailRepo = installationReportRepository.findBySiteId(siteId);
+					if (reportDetailRepo.isPresent() && reportDetailRepo.get().getUserName()
+							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
+						ReportDetails reportDetails = reportDetailRepo.get();
+						reportDetails.setUpdatedDate(LocalDateTime.now());
+						reportDetails.setUpdatedBy(inspectorUserName);
+						reportDetails.setInspectorComment(comments);
+						installationReportRepository.save(reportDetails);
+						return reportDetails.getUserName();
+					} else {
+						throw new InstalReportException("Given SiteId is Invalid");
+					}
+				}
+
+			} else {
+				throw new InstalReportException("Invalid Site-Id");
+			}
+
+		} else {
+			throw new InstalReportException("Invalid inputs");
+		}
+		return null;
 	}
 }

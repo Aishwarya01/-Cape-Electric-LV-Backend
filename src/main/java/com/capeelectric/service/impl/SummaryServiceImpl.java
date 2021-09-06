@@ -3,12 +3,16 @@ package com.capeelectric.service.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.SummaryException;
+import com.capeelectric.model.Site;
+import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Summary;
+import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.service.SummaryService;
 import com.capeelectric.util.UserFullName;
@@ -26,6 +30,9 @@ public class SummaryServiceImpl implements SummaryService {
 	
 	@Autowired
 	private UserFullName userFullName;
+	
+	@Autowired
+	private SiteRepository siteRepository;
 
 	/**
 	 * @ siteId unique for summary object
@@ -94,5 +101,54 @@ public class SummaryServiceImpl implements SummaryService {
 		} else {
 			throw new SummaryException("Invalid inputs");
 		}
+	}
+	
+	@Override
+	public Summary sendComments(String userName, Integer siteId, String comments) throws SummaryException {
+		if (userName != null && siteId != null && comments != null) {
+			Optional<Summary> summaryRepo = summaryRepository.findBySiteId(siteId);
+			if (summaryRepo.isPresent() && summaryRepo.get().getUserName().equalsIgnoreCase(userName)) {
+				Summary summary = summaryRepo.get();
+				summary.setUpdatedDate(LocalDateTime.now());
+				summary.setUpdatedBy(userName);
+				summary.setViewerComment(comments);
+				return summaryRepository.save(summary);
+			} else {
+				throw new SummaryException("Given SiteId is Invalid");
+			}
+		} else {
+			throw new SummaryException("Invalid inputs");
+		}
+	}
+
+	@Override
+	public String replyComments(String inspectorUserName, Integer siteId, String comments) throws SummaryException {
+		
+		if (inspectorUserName != null && siteId != null && comments != null) {
+			Optional<Site> siteRepo = siteRepository.findById(siteId);
+			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
+				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+				for (SitePersons sitePersons2 : sitePersons) {
+					Optional<Summary> summaryRepo = summaryRepository
+							.findBySiteId(siteId);
+					if (summaryRepo.isPresent() && summaryRepo.get().getUserName()
+							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
+						Summary summary = summaryRepo.get();
+						summary.setUpdatedDate(LocalDateTime.now());
+						summary.setUpdatedBy(inspectorUserName);
+						summary.setInspectorComment(comments);
+						summaryRepository.save(summary);
+						return summary.getUserName();
+					} 
+				}
+
+			} else {
+				throw new SummaryException("Invalid Site-Id");
+			}
+
+		} else {
+			throw new SummaryException("Invalid inputs");
+		}
+		return null;
 	}
 }

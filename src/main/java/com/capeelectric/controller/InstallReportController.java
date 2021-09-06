@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capeelectric.exception.InstalReportException;
+import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.service.InstalReportService;
+import com.capeelectric.util.SendReplyComments;
 
 /**
  * @author capeelectricsoftware
@@ -31,6 +33,9 @@ public class InstallReportController {
 
 	@Autowired
 	private InstalReportService instalReportService;
+	
+	@Autowired
+	private SendReplyComments sendReplyComments;
 
 	@PostMapping("/addInstalReport")
 	public ResponseEntity<String> addInstallationReport(@RequestBody ReportDetails reportDetails)
@@ -57,5 +62,29 @@ public class InstallReportController {
 				reportDetails.getSiteId(),reportDetails.getReportId());
 		instalReportService.updateInstallationReport(reportDetails);
 		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.OK);
+	}
+	
+	@GetMapping("/sendBasicInfoComments/{userName}/{siteId}/{comments}")
+	public ResponseEntity<Void> sendComments(@PathVariable String userName,
+			@PathVariable Integer siteId,@PathVariable String comments)
+			throws InstalReportException, RegistrationException, Exception {
+		logger.info("called sendComments function UserName : {},SiteId : {}", userName, siteId);
+		instalReportService.sendComments(userName, siteId, comments);
+		sendReplyComments.sendComments(userName);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/replyBasicInfoComments/{inspectorUserName}/{viewerUserName}/{siteId}/{comments}")
+	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
+			@PathVariable String comments) throws InstalReportException, RegistrationException, Exception {
+		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
+		String viewerUserName = instalReportService.replyComments(inspectorUserName, siteId, comments);
+		if (viewerUserName != null) {
+			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
+		} else {
+			throw new InstalReportException("No viewer userName avilable");
+		}
+
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

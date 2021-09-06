@@ -18,4 +18,8 @@ public interface InspectionService {
 
 	public void updateInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException;
 
+	public PeriodicInspection sendComments(String userName, Integer siteId, String comments) throws InspectionException;
+
+	public String replyComments(String userName, Integer siteId, String comments) throws InspectionException;
+
 }

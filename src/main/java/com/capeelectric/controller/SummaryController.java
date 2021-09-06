@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
 import com.capeelectric.service.SummaryService;
+import com.capeelectric.util.SendReplyComments;
 
 /**
  * 
@@ -32,6 +34,9 @@ public class SummaryController {
 
 	@Autowired
 	private SummaryService summaryService;
+	
+	@Autowired
+	private SendReplyComments sendReplyComments;
 
 	@PostMapping("/addSummary")
 	public ResponseEntity<String> addSummary(@RequestBody Summary summary) throws SummaryException {
@@ -57,4 +62,27 @@ public class SummaryController {
 		return new ResponseEntity<String>("Summary successfully Updated", HttpStatus.OK);
 	}
 
+
+	@GetMapping("/sendSummaryComments/{userName}/{siteId}/{comments}")
+	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
+			@PathVariable String comments) throws SummaryException, RegistrationException, Exception {
+		logger.info("called sendComments function UserName : {},SiteId : {}", userName, siteId);
+		summaryService.sendComments(userName, siteId, comments);
+		sendReplyComments.sendComments(userName);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+
+	@GetMapping("/replySummaryComments/{inspectorUserName}{siteId}/{comments}")
+	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId, @PathVariable String comments)
+			throws SummaryException, RegistrationException, Exception {
+		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
+		String viewerUserName = summaryService.replyComments(inspectorUserName, siteId, comments);
+		if (viewerUserName != null) {
+			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
+		} else {
+			throw new SummaryException("No viewer userName avilable");
+		}
+
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 }

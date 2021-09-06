@@ -52,17 +52,45 @@ public class RegistrationController {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(createdRegister.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());
-		awsEmailService.sendEmailToAdmin("Please Approve or Reject the inspector by Logging to "
-				+ "Admin Portal for User "+register.getName()+ " and Company "+ register.getCompanyName() + " with their Email "
-				+ register.getUsername()
-				+ ". You can login to admin Portal with this link " + "\n"
+		if (createdRegister.getPermission().equalsIgnoreCase("YES")) {
+			awsEmailService.sendEmail(register.getUsername(),
+					"Your request for accessing the Rush App is approved and you can generate OTP with this link" + "\n"
+							+ "\n"
+							+ (resetUrl.contains("localhost:5000")
+									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
+									: "https://www.rushforsafety.com")
+							+ "/generateOtp" + ";email=" + register.getUsername());
+		} else {
+			awsEmailService
+					.sendEmailToAdmin("Please Approve or Reject the inspector by Logging to " + "Admin Portal for User "
+							+ register.getName() + " and Company " + register.getCompanyName() + " with their Email "
+							+ register.getUsername() + ". You can login to admin Portal with this link " + "\n"
+							+ (resetUrl.contains("localhost:5000")
+									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
+									: "https://www.rushforsafety.com")
+							+ "/admin");
+		}
+
+		return ResponseEntity.created(uri).build();
+	}
+	 
+	@PostMapping("/addViewerRegistration")
+	public ResponseEntity<Void> addViewerRegistration(@RequestBody Register register)
+			throws RegistrationException, MessagingException, MalformedURLException {
+		logger.info("called addRegistration function UserName : {}", register.getUsername());
+		Register createdRegister = registrationService.addViewerRegistration(register);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(createdRegister.getRegisterId()).toUri();
+		String resetUrl = Utility.getSiteURL(uri.toURL());
+		awsEmailService.sendEmail(createdRegister.getUsername(),"Your request for accessing the Rush App is approved and you can generate OTP with this link"
+				+ "\n" + "\n" 
 				+ (resetUrl.contains("localhost:5000")
 						? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
 								: "https://www.rushforsafety.com")
-				+ "/admin");
+				+ "/generateOtp" + ";email=" + register.getUsername());
 		return ResponseEntity.created(uri).build();
 	}
-
+	
 	@GetMapping("/retrieveRegistration/{userName}")
 	public Optional<Register> retrieveRegistration(@PathVariable String userName) throws RegistrationException {
 		logger.info("called retrieveRegistration function UserName : {}", userName);
@@ -84,5 +112,5 @@ public class RegistrationController {
 		logger.debug("called sendOtp function UserName : {}, MobileNumber : {}", userName, mobileNumber);
 		registrationService.sendOtp(userName,mobileNumber);
 		return new ResponseEntity<Void>(HttpStatus.OK);
-	}
+	}	
 }

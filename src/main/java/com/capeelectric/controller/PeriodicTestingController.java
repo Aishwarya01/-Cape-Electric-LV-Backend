@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capeelectric.exception.PeriodicTestingException;
+import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.service.PeriodicTestingService;
+import com.capeelectric.util.SendReplyComments;
 
 /**
  * 
@@ -32,6 +34,9 @@ public class PeriodicTestingController {
 
 	@Autowired
 	private PeriodicTestingService testService;
+	
+	@Autowired
+	private SendReplyComments sendReplyComments;
 
 	@PostMapping("/savePeriodicTesting")
 	public ResponseEntity<String> savePeriodicTesting(@RequestBody TestingReport testingReport)
@@ -65,6 +70,30 @@ public class PeriodicTestingController {
 				testingReport.getTestingReportId());
 		testService.updatePeriodicTesting(testingReport);
 		return new ResponseEntity<String>("PeriodicTesting successfully Updated", HttpStatus.OK);
+	}
+
+	@GetMapping("/sendTestingComments/{userName}/{siteId}/{comments}")
+	public ResponseEntity<Void> sendComments(@PathVariable String userName,
+			@PathVariable Integer siteId,@PathVariable String comments)
+			throws PeriodicTestingException, RegistrationException, Exception {
+		logger.info("called sendComments function UserName : {},SiteId : {}", userName, siteId);
+		testService.sendComments(userName, siteId, comments);
+		sendReplyComments.sendComments(userName);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/replyTestingComments/{inspectorUserName}/{siteId}/{comments}")
+	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
+			@PathVariable String comments) throws PeriodicTestingException, RegistrationException, Exception {
+		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
+		String viewerUserName = testService.replyComments(inspectorUserName, siteId, comments);
+		if (viewerUserName != null) {
+			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
+		} else {
+			throw new PeriodicTestingException("No viewer userName avilable");
+		}
+
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
 }

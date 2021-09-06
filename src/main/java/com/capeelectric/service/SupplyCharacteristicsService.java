@@ -18,4 +18,8 @@ public interface SupplyCharacteristicsService {
 
 	public void updateCharacteristics(SupplyCharacteristics supplyCharacteristics) throws SupplyCharacteristicsException;
 
+	public SupplyCharacteristics sendComments(String userName, Integer siteId, String comments) throws SupplyCharacteristicsException;
+
+	public String replyComments(String userName, Integer siteId, String comments) throws SupplyCharacteristicsException;
+
 }
