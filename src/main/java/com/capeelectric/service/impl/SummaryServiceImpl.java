@@ -42,6 +42,8 @@ public class SummaryServiceImpl implements SummaryService {
 	
 	private Site site;
 	
+	private Optional<Site> siteRepo;
+	
 	/**
 	 * @ siteId unique for summary object
 	 * @param Summary object
@@ -60,9 +62,15 @@ public class SummaryServiceImpl implements SummaryService {
 				summary.setCreatedBy(userFullName.getFullName(summary.getUserName()));
 				summary.setUpdatedBy(userFullName.getFullName(summary.getUserName()));
 				summaryRepository.save(summary);
-				site = new Site();
-				site.setAllStepsCompleted("AllStepCompleted");
-				siteRepository.save(site);
+				siteRepo = siteRepository.findById(summary.getSiteId());
+				if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
+					site = siteRepo.get();
+					site.setAllStepsCompleted("AllStepCompleted");
+					siteRepository.save(site);
+				} else {
+					throw new SummaryException("Site-Id Information not Available in site_Table");
+				}
+
 			} else {
 				throw new SummaryException("Site-Id Already Available");
 			}
