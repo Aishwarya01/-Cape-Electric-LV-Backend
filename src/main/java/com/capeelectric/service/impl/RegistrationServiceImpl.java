@@ -155,12 +155,12 @@ public class RegistrationServiceImpl implements RegistrationService {
 				register.setUpdatedBy(register.getUsername());
 				registerRepository.save(register);
 			} else {
-				logger.debug("UpdatingRegistration is Faild , Because Given User not present");
+				logger.debug("UpdatingRegistration is Failed , Because Given User not present");
 				throw new RegistrationException("Given User not present");
 			}
 
 		} else {
-			logger.debug("UpdatingRegistration is Faild , Because Invalid Inputs");
+			logger.debug("UpdatingRegistration is Failed , Because Invalid Inputs");
 			throw new RegistrationException("Invalid Inputs");
 		}
 	}
