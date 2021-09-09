@@ -43,15 +43,6 @@ public class PeriodicInspection implements Serializable {
 	@Column(name = "USER_NAME")
 	private String userName;
 	
-	@Column(name = "VIEWER_COMMENT")
-	private String viewerComment;
-	
-	@Column(name = "INSPECTOR_COMMENT")
-	private String inspectorComment;
-
-	@Column(name = "COMMENT_APPROVE_OR_REJECT")
-	private String commentApproveOrReject;
-
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 
@@ -67,6 +58,10 @@ public class PeriodicInspection implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "periodicInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<IpaoInspection> ipaoInspection;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "periodicInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<PeriodicInspectionComment> periodicInspectorComment;
 
 	public Integer getPeriodicInspectionId() {
 		return periodicInspectionId;
@@ -90,30 +85,6 @@ public class PeriodicInspection implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	public String getViewerComment() {
-		return viewerComment;
-	}
-
-	public void setViewerComment(String viewerComment) {
-		this.viewerComment = viewerComment;
-	}
-
-	public String getInspectorComment() {
-		return inspectorComment;
-	}
-
-	public void setInspectorComment(String inspectorComment) {
-		this.inspectorComment = inspectorComment;
-	}
-
-	public String getCommentApproveOrReject() {
-		return commentApproveOrReject;
-	}
-
-	public void setCommentApproveOrReject(String commentApproveOrReject) {
-		this.commentApproveOrReject = commentApproveOrReject;
 	}
 
 	public LocalDateTime getCreatedDate() {
@@ -154,6 +125,14 @@ public class PeriodicInspection implements Serializable {
 
 	public void setIpaoInspection(List<IpaoInspection> ipaoInspection) {
 		this.ipaoInspection = ipaoInspection;
+	}
+	
+	public List<PeriodicInspectionComment> getPeriodicInspectorComment() {
+		return periodicInspectorComment;
+	}
+
+	public void setPeriodicInspectorComment(List<PeriodicInspectionComment> periodicInspectorComment) {
+		this.periodicInspectorComment = periodicInspectorComment;
 	}
  
 }

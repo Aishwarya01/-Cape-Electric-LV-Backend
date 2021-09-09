@@ -1,6 +1,7 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -12,6 +13,7 @@ import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Summary;
+import com.capeelectric.model.SummaryComment;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.service.SummaryService;
@@ -33,7 +35,13 @@ public class SummaryServiceImpl implements SummaryService {
 	
 	@Autowired
 	private SiteRepository siteRepository;
-
+	
+	private SummaryComment summaryComment;
+	
+	private List<SummaryComment> listOfComments = new ArrayList<SummaryComment>();
+	
+	private Site site;
+	
 	/**
 	 * @ siteId unique for summary object
 	 * @param Summary object
@@ -43,7 +51,8 @@ public class SummaryServiceImpl implements SummaryService {
 	*/
 	@Override
 	public void addSummary(Summary summary) throws SummaryException {
-		if (summary.getUserName() != null && !summary.getUserName().isEmpty() && summary.getSiteId() != null && summary.getSiteId() != 0) {
+		if (summary.getUserName() != null && !summary.getUserName().isEmpty() && summary.getSiteId() != null
+				&& summary.getSiteId() != 0) {
 			Optional<Summary> summaryRepo = summaryRepository.findBySiteId(summary.getSiteId());
 			if (!summaryRepo.isPresent() || !summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
 				summary.setCreatedDate(LocalDateTime.now());
@@ -51,6 +60,9 @@ public class SummaryServiceImpl implements SummaryService {
 				summary.setCreatedBy(userFullName.getFullName(summary.getUserName()));
 				summary.setUpdatedBy(userFullName.getFullName(summary.getUserName()));
 				summaryRepository.save(summary);
+				site = new Site();
+				site.setAllStepsCompleted("AllStepCompleted");
+				siteRepository.save(site);
 			} else {
 				throw new SummaryException("Site-Id Already Available");
 			}
@@ -111,7 +123,12 @@ public class SummaryServiceImpl implements SummaryService {
 				Summary summary = summaryRepo.get();
 				summary.setUpdatedDate(LocalDateTime.now());
 				summary.setUpdatedBy(userName);
-				summary.setViewerComment(comments);
+				summaryComment = new SummaryComment();
+				summaryComment.setViewerDate(LocalDateTime.now());
+				summaryComment.setViewerComment(comments);
+				summaryComment.setSummary(summary);
+				listOfComments.add(summaryComment);
+				summary.setSummaryComment(listOfComments);
 				return summaryRepository.save(summary);
 			} else {
 				throw new SummaryException("Given SiteId is Invalid");
@@ -122,24 +139,34 @@ public class SummaryServiceImpl implements SummaryService {
 	}
 
 	@Override
-	public String replyComments(String inspectorUserName, Integer siteId, String comments) throws SummaryException {
-		
-		if (inspectorUserName != null && siteId != null && comments != null) {
+	public String replyComments(String inspectorUserName, Integer siteId, SummaryComment summaryComment)
+			throws SummaryException {
+		if (inspectorUserName != null && siteId != null && summaryComment.getCommentsId() != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
 				for (SitePersons sitePersons2 : sitePersons) {
-					Optional<Summary> summaryRepo = summaryRepository
-							.findBySiteId(siteId);
+					Optional<Summary> summaryRepo = summaryRepository.findBySiteId(siteId);
 					if (summaryRepo.isPresent() && summaryRepo.get().getUserName()
 							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
 						Summary summary = summaryRepo.get();
 						summary.setUpdatedDate(LocalDateTime.now());
 						summary.setUpdatedBy(inspectorUserName);
-						summary.setInspectorComment(comments);
-						summaryRepository.save(summary);
-						return summary.getUserName();
-					} 
+						List<SummaryComment> summaryCommentRepo = summary.getSummaryComment();
+
+						for (SummaryComment summaryCommentItr : summaryCommentRepo) {
+							if (summaryCommentItr.getCommentsId().equals(summaryComment.getCommentsId())) {
+								summaryCommentItr.setInspectorDate(LocalDateTime.now());
+								summaryCommentItr.setSummary(summary);
+								summaryCommentItr.setInspectorComment(summaryComment.getInspectorComment());
+								summaryCommentRepo.add(summaryCommentItr);
+								summary.setSummaryComment(summaryCommentRepo);
+								summaryRepository.save(summary);
+								return summary.getUserName();
+							}
+						}
+
+					}
 				}
 
 			} else {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
+import com.capeelectric.model.SummaryComment;
 
 /**
  * 
@@ -20,6 +21,6 @@ public interface SummaryService {
 
 	public Summary sendComments(String userName, Integer siteId, String comments) throws SummaryException;
 
-	public String replyComments(String userName, Integer siteId, String comments) throws SummaryException;
+	public String replyComments(String userName, Integer siteId, SummaryComment summaryComment) throws SummaryException;
 
 }

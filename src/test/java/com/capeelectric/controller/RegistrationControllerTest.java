@@ -86,6 +86,9 @@ public class RegistrationControllerTest {
 								: "https://www.rushforsafety.com"));
 
 		  ResponseEntity<Void> addRegistration = registrationController.addRegistration(register);
+		  
+		  register.setPermission("NO");
+		  registrationController.addRegistration(register);
 
 		assertEquals(addRegistration.getStatusCode(), HttpStatus.CREATED);
 		logger.info("RegistrationControllerTest testAddRegistration_funcion Ended");
@@ -129,6 +132,30 @@ public class RegistrationControllerTest {
 		assertEquals(sendOtp.getStatusCode(), HttpStatus.OK);
 
 		logger.info("RegistrationControllerTest testResendOtp_funcion Ended");
+
+	}
+	
+	@Test
+	public void testViewerRegistration()
+			throws UserException, URISyntaxException, IOException, MessagingException, RegistrationException {
+		logger.info("RegistrationControllerTest testViewerRegistration_funcion Started");
+
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+		when(registrationService.addViewerRegistration(register)).thenReturn(register);
+
+		doNothing().when(awsEmailService).sendEmail(register.getUsername(),
+				"You have been successfully Registered with Rush for Safety App. You may need to wait for 2hrs for getting approved from Admin."
+						+ "\n" + "\n" + "You can create the password with this link " + "\n"
+						+ (resetUrl.contains("localhost:5000")
+								? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
+								: "https://www.rushforsafety.com"));
+
+		  ResponseEntity<Void> addRegistration = registrationController.addViewerRegistration(register);
+		  
+		assertEquals(addRegistration.getStatusCode(), HttpStatus.CREATED);
+		logger.info("RegistrationControllerTest testViewerRegistration_funcion Ended");
 
 	}
 }

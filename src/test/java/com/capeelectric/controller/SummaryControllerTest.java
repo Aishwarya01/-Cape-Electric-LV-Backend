@@ -19,9 +19,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
 import com.capeelectric.service.impl.SummaryServiceImpl;
+import com.capeelectric.util.SendReplyComments;
 
 /**
  * 
@@ -42,6 +44,9 @@ public class SummaryControllerTest {
 
 	@MockBean
 	private SummaryException summaryException;
+	
+	@MockBean
+	private SendReplyComments sendReplyComments;
 
 	private Summary summary;
 
@@ -87,4 +92,34 @@ public class SummaryControllerTest {
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
 		logger.info("testUpdateSummary Function Ended");
 	}
+	
+	@Test
+	public void testSendComments() throws SummaryException, RegistrationException, Exception {
+
+		ResponseEntity<Void> sendComments = summaryController.sendComments("Viewer@gmail.com", 1,
+				"I have a question?");
+
+		assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+	}
+
+	/*
+	 * @Test public void testReplyComments() throws RegistrationException,
+	 * Exception, SummaryException {
+	 * 
+	 * SummaryException exception = Assertions.assertThrows(SummaryException.class,
+	 * () -> summaryController.replyComments("Inspector@gmail.com", 1,
+	 * "I have a question?"));
+	 * 
+	 * assertEquals(exception.getMessage(), "No viewer userName avilable");
+	 * 
+	 * when(summaryServiceImpl.replyComments("Inspector@gmail.com", 1,
+	 * "I have a question?")) .thenReturn("Viewer@gmail.com");
+	 * 
+	 * ResponseEntity<Void> sendComments =
+	 * summaryController.replyComments("Inspector@gmail.com", 1,
+	 * "I have a question?");
+	 * 
+	 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK); }
+	 */
+
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
+import com.capeelectric.model.SupplyCharacteristicComment;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.service.SupplyCharacteristicsService;
 import com.capeelectric.util.SendReplyComments;
@@ -76,12 +77,13 @@ public class SupplyCharacteristicsController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@GetMapping("/replyCharacteristicsComments/{inspectorUserName}/{siteId}/{comments}")
-	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName,
-			 @PathVariable Integer siteId, @PathVariable String comments)
+	@PostMapping("/replyCharacteristicsComments/{inspectorUserName}/{siteId}/{comments}")
+	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
+			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
 			throws SupplyCharacteristicsException, RegistrationException, Exception {
 		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
-		String viewerUserName = supplyCharacteristicsService.replyComments(inspectorUserName, siteId, comments);
+		String viewerUserName = supplyCharacteristicsService.replyComments(inspectorUserName, siteId,
+				supplyCharacteristicComment);
 		if (viewerUserName != null) {
 			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
 		} else {

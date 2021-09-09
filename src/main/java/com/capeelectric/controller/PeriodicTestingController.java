@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.TestingReport;
+import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.service.PeriodicTestingService;
 import com.capeelectric.util.SendReplyComments;
 
@@ -82,11 +83,11 @@ public class PeriodicTestingController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@GetMapping("/replyTestingComments/{inspectorUserName}/{siteId}/{comments}")
+	@PostMapping("/replyTestingComments/{inspectorUserName}/{siteId}/{comments}")
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
-			@PathVariable String comments) throws PeriodicTestingException, RegistrationException, Exception {
+			@RequestBody TestingReportComment testingReportComment) throws PeriodicTestingException, RegistrationException, Exception {
 		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
-		String viewerUserName = testService.replyComments(inspectorUserName, siteId, comments);
+		String viewerUserName = testService.replyComments(inspectorUserName, siteId, testingReportComment);
 		if (viewerUserName != null) {
 			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
 		} else {

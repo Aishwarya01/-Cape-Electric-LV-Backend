@@ -1,6 +1,7 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.model.PeriodicInspection;
+import com.capeelectric.model.PeriodicInspectionComment;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.repository.InspectionRepository;
@@ -32,6 +34,10 @@ public class InspectionServiceImpl implements InspectionService {
 	
 	@Autowired
 	private SiteRepository siteRepository;
+	
+	private PeriodicInspectionComment periodicInspectionComment;
+	
+	private List<PeriodicInspectionComment> listOfComments = new ArrayList<PeriodicInspectionComment>();
 
 	/**
 	 * @param IpaoInspection object 
@@ -112,7 +118,12 @@ public class InspectionServiceImpl implements InspectionService {
 				PeriodicInspection periodicInspection = periodicInspectionRepo.get();
 				periodicInspection.setUpdatedDate(LocalDateTime.now());
 				periodicInspection.setUpdatedBy(userName);
-				periodicInspection.setViewerComment(comments);
+				periodicInspectionComment = new PeriodicInspectionComment();
+				periodicInspectionComment.setViewerDate(LocalDateTime.now());
+				periodicInspectionComment.setViewerComment(comments);
+				periodicInspectionComment.setPeriodicInspection(periodicInspection);
+				listOfComments.add(periodicInspectionComment);
+				periodicInspection.setPeriodicInspectorComment(listOfComments);
 				return inspectionRepository.save(periodicInspection);
 			} else {
 				throw new InspectionException("Given SiteId is Invalid");
@@ -123,9 +134,9 @@ public class InspectionServiceImpl implements InspectionService {
 	}
 
 	@Override
-	public String replyComments(String inspectorUserName, Integer siteId, String comments) throws InspectionException {
+	public String replyComments(String inspectorUserName, Integer siteId, PeriodicInspectionComment periodicInspectionComment) throws InspectionException {
 		
-		if (inspectorUserName != null && siteId != null && comments != null) {
+		if (inspectorUserName != null && siteId != null && periodicInspectionComment.getCommentsId() != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
@@ -136,10 +147,21 @@ public class InspectionServiceImpl implements InspectionService {
 							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
 						PeriodicInspection periodicInspection = periodicInspectionRepo.get();
 						periodicInspection.setUpdatedDate(LocalDateTime.now());
-						periodicInspection.setUpdatedBy(inspectorUserName);
-						periodicInspection.setInspectorComment(comments);
-						inspectionRepository.save(periodicInspection);
-						return periodicInspection.getUserName();
+						periodicInspection.setUpdatedBy(inspectorUserName); 
+						List<PeriodicInspectionComment> periodicInspectorCommentRepo = periodicInspection.getPeriodicInspectorComment();
+						
+						for (PeriodicInspectionComment periodicInspectionCommentItr : periodicInspectorCommentRepo) {
+							if (periodicInspectionCommentItr.getCommentsId().equals(periodicInspectionComment.getCommentsId())) {
+								periodicInspectionCommentItr.setInspectorDate(LocalDateTime.now());
+								periodicInspectionCommentItr.setPeriodicInspection(periodicInspection);
+								periodicInspectionCommentItr.setInspectorComment(periodicInspectionComment.getInspectorComment());
+								periodicInspectorCommentRepo.add(periodicInspectionCommentItr);
+								periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
+								inspectionRepository.save(periodicInspection);
+								return periodicInspection.getUserName();
+							}
+						}
+						
 					} 
 				}
 

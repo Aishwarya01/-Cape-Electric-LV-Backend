@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
+import com.capeelectric.model.SummaryComment;
 import com.capeelectric.service.SummaryService;
 import com.capeelectric.util.SendReplyComments;
 
@@ -72,11 +73,11 @@ public class SummaryController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
-	@GetMapping("/replySummaryComments/{inspectorUserName}{siteId}/{comments}")
-	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId, @PathVariable String comments)
-			throws SummaryException, RegistrationException, Exception {
+	@PostMapping("/replySummaryComments/{inspectorUserName}{siteId}/{comments}")
+	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
+			@RequestBody SummaryComment summaryComment) throws SummaryException, RegistrationException, Exception {
 		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
-		String viewerUserName = summaryService.replyComments(inspectorUserName, siteId, comments);
+		String viewerUserName = summaryService.replyComments(inspectorUserName, siteId, summaryComment);
 		if (viewerUserName != null) {
 			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
 		} else {

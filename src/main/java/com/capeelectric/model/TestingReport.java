@@ -48,15 +48,6 @@ public class TestingReport implements Serializable {
 	@Column(name = "USER_NAME")
 	private String userName;
 	
-	@Column(name = "VIEWER_COMMENT")
-	private String viewerComment;
-	
-	@Column(name = "INSPECTOR_COMMENT")
-	private String inspectorComment;
-
-	@Column(name = "COMMENT_APPROVE_OR_REJECT")
-	private String commentApproveOrReject;
-	
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 	
@@ -72,6 +63,10 @@ public class TestingReport implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "testingReport", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Testing> testing;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "testingReport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<TestingReportComment> testingComment;
 
 	public Integer getTestingReportId() {
 		return testingReportId;
@@ -95,30 +90,6 @@ public class TestingReport implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	public String getViewerComment() {
-		return viewerComment;
-	}
-
-	public void setViewerComment(String viewerComment) {
-		this.viewerComment = viewerComment;
-	}
-
-	public String getInspectorComment() {
-		return inspectorComment;
-	}
-
-	public void setInspectorComment(String inspectorComment) {
-		this.inspectorComment = inspectorComment;
-	}
-
-	public String getCommentApproveOrReject() {
-		return commentApproveOrReject;
-	}
-
-	public void setCommentApproveOrReject(String commentApproveOrReject) {
-		this.commentApproveOrReject = commentApproveOrReject;
 	}
 
 	public LocalDateTime getCreatedDate() {
@@ -159,6 +130,14 @@ public class TestingReport implements Serializable {
 
 	public void setTesting(List<Testing> testing) {
 		this.testing = testing;
+	}
+
+	public List<TestingReportComment> getTestingComment() {
+		return testingComment;
+	}
+
+	public void setTestingComment(List<TestingReportComment> testingComment) {
+		this.testingComment = testingComment;
 	}
 
 }

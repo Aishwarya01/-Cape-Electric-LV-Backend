@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.PeriodicInspection;
+import com.capeelectric.model.PeriodicInspectionComment;
 import com.capeelectric.service.InspectionService;
 import com.capeelectric.util.SendReplyComments;
 /**
@@ -73,11 +74,11 @@ public class InspectionController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@GetMapping("/replyInspectionComments/{inspectorUserName}/{siteId}/{comments}")
-	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
-			@PathVariable String comments) throws InspectionException, RegistrationException, Exception {
+	@PostMapping("/replyInspectionComments/{inspectorUserName}/{siteId}")
+	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,@RequestBody PeriodicInspectionComment periodicInspectionComment) throws InspectionException, RegistrationException, Exception {
+		
 		logger.info("called replyComments function InspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
-		String viewerUserName = inspectionService.replyComments(inspectorUserName, siteId, comments);
+		String viewerUserName = inspectionService.replyComments(inspectorUserName, siteId, periodicInspectionComment);
 		if (viewerUserName != null) {
 			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
 		} else {

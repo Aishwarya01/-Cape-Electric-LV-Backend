@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.model.ReportDetails;
+import com.capeelectric.model.ReportDetailsComment;
 
 /**
  **
@@ -20,6 +21,6 @@ public interface InstalReportService {
 
 	public ReportDetails sendComments(String userName, Integer siteId, String comments) throws InstalReportException;
 	
-	public String replyComments(String userName, Integer siteId, String comments) throws InstalReportException;
+	public String replyComments(String userName, Integer siteId, ReportDetailsComment reportDetailsComment) throws InstalReportException;
 
 }

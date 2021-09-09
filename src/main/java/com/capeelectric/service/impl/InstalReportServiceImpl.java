@@ -2,6 +2,7 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.model.ReportDetails;
+import com.capeelectric.model.ReportDetailsComment;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.repository.InstalReportDetailsRepository;
@@ -34,6 +36,10 @@ public class InstalReportServiceImpl implements InstalReportService {
 	
 	@Autowired
 	private SiteRepository siteRepository;
+	
+	private ReportDetailsComment reportDetailsComment;
+	
+	private Set<ReportDetailsComment> listOfComments = new HashSet<ReportDetailsComment>();
 	
 	/**
 	 * @param ReportDetails
@@ -109,12 +115,17 @@ public class InstalReportServiceImpl implements InstalReportService {
 	@Override
 	public ReportDetails sendComments(String userName, Integer siteId, String comments) throws InstalReportException {
 		if (userName != null && siteId != null && comments != null) {
-			Optional<ReportDetails> reportDetailRepo = installationReportRepository.findBySiteId(siteId);
-			if (reportDetailRepo.isPresent() && reportDetailRepo.get().getUserName().equalsIgnoreCase(userName)) {
-				ReportDetails reportDetails = reportDetailRepo.get();
+			Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(siteId);
+			if (reportDetailsRepo.isPresent() && reportDetailsRepo.get().getUserName().equalsIgnoreCase(userName)) {
+				ReportDetails reportDetails = reportDetailsRepo.get();
 				reportDetails.setUpdatedDate(LocalDateTime.now());
 				reportDetails.setUpdatedBy(userName);
-				reportDetails.setViewerComment(comments);
+				reportDetailsComment = new ReportDetailsComment();
+				reportDetailsComment.setViewerDate(LocalDateTime.now());
+				reportDetailsComment.setViewerComment(comments);
+				reportDetailsComment.setReportDetails(reportDetails);
+				listOfComments.add(reportDetailsComment);
+				reportDetails.setReportDetailsComment(listOfComments);
 				return installationReportRepository.save(reportDetails);
 			} else {
 				throw new InstalReportException("Given SiteId is Invalid");
@@ -125,24 +136,33 @@ public class InstalReportServiceImpl implements InstalReportService {
 	}
 
 	@Override
-	public String replyComments(String inspectorUserName, Integer siteId, String comments)
+	public String replyComments(String inspectorUserName, Integer siteId, ReportDetailsComment reportDetailsComment)
 			throws InstalReportException {
-		if (inspectorUserName != null && siteId != null && comments != null) {
+		if (inspectorUserName != null && siteId != null && reportDetailsComment.getCommentsId() != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
 				for (SitePersons sitePersons2 : sitePersons) {
-					Optional<ReportDetails> reportDetailRepo = installationReportRepository.findBySiteId(siteId);
-					if (reportDetailRepo.isPresent() && reportDetailRepo.get().getUserName()
+					Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(siteId);
+					if (reportDetailsRepo.isPresent() && reportDetailsRepo.get().getUserName()
 							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
-						ReportDetails reportDetails = reportDetailRepo.get();
+						ReportDetails reportDetails = reportDetailsRepo.get();
 						reportDetails.setUpdatedDate(LocalDateTime.now());
 						reportDetails.setUpdatedBy(inspectorUserName);
-						reportDetails.setInspectorComment(comments);
-						installationReportRepository.save(reportDetails);
-						return reportDetails.getUserName();
-					} else {
-						throw new InstalReportException("Given SiteId is Invalid");
+						Set<ReportDetailsComment> reportDetailsCommentRepo = reportDetails.getReportDetailsComment();
+
+						for (ReportDetailsComment reportDetailsCommentItr : reportDetailsCommentRepo) {
+							if (reportDetailsCommentItr.getCommentsId().equals(reportDetailsComment.getCommentsId())) {
+								reportDetailsCommentItr.setInspectorDate(LocalDateTime.now());
+								reportDetailsCommentItr.setReportDetails(reportDetails);
+								reportDetailsCommentItr.setInspectorComment(reportDetailsComment.getInspectorComment());
+								reportDetailsCommentRepo.add(reportDetailsCommentItr);
+								reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
+								installationReportRepository.save(reportDetails);
+								return reportDetails.getUserName();
+							}
+						}
+
 					}
 				}
 

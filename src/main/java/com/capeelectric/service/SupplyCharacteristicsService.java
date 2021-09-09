@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
+import com.capeelectric.model.SupplyCharacteristicComment;
 import com.capeelectric.model.SupplyCharacteristics;
 
 /**
@@ -20,6 +21,6 @@ public interface SupplyCharacteristicsService {
 
 	public SupplyCharacteristics sendComments(String userName, Integer siteId, String comments) throws SupplyCharacteristicsException;
 
-	public String replyComments(String userName, Integer siteId, String comments) throws SupplyCharacteristicsException;
+	public String replyComments(String userName, Integer siteId, SupplyCharacteristicComment supplyCharacteristicComment) throws SupplyCharacteristicsException;
 
 }

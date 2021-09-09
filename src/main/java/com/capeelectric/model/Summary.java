@@ -74,15 +74,6 @@ public class Summary implements Serializable {
 	@Column(name = "OVERALL_ASSESSMENT_INSTALLATION")
 	private String overallAssessmentInstallation;
 
-	@Column(name = "VIEWER_COMMENT")
-	private String viewerComment;
-	
-	@Column(name = "INSPECTOR_COMMENT")
-	private String inspectorComment;
-
-	@Column(name = "COMMENT_APPROVE_OR_REJECT")
-	private String commentApproveOrReject;
-	
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 	
@@ -102,6 +93,10 @@ public class Summary implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<SummaryDeclaration> summaryDeclaration;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<SummaryComment> summaryComment;
 
 	public Integer getSummaryId() {
 		return summaryId;
@@ -207,30 +202,6 @@ public class Summary implements Serializable {
 		this.overallAssessmentInstallation = overallAssessmentInstallation;
 	}
 
-	public String getViewerComment() {
-		return viewerComment;
-	}
-
-	public void setViewerComment(String viewerComment) {
-		this.viewerComment = viewerComment;
-	}
-
-	public String getInspectorComment() {
-		return inspectorComment;
-	}
-
-	public void setInspectorComment(String inspectorComment) {
-		this.inspectorComment = inspectorComment;
-	}
-
-	public String getCommentApproveOrReject() {
-		return commentApproveOrReject;
-	}
-
-	public void setCommentApproveOrReject(String commentApproveOrReject) {
-		this.commentApproveOrReject = commentApproveOrReject;
-	}
-
 	public LocalDateTime getCreatedDate() {
 		return createdDate;
 	}
@@ -277,6 +248,14 @@ public class Summary implements Serializable {
 
 	public void setSummaryDeclaration(List<SummaryDeclaration> summaryDeclaration) {
 		this.summaryDeclaration = summaryDeclaration;
+	}
+
+	public List<SummaryComment> getSummaryComment() {
+		return summaryComment;
+	}
+
+	public void setSummaryComment(List<SummaryComment> summaryComment) {
+		this.summaryComment = summaryComment;
 	}
  
 }

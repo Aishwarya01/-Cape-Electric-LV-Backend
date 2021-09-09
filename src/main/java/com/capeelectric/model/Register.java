@@ -71,9 +71,6 @@ public class Register {
 	@Column(name = "PERMISSION_BY")
 	private String permissionBy;
 
-	@Column(name = "INTERESTED_AREAS")
-	private String interestedAreas;
-	
 	@Column(name = "COMMENT")
 	private String comment;
 	
@@ -224,14 +221,6 @@ public class Register {
 
 	public void setPermissionBy(String permissionBy) {
 		this.permissionBy = permissionBy;
-	}
-
-	public String getInterestedAreas() {
-		return interestedAreas;
-	}
-
-	public void setInterestedAreas(String interestedAreas) {
-		this.interestedAreas = interestedAreas;
 	}
 
 	public String getComment() {

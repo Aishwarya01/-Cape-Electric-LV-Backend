@@ -1,6 +1,7 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -12,6 +13,7 @@ import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.TestingReport;
+import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.PeriodicTestingService;
@@ -33,6 +35,11 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 
 	@Autowired
 	private SiteRepository siteRepository;
+	
+	private TestingReportComment testingComment;
+	
+	private List<TestingReportComment> listOfComments = new ArrayList<TestingReportComment>();
+	
 	/**
 	 * @param Testing
 	 * addTestingReport method to Testing object will be storing corresponding tables
@@ -102,13 +109,17 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	public TestingReport sendComments(String userName, Integer siteId, String comments)
 			throws PeriodicTestingException {
 		if (userName != null && siteId != null && comments != null) {
-			Optional<TestingReport> periodicInspectionRepo = testingReportRepository.findBySiteId(siteId);
-			if (periodicInspectionRepo.isPresent()
-					&& periodicInspectionRepo.get().getUserName().equalsIgnoreCase(userName)) {
-				TestingReport testingReport = periodicInspectionRepo.get();
+			Optional<TestingReport> TestingReportRepo = testingReportRepository.findBySiteId(siteId);
+			if (TestingReportRepo.isPresent() && TestingReportRepo.get().getUserName().equalsIgnoreCase(userName)) {
+				TestingReport testingReport = TestingReportRepo.get();
 				testingReport.setUpdatedDate(LocalDateTime.now());
 				testingReport.setUpdatedBy(userName);
-				testingReport.setViewerComment(comments);
+				testingComment = new TestingReportComment();
+				testingComment.setViewerDate(LocalDateTime.now());
+				testingComment.setViewerComment(comments);
+				testingComment.setTestingReport(testingReport);
+				listOfComments.add(testingComment);
+				testingReport.setTestingComment(listOfComments);
 				return testingReportRepository.save(testingReport);
 			} else {
 				throw new PeriodicTestingException("Given SiteId is Invalid");
@@ -119,9 +130,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	}
 
 	@Override
-	public String replyComments(String inspectorUserName, Integer siteId, String comments)
+	public String replyComments(String inspectorUserName, Integer siteId, TestingReportComment testingReportComment)
 			throws PeriodicTestingException {
-		if (inspectorUserName != null && siteId != null && comments != null) {
+		if (inspectorUserName != null && siteId != null && testingReportComment.getCommentsId() != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
@@ -132,11 +143,20 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 						TestingReport testingReport = testingReportRepo.get();
 						testingReport.setUpdatedDate(LocalDateTime.now());
 						testingReport.setUpdatedBy(inspectorUserName);
-						testingReport.setInspectorComment(comments);
-						testingReportRepository.save(testingReport);
-						return testingReport.getUserName();
-					} else {
-						throw new PeriodicTestingException("Given SiteId is Invalid");
+						List<TestingReportComment> testingReportCommentRepo = testingReport.getTestingComment();
+
+						for (TestingReportComment testingReportCommentItr : testingReportCommentRepo) {
+							if (testingReportCommentItr.getCommentsId().equals(testingReportComment.getCommentsId())) {
+								testingReportCommentItr.setInspectorDate(LocalDateTime.now());
+								testingReportCommentItr.setTestingReport(testingReport);
+								testingReportCommentItr.setInspectorComment(testingReportComment.getInspectorComment());
+								testingReportCommentRepo.add(testingReportCommentItr);
+								testingReport.setTestingComment(testingReportCommentRepo);
+								testingReportRepository.save(testingReport);
+								return testingReport.getUserName();
+							}
+						}
+
 					}
 				}
 

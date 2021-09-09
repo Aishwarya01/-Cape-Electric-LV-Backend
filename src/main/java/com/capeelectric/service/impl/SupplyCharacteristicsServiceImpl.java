@@ -2,6 +2,7 @@ package com.capeelectric.service.impl;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -15,6 +16,7 @@ import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
+import com.capeelectric.model.SupplyCharacteristicComment;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.SupplyParameters;
 import com.capeelectric.repository.SiteRepository;
@@ -42,6 +44,10 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 
 	@Autowired
 	private UserFullName userFullName;
+	
+	private SupplyCharacteristicComment supplyCharacteristicComment;
+	
+	private List<SupplyCharacteristicComment> listOfComments = new ArrayList<SupplyCharacteristicComment>();
 	
 	/**
 	 * @param SupplyCharacteristics
@@ -158,15 +164,17 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	public SupplyCharacteristics sendComments(String userName, Integer siteId, String comments)
 			throws SupplyCharacteristicsException {
 		if (userName != null && siteId != null && comments != null) {
-
-			Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
-					.findBySiteId(siteId);
-			if (supplyCharacteristicsRepo.isPresent()
-					&& supplyCharacteristicsRepo.get().getUserName().equalsIgnoreCase(userName)) {
+			Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository.findBySiteId(siteId);
+			if (supplyCharacteristicsRepo.isPresent() && supplyCharacteristicsRepo.get().getUserName().equalsIgnoreCase(userName)) {
 				SupplyCharacteristics supplyCharacteristics = supplyCharacteristicsRepo.get();
 				supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
 				supplyCharacteristics.setUpdatedBy(userName);
-				supplyCharacteristics.setViewerComment(comments);
+				supplyCharacteristicComment = new SupplyCharacteristicComment();
+				supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
+				supplyCharacteristicComment.setViewerComment(comments);
+				supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
+				listOfComments.add(supplyCharacteristicComment);
+				supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
 				return supplyCharacteristicsRepository.save(supplyCharacteristics);
 			} else {
 				throw new SupplyCharacteristicsException("Given SiteId is Invalid");
@@ -177,26 +185,36 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	}
 
 	@Override
-	public String replyComments(String inspectorUserName, Integer siteId, String comments)
+	public String replyComments(String inspectorUserName, Integer siteId, SupplyCharacteristicComment supplyCharacteristicComment)
 			throws SupplyCharacteristicsException {
-		
-		if (inspectorUserName != null && siteId != null && comments != null) {
+		if (inspectorUserName != null && siteId != null && supplyCharacteristicComment.getCommentsId() != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
 				for (SitePersons sitePersons2 : sitePersons) {
-					Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
-							.findBySiteId(siteId);
+					Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository.findBySiteId(siteId);
 					if (supplyCharacteristicsRepo.isPresent() && supplyCharacteristicsRepo.get().getUserName()
 							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
 						SupplyCharacteristics supplyCharacteristics = supplyCharacteristicsRepo.get();
 						supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
 						supplyCharacteristics.setUpdatedBy(inspectorUserName);
-						supplyCharacteristics.setInspectorComment(comments);
-						supplyCharacteristicsRepository.save(supplyCharacteristics);
-						return supplyCharacteristics.getUserName();
-					} else {
-						throw new SupplyCharacteristicsException("Given SiteId is Invalid");
+						List<SupplyCharacteristicComment> supplyCharacteristicCommentRepo = supplyCharacteristics
+								.getSupplyCharacteristicComment();
+
+						for (SupplyCharacteristicComment supplyCharacteristicCommentItr : supplyCharacteristicCommentRepo) {
+							if (supplyCharacteristicCommentItr.getCommentsId()
+									.equals(supplyCharacteristicComment.getCommentsId())) {
+								supplyCharacteristicCommentItr.setInspectorDate(LocalDateTime.now());
+								supplyCharacteristicCommentItr.setSupplyCharacteristics(supplyCharacteristics);
+								supplyCharacteristicCommentItr
+										.setInspectorComment(supplyCharacteristicComment.getInspectorComment());
+								supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
+								supplyCharacteristics.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
+								supplyCharacteristicsRepository.save(supplyCharacteristics);
+								return supplyCharacteristics.getUserName();
+							}
+						}
+
 					}
 				}
 

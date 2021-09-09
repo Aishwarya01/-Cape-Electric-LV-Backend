@@ -64,6 +64,9 @@ public class Site implements Serializable {
 
 	@Column(name = "ZIP_CODE")
 	private String zipCode;
+	
+	@Column(name = "ALL_STEPS_COMPLETED")
+	private String allStepsCompleted;
 
 	@Column(name = "CREATED_BY")
 	private String createdBy;
@@ -158,6 +161,14 @@ public class Site implements Serializable {
 
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
+	}
+
+	public String getAllStepsCompleted() {
+		return allStepsCompleted;
+	}
+
+	public void setAllStepsCompleted(String allStepsCompleted) {
+		this.allStepsCompleted = allStepsCompleted;
 	}
 
 	public String getCreatedBy() {

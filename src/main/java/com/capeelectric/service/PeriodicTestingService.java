@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.TestingReport;
+import com.capeelectric.model.TestingReportComment;
 
 /**
  * 
@@ -20,6 +21,6 @@ public interface PeriodicTestingService {
 
 	public TestingReport sendComments(String userName, Integer siteId, String comments) throws PeriodicTestingException;
 
-	public String replyComments(String userName, Integer siteId, String comments) throws PeriodicTestingException;
+	public String replyComments(String userName, Integer siteId, TestingReportComment testingReportComment) throws PeriodicTestingException;
 
 }

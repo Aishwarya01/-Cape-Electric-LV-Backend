@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.ReportDetails;
+import com.capeelectric.model.ReportDetailsComment;
 import com.capeelectric.service.InstalReportService;
 import com.capeelectric.util.SendReplyComments;
 
@@ -74,11 +75,11 @@ public class InstallReportController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@GetMapping("/replyBasicInfoComments/{inspectorUserName}/{viewerUserName}/{siteId}/{comments}")
+	@PostMapping("/replyBasicInfoComments/{inspectorUserName}/{siteId}")
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
-			@PathVariable String comments) throws InstalReportException, RegistrationException, Exception {
+			@RequestBody ReportDetailsComment reportDetailsComment) throws InstalReportException, RegistrationException, Exception {
 		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
-		String viewerUserName = instalReportService.replyComments(inspectorUserName, siteId, comments);
+		String viewerUserName = instalReportService.replyComments(inspectorUserName, siteId, reportDetailsComment);
 		if (viewerUserName != null) {
 			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
 		} else {

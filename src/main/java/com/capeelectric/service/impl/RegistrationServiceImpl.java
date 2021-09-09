@@ -49,8 +49,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 		logger.debug("AddingRegistration Starts with User : {} ", register.getUsername());
 		if (register.getUsername() != null && register.getCompanyName() != null && register.getAddress() != null
 				&& register.getApplicationType() != null && register.getContactNumber() != null
-				&& register.getDepartment() != null && register.getDesignation() != null
-				&& register.getInterestedAreas() != null && register.getName() != null && register.getState() != null) {
+				&& register.getDepartment() != null && register.getDesignation() != null && register.getName() != null
+				&& register.getState() != null) {
 
 			Optional<Register> registerRepo = registerRepository.findByUsername(register.getUsername());
 			if (!registerRepo.isPresent()
@@ -68,7 +68,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
 				} else {
-					logger.debug(isValidIndianMobileNumber(register.getContactNumber())+"  Given MobileNumber is Invalid");
+					logger.debug(
+							isValidIndianMobileNumber(register.getContactNumber()) + "  Given MobileNumber is Invalid");
 					throw new RegistrationException("Invalid MobileNumber");
 				}
 
@@ -87,9 +88,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public Register addViewerRegistration(Register register) throws RegistrationException {
 		logger.debug("AddingRegistration Starts with User : {} ", register.getUsername());
 		if (register.getUsername() != null && register.getCompanyName() != null && register.getAddress() != null
-				&& register.getApplicationType() != null && register.getContactNumber() != null
-				&& register.getDepartment() != null && register.getDesignation() != null
-				&& register.getInterestedAreas() != null && register.getName() != null && register.getState() != null) {
+				&& register.getContactNumber() != null && register.getDepartment() != null
+				&& register.getDesignation() != null && register.getName() != null && register.getState() != null) {
 
 			Optional<Register> registerRepo = registerRepository.findByUsername(register.getUsername());
 			if (!registerRepo.isPresent()
@@ -104,7 +104,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
 				} else {
-					logger.debug(isValidIndianMobileNumber(register.getContactNumber())+"  Given MobileNumber is Invalid");
+					logger.debug(
+							isValidIndianMobileNumber(register.getContactNumber()) + "  Given MobileNumber is Invalid");
 					throw new RegistrationException("Invalid MobileNumber");
 				}
 
@@ -141,10 +142,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 		if (register.getRegisterId() != null && register.getRegisterId() != 0 && register.getUsername() != null
 				&& register.getCompanyName() != null && register.getAddress() != null
-				&& register.getApplicationType() != null && register.getContactNumber() != null
-				&& register.getDepartment() != null && register.getDesignation() != null
-				&& register.getPassword() != null && register.getCountry() != null
-				&& register.getInterestedAreas() != null && register.getName() != null && register.getState() != null) {
+				&& register.getContactNumber() != null && register.getDepartment() != null
+				&& register.getDesignation() != null && register.getPassword() != null && register.getCountry() != null
+				&& register.getName() != null && register.getState() != null) {
 
 			Optional<Register> registerRepo = registerRepository.findById(register.getRegisterId());
 

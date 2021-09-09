@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.model.PeriodicInspection;
+import com.capeelectric.model.PeriodicInspectionComment;
 
 /**
  * 
@@ -20,6 +21,6 @@ public interface InspectionService {
 
 	public PeriodicInspection sendComments(String userName, Integer siteId, String comments) throws InspectionException;
 
-	public String replyComments(String userName, Integer siteId, String comments) throws InspectionException;
+	public String replyComments(String userName, Integer siteId, PeriodicInspectionComment periodicInspectionComment) throws InspectionException;
 
 }

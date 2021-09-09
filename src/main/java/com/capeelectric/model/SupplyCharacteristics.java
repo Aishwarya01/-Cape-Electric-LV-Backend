@@ -152,15 +152,6 @@ public class SupplyCharacteristics implements Serializable {
 	@Column(name = "EARTHING_NO_OF_JOINTS")
 	private Integer earthingNoOfJoints;
 	
-	@Column(name = "VIEWER_COMMENT")
-	private String viewerComment;
-	
-	@Column(name = "INSPECTOR_COMMENT")
-	private String inspectorComment;
-
-	@Column(name = "COMMENT_APPROVE_OR_REJECT")
-	private String commentApproveOrReject;
-
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 	
@@ -192,6 +183,10 @@ public class SupplyCharacteristics implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<EarthingLocationReport> earthingLocationReport;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<SupplyCharacteristicComment> supplyCharacteristicComment;
 
 	public Integer getSupplyCharacteristicsId() {
 		return supplyCharacteristicsId;
@@ -489,30 +484,6 @@ public class SupplyCharacteristics implements Serializable {
 		this.earthingNoOfJoints = earthingNoOfJoints;
 	}
 
-	public String getViewerComment() {
-		return viewerComment;
-	}
-
-	public void setViewerComment(String viewerComment) {
-		this.viewerComment = viewerComment;
-	}
-
-	public String getInspectorComment() {
-		return inspectorComment;
-	}
-
-	public void setInspectorComment(String inspectorComment) {
-		this.inspectorComment = inspectorComment;
-	}
-
-	public String getCommentApproveOrReject() {
-		return commentApproveOrReject;
-	}
-
-	public void setCommentApproveOrReject(String commentApproveOrReject) {
-		this.commentApproveOrReject = commentApproveOrReject;
-	}
-
 	public LocalDateTime getCreatedDate() {
 		return createdDate;
 	}
@@ -583,6 +554,14 @@ public class SupplyCharacteristics implements Serializable {
 
 	public void setEarthingLocationReport(List<EarthingLocationReport> earthingLocationReport) {
 		this.earthingLocationReport = earthingLocationReport;
+	}
+
+	public List<SupplyCharacteristicComment> getSupplyCharacteristicComment() {
+		return supplyCharacteristicComment;
+	}
+
+	public void setSupplyCharacteristicComment(List<SupplyCharacteristicComment> supplyCharacteristicComment) {
+		this.supplyCharacteristicComment = supplyCharacteristicComment;
 	}
 
  
