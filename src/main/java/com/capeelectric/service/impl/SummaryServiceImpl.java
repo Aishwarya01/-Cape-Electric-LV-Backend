@@ -57,6 +57,11 @@ public class SummaryServiceImpl implements SummaryService {
 				&& summary.getSiteId() != 0) {
 			Optional<Summary> summaryRepo = summaryRepository.findBySiteId(summary.getSiteId());
 			if (!summaryRepo.isPresent() || !summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
+				summaryComment = new SummaryComment();
+				summaryComment.setInspectorFlag("0");
+				summaryComment.setViewerFlag("0");
+				listOfComments.add(summaryComment);
+				summary.setSummaryComment(listOfComments);
 				summary.setCreatedDate(LocalDateTime.now());
 				summary.setUpdatedDate(LocalDateTime.now());
 				summary.setCreatedBy(userFullName.getFullName(summary.getUserName()));
@@ -134,6 +139,7 @@ public class SummaryServiceImpl implements SummaryService {
 				summaryComment = new SummaryComment();
 				summaryComment.setViewerDate(LocalDateTime.now());
 				summaryComment.setViewerComment(comments);
+				summaryComment.setViewerFlag("1");
 				summaryComment.setSummary(summary);
 				listOfComments.add(summaryComment);
 				summary.setSummaryComment(listOfComments);
@@ -167,6 +173,7 @@ public class SummaryServiceImpl implements SummaryService {
 								summaryCommentItr.setInspectorDate(LocalDateTime.now());
 								summaryCommentItr.setSummary(summary);
 								summaryCommentItr.setInspectorComment(summaryComment.getInspectorComment());
+								summaryCommentItr.setInspectorFlag("1");
 								summaryCommentRepo.add(summaryCommentItr);
 								summary.setSummaryComment(summaryCommentRepo);
 								summaryRepository.save(summary);

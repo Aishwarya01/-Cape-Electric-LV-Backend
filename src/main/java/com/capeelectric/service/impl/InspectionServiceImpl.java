@@ -49,6 +49,11 @@ public class InspectionServiceImpl implements InspectionService {
 		if (periodicInspection.getUserName() != null && periodicInspection.getSiteId() != null) {
 			Optional<PeriodicInspection> siteId = inspectionRepository.findBySiteId(periodicInspection.getSiteId());
 			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(periodicInspection.getSiteId())) {
+				periodicInspectionComment = new PeriodicInspectionComment();
+				periodicInspectionComment.setInspectorFlag("0");
+				periodicInspectionComment.setViewerFlag("0");
+				listOfComments.add(periodicInspectionComment);
+				periodicInspection.setPeriodicInspectorComment(listOfComments);
 				periodicInspection.setCreatedDate(LocalDateTime.now());
 				periodicInspection.setUpdatedDate(LocalDateTime.now());
 				periodicInspection.setCreatedBy(userFullName.getFullName(periodicInspection.getUserName()));
@@ -122,6 +127,7 @@ public class InspectionServiceImpl implements InspectionService {
 				periodicInspectionComment.setViewerDate(LocalDateTime.now());
 				periodicInspectionComment.setViewerComment(comments);
 				periodicInspectionComment.setPeriodicInspection(periodicInspection);
+				periodicInspectionComment.setViewerFlag("1");
 				listOfComments.add(periodicInspectionComment);
 				periodicInspection.setPeriodicInspectorComment(listOfComments);
 				return inspectionRepository.save(periodicInspection);
@@ -155,6 +161,7 @@ public class InspectionServiceImpl implements InspectionService {
 								periodicInspectionCommentItr.setInspectorDate(LocalDateTime.now());
 								periodicInspectionCommentItr.setPeriodicInspection(periodicInspection);
 								periodicInspectionCommentItr.setInspectorComment(periodicInspectionComment.getInspectorComment());
+								periodicInspectionCommentItr.setInspectorFlag("1");
 								periodicInspectorCommentRepo.add(periodicInspectionCommentItr);
 								periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
 								inspectionRepository.save(periodicInspection);

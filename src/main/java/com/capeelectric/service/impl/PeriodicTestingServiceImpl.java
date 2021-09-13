@@ -50,6 +50,11 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 
 			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(testingReport.getSiteId());
 			if (!testingRepo.isPresent() || !testingRepo.get().getSiteId().equals(testingReport.getSiteId())) {
+				testingComment = new TestingReportComment();
+				testingComment.setInspectorFlag("0");
+				testingComment.setViewerFlag("0");
+				listOfComments.add(testingComment);
+				testingReport.setTestingComment(listOfComments);
 				testingReport.setCreatedDate(LocalDateTime.now());
 				testingReport.setCreatedBy(userFullName.getFullName(testingReport.getUserName()));
 				testingReport.setUpdatedDate(LocalDateTime.now());
@@ -118,6 +123,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 				testingComment.setViewerDate(LocalDateTime.now());
 				testingComment.setViewerComment(comments);
 				testingComment.setTestingReport(testingReport);
+				testingComment.setViewerFlag("1");
 				listOfComments.add(testingComment);
 				testingReport.setTestingComment(listOfComments);
 				return testingReportRepository.save(testingReport);
@@ -150,6 +156,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 								testingReportCommentItr.setInspectorDate(LocalDateTime.now());
 								testingReportCommentItr.setTestingReport(testingReport);
 								testingReportCommentItr.setInspectorComment(testingReportComment.getInspectorComment());
+								testingReportCommentItr.setInspectorFlag("1");
 								testingReportCommentRepo.add(testingReportCommentItr);
 								testingReport.setTestingComment(testingReportCommentRepo);
 								testingReportRepository.save(testingReport);

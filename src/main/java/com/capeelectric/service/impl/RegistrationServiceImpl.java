@@ -98,8 +98,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setCreatedDate(LocalDateTime.now());
 					register.setPermission("YES");
 					register.setUpdatedDate(LocalDateTime.now());
-					register.setCreatedBy(register.getUsername());
-					register.setUpdatedBy(register.getUsername());
+					register.setCreatedBy(register.getAssignedBy());
+					register.setUpdatedBy(register.getAssignedBy());
 					Register createdRegister = registerRepository.save(register);
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
@@ -143,8 +143,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 		if (register.getRegisterId() != null && register.getRegisterId() != 0 && register.getUsername() != null
 				&& register.getCompanyName() != null && register.getAddress() != null
 				&& register.getContactNumber() != null && register.getDepartment() != null
-				&& register.getDesignation() != null && register.getPassword() != null && register.getCountry() != null
-				&& register.getName() != null && register.getState() != null) {
+				&& register.getDesignation() != null && register.getCountry() != null && register.getName() != null
+				&& register.getState() != null) {
 
 			Optional<Register> registerRepo = registerRepository.findById(register.getRegisterId());
 
@@ -152,8 +152,14 @@ public class RegistrationServiceImpl implements RegistrationService {
 					&& registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
 				logger.debug("UpdatingRegistration Started");
 				register.setUpdatedDate(LocalDateTime.now());
-				register.setUpdatedBy(register.getUsername());
-				registerRepository.save(register);
+				if (register.getRole().equalsIgnoreCase("INSPECTOR")) {
+					register.setUpdatedBy(register.getUsername());
+					registerRepository.save(register);
+				} else {
+					register.setUpdatedBy(register.getAssignedBy());
+					registerRepository.save(register);
+				}
+
 			} else {
 				logger.debug("UpdatingRegistration is Failed , Because Given User not present");
 				throw new RegistrationException("Given User not present");

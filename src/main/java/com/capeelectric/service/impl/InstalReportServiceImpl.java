@@ -53,6 +53,11 @@ public class InstalReportServiceImpl implements InstalReportService {
 					.findBySiteId(reportDetails.getSiteId());
 			if (!reportDetailsRepo.isPresent()
 					|| !reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
+				ReportDetailsComment comment = new ReportDetailsComment();
+				comment.setInspectorFlag("0");
+				comment.setViewerFlag("0");
+				listOfComments.add(comment);
+				reportDetails.setReportDetailsComment(listOfComments);
 				reportDetails.setCreatedDate(LocalDateTime.now());
 				reportDetails.setUpdatedDate(LocalDateTime.now());
 				reportDetails.setCreatedBy(userFullName.getFullName(reportDetails.getUserName()));
@@ -121,6 +126,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 				reportDetails.setUpdatedDate(LocalDateTime.now());
 				reportDetails.setUpdatedBy(userName);
 				reportDetailsComment = new ReportDetailsComment();
+				reportDetailsComment.setViewerFlag("1");
 				reportDetailsComment.setViewerDate(LocalDateTime.now());
 				reportDetailsComment.setViewerComment(comments);
 				reportDetailsComment.setReportDetails(reportDetails);
@@ -156,6 +162,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 								reportDetailsCommentItr.setInspectorDate(LocalDateTime.now());
 								reportDetailsCommentItr.setReportDetails(reportDetails);
 								reportDetailsCommentItr.setInspectorComment(reportDetailsComment.getInspectorComment());
+								reportDetailsCommentItr.setInspectorFlag("1");
 								reportDetailsCommentRepo.add(reportDetailsCommentItr);
 								reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
 								installationReportRepository.save(reportDetails);

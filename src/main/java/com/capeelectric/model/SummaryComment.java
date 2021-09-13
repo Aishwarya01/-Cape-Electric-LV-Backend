@@ -48,6 +48,12 @@ public class SummaryComment implements Serializable {
 	@Column(name = "COMMENT_APPROVE_OR_REJECT")
 	private String approveOrReject;
 	
+	@Column(name = "VIEWER_FLAG")
+	private String viewerFlag;
+	
+	@Column(name = "INSPECTOR_FLAG")
+	private String inspectorFlag;
+	
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "SUMMARY_ID")
@@ -107,6 +113,22 @@ public class SummaryComment implements Serializable {
 
 	public void setSummary(Summary summary) {
 		this.summary = summary;
+	}
+
+	public String getViewerFlag() {
+		return viewerFlag;
+	}
+
+	public void setViewerFlag(String viewerFlag) {
+		this.viewerFlag = viewerFlag;
+	}
+
+	public String getInspectorFlag() {
+		return inspectorFlag;
+	}
+
+	public void setInspectorFlag(String inspectorFlag) {
+		this.inspectorFlag = inspectorFlag;
 	}
 
 }

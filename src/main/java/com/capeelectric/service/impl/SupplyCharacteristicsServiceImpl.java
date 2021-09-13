@@ -46,7 +46,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	private UserFullName userFullName;
 	
 	private SupplyCharacteristicComment supplyCharacteristicComment;
-	
+
 	private List<SupplyCharacteristicComment> listOfComments = new ArrayList<SupplyCharacteristicComment>();
 	
 	/**
@@ -56,52 +56,62 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	 * @throws DecimalConversionException 
 	*/	
 	@Override
-	public void addCharacteristics(SupplyCharacteristics supplyCharacteristics) throws SupplyCharacteristicsException, DecimalConversionException {
+	public void addCharacteristics(SupplyCharacteristics supplyCharacteristics)
+			throws SupplyCharacteristicsException, DecimalConversionException {
 		if (supplyCharacteristics != null && supplyCharacteristics.getUserName() != null
 				&& !supplyCharacteristics.getUserName().isEmpty() && supplyCharacteristics.getSiteId() != null
 				&& supplyCharacteristics.getSiteId() != 0) {
 			Optional<SupplyCharacteristics> siteId = supplyCharacteristicsRepository
 					.findBySiteId(supplyCharacteristics.getSiteId());
-			if ( !siteId.isPresent() || !siteId.get().getSiteId().equals(supplyCharacteristics.getSiteId())) {
-				if (supplyCharacteristics.getLiveConductorAC() !=null && supplyCharacteristics.getMainNominalCurrent() != null
+			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(supplyCharacteristics.getSiteId())) {
+				if (supplyCharacteristics.getLiveConductorAC() != null
+						&& supplyCharacteristics.getMainNominalCurrent() != null
 						&& supplyCharacteristics.getMainNominalFrequency() != null
 						&& supplyCharacteristics.getMainNominalVoltage() != null
 						&& supplyCharacteristics.getMainLoopImpedance() != null) {
 					logger.info("decimal formating corrections started for Main supply");
-					supplyCharacteristics.setMainNominalCurrent(DecimalConversion.convertToDecimal(supplyCharacteristics.getMainNominalCurrent(), new DecimalFormat("0.00")));
-					supplyCharacteristics.setMainNominalFrequency(
-							DecimalConversion.convertToDecimal(supplyCharacteristics.getMainNominalFrequency(), new DecimalFormat("0.00")));
-					supplyCharacteristics.setMainNominalVoltage(
-							DecimalConversion.convertToDecimal(supplyCharacteristics.getMainNominalVoltage(), new DecimalFormat("0.00")));
-					supplyCharacteristics.setMainLoopImpedance(
-							DecimalConversion.convertToDecimal(supplyCharacteristics.getMainLoopImpedance(), new DecimalFormat("0.000")));
+					supplyCharacteristics.setMainNominalCurrent(DecimalConversion.convertToDecimal(
+							supplyCharacteristics.getMainNominalCurrent(), new DecimalFormat("0.00")));
+					supplyCharacteristics.setMainNominalFrequency(DecimalConversion.convertToDecimal(
+							supplyCharacteristics.getMainNominalFrequency(), new DecimalFormat("0.00")));
+					supplyCharacteristics.setMainNominalVoltage(DecimalConversion.convertToDecimal(
+							supplyCharacteristics.getMainNominalVoltage(), new DecimalFormat("0.00")));
+					supplyCharacteristics.setMainLoopImpedance(DecimalConversion.convertToDecimal(
+							supplyCharacteristics.getMainLoopImpedance(), new DecimalFormat("0.000")));
 					logger.info("decimal formating corrections ended for Main supply");
 				}
 				if (supplyCharacteristics.getSupplyParameters() != null) {
 					List<SupplyParameters> supplyParameters = supplyCharacteristics.getSupplyParameters();
 					for (SupplyParameters supplyParametersItr : supplyParameters) {
-						if (supplyParametersItr.getaLLiveConductorAC() !=null && !supplyParametersItr.getaLLiveConductorAC().isEmpty() && supplyParametersItr.getNominalFrequency() != null
+						if (supplyParametersItr.getaLLiveConductorAC() != null
+								&& !supplyParametersItr.getaLLiveConductorAC().isEmpty()
+								&& supplyParametersItr.getNominalFrequency() != null
 								&& supplyParametersItr.getNominalVoltage() != null
 								&& supplyParametersItr.getFaultCurrent() != null
 								&& supplyParametersItr.getLoopImpedance() != null) {
 							logger.info("decimal formating corrections started for alternative supply");
-							supplyParametersItr.setNominalFrequency(
-									DecimalConversion.convertToDecimal(supplyParametersItr.getNominalFrequency(), new DecimalFormat("0.00")));
-							supplyParametersItr.setNominalVoltage(
-									DecimalConversion.convertToDecimal(supplyParametersItr.getNominalVoltage(), new DecimalFormat("0.00")));
-							supplyParametersItr.setFaultCurrent(
-									DecimalConversion.convertToDecimal(supplyParametersItr.getFaultCurrent(), new DecimalFormat("0.00")));
-							supplyParametersItr.setLoopImpedance(
-									DecimalConversion.convertToDecimal(supplyParametersItr.getLoopImpedance(), new DecimalFormat("0.000")));
+							supplyParametersItr.setNominalFrequency(DecimalConversion.convertToDecimal(
+									supplyParametersItr.getNominalFrequency(), new DecimalFormat("0.00")));
+							supplyParametersItr.setNominalVoltage(DecimalConversion.convertToDecimal(
+									supplyParametersItr.getNominalVoltage(), new DecimalFormat("0.00")));
+							supplyParametersItr.setFaultCurrent(DecimalConversion.convertToDecimal(
+									supplyParametersItr.getFaultCurrent(), new DecimalFormat("0.00")));
+							supplyParametersItr.setLoopImpedance(DecimalConversion.convertToDecimal(
+									supplyParametersItr.getLoopImpedance(), new DecimalFormat("0.000")));
 							logger.info("decimal formating corrections ended for alternative supply");
 						}
 					}
 				}
+				supplyCharacteristicComment = new SupplyCharacteristicComment();
+				supplyCharacteristicComment.setInspectorFlag("0");
+				supplyCharacteristicComment.setViewerFlag("0");
+				listOfComments.add(supplyCharacteristicComment);
+				supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
 				supplyCharacteristics.setCreatedDate(LocalDateTime.now());
 				supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
 				supplyCharacteristics.setCreatedBy(userFullName.getFullName(supplyCharacteristics.getUserName()));
 				supplyCharacteristics.setUpdatedBy(userFullName.getFullName(supplyCharacteristics.getUserName()));
-				
+
 				supplyCharacteristicsRepository.save(supplyCharacteristics);
 			} else {
 				throw new SupplyCharacteristicsException("Site-Id Already Available");
@@ -164,8 +174,10 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	public SupplyCharacteristics sendComments(String userName, Integer siteId, String comments)
 			throws SupplyCharacteristicsException {
 		if (userName != null && siteId != null && comments != null) {
-			Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository.findBySiteId(siteId);
-			if (supplyCharacteristicsRepo.isPresent() && supplyCharacteristicsRepo.get().getUserName().equalsIgnoreCase(userName)) {
+			Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
+					.findBySiteId(siteId);
+			if (supplyCharacteristicsRepo.isPresent()
+					&& supplyCharacteristicsRepo.get().getUserName().equalsIgnoreCase(userName)) {
 				SupplyCharacteristics supplyCharacteristics = supplyCharacteristicsRepo.get();
 				supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
 				supplyCharacteristics.setUpdatedBy(userName);
@@ -173,6 +185,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
 				supplyCharacteristicComment.setViewerComment(comments);
 				supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
+				supplyCharacteristicComment.setViewerFlag("1");
 				listOfComments.add(supplyCharacteristicComment);
 				supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
 				return supplyCharacteristicsRepository.save(supplyCharacteristics);
@@ -192,7 +205,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
 				for (SitePersons sitePersons2 : sitePersons) {
-					Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository.findBySiteId(siteId);
+					Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
+							.findBySiteId(siteId);
 					if (supplyCharacteristicsRepo.isPresent() && supplyCharacteristicsRepo.get().getUserName()
 							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
 						SupplyCharacteristics supplyCharacteristics = supplyCharacteristicsRepo.get();
@@ -208,6 +222,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 								supplyCharacteristicCommentItr.setSupplyCharacteristics(supplyCharacteristics);
 								supplyCharacteristicCommentItr
 										.setInspectorComment(supplyCharacteristicComment.getInspectorComment());
+								supplyCharacteristicCommentItr.setInspectorFlag("1");
 								supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
 								supplyCharacteristics.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
 								supplyCharacteristicsRepository.save(supplyCharacteristics);

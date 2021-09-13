@@ -48,6 +48,12 @@ public class SupplyCharacteristicComment implements Serializable {
 	@Column(name = "COMMENT_APPROVE_OR_REJECT")
 	private String approveOrReject;
 	
+	@Column(name = "VIEWER_FLAG")
+	private String viewerFlag;
+	
+	@Column(name = "INSPECTOR_FLAG")
+	private String inspectorFlag;
+	
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "PERIODIC_INSPECTION_ID")
@@ -107,6 +113,22 @@ public class SupplyCharacteristicComment implements Serializable {
 
 	public void setSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics) {
 		this.supplyCharacteristics = supplyCharacteristics;
+	}
+
+	public String getViewerFlag() {
+		return viewerFlag;
+	}
+
+	public void setViewerFlag(String viewerFlag) {
+		this.viewerFlag = viewerFlag;
+	}
+
+	public String getInspectorFlag() {
+		return inspectorFlag;
+	}
+
+	public void setInspectorFlag(String inspectorFlag) {
+		this.inspectorFlag = inspectorFlag;
 	}
 
 }
