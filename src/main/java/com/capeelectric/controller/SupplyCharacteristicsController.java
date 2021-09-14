@@ -68,16 +68,17 @@ public class SupplyCharacteristicsController {
 		return new ResponseEntity<String>("SupplyCharacteristics Data successfully Updated", HttpStatus.OK);
 	}
 
-	@GetMapping("/sendCharacteristicsComments/{userName}/{siteId}/{comments}")
+	@PostMapping("/sendCharacteristicsComments/{userName}/{siteId}")
 	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
-			@PathVariable String comments) throws SupplyCharacteristicsException, RegistrationException, Exception {
+			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
+			throws SupplyCharacteristicsException, RegistrationException, Exception {
 		logger.info("called sendcomments function UserName : {},SiteId : {}", userName, siteId);
-		supplyCharacteristicsService.sendComments(userName, siteId, comments);
+		supplyCharacteristicsService.sendComments(userName, siteId, supplyCharacteristicComment);
 		sendReplyComments.sendComments(userName);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@PostMapping("/replyCharacteristicsComments/{inspectorUserName}/{siteId}/{comments}")
+	@PostMapping("/replyCharacteristicsComments/{inspectorUserName}/{siteId}")
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
 			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
 			throws SupplyCharacteristicsException, RegistrationException, Exception {

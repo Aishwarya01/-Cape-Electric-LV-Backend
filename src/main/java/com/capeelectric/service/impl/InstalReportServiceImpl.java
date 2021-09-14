@@ -53,10 +53,11 @@ public class InstalReportServiceImpl implements InstalReportService {
 					.findBySiteId(reportDetails.getSiteId());
 			if (!reportDetailsRepo.isPresent()
 					|| !reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
-				ReportDetailsComment comment = new ReportDetailsComment();
-				comment.setInspectorFlag("0");
-				comment.setViewerFlag("0");
-				listOfComments.add(comment);
+				reportDetailsComment = new ReportDetailsComment();
+				reportDetailsComment.setInspectorFlag("0");
+				reportDetailsComment.setViewerFlag("0");
+				reportDetailsComment.setReportDetails(reportDetails);
+				listOfComments.add(reportDetailsComment);
 				reportDetails.setReportDetailsComment(listOfComments);
 				reportDetails.setCreatedDate(LocalDateTime.now());
 				reportDetails.setUpdatedDate(LocalDateTime.now());
@@ -118,17 +119,15 @@ public class InstalReportServiceImpl implements InstalReportService {
 	}
 
 	@Override
-	public ReportDetails sendComments(String userName, Integer siteId, String comments) throws InstalReportException {
-		if (userName != null && siteId != null && comments != null) {
+	public ReportDetails sendComments(String userName, Integer siteId, ReportDetailsComment reportDetailsComment) throws InstalReportException {
+		if (userName != null && siteId != null && reportDetailsComment != null) {
 			Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(siteId);
 			if (reportDetailsRepo.isPresent() && reportDetailsRepo.get().getUserName().equalsIgnoreCase(userName)) {
 				ReportDetails reportDetails = reportDetailsRepo.get();
 				reportDetails.setUpdatedDate(LocalDateTime.now());
 				reportDetails.setUpdatedBy(userName);
-				reportDetailsComment = new ReportDetailsComment();
 				reportDetailsComment.setViewerFlag("1");
 				reportDetailsComment.setViewerDate(LocalDateTime.now());
-				reportDetailsComment.setViewerComment(comments);
 				reportDetailsComment.setReportDetails(reportDetails);
 				listOfComments.add(reportDetailsComment);
 				reportDetails.setReportDetailsComment(listOfComments);

@@ -53,6 +53,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 				testingComment = new TestingReportComment();
 				testingComment.setInspectorFlag("0");
 				testingComment.setViewerFlag("0");
+				testingComment.setTestingReport(testingReport);
 				listOfComments.add(testingComment);
 				testingReport.setTestingComment(listOfComments);
 				testingReport.setCreatedDate(LocalDateTime.now());
@@ -111,20 +112,18 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	}
 
 	@Override
-	public TestingReport sendComments(String userName, Integer siteId, String comments)
+	public TestingReport sendComments(String userName, Integer siteId, TestingReportComment testingReportComment)
 			throws PeriodicTestingException {
-		if (userName != null && siteId != null && comments != null) {
+		if (userName != null && siteId != null && testingReportComment != null) {
 			Optional<TestingReport> TestingReportRepo = testingReportRepository.findBySiteId(siteId);
 			if (TestingReportRepo.isPresent() && TestingReportRepo.get().getUserName().equalsIgnoreCase(userName)) {
 				TestingReport testingReport = TestingReportRepo.get();
 				testingReport.setUpdatedDate(LocalDateTime.now());
 				testingReport.setUpdatedBy(userName);
-				testingComment = new TestingReportComment();
-				testingComment.setViewerDate(LocalDateTime.now());
-				testingComment.setViewerComment(comments);
-				testingComment.setTestingReport(testingReport);
-				testingComment.setViewerFlag("1");
-				listOfComments.add(testingComment);
+				testingReportComment.setViewerDate(LocalDateTime.now());
+				testingReportComment.setTestingReport(testingReport);
+				testingReportComment.setViewerFlag("1");
+				listOfComments.add(testingReportComment);
 				testingReport.setTestingComment(listOfComments);
 				return testingReportRepository.save(testingReport);
 			} else {
@@ -176,6 +175,4 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		}
 		return null;
 	}
-	
-	
 }

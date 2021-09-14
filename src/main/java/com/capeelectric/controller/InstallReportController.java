@@ -65,19 +65,20 @@ public class InstallReportController {
 		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.OK);
 	}
 	
-	@GetMapping("/sendBasicInfoComments/{userName}/{siteId}/{comments}")
-	public ResponseEntity<Void> sendComments(@PathVariable String userName,
-			@PathVariable Integer siteId,@PathVariable String comments)
+	@PostMapping("/sendBasicInfoComments/{userName}/{siteId}")
+	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
+			@RequestBody ReportDetailsComment reportDetailsComment)
 			throws InstalReportException, RegistrationException, Exception {
 		logger.info("called sendComments function UserName : {},SiteId : {}", userName, siteId);
-		instalReportService.sendComments(userName, siteId, comments);
+		instalReportService.sendComments(userName, siteId, reportDetailsComment);
 		sendReplyComments.sendComments(userName);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 	@PostMapping("/replyBasicInfoComments/{inspectorUserName}/{siteId}")
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
-			@RequestBody ReportDetailsComment reportDetailsComment) throws InstalReportException, RegistrationException, Exception {
+			@RequestBody ReportDetailsComment reportDetailsComment)
+			throws InstalReportException, RegistrationException, Exception {
 		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
 		String viewerUserName = instalReportService.replyComments(inspectorUserName, siteId, reportDetailsComment);
 		if (viewerUserName != null) {

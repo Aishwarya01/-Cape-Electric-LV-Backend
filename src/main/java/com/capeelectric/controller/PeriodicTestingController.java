@@ -73,19 +73,20 @@ public class PeriodicTestingController {
 		return new ResponseEntity<String>("PeriodicTesting successfully Updated", HttpStatus.OK);
 	}
 
-	@GetMapping("/sendTestingComments/{userName}/{siteId}/{comments}")
+	@PostMapping("/sendTestingComments/{userName}/{siteId}")
 	public ResponseEntity<Void> sendComments(@PathVariable String userName,
-			@PathVariable Integer siteId,@PathVariable String comments)
+			@PathVariable Integer siteId,@RequestBody TestingReportComment testingReportComment)
 			throws PeriodicTestingException, RegistrationException, Exception {
 		logger.info("called sendComments function UserName : {},SiteId : {}", userName, siteId);
-		testService.sendComments(userName, siteId, comments);
+		testService.sendComments(userName, siteId, testingReportComment);
 		sendReplyComments.sendComments(userName);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
-	
-	@PostMapping("/replyTestingComments/{inspectorUserName}/{siteId}/{comments}")
+
+	@PostMapping("/replyTestingComments/{inspectorUserName}/{siteId}")
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
-			@RequestBody TestingReportComment testingReportComment) throws PeriodicTestingException, RegistrationException, Exception {
+			@RequestBody TestingReportComment testingReportComment)
+			throws PeriodicTestingException, RegistrationException, Exception {
 		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
 		String viewerUserName = testService.replyComments(inspectorUserName, siteId, testingReportComment);
 		if (viewerUserName != null) {

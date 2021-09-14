@@ -105,6 +105,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				supplyCharacteristicComment = new SupplyCharacteristicComment();
 				supplyCharacteristicComment.setInspectorFlag("0");
 				supplyCharacteristicComment.setViewerFlag("0");
+				supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
 				listOfComments.add(supplyCharacteristicComment);
 				supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
 				supplyCharacteristics.setCreatedDate(LocalDateTime.now());
@@ -171,9 +172,9 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	}
 	
 	@Override
-	public SupplyCharacteristics sendComments(String userName, Integer siteId, String comments)
-			throws SupplyCharacteristicsException {
-		if (userName != null && siteId != null && comments != null) {
+	public SupplyCharacteristics sendComments(String userName, Integer siteId,
+			SupplyCharacteristicComment supplyCharacteristicComment) throws SupplyCharacteristicsException {
+		if (userName != null && siteId != null && supplyCharacteristicComment != null) {
 			Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
 					.findBySiteId(siteId);
 			if (supplyCharacteristicsRepo.isPresent()
@@ -181,9 +182,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				SupplyCharacteristics supplyCharacteristics = supplyCharacteristicsRepo.get();
 				supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
 				supplyCharacteristics.setUpdatedBy(userName);
-				supplyCharacteristicComment = new SupplyCharacteristicComment();
 				supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
-				supplyCharacteristicComment.setViewerComment(comments);
 				supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
 				supplyCharacteristicComment.setViewerFlag("1");
 				listOfComments.add(supplyCharacteristicComment);

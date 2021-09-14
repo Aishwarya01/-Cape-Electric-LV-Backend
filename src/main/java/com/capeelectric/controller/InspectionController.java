@@ -65,11 +65,12 @@ public class InspectionController {
 		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.OK);
 	}
 	
-	@GetMapping("/sendInspectionComments/{userName}/{siteId}/{comments}")
+	@PostMapping("/sendInspectionComments/{userName}/{siteId}")
 	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
-			@PathVariable String comments) throws InspectionException, RegistrationException, Exception {
+			@RequestBody PeriodicInspectionComment periodicInspectionComment)
+			throws InspectionException, RegistrationException, Exception {
 		logger.info("called sendComments function UserName : {},SiteId : {}", userName, siteId);
-		inspectionService.sendComments(userName, siteId, comments);
+		inspectionService.sendComments(userName, siteId, periodicInspectionComment);
 		sendReplyComments.sendComments(userName);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
@@ -88,4 +89,5 @@ public class InspectionController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 
 	}
+	
 }

@@ -64,16 +64,16 @@ public class SummaryController {
 	}
 
 
-	@GetMapping("/sendSummaryComments/{userName}/{siteId}/{comments}")
+	@PostMapping("/sendSummaryComments/{userName}/{siteId}")
 	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
-			@PathVariable String comments) throws SummaryException, RegistrationException, Exception {
+			@RequestBody SummaryComment summaryComment) throws SummaryException, RegistrationException, Exception {
 		logger.info("called sendComments function UserName : {},SiteId : {}", userName, siteId);
-		summaryService.sendComments(userName, siteId, comments);
+		summaryService.sendComments(userName, siteId, summaryComment);
 		sendReplyComments.sendComments(userName);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
-	@PostMapping("/replySummaryComments/{inspectorUserName}{siteId}/{comments}")
+	@PostMapping("/replySummaryComments/{inspectorUserName}{siteId}")
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
 			@RequestBody SummaryComment summaryComment) throws SummaryException, RegistrationException, Exception {
 		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
