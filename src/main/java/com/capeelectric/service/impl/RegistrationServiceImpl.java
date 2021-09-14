@@ -58,9 +58,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 				if (isValidIndianMobileNumber(register.getContactNumber())) {
 					if (register.getRole().equalsIgnoreCase("INSPECTOR")) {
 						register.setNoOfLicence(numberOfLicence);
+						register.setPermission("NOT_AUTHORIZED");
 					}
 					register.setCreatedDate(LocalDateTime.now());
-					register.setPermission("NOT_AUTHORIZED");
 					register.setUpdatedDate(LocalDateTime.now());
 					register.setCreatedBy(register.getUsername());
 					register.setUpdatedBy(register.getUsername());
