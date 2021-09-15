@@ -221,7 +221,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 
 		Boolean flagSitePersons = true;
 		Boolean flagInspectionComment = true;
-		if (userName != null && siteId != null && supplyCharacteristicComment.getCommentsId() != null) {
+		if (userName != null && siteId != null && supplyCharacteristicComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
@@ -276,8 +276,16 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 							}
 						}
 						if (flagInspectionComment) {
-							throw new SupplyCharacteristicsException(
-									"Comment information doesn't exist for Given commentId");
+
+							if (process.equalsIgnoreCase("SEND")) {
+								supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
+								supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
+								supplyCharacteristicComment.setViewerFlag("1");
+								supplyCharacteristicComment.setInspectorFlag("0");
+								supplyCharacteristicCommentRepo.add(supplyCharacteristicComment);
+								supplyCharacteristics.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
+								return supplyCharacteristics;
+							}
 						}
 					}
 				}

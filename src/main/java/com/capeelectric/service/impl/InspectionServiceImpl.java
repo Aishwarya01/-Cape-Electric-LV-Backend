@@ -157,7 +157,7 @@ public class InspectionServiceImpl implements InspectionService {
 
 		Boolean flagSitePersons = true;
 		Boolean flagInspectionComment = true;
-		if (userName != null && siteId != null && periodicInspectionComment.getCommentsId() != null) {
+		if (userName != null && siteId != null && periodicInspectionComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
@@ -181,7 +181,8 @@ public class InspectionServiceImpl implements InspectionService {
 
 								if (process.equalsIgnoreCase("SEND")) {
 									periodicInspectionCommentItr.setViewerDate(LocalDateTime.now());
-									periodicInspectionCommentItr.setViewerComment(periodicInspectionComment.getViewerComment());
+									periodicInspectionCommentItr
+											.setViewerComment(periodicInspectionComment.getViewerComment());
 									periodicInspectionCommentItr.setViewerFlag("1");
 									periodicInspectorCommentRepo.add(periodicInspectionCommentItr);
 									periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
@@ -207,7 +208,19 @@ public class InspectionServiceImpl implements InspectionService {
 							}
 						}
 						if (flagInspectionComment) {
-							throw new InspectionException("Comment information doesn't exist for Given commentId");
+
+							if (process.equalsIgnoreCase("SEND")) {
+								periodicInspectionComment.setPeriodicInspection(periodicInspection);
+								periodicInspectionComment.setViewerDate(LocalDateTime.now());
+								periodicInspectionComment.setViewerFlag("1");
+								periodicInspectionComment.setInspectorFlag("0");
+								periodicInspectorCommentRepo.add(periodicInspectionComment);
+								periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
+								return periodicInspection;
+							} else {
+								throw new InspectionException("Sending viewer comments faild");
+							}
+
 						}
 					}
 				}

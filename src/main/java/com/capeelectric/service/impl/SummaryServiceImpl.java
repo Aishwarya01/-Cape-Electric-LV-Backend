@@ -165,10 +165,9 @@ public class SummaryServiceImpl implements SummaryService {
 	private Summary verifyCommentsInfo(String userName, Integer siteId,
 			SummaryComment summaryComment, String process) throws SummaryException {
 
-
 		Boolean flagSitePersons = true;
 		Boolean flagInspectionComment = true;
-		if (userName != null && siteId != null && summaryComment.getCommentsId() != null) {
+		if (userName != null && siteId != null && summaryComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
@@ -198,8 +197,7 @@ public class SummaryServiceImpl implements SummaryService {
 								}
 								if (process.equalsIgnoreCase("REPLY")) {
 									summaryCommentItr.setInspectorDate(LocalDateTime.now());
-									summaryCommentItr
-											.setInspectorComment(summaryComment.getInspectorComment());
+									summaryCommentItr.setInspectorComment(summaryComment.getInspectorComment());
 									summaryCommentItr.setInspectorFlag("1");
 									summaryCommentRepo.add(summaryCommentItr);
 									summary.setSummaryComment(summaryCommentRepo);
@@ -207,8 +205,7 @@ public class SummaryServiceImpl implements SummaryService {
 								}
 								if (process.equalsIgnoreCase("APPROVE")) {
 									summaryCommentItr.setViewerDate(LocalDateTime.now());
-									summaryCommentItr
-											.setApproveOrReject(summaryComment.getApproveOrReject());
+									summaryCommentItr.setApproveOrReject(summaryComment.getApproveOrReject());
 									summaryCommentRepo.add(summaryCommentItr);
 									summary.setSummaryComment(summaryCommentRepo);
 									return summary;
@@ -216,7 +213,17 @@ public class SummaryServiceImpl implements SummaryService {
 							}
 						}
 						if (flagInspectionComment) {
-							throw new SummaryException("Comment information doesn't exist for Given commentId");
+							if (process.equalsIgnoreCase("SEND")) {
+								summaryComment.setSummary(summary);
+								summaryComment.setViewerDate(LocalDateTime.now());
+								summaryComment.setViewerFlag("1");
+								summaryComment.setInspectorFlag("0");
+								summaryCommentRepo.add(summaryComment);
+								summary.setSummaryComment(summaryCommentRepo);
+								return summary;
+							} else {
+								throw new SummaryException("Sending viewer comments faild");
+							}
 						}
 					}
 				}

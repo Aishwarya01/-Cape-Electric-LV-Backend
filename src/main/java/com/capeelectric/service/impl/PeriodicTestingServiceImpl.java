@@ -151,7 +151,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 
 		Boolean flagSitePersons = true;
 		Boolean flagInspectionComment = true;
-		if (userName != null && siteId != null && testingReportComment.getCommentsId() != null) {
+		if (userName != null && siteId != null && testingReportComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
@@ -199,8 +199,20 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 							}
 						}
 						if (flagInspectionComment) {
-							throw new PeriodicTestingException("Comment information doesn't exist for Given commentId");
+
+							if (process.equalsIgnoreCase("SEND")) {
+								testingReportComment.setTestingReport(testingReport);
+								testingReportComment.setViewerDate(LocalDateTime.now());
+								testingReportComment.setViewerFlag("1");
+								testingReportComment.setInspectorFlag("0");
+								testingReportCommentRepo.add(testingReportComment);
+								testingReport.setTestingComment(testingReportCommentRepo);
+								return testingReport;
+							} else {
+								throw new PeriodicTestingException("Sending viewer comments faild");
+							}
 						}
+
 					}
 				}
 				if (flagSitePersons) {

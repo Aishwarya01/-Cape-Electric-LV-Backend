@@ -155,10 +155,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 	private ReportDetails verifyCommentsInfo(String userName, Integer siteId,
 			ReportDetailsComment reportDetailsComment, String process) throws InstalReportException {
 
-
 		Boolean flagSitePersons = true;
 		Boolean flagInspectionComment = true;
-		if (userName != null && siteId != null && reportDetailsComment.getCommentsId() != null) {
+		if (userName != null && siteId != null && reportDetailsComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
@@ -173,8 +172,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 						Set<ReportDetailsComment> reportDetailsCommentRepo = reportDetails.getReportDetailsComment();
 
 						for (ReportDetailsComment reportDetailsCommentItr : reportDetailsCommentRepo) {
-							if (reportDetailsCommentItr.getCommentsId()
-									.equals(reportDetailsComment.getCommentsId())) {
+							if (reportDetailsCommentItr.getCommentsId().equals(reportDetailsComment.getCommentsId())) {
 								flagInspectionComment = false;
 
 								reportDetailsCommentItr.setReportDetails(reportDetails);
@@ -207,7 +205,18 @@ public class InstalReportServiceImpl implements InstalReportService {
 							}
 						}
 						if (flagInspectionComment) {
-							throw new InstalReportException("Comment information doesn't exist for Given commentId");
+							if (process.equalsIgnoreCase("SEND")) {
+								reportDetailsComment.setReportDetails(reportDetails);
+								reportDetailsComment.setViewerDate(LocalDateTime.now());
+								reportDetailsComment.setViewerFlag("1");
+								reportDetailsComment.setInspectorFlag("0");
+								reportDetailsCommentRepo.add(reportDetailsComment);
+								reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
+								return reportDetails;
+							} else {
+								throw new InstalReportException("Sending viewer comments faild");
+							}
+
 						}
 					}
 				}
