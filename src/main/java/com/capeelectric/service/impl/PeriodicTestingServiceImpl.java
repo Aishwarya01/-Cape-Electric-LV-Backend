@@ -112,32 +112,46 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	}
 
 	@Override
-	public TestingReport sendComments(String userName, Integer siteId, TestingReportComment testingReportComment)
+	public void sendComments(String userName, Integer siteId, TestingReportComment testingReportComment)
 			throws PeriodicTestingException {
-		if (userName != null && siteId != null && testingReportComment != null) {
-			Optional<TestingReport> TestingReportRepo = testingReportRepository.findBySiteId(siteId);
-			if (TestingReportRepo.isPresent() && TestingReportRepo.get().getUserName().equalsIgnoreCase(userName)) {
-				TestingReport testingReport = TestingReportRepo.get();
-				testingReport.setUpdatedDate(LocalDateTime.now());
-				testingReport.setUpdatedBy(userName);
-				testingReportComment.setViewerDate(LocalDateTime.now());
-				testingReportComment.setTestingReport(testingReport);
-				testingReportComment.setViewerFlag("1");
-				listOfComments.add(testingReportComment);
-				testingReport.setTestingComment(listOfComments);
-				return testingReportRepository.save(testingReport);
-			} else {
-				throw new PeriodicTestingException("Given SiteId is Invalid");
-			}
+
+		TestingReport testingReport = verifyCommentsInfo(userName, siteId, testingReportComment, "SEND");
+		if (testingReport != null) {
+			testingReportRepository.save(testingReport);
 		} else {
-			throw new PeriodicTestingException("Invalid inputs");
+			throw new PeriodicTestingException("Testing-Information doesn't exist for given Site-Id");
 		}
 	}
 
 	@Override
 	public String replyComments(String inspectorUserName, Integer siteId, TestingReportComment testingReportComment)
 			throws PeriodicTestingException {
-		if (inspectorUserName != null && siteId != null && testingReportComment.getCommentsId() != null) {
+		TestingReport testingReport = verifyCommentsInfo(inspectorUserName, siteId, testingReportComment, "REPLY");
+		if (testingReport != null) {
+			testingReportRepository.save(testingReport);
+			return testingReport.getUserName();
+		} else {
+			throw new PeriodicTestingException("Testing-Information doesn't exist for given Site-Id");
+		}
+	}
+	
+	@Override
+	public void approveComments(String userName, Integer siteId, TestingReportComment testingReportComment)
+			throws PeriodicTestingException {
+		TestingReport testingReport = verifyCommentsInfo(userName, siteId, testingReportComment, "APPROVE");
+		if (testingReport != null) {
+			testingReportRepository.save(testingReport);
+		} else {
+			throw new PeriodicTestingException("Testing-Information doesn't exist for given Site-Id");
+		}
+	}
+	
+	private TestingReport verifyCommentsInfo(String userName, Integer siteId, TestingReportComment testingReportComment,
+			String process) throws PeriodicTestingException {
+
+		Boolean flagSitePersons = true;
+		Boolean flagInspectionComment = true;
+		if (userName != null && siteId != null && testingReportComment.getCommentsId() != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
@@ -145,29 +159,56 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 					Optional<TestingReport> testingReportRepo = testingReportRepository.findBySiteId(siteId);
 					if (testingReportRepo.isPresent() && testingReportRepo.get().getUserName()
 							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
+						flagSitePersons = false;
 						TestingReport testingReport = testingReportRepo.get();
 						testingReport.setUpdatedDate(LocalDateTime.now());
-						testingReport.setUpdatedBy(inspectorUserName);
+						testingReport.setUpdatedBy(userName);
 						List<TestingReportComment> testingReportCommentRepo = testingReport.getTestingComment();
 
 						for (TestingReportComment testingReportCommentItr : testingReportCommentRepo) {
 							if (testingReportCommentItr.getCommentsId().equals(testingReportComment.getCommentsId())) {
-								testingReportCommentItr.setInspectorDate(LocalDateTime.now());
+								flagInspectionComment = false;
+
 								testingReportCommentItr.setTestingReport(testingReport);
-								testingReportCommentItr.setInspectorComment(testingReportComment.getInspectorComment());
-								testingReportCommentItr.setInspectorFlag("1");
-								testingReportCommentRepo.add(testingReportCommentItr);
-								testingReport.setTestingComment(testingReportCommentRepo);
-								testingReportRepository.save(testingReport);
-								return testingReport.getUserName();
+
+								if (process.equalsIgnoreCase("SEND")) {
+									testingReportCommentItr.setViewerDate(LocalDateTime.now());
+									testingReportCommentItr.setViewerComment(testingReportComment.getViewerComment());
+									testingReportCommentItr.setViewerFlag("1");
+									testingReportCommentRepo.add(testingReportCommentItr);
+									testingReport.setTestingComment(testingReportCommentRepo);
+									return testingReport;
+								}
+								if (process.equalsIgnoreCase("REPLY")) {
+									testingReportCommentItr.setInspectorDate(LocalDateTime.now());
+									testingReportCommentItr
+											.setInspectorComment(testingReportComment.getInspectorComment());
+									testingReportCommentItr.setInspectorFlag("1");
+									testingReportCommentRepo.add(testingReportCommentItr);
+									testingReport.setTestingComment(testingReportCommentRepo);
+									return testingReport;
+								}
+								if (process.equalsIgnoreCase("APPROVE")) {
+									testingReportCommentItr.setViewerDate(LocalDateTime.now());
+									testingReportCommentItr
+											.setApproveOrReject(testingReportComment.getApproveOrReject());
+									testingReportCommentRepo.add(testingReportCommentItr);
+									testingReport.setTestingComment(testingReportCommentRepo);
+									return testingReport;
+								}
 							}
 						}
-
+						if (flagInspectionComment) {
+							throw new PeriodicTestingException("Comment information doesn't exist for Given commentId");
+						}
 					}
+				}
+				if (flagSitePersons) {
+					throw new PeriodicTestingException("PersonIncharge mail-Id not matched Given UserName");
 				}
 
 			} else {
-				throw new PeriodicTestingException("Invalid Site-Id");
+				throw new PeriodicTestingException("Siteinformation doesn't exist, try with different Site-Id");
 			}
 
 		} else {

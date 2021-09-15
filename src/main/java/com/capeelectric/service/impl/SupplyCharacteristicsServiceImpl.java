@@ -172,34 +172,56 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	}
 	
 	@Override
-	public SupplyCharacteristics sendComments(String userName, Integer siteId,
+	public void sendComments(String userName, Integer siteId,
 			SupplyCharacteristicComment supplyCharacteristicComment) throws SupplyCharacteristicsException {
-		if (userName != null && siteId != null && supplyCharacteristicComment != null) {
-			Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
-					.findBySiteId(siteId);
-			if (supplyCharacteristicsRepo.isPresent()
-					&& supplyCharacteristicsRepo.get().getUserName().equalsIgnoreCase(userName)) {
-				SupplyCharacteristics supplyCharacteristics = supplyCharacteristicsRepo.get();
-				supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
-				supplyCharacteristics.setUpdatedBy(userName);
-				supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
-				supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
-				supplyCharacteristicComment.setViewerFlag("1");
-				listOfComments.add(supplyCharacteristicComment);
-				supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
-				return supplyCharacteristicsRepository.save(supplyCharacteristics);
-			} else {
-				throw new SupplyCharacteristicsException("Given SiteId is Invalid");
-			}
+
+		SupplyCharacteristics supplyCharacteristics = verifyCommentsInfo(userName, siteId,
+				supplyCharacteristicComment, "APPROVE");
+		if (supplyCharacteristics != null) {
+			supplyCharacteristicsRepository.save(supplyCharacteristics);
 		} else {
-			throw new SupplyCharacteristicsException("Invalid inputs");
+			throw new SupplyCharacteristicsException(
+					"SupplyCharacteristics-Information doesn't exist for given Site-Id");
 		}
 	}
 
 	@Override
-	public String replyComments(String inspectorUserName, Integer siteId, SupplyCharacteristicComment supplyCharacteristicComment)
+	public String replyComments(String inspectorUserName, Integer siteId,
+			SupplyCharacteristicComment supplyCharacteristicComment) throws SupplyCharacteristicsException {
+
+		SupplyCharacteristics supplyCharacteristics = verifyCommentsInfo(inspectorUserName, siteId,
+				supplyCharacteristicComment, "APPROVE");
+		if (supplyCharacteristics != null) {
+			supplyCharacteristicsRepository.save(supplyCharacteristics);
+			return supplyCharacteristics.getUserName();
+		} else {
+			throw new SupplyCharacteristicsException(
+					"SupplyCharacteristics-Information doesn't exist for given Site-Id");
+		}
+	}
+	
+	@Override
+	public void approveComments(String userName, Integer siteId,
+			SupplyCharacteristicComment supplyCharacteristicComment) throws SupplyCharacteristicsException {
+
+		SupplyCharacteristics supplyCharacteristics = verifyCommentsInfo(userName, siteId, supplyCharacteristicComment,
+				"APPROVE");
+		if (supplyCharacteristics != null) {
+			supplyCharacteristicsRepository.save(supplyCharacteristics);
+		} else {
+			throw new SupplyCharacteristicsException(
+					"SupplyCharacteristics-Information doesn't exist for given Site-Id");
+		}
+
+	}
+	
+	private SupplyCharacteristics verifyCommentsInfo(String userName, Integer siteId,
+			SupplyCharacteristicComment supplyCharacteristicComment, String process)
 			throws SupplyCharacteristicsException {
-		if (inspectorUserName != null && siteId != null && supplyCharacteristicComment.getCommentsId() != null) {
+
+		Boolean flagSitePersons = true;
+		Boolean flagInspectionComment = true;
+		if (userName != null && siteId != null && supplyCharacteristicComment.getCommentsId() != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
@@ -208,32 +230,63 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 							.findBySiteId(siteId);
 					if (supplyCharacteristicsRepo.isPresent() && supplyCharacteristicsRepo.get().getUserName()
 							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
+						flagSitePersons = false;
 						SupplyCharacteristics supplyCharacteristics = supplyCharacteristicsRepo.get();
 						supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
-						supplyCharacteristics.setUpdatedBy(inspectorUserName);
+						supplyCharacteristics.setUpdatedBy(userName);
 						List<SupplyCharacteristicComment> supplyCharacteristicCommentRepo = supplyCharacteristics
 								.getSupplyCharacteristicComment();
 
 						for (SupplyCharacteristicComment supplyCharacteristicCommentItr : supplyCharacteristicCommentRepo) {
 							if (supplyCharacteristicCommentItr.getCommentsId()
 									.equals(supplyCharacteristicComment.getCommentsId())) {
-								supplyCharacteristicCommentItr.setInspectorDate(LocalDateTime.now());
+								flagInspectionComment = false;
+
 								supplyCharacteristicCommentItr.setSupplyCharacteristics(supplyCharacteristics);
-								supplyCharacteristicCommentItr
-										.setInspectorComment(supplyCharacteristicComment.getInspectorComment());
-								supplyCharacteristicCommentItr.setInspectorFlag("1");
-								supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
-								supplyCharacteristics.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
-								supplyCharacteristicsRepository.save(supplyCharacteristics);
-								return supplyCharacteristics.getUserName();
+
+								if (process.equalsIgnoreCase("SEND")) {
+									supplyCharacteristicCommentItr.setViewerDate(LocalDateTime.now());
+									supplyCharacteristicCommentItr
+											.setViewerComment(supplyCharacteristicComment.getViewerComment());
+									supplyCharacteristicCommentItr.setViewerFlag("1");
+									supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
+									supplyCharacteristics
+											.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
+									return supplyCharacteristics;
+								}
+								if (process.equalsIgnoreCase("REPLY")) {
+									supplyCharacteristicCommentItr.setInspectorDate(LocalDateTime.now());
+									supplyCharacteristicCommentItr
+											.setInspectorComment(supplyCharacteristicComment.getInspectorComment());
+									supplyCharacteristicCommentItr.setInspectorFlag("1");
+									supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
+									supplyCharacteristics
+											.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
+									return supplyCharacteristics;
+								}
+								if (process.equalsIgnoreCase("APPROVE")) {
+									supplyCharacteristicCommentItr.setViewerDate(LocalDateTime.now());
+									supplyCharacteristicCommentItr
+											.setApproveOrReject(supplyCharacteristicComment.getApproveOrReject());
+									supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
+									supplyCharacteristics
+											.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
+									return supplyCharacteristics;
+								}
 							}
 						}
-
+						if (flagInspectionComment) {
+							throw new SupplyCharacteristicsException(
+									"Comment information doesn't exist for Given commentId");
+						}
 					}
+				}
+				if (flagSitePersons) {
+					throw new SupplyCharacteristicsException("PersonIncharge mail-Id not matched Given UserName");
 				}
 
 			} else {
-				throw new SupplyCharacteristicsException("Invalid Site-Id");
+				throw new SupplyCharacteristicsException("Siteinformation doesn't exist, try with different Site-Id");
 			}
 
 		} else {

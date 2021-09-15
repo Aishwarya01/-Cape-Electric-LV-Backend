@@ -19,10 +19,13 @@ public interface InstalReportService {
 
 	public void updateInstallationReport(ReportDetails reportDetails) throws InstalReportException;
 
-	public ReportDetails sendComments(String userName, Integer siteId, ReportDetailsComment reportDetailsComment)
+	public void sendComments(String userName, Integer siteId, ReportDetailsComment reportDetailsComment)
 			throws InstalReportException;
 
 	public String replyComments(String userName, Integer siteId, ReportDetailsComment reportDetailsComment)
+			throws InstalReportException;
+
+	public void approveComments(String userName, Integer siteId, ReportDetailsComment reportDetailsComment)
 			throws InstalReportException;
 
 }

@@ -119,31 +119,46 @@ public class InstalReportServiceImpl implements InstalReportService {
 	}
 
 	@Override
-	public ReportDetails sendComments(String userName, Integer siteId, ReportDetailsComment reportDetailsComment) throws InstalReportException {
-		if (userName != null && siteId != null && reportDetailsComment != null) {
-			Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(siteId);
-			if (reportDetailsRepo.isPresent() && reportDetailsRepo.get().getUserName().equalsIgnoreCase(userName)) {
-				ReportDetails reportDetails = reportDetailsRepo.get();
-				reportDetails.setUpdatedDate(LocalDateTime.now());
-				reportDetails.setUpdatedBy(userName);
-				reportDetailsComment.setViewerFlag("1");
-				reportDetailsComment.setViewerDate(LocalDateTime.now());
-				reportDetailsComment.setReportDetails(reportDetails);
-				listOfComments.add(reportDetailsComment);
-				reportDetails.setReportDetailsComment(listOfComments);
-				return installationReportRepository.save(reportDetails);
-			} else {
-				throw new InstalReportException("Given SiteId is Invalid");
-			}
+	public void sendComments(String userName, Integer siteId, ReportDetailsComment reportDetailsComment) throws InstalReportException {
+		ReportDetails reportDetails = verifyCommentsInfo(userName, siteId, reportDetailsComment, "SEND");
+		if (reportDetails != null) {
+			installationReportRepository.save(reportDetails);
 		} else {
-			throw new InstalReportException("Invalid inputs");
+			throw new InstalReportException("Basic-Information information doesn't exist for given Site-Id");
 		}
 	}
 
 	@Override
 	public String replyComments(String inspectorUserName, Integer siteId, ReportDetailsComment reportDetailsComment)
 			throws InstalReportException {
-		if (inspectorUserName != null && siteId != null && reportDetailsComment.getCommentsId() != null) {
+		ReportDetails reportDetails = verifyCommentsInfo(inspectorUserName, siteId, reportDetailsComment, "REPLY");
+		if (reportDetails != null) {
+			installationReportRepository.save(reportDetails);
+			return reportDetails.getUserName();
+		} else {
+			throw new InstalReportException("Basic-Information information doesn't exist for given Site-Id");
+		}
+
+	}
+	
+	@Override
+	public void approveComments(String userName, Integer siteId, ReportDetailsComment reportDetailsComment)
+			throws InstalReportException {
+		ReportDetails reportDetails = verifyCommentsInfo(userName, siteId, reportDetailsComment, "APPROVE");
+		if (reportDetails != null) {
+			installationReportRepository.save(reportDetails);
+		} else {
+			throw new InstalReportException("Basic-Information doesn't exist for given Site-Id");
+		}
+	}
+	
+	private ReportDetails verifyCommentsInfo(String userName, Integer siteId,
+			ReportDetailsComment reportDetailsComment, String process) throws InstalReportException {
+
+
+		Boolean flagSitePersons = true;
+		Boolean flagInspectionComment = true;
+		if (userName != null && siteId != null && reportDetailsComment.getCommentsId() != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
@@ -151,29 +166,57 @@ public class InstalReportServiceImpl implements InstalReportService {
 					Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(siteId);
 					if (reportDetailsRepo.isPresent() && reportDetailsRepo.get().getUserName()
 							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
+						flagSitePersons = false;
 						ReportDetails reportDetails = reportDetailsRepo.get();
 						reportDetails.setUpdatedDate(LocalDateTime.now());
-						reportDetails.setUpdatedBy(inspectorUserName);
+						reportDetails.setUpdatedBy(userName);
 						Set<ReportDetailsComment> reportDetailsCommentRepo = reportDetails.getReportDetailsComment();
 
 						for (ReportDetailsComment reportDetailsCommentItr : reportDetailsCommentRepo) {
-							if (reportDetailsCommentItr.getCommentsId().equals(reportDetailsComment.getCommentsId())) {
-								reportDetailsCommentItr.setInspectorDate(LocalDateTime.now());
+							if (reportDetailsCommentItr.getCommentsId()
+									.equals(reportDetailsComment.getCommentsId())) {
+								flagInspectionComment = false;
+
 								reportDetailsCommentItr.setReportDetails(reportDetails);
-								reportDetailsCommentItr.setInspectorComment(reportDetailsComment.getInspectorComment());
-								reportDetailsCommentItr.setInspectorFlag("1");
-								reportDetailsCommentRepo.add(reportDetailsCommentItr);
-								reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
-								installationReportRepository.save(reportDetails);
-								return reportDetails.getUserName();
+
+								if (process.equalsIgnoreCase("SEND")) {
+									reportDetailsCommentItr.setViewerDate(LocalDateTime.now());
+									reportDetailsCommentItr.setViewerComment(reportDetailsComment.getViewerComment());
+									reportDetailsCommentItr.setViewerFlag("1");
+									reportDetailsCommentRepo.add(reportDetailsCommentItr);
+									reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
+									return reportDetails;
+								}
+								if (process.equalsIgnoreCase("REPLY")) {
+									reportDetailsCommentItr.setInspectorDate(LocalDateTime.now());
+									reportDetailsCommentItr
+											.setInspectorComment(reportDetailsComment.getInspectorComment());
+									reportDetailsCommentItr.setInspectorFlag("1");
+									reportDetailsCommentRepo.add(reportDetailsCommentItr);
+									reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
+									return reportDetails;
+								}
+								if (process.equalsIgnoreCase("APPROVE")) {
+									reportDetailsCommentItr.setViewerDate(LocalDateTime.now());
+									reportDetailsCommentItr
+											.setApproveOrReject(reportDetailsComment.getApproveOrReject());
+									reportDetailsCommentRepo.add(reportDetailsCommentItr);
+									reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
+									return reportDetails;
+								}
 							}
 						}
-
+						if (flagInspectionComment) {
+							throw new InstalReportException("Comment information doesn't exist for Given commentId");
+						}
 					}
+				}
+				if (flagSitePersons) {
+					throw new InstalReportException("PersonIncharge mail-Id not matched Given UserName");
 				}
 
 			} else {
-				throw new InstalReportException("Invalid Site-Id");
+				throw new InstalReportException("Siteinformation doesn't exist, try with different Site-Id");
 			}
 
 		} else {

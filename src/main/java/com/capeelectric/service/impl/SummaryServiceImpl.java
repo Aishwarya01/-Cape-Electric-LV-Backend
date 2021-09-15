@@ -130,32 +130,45 @@ public class SummaryServiceImpl implements SummaryService {
 	}
 	
 	@Override
-	public Summary sendComments(String userName, Integer siteId, SummaryComment summaryComment) throws SummaryException {
-		if (userName != null && siteId != null && summaryComment != null) {
-			Optional<Summary> summaryRepo = summaryRepository.findBySiteId(siteId);
-			if (summaryRepo.isPresent() && summaryRepo.get().getUserName().equalsIgnoreCase(userName)) {
-				Summary summary = summaryRepo.get();
-				summary.setUpdatedDate(LocalDateTime.now());
-				summary.setUpdatedBy(userName);
-				summaryComment = new SummaryComment();
-				summaryComment.setViewerDate(LocalDateTime.now());
-				summaryComment.setViewerFlag("1");
-				summaryComment.setSummary(summary);
-				listOfComments.add(summaryComment);
-				summary.setSummaryComment(listOfComments);
-				return summaryRepository.save(summary);
-			} else {
-				throw new SummaryException("Given SiteId is Invalid");
-			}
+	public void sendComments(String userName, Integer siteId, SummaryComment summaryComment) throws SummaryException {
+		Summary summary = verifyCommentsInfo(userName, siteId, summaryComment, "APPROVE");
+		if (summary != null) {
+			summaryRepository.save(summary);
 		} else {
-			throw new SummaryException("Invalid inputs");
+			throw new SummaryException("Testing-Information doesn't exist for given Site-Id");
 		}
 	}
 
 	@Override
 	public String replyComments(String inspectorUserName, Integer siteId, SummaryComment summaryComment)
 			throws SummaryException {
-		if (inspectorUserName != null && siteId != null && summaryComment.getCommentsId() != null) {
+		Summary summary = verifyCommentsInfo(inspectorUserName, siteId, summaryComment, "APPROVE");
+		if (summary != null) {
+			summaryRepository.save(summary);
+			return summary.getUserName();
+		} else {
+			throw new SummaryException("Testing-Information doesn't exist for given Site-Id");
+		}
+	}
+	
+	@Override
+	public void approveComments(String userName, Integer siteId, SummaryComment summaryComment)
+			throws SummaryException {
+		Summary summary = verifyCommentsInfo(userName, siteId, summaryComment, "APPROVE");
+		if (summary != null) {
+			summaryRepository.save(summary);
+		} else {
+			throw new SummaryException("Testing-Information doesn't exist for given Site-Id");
+		}
+	}
+
+	private Summary verifyCommentsInfo(String userName, Integer siteId,
+			SummaryComment summaryComment, String process) throws SummaryException {
+
+
+		Boolean flagSitePersons = true;
+		Boolean flagInspectionComment = true;
+		if (userName != null && siteId != null && summaryComment.getCommentsId() != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
 				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
@@ -163,29 +176,56 @@ public class SummaryServiceImpl implements SummaryService {
 					Optional<Summary> summaryRepo = summaryRepository.findBySiteId(siteId);
 					if (summaryRepo.isPresent() && summaryRepo.get().getUserName()
 							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
+						flagSitePersons = false;
 						Summary summary = summaryRepo.get();
 						summary.setUpdatedDate(LocalDateTime.now());
-						summary.setUpdatedBy(inspectorUserName);
+						summary.setUpdatedBy(userName);
 						List<SummaryComment> summaryCommentRepo = summary.getSummaryComment();
 
 						for (SummaryComment summaryCommentItr : summaryCommentRepo) {
 							if (summaryCommentItr.getCommentsId().equals(summaryComment.getCommentsId())) {
-								summaryCommentItr.setInspectorDate(LocalDateTime.now());
+								flagInspectionComment = false;
+
 								summaryCommentItr.setSummary(summary);
-								summaryCommentItr.setInspectorComment(summaryComment.getInspectorComment());
-								summaryCommentItr.setInspectorFlag("1");
-								summaryCommentRepo.add(summaryCommentItr);
-								summary.setSummaryComment(summaryCommentRepo);
-								summaryRepository.save(summary);
-								return summary.getUserName();
+
+								if (process.equalsIgnoreCase("SEND")) {
+									summaryCommentItr.setViewerDate(LocalDateTime.now());
+									summaryCommentItr.setViewerComment(summaryComment.getViewerComment());
+									summaryCommentItr.setViewerFlag("1");
+									summaryCommentRepo.add(summaryCommentItr);
+									summary.setSummaryComment(summaryCommentRepo);
+									return summary;
+								}
+								if (process.equalsIgnoreCase("REPLY")) {
+									summaryCommentItr.setInspectorDate(LocalDateTime.now());
+									summaryCommentItr
+											.setInspectorComment(summaryComment.getInspectorComment());
+									summaryCommentItr.setInspectorFlag("1");
+									summaryCommentRepo.add(summaryCommentItr);
+									summary.setSummaryComment(summaryCommentRepo);
+									return summary;
+								}
+								if (process.equalsIgnoreCase("APPROVE")) {
+									summaryCommentItr.setViewerDate(LocalDateTime.now());
+									summaryCommentItr
+											.setApproveOrReject(summaryComment.getApproveOrReject());
+									summaryCommentRepo.add(summaryCommentItr);
+									summary.setSummaryComment(summaryCommentRepo);
+									return summary;
+								}
 							}
 						}
-
+						if (flagInspectionComment) {
+							throw new SummaryException("Comment information doesn't exist for Given commentId");
+						}
 					}
+				}
+				if (flagSitePersons) {
+					throw new SummaryException("PersonIncharge mail-Id not matched Given UserName");
 				}
 
 			} else {
-				throw new SummaryException("Invalid Site-Id");
+				throw new SummaryException("Siteinformation doesn't exist, try with different Site-Id");
 			}
 
 		} else {

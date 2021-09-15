@@ -94,8 +94,16 @@ public class PeriodicTestingController {
 		} else {
 			throw new PeriodicTestingException("No viewer userName avilable");
 		}
-
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
+	@PostMapping("/approveTestingComments/{userName}/{siteId}")
+	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
+			@RequestBody TestingReportComment testingReportComment)
+			throws PeriodicTestingException, RegistrationException, Exception {
+		logger.info("called approveComments function UserName : {},SiteId : {}", userName, siteId);
+		testService.approveComments(userName, siteId, testingReportComment);
+		sendReplyComments.approveComments(userName, testingReportComment.getApproveOrReject());
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 }

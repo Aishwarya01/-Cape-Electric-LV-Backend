@@ -76,8 +76,10 @@ public class InspectionController {
 	}
 	
 	@PostMapping("/replyInspectionComments/{inspectorUserName}/{siteId}")
-	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,@RequestBody PeriodicInspectionComment periodicInspectionComment) throws InspectionException, RegistrationException, Exception {
-		
+	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
+			@RequestBody PeriodicInspectionComment periodicInspectionComment)
+			throws InspectionException, RegistrationException, Exception {
+
 		logger.info("called replyComments function InspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
 		String viewerUserName = inspectionService.replyComments(inspectorUserName, siteId, periodicInspectionComment);
 		if (viewerUserName != null) {
@@ -85,9 +87,17 @@ public class InspectionController {
 		} else {
 			throw new InspectionException("No viewer userName avilable");
 		}
-
 		return new ResponseEntity<Void>(HttpStatus.OK);
-
+	}
+	
+	@PostMapping("/approveInspectionComments/{userName}/{siteId}")
+	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
+			@RequestBody PeriodicInspectionComment periodicInspectionComment)
+			throws InspectionException, RegistrationException, Exception {
+		logger.info("called approveComments function UserName : {},SiteId : {}", userName, siteId);
+		inspectionService.approveComments(userName, siteId, periodicInspectionComment);
+		sendReplyComments.approveComments(userName,periodicInspectionComment.getApproveOrReject());
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
 }

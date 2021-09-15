@@ -22,10 +22,13 @@ public interface SupplyCharacteristicsService {
 	public void updateCharacteristics(SupplyCharacteristics supplyCharacteristics)
 			throws SupplyCharacteristicsException;
 
-	public SupplyCharacteristics sendComments(String userName, Integer siteId,
-			SupplyCharacteristicComment supplyCharacteristicComment) throws SupplyCharacteristicsException;
+	public void sendComments(String userName, Integer siteId, SupplyCharacteristicComment supplyCharacteristicComment)
+			throws SupplyCharacteristicsException;
 
 	public String replyComments(String userName, Integer siteId,
+			SupplyCharacteristicComment supplyCharacteristicComment) throws SupplyCharacteristicsException;
+
+	public void approveComments(String userName, Integer siteId,
 			SupplyCharacteristicComment supplyCharacteristicComment) throws SupplyCharacteristicsException;
 
 }

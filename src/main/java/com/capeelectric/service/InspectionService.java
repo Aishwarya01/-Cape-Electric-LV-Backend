@@ -20,10 +20,13 @@ public interface InspectionService {
 
 	public void updateInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException;
 
-	public void sendComments(String userName, Integer siteId,
-			PeriodicInspectionComment periodicInspectionComment) throws InspectionException;
+	public void sendComments(String userName, Integer siteId, PeriodicInspectionComment periodicInspectionComment)
+			throws InspectionException;
 
 	public String replyComments(String userName, Integer siteId, PeriodicInspectionComment periodicInspectionComment)
+			throws InspectionException;
+
+	public void approveComments(String userName, Integer siteId, PeriodicInspectionComment periodicInspectionComment)
 			throws InspectionException;
 
 }

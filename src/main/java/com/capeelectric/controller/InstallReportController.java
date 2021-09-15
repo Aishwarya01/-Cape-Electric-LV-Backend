@@ -86,7 +86,16 @@ public class InstallReportController {
 		} else {
 			throw new InstalReportException("No viewer userName avilable");
 		}
-
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/approveBasicInfoComments/{userName}/{siteId}")
+	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
+			@RequestBody ReportDetailsComment reportDetailsComment)
+			throws InstalReportException, RegistrationException, Exception {
+		logger.info("called approveComments function UserName : {},SiteId : {}", userName, siteId);
+		instalReportService.approveComments(userName, siteId, reportDetailsComment);
+		sendReplyComments.approveComments(userName,reportDetailsComment.getApproveOrReject());
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

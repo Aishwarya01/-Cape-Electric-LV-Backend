@@ -19,8 +19,10 @@ public interface SummaryService {
 
 	public void updateSummary(Summary summary) throws SummaryException;
 
-	public Summary sendComments(String userName, Integer siteId, SummaryComment summaryComment) throws SummaryException;
+	public void sendComments(String userName, Integer siteId, SummaryComment summaryComment) throws SummaryException;
 
 	public String replyComments(String userName, Integer siteId, SummaryComment summaryComment) throws SummaryException;
+
+	public void approveComments(String userName, Integer siteId, SummaryComment summaryComment) throws SummaryException;
 
 }

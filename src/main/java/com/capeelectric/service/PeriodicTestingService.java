@@ -19,10 +19,13 @@ public interface PeriodicTestingService {
 
 	public void updatePeriodicTesting(TestingReport testingReport) throws PeriodicTestingException;
 
-	public TestingReport sendComments(String userName, Integer siteId, TestingReportComment testingReportComment)
+	public void sendComments(String userName, Integer siteId, TestingReportComment testingReportComment)
 			throws PeriodicTestingException;
 
 	public String replyComments(String userName, Integer siteId, TestingReportComment testingReportComment)
+			throws PeriodicTestingException;
+
+	public void approveComments(String userName, Integer siteId, TestingReportComment testingReportComment)
 			throws PeriodicTestingException;
 
 }

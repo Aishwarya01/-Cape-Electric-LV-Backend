@@ -21,6 +21,12 @@ public class SendReplyComments {
 
 	@Value("${email.reply.comment.message}")
 	private String replyCommentMsg;
+	
+	@Value("${email.approve.comment.message}")
+	private String approveCommentMsg;
+	
+	@Value("${email.reject.comment.message}")
+	private String rejectCommentMsg;
 
 	@Autowired
 	private AWSEmailService awsEmailService;
@@ -63,6 +69,29 @@ public class SendReplyComments {
 		} else {
 			throw new Exception("Given Inspector UserName MisMatched");
 		}
+	}
+	
+	public void approveComments(String userName, String approveOrReject) throws RegistrationException, Exception {
+		Optional<Register> registerRepo = registrationRepo.findByUsername(userName);
 
+		if (registerRepo.isPresent() && registerRepo.get().getAssignedBy() != null) {
+
+			if (approveOrReject.equalsIgnoreCase("APPROVED")) {
+				awsEmailService.sendEmail(registerRepo.get().getAssignedBy(), userName, approveCommentMsg);
+			} else {
+				URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+						.buildAndExpand(registerRepo.get().getRegisterId()).toUri();
+				String resetUrl = Utility.getSiteURL(uri.toURL());
+				awsEmailService.sendEmail(registerRepo.get().getAssignedBy(), userName,
+						rejectCommentMsg + "\n"
+								+ (resetUrl.contains("localhost:5000")
+										? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
+										: "https://www.rushforsafety.com")
+								+ "/login");
+			}
+
+		} else {
+			throw new Exception("Email Id doesn't exist!");
+		}
 	}
 }

@@ -83,7 +83,15 @@ public class SummaryController {
 		} else {
 			throw new SummaryException("No viewer userName avilable");
 		}
-
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/approveSummaryComments/{userName}/{siteId}")
+	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
+			@RequestBody SummaryComment summaryComment) throws SummaryException, RegistrationException, Exception {
+		logger.info("called approveComments function UserName : {},SiteId : {}", userName, siteId);
+		summaryService.approveComments(userName, siteId, summaryComment);
+		sendReplyComments.approveComments(userName, summaryComment.getApproveOrReject());
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

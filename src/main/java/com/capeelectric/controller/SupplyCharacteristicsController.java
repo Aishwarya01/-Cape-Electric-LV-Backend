@@ -90,7 +90,16 @@ public class SupplyCharacteristicsController {
 		} else {
 			throw new SupplyCharacteristicsException("No viewer userName avilable");
 		}
-
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/approveCharacteristicsComments/{userName}/{siteId}")
+	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
+			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
+			throws SupplyCharacteristicsException, RegistrationException, Exception {
+		logger.info("called approveComments function UserName : {},SiteId : {}", userName, siteId);
+		supplyCharacteristicsService.approveComments(userName, siteId, supplyCharacteristicComment);
+		sendReplyComments.approveComments(userName, supplyCharacteristicComment.getApproveOrReject());
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }
