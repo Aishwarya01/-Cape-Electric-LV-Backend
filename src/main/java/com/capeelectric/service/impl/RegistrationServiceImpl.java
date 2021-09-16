@@ -100,6 +100,14 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setUpdatedDate(LocalDateTime.now());
 					register.setCreatedBy(register.getAssignedBy());
 					register.setUpdatedBy(register.getAssignedBy());
+					try {
+						Optional<Register> inspectorInfo = registerRepository.findByUsername(register.getAssignedBy());
+						Register inspector = inspectorInfo.get();
+						inspector.setNoOfLicence(String.valueOf(Integer.parseInt(inspector.getNoOfLicence()) - 1));
+						updateRegistration(inspectorInfo.get());
+					} catch (Exception e) {
+						throw new RegistrationException("Inspector License updating failed");
+					}
 					Register createdRegister = registerRepository.save(register);
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
