@@ -71,4 +71,16 @@ public class GlobalExceptionHandler {
             ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
             return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
     }
+    
+    @ExceptionHandler({RegistrationException.class})
+    public ResponseEntity<ErrorMessage> handleUserException(RegistrationException e){
+    		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
+    		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+    
+    @ExceptionHandler({RegisterPermissionRequestException.class})
+    public ResponseEntity<ErrorMessage> handleChangePasswordException(RegisterPermissionRequestException e){
+    		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+    		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+    }
 }
