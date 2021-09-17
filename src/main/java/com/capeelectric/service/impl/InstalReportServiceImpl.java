@@ -2,7 +2,8 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.ReportDetailsComment;
@@ -39,7 +41,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 	
 	private ReportDetailsComment reportDetailsComment;
 	
-	private Set<ReportDetailsComment> listOfComments = new HashSet<ReportDetailsComment>();
+	private List<ReportDetailsComment> listOfComments = new ArrayList<ReportDetailsComment>();
 	
 	/**
 	 * @param ReportDetails
@@ -76,14 +78,23 @@ public class InstalReportServiceImpl implements InstalReportService {
 	/**
 	 * @param userName
 	 * retrieveInstallationReport method to will be save retrieve object based on userName
+	 * @throws InspectionException 
 	 * 
 	*/
 	@Override
-	public List<ReportDetails> retrieveInstallationReport(String userName,Integer siteId) throws InstalReportException {
+	public List<ReportDetails> retrieveInstallationReport(String userName, Integer siteId)
+			throws InstalReportException, InspectionException {
 		if (userName != null) {
-
-			return installationReportRepository.findByUserNameAndSiteId(userName,siteId);
-
+			List<ReportDetails> reportDetailsRepo = installationReportRepository.findByUserNameAndSiteId(userName,
+					siteId);
+			if (reportDetailsRepo != null) {
+				for (ReportDetails reportDetails : reportDetailsRepo) {
+					sortingDateTime(reportDetails.getReportDetailsComment());
+				}
+				return reportDetailsRepo;
+			} else {
+				throw new InspectionException("Given UserName & Site doesn't exist Basic-information");
+			}
 		} else {
 			throw new InstalReportException("invalid inputs");
 		}
@@ -169,7 +180,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 						ReportDetails reportDetails = reportDetailsRepo.get();
 						reportDetails.setUpdatedDate(LocalDateTime.now());
 						reportDetails.setUpdatedBy(userName);
-						Set<ReportDetailsComment> reportDetailsCommentRepo = reportDetails.getReportDetailsComment();
+						List<ReportDetailsComment> reportDetailsCommentRepo = reportDetails.getReportDetailsComment();
 
 						for (ReportDetailsComment reportDetailsCommentItr : reportDetailsCommentRepo) {
 							if (reportDetailsCommentItr.getCommentsId().equals(reportDetailsComment.getCommentsId())) {
@@ -232,5 +243,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 			throw new InstalReportException("Invalid inputs");
 		}
 		return null;
+	}
+	
+	private void sortingDateTime(List<ReportDetailsComment> listOfComments) {
+		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
 	}
 }

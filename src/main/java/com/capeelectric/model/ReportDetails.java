@@ -3,6 +3,7 @@ package com.capeelectric.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -118,7 +119,7 @@ public class ReportDetails implements Serializable {
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "reportDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<ReportDetailsComment> reportDetailsComment;
+	private List<ReportDetailsComment> reportDetailsComment;
 
 	public Integer getReportId() {
 		return reportId;
@@ -328,11 +329,11 @@ public class ReportDetails implements Serializable {
 		this.signatorDetails = signatorDetails;
 	}
 
-	public Set<ReportDetailsComment> getReportDetailsComment() {
+	public List<ReportDetailsComment> getReportDetailsComment() {
 		return reportDetailsComment;
 	}
 
-	public void setReportDetailsComment(Set<ReportDetailsComment> reportDetailsComment) {
+	public void setReportDetailsComment(List<ReportDetailsComment> reportDetailsComment) {
 		this.reportDetailsComment = reportDetailsComment;
 	}
 

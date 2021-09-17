@@ -2,6 +2,7 @@ package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -96,7 +97,15 @@ public class SummaryServiceImpl implements SummaryService {
 	@Override
 	public List<Summary> retrieveSummary(String userName, Integer siteId) throws SummaryException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
-			return summaryRepository.findByUserNameAndSiteId(userName, siteId);
+			List<Summary> summaryRepo = summaryRepository.findByUserNameAndSiteId(userName, siteId);
+			if (summaryRepo != null) {
+				for (Summary summary : summaryRepo) {
+					sortingDateTime(summary.getSummaryComment());
+				}
+				return summaryRepo;
+			} else {
+				throw new SummaryException("Given UserName & Site doesn't exist Inspection");
+			}
 		} else {
 			throw new SummaryException("Invalid Inputs");
 
@@ -239,5 +248,9 @@ public class SummaryServiceImpl implements SummaryService {
 			throw new SummaryException("Invalid inputs");
 		}
 		return null;
+	}
+	
+	private void sortingDateTime(List<SummaryComment> listOfComments) {
+		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
 	}
 }

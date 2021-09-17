@@ -2,6 +2,7 @@ package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -79,9 +80,17 @@ public class InspectionServiceImpl implements InspectionService {
 	@Override
 	public List<PeriodicInspection> retrieveInspectionDetails(String userName, Integer siteId)
 			throws InspectionException {
-
 		if (userName != null && !userName.isEmpty() && siteId != null) {
-			return inspectionRepository.findByUserNameAndSiteId(userName, siteId);
+			List<PeriodicInspection> inspectionRepo = inspectionRepository.findByUserNameAndSiteId(userName, siteId);
+			if (inspectionRepo != null) {
+				for (PeriodicInspection periodicInspection : inspectionRepo) {
+					sortingDateTime(periodicInspection.getPeriodicInspectorComment());
+				}
+				return inspectionRepo;
+			} else {
+				throw new InspectionException("Given UserName & Site doesn't exist Inspection");
+			}
+
 		} else {
 			throw new InspectionException("Invalid Inputs");
 		}
@@ -236,5 +245,9 @@ public class InspectionServiceImpl implements InspectionService {
 			throw new InspectionException("Invalid inputs");
 		}
 		return null;
+	}
+	
+	private void sortingDateTime(List<PeriodicInspectionComment> listOfComments) {
+		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
 	}
 }

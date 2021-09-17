@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.ReportDetails;
@@ -75,7 +76,7 @@ public class InstallReportControllerTest {
 	}
 	
 	@Test
-	public void testRetrieveInstallationReport() throws InstalReportException { 
+	public void testRetrieveInstallationReport() throws InstalReportException, InspectionException { 
 
 		ResponseEntity<List<ReportDetails>> report = instalReportController.retrieveInstallationReport(reportDetails.getUserName(),reportDetails.getSiteId());
 		assertEquals(report.getStatusCode(), HttpStatus.OK);

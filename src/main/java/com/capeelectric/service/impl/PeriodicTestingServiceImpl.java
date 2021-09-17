@@ -2,6 +2,7 @@ package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -77,7 +78,15 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	@Override
 	public List<TestingReport> retrieveTestingReport(String userName, Integer siteId) throws PeriodicTestingException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
-			return testingReportRepository.findByUserNameAndSiteId(userName, siteId);
+			List<TestingReport> testingReportRepo = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
+			if (testingReportRepo != null) {
+				for (TestingReport testingReport : testingReportRepo) {
+					sortingDateTime(testingReport.getTestingComment());
+				}
+				return testingReportRepo;
+			} else {
+				throw new PeriodicTestingException("Given UserName & Site doesn't exist Testing");
+			}
 		} else {
 			throw new PeriodicTestingException("Invalid Inputs");
 		}
@@ -227,5 +236,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 			throw new PeriodicTestingException("Invalid inputs");
 		}
 		return null;
+	}
+	
+	private void sortingDateTime(List<TestingReportComment> listOfComments) {
+		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
 	}
 }

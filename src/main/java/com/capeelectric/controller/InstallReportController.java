@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.ReportDetails;
@@ -50,7 +51,7 @@ public class InstallReportController {
 	@GetMapping("/retrieveInstalReport/{userName}/{siteId}")
 	public ResponseEntity<List<ReportDetails>> retrieveInstallationReport(@PathVariable String userName,
 			@PathVariable Integer siteId)
-			throws InstalReportException {
+			throws InstalReportException, InspectionException {
 		logger.info("called retrieveInstallationReport function UserName: {}, SiteId : {}", userName, siteId);
 		return new ResponseEntity<List<ReportDetails>>(instalReportService.retrieveInstallationReport(userName,siteId),
 				HttpStatus.OK);
