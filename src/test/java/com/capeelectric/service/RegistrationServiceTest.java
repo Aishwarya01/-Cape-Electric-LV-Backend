@@ -50,7 +50,6 @@ public class RegistrationServiceTest {
 		register.setCountry("INDIA");
 		register.setDepartment("ECE");
 		register.setDesignation("INSPECTOR");
-		register.setInterestedAreas("Learning");
 		register.setName("Cape");
 		register.setUsername("lvsystem@capeindia.net");
 		register.setState("TN");
@@ -128,9 +127,8 @@ public class RegistrationServiceTest {
 		register2.setCountry("INDIA");
 		register2.setDepartment("ECE");
 		register2.setDesignation("INSPECTOR");
-		register2.setInterestedAreas("Learning");
 		register2.setName("Cape");
-		register2.setUsername("lvsystem@capeindia.net");
+		register2.setUsername("lvsystem12@capeindia.net");
 		register2.setState("TN");
 		return register2;
 	}
