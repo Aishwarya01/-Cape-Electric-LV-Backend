@@ -1,12 +1,9 @@
 package com.capeelectric.service;
 
-import java.util.List;
 import java.util.Optional;
 
-import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
-import com.capeelectric.request.RegisterPermissionRequest;
 
 /**
  * 
@@ -22,9 +19,5 @@ public interface RegistrationService {
 	public void updateRegistration(Register inspector) throws RegistrationException;
 
 	public void sendOtp(String userName, String mobileNumber) throws RegistrationException;
-	
-	public Register updatePermission(RegisterPermissionRequest registerPermissionRequest) throws RegisterPermissionRequestException;
-
-	public List<Register> retrieveAllRegistration() throws RegistrationException;
 
 }
