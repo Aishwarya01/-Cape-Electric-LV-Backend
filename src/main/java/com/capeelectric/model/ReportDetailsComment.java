@@ -54,6 +54,9 @@ public class ReportDetailsComment implements Serializable {
 	@Column(name = "INSPECTOR_FLAG")
 	private String inspectorFlag;
 	
+	@Column(name = "NO_OF_COMMENT")
+	private Integer noOfComment;
+	
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "REPORT_ID")
@@ -129,6 +132,14 @@ public class ReportDetailsComment implements Serializable {
 
 	public void setInspectorFlag(String inspectorFlag) {
 		this.inspectorFlag = inspectorFlag;
+	}
+
+	public Integer getNoOfComment() {
+		return noOfComment;
+	}
+
+	public void setNoOfComment(Integer noOfComment) {
+		this.noOfComment = noOfComment;
 	}
 
 }

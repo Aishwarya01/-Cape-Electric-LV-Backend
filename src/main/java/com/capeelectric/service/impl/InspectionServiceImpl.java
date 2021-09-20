@@ -55,6 +55,7 @@ public class InspectionServiceImpl implements InspectionService {
 				periodicInspectionComment = new PeriodicInspectionComment();
 				periodicInspectionComment.setInspectorFlag("0");
 				periodicInspectionComment.setViewerFlag("0");
+				periodicInspectionComment.setNoOfComment(1);
 				periodicInspectionComment.setPeriodicInspection(periodicInspection);
 				listOfComments.add(periodicInspectionComment);
 				periodicInspection.setPeriodicInspectorComment(listOfComments);
@@ -219,6 +220,7 @@ public class InspectionServiceImpl implements InspectionService {
 						if (flagInspectionComment) {
 
 							if (process.equalsIgnoreCase("SEND")) {
+								periodicInspectionComment = checkNoOfComments(periodicInspection.getPeriodicInspectorComment());
 								periodicInspectionComment.setPeriodicInspection(periodicInspection);
 								periodicInspectionComment.setViewerDate(LocalDateTime.now());
 								periodicInspectionComment.setViewerFlag("1");
@@ -249,5 +251,24 @@ public class InspectionServiceImpl implements InspectionService {
 	
 	private void sortingDateTime(List<PeriodicInspectionComment> listOfComments) {
 		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
+	}
+	
+	private PeriodicInspectionComment checkNoOfComments(List<PeriodicInspectionComment> listOfComments) {
+		PeriodicInspectionComment inspectionComment = new PeriodicInspectionComment();
+		int maxNum = 0;
+		String approveRejectedFlag = "";
+		for (PeriodicInspectionComment periodicInspectionComment : listOfComments) {
+			if (periodicInspectionComment != null && maxNum <= periodicInspectionComment.getNoOfComment()) {
+				maxNum = periodicInspectionComment.getNoOfComment();
+				approveRejectedFlag = periodicInspectionComment.getApproveOrReject();
+			}
+		}
+		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase("APPROVED")) {
+			inspectionComment.setNoOfComment(maxNum + 1);
+			return inspectionComment;
+		} else {
+			inspectionComment.setNoOfComment(maxNum);
+			return inspectionComment;
+		}
 	}
 }

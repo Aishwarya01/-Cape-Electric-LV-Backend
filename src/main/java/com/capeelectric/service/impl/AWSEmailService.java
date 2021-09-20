@@ -127,8 +127,8 @@ public class AWSEmailService {
 	 */
 	public  void sendEmail(String toEmail,String ccEmail, String content) throws MessagingException {
 		
+		if(!emailDisable.equalsIgnoreCase("Y")) {
 		logger.debug("Inside AWS Email");
-
 		Properties props = new Properties();
 		props.put("mail.transport.protocol", "smtp");
 		props.put("mail.smtp.host", emailConfig.getSMTP_HOST_NAME());
@@ -153,6 +153,6 @@ public class AWSEmailService {
 	    transport.sendMessage(message, message.getRecipients(Message.RecipientType.CC));
 		transport.close();
 
-
+		}
 	}
 }

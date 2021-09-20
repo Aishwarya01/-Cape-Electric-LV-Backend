@@ -106,6 +106,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				supplyCharacteristicComment = new SupplyCharacteristicComment();
 				supplyCharacteristicComment.setInspectorFlag("0");
 				supplyCharacteristicComment.setViewerFlag("0");
+				supplyCharacteristicComment.setNoOfComment(1);
 				supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
 				listOfComments.add(supplyCharacteristicComment);
 				supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
@@ -288,6 +289,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 						if (flagInspectionComment) {
 
 							if (process.equalsIgnoreCase("SEND")) {
+								supplyCharacteristicComment = checkNoOfComments(
+										supplyCharacteristics.getSupplyCharacteristicComment());
 								supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
 								supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
 								supplyCharacteristicComment.setViewerFlag("1");
@@ -315,5 +318,24 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	
 	private void sortingDateTime(List<SupplyCharacteristicComment> listOfComments) {
 		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
+	}
+	
+	private SupplyCharacteristicComment checkNoOfComments(List<SupplyCharacteristicComment> listOfComments) {
+		SupplyCharacteristicComment supplyCharacteristicComment = new SupplyCharacteristicComment();
+		int maxNum = 0;
+		String approveRejectedFlag = "";
+		for (SupplyCharacteristicComment supplyCharacteristicCommentItr : listOfComments) {
+			if (supplyCharacteristicCommentItr != null && maxNum <= supplyCharacteristicCommentItr.getNoOfComment()) {
+				maxNum = supplyCharacteristicCommentItr.getNoOfComment();
+				approveRejectedFlag = supplyCharacteristicCommentItr.getApproveOrReject();
+			}
+		}
+		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase("APPROVED")) {
+			supplyCharacteristicComment.setNoOfComment(maxNum + 1);
+			return supplyCharacteristicComment;
+		} else {
+			supplyCharacteristicComment.setNoOfComment(maxNum);
+			return supplyCharacteristicComment;
+		}
 	}
 }
