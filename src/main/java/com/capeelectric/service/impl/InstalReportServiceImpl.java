@@ -218,7 +218,8 @@ public class InstalReportServiceImpl implements InstalReportService {
 						}
 						if (flagInspectionComment) {
 							if (process.equalsIgnoreCase("SEND")) {
-								reportDetailsComment = checkNoOfComments(reportDetails.getReportDetailsComment());
+								reportDetailsComment
+										.setNoOfComment(checkNoOfComments(reportDetails.getReportDetailsComment()));
 								reportDetailsComment.setReportDetails(reportDetails);
 								reportDetailsComment.setViewerDate(LocalDateTime.now());
 								reportDetailsComment.setViewerFlag("1");
@@ -251,9 +252,8 @@ public class InstalReportServiceImpl implements InstalReportService {
 		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
 	}
 	
-	private ReportDetailsComment checkNoOfComments(List<ReportDetailsComment> listOfComments) {
-		ReportDetailsComment reportDetailsComment = new ReportDetailsComment();
-		int maxNum = 0;
+	private Integer checkNoOfComments(List<ReportDetailsComment> listOfComments) {
+		Integer maxNum = 0;
 		String approveRejectedFlag = "";
 		for (ReportDetailsComment reportDetailsCommentItr : listOfComments) {
 			if (reportDetailsCommentItr != null && maxNum <= reportDetailsCommentItr.getNoOfComment()) {
@@ -262,11 +262,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 			}
 		}
 		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase("APPROVED")) {
-			reportDetailsComment.setNoOfComment(maxNum + 1);
-			return reportDetailsComment;
+			return maxNum + 1;
 		} else {
-			reportDetailsComment.setNoOfComment(maxNum);
-			return reportDetailsComment;
+			return maxNum;
 		}
 	}
 }

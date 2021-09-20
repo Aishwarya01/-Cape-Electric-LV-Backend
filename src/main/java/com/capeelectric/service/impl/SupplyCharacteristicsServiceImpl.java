@@ -289,8 +289,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 						if (flagInspectionComment) {
 
 							if (process.equalsIgnoreCase("SEND")) {
-								supplyCharacteristicComment = checkNoOfComments(
-										supplyCharacteristics.getSupplyCharacteristicComment());
+								supplyCharacteristicComment.setNoOfComment(
+										checkNoOfComments(supplyCharacteristics.getSupplyCharacteristicComment()));
 								supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
 								supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
 								supplyCharacteristicComment.setViewerFlag("1");
@@ -320,9 +320,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
 	}
 	
-	private SupplyCharacteristicComment checkNoOfComments(List<SupplyCharacteristicComment> listOfComments) {
-		SupplyCharacteristicComment supplyCharacteristicComment = new SupplyCharacteristicComment();
-		int maxNum = 0;
+	private Integer checkNoOfComments(List<SupplyCharacteristicComment> listOfComments) {
+		Integer maxNum = 0;
 		String approveRejectedFlag = "";
 		for (SupplyCharacteristicComment supplyCharacteristicCommentItr : listOfComments) {
 			if (supplyCharacteristicCommentItr != null && maxNum <= supplyCharacteristicCommentItr.getNoOfComment()) {
@@ -331,11 +330,9 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			}
 		}
 		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase("APPROVED")) {
-			supplyCharacteristicComment.setNoOfComment(maxNum + 1);
-			return supplyCharacteristicComment;
+			return maxNum + 1;
 		} else {
-			supplyCharacteristicComment.setNoOfComment(maxNum);
-			return supplyCharacteristicComment;
+			return maxNum + 1;
 		}
 	}
 }

@@ -224,7 +224,7 @@ public class SummaryServiceImpl implements SummaryService {
 						}
 						if (flagInspectionComment) {
 							if (process.equalsIgnoreCase("SEND")) {
-								summaryComment = checkNoOfComments(summary.getSummaryComment());
+								summaryComment.setNoOfComment(checkNoOfComments(summary.getSummaryComment()));
 								summaryComment.setSummary(summary);
 								summaryComment.setViewerDate(LocalDateTime.now());
 								summaryComment.setViewerFlag("1");
@@ -256,9 +256,8 @@ public class SummaryServiceImpl implements SummaryService {
 		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
 	}
 	
-	private SummaryComment checkNoOfComments(List<SummaryComment> listOfComments) {
-		SummaryComment summaryComment = new SummaryComment();
-		int maxNum = 0;
+	private Integer checkNoOfComments(List<SummaryComment> listOfComments) {
+		Integer maxNum = 0;
 		String approveRejectedFlag = "";
 		for (SummaryComment SummaryCommentItr : listOfComments) {
 			if (SummaryCommentItr != null && maxNum <= SummaryCommentItr.getNoOfComment()) {
@@ -267,11 +266,9 @@ public class SummaryServiceImpl implements SummaryService {
 			}
 		}
 		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase("APPROVED")) {
-			summaryComment.setNoOfComment(maxNum + 1);
-			return summaryComment;
+			return maxNum + 1;
 		} else {
-			summaryComment.setNoOfComment(maxNum);
-			return summaryComment;
+			return maxNum + 1;
 		}
 	}
 }

@@ -211,7 +211,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 						if (flagInspectionComment) {
 
 							if (process.equalsIgnoreCase("SEND")) {
-								testingReportComment = checkNoOfComments(testingReport.getTestingComment());
+								testingReportComment.setNoOfComment(checkNoOfComments(testingReport.getTestingComment()));
 								testingReportComment.setTestingReport(testingReport);
 								testingReportComment.setViewerDate(LocalDateTime.now());
 								testingReportComment.setViewerFlag("1");
@@ -244,9 +244,8 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
 	}
 	
-	private TestingReportComment checkNoOfComments(List<TestingReportComment> listOfComments) {
-		TestingReportComment testingReportComment = new TestingReportComment();
-		int maxNum = 0;
+	private Integer checkNoOfComments(List<TestingReportComment> listOfComments) {
+		Integer maxNum = 0;
 		String approveRejectedFlag = "";
 		for (TestingReportComment testingReportCommentItr : listOfComments) {
 			if (testingReportCommentItr != null && maxNum <= testingReportCommentItr.getNoOfComment()) {
@@ -255,11 +254,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 			}
 		}
 		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase("APPROVED")) {
-			testingReportComment.setNoOfComment(maxNum + 1);
-			return testingReportComment;
+			return maxNum + 1;
 		} else {
-			testingReportComment.setNoOfComment(maxNum);
-			return testingReportComment;
+			return maxNum;
 		}
 	}
 }

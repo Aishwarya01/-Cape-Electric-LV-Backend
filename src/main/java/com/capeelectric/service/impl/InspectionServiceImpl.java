@@ -220,7 +220,8 @@ public class InspectionServiceImpl implements InspectionService {
 						if (flagInspectionComment) {
 
 							if (process.equalsIgnoreCase("SEND")) {
-								periodicInspectionComment = checkNoOfComments(periodicInspection.getPeriodicInspectorComment());
+								periodicInspectionComment.setNoOfComment(
+										checkNoOfComments(periodicInspection.getPeriodicInspectorComment()));
 								periodicInspectionComment.setPeriodicInspection(periodicInspection);
 								periodicInspectionComment.setViewerDate(LocalDateTime.now());
 								periodicInspectionComment.setViewerFlag("1");
@@ -253,9 +254,8 @@ public class InspectionServiceImpl implements InspectionService {
 		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
 	}
 	
-	private PeriodicInspectionComment checkNoOfComments(List<PeriodicInspectionComment> listOfComments) {
-		PeriodicInspectionComment inspectionComment = new PeriodicInspectionComment();
-		int maxNum = 0;
+	private Integer checkNoOfComments(List<PeriodicInspectionComment> listOfComments) {
+		Integer maxNum = 0;
 		String approveRejectedFlag = "";
 		for (PeriodicInspectionComment periodicInspectionComment : listOfComments) {
 			if (periodicInspectionComment != null && maxNum <= periodicInspectionComment.getNoOfComment()) {
@@ -264,11 +264,9 @@ public class InspectionServiceImpl implements InspectionService {
 			}
 		}
 		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase("APPROVED")) {
-			inspectionComment.setNoOfComment(maxNum + 1);
-			return inspectionComment;
+			return maxNum + 1;
 		} else {
-			inspectionComment.setNoOfComment(maxNum);
-			return inspectionComment;
+			return maxNum;
 		}
 	}
 }
