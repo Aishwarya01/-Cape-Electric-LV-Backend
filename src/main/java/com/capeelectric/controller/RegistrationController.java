@@ -112,5 +112,13 @@ public class RegistrationController {
 		logger.debug("called sendOtp function UserName : {}, MobileNumber : {}", userName, mobileNumber);
 		registrationService.sendOtp(userName,mobileNumber);
 		return new ResponseEntity<Void>(HttpStatus.OK);
-	}	
+	}
+	
+	@PutMapping("/updateLicence/{userName}/{numoflicence}")
+	public ResponseEntity<String> updateLicence(@PathVariable String userName, @PathVariable String numoflicence)
+			throws RegistrationException {
+		logger.debug("called updateLicence function UserName : {}", userName);
+		registrationService.updateLicence(userName, numoflicence);
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
 }

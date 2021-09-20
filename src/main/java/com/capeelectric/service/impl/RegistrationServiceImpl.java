@@ -237,4 +237,23 @@ public class RegistrationServiceImpl implements RegistrationService {
 		return sendOtpResponse.getBody().replaceAll(SESSION_TITLE, "$1");
 	}
 
+	@Override
+	public void updateLicence(String userName, String numoflicence) throws RegistrationException {
+
+		if (userName != null && numoflicence != null) {
+
+			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
+			if (registerRepo.isPresent() && registerRepo.get().getUsername().equalsIgnoreCase(userName)) {
+				Register register = registerRepo.get();
+				register.setNoOfLicence(numoflicence);
+				registerRepository.save(register);
+			} else {
+				throw new RegistrationException("Given UserName does not Exist");
+			}
+
+		} else {
+			throw new RegistrationException("Invalid Input");
+		}
+	}
+
 }
