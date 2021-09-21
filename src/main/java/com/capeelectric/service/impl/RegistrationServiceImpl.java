@@ -56,7 +56,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			if (!registerRepo.isPresent()
 					|| !registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
 				if (isValidIndianMobileNumber(register.getContactNumber())) {
-					if (register.getRole().equalsIgnoreCase("INSPECTOR")) {
+					if (register.getRole() != null && register.getRole().equalsIgnoreCase("INSPECTOR")) {
 						register.setNoOfLicence(numberOfLicence);
 						register.setPermission("NOT_AUTHORIZED");
 					}
