@@ -34,7 +34,7 @@ public class PeriodicTestingController {
 	private static final Logger logger = LoggerFactory.getLogger(PeriodicTestingController.class);
 
 	@Autowired
-	private PeriodicTestingService testService;
+	private PeriodicTestingService periodicTestingService;
 	
 	@Autowired
 	private SendReplyComments sendReplyComments;
@@ -45,7 +45,7 @@ public class PeriodicTestingController {
 		logger.info("started savePeriodicTesting function userName: {},siteId : {}", testingReport.getUserName(),
 				testingReport.getSiteId());
 
-		testService.addTestingReport(testingReport);
+		periodicTestingService.addTestingReport(testingReport);
 		logger.info("ended savePeriodicTesting function");
 
 		return new ResponseEntity<String>("Testing Report Successfully Saved", HttpStatus.OK);
@@ -56,7 +56,7 @@ public class PeriodicTestingController {
 	public ResponseEntity<List<TestingReport>> retrievePeriodicTesting(@PathVariable String userName,
 			@PathVariable Integer siteId) throws PeriodicTestingException {
 		logger.info("Started retrievePeriodicTesting function userName: {},siteId : {}", userName, siteId);
-		List<TestingReport> retrieveTestingReport = testService.retrieveTestingReport(userName, siteId);
+		List<TestingReport> retrieveTestingReport = periodicTestingService.retrieveTestingReport(userName, siteId);
 		logger.info("ended retrievePeriodicTesting function");
 
 		return new ResponseEntity<List<TestingReport>>(retrieveTestingReport, HttpStatus.OK);
@@ -69,7 +69,7 @@ public class PeriodicTestingController {
 		logger.info("called updatePeriodicTesting function UserName : {},SiteId : {},TestingReportId : {}",
 				testingReport.getUserName(), testingReport.getSiteId(),
 				testingReport.getTestingReportId());
-		testService.updatePeriodicTesting(testingReport);
+		periodicTestingService.updatePeriodicTesting(testingReport);
 		return new ResponseEntity<String>("PeriodicTesting successfully Updated", HttpStatus.OK);
 	}
 
@@ -78,7 +78,7 @@ public class PeriodicTestingController {
 			@PathVariable Integer siteId,@RequestBody TestingReportComment testingReportComment)
 			throws PeriodicTestingException, RegistrationException, Exception {
 		logger.info("called sendComments function UserName : {},SiteId : {}", userName, siteId);
-		testService.sendComments(userName, siteId, testingReportComment);
+		periodicTestingService.sendComments(userName, siteId, testingReportComment);
 		sendReplyComments.sendComments(userName);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
@@ -88,7 +88,7 @@ public class PeriodicTestingController {
 			@RequestBody TestingReportComment testingReportComment)
 			throws PeriodicTestingException, RegistrationException, Exception {
 		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
-		String viewerUserName = testService.replyComments(inspectorUserName, siteId, testingReportComment);
+		String viewerUserName = periodicTestingService.replyComments(inspectorUserName, siteId, testingReportComment);
 		if (viewerUserName != null) {
 			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
 		} else {
@@ -102,7 +102,7 @@ public class PeriodicTestingController {
 			@RequestBody TestingReportComment testingReportComment)
 			throws PeriodicTestingException, RegistrationException, Exception {
 		logger.info("called approveComments function UserName : {},SiteId : {}", userName, siteId);
-		testService.approveComments(userName, siteId, testingReportComment);
+		periodicTestingService.approveComments(userName, siteId, testingReportComment);
 		sendReplyComments.approveComments(userName, testingReportComment.getApproveOrReject());
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
