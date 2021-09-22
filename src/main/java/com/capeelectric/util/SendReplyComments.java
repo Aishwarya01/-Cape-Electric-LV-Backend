@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -55,12 +56,12 @@ public class SendReplyComments {
 
 	public void replyComments(String inspectoUserName, String ViewerUserName) throws RegistrationException, Exception {
 
-		Optional<Register> registerRepo = registrationRepo.findByUsername(ViewerUserName);
-		if (registerRepo.isPresent() && registerRepo.get().getAssignedBy().equalsIgnoreCase(inspectoUserName)) {
+		Optional<Register> registerRepo = registrationRepo.findByUsername(inspectoUserName);
+		if (registerRepo.isPresent() && registerRepo.get().getUsername().equalsIgnoreCase(inspectoUserName)) {
 			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 					.buildAndExpand(registerRepo.get().getRegisterId()).toUri();
 			String resetUrl = Utility.getSiteURL(uri.toURL());
-			awsEmailService.sendEmail(ViewerUserName, registerRepo.get().getAssignedBy(),
+			awsEmailService.sendEmail(ViewerUserName, ViewerUserName,
 					replyCommentMsg + "\n" + "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")

@@ -41,6 +41,8 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	
 	private List<TestingReportComment> listOfComments = new ArrayList<TestingReportComment>();
 	
+	private String viewerName;
+	
 	/**
 	 * @param Testing
 	 * addTestingReport method to Testing object will be storing corresponding tables
@@ -139,7 +141,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		TestingReport testingReport = verifyCommentsInfo(inspectorUserName, siteId, testingReportComment, "REPLY");
 		if (testingReport != null) {
 			testingReportRepository.save(testingReport);
-			return testingReport.getUserName();
+			return viewerName;
 		} else {
 			throw new PeriodicTestingException("Testing-Information doesn't exist for given Site-Id");
 		}
@@ -159,75 +161,66 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	private TestingReport verifyCommentsInfo(String userName, Integer siteId, TestingReportComment testingReportComment,
 			String process) throws PeriodicTestingException {
 
-		Boolean flagSitePersons = true;
 		Boolean flagInspectionComment = true;
 		if (userName != null && siteId != null && testingReportComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
-				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
-				for (SitePersons sitePersons2 : sitePersons) {
-					Optional<TestingReport> testingReportRepo = testingReportRepository.findBySiteId(siteId);
-					if (testingReportRepo.isPresent() && testingReportRepo.get().getUserName()
-							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
-						flagSitePersons = false;
-						TestingReport testingReport = testingReportRepo.get();
-						testingReport.setUpdatedDate(LocalDateTime.now());
-						testingReport.setUpdatedBy(userName);
-						List<TestingReportComment> testingReportCommentRepo = testingReport.getTestingComment();
+				Optional<TestingReport> testingReportRepo = testingReportRepository.findBySiteId(siteId);
+				if (testingReportRepo.isPresent() && testingReportRepo.get() != null
+						&& checkInspectorViewer(userName, process, siteRepo, testingReportRepo)) {
+					TestingReport testingReport = testingReportRepo.get();
+					testingReport.setUpdatedDate(LocalDateTime.now());
+					testingReport.setUpdatedBy(userName);
+					List<TestingReportComment> testingReportCommentRepo = testingReport.getTestingComment();
 
-						for (TestingReportComment testingReportCommentItr : testingReportCommentRepo) {
-							if (testingReportCommentItr.getCommentsId().equals(testingReportComment.getCommentsId())) {
-								flagInspectionComment = false;
+					for (TestingReportComment testingReportCommentItr : testingReportCommentRepo) {
+						if (testingReportCommentItr.getCommentsId().equals(testingReportComment.getCommentsId())) {
+							flagInspectionComment = false;
 
-								testingReportCommentItr.setTestingReport(testingReport);
-
-								if (process.equalsIgnoreCase("SEND")) {
-									testingReportCommentItr.setViewerDate(LocalDateTime.now());
-									testingReportCommentItr.setViewerComment(testingReportComment.getViewerComment());
-									testingReportCommentItr.setViewerFlag("1");
-									testingReportCommentRepo.add(testingReportCommentItr);
-									testingReport.setTestingComment(testingReportCommentRepo);
-									return testingReport;
-								}
-								if (process.equalsIgnoreCase("REPLY")) {
-									testingReportCommentItr.setInspectorDate(LocalDateTime.now());
-									testingReportCommentItr
-											.setInspectorComment(testingReportComment.getInspectorComment());
-									testingReportCommentItr.setInspectorFlag("1");
-									testingReportCommentRepo.add(testingReportCommentItr);
-									testingReport.setTestingComment(testingReportCommentRepo);
-									return testingReport;
-								}
-								if (process.equalsIgnoreCase("APPROVE")) {
-									testingReportCommentItr.setViewerDate(LocalDateTime.now());
-									testingReportCommentItr
-											.setApproveOrReject(testingReportComment.getApproveOrReject());
-									testingReportCommentRepo.add(testingReportCommentItr);
-									testingReport.setTestingComment(testingReportCommentRepo);
-									return testingReport;
-								}
-							}
-						}
-						if (flagInspectionComment) {
+							testingReportCommentItr.setTestingReport(testingReport);
 
 							if (process.equalsIgnoreCase("SEND")) {
-								testingReportComment.setNoOfComment(checkNoOfComments(testingReport.getTestingComment()));
-								testingReportComment.setTestingReport(testingReport);
-								testingReportComment.setViewerDate(LocalDateTime.now());
-								testingReportComment.setViewerFlag("1");
-								testingReportComment.setInspectorFlag("0");
-								testingReportCommentRepo.add(testingReportComment);
+								testingReportCommentItr.setViewerDate(LocalDateTime.now());
+								testingReportCommentItr.setViewerComment(testingReportComment.getViewerComment());
+								testingReportCommentItr.setViewerFlag("1");
+								testingReportCommentRepo.add(testingReportCommentItr);
 								testingReport.setTestingComment(testingReportCommentRepo);
 								return testingReport;
-							} else {
-								throw new PeriodicTestingException("Sending viewer comments faild");
+							}
+							if (process.equalsIgnoreCase("REPLY")) {
+								testingReportCommentItr.setInspectorDate(LocalDateTime.now());
+								testingReportCommentItr.setInspectorComment(testingReportComment.getInspectorComment());
+								testingReportCommentItr.setInspectorFlag("1");
+								testingReportCommentRepo.add(testingReportCommentItr);
+								testingReport.setTestingComment(testingReportCommentRepo);
+								return testingReport;
+							}
+							if (process.equalsIgnoreCase("APPROVE")) {
+								testingReportCommentItr.setViewerDate(LocalDateTime.now());
+								testingReportCommentItr.setApproveOrReject(testingReportComment.getApproveOrReject());
+								testingReportCommentRepo.add(testingReportCommentItr);
+								testingReport.setTestingComment(testingReportCommentRepo);
+								return testingReport;
 							}
 						}
-
 					}
-				}
-				if (flagSitePersons) {
-					throw new PeriodicTestingException("PersonIncharge mail-Id not matched Given UserName");
+					if (flagInspectionComment) {
+
+						if (process.equalsIgnoreCase("SEND")) {
+							testingReportComment.setNoOfComment(checkNoOfComments(testingReport.getTestingComment()));
+							testingReportComment.setTestingReport(testingReport);
+							testingReportComment.setViewerDate(LocalDateTime.now());
+							testingReportComment.setViewerFlag("1");
+							testingReportComment.setInspectorFlag("0");
+							testingReportCommentRepo.add(testingReportComment);
+							testingReport.setTestingComment(testingReportCommentRepo);
+							return testingReport;
+						} else {
+							throw new PeriodicTestingException("Sending viewer comments faild");
+						}
+					}
+				} else {
+					throw new PeriodicTestingException("Given username not have access for comments");
 				}
 
 			} else {
@@ -258,5 +251,38 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		} else {
 			return maxNum;
 		}
+	}
+	
+	private Boolean checkInspectorViewer(String userName, String process, Optional<Site> siteRepo,
+			Optional<TestingReport> testingReportRepo) throws PeriodicTestingException {
+		Boolean flag = false;
+		if (process.equalsIgnoreCase("REPLY")) {
+			if (siteRepo.get().getUserName().equalsIgnoreCase(userName)
+					&& testingReportRepo.get().getUserName() != null
+					&& siteRepo.get().getUserName().equalsIgnoreCase(testingReportRepo.get().getUserName())) {
+				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+				for (SitePersons sitePersonsItr : sitePersons) {
+					if (sitePersonsItr != null && sitePersonsItr.getPersonInchargeEmail() != null) {
+						viewerName = sitePersonsItr.getPersonInchargeEmail();
+						return flag = true;
+					}
+				}
+			} else {
+				throw new PeriodicTestingException("Given userName not allowing for " + process + " comment");
+			}
+
+		} else if (process.equalsIgnoreCase("SEND") || process.equalsIgnoreCase("APPROVE")) {
+
+			Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+			for (SitePersons sitePersonsItr : sitePersons) {
+				if (sitePersonsItr != null && sitePersonsItr.getPersonInchargeEmail() != null
+						&& sitePersonsItr.getPersonInchargeEmail().equalsIgnoreCase(userName)) {
+					return flag = true;
+				} else {
+					throw new PeriodicTestingException("Given userName not allowing for " + process + " comment");
+				}
+			}
+		}
+		return flag;
 	}
 }

@@ -45,6 +45,8 @@ public class SummaryServiceImpl implements SummaryService {
 	
 	private Optional<Site> siteRepo;
 	
+	private String viewerName;
+	
 	/**
 	 * @ siteId unique for summary object
 	 * @param Summary object
@@ -155,7 +157,7 @@ public class SummaryServiceImpl implements SummaryService {
 		Summary summary = verifyCommentsInfo(inspectorUserName, siteId, summaryComment, "APPROVE");
 		if (summary != null) {
 			summaryRepository.save(summary);
-			return summary.getUserName();
+			return viewerName;
 		} else {
 			throw new SummaryException("Testing-Information doesn't exist for given Site-Id");
 		}
@@ -175,71 +177,67 @@ public class SummaryServiceImpl implements SummaryService {
 	private Summary verifyCommentsInfo(String userName, Integer siteId,
 			SummaryComment summaryComment, String process) throws SummaryException {
 
-		Boolean flagSitePersons = true;
 		Boolean flagInspectionComment = true;
 		if (userName != null && siteId != null && summaryComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
-				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
-				for (SitePersons sitePersons2 : sitePersons) {
-					Optional<Summary> summaryRepo = summaryRepository.findBySiteId(siteId);
-					if (summaryRepo.isPresent() && summaryRepo.get().getUserName()
-							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
-						flagSitePersons = false;
-						Summary summary = summaryRepo.get();
-						summary.setUpdatedDate(LocalDateTime.now());
-						summary.setUpdatedBy(userName);
-						List<SummaryComment> summaryCommentRepo = summary.getSummaryComment();
+				Optional<Summary> summaryRepo = summaryRepository.findBySiteId(siteId);
 
-						for (SummaryComment summaryCommentItr : summaryCommentRepo) {
-							if (summaryCommentItr.getCommentsId().equals(summaryComment.getCommentsId())) {
-								flagInspectionComment = false;
+				if (summaryRepo.isPresent() && summaryRepo.get() != null
+						&& checkInspectorViewer(userName, process, siteRepo, summaryRepo)) {
+					
+					Summary summary = summaryRepo.get();
+					summary.setUpdatedDate(LocalDateTime.now());
+					summary.setUpdatedBy(userName);
+					List<SummaryComment> summaryCommentRepo = summary.getSummaryComment();
 
-								summaryCommentItr.setSummary(summary);
+					for (SummaryComment summaryCommentItr : summaryCommentRepo) {
+						if (summaryCommentItr.getCommentsId().equals(summaryComment.getCommentsId())) {
+							flagInspectionComment = false;
 
-								if (process.equalsIgnoreCase("SEND")) {
-									summaryCommentItr.setViewerDate(LocalDateTime.now());
-									summaryCommentItr.setViewerComment(summaryComment.getViewerComment());
-									summaryCommentItr.setViewerFlag("1");
-									summaryCommentRepo.add(summaryCommentItr);
-									summary.setSummaryComment(summaryCommentRepo);
-									return summary;
-								}
-								if (process.equalsIgnoreCase("REPLY")) {
-									summaryCommentItr.setInspectorDate(LocalDateTime.now());
-									summaryCommentItr.setInspectorComment(summaryComment.getInspectorComment());
-									summaryCommentItr.setInspectorFlag("1");
-									summaryCommentRepo.add(summaryCommentItr);
-									summary.setSummaryComment(summaryCommentRepo);
-									return summary;
-								}
-								if (process.equalsIgnoreCase("APPROVE")) {
-									summaryCommentItr.setViewerDate(LocalDateTime.now());
-									summaryCommentItr.setApproveOrReject(summaryComment.getApproveOrReject());
-									summaryCommentRepo.add(summaryCommentItr);
-									summary.setSummaryComment(summaryCommentRepo);
-									return summary;
-								}
-							}
-						}
-						if (flagInspectionComment) {
+							summaryCommentItr.setSummary(summary);
+
 							if (process.equalsIgnoreCase("SEND")) {
-								summaryComment.setNoOfComment(checkNoOfComments(summary.getSummaryComment()));
-								summaryComment.setSummary(summary);
-								summaryComment.setViewerDate(LocalDateTime.now());
-								summaryComment.setViewerFlag("1");
-								summaryComment.setInspectorFlag("0");
-								summaryCommentRepo.add(summaryComment);
+								summaryCommentItr.setViewerDate(LocalDateTime.now());
+								summaryCommentItr.setViewerComment(summaryComment.getViewerComment());
+								summaryCommentItr.setViewerFlag("1");
+								summaryCommentRepo.add(summaryCommentItr);
 								summary.setSummaryComment(summaryCommentRepo);
 								return summary;
-							} else {
-								throw new SummaryException("Sending viewer comments faild");
+							}
+							if (process.equalsIgnoreCase("REPLY")) {
+								summaryCommentItr.setInspectorDate(LocalDateTime.now());
+								summaryCommentItr.setInspectorComment(summaryComment.getInspectorComment());
+								summaryCommentItr.setInspectorFlag("1");
+								summaryCommentRepo.add(summaryCommentItr);
+								summary.setSummaryComment(summaryCommentRepo);
+								return summary;
+							}
+							if (process.equalsIgnoreCase("APPROVE")) {
+								summaryCommentItr.setViewerDate(LocalDateTime.now());
+								summaryCommentItr.setApproveOrReject(summaryComment.getApproveOrReject());
+								summaryCommentRepo.add(summaryCommentItr);
+								summary.setSummaryComment(summaryCommentRepo);
+								return summary;
 							}
 						}
 					}
-				}
-				if (flagSitePersons) {
-					throw new SummaryException("PersonIncharge mail-Id not matched Given UserName");
+					if (flagInspectionComment) {
+						if (process.equalsIgnoreCase("SEND")) {
+							summaryComment.setNoOfComment(checkNoOfComments(summary.getSummaryComment()));
+							summaryComment.setSummary(summary);
+							summaryComment.setViewerDate(LocalDateTime.now());
+							summaryComment.setViewerFlag("1");
+							summaryComment.setInspectorFlag("0");
+							summaryCommentRepo.add(summaryComment);
+							summary.setSummaryComment(summaryCommentRepo);
+							return summary;
+						} else {
+							throw new SummaryException("Sending viewer comments faild");
+						}
+					}
+				} else {
+					throw new SummaryException("Given username not have access for comments");
 				}
 
 			} else {
@@ -270,5 +268,38 @@ public class SummaryServiceImpl implements SummaryService {
 		} else {
 			return maxNum + 1;
 		}
+	}
+	
+	private Boolean checkInspectorViewer(String userName, String process, Optional<Site> siteRepo,
+			Optional<Summary> summaryRepo) throws SummaryException {
+		Boolean flag = false;
+		if (process.equalsIgnoreCase("REPLY")) {
+			if (siteRepo.get().getUserName().equalsIgnoreCase(userName)
+					&& summaryRepo.get().getUserName() != null
+					&& siteRepo.get().getUserName().equalsIgnoreCase(summaryRepo.get().getUserName())) {
+				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+				for (SitePersons sitePersonsItr : sitePersons) {
+					if (sitePersonsItr != null && sitePersonsItr.getPersonInchargeEmail() != null) {
+						viewerName = sitePersonsItr.getPersonInchargeEmail();
+						return flag = true;
+					}
+				}
+			} else {
+				throw new SummaryException("Given userName not allowing for " + process + " comment");
+			}
+
+		} else if (process.equalsIgnoreCase("SEND") || process.equalsIgnoreCase("APPROVE")) {
+
+			Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+			for (SitePersons sitePersonsItr : sitePersons) {
+				if (sitePersonsItr != null && sitePersonsItr.getPersonInchargeEmail() != null
+						&& sitePersonsItr.getPersonInchargeEmail().equalsIgnoreCase(userName)) {
+					return flag = true;
+				} else {
+					throw new SummaryException("Given userName not allowing for " + process + " comment");
+				}
+			}
+		}
+		return flag;
 	}
 }

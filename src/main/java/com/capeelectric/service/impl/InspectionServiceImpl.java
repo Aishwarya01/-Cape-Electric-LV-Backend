@@ -39,6 +39,8 @@ public class InspectionServiceImpl implements InspectionService {
 	private PeriodicInspectionComment periodicInspectionComment;
 	
 	private List<PeriodicInspectionComment> listOfComments;
+	
+	private String viewerName;
 
 	/**
 	 * @param IpaoInspection object 
@@ -144,7 +146,7 @@ public class InspectionServiceImpl implements InspectionService {
 				"REPLY");
 		if (periodicInspection != null) {
 			inspectionRepository.save(periodicInspection);
-			return periodicInspection.getUserName();
+			return viewerName;
 		} else {
 			throw new InspectionException("Periodic-Inspection information doesn't exist for given Site-Id");
 		}
@@ -165,79 +167,73 @@ public class InspectionServiceImpl implements InspectionService {
 	private PeriodicInspection verifyCommentsInfo(String userName, Integer siteId,
 			PeriodicInspectionComment periodicInspectionComment, String process) throws InspectionException {
 
-		Boolean flagSitePersons = true;
 		Boolean flagInspectionComment = true;
 		if (userName != null && siteId != null && periodicInspectionComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
-				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
-				for (SitePersons sitePersons2 : sitePersons) {
-					Optional<PeriodicInspection> periodicInspectionRepo = inspectionRepository.findBySiteId(siteId);
-					if (periodicInspectionRepo.isPresent() && periodicInspectionRepo.get().getUserName()
-							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
-						flagSitePersons = false;
-						PeriodicInspection periodicInspection = periodicInspectionRepo.get();
-						periodicInspection.setUpdatedDate(LocalDateTime.now());
-						periodicInspection.setUpdatedBy(userName);
-						List<PeriodicInspectionComment> periodicInspectorCommentRepo = periodicInspection
-								.getPeriodicInspectorComment();
+				Optional<PeriodicInspection> periodicInspectionRepo = inspectionRepository.findBySiteId(siteId);
+				if (periodicInspectionRepo.isPresent() && periodicInspectionRepo.get() != null
+						&& periodicInspectionRepo.get().getUserName() != null
+						&& checkInspectorViewer(userName, process, siteRepo, periodicInspectionRepo)) {
+					PeriodicInspection periodicInspection = periodicInspectionRepo.get();
+					periodicInspection.setUpdatedDate(LocalDateTime.now());
+					periodicInspection.setUpdatedBy(userName);
+					List<PeriodicInspectionComment> periodicInspectorCommentRepo = periodicInspection
+							.getPeriodicInspectorComment();
 
-						for (PeriodicInspectionComment periodicInspectionCommentItr : periodicInspectorCommentRepo) {
-							if (periodicInspectionCommentItr.getCommentsId()
-									.equals(periodicInspectionComment.getCommentsId())) {
-								flagInspectionComment = false;
+					for (PeriodicInspectionComment periodicInspectionCommentItr : periodicInspectorCommentRepo) {
+						if (periodicInspectionCommentItr.getCommentsId()
+								.equals(periodicInspectionComment.getCommentsId())) {
+							flagInspectionComment = false;
 
-								periodicInspectionCommentItr.setPeriodicInspection(periodicInspection);
-
-								if (process.equalsIgnoreCase("SEND")) {
-									periodicInspectionCommentItr.setViewerDate(LocalDateTime.now());
-									periodicInspectionCommentItr
-											.setViewerComment(periodicInspectionComment.getViewerComment());
-									periodicInspectionCommentItr.setViewerFlag("1");
-									periodicInspectorCommentRepo.add(periodicInspectionCommentItr);
-									periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
-									return periodicInspection;
-								}
-								if (process.equalsIgnoreCase("REPLY")) {
-									periodicInspectionCommentItr.setInspectorDate(LocalDateTime.now());
-									periodicInspectionCommentItr
-											.setInspectorComment(periodicInspectionComment.getInspectorComment());
-									periodicInspectionCommentItr.setInspectorFlag("1");
-									periodicInspectorCommentRepo.add(periodicInspectionCommentItr);
-									periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
-									return periodicInspection;
-								}
-								if (process.equalsIgnoreCase("APPROVE")) {
-									periodicInspectionCommentItr.setViewerDate(LocalDateTime.now());
-									periodicInspectionCommentItr
-											.setApproveOrReject(periodicInspectionComment.getApproveOrReject());
-									periodicInspectorCommentRepo.add(periodicInspectionCommentItr);
-									periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
-									return periodicInspection;
-								}
-							}
-						}
-						if (flagInspectionComment) {
+							periodicInspectionCommentItr.setPeriodicInspection(periodicInspection);
 
 							if (process.equalsIgnoreCase("SEND")) {
-								periodicInspectionComment.setNoOfComment(
-										checkNoOfComments(periodicInspection.getPeriodicInspectorComment()));
-								periodicInspectionComment.setPeriodicInspection(periodicInspection);
-								periodicInspectionComment.setViewerDate(LocalDateTime.now());
-								periodicInspectionComment.setViewerFlag("1");
-								periodicInspectionComment.setInspectorFlag("0");
-								periodicInspectorCommentRepo.add(periodicInspectionComment);
+								periodicInspectionCommentItr.setViewerDate(LocalDateTime.now());
+								periodicInspectionCommentItr
+										.setViewerComment(periodicInspectionComment.getViewerComment());
+								periodicInspectionCommentItr.setViewerFlag("1");
+								periodicInspectorCommentRepo.add(periodicInspectionCommentItr);
 								periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
 								return periodicInspection;
-							} else {
-								throw new InspectionException("Sending viewer comments faild");
 							}
-
+							if (process.equalsIgnoreCase("REPLY")) {
+								periodicInspectionCommentItr.setInspectorDate(LocalDateTime.now());
+								periodicInspectionCommentItr
+										.setInspectorComment(periodicInspectionComment.getInspectorComment());
+								periodicInspectionCommentItr.setInspectorFlag("1");
+								periodicInspectorCommentRepo.add(periodicInspectionCommentItr);
+								periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
+								return periodicInspection;
+							}
+							if (process.equalsIgnoreCase("APPROVE")) {
+								periodicInspectionCommentItr.setViewerDate(LocalDateTime.now());
+								periodicInspectionCommentItr
+										.setApproveOrReject(periodicInspectionComment.getApproveOrReject());
+								periodicInspectorCommentRepo.add(periodicInspectionCommentItr);
+								periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
+								return periodicInspection;
+							}
 						}
 					}
-				}
-				if (flagSitePersons) {
-					throw new InspectionException("PersonIncharge mail-Id not matched Given UserName");
+					if (flagInspectionComment) {
+
+						if (process.equalsIgnoreCase("SEND")) {
+							periodicInspectionComment.setNoOfComment(
+									checkNoOfComments(periodicInspection.getPeriodicInspectorComment()));
+							periodicInspectionComment.setPeriodicInspection(periodicInspection);
+							periodicInspectionComment.setViewerDate(LocalDateTime.now());
+							periodicInspectionComment.setViewerFlag("1");
+							periodicInspectionComment.setInspectorFlag("0");
+							periodicInspectorCommentRepo.add(periodicInspectionComment);
+							periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
+							return periodicInspection;
+						} else {
+							throw new InspectionException("Sending viewer comments faild");
+						}
+					}
+				} else {
+					throw new InspectionException("Given username not have access for comments");
 				}
 
 			} else {
@@ -268,5 +264,38 @@ public class InspectionServiceImpl implements InspectionService {
 		} else {
 			return maxNum;
 		}
+	}
+	
+	private Boolean checkInspectorViewer(String userName, String process, Optional<Site> siteRepo,
+			Optional<PeriodicInspection> periodicInspectionRepo) throws InspectionException {
+		Boolean flag = false;
+		if (process.equalsIgnoreCase("REPLY")) {
+			if (siteRepo.get().getUserName().equalsIgnoreCase(userName)
+					&& periodicInspectionRepo.get().getUserName() != null
+					&& siteRepo.get().getUserName().equalsIgnoreCase(periodicInspectionRepo.get().getUserName())) {
+				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+				for (SitePersons sitePersonsItr : sitePersons) {
+					if (sitePersonsItr != null && sitePersonsItr.getPersonInchargeEmail() != null) {
+						viewerName = sitePersonsItr.getPersonInchargeEmail();
+						return flag = true;
+					}
+				}
+			} else {
+				throw new InspectionException("Given userName not allowing for " + process + " comment");
+			}
+
+		} else if (process.equalsIgnoreCase("SEND") || process.equalsIgnoreCase("APPROVE")) {
+
+			Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+			for (SitePersons sitePersonsItr : sitePersons) {
+				if (sitePersonsItr != null && sitePersonsItr.getPersonInchargeEmail() != null
+						&& sitePersonsItr.getPersonInchargeEmail().equalsIgnoreCase(userName)) {
+					return flag = true;
+				} else {
+					throw new InspectionException("Given userName not allowing for " + process + " comment");
+				}
+			}
+		}
+		return flag;
 	}
 }

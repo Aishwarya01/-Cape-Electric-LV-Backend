@@ -50,6 +50,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 
 	private List<SupplyCharacteristicComment> listOfComments = new ArrayList<SupplyCharacteristicComment>();
 	
+	private String viewerName;
+	
 	/**
 	 * @param SupplyCharacteristics
 	 * addCharacteristics method to first formating the main and alternative_supply (NominalFrequency,NominalVoltage,LoopImpedance and NominalCurrent)
@@ -204,7 +206,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				supplyCharacteristicComment, "APPROVE");
 		if (supplyCharacteristics != null) {
 			supplyCharacteristicsRepository.save(supplyCharacteristics);
-			return supplyCharacteristics.getUserName();
+			return viewerName;
 		} else {
 			throw new SupplyCharacteristicsException(
 					"SupplyCharacteristics-Information doesn't exist for given Site-Id");
@@ -230,80 +232,72 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			SupplyCharacteristicComment supplyCharacteristicComment, String process)
 			throws SupplyCharacteristicsException {
 
-		Boolean flagSitePersons = true;
 		Boolean flagInspectionComment = true;
 		if (userName != null && siteId != null && supplyCharacteristicComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
-				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
-				for (SitePersons sitePersons2 : sitePersons) {
-					Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
-							.findBySiteId(siteId);
-					if (supplyCharacteristicsRepo.isPresent() && supplyCharacteristicsRepo.get().getUserName()
-							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
-						flagSitePersons = false;
-						SupplyCharacteristics supplyCharacteristics = supplyCharacteristicsRepo.get();
-						supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
-						supplyCharacteristics.setUpdatedBy(userName);
-						List<SupplyCharacteristicComment> supplyCharacteristicCommentRepo = supplyCharacteristics
-								.getSupplyCharacteristicComment();
+				Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
+						.findBySiteId(siteId);
 
-						for (SupplyCharacteristicComment supplyCharacteristicCommentItr : supplyCharacteristicCommentRepo) {
-							if (supplyCharacteristicCommentItr.getCommentsId()
-									.equals(supplyCharacteristicComment.getCommentsId())) {
-								flagInspectionComment = false;
+				if (supplyCharacteristicsRepo.isPresent() && supplyCharacteristicsRepo.get() != null
+						&& checkInspectorViewer(userName, process, siteRepo, supplyCharacteristicsRepo)) {
+					SupplyCharacteristics supplyCharacteristics = supplyCharacteristicsRepo.get();
+					supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
+					supplyCharacteristics.setUpdatedBy(userName);
+					List<SupplyCharacteristicComment> supplyCharacteristicCommentRepo = supplyCharacteristics
+							.getSupplyCharacteristicComment();
 
-								supplyCharacteristicCommentItr.setSupplyCharacteristics(supplyCharacteristics);
+					for (SupplyCharacteristicComment supplyCharacteristicCommentItr : supplyCharacteristicCommentRepo) {
+						if (supplyCharacteristicCommentItr.getCommentsId()
+								.equals(supplyCharacteristicComment.getCommentsId())) {
+							flagInspectionComment = false;
 
-								if (process.equalsIgnoreCase("SEND")) {
-									supplyCharacteristicCommentItr.setViewerDate(LocalDateTime.now());
-									supplyCharacteristicCommentItr
-											.setViewerComment(supplyCharacteristicComment.getViewerComment());
-									supplyCharacteristicCommentItr.setViewerFlag("1");
-									supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
-									supplyCharacteristics
-											.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
-									return supplyCharacteristics;
-								}
-								if (process.equalsIgnoreCase("REPLY")) {
-									supplyCharacteristicCommentItr.setInspectorDate(LocalDateTime.now());
-									supplyCharacteristicCommentItr
-											.setInspectorComment(supplyCharacteristicComment.getInspectorComment());
-									supplyCharacteristicCommentItr.setInspectorFlag("1");
-									supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
-									supplyCharacteristics
-											.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
-									return supplyCharacteristics;
-								}
-								if (process.equalsIgnoreCase("APPROVE")) {
-									supplyCharacteristicCommentItr.setViewerDate(LocalDateTime.now());
-									supplyCharacteristicCommentItr
-											.setApproveOrReject(supplyCharacteristicComment.getApproveOrReject());
-									supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
-									supplyCharacteristics
-											.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
-									return supplyCharacteristics;
-								}
-							}
-						}
-						if (flagInspectionComment) {
+							supplyCharacteristicCommentItr.setSupplyCharacteristics(supplyCharacteristics);
 
 							if (process.equalsIgnoreCase("SEND")) {
-								supplyCharacteristicComment.setNoOfComment(
-										checkNoOfComments(supplyCharacteristics.getSupplyCharacteristicComment()));
-								supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
-								supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
-								supplyCharacteristicComment.setViewerFlag("1");
-								supplyCharacteristicComment.setInspectorFlag("0");
-								supplyCharacteristicCommentRepo.add(supplyCharacteristicComment);
+								supplyCharacteristicCommentItr.setViewerDate(LocalDateTime.now());
+								supplyCharacteristicCommentItr
+										.setViewerComment(supplyCharacteristicComment.getViewerComment());
+								supplyCharacteristicCommentItr.setViewerFlag("1");
+								supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
+								supplyCharacteristics.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
+								return supplyCharacteristics;
+							}
+							if (process.equalsIgnoreCase("REPLY")) {
+								supplyCharacteristicCommentItr.setInspectorDate(LocalDateTime.now());
+								supplyCharacteristicCommentItr
+										.setInspectorComment(supplyCharacteristicComment.getInspectorComment());
+								supplyCharacteristicCommentItr.setInspectorFlag("1");
+								supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
+								supplyCharacteristics.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
+								return supplyCharacteristics;
+							}
+							if (process.equalsIgnoreCase("APPROVE")) {
+								supplyCharacteristicCommentItr.setViewerDate(LocalDateTime.now());
+								supplyCharacteristicCommentItr
+										.setApproveOrReject(supplyCharacteristicComment.getApproveOrReject());
+								supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
 								supplyCharacteristics.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
 								return supplyCharacteristics;
 							}
 						}
 					}
-				}
-				if (flagSitePersons) {
-					throw new SupplyCharacteristicsException("PersonIncharge mail-Id not matched Given UserName");
+					if (flagInspectionComment) {
+
+						if (process.equalsIgnoreCase("SEND")) {
+							supplyCharacteristicComment.setNoOfComment(
+									checkNoOfComments(supplyCharacteristics.getSupplyCharacteristicComment()));
+							supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
+							supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
+							supplyCharacteristicComment.setViewerFlag("1");
+							supplyCharacteristicComment.setInspectorFlag("0");
+							supplyCharacteristicCommentRepo.add(supplyCharacteristicComment);
+							supplyCharacteristics.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
+							return supplyCharacteristics;
+						}
+					}
+				} else {
+					throw new SupplyCharacteristicsException("Given username not have access for comments");
 				}
 
 			} else {
@@ -334,5 +328,38 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		} else {
 			return maxNum + 1;
 		}
+	}
+
+	private Boolean checkInspectorViewer(String userName, String process, Optional<Site> siteRepo,
+			Optional<SupplyCharacteristics> supplyCharacteristicsRepo) throws SupplyCharacteristicsException {
+		Boolean flag = false;
+		if (process.equalsIgnoreCase("REPLY")) {
+			if (siteRepo.get().getUserName().equalsIgnoreCase(userName)
+					&& supplyCharacteristicsRepo.get().getUserName() != null
+					&& siteRepo.get().getUserName().equalsIgnoreCase(supplyCharacteristicsRepo.get().getUserName())) {
+				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+				for (SitePersons sitePersonsItr : sitePersons) {
+					if (sitePersonsItr != null && sitePersonsItr.getPersonInchargeEmail() != null) {
+						viewerName = sitePersonsItr.getPersonInchargeEmail();
+						return flag = true;
+					}
+				}
+			} else {
+				throw new SupplyCharacteristicsException("Given userName not allowing for " + process + " comment");
+			}
+
+		} else if (process.equalsIgnoreCase("SEND") || process.equalsIgnoreCase("APPROVE")) {
+
+			Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+			for (SitePersons sitePersonsItr : sitePersons) {
+				if (sitePersonsItr != null && sitePersonsItr.getPersonInchargeEmail() != null
+						&& sitePersonsItr.getPersonInchargeEmail().equalsIgnoreCase(userName)) {
+					return flag = true;
+				} else {
+					throw new SupplyCharacteristicsException("Given userName not allowing for " + process + " comment");
+				}
+			}
+		}
+		return flag;
 	}
 }

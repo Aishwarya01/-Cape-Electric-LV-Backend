@@ -43,6 +43,8 @@ public class InstalReportServiceImpl implements InstalReportService {
 	
 	private List<ReportDetailsComment> listOfComments = new ArrayList<ReportDetailsComment>();
 	
+	private String viewerName;
+	
 	/**
 	 * @param ReportDetails
 	 * addInstallationReport method to will be save ReportDetails object
@@ -144,9 +146,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 	public String replyComments(String inspectorUserName, Integer siteId, ReportDetailsComment reportDetailsComment)
 			throws InstalReportException {
 		ReportDetails reportDetails = verifyCommentsInfo(inspectorUserName, siteId, reportDetailsComment, "REPLY");
-		if (reportDetails != null) {
+		if (reportDetails != null && viewerName != null) {
 			installationReportRepository.save(reportDetails);
-			return reportDetails.getUserName();
+			return viewerName;
 		} else {
 			throw new InstalReportException("Basic-Information information doesn't exist for given Site-Id");
 		}
@@ -167,75 +169,69 @@ public class InstalReportServiceImpl implements InstalReportService {
 	private ReportDetails verifyCommentsInfo(String userName, Integer siteId,
 			ReportDetailsComment reportDetailsComment, String process) throws InstalReportException {
 
-		Boolean flagSitePersons = true;
 		Boolean flagInspectionComment = true;
 		if (userName != null && siteId != null && reportDetailsComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
-				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
-				for (SitePersons sitePersons2 : sitePersons) {
-					Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(siteId);
-					if (reportDetailsRepo.isPresent() && reportDetailsRepo.get().getUserName()
-							.equalsIgnoreCase(sitePersons2.getPersonInchargeEmail())) {
-						flagSitePersons = false;
-						ReportDetails reportDetails = reportDetailsRepo.get();
-						reportDetails.setUpdatedDate(LocalDateTime.now());
-						reportDetails.setUpdatedBy(userName);
-						List<ReportDetailsComment> reportDetailsCommentRepo = reportDetails.getReportDetailsComment();
+				Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(siteId);
+				if (reportDetailsRepo.isPresent() && reportDetailsRepo.get() != null
+						&& reportDetailsRepo.get().getUserName() != null
+						&& checkInspectorViewer(userName, process, siteRepo, reportDetailsRepo)) {
 
-						for (ReportDetailsComment reportDetailsCommentItr : reportDetailsCommentRepo) {
-							if (reportDetailsCommentItr.getCommentsId().equals(reportDetailsComment.getCommentsId())) {
-								flagInspectionComment = false;
+					ReportDetails reportDetails = reportDetailsRepo.get();
+					reportDetails.setUpdatedDate(LocalDateTime.now());
+					reportDetails.setUpdatedBy(userName);
+					List<ReportDetailsComment> reportDetailsCommentRepo = reportDetails.getReportDetailsComment();
 
-								reportDetailsCommentItr.setReportDetails(reportDetails);
+					for (ReportDetailsComment reportDetailsCommentItr : reportDetailsCommentRepo) {
+						if (reportDetailsCommentItr.getCommentsId().equals(reportDetailsComment.getCommentsId())) {
+							flagInspectionComment = false;
 
-								if (process.equalsIgnoreCase("SEND")) {
-									reportDetailsCommentItr.setViewerDate(LocalDateTime.now());
-									reportDetailsCommentItr.setViewerComment(reportDetailsComment.getViewerComment());
-									reportDetailsCommentItr.setViewerFlag("1");
-									reportDetailsCommentRepo.add(reportDetailsCommentItr);
-									reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
-									return reportDetails;
-								}
-								if (process.equalsIgnoreCase("REPLY")) {
-									reportDetailsCommentItr.setInspectorDate(LocalDateTime.now());
-									reportDetailsCommentItr
-											.setInspectorComment(reportDetailsComment.getInspectorComment());
-									reportDetailsCommentItr.setInspectorFlag("1");
-									reportDetailsCommentRepo.add(reportDetailsCommentItr);
-									reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
-									return reportDetails;
-								}
-								if (process.equalsIgnoreCase("APPROVE")) {
-									reportDetailsCommentItr.setViewerDate(LocalDateTime.now());
-									reportDetailsCommentItr
-											.setApproveOrReject(reportDetailsComment.getApproveOrReject());
-									reportDetailsCommentRepo.add(reportDetailsCommentItr);
-									reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
-									return reportDetails;
-								}
-							}
-						}
-						if (flagInspectionComment) {
+							reportDetailsCommentItr.setReportDetails(reportDetails);
+
 							if (process.equalsIgnoreCase("SEND")) {
-								reportDetailsComment
-										.setNoOfComment(checkNoOfComments(reportDetails.getReportDetailsComment()));
-								reportDetailsComment.setReportDetails(reportDetails);
-								reportDetailsComment.setViewerDate(LocalDateTime.now());
-								reportDetailsComment.setViewerFlag("1");
-								reportDetailsComment.setInspectorFlag("0");
-								reportDetailsCommentRepo.add(reportDetailsComment);
+								reportDetailsCommentItr.setViewerDate(LocalDateTime.now());
+								reportDetailsCommentItr.setViewerComment(reportDetailsComment.getViewerComment());
+								reportDetailsCommentItr.setViewerFlag("1");
+								reportDetailsCommentRepo.add(reportDetailsCommentItr);
 								reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
 								return reportDetails;
-							} else {
-								throw new InstalReportException("Sending viewer comments faild");
 							}
-
+							if (process.equalsIgnoreCase("REPLY")) {
+								reportDetailsCommentItr.setInspectorDate(LocalDateTime.now());
+								reportDetailsCommentItr.setInspectorComment(reportDetailsComment.getInspectorComment());
+								reportDetailsCommentItr.setInspectorFlag("1");
+								reportDetailsCommentRepo.add(reportDetailsCommentItr);
+								reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
+								return reportDetails;
+							}
+							if (process.equalsIgnoreCase("APPROVE")) {
+								reportDetailsCommentItr.setViewerDate(LocalDateTime.now());
+								reportDetailsCommentItr.setApproveOrReject(reportDetailsComment.getApproveOrReject());
+								reportDetailsCommentRepo.add(reportDetailsCommentItr);
+								reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
+								return reportDetails;
+							}
+						}
+					}
+					if (flagInspectionComment) {
+						if (process.equalsIgnoreCase("SEND")) {
+							reportDetailsComment
+									.setNoOfComment(checkNoOfComments(reportDetails.getReportDetailsComment()));
+							reportDetailsComment.setReportDetails(reportDetails);
+							reportDetailsComment.setViewerDate(LocalDateTime.now());
+							reportDetailsComment.setViewerFlag("1");
+							reportDetailsComment.setInspectorFlag("0");
+							reportDetailsCommentRepo.add(reportDetailsComment);
+							reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
+							return reportDetails;
+						} else {
+							throw new InstalReportException("Sending viewer comments faild");
 						}
 					}
 				}
-				if (flagSitePersons) {
-					throw new InstalReportException("PersonIncharge mail-Id not matched Given UserName");
+				else {
+					throw new InstalReportException("Given username not have access for comments");
 				}
 
 			} else {
@@ -266,5 +262,38 @@ public class InstalReportServiceImpl implements InstalReportService {
 		} else {
 			return maxNum;
 		}
+	}
+	
+	private Boolean checkInspectorViewer(String userName, String process, Optional<Site> siteRepo,
+			Optional<ReportDetails> reportDetailsRepo) throws InstalReportException {
+		Boolean flag = false;
+		if (process.equalsIgnoreCase("REPLY")) {
+			if (siteRepo.get().getUserName().equalsIgnoreCase(userName)
+					&& reportDetailsRepo.get().getUserName() != null
+					&& siteRepo.get().getUserName().equalsIgnoreCase(reportDetailsRepo.get().getUserName())) {
+				Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+				for (SitePersons sitePersonsItr : sitePersons) {
+					if (sitePersonsItr != null && sitePersonsItr.getPersonInchargeEmail() != null) {
+						viewerName = sitePersonsItr.getPersonInchargeEmail();
+						return flag = true;
+					}
+				}
+			} else {
+				throw new InstalReportException("Given userName not allowing for " + process + " comment");
+			}
+
+		} else if (process.equalsIgnoreCase("SEND") || process.equalsIgnoreCase("APPROVE")) {
+
+			Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
+			for (SitePersons sitePersonsItr : sitePersons) {
+				if (sitePersonsItr != null && sitePersonsItr.getPersonInchargeEmail() != null
+						&& sitePersonsItr.getPersonInchargeEmail().equalsIgnoreCase(userName)) {
+					return flag = true;
+				} else {
+					throw new InstalReportException("Given userName not allowing for " + process + " comment");
+				}
+			}
+		}
+		return flag;
 	}
 }
