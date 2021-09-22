@@ -1,6 +1,5 @@
 package com.capeelectric.service.impl;
 
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,13 +73,13 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 						&& supplyCharacteristics.getMainLoopImpedance() != null) {
 					logger.info("decimal formating corrections started for Main supply");
 					supplyCharacteristics.setMainNominalCurrent(DecimalConversion.convertToDecimal(
-							supplyCharacteristics.getMainNominalCurrent(), new DecimalFormat("0.00")));
+							supplyCharacteristics.getMainNominalCurrent(), "Supply_MainNominalCurrent"));
 					supplyCharacteristics.setMainNominalFrequency(DecimalConversion.convertToDecimal(
-							supplyCharacteristics.getMainNominalFrequency(), new DecimalFormat("0.00")));
+							supplyCharacteristics.getMainNominalFrequency(), "Supply_MainNominalFrequency"));
 					supplyCharacteristics.setMainNominalVoltage(DecimalConversion.convertToDecimal(
-							supplyCharacteristics.getMainNominalVoltage(), new DecimalFormat("0.00")));
+							supplyCharacteristics.getMainNominalVoltage(), "Supply_MainNominalVoltage"));
 					supplyCharacteristics.setMainLoopImpedance(DecimalConversion.convertToDecimal(
-							supplyCharacteristics.getMainLoopImpedance(), new DecimalFormat("0.000")));
+							supplyCharacteristics.getMainLoopImpedance(), "Supply_MainLoopImpedance"));
 					logger.info("decimal formating corrections ended for Main supply");
 				}
 				if (supplyCharacteristics.getSupplyParameters() != null) {
@@ -94,13 +93,13 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 								&& supplyParametersItr.getLoopImpedance() != null) {
 							logger.info("decimal formating corrections started for alternative supply");
 							supplyParametersItr.setNominalFrequency(DecimalConversion.convertToDecimal(
-									supplyParametersItr.getNominalFrequency(), new DecimalFormat("0.00")));
+									supplyParametersItr.getNominalFrequency(), "Supply_NominalFrequency"));
 							supplyParametersItr.setNominalVoltage(DecimalConversion.convertToDecimal(
-									supplyParametersItr.getNominalVoltage(), new DecimalFormat("0.00")));
-							supplyParametersItr.setFaultCurrent(DecimalConversion.convertToDecimal(
-									supplyParametersItr.getFaultCurrent(), new DecimalFormat("0.00")));
-							supplyParametersItr.setLoopImpedance(DecimalConversion.convertToDecimal(
-									supplyParametersItr.getLoopImpedance(), new DecimalFormat("0.000")));
+									supplyParametersItr.getNominalVoltage(), "Supply_NominalVoltage"));
+							supplyParametersItr.setFaultCurrent(DecimalConversion
+									.convertToDecimal(supplyParametersItr.getFaultCurrent(), "Supply_FaultCurrent"));
+							supplyParametersItr.setLoopImpedance(DecimalConversion
+									.convertToDecimal(supplyParametersItr.getLoopImpedance(), "Supply_LoopImpedance"));
 							logger.info("decimal formating corrections ended for alternative supply");
 						}
 					}

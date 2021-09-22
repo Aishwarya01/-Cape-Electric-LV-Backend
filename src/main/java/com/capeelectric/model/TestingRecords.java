@@ -1,7 +1,6 @@
 package com.capeelectric.model;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,12 +48,21 @@ public class TestingRecords implements Serializable {
 
 	@Column(name = "CIRCUIT_BREAKING_CAPACITY")
 	private String circuitBreakingCapacity;
+	
+	@Column(name = "SHORT_CIRCUIT_SETTING")
+	private String shortCircuitSetting;
+	
+	@Column(name = "E_F_SETTING")
+	private String eFSetting;
 
 	@Column(name = "CONDUCTOR_INSTALLATION")
 	private String conductorInstallation;
 
-	@Column(name = "CONDUCTOR_LIVE")
-	private String conductorLive;
+	@Column(name = "CONDUCTOR_PHASE")
+	private String conductorPhase;
+	
+	@Column(name = "CONDUCTOR_NEUTRAL")
+	private String conductorNeutral;
 
 	@Column(name = "CONDUCTOR_PECPC")
 	private String conductorPecpc;
@@ -65,18 +73,15 @@ public class TestingRecords implements Serializable {
 	@Column(name = "CONTINUTIY_R1_R2")
 	private String continutiyRR;
 
-	@Column(name = "CONTINUTIY_R2")
-	private String continutiyR;
-
-	@Column(name = "CONTINUTIY_LL")
-	private String continutiyLL;
-
 	@Column(name = "CONTINUTIY_LE")
 	private String continutiyLE;
 
 	@Column(name = "CONTINUTIY_POLARITY")
 	private String continutiyPolarity;
 
+	@Column(name = "INSULATION_RESISTANCE")
+	private String insulationResistance;
+	
 	@Column(name = "TEST_VOLTAGE")
 	private String testVoltage;
 
@@ -165,6 +170,28 @@ public class TestingRecords implements Serializable {
 		this.circuitBreakingCapacity = circuitBreakingCapacity;
 	}
 
+	public String getShortCircuitSetting() {
+		return shortCircuitSetting;
+	}
+
+	public void setShortCircuitSetting(String shortCircuitSetting) throws DecimalConversionException {
+		if (shortCircuitSetting != null) {
+			this.shortCircuitSetting = DecimalConversion.convertToDecimal(shortCircuitSetting, "ShortCircuitSetting");
+		}
+		this.shortCircuitSetting = shortCircuitSetting;
+	}
+
+	public String geteFSetting() {
+		return eFSetting;
+	}
+
+	public void seteFSetting(String eFSetting) throws DecimalConversionException {
+		if (eFSetting != null) {
+			this.eFSetting = DecimalConversion.convertToDecimal(eFSetting, "EFSetting");
+		}
+		this.eFSetting = eFSetting;
+	}
+
 	public String getConductorInstallation() {
 		return conductorInstallation;
 	}
@@ -173,12 +200,20 @@ public class TestingRecords implements Serializable {
 		this.conductorInstallation = conductorInstallation;
 	}
 
-	public String getConductorLive() {
-		return conductorLive;
+	public String getConductorPhase() {
+		return conductorPhase;
 	}
 
-	public void setConductorLive(String conductorLive) {
-		this.conductorLive = conductorLive;
+	public void setConductorPhase(String conductorPhase) {
+		this.conductorPhase = conductorPhase;
+	}
+
+	public String getConductorNeutral() {
+		return conductorNeutral;
+	}
+
+	public void setConductorNeutral(String conductorNeutral) {
+		this.conductorNeutral = conductorNeutral;
 	}
 
 	public String getConductorPecpc() {
@@ -205,22 +240,6 @@ public class TestingRecords implements Serializable {
 		this.continutiyRR = continutiyRR;
 	}
 
-	public String getContinutiyR() {
-		return continutiyR;
-	}
-
-	public void setContinutiyR(String continutiyR) {
-		this.continutiyR = continutiyR;
-	}
-
-	public String getContinutiyLL() {
-		return continutiyLL;
-	}
-
-	public void setContinutiyLL(String continutiyLL) {
-		this.continutiyLL = continutiyLL;
-	}
-
 	public String getContinutiyLE() {
 		return continutiyLE;
 	}
@@ -237,12 +256,20 @@ public class TestingRecords implements Serializable {
 		this.continutiyPolarity = continutiyPolarity;
 	}
 
+	public String getInsulationResistance() {
+		return insulationResistance;
+	}
+
+	public void setInsulationResistance(String insulationResistance) throws DecimalConversionException {
+		this.insulationResistance = DecimalConversion.convertToDecimal(insulationResistance, "InsulationResistance");
+	}
+
 	public String getTestVoltage() {
 		return testVoltage;
 	}
 
 	public void setTestVoltage(String testVoltage) throws DecimalConversionException {
-		this.testVoltage = DecimalConversion.convertToDecimal(testVoltage, new DecimalFormat("0.00"));
+		this.testVoltage = DecimalConversion.convertToDecimal(testVoltage,"Voltage");
 	}
 
 	public String getTestLoopImpedance() {
@@ -250,7 +277,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setTestLoopImpedance(String testLoopImpedance) throws DecimalConversionException {
-		this.testLoopImpedance = DecimalConversion.convertToDecimal(testLoopImpedance, new DecimalFormat("0.000"));
+		this.testLoopImpedance = DecimalConversion.convertToDecimal(testLoopImpedance, "Loopimpedance");
 	}
 
 	public String getTestFaultCurrent() {
@@ -258,7 +285,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setTestFaultCurrent(String testFaultCurrent) throws DecimalConversionException {
-		this.testFaultCurrent = DecimalConversion.convertToDecimal(testFaultCurrent, new DecimalFormat("0.00"));
+		this.testFaultCurrent = DecimalConversion.convertToDecimal(testFaultCurrent, "Faultcurrent");
 	}
 
 	public String getDisconnectionTime() {

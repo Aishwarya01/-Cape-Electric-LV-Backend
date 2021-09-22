@@ -41,8 +41,6 @@ public class InstalReportServiceImpl implements InstalReportService {
 	
 	private ReportDetailsComment reportDetailsComment;
 	
-	private List<ReportDetailsComment> listOfComments = new ArrayList<ReportDetailsComment>();
-	
 	private String viewerName;
 	
 	/**
@@ -52,6 +50,8 @@ public class InstalReportServiceImpl implements InstalReportService {
 	*/
 	@Override
 	public void addInstallationReport(ReportDetails reportDetails) throws InstalReportException {
+		List<ReportDetailsComment> listOfComments = new ArrayList<ReportDetailsComment>();
+		
 		if (reportDetails != null && reportDetails.getUserName() != null && reportDetails.getSiteId() != null) {
 			Optional<ReportDetails> reportDetailsRepo = installationReportRepository
 					.findBySiteId(reportDetails.getSiteId());

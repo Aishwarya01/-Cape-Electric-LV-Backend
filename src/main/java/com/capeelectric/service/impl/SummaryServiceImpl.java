@@ -39,7 +39,7 @@ public class SummaryServiceImpl implements SummaryService {
 	
 	private SummaryComment summaryComment;
 	
-	private List<SummaryComment> listOfComments = new ArrayList<SummaryComment>();
+	private List<SummaryComment> listOfComments;
 	
 	private Site site;
 	
@@ -56,6 +56,7 @@ public class SummaryServiceImpl implements SummaryService {
 	*/
 	@Override
 	public void addSummary(Summary summary) throws SummaryException {
+		listOfComments = new ArrayList<SummaryComment>();
 		if (summary.getUserName() != null && !summary.getUserName().isEmpty() && summary.getSiteId() != null
 				&& summary.getSiteId() != 0) {
 			Optional<Summary> summaryRepo = summaryRepository.findBySiteId(summary.getSiteId());

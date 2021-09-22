@@ -39,8 +39,6 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	
 	private TestingReportComment testingComment;
 	
-	private List<TestingReportComment> listOfComments = new ArrayList<TestingReportComment>();
-	
 	private String viewerName;
 	
 	/**
@@ -49,6 +47,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	*/
 	@Override
 	public void addTestingReport(TestingReport testingReport) throws PeriodicTestingException {
+		List<TestingReportComment> listOfComments = new ArrayList<TestingReportComment>();
 		if (testingReport.getUserName() != null && testingReport.getSiteId() != null) {
 
 			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(testingReport.getSiteId());
