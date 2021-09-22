@@ -16,7 +16,7 @@ import com.capeelectric.model.IsolationCurrent;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.service.InspectionServicePDF;
-import com.capeelectric.util.AddPageNumbers;
+import com.capeelectric.util.HeaderFooterPageEvent;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -29,6 +29,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.GrayColor;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfPageEvent;
 import com.itextpdf.text.pdf.PdfWriter;
 
 @Service
@@ -50,8 +51,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				PdfWriter writer = PdfWriter.getInstance(document,
 						new FileOutputStream("PrintInspectionDetailsData.pdf"));
 
-				writer.setPageEvent(new AddPageNumbers());	
-			
+				
 				Optional<PeriodicInspection> inspectionDetails = inspectionRepository.findBySiteId(siteId);
 				PeriodicInspection inspection = inspectionDetails.get();
 
@@ -67,6 +67,8 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				List<IsolationCurrent> isolationCurrentDetails = ipoInspection.getIsolationCurrent();
 				IsolationCurrent isolationCurrent = isolationCurrentDetails.get(0);
 				
+				HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+                writer.setPageEvent((PdfPageEvent) event);
 				
 				document.open();
 				
@@ -476,7 +478,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		
 		Paragraph gap2 = new Paragraph(6, " ", font10B);
 		document.add(gap2);
-		
+
 		PdfPTable Basic = new PdfPTable(pointColumnWidths5);
 		Basic.setWidthPercentage(100); // Width 100%
 		Basic.setSpacingBefore(5f); // Space before table
@@ -551,6 +553,20 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		cell26.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell26.setBorder(PdfPCell.NO_BORDER);
 		table4.addCell(cell26);
+
+		PdfPCell isolatorCellLabel = new PdfPCell(new Paragraph("Isolator (Means to isolate the public supply system):",
+				new Font(BaseFont.createFont( ), 10, Font.NORMAL)));
+		isolatorCellLabel.setBackgroundColor(new GrayColor(0.93f));
+		isolatorCellLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
+		isolatorCellLabel.setBorder(PdfPCell.NO_BORDER);
+		table4.addCell(isolatorCellLabel);
+		PdfPCell isolatorCell = new PdfPCell(
+				new Paragraph(ipoInspection.getBasicElectricalSepartion(), new Font(BaseFont.createFont( ), 10, Font.NORMAL)));
+		isolatorCell.setFixedHeight(10f);
+		isolatorCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		isolatorCell.setBackgroundColor(new GrayColor(0.93f));
+		isolatorCell.setBorder(PdfPCell.NO_BORDER);
+		table4.addCell(isolatorCell);
 		document.add(table4);
 		
 		PdfPTable BasicPro = new PdfPTable(pointColumnWidths5);
