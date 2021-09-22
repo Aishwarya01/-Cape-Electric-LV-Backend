@@ -47,7 +47,6 @@ import com.itextpdf.text.pdf.PdfPageEvent;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.capeelectric.util.AddPageNumbers;
 import com.capeelectric.util.HeaderFooterPageEvent;
 
 @Service
@@ -72,7 +71,7 @@ public class PrintServiceImpl implements PrintService {
 				SummaryDeclaration declaration = declaration1.get(0);
 				SummaryDeclaration declaration11 = declaration1.get(1);
 
-				writer.setPageEvent(new AddPageNumbers());
+		
 				HeaderFooterPageEvent event = new HeaderFooterPageEvent();
 				writer.setPageEvent((PdfPageEvent) event);
 

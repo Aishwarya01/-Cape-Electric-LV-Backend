@@ -28,7 +28,6 @@ import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.service.PrintSupplyService;
 import com.capeelectric.service.SupplyCharacteristicsService;
-import com.capeelectric.util.AddPageNumbers;
 import com.capeelectric.util.HeaderFooterPageEvent;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -120,7 +119,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				List<BoundingLocationReport> boundingLocationReport = supply.getBoundingLocationReport();
 				List<EarthingLocationReport> earthingLocationReport = supply.getEarthingLocationReport();
 
-				writer.setPageEvent(new AddPageNumbers());
+			
 				HeaderFooterPageEvent event = new HeaderFooterPageEvent();
 				writer.setPageEvent((PdfPageEvent) event);
 
@@ -1022,6 +1021,12 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell5.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell6.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell7.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell8.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell9.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table1.addCell(nameCell);
 		table1.addCell(valueCell1);
 		table1.addCell(valueCell2);

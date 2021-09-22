@@ -1,8 +1,6 @@
 package com.capeelectric.util;
 
-import java.net.MalformedURLException;
-
-import javax.swing.border.Border;
+import java.io.IOException;
 
 import com.itextpdf.awt.geom.Rectangle;
 import com.itextpdf.text.BaseColor;
@@ -13,7 +11,9 @@ import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.GrayColor;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -21,8 +21,6 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
-
-import io.jsonwebtoken.io.IOException;
 
 public class HeaderFooterPageEvent extends PdfPageEventHelper {
 
@@ -41,13 +39,32 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 
 	@Override
 	public void onEndPage(PdfWriter writer, Document document) {
-		addFooter(writer);
+		addFooter(writer, document );
 	}
 
-	private void addFooter(PdfWriter writer) {
+	private void addFooter(PdfWriter writer , Document document) {
 		PdfPTable footer = new PdfPTable(2);
 		footer.getDefaultCell().setBorder(0);
 		try {
+			final com.itextpdf.text.Rectangle pageSize = document.getPageSize();
+			final PdfContentByte directContent = writer.getDirectContent();
+
+			directContent.setColorFill(new GrayColor(0.50f));
+			directContent.setFontAndSize(BaseFont.createFont(), 8);
+			directContent.setTextMatrix(pageSize.getRight(520), pageSize.getBottom(30));
+			String file = "file:///D:/project%20cape/siva/Cape-Back-end/src/main/resources/image/rush-logo.png";
+			Image image = Image.getInstance(file);
+			image.scaleToFit(185, 185);
+			image.setAbsolutePosition(30, -9);
+			document.add(image);
+
+			directContent.setTextMatrix(pageSize.getRight(400), pageSize.getBottom(45));
+			directContent.showText(
+					String.valueOf("Testing Inspection and Verification (TIC) of LV electrical installation"));
+			directContent.setTextMatrix(pageSize.getRight(380), pageSize.getBottom(36));
+			directContent.showText(String.valueOf("Electrical safety in Industrial and Commercial premises"));
+			directContent.setTextMatrix(pageSize.getRight(330), pageSize.getBottom(26));
+			directContent.showText(String.valueOf("as per IEC 60364 – 6 (IS 732)"));
 			footer.setWidths(new int[] { 2, 1 });
 			footer.setTotalWidth(70);
 			footer.setLockedWidth(true);
@@ -65,7 +82,7 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 			footer.writeSelectedRows(0, -1, 465, 50, canvas);
 			footer.getDefaultCell().setBorder(0);
 			canvas.endMarkedContentSequence();
-		} catch (DocumentException de) {
+		} catch (DocumentException | IOException de) {
 			throw new ExceptionConverter(de);
 		}
 	}
