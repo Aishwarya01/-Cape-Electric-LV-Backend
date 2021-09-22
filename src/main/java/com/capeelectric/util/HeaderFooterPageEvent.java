@@ -2,7 +2,6 @@ package com.capeelectric.util;
 
 import java.io.IOException;
 
-import com.itextpdf.awt.geom.Rectangle;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -52,19 +51,21 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 			directContent.setColorFill(new GrayColor(0.50f));
 			directContent.setFontAndSize(BaseFont.createFont(), 8);
 			directContent.setTextMatrix(pageSize.getRight(520), pageSize.getBottom(30));
-			String file = "file:///D:/project%20cape/siva/Cape-Back-end/src/main/resources/image/rush-logo.png";
+			
+			String file = "file:///C:/Users/capeelectricsoftware/Documents/GitHub/Cape-Electric-Software-BackEnd/src/main/resources/image/rush-logo.png";
 			Image image = Image.getInstance(file);
 			image.scaleToFit(185, 185);
-			image.setAbsolutePosition(30, -9);
+			image.setAbsolutePosition(-3, -9);
 			document.add(image);
 
-			directContent.setTextMatrix(pageSize.getRight(400), pageSize.getBottom(45));
+			directContent.setTextMatrix(pageSize.getRight(425), pageSize.getBottom(45));
 			directContent.showText(
 					String.valueOf("Testing Inspection and Verification (TIC) of LV electrical installation"));
-			directContent.setTextMatrix(pageSize.getRight(380), pageSize.getBottom(36));
+			directContent.setTextMatrix(pageSize.getRight(405), pageSize.getBottom(36));
 			directContent.showText(String.valueOf("Electrical safety in Industrial and Commercial premises"));
-			directContent.setTextMatrix(pageSize.getRight(330), pageSize.getBottom(26));
+			directContent.setTextMatrix(pageSize.getRight(360), pageSize.getBottom(26));
 			directContent.showText(String.valueOf("as per IEC 60364 – 6 (IS 732)"));
+			
 			footer.setWidths(new int[] { 2, 1 });
 			footer.setTotalWidth(70);
 			footer.setLockedWidth(true);
@@ -73,13 +74,15 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 			footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
 			footer.addCell(new Phrase(String.format("Page %d of", writer.getPageNumber()),
 					new Font(Font.FontFamily.HELVETICA, 8)));
+		
 			// add placeholder for total page count
 			PdfPCell totalPageCount = new PdfPCell(total);
 			totalPageCount.setBorder(0);
 			footer.addCell(totalPageCount);
+			
 			PdfContentByte canvas = writer.getDirectContent();
 			canvas.beginMarkedContentSequence(PdfName.ARTIFACT);
-			footer.writeSelectedRows(0, -1, 465, 50, canvas);
+			footer.writeSelectedRows(0, -1, 470, 50, canvas);
 			footer.getDefaultCell().setBorder(0);
 			canvas.endMarkedContentSequence();
 		} catch (DocumentException | IOException de) {
