@@ -130,7 +130,7 @@ public class LoginController {
 	@GetMapping("/retrieveUserInformation/{email}")
 	public ResponseEntity<Register> retrieveInformation(@PathVariable String email)
 			throws RegistrationException, IOException, MessagingException, ForgotPasswordException {
-		logger.debug("forgotPassword started");
+		logger.debug("retrieveInformation_function started");
 		Register registerUser = registrationDetailsServiceImpl.loadUserByUsername(email);
 		return new ResponseEntity<Register>(registerUser, HttpStatus.OK);
 		
