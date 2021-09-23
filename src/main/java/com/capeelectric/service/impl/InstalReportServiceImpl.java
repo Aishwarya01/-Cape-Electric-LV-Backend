@@ -193,6 +193,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 								reportDetailsCommentItr.setViewerDate(LocalDateTime.now());
 								reportDetailsCommentItr.setViewerComment(reportDetailsComment.getViewerComment());
 								reportDetailsCommentItr.setViewerFlag("1");
+								reportDetailsCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								reportDetailsCommentRepo.add(reportDetailsCommentItr);
 								reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
 								return reportDetails;
@@ -201,11 +202,13 @@ public class InstalReportServiceImpl implements InstalReportService {
 								reportDetailsCommentItr.setInspectorDate(LocalDateTime.now());
 								reportDetailsCommentItr.setInspectorComment(reportDetailsComment.getInspectorComment());
 								reportDetailsCommentItr.setInspectorFlag("1");
+								reportDetailsCommentItr.setInspectorUserName(userFullName.findByUserName(userName));
 								reportDetailsCommentRepo.add(reportDetailsCommentItr);
 								reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
 								return reportDetails;
 							}
 							if (process.equalsIgnoreCase("APPROVE")) {
+								reportDetailsCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								reportDetailsCommentItr.setViewerDate(LocalDateTime.now());
 								reportDetailsCommentItr.setApproveOrReject(reportDetailsComment.getApproveOrReject());
 								reportDetailsCommentRepo.add(reportDetailsCommentItr);
@@ -216,12 +219,14 @@ public class InstalReportServiceImpl implements InstalReportService {
 					}
 					if (flagInspectionComment) {
 						if (process.equalsIgnoreCase("SEND")) {
+							
 							reportDetailsComment
 									.setNoOfComment(checkNoOfComments(reportDetails.getReportDetailsComment()));
 							reportDetailsComment.setReportDetails(reportDetails);
 							reportDetailsComment.setViewerDate(LocalDateTime.now());
 							reportDetailsComment.setViewerFlag("1");
 							reportDetailsComment.setInspectorFlag("0");
+							reportDetailsComment.setViewerUserName(userFullName.findByUserName(userName));
 							reportDetailsCommentRepo.add(reportDetailsComment);
 							reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
 							return reportDetails;

@@ -32,6 +32,12 @@ public class TestingReportComment implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "COMMENTS_ID")
 	private Integer commentsId;
+	
+	@Column(name = "VIEWER_USERNAME")
+	private String viewerUserName;
+	
+	@Column(name = "INSPECTOR_USERNAME")
+	private String inspectorUserName;
 
 	@Column(name = "VIEWER_COMMENT")
 	private String viewerComment;
@@ -68,6 +74,22 @@ public class TestingReportComment implements Serializable {
 
 	public void setCommentsId(Integer commentsId) {
 		this.commentsId = commentsId;
+	}
+
+	public String getViewerUserName() {
+		return viewerUserName;
+	}
+
+	public void setViewerUserName(String viewerUserName) {
+		this.viewerUserName = viewerUserName;
+	}
+
+	public String getInspectorUserName() {
+		return inspectorUserName;
+	}
+
+	public void setInspectorUserName(String inspectorUserName) {
+		this.inspectorUserName = inspectorUserName;
 	}
 
 	public String getViewerComment() {

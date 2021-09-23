@@ -255,6 +255,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 
 							if (process.equalsIgnoreCase("SEND")) {
 								supplyCharacteristicCommentItr.setViewerDate(LocalDateTime.now());
+								supplyCharacteristicCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								supplyCharacteristicCommentItr
 										.setViewerComment(supplyCharacteristicComment.getViewerComment());
 								supplyCharacteristicCommentItr.setViewerFlag("1");
@@ -264,6 +265,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 							}
 							if (process.equalsIgnoreCase("REPLY")) {
 								supplyCharacteristicCommentItr.setInspectorDate(LocalDateTime.now());
+								supplyCharacteristicCommentItr.setInspectorUserName(userFullName.findByUserName(userName));
 								supplyCharacteristicCommentItr
 										.setInspectorComment(supplyCharacteristicComment.getInspectorComment());
 								supplyCharacteristicCommentItr.setInspectorFlag("1");
@@ -273,6 +275,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 							}
 							if (process.equalsIgnoreCase("APPROVE")) {
 								supplyCharacteristicCommentItr.setViewerDate(LocalDateTime.now());
+								supplyCharacteristicCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								supplyCharacteristicCommentItr
 										.setApproveOrReject(supplyCharacteristicComment.getApproveOrReject());
 								supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
@@ -288,6 +291,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 									checkNoOfComments(supplyCharacteristics.getSupplyCharacteristicComment()));
 							supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
 							supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
+							supplyCharacteristicComment.setViewerUserName(userFullName.findByUserName(userName));
 							supplyCharacteristicComment.setViewerFlag("1");
 							supplyCharacteristicComment.setInspectorFlag("0");
 							supplyCharacteristicCommentRepo.add(supplyCharacteristicComment);

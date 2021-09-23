@@ -182,12 +182,14 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 								testingReportCommentItr.setViewerDate(LocalDateTime.now());
 								testingReportCommentItr.setViewerComment(testingReportComment.getViewerComment());
 								testingReportCommentItr.setViewerFlag("1");
+								testingReportCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								testingReportCommentRepo.add(testingReportCommentItr);
 								testingReport.setTestingComment(testingReportCommentRepo);
 								return testingReport;
 							}
 							if (process.equalsIgnoreCase("REPLY")) {
 								testingReportCommentItr.setInspectorDate(LocalDateTime.now());
+								testingReportCommentItr.setInspectorUserName(userFullName.findByUserName(userName));
 								testingReportCommentItr.setInspectorComment(testingReportComment.getInspectorComment());
 								testingReportCommentItr.setInspectorFlag("1");
 								testingReportCommentRepo.add(testingReportCommentItr);
@@ -196,6 +198,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 							}
 							if (process.equalsIgnoreCase("APPROVE")) {
 								testingReportCommentItr.setViewerDate(LocalDateTime.now());
+								testingReportCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								testingReportCommentItr.setApproveOrReject(testingReportComment.getApproveOrReject());
 								testingReportCommentRepo.add(testingReportCommentItr);
 								testingReport.setTestingComment(testingReportCommentRepo);
@@ -209,6 +212,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 							testingReportComment.setNoOfComment(checkNoOfComments(testingReport.getTestingComment()));
 							testingReportComment.setTestingReport(testingReport);
 							testingReportComment.setViewerDate(LocalDateTime.now());
+							testingReportComment.setViewerUserName(userFullName.findByUserName(userName));
 							testingReportComment.setViewerFlag("1");
 							testingReportComment.setInspectorFlag("0");
 							testingReportCommentRepo.add(testingReportComment);

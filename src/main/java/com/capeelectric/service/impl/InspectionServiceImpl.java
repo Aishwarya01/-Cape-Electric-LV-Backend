@@ -193,12 +193,14 @@ public class InspectionServiceImpl implements InspectionService {
 								periodicInspectionCommentItr
 										.setViewerComment(periodicInspectionComment.getViewerComment());
 								periodicInspectionCommentItr.setViewerFlag("1");
+								periodicInspectionCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								periodicInspectorCommentRepo.add(periodicInspectionCommentItr);
 								periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
 								return periodicInspection;
 							}
 							if (process.equalsIgnoreCase("REPLY")) {
 								periodicInspectionCommentItr.setInspectorDate(LocalDateTime.now());
+								periodicInspectionCommentItr.setInspectorUserName(userFullName.findByUserName(userName));
 								periodicInspectionCommentItr
 										.setInspectorComment(periodicInspectionComment.getInspectorComment());
 								periodicInspectionCommentItr.setInspectorFlag("1");
@@ -207,6 +209,7 @@ public class InspectionServiceImpl implements InspectionService {
 								return periodicInspection;
 							}
 							if (process.equalsIgnoreCase("APPROVE")) {
+								periodicInspectionCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								periodicInspectionCommentItr.setViewerDate(LocalDateTime.now());
 								periodicInspectionCommentItr
 										.setApproveOrReject(periodicInspectionComment.getApproveOrReject());
@@ -225,6 +228,7 @@ public class InspectionServiceImpl implements InspectionService {
 							periodicInspectionComment.setViewerDate(LocalDateTime.now());
 							periodicInspectionComment.setViewerFlag("1");
 							periodicInspectionComment.setInspectorFlag("0");
+							periodicInspectionComment.setViewerUserName(userFullName.findByUserName(userName));
 							periodicInspectorCommentRepo.add(periodicInspectionComment);
 							periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
 							return periodicInspection;

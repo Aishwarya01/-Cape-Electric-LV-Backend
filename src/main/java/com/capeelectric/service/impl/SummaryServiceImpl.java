@@ -200,6 +200,7 @@ public class SummaryServiceImpl implements SummaryService {
 
 							if (process.equalsIgnoreCase("SEND")) {
 								summaryCommentItr.setViewerDate(LocalDateTime.now());
+								summaryCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								summaryCommentItr.setViewerComment(summaryComment.getViewerComment());
 								summaryCommentItr.setViewerFlag("1");
 								summaryCommentRepo.add(summaryCommentItr);
@@ -208,6 +209,7 @@ public class SummaryServiceImpl implements SummaryService {
 							}
 							if (process.equalsIgnoreCase("REPLY")) {
 								summaryCommentItr.setInspectorDate(LocalDateTime.now());
+								summaryCommentItr.setInspectorUserName(userFullName.findByUserName(userName));
 								summaryCommentItr.setInspectorComment(summaryComment.getInspectorComment());
 								summaryCommentItr.setInspectorFlag("1");
 								summaryCommentRepo.add(summaryCommentItr);
@@ -216,6 +218,7 @@ public class SummaryServiceImpl implements SummaryService {
 							}
 							if (process.equalsIgnoreCase("APPROVE")) {
 								summaryCommentItr.setViewerDate(LocalDateTime.now());
+								summaryCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								summaryCommentItr.setApproveOrReject(summaryComment.getApproveOrReject());
 								summaryCommentRepo.add(summaryCommentItr);
 								summary.setSummaryComment(summaryCommentRepo);
@@ -228,6 +231,7 @@ public class SummaryServiceImpl implements SummaryService {
 							summaryComment.setNoOfComment(checkNoOfComments(summary.getSummaryComment()));
 							summaryComment.setSummary(summary);
 							summaryComment.setViewerDate(LocalDateTime.now());
+							summaryComment.setViewerUserName(userFullName.findByUserName(userName));
 							summaryComment.setViewerFlag("1");
 							summaryComment.setInspectorFlag("0");
 							summaryCommentRepo.add(summaryComment);
