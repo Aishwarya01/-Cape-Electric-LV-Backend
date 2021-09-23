@@ -119,32 +119,25 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				List<BoundingLocationReport> boundingLocationReport = supply.getBoundingLocationReport();
 				List<EarthingLocationReport> earthingLocationReport = supply.getEarthingLocationReport();
 
-			
-				HeaderFooterPageEvent event = new HeaderFooterPageEvent();
-				writer.setPageEvent((PdfPageEvent) event);
-
 				document.open();
 
 				Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				Font font1 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
-
-				Font font4 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
-
-				Font font5 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
+                Font font4 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
+                Font font5 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
 				Font font6 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				Font font9 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				Font font10 = new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
 				Paragraph paragraphOne = new Paragraph("TIC of LV electrical installation ", font);
 				paragraphOne.setAlignment(Element.ALIGN_CENTER);
 				document.add(paragraphOne);
-
 				PdfPTable table14 = new PdfPTable(1);
 				table14.setWidthPercentage(100); // Width 100%
 				table14.setSpacingBefore(10f); // Space before table
 				table14.setWidthPercentage(100);
 				table14.getDefaultCell().setBorder(0);
 				PdfPCell cell45 = new PdfPCell(
-						new Paragraph(30, "Part 2: Supply characteristics and earthing arrangement ", font5));
+						new Paragraph(30, "Part - 2: Supply characteristics and earthing arrangement ", font5));
 				cell45.setBorder(PdfPCell.NO_BORDER);
 				cell45.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table14.addCell(cell45);
@@ -155,7 +148,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table16.setSpacingBefore(10f); // Space before table
 				table16.setWidthPercentage(100);
 				table16.getDefaultCell().setBorder(0);
-				PdfPCell cell8 = new PdfPCell(new Paragraph(30, "Section-1:Mains incoming", font5));
+				PdfPCell cell8 = new PdfPCell(new Paragraph(30, "Section - 1:Mains incoming", font5));
 				cell8.setBorder(PdfPCell.NO_BORDER);
 				cell8.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table16.addCell(cell8);
@@ -291,7 +284,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table21.setSpacingBefore(10f); // Space before table
 				table21.setWidthPercentage(100);
 				table21.getDefaultCell().setBorder(0);
-				PdfPCell cell53 = new PdfPCell(new Paragraph("Section-2:Alternative source of supply", font5));
+				PdfPCell cell53 = new PdfPCell(new Paragraph("Section - 2:Alternative source of supply", font5));
 				cell53.setBorder(PdfPCell.NO_BORDER);
 				cell53.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table21.addCell(cell53);
@@ -331,7 +324,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table18.setWidthPercentage(100);
 				table18.getDefaultCell().setBorder(0);
 				PdfPCell cell50 = new PdfPCell(
-						new Paragraph("Section-3:Particulars of installation referred in the report", font10));
+						new Paragraph("Section - 3:Particulars of installation referred in the report", font10));
 				cell50.setBorder(PdfPCell.NO_BORDER);
 				cell50.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table18.addCell(cell50);
@@ -408,7 +401,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table19.setWidthPercentage(100);
 				table19.getDefaultCell().setBorder(0);
 				PdfPCell cell51 = new PdfPCell(
-						new Paragraph("Section-4:Details of main protective conductor ", font10));
+						new Paragraph("Section - 4:Details of main protective conductor ", font10));
 				cell51.setBorder(PdfPCell.NO_BORDER);
 				cell51.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table19.addCell(cell51);
@@ -547,7 +540,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table20.getDefaultCell().setBorder(0);
 
 				PdfPCell cell49 = new PdfPCell(
-						new Paragraph("Section 5: Details of main switch or circuit breaker", font5));
+						new Paragraph("Section - 5: Details of main switch or circuit breaker", font5));
 				cell49.setBorder(PdfPCell.NO_BORDER);
 				cell49.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table20.addCell(cell49);

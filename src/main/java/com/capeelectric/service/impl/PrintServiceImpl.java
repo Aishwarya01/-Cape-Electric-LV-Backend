@@ -71,10 +71,6 @@ public class PrintServiceImpl implements PrintService {
 				SummaryDeclaration declaration = declaration1.get(0);
 				SummaryDeclaration declaration11 = declaration1.get(1);
 
-		
-				HeaderFooterPageEvent event = new HeaderFooterPageEvent();
-				writer.setPageEvent((PdfPageEvent) event);
-
 				document.open();
 				Font font = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
 				Paragraph paragraphOne = new Paragraph("TIC of LV electrical installation ", font);
@@ -88,7 +84,7 @@ public class PrintServiceImpl implements PrintService {
 				table10.getDefaultCell().setBorder(0);
 
 				PdfPCell cell9 = new PdfPCell(
-						new Paragraph("Part 5: Observations, Recommendations and Summary", font2));
+						new Paragraph("Part - 5: Observations, Recommendations and Summary", font2));
 				cell9.setBorder(PdfPCell.NO_BORDER);
 				cell9.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table10.addCell(cell9);
@@ -100,7 +96,7 @@ public class PrintServiceImpl implements PrintService {
 				table13.getDefaultCell().setBorder(0);
 
 				PdfPCell cell8 = new PdfPCell(
-						new Paragraph("Section 1: Extent and limitations of inspection and testing :", font2));
+						new Paragraph("Section - 1: Extent and limitations of inspection and testing :", font2));
 				cell8.setBorder(PdfPCell.NO_BORDER);
 				cell8.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table13.addCell(cell8);
@@ -164,7 +160,7 @@ public class PrintServiceImpl implements PrintService {
 				table15.setWidthPercentage(100);
 				table15.getDefaultCell().setBorder(0);
 
-				PdfPCell cell25 = new PdfPCell(new Paragraph(15, "Section 2: Observations ", font5));
+				PdfPCell cell25 = new PdfPCell(new Paragraph(15, "Section - 2: Observations ", font5));
 				cell25.setBorder(PdfPCell.NO_BORDER);
 				cell25.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table15.addCell(cell25);
@@ -193,7 +189,7 @@ public class PrintServiceImpl implements PrintService {
 				table16.setWidthPercentage(100);
 				table16.getDefaultCell().setBorder(0);
 
-				PdfPCell cell26 = new PdfPCell(new Paragraph(15, "Section-3:Recommendations", font5));
+				PdfPCell cell26 = new PdfPCell(new Paragraph(15, "Section - 3:Recommendations", font5));
 				cell26.setBorder(PdfPCell.NO_BORDER);
 				cell26.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table16.addCell(cell26);
@@ -240,7 +236,7 @@ public class PrintServiceImpl implements PrintService {
 				table17.getDefaultCell().setBorder(0);
 
 				PdfPCell cell27 = new PdfPCell(
-						new Paragraph(15, "Section-4:Summary And Conditions Of The Installation ", font5));
+						new Paragraph(15, "Section - 4:Summary And Conditions Of The Installation ", font5));
 				cell27.setBorder(PdfPCell.NO_BORDER);
 				cell27.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table17.addCell(cell27);
@@ -288,7 +284,7 @@ public class PrintServiceImpl implements PrintService {
 				table18.setWidthPercentage(100);
 				table18.getDefaultCell().setBorder(0);
 
-				PdfPCell cell28 = new PdfPCell(new Paragraph(15, "Section 5:Declaration", font5));
+				PdfPCell cell28 = new PdfPCell(new Paragraph(15, "Sectio - 5:Declaration", font5));
 				cell28.setBorder(PdfPCell.NO_BORDER);
 				cell28.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table18.addCell(cell28);

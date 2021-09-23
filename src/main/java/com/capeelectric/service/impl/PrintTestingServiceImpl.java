@@ -68,23 +68,21 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				List<Testing> testing = supply2.getTesting();
 				Testing testRecords = testing.get(0);
 
-			
-				HeaderFooterPageEvent event = new HeaderFooterPageEvent();
-				writer.setPageEvent((PdfPageEvent) event);
-
 				document.open();
 
 				Font font = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
 				Paragraph paragraphOne = new Paragraph("TIC of LV electrical installation ", font);
 				paragraphOne.setAlignment(Element.ALIGN_CENTER);
+
 				document.add(paragraphOne);
+
 				PdfPTable table13 = new PdfPTable(1);
 				table13.setWidthPercentage(100); // Width 100%
 				table13.setSpacingBefore(10f); // Space before table
 				table13.setWidthPercentage(100);
 				table13.getDefaultCell().setBorder(0);
 
-				PdfPCell cell8 = new PdfPCell(new Paragraph(30, "Part 4: Testing ", font));
+				PdfPCell cell8 = new PdfPCell(new Paragraph(30, "Part - 4: Testing ", font));
 				cell8.setBorder(PdfPCell.NO_BORDER);
 				cell8.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table13.addCell(cell8);
@@ -340,7 +338,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		String IR6 = insulationResistance_list[5];
 		String IR7 = insulationResistance_list[6];
 		String IR8 = insulationResistance_list[7];
-		String IR9 =insulationResistance_list[8];
+		String IR9 = insulationResistance_list[8];
 		cell1 = new PdfPCell(new Phrase(IR1, font23));
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -655,7 +653,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		table13.setWidthPercentage(100);
 		table13.getDefaultCell().setBorder(0);
 
-		PdfPCell cell30 = new PdfPCell(new Paragraph(30, "Section 1: Basics information", font2));
+		PdfPCell cell30 = new PdfPCell(new Paragraph(30, "Section - 1: Basics information", font2));
 		cell30.setBorder(PdfPCell.NO_BORDER);
 		cell30.setBackgroundColor(BaseColor.LIGHT_GRAY);
 		table13.addCell(cell30);
@@ -752,7 +750,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		table14.setWidthPercentage(100);
 		table14.getDefaultCell().setBorder(0);
 
-		PdfPCell cell31 = new PdfPCell(new Paragraph(30, "Section 2:Detailed Testing:", font2));
+		PdfPCell cell31 = new PdfPCell(new Paragraph(30, "Section - 2:Detailed Testing:", font2));
 		cell31.setBorder(PdfPCell.NO_BORDER);
 		cell31.setBackgroundColor(BaseColor.LIGHT_GRAY);
 		table14.addCell(cell31);
