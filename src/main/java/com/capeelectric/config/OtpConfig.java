@@ -1,15 +1,16 @@
 package com.capeelectric.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import com.capeelectric.util.Constants;
 
 @Component
 public class OtpConfig {
 	
-	private String sendOtp =Constants.SMS_SEND_OTP;
+	@Value("${sms.otp.send}")
+	private String sendOtp;
 	
-	private String verifyOtp=Constants.SMS_VERIFY_OTP;
+	@Value("${sms.otp.verify}")
+	private String verifyOtp;
 
 	public String getSendOtp() {
 		return sendOtp;

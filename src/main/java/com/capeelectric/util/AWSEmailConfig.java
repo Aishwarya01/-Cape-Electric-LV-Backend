@@ -1,17 +1,22 @@
 package com.capeelectric.util;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AWSEmailConfig {
 	
-	private String SMTP_HOST_NAME = Constants.SMTP_HOST_NAME;
-
-	private String SMTP_AUTH_USER = Constants.SMTP_AUTH_USER;
-
-	private String SMTP_AUTH_PWD = Constants.SMTP_AUTH_PWD;
-
-	private String SMTP_HOST_PORT = Constants.SMTP_HOST_PORT;
+	@Value("${app.email.host}")
+	private String SMTP_HOST_NAME;	
+	
+	@Value("${app.email.user}")
+	private String SMTP_AUTH_USER;	
+	
+	@Value("${app.email.password}")
+	private String SMTP_AUTH_PWD;	
+	
+	@Value("${app.email.port}")
+	private String SMTP_HOST_PORT;
 
 	public String getSMTP_HOST_NAME() {
 		return SMTP_HOST_NAME;

@@ -14,10 +14,10 @@ import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.util.AWSEmailConfig;
-import com.capeelectric.util.Constants;
 
 /**
  * 
@@ -27,15 +27,20 @@ import com.capeelectric.util.Constants;
 @Service
 public class AWSEmailService {
 
-	private String FROM=Constants.EMAIL_FROM;
+	@Value("${app.email.from}")
+	private String FROM;
 	
-	private String firstPersonEmail=Constants.FIRST_PERSON_EMAIL;
+	@Value("${app.email.multiple.person.first}")
+	private String firstPersonEmail;
 	
-	private String secondPersonEmail=Constants.SECOND_PERSON_EMAIL;
+	@Value("${app.email.multiple.person.second}")
+	private String secondPersonEmail;
 	
-	private String thirdPersonEmail=Constants.THIRD_PERSON_EMAIL;
+	@Value("${app.email.multiple.person.third}")
+	private String thirdPersonEmail;
 
-	private String emailDisable=Constants.EMAIL_DISABLE;
+	@Value("${app.email.disable}")
+	private String emailDisable;
 	
 	private static final Logger logger = LoggerFactory.getLogger(AWSEmailService.class);
 

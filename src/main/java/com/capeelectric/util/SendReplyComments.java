@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -15,13 +17,17 @@ import com.capeelectric.service.impl.AWSEmailService;
 @Component
 public class SendReplyComments {
 
-	private String sendCommentMsg = Constants.SEND_COMMENT_MSG;
+	@Value("${email.send.comment.message}")
+	private String sendCommentMsg;
 
-	private String replyCommentMsg = Constants.REPLY_COMMENT_MSG;
-
-	private String approveCommentMsg = Constants.APPROVE_COMMENT_MSG;
-
-	private String rejectCommentMsg = Constants.REJECT_COMMENT_MSG;
+	@Value("${email.reply.comment.message}")
+	private String replyCommentMsg;
+	
+	@Value("${email.approve.comment.message}")
+	private String approveCommentMsg;
+	
+	@Value("${email.reject.comment.message}")
+	private String rejectCommentMsg;
 
 	@Autowired
 	private AWSEmailService awsEmailService;

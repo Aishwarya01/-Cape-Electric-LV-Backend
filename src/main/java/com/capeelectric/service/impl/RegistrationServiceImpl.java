@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,6 @@ import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.service.RegistrationService;
-import com.capeelectric.util.Constants;
 
 /**
  * 
@@ -41,7 +41,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	private String numberOfLicence=Constants.NUM_OF_LICENCE;
+	@Value("${number.of.licence}")
+	private String numberOfLicence;
 	
 	@Override
 	public Register addRegistration(Register register) throws RegistrationException {
