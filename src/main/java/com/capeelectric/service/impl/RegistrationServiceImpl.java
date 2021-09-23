@@ -15,8 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.capeelectric.config.OtpConfig;
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.Site;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.service.RegistrationService;
 
@@ -37,6 +39,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 	
 	@Autowired
 	private RegistrationRepository registerRepository;
+	
+	@Autowired
+	private SiteServiceImpl siteServiceImpl;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -64,6 +69,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setUpdatedDate(LocalDateTime.now());
 					register.setCreatedBy(register.getUsername());
 					register.setUpdatedBy(register.getUsername());
+					register.setNoOfLicence("0");
 					Register createdRegister = registerRepository.save(register);
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
@@ -85,7 +91,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 
 	@Override
-	public Register addViewerRegistration(Register register) throws RegistrationException {
+	public Register addViewerRegistration(Register register) throws RegistrationException, CompanyDetailsException {
 		logger.debug("AddingRegistration Starts with User : {} ", register.getUsername());
 		if (register.getUsername() != null && register.getCompanyName() != null && register.getAddress() != null
 				&& register.getContactNumber() != null && register.getDepartment() != null
@@ -146,7 +152,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 
 	@Override
-	public void updateRegistration(Register register) throws RegistrationException {
+	public void updateRegistration(Register register) throws RegistrationException, CompanyDetailsException {
 
 		if (register.getRegisterId() != null && register.getRegisterId() != 0 && register.getUsername() != null
 				&& register.getCompanyName() != null && register.getAddress() != null
@@ -163,6 +169,15 @@ public class RegistrationServiceImpl implements RegistrationService {
 				if (register.getRole().equalsIgnoreCase("INSPECTOR")) {
 					register.setUpdatedBy(register.getUsername());
 					registerRepository.save(register);
+						Site site = new Site();
+						site.setCountry(register.getCountry());
+						site.setSite(register.getSiteName());
+						site.setState(register.getState());
+						site.setAddressLine_1(register.getAddress());
+						site.setZipCode(register.getPinCode());
+						site.setLandMark(register.getDistrict());
+						site.setUserName(register.getUsername());
+						siteServiceImpl.addSite(site);
 				} else {
 					try {
 						Optional<Register> inspectorInfo = registerRepository.findByUsername(register.getAssignedBy());

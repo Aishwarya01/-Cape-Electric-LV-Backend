@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.service.RegistrationService;
@@ -76,7 +77,7 @@ public class RegistrationController {
 	 
 	@PostMapping("/addViewerRegistration")
 	public ResponseEntity<Void> addViewerRegistration(@RequestBody Register register)
-			throws RegistrationException, MessagingException, MalformedURLException {
+			throws RegistrationException, MessagingException, MalformedURLException, CompanyDetailsException {
 		logger.info("called addRegistration function UserName : {}", register.getUsername());
 		Register createdRegister = registrationService.addViewerRegistration(register);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -99,7 +100,7 @@ public class RegistrationController {
 
 	@PutMapping("/updateRegistration")
 	public ResponseEntity<String> updateRegistration(@RequestBody Register register)
-			throws IOException, MessagingException, RegistrationException {
+			throws IOException, MessagingException, RegistrationException, CompanyDetailsException {
 		logger.debug("called updateRegistration function UserName : {}", register.getUsername());
 		registrationService.updateRegistration(register);
 		awsEmailService.sendEmail(register.getUsername(), "You have successfully updated your profile");

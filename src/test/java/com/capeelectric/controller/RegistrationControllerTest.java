@@ -25,6 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.Register;
@@ -109,7 +110,7 @@ public class RegistrationControllerTest {
 	}
 
 	@Test
-	public void testUpdateRegistration() throws RegistrationException, MessagingException, IOException {
+	public void testUpdateRegistration() throws RegistrationException, MessagingException, IOException, CompanyDetailsException {
 		logger.info("RegistrationControllerTest testUpdateRegistration_funcion Started");
 
 		doNothing().when(registrationService).updateRegistration(register);
@@ -137,7 +138,7 @@ public class RegistrationControllerTest {
 	
 	@Test
 	public void testViewerRegistration()
-			throws UserException, URISyntaxException, IOException, MessagingException, RegistrationException {
+			throws UserException, URISyntaxException, IOException, MessagingException, RegistrationException, CompanyDetailsException {
 		logger.info("RegistrationControllerTest testViewerRegistration_funcion Started");
 
 		MockHttpServletRequest request = new MockHttpServletRequest();

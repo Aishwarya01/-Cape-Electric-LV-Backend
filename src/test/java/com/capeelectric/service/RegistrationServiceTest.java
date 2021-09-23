@@ -23,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
 import com.capeelectric.config.OtpConfig;
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
@@ -105,7 +106,7 @@ public class RegistrationServiceTest {
 	}
 	
 	@Test
-	public void testAddViewerRegistration() throws RegistrationException {
+	public void testAddViewerRegistration() throws RegistrationException, CompanyDetailsException {
 		logger.info("RegistrationServiceTest testAddViewerRegistration_funcion Started");
 
 		Optional<Register> optionalRegister = Optional.of(register);
@@ -143,7 +144,7 @@ public class RegistrationServiceTest {
 	}
 
 	@Test
-	public void testUpdateRegistration() throws RegistrationException {
+	public void testUpdateRegistration() throws RegistrationException, CompanyDetailsException {
 		logger.info("RegistrationServiceTest testUpdateRegistration_funcion Started");
 
 		Optional<Register> optionalRegister = Optional.of(register);
