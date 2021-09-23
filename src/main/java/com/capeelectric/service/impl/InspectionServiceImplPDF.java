@@ -16,7 +16,6 @@ import com.capeelectric.model.IsolationCurrent;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.service.InspectionServicePDF;
-import com.capeelectric.util.HeaderFooterPageEvent;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -29,7 +28,6 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.GrayColor;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfPageEvent;
 import com.itextpdf.text.pdf.PdfWriter;
 
 @Service
@@ -66,9 +64,6 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				
 				List<IsolationCurrent> isolationCurrentDetails = ipoInspection.getIsolationCurrent();
 				IsolationCurrent isolationCurrent = isolationCurrentDetails.get(0);
-				
-				HeaderFooterPageEvent event = new HeaderFooterPageEvent();
-                writer.setPageEvent((PdfPageEvent) event);
 				
 				document.open();
 				
