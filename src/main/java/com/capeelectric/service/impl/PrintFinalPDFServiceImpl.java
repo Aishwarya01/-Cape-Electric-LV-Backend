@@ -12,10 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.SummaryException;
 import com.capeelectric.service.PrintFinalPDFService;
 import com.capeelectric.service.PrintService;
 import com.capeelectric.util.HeaderFooterPageEvent;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfPageEvent;
@@ -26,6 +28,8 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 
 	@Override
 	public void printFinalPDF(String userName, Integer siteId) throws Exception {
+		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
+			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 		 try {
 					List<InputStream> inputPdfList = new ArrayList<InputStream>();
 					inputPdfList.add(new FileInputStream("SupplyCharacteristic.pdf"));
@@ -38,7 +42,10 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 					e.printStackTrace();
 					}
 }
-
+		else {
+			throw new Exception("Invalid Inputs");
+		}
+	}
 	  private static void mergePdfFiles(List<InputStream> inputPdfList,
 			OutputStream outputStream) throws Exception{
 			Document document = new Document();
