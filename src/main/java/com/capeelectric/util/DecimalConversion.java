@@ -56,35 +56,35 @@ public class DecimalConversion {
 	private DecimalFormat findDecimalSize(String type) throws DecimalConversionException {
 		if (type != null) {
 			if (type.equalsIgnoreCase("Supply_MainNominalCurrent")) {
-				return new DecimalFormat(DecimalConversionConstant.supplyMainNominalCurrent);
+				return new DecimalFormat(Constants.supplyMainNominalCurrent);
 			} else if (type != null && type.equalsIgnoreCase("Supply_MainNominalFrequency")) {
-				return new DecimalFormat(DecimalConversionConstant.supplyMainNominalFrequency);
+				return new DecimalFormat(Constants.supplyMainNominalFrequency);
 			} else if (type != null && type.equalsIgnoreCase("Supply_MainNominalVoltage")) {
-				return new DecimalFormat(DecimalConversionConstant.supplyMainNominalVoltage);
+				return new DecimalFormat(Constants.supplyMainNominalVoltage);
 			} else if (type != null && type.equalsIgnoreCase("Supply_MainLoopImpedance")) {
-				return new DecimalFormat(DecimalConversionConstant.supplyMainLoopImpedance);
+				return new DecimalFormat(Constants.supplyMainLoopImpedance);
 			} else if (type != null && type.equalsIgnoreCase("Supply_NominalFrequency")) {
-				return new DecimalFormat(DecimalConversionConstant.supplyNominalFrequency);
+				return new DecimalFormat(Constants.supplyNominalFrequency);
 			} else if (type != null && type.equalsIgnoreCase("Supply_NominalVoltage")) {
-				return new DecimalFormat(DecimalConversionConstant.supplyNominalVoltage);
+				return new DecimalFormat(Constants.supplyNominalVoltage);
 			} else if (type != null && type.equalsIgnoreCase("Supply_FaultCurrent")) {
-				return new DecimalFormat(DecimalConversionConstant.supplyFaultCurrent);
+				return new DecimalFormat(Constants.supplyFaultCurrent);
 			} else if (type != null && type.equalsIgnoreCase("Supply_LoopImpedance")) {
-				return new DecimalFormat(DecimalConversionConstant.supplyLoopImpedance);
+				return new DecimalFormat(Constants.supplyLoopImpedance);
 			} else if (type != null && type.equalsIgnoreCase("IncomingLoopImpedance")) {
-				return new DecimalFormat(DecimalConversionConstant.testIncomingLoopimpedance);
+				return new DecimalFormat(Constants.testIncomingLoopimpedance);
 			} else if (type != null && type.equalsIgnoreCase("ShortCircuitSetting")) {
-				return new DecimalFormat(DecimalConversionConstant.testShortCircuit);
+				return new DecimalFormat(Constants.testShortCircuit);
 			} else if (type != null && type.equalsIgnoreCase("EFSetting")) {
-				return new DecimalFormat(DecimalConversionConstant.testInstantaneousDmt);
+				return new DecimalFormat(Constants.testInstantaneousDmt);
 			} else if (type != null && type.equalsIgnoreCase("InsulationResistance")) {
-				return new DecimalFormat(DecimalConversionConstant.testInsulationResistance);
+				return new DecimalFormat(Constants.testInsulationResistance);
 			} else if (type.equalsIgnoreCase("Voltage")) {
-				return new DecimalFormat(DecimalConversionConstant.testVoltage);
+				return new DecimalFormat(Constants.testVoltage);
 			} else if (type != null && type.equalsIgnoreCase("Loopimpedance")) {
-				return new DecimalFormat(DecimalConversionConstant.loopImpedance);
+				return new DecimalFormat(Constants.loopImpedance);
 			} else if (type != null && type.equalsIgnoreCase("Faultcurrent")) {
-				return new DecimalFormat(DecimalConversionConstant.faultCurrent);
+				return new DecimalFormat(Constants.faultCurrent);
 			}
 		} else {
 			throw new DecimalConversionException("Finding DecimalConversion variable type failed");

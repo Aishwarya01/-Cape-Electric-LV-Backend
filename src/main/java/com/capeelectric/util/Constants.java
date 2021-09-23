@@ -4,7 +4,7 @@ package com.capeelectric.util;
  * @author capeelectricsoftware
  *
  */
-public class DecimalConversionConstant {
+public class Constants {
 
 	public static final String supplyMainNominalCurrent = "0.00";
 
