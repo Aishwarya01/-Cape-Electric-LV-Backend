@@ -88,7 +88,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				part3.setWidthPercentage(100);
 				part3.getDefaultCell().setBorder(0);
 
-				PdfPCell basic = new PdfPCell(new Paragraph("Part:3 Inspection",
+				PdfPCell basic = new PdfPCell(new Paragraph("Part - 3: Inspection",
 						new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 				basic.setBackgroundColor(new GrayColor(0.82f));
 				basic.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -136,7 +136,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		part3.setWidthPercentage(100);
 		part3.getDefaultCell().setBorder(0);
 
-		PdfPCell Section1 = new PdfPCell(new Paragraph("Section 1: Incoming equipment",
+		PdfPCell Section1 = new PdfPCell(new Paragraph("Section - 1: Incoming equipment",
 				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 		Section1.setBackgroundColor(new GrayColor(0.82f));
 		Section1.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -255,7 +255,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		section2.setWidthPercentage(100);
 		section2.getDefaultCell().setBorder(0);
 
-		PdfPCell arrangements = new PdfPCell(new Paragraph("Section 2: Arrangements for parallel or switched alternative sources of supply",
+		PdfPCell arrangements = new PdfPCell(new Paragraph("Section - 2: Arrangements for parallel or switched alternative sources of supply",
 				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 		arrangements.setBackgroundColor(new GrayColor(0.82f));
 		arrangements.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -355,7 +355,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		section3.setWidthPercentage(100);
 		section3.getDefaultCell().setBorder(0);
 
-		PdfPCell Automatic = new PdfPCell(new Paragraph("Section 3: Automatic disconnection of supply",
+		PdfPCell Automatic = new PdfPCell(new Paragraph("Section - 3: Automatic disconnection of supply",
 				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 		Automatic.setBackgroundColor(new GrayColor(0.82f));
 		Automatic.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -465,7 +465,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		section4.setWidthPercentage(100);
 		section4.getDefaultCell().setBorder(0);
 
-		PdfPCell protection = new PdfPCell(new Paragraph("Section 4: Other methods of protection ",
+		PdfPCell protection = new PdfPCell(new Paragraph("Section - 4: Other methods of protection ",
 				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 		protection.setBackgroundColor(new GrayColor(0.82f));
 		protection.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -486,7 +486,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		Basic.setWidthPercentage(100);
 		Basic.getDefaultCell().setBorder(0);
 
-		PdfPCell fault = new PdfPCell(new Paragraph("Basic and fault protection.",
+		PdfPCell fault = new PdfPCell(new Paragraph("4.1: Basic and fault protection.",
 				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 		fault.setBackgroundColor(new GrayColor(0.82f));
 		fault.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -576,7 +576,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		BasicPro.setWidthPercentage(100);
 		BasicPro.getDefaultCell().setBorder(0);
 
-		PdfPCell liveParts = new PdfPCell(new Paragraph("Basic protection (prevention of contact with live parts).",
+		PdfPCell liveParts = new PdfPCell(new Paragraph("4.2: Basic protection (prevention of contact with live parts).",
 				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 		liveParts.setBackgroundColor(new GrayColor(0.82f));
 		liveParts.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -644,7 +644,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		Fault.setWidthPercentage(100);
 		Fault.getDefaultCell().setBorder(0);
 
-		PdfPCell protection1 = new PdfPCell(new Paragraph("Fault protection.",
+		PdfPCell protection1 = new PdfPCell(new Paragraph("4.3: Fault protection.",
 				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 		protection1.setBackgroundColor(new GrayColor(0.82f));
 		protection1.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -692,7 +692,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		Additional.setWidthPercentage(100);
 		Additional.getDefaultCell().setBorder(0);
 
-		PdfPCell protection2 = new PdfPCell(new Paragraph("Additional protection.",
+		PdfPCell protection2 = new PdfPCell(new Paragraph("4.4: Additional protection.",
 				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 		protection2.setBackgroundColor(new GrayColor(0.82f));
 		protection2.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -735,6 +735,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		Paragraph paragraph18 = new Paragraph("Specific examples of section 4:", font10N);
 		document.add(paragraph18);
 		
+		document.newPage();
 		
 		PdfPTable Section5 = new PdfPTable(pointColumnWidths5);
 		Section5.setWidthPercentage(100); // Width 100%
@@ -743,7 +744,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		Section5.setWidthPercentage(100);
 		Section5.getDefaultCell().setBorder(0);
 
-		PdfPCell consumer = new PdfPCell(new Paragraph("Section 5: Consumer unit(s) / distribution board(s) / distribution equipment",
+		PdfPCell consumer = new PdfPCell(new Paragraph("Section - 5: Consumer unit(s) / distribution board(s) / distribution equipment",
 				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 		consumer.setBackgroundColor(new GrayColor(0.82f));
 		consumer.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -791,6 +792,8 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		addRow(table8, "30", "Confirmation that all conductor connections including connections to busbars are correctly located in terminals and are tight and secure", consumerUnit.getAllConductorCon());
 		document.add(table8);
 
+		document.newPage();
+		
 		PdfPTable Section6 = new PdfPTable(pointColumnWidths5);
 		Section6.setWidthPercentage(100); // Width 100%
 		Section6.setSpacingBefore(10f); // Space before table
@@ -798,7 +801,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		Section6.setWidthPercentage(100);
 		Section6.getDefaultCell().setBorder(0);
 
-		PdfPCell circuit1 = new PdfPCell(new Paragraph("Section 6: Circuits",
+		PdfPCell circuit1 = new PdfPCell(new Paragraph("Section - 6: Circuits",
 				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 		circuit1.setHorizontalAlignment(Element.ALIGN_LEFT);
 		circuit1.setBackgroundColor(new GrayColor(0.82f));
@@ -847,6 +850,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		addRow1(table9, "31", "Presence, operation, and correct location of appropriate devices for isolation and switching", circuit.getIsolationSwitching());
 		document.add(table9);
 
+		document.newPage();
 		
 		PdfPTable Section7 = new PdfPTable(pointColumnWidths5);
 		Section7.setWidthPercentage(100); // Width 100%
@@ -855,7 +859,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		Section7.setWidthPercentage(100);
 		Section7.getDefaultCell().setBorder(0);
 
-		PdfPCell isolation = new PdfPCell(new Paragraph("Section 7: Isolation and switching",
+		PdfPCell isolation = new PdfPCell(new Paragraph("Section - 7: Isolation and switching",
 				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 		isolation.setHorizontalAlignment(Element.ALIGN_LEFT);
 		isolation.setBackgroundColor(new GrayColor(0.82f));
@@ -895,6 +899,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		addRow2(table10, "22", "Functional switching - Correct operation verified (functional check)", isolationCurrent.getFuSwitOperationVerify());
 		document.add(table10);
 		
+		document.newPage();
 		
 		PdfPTable Section8 = new PdfPTable(pointColumnWidths5);
 		Section8.setWidthPercentage(100); // Width 100%
@@ -903,7 +908,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		Section8.setWidthPercentage(100);
 		Section8.getDefaultCell().setBorder(0);
 
-		PdfPCell current = new PdfPCell(new Paragraph("Section 8: Current – using equipment (permanently connected)",
+		PdfPCell current = new PdfPCell(new Paragraph("Section - 8: Current – using equipment (permanently connected)",
 				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
 		current.setHorizontalAlignment(Element.ALIGN_LEFT);
 		current.setBackgroundColor(new GrayColor(0.82f));

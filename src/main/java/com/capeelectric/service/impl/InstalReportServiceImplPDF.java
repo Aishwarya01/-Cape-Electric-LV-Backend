@@ -63,6 +63,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				
 				Font font14B = new Font(BaseFont.createFont(), 14, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
 				Paragraph certificate1 = new Paragraph("TESTING, INSPECTION & CERTIFICATION", font14B);
+				certificate1.setAlignment(Element.ALIGN_CENTER);
 				document.add(certificate1);
 
 				Paragraph certificate2 = new Paragraph("(TIC)", font14B);
@@ -95,7 +96,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				Paragraph gap2 = new Paragraph(20, " ", font9);
 				document.add(gap2);
 
-				Font fonta = new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
+				Font fonta = new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.NORMAL, BaseColor.BLACK);
 				Paragraph certificate6 = new Paragraph("NAME:", fonta);
 				document.add(certificate6);
 
@@ -159,7 +160,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				part1.setWidthPercentage(100);
 				part1.getDefaultCell().setBorder(0);
 
-				PdfPCell basic = new PdfPCell(new Paragraph("Part:1 Basic Information",
+				PdfPCell basic = new PdfPCell(new Paragraph("Part - 1: Basic Information",
 						new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
 				basic.setBackgroundColor(new GrayColor(0.82f));
 //				basic.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -176,7 +177,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				Section1.setWidthPercentage(100);
 				Section1.getDefaultCell().setBorder(0);
 
-				PdfPCell Description = new PdfPCell(new Paragraph("Section 1: Description and extent of installation",
+				PdfPCell Description = new PdfPCell(new Paragraph("Section - 1: Description and extent of installation",
 						new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
 				Description.setBackgroundColor(new GrayColor(0.82f));
 //				Description.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -533,7 +534,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				section2.setWidthPercentage(100);
 				section2.getDefaultCell().setBorder(0);
 
-				PdfPCell Liability = new PdfPCell(new Paragraph("Section 2: Liability and declaration",
+				PdfPCell Liability = new PdfPCell(new Paragraph("Section - 2: Liability and declaration",
 						new Font(BaseFont.createFont(), 10, Font.BOLD)));
 				Liability.setBackgroundColor(new GrayColor(0.82f));
 				Liability.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -666,7 +667,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				NextInspection.setWidthPercentage(100);
 				NextInspection.getDefaultCell().setBorder(0);
 
-				PdfPCell section3 = new PdfPCell(new Paragraph("Section 3: Next inspection",
+				PdfPCell section3 = new PdfPCell(new Paragraph("Section - 3: Next inspection",
 						new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
 				section3.setBackgroundColor(new GrayColor(0.82f));
 //				section3.setFixedHeight(30f);
@@ -688,7 +689,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				signatories.setWidthPercentage(100);
 				signatories.getDefaultCell().setBorder(0);
 
-				PdfPCell section4 = new PdfPCell(new Paragraph("Section 4: Details of the designers",
+				PdfPCell section4 = new PdfPCell(new Paragraph("Section - 4: Details of the designers",
 						new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
 				section4.setBackgroundColor(new GrayColor(0.82f));
 //				section4.setFixedHeight(30f);
@@ -705,7 +706,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				designer.getDefaultCell().setBorder(0);
 
 				PdfPCell designer1 = new PdfPCell(
-						new Paragraph("Designer-1", new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+						new Paragraph("Designer - 1", new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
 				designer1.setBackgroundColor(new GrayColor(0.82f));
 //				designer1.setFixedHeight(30f);
 				designer1.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -730,7 +731,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				designer2.getDefaultCell().setBorder(0);
 
 				PdfPCell ddesigner = new PdfPCell(
-						new Paragraph("Designer-2", new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+						new Paragraph("Designer - 2", new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
 				ddesigner.setBackgroundColor(new GrayColor(0.82f));
 //				ddesigner.setFixedHeight(30f);
 				ddesigner.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -754,7 +755,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				contractor.setWidthPercentage(100);
 				contractor.getDefaultCell().setBorder(0);
 
-				PdfPCell section5 = new PdfPCell(new Paragraph("Section 5: Details of the contactors",
+				PdfPCell section5 = new PdfPCell(new Paragraph("Section - 5: Details of the contactors",
 						new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
 				section5.setBackgroundColor(new GrayColor(0.82f));
 //				section5.setFixedHeight(30f);
@@ -794,7 +795,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				inspector.setWidthPercentage(100);
 				inspector.getDefaultCell().setBorder(0);
 
-				PdfPCell section6 = new PdfPCell(new Paragraph("Section 6: Details of Inspector",
+				PdfPCell section6 = new PdfPCell(new Paragraph("Section - 6: Details of Inspector",
 						new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
 				section6.setBackgroundColor(new GrayColor(0.82f));
 //				section6.setFixedHeight(30f);

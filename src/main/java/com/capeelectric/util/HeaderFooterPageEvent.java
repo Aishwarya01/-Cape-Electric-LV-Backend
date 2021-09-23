@@ -52,7 +52,7 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 			directContent.setFontAndSize(BaseFont.createFont(), 8);
 			directContent.setTextMatrix(pageSize.getRight(520), pageSize.getBottom(30));
 			
-			String file = "file:///D:/project%20cape/siva/Cape-Back-end/src/main/resources/image/rush-logo.png";
+			String file = "file:///C:/Users/capeelectricsoftware/Documents/GitHub/Cape-Electric-Software-BackEnd/src/main/resources/image/rush-logo.png";
 			Image image = Image.getInstance(file);
 			image.scaleToFit(185, 185);
 			image.setAbsolutePosition(-3, -9);
@@ -82,7 +82,7 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 			
 			PdfContentByte canvas = writer.getDirectContent();
 			canvas.beginMarkedContentSequence(PdfName.ARTIFACT);
-			footer.writeSelectedRows(0, -1, 470, 50, canvas);
+			footer.writeSelectedRows(0, -1, 470, 52, canvas);
 			footer.getDefaultCell().setBorder(0);
 			canvas.endMarkedContentSequence();
 		} catch (DocumentException | IOException de) {
