@@ -70,8 +70,8 @@ public class SummaryServiceImpl implements SummaryService {
 				summary.setSummaryComment(listOfComments);
 				summary.setCreatedDate(LocalDateTime.now());
 				summary.setUpdatedDate(LocalDateTime.now());
-				summary.setCreatedBy(userFullName.getFullName(summary.getUserName()));
-				summary.setUpdatedBy(userFullName.getFullName(summary.getUserName()));
+				summary.setCreatedBy(userFullName.findByUserName(summary.getUserName()));
+				summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
 				summaryRepository.save(summary);
 				siteRepo = siteRepository.findById(summary.getSiteId());
 				if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
@@ -131,7 +131,7 @@ public class SummaryServiceImpl implements SummaryService {
 			Optional<Summary> summaryRepo = summaryRepository.findById(summary.getSummaryId());
 			if (summaryRepo.isPresent() && summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
 				summary.setUpdatedDate(LocalDateTime.now());
-				summary.setUpdatedBy(userFullName.getFullName(summary.getUserName()));
+				summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
 				summaryRepository.save(summary);
 			} else {
 				throw new SummaryException("Given SiteId and ReportId is Invalid");
@@ -217,7 +217,6 @@ public class SummaryServiceImpl implements SummaryService {
 								return summary;
 							}
 							if (process.equalsIgnoreCase("APPROVE")) {
-								summaryCommentItr.setViewerDate(LocalDateTime.now());
 								summaryCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								summaryCommentItr.setApproveOrReject(summaryComment.getApproveOrReject());
 								summaryCommentRepo.add(summaryCommentItr);

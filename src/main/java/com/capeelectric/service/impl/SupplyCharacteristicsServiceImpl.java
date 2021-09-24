@@ -113,8 +113,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
 				supplyCharacteristics.setCreatedDate(LocalDateTime.now());
 				supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
-				supplyCharacteristics.setCreatedBy(userFullName.getFullName(supplyCharacteristics.getUserName()));
-				supplyCharacteristics.setUpdatedBy(userFullName.getFullName(supplyCharacteristics.getUserName()));
+				supplyCharacteristics.setCreatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
+				supplyCharacteristics.setUpdatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
 
 				supplyCharacteristicsRepository.save(supplyCharacteristics);
 			} else {
@@ -171,7 +171,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			if (supplyCharacteristicsRepo.isPresent()
 					&& supplyCharacteristicsRepo.get().getSiteId().equals(supplyCharacteristics.getSiteId())) {
 				supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
-				supplyCharacteristics.setUpdatedBy(userFullName.getFullName(supplyCharacteristics.getUserName()));
+				supplyCharacteristics.setUpdatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
 				supplyCharacteristicsRepository.save(supplyCharacteristics);
 			} else {
 				throw new SupplyCharacteristicsException("Given SiteId and ReportId is Invalid");
@@ -274,7 +274,6 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 								return supplyCharacteristics;
 							}
 							if (process.equalsIgnoreCase("APPROVE")) {
-								supplyCharacteristicCommentItr.setViewerDate(LocalDateTime.now());
 								supplyCharacteristicCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								supplyCharacteristicCommentItr
 										.setApproveOrReject(supplyCharacteristicComment.getApproveOrReject());

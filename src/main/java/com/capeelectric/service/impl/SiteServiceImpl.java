@@ -13,11 +13,10 @@ import org.springframework.stereotype.Service;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
-import com.capeelectric.model.User;
 import com.capeelectric.repository.SitePersonsRepository;
 import com.capeelectric.repository.SiteRepository;
-import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.SiteService;
+import com.capeelectric.util.UserFullName;
 
 @Service
 public class SiteServiceImpl implements SiteService {
@@ -26,10 +25,9 @@ public class SiteServiceImpl implements SiteService {
 	private SiteRepository siteRepository;
 
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
 	private SitePersonsRepository sitePersonsRepository;
+	
+	private UserFullName userName;
 
 	/*
 	 * @param Site addSite method to c comparing department client_name, comparing
@@ -46,8 +44,8 @@ public class SiteServiceImpl implements SiteService {
 				site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
 				site.setCreatedDate(LocalDateTime.now());
 				site.setUpdatedDate(LocalDateTime.now());
-				site.setCreatedBy(generateFullName(site.getUserName()));
-				site.setUpdatedBy(generateFullName(site.getUserName()));
+				site.setCreatedBy(userName.findByUserName(site.getUserName()));
+				site.setUpdatedBy(userName.findByUserName(site.getUserName()));
 				boolean email = checkSitePersonEmail(site.getSite(),site.getSitePersons());
 				if (email) {
 					siteRepository.save(site);
@@ -82,7 +80,7 @@ public class SiteServiceImpl implements SiteService {
 					&& siteRepo.get().getSiteId().equals(site.getSiteId())) {
 				site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
 				site.setUpdatedDate(LocalDateTime.now());
-				site.setUpdatedBy(generateFullName(site.getUserName()));
+				site.setUpdatedBy(userName.findByUserName(site.getUserName()));
 				boolean email = checkSitePersonEmail(site.getSite(),site.getSitePersons());
 				if (email) {
 					siteRepository.save(site);
@@ -130,13 +128,6 @@ public class SiteServiceImpl implements SiteService {
 		} else {
 			throw new CompanyDetailsException("Invalid Inputs");
 		}
-	}
-
-	private String generateFullName(String userName) {
-		Optional<User> user = userRepository.findByUsername(userName);
-		if (user.isPresent() && user.get() != null)
-			return user.get().getFirstname() + " " + user.get().getLastname();
-		return "";
 	}
 
 	/*

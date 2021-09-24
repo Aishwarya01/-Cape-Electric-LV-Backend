@@ -60,9 +60,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 				listOfComments.add(testingComment);
 				testingReport.setTestingComment(listOfComments);
 				testingReport.setCreatedDate(LocalDateTime.now());
-				testingReport.setCreatedBy(userFullName.getFullName(testingReport.getUserName()));
+				testingReport.setCreatedBy(userFullName.findByUserName(testingReport.getUserName()));
 				testingReport.setUpdatedDate(LocalDateTime.now());
-				testingReport.setUpdatedBy(userFullName.getFullName(testingReport.getUserName()));
+				testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
 				testingReportRepository.save(testingReport);
 			} else {
 				throw new PeriodicTestingException("Site-Id Already Present");
@@ -111,7 +111,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 			if (periodicInspectionRepo.isPresent()
 					&& periodicInspectionRepo.get().getSiteId().equals(testingReport.getSiteId())) {
 				testingReport.setUpdatedDate(LocalDateTime.now());
-				testingReport.setUpdatedBy(userFullName.getFullName(testingReport.getUserName()));
+				testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
 				testingReportRepository.save(testingReport);
 			} else {
 				throw new PeriodicTestingException("Given SiteId and ReportId is Invalid");
@@ -197,7 +197,6 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 								return testingReport;
 							}
 							if (process.equalsIgnoreCase("APPROVE")) {
-								testingReportCommentItr.setViewerDate(LocalDateTime.now());
 								testingReportCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								testingReportCommentItr.setApproveOrReject(testingReportComment.getApproveOrReject());
 								testingReportCommentRepo.add(testingReportCommentItr);

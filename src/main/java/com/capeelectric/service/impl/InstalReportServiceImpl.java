@@ -66,8 +66,8 @@ public class InstalReportServiceImpl implements InstalReportService {
 				reportDetails.setReportDetailsComment(listOfComments);
 				reportDetails.setCreatedDate(LocalDateTime.now());
 				reportDetails.setUpdatedDate(LocalDateTime.now());
-				reportDetails.setCreatedBy(userFullName.getFullName(reportDetails.getUserName()));
-				reportDetails.setUpdatedBy(userFullName.getFullName(reportDetails.getUserName()));
+				reportDetails.setCreatedBy(userFullName.findByUserName(reportDetails.getUserName()));
+				reportDetails.setUpdatedBy(userFullName.findByUserName(reportDetails.getUserName()));
 				installationReportRepository.save(reportDetails);
 			} else {
 				throw new InstalReportException("Site-Id Details Already Available,Create New Site-Id");
@@ -121,7 +121,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 			if (reportDetailsRepo.isPresent()
 					&& reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
 				reportDetails.setUpdatedDate(LocalDateTime.now());
-				reportDetails.setUpdatedBy(userFullName.getFullName(reportDetails.getUserName()));
+				reportDetails.setUpdatedBy(userFullName.findByUserName(reportDetails.getUserName()));
 				installationReportRepository.save(reportDetails);
 			} else {
 				throw new InstalReportException("Given SiteId and ReportId is Invalid");
@@ -209,7 +209,6 @@ public class InstalReportServiceImpl implements InstalReportService {
 							}
 							if (process.equalsIgnoreCase("APPROVE")) {
 								reportDetailsCommentItr.setViewerUserName(userFullName.findByUserName(userName));
-								reportDetailsCommentItr.setViewerDate(LocalDateTime.now());
 								reportDetailsCommentItr.setApproveOrReject(reportDetailsComment.getApproveOrReject());
 								reportDetailsCommentRepo.add(reportDetailsCommentItr);
 								reportDetails.setReportDetailsComment(reportDetailsCommentRepo);

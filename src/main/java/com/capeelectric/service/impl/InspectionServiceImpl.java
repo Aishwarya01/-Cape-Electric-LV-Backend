@@ -63,8 +63,8 @@ public class InspectionServiceImpl implements InspectionService {
 				periodicInspection.setPeriodicInspectorComment(listOfComments);
 				periodicInspection.setCreatedDate(LocalDateTime.now());
 				periodicInspection.setUpdatedDate(LocalDateTime.now());
-				periodicInspection.setCreatedBy(userFullName.getFullName(periodicInspection.getUserName()));
-				periodicInspection.setUpdatedBy(userFullName.getFullName(periodicInspection.getUserName()));
+				periodicInspection.setCreatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
+				periodicInspection.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 				inspectionRepository.save(periodicInspection);
 			} else {
 				throw new InspectionException("SiteId already present");
@@ -116,7 +116,7 @@ public class InspectionServiceImpl implements InspectionService {
 			if (periodicInspectionRepo.isPresent()
 					&& periodicInspectionRepo.get().getSiteId().equals(periodicInspection.getSiteId())) {
 				periodicInspection.setUpdatedDate(LocalDateTime.now());
-				periodicInspection.setUpdatedBy(userFullName.getFullName(periodicInspection.getUserName()));
+				periodicInspection.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 				inspectionRepository.save(periodicInspection);
 			} else {
 				throw new InspectionException("Given SiteId and ReportId is Invalid");
@@ -210,7 +210,6 @@ public class InspectionServiceImpl implements InspectionService {
 							}
 							if (process.equalsIgnoreCase("APPROVE")) {
 								periodicInspectionCommentItr.setViewerUserName(userFullName.findByUserName(userName));
-								periodicInspectionCommentItr.setViewerDate(LocalDateTime.now());
 								periodicInspectionCommentItr
 										.setApproveOrReject(periodicInspectionComment.getApproveOrReject());
 								periodicInspectorCommentRepo.add(periodicInspectionCommentItr);

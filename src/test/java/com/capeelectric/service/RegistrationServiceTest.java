@@ -28,6 +28,7 @@ import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.service.impl.RegistrationServiceImpl;
+import com.capeelectric.service.impl.SiteServiceImpl;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -46,6 +47,9 @@ public class RegistrationServiceTest {
 	
 	@Mock
 	private RestTemplate restTemplate;
+	
+	@MockBean
+	private SiteServiceImpl siteServiceImpl;
 
 	private Register register;
 
@@ -64,6 +68,9 @@ public class RegistrationServiceTest {
 		register.setUsername("lvsystem@capeindia.net");
 		register.setState("TN");
 		register.setPermission("yes");
+		register.setAssignedBy("lvsystem@capeindia.net");
+		register.setNoOfLicence("5");
+		register.setRole("INSPECTOR");
 	}
 
 	@Test
@@ -113,6 +120,7 @@ public class RegistrationServiceTest {
 
 		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionalRegister);
 		when(registrationRepository.save(register)).thenReturn(register);
+		when(registrationRepository.findById(register.getRegisterId())).thenReturn(optionalRegister);
 
 		// Success flow
 		register.setUsername("lvsystem123@capeindia.net");

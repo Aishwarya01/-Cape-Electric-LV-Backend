@@ -18,13 +18,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.CompanyDetailsException;
+import com.capeelectric.model.Register;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.User;
+import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.repository.SitePersonsRepository;
 import com.capeelectric.repository.SiteRepository;
-import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.impl.SiteServiceImpl;
+import com.capeelectric.util.UserFullName;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -37,13 +39,16 @@ public class SiteDetailsServiceTest {
 	private SiteServiceImpl siteServiceImpl;
 
 	@MockBean
-	private UserRepository userRepository;
+	private RegistrationRepository registrationRepository;
 
 	@MockBean
 	private CompanyDetailsException companyDetailsException;
 
 	@MockBean
 	private SitePersonsRepository sitePersonsRepository;
+	
+	@MockBean
+	private UserFullName userName;
 
 	private SitePersons sitePersons1 = new SitePersons();
 
@@ -54,8 +59,13 @@ public class SiteDetailsServiceTest {
 	private Set<SitePersons> sitePersonsSet;
 
 	private Site site;
+	
+	private Register register;
 
 	{
+		register =new Register();
+		register.setUsername("hasan");
+		
 		site = new Site();
 		site.setUserName("hasan");
 		site.setSiteId(1);
@@ -86,7 +96,6 @@ public class SiteDetailsServiceTest {
 	@Test
 	public void testupdateSiteRemovedInactivePerson() throws CompanyDetailsException {
 		test();
-
 		sitePersons1.setInActive(false);
 		sitePersonsSet.add(sitePersons1);
 		site.setSitePersons(sitePersonsSet);
@@ -224,6 +233,7 @@ public class SiteDetailsServiceTest {
 	}
 
 	public void test() {
+		when(userName.findByUserName("hasan")).thenReturn("hasan");
 		List<Site> deptlist = new ArrayList<>();
 		deptlist.add(site);
 
