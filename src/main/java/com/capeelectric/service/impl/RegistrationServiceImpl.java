@@ -108,23 +108,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setUpdatedDate(LocalDateTime.now());
 					register.setCreatedBy(register.getAssignedBy());
 					register.setUpdatedBy(register.getAssignedBy());
-					try {
-						Optional<Register> inspectorInfo = registerRepository.findByUsername(register.getAssignedBy());
-						Register inspector = inspectorInfo.get();
-						inspector.setNoOfLicence(String.valueOf(Integer.parseInt(inspector.getNoOfLicence()) - 1));
-						updateRegistration(inspector);
-						Site site = new Site();
-						site.setCountry(register.getCountry());
-						site.setSite(register.getSiteName());
-						site.setState(register.getState());
-						site.setAddressLine_1(register.getAddress());
-						site.setZipCode(register.getPinCode());
-						site.setLandMark(register.getDistrict());
-						site.setUserName(register.getUsername());
-						siteServiceImpl.addSite(site);
-					} catch (Exception e) {
-						throw new RegistrationException("Inspector License updating failed");
-					}
+					Site site = new Site();
+					site.setCountry(register.getCountry());
+					site.setSite(register.getSiteName());
+					site.setState(register.getState());
+					site.setAddressLine_1(register.getAddress());
+					site.setZipCode(register.getPinCode());
+					site.setLandMark(register.getDistrict());
+					site.setUserName(register.getUsername());
+					siteServiceImpl.addSite(site);
+					reduceLicence(register.getAssignedBy());
 					Register createdRegister = registerRepository.save(register);
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
@@ -181,14 +174,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setUpdatedBy(register.getUsername());
 					registerRepository.save(register);
 				} else {
-					try {
-						Optional<Register> inspectorInfo = registerRepository.findByUsername(register.getAssignedBy());
-						Register inspector = inspectorInfo.get();
-						inspector.setNoOfLicence(String.valueOf(Integer.parseInt(inspector.getNoOfLicence()) - 1));
-						updateRegistration(inspector);
-					} catch (Exception e) {
-						throw new RegistrationException("Inspector License updating failed");
-					}
+					reduceLicence(register.getAssignedBy());
 					register.setUpdatedBy(register.getAssignedBy());
 					registerRepository.save(register);
 				}
@@ -270,6 +256,18 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 		} else {
 			throw new RegistrationException("Invalid Input");
+		}
+	}
+	
+	
+	private void reduceLicence(String inspectorUserName) throws RegistrationException {
+		try {
+			Optional<Register> inspectorInfo = registerRepository.findByUsername(inspectorUserName);
+			Register inspector = inspectorInfo.get();
+			inspector.setNoOfLicence(String.valueOf(Integer.parseInt(inspector.getNoOfLicence()) - 1));
+			registerRepository.save(inspector);
+		} catch (Exception e) {
+			throw new RegistrationException("Inspector License updating failed");
 		}
 	}
 
