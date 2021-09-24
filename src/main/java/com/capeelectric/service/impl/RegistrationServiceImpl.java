@@ -96,7 +96,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 		logger.debug("AddingRegistration Starts with User : {} ", register.getUsername());
 		if (register.getUsername() != null && register.getCompanyName() != null && register.getAddress() != null
 				&& register.getContactNumber() != null && register.getDepartment() != null
-				&& register.getDesignation() != null && register.getName() != null && register.getState() != null) {
+				&& register.getDesignation() != null && register.getName() != null && register.getState() != null
+				&& register.getSiteName() != null) {
 
 			Optional<Register> registerRepo = registerRepository.findByUsername(register.getUsername());
 			if (!registerRepo.isPresent()
@@ -112,6 +113,15 @@ public class RegistrationServiceImpl implements RegistrationService {
 						Register inspector = inspectorInfo.get();
 						inspector.setNoOfLicence(String.valueOf(Integer.parseInt(inspector.getNoOfLicence()) - 1));
 						updateRegistration(inspector);
+						Site site = new Site();
+						site.setCountry(register.getCountry());
+						site.setSite(register.getSiteName());
+						site.setState(register.getState());
+						site.setAddressLine_1(register.getAddress());
+						site.setZipCode(register.getPinCode());
+						site.setLandMark(register.getDistrict());
+						site.setUserName(register.getUsername());
+						siteServiceImpl.addSite(site);
 					} catch (Exception e) {
 						throw new RegistrationException("Inspector License updating failed");
 					}
@@ -170,15 +180,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 				if (register.getRole().equalsIgnoreCase("INSPECTOR")) {
 					register.setUpdatedBy(register.getUsername());
 					registerRepository.save(register);
-						Site site = new Site();
-						site.setCountry(register.getCountry());
-						site.setSite(register.getSiteName());
-						site.setState(register.getState());
-						site.setAddressLine_1(register.getAddress());
-						site.setZipCode(register.getPinCode());
-						site.setLandMark(register.getDistrict());
-						site.setUserName(register.getUsername());
-						siteServiceImpl.addSite(site);
 				} else {
 					try {
 						Optional<Register> inspectorInfo = registerRepository.findByUsername(register.getAssignedBy());
