@@ -18,6 +18,7 @@ import com.capeelectric.model.SitePersons;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.InspectionService;
+import com.capeelectric.util.Constants;
 import com.capeelectric.util.UserFullName;
 /**
  * This InspectionServiceImpl class to add and retrieve the IpaoInspection object
@@ -55,8 +56,8 @@ public class InspectionServiceImpl implements InspectionService {
 			Optional<PeriodicInspection> siteId = inspectionRepository.findBySiteId(periodicInspection.getSiteId());
 			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(periodicInspection.getSiteId())) {
 				periodicInspectionComment = new PeriodicInspectionComment();
-				periodicInspectionComment.setInspectorFlag("0");
-				periodicInspectionComment.setViewerFlag("0");
+				periodicInspectionComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+				periodicInspectionComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
 				periodicInspectionComment.setNoOfComment(1);
 				periodicInspectionComment.setPeriodicInspection(periodicInspection);
 				listOfComments.add(periodicInspectionComment);
@@ -131,7 +132,7 @@ public class InspectionServiceImpl implements InspectionService {
 	@Override
 	public void sendComments(String userName, Integer siteId, PeriodicInspectionComment periodicInspectionComment)
 			throws InspectionException {
-		PeriodicInspection periodicInspection = verifyCommentsInfo(userName, siteId, periodicInspectionComment, "SEND");
+		PeriodicInspection periodicInspection = verifyCommentsInfo(userName, siteId, periodicInspectionComment, Constants.SEND_COMMENT);
 		if (periodicInspection != null) {
 			inspectionRepository.save(periodicInspection);
 		} else {
@@ -143,7 +144,7 @@ public class InspectionServiceImpl implements InspectionService {
 	public String replyComments(String inspectorUserName, Integer siteId,
 			PeriodicInspectionComment periodicInspectionComment) throws InspectionException {
 		PeriodicInspection periodicInspection = verifyCommentsInfo(inspectorUserName, siteId, periodicInspectionComment,
-				"REPLY");
+				Constants.REPLY_COMMENT);
 		if (periodicInspection != null) {
 			inspectionRepository.save(periodicInspection);
 			return viewerName;
@@ -156,7 +157,7 @@ public class InspectionServiceImpl implements InspectionService {
 	public void approveComments(String userName, Integer siteId, PeriodicInspectionComment periodicInspectionComment)
 			throws InspectionException {
 		PeriodicInspection periodicInspection = verifyCommentsInfo(userName, siteId, periodicInspectionComment,
-				"APPROVE");
+				Constants.APPROVE_REJECT_COMMENT);
 		if (periodicInspection != null) {
 			inspectionRepository.save(periodicInspection);
 		} else {
@@ -188,27 +189,27 @@ public class InspectionServiceImpl implements InspectionService {
 
 							periodicInspectionCommentItr.setPeriodicInspection(periodicInspection);
 
-							if (process.equalsIgnoreCase("SEND")) {
+							if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
 								periodicInspectionCommentItr.setViewerDate(LocalDateTime.now());
 								periodicInspectionCommentItr
 										.setViewerComment(periodicInspectionComment.getViewerComment());
-								periodicInspectionCommentItr.setViewerFlag("1");
+								periodicInspectionCommentItr.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
 								periodicInspectionCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								periodicInspectorCommentRepo.add(periodicInspectionCommentItr);
 								periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
 								return periodicInspection;
 							}
-							if (process.equalsIgnoreCase("REPLY")) {
+							if (process.equalsIgnoreCase(Constants.REPLY_COMMENT)) {
 								periodicInspectionCommentItr.setInspectorDate(LocalDateTime.now());
 								periodicInspectionCommentItr.setInspectorUserName(userFullName.findByUserName(userName));
 								periodicInspectionCommentItr
 										.setInspectorComment(periodicInspectionComment.getInspectorComment());
-								periodicInspectionCommentItr.setInspectorFlag("1");
+								periodicInspectionCommentItr.setInspectorFlag(Constants.INCREASED_FLAG_VALUE);
 								periodicInspectorCommentRepo.add(periodicInspectionCommentItr);
 								periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
 								return periodicInspection;
 							}
-							if (process.equalsIgnoreCase("APPROVE")) {
+							if (process.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 								periodicInspectionCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								periodicInspectionCommentItr
 										.setApproveOrReject(periodicInspectionComment.getApproveOrReject());
@@ -220,13 +221,13 @@ public class InspectionServiceImpl implements InspectionService {
 					}
 					if (flagInspectionComment) {
 
-						if (process.equalsIgnoreCase("SEND")) {
+						if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
 							periodicInspectionComment.setNoOfComment(
 									checkNoOfComments(periodicInspection.getPeriodicInspectorComment()));
 							periodicInspectionComment.setPeriodicInspection(periodicInspection);
 							periodicInspectionComment.setViewerDate(LocalDateTime.now());
-							periodicInspectionComment.setViewerFlag("1");
-							periodicInspectionComment.setInspectorFlag("0");
+							periodicInspectionComment.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
+							periodicInspectionComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 							periodicInspectionComment.setViewerUserName(userFullName.findByUserName(userName));
 							periodicInspectorCommentRepo.add(periodicInspectionComment);
 							periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
@@ -262,7 +263,7 @@ public class InspectionServiceImpl implements InspectionService {
 				approveRejectedFlag = periodicInspectionComment.getApproveOrReject();
 			}
 		}
-		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase("APPROVED")) {
+		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 			return maxNum + 1;
 		} else {
 			return maxNum;
@@ -272,7 +273,7 @@ public class InspectionServiceImpl implements InspectionService {
 	private Boolean checkInspectorViewer(String userName, String process, Optional<Site> siteRepo,
 			Optional<PeriodicInspection> periodicInspectionRepo) throws InspectionException {
 		Boolean flag = false;
-		if (process.equalsIgnoreCase("REPLY")) {
+		if (process.equalsIgnoreCase(Constants.REPLY_COMMENT)) {
 			if (siteRepo.get().getUserName().equalsIgnoreCase(userName)
 					&& periodicInspectionRepo.get().getUserName() != null
 					&& siteRepo.get().getUserName().equalsIgnoreCase(periodicInspectionRepo.get().getUserName())) {
@@ -287,7 +288,7 @@ public class InspectionServiceImpl implements InspectionService {
 				throw new InspectionException("Given userName not allowing for " + process + " comment");
 			}
 
-		} else if (process.equalsIgnoreCase("SEND") || process.equalsIgnoreCase("APPROVE")) {
+		} else if (process.equalsIgnoreCase(Constants.SEND_COMMENT) || process.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 
 			Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
 			for (SitePersons sitePersonsItr : sitePersons) {

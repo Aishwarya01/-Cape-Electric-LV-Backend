@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.capeelectric.exception.DecimalConversionException;
+import com.capeelectric.util.Constants;
 import com.capeelectric.util.DecimalConversion;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -167,7 +168,7 @@ public class TestDistribution implements Serializable {
 	public void setIncomingLoopImpedance(String incomingLoopImpedance) throws DecimalConversionException {
 		if (incomingLoopImpedance != null) {
 			this.incomingLoopImpedance = DecimalConversion.convertToDecimal(incomingLoopImpedance,
-					"IncomingLoopImpedance");
+					Constants.test_Incoming_LoopImpedance);
 		}
 		this.incomingLoopImpedance = incomingLoopImpedance;
 	}

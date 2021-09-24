@@ -18,6 +18,7 @@ import com.capeelectric.model.SummaryComment;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.service.SummaryService;
+import com.capeelectric.util.Constants;
 import com.capeelectric.util.UserFullName;
 
 /**
@@ -62,8 +63,8 @@ public class SummaryServiceImpl implements SummaryService {
 			Optional<Summary> summaryRepo = summaryRepository.findBySiteId(summary.getSiteId());
 			if (!summaryRepo.isPresent() || !summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
 				summaryComment = new SummaryComment();
-				summaryComment.setInspectorFlag("0");
-				summaryComment.setViewerFlag("0");
+				summaryComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+				summaryComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
 				summaryComment.setNoOfComment(1);
 				summaryComment.setSummary(summary);
 				listOfComments.add(summaryComment);
@@ -144,7 +145,7 @@ public class SummaryServiceImpl implements SummaryService {
 	
 	@Override
 	public void sendComments(String userName, Integer siteId, SummaryComment summaryComment) throws SummaryException {
-		Summary summary = verifyCommentsInfo(userName, siteId, summaryComment, "APPROVE");
+		Summary summary = verifyCommentsInfo(userName, siteId, summaryComment, Constants.SEND_COMMENT);
 		if (summary != null) {
 			summaryRepository.save(summary);
 		} else {
@@ -155,7 +156,7 @@ public class SummaryServiceImpl implements SummaryService {
 	@Override
 	public String replyComments(String inspectorUserName, Integer siteId, SummaryComment summaryComment)
 			throws SummaryException {
-		Summary summary = verifyCommentsInfo(inspectorUserName, siteId, summaryComment, "APPROVE");
+		Summary summary = verifyCommentsInfo(inspectorUserName, siteId, summaryComment, Constants.REPLY_COMMENT);
 		if (summary != null) {
 			summaryRepository.save(summary);
 			return viewerName;
@@ -167,7 +168,7 @@ public class SummaryServiceImpl implements SummaryService {
 	@Override
 	public void approveComments(String userName, Integer siteId, SummaryComment summaryComment)
 			throws SummaryException {
-		Summary summary = verifyCommentsInfo(userName, siteId, summaryComment, "APPROVE");
+		Summary summary = verifyCommentsInfo(userName, siteId, summaryComment, Constants.APPROVE_REJECT_COMMENT);
 		if (summary != null) {
 			summaryRepository.save(summary);
 		} else {
@@ -198,25 +199,25 @@ public class SummaryServiceImpl implements SummaryService {
 
 							summaryCommentItr.setSummary(summary);
 
-							if (process.equalsIgnoreCase("SEND")) {
+							if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
 								summaryCommentItr.setViewerDate(LocalDateTime.now());
 								summaryCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								summaryCommentItr.setViewerComment(summaryComment.getViewerComment());
-								summaryCommentItr.setViewerFlag("1");
+								summaryCommentItr.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
 								summaryCommentRepo.add(summaryCommentItr);
 								summary.setSummaryComment(summaryCommentRepo);
 								return summary;
 							}
-							if (process.equalsIgnoreCase("REPLY")) {
+							if (process.equalsIgnoreCase(Constants.REPLY_COMMENT)) {
 								summaryCommentItr.setInspectorDate(LocalDateTime.now());
 								summaryCommentItr.setInspectorUserName(userFullName.findByUserName(userName));
 								summaryCommentItr.setInspectorComment(summaryComment.getInspectorComment());
-								summaryCommentItr.setInspectorFlag("1");
+								summaryCommentItr.setInspectorFlag(Constants.INCREASED_FLAG_VALUE);
 								summaryCommentRepo.add(summaryCommentItr);
 								summary.setSummaryComment(summaryCommentRepo);
 								return summary;
 							}
-							if (process.equalsIgnoreCase("APPROVE")) {
+							if (process.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 								summaryCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								summaryCommentItr.setApproveOrReject(summaryComment.getApproveOrReject());
 								summaryCommentRepo.add(summaryCommentItr);
@@ -226,13 +227,13 @@ public class SummaryServiceImpl implements SummaryService {
 						}
 					}
 					if (flagInspectionComment) {
-						if (process.equalsIgnoreCase("SEND")) {
+						if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
 							summaryComment.setNoOfComment(checkNoOfComments(summary.getSummaryComment()));
 							summaryComment.setSummary(summary);
 							summaryComment.setViewerDate(LocalDateTime.now());
 							summaryComment.setViewerUserName(userFullName.findByUserName(userName));
-							summaryComment.setViewerFlag("1");
-							summaryComment.setInspectorFlag("0");
+							summaryComment.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
+							summaryComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 							summaryCommentRepo.add(summaryComment);
 							summary.setSummaryComment(summaryCommentRepo);
 							return summary;
@@ -267,7 +268,7 @@ public class SummaryServiceImpl implements SummaryService {
 				approveRejectedFlag = SummaryCommentItr.getApproveOrReject();
 			}
 		}
-		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase("APPROVED")) {
+		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 			return maxNum + 1;
 		} else {
 			return maxNum + 1;
@@ -277,7 +278,7 @@ public class SummaryServiceImpl implements SummaryService {
 	private Boolean checkInspectorViewer(String userName, String process, Optional<Site> siteRepo,
 			Optional<Summary> summaryRepo) throws SummaryException {
 		Boolean flag = false;
-		if (process.equalsIgnoreCase("REPLY")) {
+		if (process.equalsIgnoreCase(Constants.REPLY_COMMENT)) {
 			if (siteRepo.get().getUserName().equalsIgnoreCase(userName)
 					&& summaryRepo.get().getUserName() != null
 					&& siteRepo.get().getUserName().equalsIgnoreCase(summaryRepo.get().getUserName())) {
@@ -292,7 +293,7 @@ public class SummaryServiceImpl implements SummaryService {
 				throw new SummaryException("Given userName not allowing for " + process + " comment");
 			}
 
-		} else if (process.equalsIgnoreCase("SEND") || process.equalsIgnoreCase("APPROVE")) {
+		} else if (process.equalsIgnoreCase(Constants.SEND_COMMENT) || process.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 
 			Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
 			for (SitePersons sitePersonsItr : sitePersons) {

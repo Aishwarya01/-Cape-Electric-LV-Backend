@@ -21,6 +21,7 @@ import com.capeelectric.model.Register;
 import com.capeelectric.model.Site;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.service.RegistrationService;
+import com.capeelectric.util.Constants;
 
 /**
  * 
@@ -63,7 +64,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 				if (isValidIndianMobileNumber(register.getContactNumber())) {
 					if (register.getRole() != null && register.getRole().equalsIgnoreCase("INSPECTOR")) {
 						register.setNoOfLicence(numberOfLicence);
-						register.setPermission("NOT_AUTHORIZED");
+						register.setPermission(Constants.before_Approve_Permission);
 					}
 					register.setCreatedDate(LocalDateTime.now());
 					register.setUpdatedDate(LocalDateTime.now());

@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.capeelectric.exception.DecimalConversionException;
+import com.capeelectric.util.Constants;
 import com.capeelectric.util.DecimalConversion;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -176,7 +177,7 @@ public class TestingRecords implements Serializable {
 
 	public void setShortCircuitSetting(String shortCircuitSetting) throws DecimalConversionException {
 		if (shortCircuitSetting != null) {
-			this.shortCircuitSetting = DecimalConversion.convertToDecimal(shortCircuitSetting, "ShortCircuitSetting");
+			this.shortCircuitSetting = DecimalConversion.convertToDecimal(shortCircuitSetting, Constants.test_Short_CircuitSetting);
 		}
 		this.shortCircuitSetting = shortCircuitSetting;
 	}
@@ -187,7 +188,7 @@ public class TestingRecords implements Serializable {
 
 	public void seteFSetting(String eFSetting) throws DecimalConversionException {
 		if (eFSetting != null) {
-			this.eFSetting = DecimalConversion.convertToDecimal(eFSetting, "EFSetting");
+			this.eFSetting = DecimalConversion.convertToDecimal(eFSetting, Constants.test_EFSetting);
 		}
 		this.eFSetting = eFSetting;
 	}
@@ -261,7 +262,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setInsulationResistance(String insulationResistance) throws DecimalConversionException {
-		this.insulationResistance = DecimalConversion.convertToDecimal(insulationResistance, "InsulationResistance");
+		this.insulationResistance = DecimalConversion.convertToDecimal(insulationResistance, Constants.test_Insulation_Resistance);
 	}
 
 	public String getTestVoltage() {
@@ -269,7 +270,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setTestVoltage(String testVoltage) throws DecimalConversionException {
-		this.testVoltage = DecimalConversion.convertToDecimal(testVoltage,"Voltage");
+		this.testVoltage = DecimalConversion.convertToDecimal(testVoltage,Constants.test_Voltage);
 	}
 
 	public String getTestLoopImpedance() {
@@ -277,7 +278,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setTestLoopImpedance(String testLoopImpedance) throws DecimalConversionException {
-		this.testLoopImpedance = DecimalConversion.convertToDecimal(testLoopImpedance, "Loopimpedance");
+		this.testLoopImpedance = DecimalConversion.convertToDecimal(testLoopImpedance, Constants.test_Loopimpedance);
 	}
 
 	public String getTestFaultCurrent() {
@@ -285,7 +286,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setTestFaultCurrent(String testFaultCurrent) throws DecimalConversionException {
-		this.testFaultCurrent = DecimalConversion.convertToDecimal(testFaultCurrent, "Faultcurrent");
+		this.testFaultCurrent = DecimalConversion.convertToDecimal(testFaultCurrent, Constants.test_Faultcurrent);
 	}
 
 	public String getDisconnectionTime() {

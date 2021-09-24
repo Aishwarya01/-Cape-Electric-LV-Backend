@@ -18,6 +18,7 @@ import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.PeriodicTestingService;
+import com.capeelectric.util.Constants;
 import com.capeelectric.util.UserFullName;
 
 /**
@@ -53,8 +54,8 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(testingReport.getSiteId());
 			if (!testingRepo.isPresent() || !testingRepo.get().getSiteId().equals(testingReport.getSiteId())) {
 				testingComment = new TestingReportComment();
-				testingComment.setInspectorFlag("0");
-				testingComment.setViewerFlag("0");
+				testingComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+				testingComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
 				testingComment.setNoOfComment(1);
 				testingComment.setTestingReport(testingReport);
 				listOfComments.add(testingComment);
@@ -126,7 +127,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	public void sendComments(String userName, Integer siteId, TestingReportComment testingReportComment)
 			throws PeriodicTestingException {
 
-		TestingReport testingReport = verifyCommentsInfo(userName, siteId, testingReportComment, "SEND");
+		TestingReport testingReport = verifyCommentsInfo(userName, siteId, testingReportComment, Constants.SEND_COMMENT);
 		if (testingReport != null) {
 			testingReportRepository.save(testingReport);
 		} else {
@@ -137,7 +138,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	@Override
 	public String replyComments(String inspectorUserName, Integer siteId, TestingReportComment testingReportComment)
 			throws PeriodicTestingException {
-		TestingReport testingReport = verifyCommentsInfo(inspectorUserName, siteId, testingReportComment, "REPLY");
+		TestingReport testingReport = verifyCommentsInfo(inspectorUserName, siteId, testingReportComment, Constants.REPLY_COMMENT);
 		if (testingReport != null) {
 			testingReportRepository.save(testingReport);
 			return viewerName;
@@ -149,7 +150,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	@Override
 	public void approveComments(String userName, Integer siteId, TestingReportComment testingReportComment)
 			throws PeriodicTestingException {
-		TestingReport testingReport = verifyCommentsInfo(userName, siteId, testingReportComment, "APPROVE");
+		TestingReport testingReport = verifyCommentsInfo(userName, siteId, testingReportComment, Constants.APPROVE_REJECT_COMMENT);
 		if (testingReport != null) {
 			testingReportRepository.save(testingReport);
 		} else {
@@ -178,25 +179,25 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 
 							testingReportCommentItr.setTestingReport(testingReport);
 
-							if (process.equalsIgnoreCase("SEND")) {
+							if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
 								testingReportCommentItr.setViewerDate(LocalDateTime.now());
 								testingReportCommentItr.setViewerComment(testingReportComment.getViewerComment());
-								testingReportCommentItr.setViewerFlag("1");
+								testingReportCommentItr.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
 								testingReportCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								testingReportCommentRepo.add(testingReportCommentItr);
 								testingReport.setTestingComment(testingReportCommentRepo);
 								return testingReport;
 							}
-							if (process.equalsIgnoreCase("REPLY")) {
+							if (process.equalsIgnoreCase(Constants.REPLY_COMMENT)) {
 								testingReportCommentItr.setInspectorDate(LocalDateTime.now());
 								testingReportCommentItr.setInspectorUserName(userFullName.findByUserName(userName));
 								testingReportCommentItr.setInspectorComment(testingReportComment.getInspectorComment());
-								testingReportCommentItr.setInspectorFlag("1");
+								testingReportCommentItr.setInspectorFlag(Constants.INCREASED_FLAG_VALUE);
 								testingReportCommentRepo.add(testingReportCommentItr);
 								testingReport.setTestingComment(testingReportCommentRepo);
 								return testingReport;
 							}
-							if (process.equalsIgnoreCase("APPROVE")) {
+							if (process.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 								testingReportCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								testingReportCommentItr.setApproveOrReject(testingReportComment.getApproveOrReject());
 								testingReportCommentRepo.add(testingReportCommentItr);
@@ -207,13 +208,13 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 					}
 					if (flagInspectionComment) {
 
-						if (process.equalsIgnoreCase("SEND")) {
+						if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
 							testingReportComment.setNoOfComment(checkNoOfComments(testingReport.getTestingComment()));
 							testingReportComment.setTestingReport(testingReport);
 							testingReportComment.setViewerDate(LocalDateTime.now());
 							testingReportComment.setViewerUserName(userFullName.findByUserName(userName));
-							testingReportComment.setViewerFlag("1");
-							testingReportComment.setInspectorFlag("0");
+							testingReportComment.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
+							testingReportComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 							testingReportCommentRepo.add(testingReportComment);
 							testingReport.setTestingComment(testingReportCommentRepo);
 							return testingReport;
@@ -248,7 +249,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 				approveRejectedFlag = testingReportCommentItr.getApproveOrReject();
 			}
 		}
-		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase("APPROVED")) {
+		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 			return maxNum + 1;
 		} else {
 			return maxNum;
@@ -258,7 +259,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	private Boolean checkInspectorViewer(String userName, String process, Optional<Site> siteRepo,
 			Optional<TestingReport> testingReportRepo) throws PeriodicTestingException {
 		Boolean flag = false;
-		if (process.equalsIgnoreCase("REPLY")) {
+		if (process.equalsIgnoreCase(Constants.REPLY_COMMENT)) {
 			if (siteRepo.get().getUserName().equalsIgnoreCase(userName)
 					&& testingReportRepo.get().getUserName() != null
 					&& siteRepo.get().getUserName().equalsIgnoreCase(testingReportRepo.get().getUserName())) {
@@ -273,7 +274,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 				throw new PeriodicTestingException("Given userName not allowing for " + process + " comment");
 			}
 
-		} else if (process.equalsIgnoreCase("SEND") || process.equalsIgnoreCase("APPROVE")) {
+		} else if (process.equalsIgnoreCase(Constants.SEND_COMMENT) || process.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 
 			Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
 			for (SitePersons sitePersonsItr : sitePersons) {

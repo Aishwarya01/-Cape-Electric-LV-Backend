@@ -22,6 +22,7 @@ import com.capeelectric.model.SupplyParameters;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.service.SupplyCharacteristicsService;
+import com.capeelectric.util.Constants;
 import com.capeelectric.util.DecimalConversion;
 import com.capeelectric.util.UserFullName;
 
@@ -73,13 +74,13 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 						&& supplyCharacteristics.getMainLoopImpedance() != null) {
 					logger.info("decimal formating corrections started for Main supply");
 					supplyCharacteristics.setMainNominalCurrent(DecimalConversion.convertToDecimal(
-							supplyCharacteristics.getMainNominalCurrent(), "Supply_MainNominalCurrent"));
+							supplyCharacteristics.getMainNominalCurrent(), Constants.supply_MainNominal_Current));
 					supplyCharacteristics.setMainNominalFrequency(DecimalConversion.convertToDecimal(
-							supplyCharacteristics.getMainNominalFrequency(), "Supply_MainNominalFrequency"));
+							supplyCharacteristics.getMainNominalFrequency(), Constants.supply_MainNominal_Frequency));
 					supplyCharacteristics.setMainNominalVoltage(DecimalConversion.convertToDecimal(
-							supplyCharacteristics.getMainNominalVoltage(), "Supply_MainNominalVoltage"));
+							supplyCharacteristics.getMainNominalVoltage(), Constants.supply_MainNominal_Voltage));
 					supplyCharacteristics.setMainLoopImpedance(DecimalConversion.convertToDecimal(
-							supplyCharacteristics.getMainLoopImpedance(), "Supply_MainLoopImpedance"));
+							supplyCharacteristics.getMainLoopImpedance(), Constants.supply_MainLoop_Impedance));
 					logger.info("decimal formating corrections ended for Main supply");
 				}
 				if (supplyCharacteristics.getSupplyParameters() != null) {
@@ -93,20 +94,20 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 								&& supplyParametersItr.getLoopImpedance() != null) {
 							logger.info("decimal formating corrections started for alternative supply");
 							supplyParametersItr.setNominalFrequency(DecimalConversion.convertToDecimal(
-									supplyParametersItr.getNominalFrequency(), "Supply_NominalFrequency"));
+									supplyParametersItr.getNominalFrequency(), Constants.supply_Nominal_Frequency));
 							supplyParametersItr.setNominalVoltage(DecimalConversion.convertToDecimal(
-									supplyParametersItr.getNominalVoltage(), "Supply_NominalVoltage"));
-							supplyParametersItr.setFaultCurrent(DecimalConversion
-									.convertToDecimal(supplyParametersItr.getFaultCurrent(), "Supply_FaultCurrent"));
-							supplyParametersItr.setLoopImpedance(DecimalConversion
-									.convertToDecimal(supplyParametersItr.getLoopImpedance(), "Supply_LoopImpedance"));
+									supplyParametersItr.getNominalVoltage(), Constants.supply_Nominal_Voltage));
+							supplyParametersItr.setFaultCurrent(DecimalConversion.convertToDecimal(
+									supplyParametersItr.getFaultCurrent(), Constants.supply_Fault_Current));
+							supplyParametersItr.setLoopImpedance(DecimalConversion.convertToDecimal(
+									supplyParametersItr.getLoopImpedance(), Constants.supply_LoopImpedance));
 							logger.info("decimal formating corrections ended for alternative supply");
 						}
 					}
 				}
 				supplyCharacteristicComment = new SupplyCharacteristicComment();
-				supplyCharacteristicComment.setInspectorFlag("0");
-				supplyCharacteristicComment.setViewerFlag("0");
+				supplyCharacteristicComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+				supplyCharacteristicComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
 				supplyCharacteristicComment.setNoOfComment(1);
 				supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
 				listOfComments.add(supplyCharacteristicComment);
@@ -188,7 +189,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			SupplyCharacteristicComment supplyCharacteristicComment) throws SupplyCharacteristicsException {
 
 		SupplyCharacteristics supplyCharacteristics = verifyCommentsInfo(userName, siteId,
-				supplyCharacteristicComment, "APPROVE");
+				supplyCharacteristicComment, Constants.SEND_COMMENT);
 		if (supplyCharacteristics != null) {
 			supplyCharacteristicsRepository.save(supplyCharacteristics);
 		} else {
@@ -202,7 +203,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			SupplyCharacteristicComment supplyCharacteristicComment) throws SupplyCharacteristicsException {
 
 		SupplyCharacteristics supplyCharacteristics = verifyCommentsInfo(inspectorUserName, siteId,
-				supplyCharacteristicComment, "APPROVE");
+				supplyCharacteristicComment, Constants.REPLY_COMMENT);
 		if (supplyCharacteristics != null) {
 			supplyCharacteristicsRepository.save(supplyCharacteristics);
 			return viewerName;
@@ -217,7 +218,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			SupplyCharacteristicComment supplyCharacteristicComment) throws SupplyCharacteristicsException {
 
 		SupplyCharacteristics supplyCharacteristics = verifyCommentsInfo(userName, siteId, supplyCharacteristicComment,
-				"APPROVE");
+				Constants.APPROVE_REJECT_COMMENT);
 		if (supplyCharacteristics != null) {
 			supplyCharacteristicsRepository.save(supplyCharacteristics);
 		} else {
@@ -253,27 +254,27 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 
 							supplyCharacteristicCommentItr.setSupplyCharacteristics(supplyCharacteristics);
 
-							if (process.equalsIgnoreCase("SEND")) {
+							if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
 								supplyCharacteristicCommentItr.setViewerDate(LocalDateTime.now());
 								supplyCharacteristicCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								supplyCharacteristicCommentItr
 										.setViewerComment(supplyCharacteristicComment.getViewerComment());
-								supplyCharacteristicCommentItr.setViewerFlag("1");
+								supplyCharacteristicCommentItr.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
 								supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
 								supplyCharacteristics.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
 								return supplyCharacteristics;
 							}
-							if (process.equalsIgnoreCase("REPLY")) {
+							if (process.equalsIgnoreCase(Constants.REPLY_COMMENT)) {
 								supplyCharacteristicCommentItr.setInspectorDate(LocalDateTime.now());
 								supplyCharacteristicCommentItr.setInspectorUserName(userFullName.findByUserName(userName));
 								supplyCharacteristicCommentItr
 										.setInspectorComment(supplyCharacteristicComment.getInspectorComment());
-								supplyCharacteristicCommentItr.setInspectorFlag("1");
+								supplyCharacteristicCommentItr.setInspectorFlag(Constants.INCREASED_FLAG_VALUE);
 								supplyCharacteristicCommentRepo.add(supplyCharacteristicCommentItr);
 								supplyCharacteristics.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
 								return supplyCharacteristics;
 							}
-							if (process.equalsIgnoreCase("APPROVE")) {
+							if (process.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 								supplyCharacteristicCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								supplyCharacteristicCommentItr
 										.setApproveOrReject(supplyCharacteristicComment.getApproveOrReject());
@@ -285,14 +286,14 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 					}
 					if (flagInspectionComment) {
 
-						if (process.equalsIgnoreCase("SEND")) {
+						if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
 							supplyCharacteristicComment.setNoOfComment(
 									checkNoOfComments(supplyCharacteristics.getSupplyCharacteristicComment()));
 							supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
 							supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
 							supplyCharacteristicComment.setViewerUserName(userFullName.findByUserName(userName));
-							supplyCharacteristicComment.setViewerFlag("1");
-							supplyCharacteristicComment.setInspectorFlag("0");
+							supplyCharacteristicComment.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
+							supplyCharacteristicComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 							supplyCharacteristicCommentRepo.add(supplyCharacteristicComment);
 							supplyCharacteristics.setSupplyCharacteristicComment(supplyCharacteristicCommentRepo);
 							return supplyCharacteristics;
@@ -325,7 +326,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				approveRejectedFlag = supplyCharacteristicCommentItr.getApproveOrReject();
 			}
 		}
-		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase("APPROVED")) {
+		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 			return maxNum + 1;
 		} else {
 			return maxNum + 1;
@@ -335,7 +336,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	private Boolean checkInspectorViewer(String userName, String process, Optional<Site> siteRepo,
 			Optional<SupplyCharacteristics> supplyCharacteristicsRepo) throws SupplyCharacteristicsException {
 		Boolean flag = false;
-		if (process.equalsIgnoreCase("REPLY")) {
+		if (process.equalsIgnoreCase(Constants.REPLY_COMMENT)) {
 			if (siteRepo.get().getUserName().equalsIgnoreCase(userName)
 					&& supplyCharacteristicsRepo.get().getUserName() != null
 					&& siteRepo.get().getUserName().equalsIgnoreCase(supplyCharacteristicsRepo.get().getUserName())) {
@@ -350,7 +351,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				throw new SupplyCharacteristicsException("Given userName not allowing for " + process + " comment");
 			}
 
-		} else if (process.equalsIgnoreCase("SEND") || process.equalsIgnoreCase("APPROVE")) {
+		} else if (process.equalsIgnoreCase(Constants.SEND_COMMENT) || process.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 
 			Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
 			for (SitePersons sitePersonsItr : sitePersons) {

@@ -20,6 +20,7 @@ import com.capeelectric.model.SitePersons;
 import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.InstalReportService;
+import com.capeelectric.util.Constants;
 import com.capeelectric.util.UserFullName;
 
 /**
@@ -58,8 +59,8 @@ public class InstalReportServiceImpl implements InstalReportService {
 			if (!reportDetailsRepo.isPresent()
 					|| !reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
 				reportDetailsComment = new ReportDetailsComment();
-				reportDetailsComment.setInspectorFlag("0");
-				reportDetailsComment.setViewerFlag("0");
+				reportDetailsComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+				reportDetailsComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
 				reportDetailsComment.setNoOfComment(1);
 				reportDetailsComment.setReportDetails(reportDetails);
 				listOfComments.add(reportDetailsComment);
@@ -134,7 +135,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 
 	@Override
 	public void sendComments(String userName, Integer siteId, ReportDetailsComment reportDetailsComment) throws InstalReportException {
-		ReportDetails reportDetails = verifyCommentsInfo(userName, siteId, reportDetailsComment, "SEND");
+		ReportDetails reportDetails = verifyCommentsInfo(userName, siteId, reportDetailsComment, Constants.SEND_COMMENT);
 		if (reportDetails != null) {
 			installationReportRepository.save(reportDetails);
 		} else {
@@ -145,7 +146,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 	@Override
 	public String replyComments(String inspectorUserName, Integer siteId, ReportDetailsComment reportDetailsComment)
 			throws InstalReportException {
-		ReportDetails reportDetails = verifyCommentsInfo(inspectorUserName, siteId, reportDetailsComment, "REPLY");
+		ReportDetails reportDetails = verifyCommentsInfo(inspectorUserName, siteId, reportDetailsComment, Constants.REPLY_COMMENT);
 		if (reportDetails != null && viewerName != null) {
 			installationReportRepository.save(reportDetails);
 			return viewerName;
@@ -158,7 +159,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 	@Override
 	public void approveComments(String userName, Integer siteId, ReportDetailsComment reportDetailsComment)
 			throws InstalReportException {
-		ReportDetails reportDetails = verifyCommentsInfo(userName, siteId, reportDetailsComment, "APPROVE");
+		ReportDetails reportDetails = verifyCommentsInfo(userName, siteId, reportDetailsComment, Constants.APPROVE_REJECT_COMMENT);
 		if (reportDetails != null) {
 			installationReportRepository.save(reportDetails);
 		} else {
@@ -189,25 +190,25 @@ public class InstalReportServiceImpl implements InstalReportService {
 
 							reportDetailsCommentItr.setReportDetails(reportDetails);
 
-							if (process.equalsIgnoreCase("SEND")) {
+							if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
 								reportDetailsCommentItr.setViewerDate(LocalDateTime.now());
 								reportDetailsCommentItr.setViewerComment(reportDetailsComment.getViewerComment());
-								reportDetailsCommentItr.setViewerFlag("1");
+								reportDetailsCommentItr.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
 								reportDetailsCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								reportDetailsCommentRepo.add(reportDetailsCommentItr);
 								reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
 								return reportDetails;
 							}
-							if (process.equalsIgnoreCase("REPLY")) {
+							if (process.equalsIgnoreCase(Constants.REPLY_COMMENT)) {
 								reportDetailsCommentItr.setInspectorDate(LocalDateTime.now());
 								reportDetailsCommentItr.setInspectorComment(reportDetailsComment.getInspectorComment());
-								reportDetailsCommentItr.setInspectorFlag("1");
+								reportDetailsCommentItr.setInspectorFlag(Constants.INCREASED_FLAG_VALUE);
 								reportDetailsCommentItr.setInspectorUserName(userFullName.findByUserName(userName));
 								reportDetailsCommentRepo.add(reportDetailsCommentItr);
 								reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
 								return reportDetails;
 							}
-							if (process.equalsIgnoreCase("APPROVE")) {
+							if (process.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 								reportDetailsCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								reportDetailsCommentItr.setApproveOrReject(reportDetailsComment.getApproveOrReject());
 								reportDetailsCommentRepo.add(reportDetailsCommentItr);
@@ -217,14 +218,14 @@ public class InstalReportServiceImpl implements InstalReportService {
 						}
 					}
 					if (flagInspectionComment) {
-						if (process.equalsIgnoreCase("SEND")) {
+						if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
 							
 							reportDetailsComment
 									.setNoOfComment(checkNoOfComments(reportDetails.getReportDetailsComment()));
 							reportDetailsComment.setReportDetails(reportDetails);
 							reportDetailsComment.setViewerDate(LocalDateTime.now());
-							reportDetailsComment.setViewerFlag("1");
-							reportDetailsComment.setInspectorFlag("0");
+							reportDetailsComment.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
+							reportDetailsComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 							reportDetailsComment.setViewerUserName(userFullName.findByUserName(userName));
 							reportDetailsCommentRepo.add(reportDetailsComment);
 							reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
@@ -261,7 +262,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 				approveRejectedFlag = reportDetailsCommentItr.getApproveOrReject();
 			}
 		}
-		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase("APPROVED")) {
+		if (approveRejectedFlag != null && approveRejectedFlag.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 			return maxNum + 1;
 		} else {
 			return maxNum;
@@ -271,7 +272,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 	private Boolean checkInspectorViewer(String userName, String process, Optional<Site> siteRepo,
 			Optional<ReportDetails> reportDetailsRepo) throws InstalReportException {
 		Boolean flag = false;
-		if (process.equalsIgnoreCase("REPLY")) {
+		if (process.equalsIgnoreCase(Constants.REPLY_COMMENT)) {
 			if (siteRepo.get().getUserName().equalsIgnoreCase(userName)
 					&& reportDetailsRepo.get().getUserName() != null
 					&& siteRepo.get().getUserName().equalsIgnoreCase(reportDetailsRepo.get().getUserName())) {
@@ -286,7 +287,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 				throw new InstalReportException("Given userName not allowing for " + process + " comment");
 			}
 
-		} else if (process.equalsIgnoreCase("SEND") || process.equalsIgnoreCase("APPROVE")) {
+		} else if (process.equalsIgnoreCase(Constants.SEND_COMMENT) || process.equalsIgnoreCase(Constants.APPROVE_REJECT_COMMENT)) {
 
 			Set<SitePersons> sitePersons = siteRepo.get().getSitePersons();
 			for (SitePersons sitePersonsItr : sitePersons) {

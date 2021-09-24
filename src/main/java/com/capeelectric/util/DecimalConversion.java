@@ -55,35 +55,35 @@ public class DecimalConversion {
 
 	private DecimalFormat findDecimalSize(String type) throws DecimalConversionException {
 		if (type != null) {
-			if (type.equalsIgnoreCase("Supply_MainNominalCurrent")) {
+			if (type.equalsIgnoreCase(Constants.supply_MainNominal_Current)) {
 				return new DecimalFormat(Constants.supplyMainNominalCurrent);
-			} else if (type != null && type.equalsIgnoreCase("Supply_MainNominalFrequency")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_MainNominal_Frequency)) {
 				return new DecimalFormat(Constants.supplyMainNominalFrequency);
-			} else if (type != null && type.equalsIgnoreCase("Supply_MainNominalVoltage")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_MainNominal_Voltage)) {
 				return new DecimalFormat(Constants.supplyMainNominalVoltage);
-			} else if (type != null && type.equalsIgnoreCase("Supply_MainLoopImpedance")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_MainLoop_Impedance)) {
 				return new DecimalFormat(Constants.supplyMainLoopImpedance);
-			} else if (type != null && type.equalsIgnoreCase("Supply_NominalFrequency")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Nominal_Frequency)) {
 				return new DecimalFormat(Constants.supplyNominalFrequency);
-			} else if (type != null && type.equalsIgnoreCase("Supply_NominalVoltage")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Nominal_Voltage)) {
 				return new DecimalFormat(Constants.supplyNominalVoltage);
-			} else if (type != null && type.equalsIgnoreCase("Supply_FaultCurrent")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Fault_Current)) {
 				return new DecimalFormat(Constants.supplyFaultCurrent);
-			} else if (type != null && type.equalsIgnoreCase("Supply_LoopImpedance")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_LoopImpedance)) {
 				return new DecimalFormat(Constants.supplyLoopImpedance);
-			} else if (type != null && type.equalsIgnoreCase("IncomingLoopImpedance")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.test_Incoming_LoopImpedance)) {
 				return new DecimalFormat(Constants.testIncomingLoopimpedance);
-			} else if (type != null && type.equalsIgnoreCase("ShortCircuitSetting")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.test_Short_CircuitSetting)) {
 				return new DecimalFormat(Constants.testShortCircuit);
-			} else if (type != null && type.equalsIgnoreCase("EFSetting")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.test_EFSetting)) {
 				return new DecimalFormat(Constants.testInstantaneousDmt);
-			} else if (type != null && type.equalsIgnoreCase("InsulationResistance")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.test_Insulation_Resistance)) {
 				return new DecimalFormat(Constants.testInsulationResistance);
-			} else if (type.equalsIgnoreCase("Voltage")) {
+			} else if (type.equalsIgnoreCase(Constants.test_Voltage)) {
 				return new DecimalFormat(Constants.testVoltage);
-			} else if (type != null && type.equalsIgnoreCase("Loopimpedance")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.test_Loopimpedance)) {
 				return new DecimalFormat(Constants.loopImpedance);
-			} else if (type != null && type.equalsIgnoreCase("Faultcurrent")) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.test_Faultcurrent)) {
 				return new DecimalFormat(Constants.faultCurrent);
 			}
 		} else {
