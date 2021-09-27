@@ -27,6 +27,7 @@ public class SiteServiceImpl implements SiteService {
 	@Autowired
 	private SitePersonsRepository sitePersonsRepository;
 	
+	@Autowired
 	private UserFullName userName;
 
 	/*
