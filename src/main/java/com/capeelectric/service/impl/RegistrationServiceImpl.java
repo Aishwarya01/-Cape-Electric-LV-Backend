@@ -108,17 +108,21 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setUpdatedDate(LocalDateTime.now());
 					register.setCreatedBy(register.getAssignedBy());
 					register.setUpdatedBy(register.getAssignedBy());
-					Site site = new Site();
-					site.setCountry(register.getCountry());
-					site.setSite(register.getSiteName());
-					site.setState(register.getState());
-					site.setAddressLine_1(register.getAddress());
-					site.setZipCode(register.getPinCode());
-					site.setLandMark(register.getDistrict());
-					site.setUserName(register.getUsername());
-					siteServiceImpl.addSite(site);
 					reduceLicence(register.getAssignedBy());
 					Register createdRegister = registerRepository.save(register);
+					if(createdRegister != null) {
+						Site site = new Site();
+						site.setCountry(createdRegister.getCountry());
+						site.setSite(createdRegister.getSiteName());
+						site.setState(createdRegister.getState());
+						site.setAddressLine_1(createdRegister.getAddress());
+						site.setZipCode(createdRegister.getPinCode());
+						site.setLandMark(createdRegister.getDistrict());
+						site.setUserName(createdRegister.getUsername());
+						siteServiceImpl.addSite(site);
+					} else {
+						throw new RegistrationException("Registration Failed");
+					}
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
 				} else {
