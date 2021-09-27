@@ -156,13 +156,13 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 
 	@Override
-	public void updateRegistration(Register register) throws RegistrationException, CompanyDetailsException {
+	public void updateRegistration(Register register,Boolean isLicenseUpdate) throws RegistrationException, CompanyDetailsException {
 
 		if (register.getRegisterId() != null && register.getRegisterId() != 0 && register.getUsername() != null
 				&& register.getCompanyName() != null && register.getAddress() != null
 				&& register.getContactNumber() != null && register.getDepartment() != null
 				&& register.getDesignation() != null && register.getCountry() != null && register.getName() != null
-				&& register.getState() != null) {
+				&& register.getState() != null&& isLicenseUpdate != null) {
 
 			Optional<Register> registerRepo = registerRepository.findById(register.getRegisterId());
 
@@ -174,8 +174,11 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setUpdatedBy(register.getUsername());
 					registerRepository.save(register);
 				} else {
-					reduceLicence(register.getAssignedBy());
 					register.setUpdatedBy(register.getAssignedBy());
+					if (isLicenseUpdate) {
+						reduceLicence(register.getAssignedBy());
+						registerRepository.save(register);
+					}
 					registerRepository.save(register);
 				}
 
@@ -200,9 +203,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 				if (registerRepo.get().getPermission().equalsIgnoreCase("Yes")) {
 					if (registerRepo.get().getContactNumber().contains(mobileNumber)) {
 						if (isValidIndianMobileNumber(mobileNumber)) {
-							String SessionKey = otpSend(mobileNumber);
+							String sessionKey = otpSend(mobileNumber);
 							Register register = registerRepo.get();
-							register.setOtpSessionKey(SessionKey);
+							register.setOtpSessionKey(sessionKey);
 							register.setUpdatedDate(LocalDateTime.now());
 							register.setUpdatedBy(userName);
 							registerRepository.save(register);
@@ -249,6 +252,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 			if (registerRepo.isPresent() && registerRepo.get().getUsername().equalsIgnoreCase(userName)) {
 				Register register = registerRepo.get();
 				register.setNoOfLicence(numoflicence);
+				register.setUpdatedDate(LocalDateTime.now());
+				register.setUpdatedBy(userName);
 				registerRepository.save(register);
 			} else {
 				throw new RegistrationException("Given UserName does not Exist");
@@ -265,6 +270,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 			Optional<Register> inspectorInfo = registerRepository.findByUsername(inspectorUserName);
 			Register inspector = inspectorInfo.get();
 			inspector.setNoOfLicence(String.valueOf(Integer.parseInt(inspector.getNoOfLicence()) - 1));
+			inspector.setUpdatedBy(inspectorUserName);
+			inspector.setUpdatedDate(LocalDateTime.now());
 			registerRepository.save(inspector);
 		} catch (Exception e) {
 			throw new RegistrationException("Inspector License updating failed");

@@ -98,11 +98,12 @@ public class RegistrationController {
 		return registrationService.retrieveRegistration(userName);
 	}
 
-	@PutMapping("/updateRegistration")
-	public ResponseEntity<String> updateRegistration(@RequestBody Register register)
+	@PutMapping("/updateRegistration/{islicenseupdate}")
+	public ResponseEntity<String> updateRegistration(@RequestBody Register register,@PathVariable("islicenseupdate") Boolean isLicenseUpdate)
 			throws IOException, MessagingException, RegistrationException, CompanyDetailsException {
-		logger.debug("called updateRegistration function UserName : {}", register.getUsername());
-		registrationService.updateRegistration(register);
+		logger.debug("called updateRegistration function UserName : {}, IsLicenseUpdate : {}", register.getUsername(),
+				isLicenseUpdate);
+		registrationService.updateRegistration(register, isLicenseUpdate);
 		awsEmailService.sendEmail(register.getUsername(), "You have successfully updated your profile");
 		return new ResponseEntity<String>("Successfully Updated Registration", HttpStatus.OK);
 	}

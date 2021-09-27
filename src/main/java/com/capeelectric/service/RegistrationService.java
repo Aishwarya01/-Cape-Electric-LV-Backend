@@ -17,7 +17,7 @@ public interface RegistrationService {
 
 	public Optional<Register> retrieveRegistration(String userName) throws RegistrationException;
 
-	public void updateRegistration(Register inspector) throws RegistrationException, CompanyDetailsException;
+	public void updateRegistration(Register inspector, Boolean isLicenseUpdate) throws RegistrationException, CompanyDetailsException;
 
 	public void sendOtp(String userName, String mobileNumber) throws RegistrationException;
 

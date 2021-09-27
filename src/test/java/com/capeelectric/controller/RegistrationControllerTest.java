@@ -113,10 +113,10 @@ public class RegistrationControllerTest {
 	public void testUpdateRegistration() throws RegistrationException, MessagingException, IOException, CompanyDetailsException {
 		logger.info("RegistrationControllerTest testUpdateRegistration_funcion Started");
 
-		doNothing().when(registrationService).updateRegistration(register);
+		doNothing().when(registrationService).updateRegistration(register,true);
 		doNothing().when(awsEmailService).sendEmail(register.getUsername(),
 				"You have successfully updated your profile");
-		ResponseEntity<String> updateRegistration = registrationController.updateRegistration(register);
+		ResponseEntity<String> updateRegistration = registrationController.updateRegistration(register,true);
 		assertEquals(updateRegistration.getStatusCode(), HttpStatus.OK);
 
 		logger.info("RegistrationControllerTest testUpdateRegistration_funcion Ended");
