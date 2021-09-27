@@ -176,7 +176,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 				} else {
 					register.setUpdatedBy(register.getAssignedBy());
 					if (isLicenseUpdate) {
-						reduceLicence(register.getAssignedBy(),null);
+						reduceLicence(register.getAssignedBy(),register.getSiteName());
 						registerRepository.save(register);
 					}
 					registerRepository.save(register);
@@ -275,6 +275,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 				} else {
 					inspector.setSiteName(inspector.getSiteName() + "," + siteName);
 				}
+			} else {
+				throw new RegistrationException("Site_Name Invalid Input");
 			}
 			inspector.setNoOfLicence(String.valueOf(Integer.parseInt(inspector.getNoOfLicence()) - 1));
 			inspector.setUpdatedBy(inspectorUserName);
