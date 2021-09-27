@@ -297,7 +297,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 				Register register = registerRepo.get();
 				Site site = new Site();
 				site.setCountry(register.getCountry());
-				if (register.getSiteName() == null) {
+				if (register.getSiteName() == null || register.getSiteName().length() == 0) {
 					site.setSite(createdRegister.getSiteName());
 				} else {
 					site.setSite(register.getSiteName() + "," + createdRegister.getSiteName());
