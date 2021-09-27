@@ -177,7 +177,7 @@ public class SiteServiceImpl implements SiteService {
 		} else {
 			throw new CompanyDetailsException("Company Name "
 					+ companyName +", " +"Department Name "+ departmentName + ", "
-					+ " Site Name "+ siteName);
+					+ " Site Name " + siteName + " is not available");
 		}
 	}
 

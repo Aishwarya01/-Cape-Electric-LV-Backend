@@ -60,7 +60,9 @@ public class SiteController {
 	}
 	
 	@GetMapping("/retrieveSiteByName/{companyName}/{department}/{siteName}")
-	public ResponseEntity<Site> retrieveSiteByName(@PathVariable String companyName, @PathVariable String department, @PathVariable String siteName) throws CompanyDetailsException{
+	public ResponseEntity<Site> retrieveSiteByName(@PathVariable String companyName, 
+			@PathVariable String department, @PathVariable String siteName) throws CompanyDetailsException{
+		logger.info("called retriveSiteByName function Company Name: {}, Department: {}, Site Name: {}", companyName, department, siteName);
 		return new ResponseEntity<Site>(siteService.retrieveSiteByName(companyName, department, siteName), HttpStatus.OK);
 	}
 
