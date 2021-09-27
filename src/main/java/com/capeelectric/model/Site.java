@@ -26,7 +26,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "site_table")
 @NamedQueries(value = {
-		@NamedQuery(name = "SiteRepository.findByUserNameAndSite", query = "select s from Site s where s.userName=:userName and s.site=:site") })
+		@NamedQuery(name = "SiteRepository.findByUserNameAndSite", query = "select s from Site s where s.userName=:userName and s.site=:site"),
+		@NamedQuery(name = "SiteRepository.findByCompanyNameAndDepartmentNameAndSite",
+		            query = "select s from Site s where s.companyName=:companyName and s.departmentName=:departmentName and s.site=:site") })
 public class Site implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -43,6 +45,12 @@ public class Site implements Serializable {
 
 	@Column(name = "SITE")
 	private String site;
+	
+	@Column(name = "COMPANY_NAME")
+	private String companyName;
+	
+	@Column(name = "DEPARTMENT_NAME")
+	private String departmentName;
 
 	@Column(name = "ADDRESSLINE_1")
 	private String addressLine_1;
@@ -79,7 +87,7 @@ public class Site implements Serializable {
 
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
-
+	
 	@OneToMany(mappedBy="site",fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	private Set<SitePersons> sitePersons;
 	
@@ -105,6 +113,22 @@ public class Site implements Serializable {
 
 	public void setSite(String site) {
 		this.site = site;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 
 	public String getAddressLine_1() {
@@ -219,5 +243,5 @@ public class Site implements Serializable {
 	public void setSitePersons(Set<SitePersons> sitePersons) {
 		this.sitePersons = sitePersons;
 	}
-
+	
 }

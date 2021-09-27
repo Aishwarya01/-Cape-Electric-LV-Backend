@@ -307,6 +307,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 				site.setZipCode(register.getPinCode());
 				site.setLandMark(register.getDistrict());
 				site.setUserName(register.getUsername());
+				site.setCompanyName(register.getCompanyName());
+				site.setDepartmentName(register.getDepartment());
 				sitePersons = new SitePersons();
 
 				sitePersons.setPersonInchargeEmail(createdRegister.getUsername());

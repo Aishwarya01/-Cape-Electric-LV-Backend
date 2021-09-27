@@ -58,5 +58,10 @@ public class SiteController {
 		logger.info("called retriveSite function UserName: {}", userName);
 		return new ResponseEntity<List<Site>>(siteService.retriveSite(userName), HttpStatus.OK);
 	}
+	
+	@GetMapping("/retrieveSiteByName/{companyName}/{department}/{siteName}")
+	public ResponseEntity<Site> retrieveSiteByName(@PathVariable String companyName, @PathVariable String department, @PathVariable String siteName) throws CompanyDetailsException{
+		return new ResponseEntity<Site>(siteService.retrieveSiteByName(companyName, department, siteName), HttpStatus.OK);
+	}
 
 }
