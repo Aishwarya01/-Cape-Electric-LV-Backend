@@ -27,6 +27,7 @@ import com.capeelectric.model.SitePersons;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.UserFullName;
 
 /**
  * 
@@ -57,6 +58,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 	
 	private Set<SitePersons> setSitePersons;
 	
+	@Autowired
+	private UserFullName userFullName;
+	
 	@Override
 	public Register addRegistration(Register register) throws RegistrationException {
 		logger.debug("AddingRegistration Starts with User : {} ", register.getUsername());
@@ -75,8 +79,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 					}
 					register.setCreatedDate(LocalDateTime.now());
 					register.setUpdatedDate(LocalDateTime.now());
-					register.setCreatedBy(register.getUsername());
-					register.setUpdatedBy(register.getUsername());
+					register.setCreatedBy(userFullName.findByUserName(register.getUsername()));
+					register.setUpdatedBy(userFullName.findByUserName(register.getUsername()));
 					register.setNoOfLicence("0");
 					Register createdRegister = registerRepository.save(register);
 					logger.debug("Sucessfully Registration Information Saved");
@@ -100,30 +104,30 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	@Transactional
-	public Register addViewerRegistration(Register register) throws RegistrationException, CompanyDetailsException {
-		logger.debug("AddingRegistration Starts with User : {} ", register.getUsername());
-		if (register.getUsername() != null && register.getCompanyName() != null && register.getAddress() != null
-				&& register.getContactNumber() != null && register.getDepartment() != null
-				&& register.getDesignation() != null && register.getName() != null && register.getState() != null
-				&& register.getSiteName() != null) {
+	public Register addViewerRegistration(Register viewer) throws RegistrationException, CompanyDetailsException {
+		logger.debug("AddingRegistration Starts with User : {} ", viewer.getUsername());
+		if (viewer.getUsername() != null && viewer.getCompanyName() != null && viewer.getAddress() != null
+				&& viewer.getContactNumber() != null && viewer.getDepartment() != null
+				&& viewer.getDesignation() != null && viewer.getName() != null && viewer.getState() != null
+				&& viewer.getSiteName() != null) {
 
-			Optional<Register> registerRepo = registerRepository.findByUsername(register.getUsername());
+			Optional<Register> registerRepo = registerRepository.findByUsername(viewer.getUsername());
 			if (!registerRepo.isPresent()
-					|| !registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
-				if (isValidIndianMobileNumber(register.getContactNumber())) {
-					register.setCreatedDate(LocalDateTime.now());
-					register.setPermission("YES");
-					register.setUpdatedDate(LocalDateTime.now());
-					register.setCreatedBy(register.getAssignedBy());
-					register.setUpdatedBy(register.getAssignedBy());
-					reduceLicence(register.getAssignedBy(),register.getSiteName());
-					Register createdRegister = registerRepository.save(register);
+					|| !registerRepo.get().getUsername().equalsIgnoreCase(viewer.getUsername())) {
+				if (isValidIndianMobileNumber(viewer.getContactNumber())) {
+					viewer.setCreatedDate(LocalDateTime.now());
+					viewer.setPermission("YES");
+					viewer.setUpdatedDate(LocalDateTime.now());
+					viewer.setCreatedBy(userFullName.findByUserName(viewer.getAssignedBy()));
+					viewer.setUpdatedBy(userFullName.findByUserName(viewer.getAssignedBy()));
+					reduceLicence(viewer.getAssignedBy(),viewer.getSiteName());
+					Register createdRegister = registerRepository.save(viewer);
 					saveSiteInfo(createdRegister);
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
 				} else {
 					logger.debug(
-							isValidIndianMobileNumber(register.getContactNumber()) + "  Given MobileNumber is Invalid");
+							isValidIndianMobileNumber(viewer.getContactNumber()) + "  Given MobileNumber is Invalid");
 					throw new RegistrationException("Invalid MobileNumber");
 				}
 
@@ -172,10 +176,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 				Register registerDetails = registerRepo.get();
 				registerDetails.setUpdatedDate(LocalDateTime.now());
 				if (register.getRole().equalsIgnoreCase("INSPECTOR")) {
-					registerDetails.setUpdatedBy(register.getUsername());
+					registerDetails.setUpdatedBy(userFullName.findByUserName(register.getUsername()));
 					registerRepository.save(registerDetails);
-				} else {
-					registerDetails.setUpdatedBy(register.getAssignedBy());
+				} else { 
+					registerDetails.setUpdatedBy(userFullName.findByUserName(register.getAssignedBy()));
 					if (isLicenseUpdate) {
 						reduceLicence(register.getAssignedBy(), register.getSiteName());
 						saveSiteInfo(register);
@@ -209,7 +213,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 							Register register = registerRepo.get();
 							register.setOtpSessionKey(sessionKey);
 							register.setUpdatedDate(LocalDateTime.now());
-							register.setUpdatedBy(userName);
+							register.setUpdatedBy(userFullName.findByUserName(userName));
 							registerRepository.save(register);
 						} else {
 							throw new RegistrationException("Invalid MobileNumber");
@@ -281,7 +285,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 				throw new RegistrationException("Site_Name Invalid Input");
 			}
 			inspector.setNoOfLicence(String.valueOf(Integer.parseInt(inspector.getNoOfLicence()) - 1));
-			inspector.setUpdatedBy(inspectorUserName);
+			inspector.setUpdatedBy(userFullName.findByUserName(inspectorUserName));
 			inspector.setUpdatedDate(LocalDateTime.now());
 			registerRepository.save(inspector);
 		} catch (Exception e) {
@@ -289,32 +293,32 @@ public class RegistrationServiceImpl implements RegistrationService {
 		}
 	}
 	
-	private void saveSiteInfo(Register createdRegister) throws CompanyDetailsException, RegistrationException {
+	private void saveSiteInfo(Register viewer) throws CompanyDetailsException, RegistrationException {
 		SitePersons sitePersons = null;
 		setSitePersons = new HashSet<SitePersons>();
-		if (createdRegister != null) {
-			Optional<Register> registerRepo = registerRepository.findByUsername(createdRegister.getAssignedBy());
+		if (viewer != null) {
+			Optional<Register> registerRepo = registerRepository.findByUsername(viewer.getAssignedBy());
 			if (registerRepo.isPresent() && registerRepo.get() != null
-					&& registerRepo.get().getUsername().equalsIgnoreCase(createdRegister.getAssignedBy())) {
+					&& registerRepo.get().getUsername().equalsIgnoreCase(viewer.getAssignedBy())) {
 				Register register = registerRepo.get();
 				Site site = new Site();
 				site.setCountry(register.getCountry());
-				site.setSite(createdRegister.getSiteName());
+				site.setSite(viewer.getSiteName());
 				site.setState(register.getState());
 				site.setAddressLine_1(register.getAddress());
 				site.setZipCode(register.getPinCode());
 				site.setLandMark(register.getDistrict());
 				site.setUserName(register.getUsername());
-				site.setCompanyName(createdRegister.getCompanyName());
-				site.setDepartmentName(createdRegister.getDepartment());
-				site.setAssignedTo(createdRegister.getUsername());
+				site.setCompanyName(viewer.getCompanyName());
+				site.setDepartmentName(viewer.getDepartment());
+				site.setAssignedTo(viewer.getUsername());
 				sitePersons = new SitePersons();
 
-				sitePersons.setPersonInchargeEmail(createdRegister.getUsername());
-				sitePersons.setSiteName(createdRegister.getSiteName());
-				sitePersons.setPersonIncharge(createdRegister.getName());
-				sitePersons.setContactNo(createdRegister.getContactNumber());
-				sitePersons.setDesignation(createdRegister.getDesignation());
+				sitePersons.setPersonInchargeEmail(viewer.getUsername());
+				sitePersons.setSiteName(viewer.getSiteName());
+				sitePersons.setPersonIncharge(viewer.getName());
+				sitePersons.setContactNo(viewer.getContactNumber());
+				sitePersons.setDesignation(viewer.getDesignation());
 				sitePersons.setInActive(true);
 				sitePersons.setSite(site);
 				setSitePersons.add(sitePersons);
