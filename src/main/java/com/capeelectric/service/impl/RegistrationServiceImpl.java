@@ -169,21 +169,17 @@ public class RegistrationServiceImpl implements RegistrationService {
 			if (registerRepo.isPresent() && registerRepo.get().getRegisterId().equals(register.getRegisterId())
 					&& registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
 				logger.debug("UpdatingRegistration Started");
-				register.setUpdatedDate(LocalDateTime.now());
+				Register registerDetails = registerRepo.get();
+				registerDetails.setUpdatedDate(LocalDateTime.now());
 				if (register.getRole().equalsIgnoreCase("INSPECTOR")) {
-					register.setUpdatedBy(register.getUsername());
-					registerRepository.save(register);
+					registerDetails.setUpdatedBy(register.getUsername());
+					registerRepository.save(registerDetails);
 				} else {
-					register.setUpdatedBy(register.getAssignedBy());
+					registerDetails.setUpdatedBy(register.getAssignedBy());
 					if (isLicenseUpdate) {
 						reduceLicence(register.getAssignedBy(), register.getSiteName());
 						saveSiteInfo(register);
-						if (register.getSiteName() == null || register.getSiteName().length() == 0) {
-							register.setSiteName(register.getSiteName());
-						} else {
-							register.setSiteName(register.getSiteName() + "," + register.getSiteName());
-						}
-						registerRepository.save(register);
+						registerRepository.save(registerDetails);
 					}
 					registerRepository.save(register);
 				}
