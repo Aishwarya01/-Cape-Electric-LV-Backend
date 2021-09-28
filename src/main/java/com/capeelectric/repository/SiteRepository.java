@@ -13,7 +13,8 @@ public interface SiteRepository extends CrudRepository<Site, Integer> {
 
 	List<Site> findByUserName(String userName);
 	
-
+	List<Site> findBysiteId(Integer siteId);
+	
 	Site findByCompanyNameAndDepartmentNameAndSite(String companyName, String departmentName, String site);
 
 }

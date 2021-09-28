@@ -209,7 +209,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				table0.setWidthPercentage(100);
 				table0.getDefaultCell().setBorder(0);
 
-				PdfPCell site1 = new PdfPCell(new Paragraph(siteInformation.getClientName(),
+				PdfPCell site1 = new PdfPCell(new Paragraph(siteInformation.getCompanyName(),
 						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				table0.addCell(new Phrase("Client name:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				site1.setHorizontalAlignment(Element.ALIGN_LEFT);
