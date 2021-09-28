@@ -46,7 +46,7 @@ public class Summary implements Serializable {
 
 	@Column(name = "LIMITATIONS_INSPECTION")
 	private String limitationsInspection;
-
+	
 	@Column(name = "EXTENT_INSTALLATION")
 	private String extentInstallation;
 
