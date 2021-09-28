@@ -176,8 +176,13 @@ public class RegistrationServiceImpl implements RegistrationService {
 				} else {
 					register.setUpdatedBy(register.getAssignedBy());
 					if (isLicenseUpdate) {
-						reduceLicence(register.getAssignedBy(),register.getSiteName());
+						reduceLicence(register.getAssignedBy(), register.getSiteName());
 						saveSiteInfo(register);
+						if (register.getSiteName() == null || register.getSiteName().length() == 0) {
+							register.setSiteName(register.getSiteName());
+						} else {
+							register.setSiteName(register.getSiteName() + "," + register.getSiteName());
+						}
 						registerRepository.save(register);
 					}
 					registerRepository.save(register);
@@ -298,18 +303,14 @@ public class RegistrationServiceImpl implements RegistrationService {
 				Register register = registerRepo.get();
 				Site site = new Site();
 				site.setCountry(register.getCountry());
-				if (register.getSiteName() == null || register.getSiteName().length() == 0) {
-					site.setSite(createdRegister.getSiteName());
-				} else {
-					site.setSite(register.getSiteName() + "," + createdRegister.getSiteName());
-				}
+				site.setSite(createdRegister.getSiteName());
 				site.setState(register.getState());
 				site.setAddressLine_1(register.getAddress());
 				site.setZipCode(register.getPinCode());
 				site.setLandMark(register.getDistrict());
 				site.setUserName(register.getUsername());
-				site.setCompanyName(register.getCompanyName());
-				site.setDepartmentName(register.getDepartment());
+				site.setCompanyName(createdRegister.getCompanyName());
+				site.setDepartmentName(createdRegister.getDepartment());
 				sitePersons = new SitePersons();
 
 				sitePersons.setPersonInchargeEmail(createdRegister.getUsername());
