@@ -307,6 +307,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 				site.setUserName(register.getUsername());
 				site.setCompanyName(createdRegister.getCompanyName());
 				site.setDepartmentName(createdRegister.getDepartment());
+				site.setAssignedTo(createdRegister.getUsername());
 				sitePersons = new SitePersons();
 
 				sitePersons.setPersonInchargeEmail(createdRegister.getUsername());

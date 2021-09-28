@@ -75,6 +75,9 @@ public class Site implements Serializable {
 	
 	@Column(name = "ALL_STEPS_COMPLETED")
 	private String allStepsCompleted;
+	
+	@Column(name = "SITE_ASSIGNED_TO")
+	private String assignedTo;
 
 	@Column(name = "CREATED_BY")
 	private String createdBy;
@@ -193,6 +196,14 @@ public class Site implements Serializable {
 
 	public void setAllStepsCompleted(String allStepsCompleted) {
 		this.allStepsCompleted = allStepsCompleted;
+	}
+	
+	public String getAssignedTo() {
+		return assignedTo;
+	}
+
+	public void setAssignedTo(String assignedTo) {
+		this.assignedTo = assignedTo;
 	}
 
 	public String getCreatedBy() {
