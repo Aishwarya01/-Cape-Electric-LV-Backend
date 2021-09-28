@@ -47,17 +47,6 @@ public class Summary implements Serializable {
 	@Column(name = "LIMITATIONS_INSPECTION")
 	private String limitationsInspection;
 	
-	@Column(name = "INSPECTION_REPORT_TESTRESULT")
-	private String inspectionReportTestResult;
-
-	public String getInspectionReportTestResult() {
-		return inspectionReportTestResult;
-	}
-
-	public void setInspectionReportTestResult(String inspectionReportTestResult) {
-		this.inspectionReportTestResult = inspectionReportTestResult;
-	}
-
 	@Column(name = "EXTENT_INSTALLATION")
 	private String extentInstallation;
 
