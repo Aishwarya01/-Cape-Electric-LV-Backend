@@ -23,7 +23,7 @@ import com.capeelectric.service.PrintSupplyService;
 import com.capeelectric.service.PrintTestingService;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v2")
 public class FinalPDFController {
 	private static final Logger logger = LoggerFactory.getLogger(FinalReportController.class);
 	
@@ -46,8 +46,7 @@ public class FinalPDFController {
 	private InspectionServicePDF inspectionServicePDF;
 	
 	@GetMapping("/printFinalPDF/{userName}/{siteId}")
-	
-	public ResponseEntity printFinalPDF(@PathVariable String userName,
+	public ResponseEntity<String> printFinalPDF(@PathVariable String userName,
 			@PathVariable Integer siteId, Object writer) throws Exception, SummaryException, PeriodicTestingException, SupplyCharacteristicsException, InstalReportException, InspectionException {
 		logger.info("called printFinalPDF function UserName : {},SiteId : {}", userName, siteId);
 		
@@ -57,7 +56,7 @@ public class FinalPDFController {
 		printTestingService.printTesting(userName, siteId);
 		printService.printSummary(userName,siteId);
 		printFinalPDFService.printFinalPDF(userName, siteId);
-	     return new ResponseEntity(HttpStatus.OK);
+	     return new ResponseEntity<String>("Final Report Generated Successfully",HttpStatus.OK);
 		}
 	
 }
