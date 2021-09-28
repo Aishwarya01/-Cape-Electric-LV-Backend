@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "site_person_table")
 @NamedQueries(value = {
-		@NamedQuery(name = "SitePersonsRepository.findByUSiteNameAndPersonInchargeEmail", query = "select p.personInchargeEmail from SitePersons p where p.siteName=:siteName and p.personInchargeEmail=:personInchargeEmail") })
+		@NamedQuery(name = "SitePersonsRepository.RepositoryfindByPersonInchargeEmail", query = "select p.personInchargeEmail from SitePersons p where p.siteName=:siteName and p.personInchargeEmail=:personInchargeEmail") })
 public class SitePersons implements Serializable {
 
 	/**

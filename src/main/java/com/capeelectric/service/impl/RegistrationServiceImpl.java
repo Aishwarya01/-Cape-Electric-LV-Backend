@@ -160,6 +160,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 
 	@Override
+	@Transactional
 	public void updateRegistration(Register register,Boolean isLicenseUpdate) throws RegistrationException, CompanyDetailsException {
 
 		if (register.getRegisterId() != null && register.getRegisterId() != 0 && register.getUsername() != null
@@ -178,14 +179,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 				if (register.getRole().equalsIgnoreCase("INSPECTOR")) {
 					registerDetails.setUpdatedBy(userFullName.findByUserName(register.getUsername()));
 					registerRepository.save(registerDetails);
-				} else { 
+				} else {
 					registerDetails.setUpdatedBy(userFullName.findByUserName(register.getAssignedBy()));
+					registerDetails.setSiteName(register.getSiteName());
 					if (isLicenseUpdate) {
 						reduceLicence(register.getAssignedBy(), register.getSiteName());
 						saveSiteInfo(register);
 						registerRepository.save(registerDetails);
+					} else {
+						registerRepository.save(registerDetails);
 					}
-					registerRepository.save(register);
 				}
 
 			} else {
@@ -275,15 +278,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 		try {
 			Optional<Register> inspectorInfo = registerRepository.findByUsername(inspectorUserName);
 			Register inspector = inspectorInfo.get();
-			if (siteName != null) {
-				if (inspector.getSiteName() == null) {
-					inspector.setSiteName(siteName);
-				} else {
-					inspector.setSiteName(inspector.getSiteName() + "," + siteName);
-				}
-			} else {
-				throw new RegistrationException("Site_Name Invalid Input");
-			}
 			inspector.setNoOfLicence(String.valueOf(Integer.parseInt(inspector.getNoOfLicence()) - 1));
 			inspector.setUpdatedBy(userFullName.findByUserName(inspectorUserName));
 			inspector.setUpdatedDate(LocalDateTime.now());
