@@ -1,54 +1,31 @@
 package com.capeelectric.service.impl;
 
-import java.awt.Color;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.Table;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.PeriodicTestingException;
-import com.capeelectric.exception.SummaryException;
-import com.capeelectric.exception.SupplyCharacteristicsException;
-import com.capeelectric.model.EarthingLocationReport;
-import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.TestDistribution;
 import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
-import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
-import com.capeelectric.service.PeriodicTestingService;
 import com.capeelectric.service.PrintTestingService;
-import com.capeelectric.util.HeaderFooterPageEvent;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.log.SysoCounter;
 import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfPage;
-import com.itextpdf.text.pdf.PdfPageEvent;
-import com.itextpdf.text.pdf.PdfPageEventHelper;
-import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.codec.Base64.OutputStream;
-
-import net.bytebuddy.implementation.bytecode.ByteCodeAppender.Size;
 
 @Service
 public class PrintTestingServiceImpl implements PrintTestingService {
@@ -103,7 +80,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 	}
 
-	private void testingTableIteration(Document document, TestingRecords TestingRecords1)
+	private void testingTableIteration(Document document, TestingRecords testingRecords1)
 			throws DocumentException, IOException {
 		PdfPTable table466 = new PdfPTable(12);
 		table466.setSpacingAfter(20f); // Space after table
@@ -125,7 +102,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getCircuitNo(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitNo(), font27));
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -134,7 +111,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(3);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getCircuitDesc(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitDesc(), font27));
 		cell1.setColspan(6);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -149,7 +126,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getCircuitStandardNo(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitStandardNo(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -158,7 +135,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getCircuitType(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitType(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -167,7 +144,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getCircuitRating(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitRating(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -176,7 +153,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getCircuitBreakingCapacity(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitBreakingCapacity(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -185,7 +162,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getCircuitRating(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitRating(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -194,7 +171,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getContinutiyLE(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getContinutiyLE(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -208,7 +185,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getConductorInstallation(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getConductorInstallation(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -221,7 +198,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getConductorLive(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getConductorPhase(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -229,7 +206,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getConductorLive(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getConductorPhase(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -237,7 +214,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getConductorPecpc(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getConductorPecpc(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -254,7 +231,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getContinutiyApproximateLength(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getContinutiyApproximateLength(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -262,7 +239,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getContinutiyRR(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getContinutiyRR(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -270,7 +247,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getContinutiyR(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getContinutiyRR(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -279,7 +256,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(3);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getContinutiyPolarity(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getContinutiyPolarity(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -328,7 +305,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(3);
 		table466.addCell(cell1);
-		String insulationResistance = TestingRecords1.getTestVoltage();
+		String insulationResistance = testingRecords1.getTestVoltage();
 		String insulationResistance_list[] = insulationResistance.split(",");
 		String IR1 = insulationResistance_list[0];
 		String IR2 = insulationResistance_list[1];
@@ -371,7 +348,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(3);
 		table466.addCell(cell1);
-		String voltage = TestingRecords1.getTestVoltage();
+		String voltage = testingRecords1.getTestVoltage();
 		String voltage_list[] = voltage.split(",");
 		String V1 = voltage_list[0];
 		String V2 = voltage_list[1];
@@ -414,7 +391,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(3);
 		table466.addCell(cell1);
-		String faultCurrent = TestingRecords1.getTestLoopImpedance();
+		String faultCurrent = testingRecords1.getTestLoopImpedance();
 		String faultCurrent_list[] = faultCurrent.split(",");
 		String FC1 = faultCurrent_list[0];
 		String FC2 = faultCurrent_list[1];
@@ -458,7 +435,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(3);
 		table466.addCell(cell1);
-		String disconnectionTime = TestingRecords1.getDisconnectionTime();
+		String disconnectionTime = testingRecords1.getDisconnectionTime();
 		String disconnectionTime_list[] = disconnectionTime.split(",");
 		String DT1 = disconnectionTime_list[0];
 		String DT2 = disconnectionTime_list[1];
@@ -501,7 +478,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(3);
 		table466.addCell(cell1);
-		String faultCurrent1 = TestingRecords1.getTestFaultCurrent();
+		String faultCurrent1 = testingRecords1.getTestFaultCurrent();
 		String faultCurrent1_list[] = faultCurrent1.split(",");
 		String FC11 = faultCurrent1_list[0];
 		String FC22 = faultCurrent1_list[1];
@@ -551,7 +528,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(2);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getRcdCurrent(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getRcdCurrent(), font27));
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(9);
 		table466.addCell(cell1);
@@ -560,7 +537,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(2);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getRcdOperatingCurrent(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getRcdOperatingCurrent(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -569,7 +546,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getRcdOperatingFiveCurrent(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getRcdOperatingFiveCurrent(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -578,7 +555,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getRcdTestButtonOperation(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getRcdTestButtonOperation(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -587,7 +564,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(TestingRecords1.getRcdRemarks(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getRcdRemarks(), font27));
 		cell1.setColspan(10);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -615,7 +592,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		String IV8 = incomingVoltage_list[7];
 		String IV9 = incomingVoltage_list[8];
 
-		String incomingIPF = distribution.getIncomingIpf();
+		String incomingIPF = distribution.getIncomingFaultCurrent();
 		String incomingIPF_list[] = incomingIPF.split(",");
 		String IPF1 = incomingIPF_list[0];
 		String IPF2 = incomingIPF_list[1];
@@ -627,7 +604,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		String IPF8 = incomingIPF_list[7];
 		String IPF9 = incomingIPF_list[8];
 
-		String incomingZS = distribution.getIncomingZs();
+		String incomingZS = distribution.getIncomingLoopImpedance();
 		String incomingZS_list[] = incomingZS.split(",");
 		String ZS1 = incomingZS_list[0];
 		String ZS2 = incomingZS_list[1];
@@ -833,8 +810,8 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		document.add(table2);
 
 		document.newPage();
-		for (TestingRecords TestingRecords11 : testRecords) {
-			testingTableIteration(document, TestingRecords11);
+		for (TestingRecords testingRecords11 : testRecords) {
+			testingTableIteration(document, testingRecords11);
 		}
 
 	}
