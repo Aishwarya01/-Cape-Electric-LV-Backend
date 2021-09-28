@@ -10,13 +10,6 @@ public class ChangePasswordRequest extends AuthenticationRequest {
 		// TODO Auto-generated constructor stub
 	}
 
-
-	public ChangePasswordRequest(String email, String password) {
-		super(email, password);
-		// TODO Auto-generated constructor stub
-	}
-
-
 	public ChangePasswordRequest(String oldPassword) {
 		super();
 		this.oldPassword = oldPassword;

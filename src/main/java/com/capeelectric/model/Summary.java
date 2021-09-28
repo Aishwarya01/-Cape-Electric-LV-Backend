@@ -72,6 +72,9 @@ public class Summary implements Serializable {
 
 	@Column(name = "INSPECTION_TESTING_DETAILED")
 	private String inspectionTestingDetailed;
+	
+	@Column(name = "INSPECTION_REPORT_TESTRESULT")
+	private String inspectionReportTestResult;
 
 	@Column(name = "RECOMMENDATIONS_DATE")
 	private String recommendationsDate;
@@ -101,6 +104,10 @@ public class Summary implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<SummaryDeclaration> summaryDeclaration;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<SummaryComment> summaryComment;
 
 	public Integer getSummaryId() {
 		return summaryId;
@@ -174,6 +181,14 @@ public class Summary implements Serializable {
 		this.inspectionTestingDetailed = inspectionTestingDetailed;
 	}
 
+	public String getInspectionReportTestResult() {
+		return inspectionReportTestResult;
+	}
+
+	public void setInspectionReportTestResult(String inspectionReportTestResult) {
+		this.inspectionReportTestResult = inspectionReportTestResult;
+	}
+
 	public String getRecommendationsDate() {
 		return recommendationsDate;
 	}
@@ -244,6 +259,14 @@ public class Summary implements Serializable {
 
 	public void setSummaryDeclaration(List<SummaryDeclaration> summaryDeclaration) {
 		this.summaryDeclaration = summaryDeclaration;
+	}
+
+	public List<SummaryComment> getSummaryComment() {
+		return summaryComment;
+	}
+
+	public void setSummaryComment(List<SummaryComment> summaryComment) {
+		this.summaryComment = summaryComment;
 	}
  
 }

@@ -42,7 +42,7 @@ public class PeriodicInspection implements Serializable {
 
 	@Column(name = "USER_NAME")
 	private String userName;
-
+	
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 
@@ -58,6 +58,10 @@ public class PeriodicInspection implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "periodicInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<IpaoInspection> ipaoInspection;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "periodicInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<PeriodicInspectionComment> periodicInspectorComment;
 
 	public Integer getPeriodicInspectionId() {
 		return periodicInspectionId;
@@ -121,6 +125,14 @@ public class PeriodicInspection implements Serializable {
 
 	public void setIpaoInspection(List<IpaoInspection> ipaoInspection) {
 		this.ipaoInspection = ipaoInspection;
+	}
+	
+	public List<PeriodicInspectionComment> getPeriodicInspectorComment() {
+		return periodicInspectorComment;
+	}
+
+	public void setPeriodicInspectorComment(List<PeriodicInspectionComment> periodicInspectorComment) {
+		this.periodicInspectorComment = periodicInspectorComment;
 	}
  
 }

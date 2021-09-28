@@ -63,6 +63,10 @@ public class TestingReport implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "testingReport", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Testing> testing;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "testingReport", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<TestingReportComment> testingComment;
 
 	public Integer getTestingReportId() {
 		return testingReportId;
@@ -126,6 +130,14 @@ public class TestingReport implements Serializable {
 
 	public void setTesting(List<Testing> testing) {
 		this.testing = testing;
+	}
+
+	public List<TestingReportComment> getTestingComment() {
+		return testingComment;
+	}
+
+	public void setTestingComment(List<TestingReportComment> testingComment) {
+		this.testingComment = testingComment;
 	}
 
 }

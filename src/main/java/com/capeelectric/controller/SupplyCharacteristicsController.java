@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capeelectric.exception.DecimalConversionException;
+import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
+import com.capeelectric.model.SupplyCharacteristicComment;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.service.SupplyCharacteristicsService;
+import com.capeelectric.util.SendReplyComments;
 
 /**
  *
@@ -33,6 +36,9 @@ public class SupplyCharacteristicsController {
 	
 	@Autowired
 	private SupplyCharacteristicsService supplyCharacteristicsService;
+	
+	@Autowired
+	private SendReplyComments sendReplyComments;
 
 	@PostMapping("/addCharacteristics")
 	public ResponseEntity<String> addCharacteristics(@RequestBody SupplyCharacteristics supplyCharacteristics)
@@ -62,4 +68,38 @@ public class SupplyCharacteristicsController {
 		return new ResponseEntity<String>("SupplyCharacteristics Data successfully Updated", HttpStatus.OK);
 	}
 
+	@PostMapping("/sendCharacteristicsComments/{userName}/{siteId}")
+	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
+			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
+			throws SupplyCharacteristicsException, RegistrationException, Exception {
+		logger.info("called sendcomments function UserName : {},SiteId : {}", userName, siteId);
+		supplyCharacteristicsService.sendComments(userName, siteId, supplyCharacteristicComment);
+		sendReplyComments.sendComments(userName);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/replyCharacteristicsComments/{inspectorUserName}/{siteId}")
+	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
+			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
+			throws SupplyCharacteristicsException, RegistrationException, Exception {
+		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
+		String viewerUserName = supplyCharacteristicsService.replyComments(inspectorUserName, siteId,
+				supplyCharacteristicComment);
+		if (viewerUserName != null) {
+			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
+		} else {
+			throw new SupplyCharacteristicsException("No viewer userName avilable");
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/approveCharacteristicsComments/{userName}/{siteId}")
+	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
+			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
+			throws SupplyCharacteristicsException, RegistrationException, Exception {
+		logger.info("called approveComments function UserName : {},SiteId : {}", userName, siteId);
+		supplyCharacteristicsService.approveComments(userName, siteId, supplyCharacteristicComment);
+		sendReplyComments.approveComments(userName, supplyCharacteristicComment.getApproveOrReject());
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 }

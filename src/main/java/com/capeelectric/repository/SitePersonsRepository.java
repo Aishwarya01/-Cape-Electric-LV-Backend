@@ -10,6 +10,6 @@ import com.capeelectric.model.SitePersons;
 @Repository
 public interface SitePersonsRepository extends CrudRepository<SitePersons, Integer> {
 
-	Optional<SitePersons> findByPersonInchargeEmail(String email);
+	Optional<SitePersons> findBySiteNameAndPersonInchargeEmail(String siteName,String email);
 	
 }

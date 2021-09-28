@@ -3,6 +3,7 @@ package com.capeelectric.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.model.PeriodicInspection;
+import com.capeelectric.model.PeriodicInspectionComment;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.service.impl.InspectionServiceImpl;
 import com.capeelectric.util.UserFullName;
@@ -38,11 +40,21 @@ public class InspectionServiceImplTest {
 	private UserFullName userFullName;
 
 	private PeriodicInspection periodicInspection;
+	
+	private PeriodicInspectionComment periodicInspectionComment;
 
 	{
 		periodicInspection = new PeriodicInspection();
 		periodicInspection.setUserName("cape");
 		periodicInspection.setSiteId(1);
+		
+		periodicInspectionComment = new PeriodicInspectionComment();
+		periodicInspectionComment.setViewerDate(LocalDateTime.now());
+		
+		ArrayList<PeriodicInspectionComment> listOfComments = new ArrayList<PeriodicInspectionComment>();
+	    listOfComments.add(periodicInspectionComment);
+	    periodicInspection.setPeriodicInspectorComment(listOfComments);
+		
 	}
 
 	@Test

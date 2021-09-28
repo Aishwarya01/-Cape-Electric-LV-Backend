@@ -43,7 +43,7 @@ import com.capeelectric.service.impl.FinalReportServiceImpl;
 @ExtendWith(MockitoExtension.class)
 public class FinalReportServiceTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(SummaryServiceTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(FinalReportServiceTest.class);
 
 	@InjectMocks
 	private FinalReportServiceImpl finalReportServiceImpl;
@@ -94,13 +94,12 @@ public class FinalReportServiceTest {
 		logger.info("testRetriveListOfSite method started");
 		ArrayList<Site> sites = new ArrayList<Site>();
 		sites.add(site);
-		when(siteRepository.findByClientNameAndDepartmentName("LVsystem@gmail.com", "IT")).thenReturn(sites);
-
-		List<Site> retrieveListOfSite = finalReportServiceImpl.retrieveListOfSite("LVsystem@gmail.com", "IT");
+		when(siteRepository.findByUserName("LVsystem@gmail.com")).thenReturn(sites);
+		List<Site> retrieveListOfSite = finalReportServiceImpl.retrieveListOfSite("LVsystem@gmail.com");
 		assertTrue(retrieveListOfSite.contains(site));
 
 		FinalReportException finalReportException = Assertions.assertThrows(FinalReportException.class,
-				() -> finalReportServiceImpl.retrieveListOfSite(null, "IT"));
+				() -> finalReportServiceImpl.retrieveListOfSite(null));
 		assertEquals(finalReportException.getMessage(), "Invaild Input");
 		logger.info("testRetriveListOfSite method ended");
 

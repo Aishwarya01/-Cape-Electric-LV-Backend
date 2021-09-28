@@ -13,7 +13,7 @@ import com.capeelectric.model.Site;
  *
  */
 public interface FinalReportService {
-	List<Site> retrieveListOfSite(String userName, String departmentName) throws FinalReportException;
+	List<Site> retrieveListOfSite(String userName) throws FinalReportException;
 
 	Optional<FinalReport> retrieveFinalReport(String userName, Integer siteId) throws FinalReportException;
 }
