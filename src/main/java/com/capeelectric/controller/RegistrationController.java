@@ -26,6 +26,7 @@ import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.AWSEmailService;
+import com.capeelectric.util.Constants;
 import com.capeelectric.util.Utility;
 
 /**
@@ -55,11 +56,11 @@ public class RegistrationController {
 		String resetUrl = Utility.getSiteURL(uri.toURL());
 		if (createdRegister.getPermission().equalsIgnoreCase("YES")) {
 			awsEmailService.sendEmail(register.getUsername(),
-					"Your request for accessing the Rush App is approved and you can generate OTP with this link" + "\n"
+					Constants.EMAIL_SUBJECT_REGISTRATION + "\n"
 							+ "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-									: "https://www.rushforsafety.com")
+									: Constants.EMAIL_SUBJECT_URL_AWS)
 							+ "/generateOtp" + ";email=" + register.getUsername());
 		} else {
 			awsEmailService
@@ -68,7 +69,7 @@ public class RegistrationController {
 							+ register.getUsername() + ". You can login to admin Portal with this link " + "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-									: "https://www.rushforsafety.com")
+									: Constants.EMAIL_SUBJECT_ADMIN_URL_AWS)
 							+ "/admin");
 		}
 
@@ -83,11 +84,11 @@ public class RegistrationController {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(createdRegister.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());
-		awsEmailService.sendEmail(createdRegister.getUsername(),"Your request for accessing the Rush App is approved and you can generate OTP with this link"
+		awsEmailService.sendEmail(createdRegister.getUsername(),Constants.EMAIL_SUBJECT_REGISTRATION
 				+ "\n" + "\n" 
 				+ (resetUrl.contains("localhost:5000")
 						? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-								: "https://www.rushforsafety.com")
+								: Constants.EMAIL_SUBJECT_URL_AWS)
 				+ "/generateOtp" + ";email=" + register.getUsername());
 		return ResponseEntity.created(uri).build();
 	}

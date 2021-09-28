@@ -177,6 +177,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setUpdatedBy(register.getAssignedBy());
 					if (isLicenseUpdate) {
 						reduceLicence(register.getAssignedBy(),register.getSiteName());
+						saveSiteInfo(register);
 						registerRepository.save(register);
 					}
 					registerRepository.save(register);
