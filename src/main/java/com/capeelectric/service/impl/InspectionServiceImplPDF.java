@@ -556,7 +556,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		isolatorCellLabel.setBorder(PdfPCell.NO_BORDER);
 		table4.addCell(isolatorCellLabel);
 		PdfPCell isolatorCell = new PdfPCell(
-				new Paragraph(ipoInspection.getBasicElectricalSepartion(), new Font(BaseFont.createFont( ), 10, Font.NORMAL)));
+				new Paragraph(ipoInspection.getIsolatePublicSupply(), new Font(BaseFont.createFont( ), 10, Font.NORMAL)));
 		isolatorCell.setFixedHeight(10f);
 		isolatorCell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		isolatorCell.setBackgroundColor(new GrayColor(0.93f));
