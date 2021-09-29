@@ -437,7 +437,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				cell33.setBorder(PdfPCell.NO_BORDER);
 				cell33.setGrayFill(0.92f);
 				table10.addCell(cell33);
-				PdfPCell cell60 = new PdfPCell(new Paragraph(supply.getMaximumDemand(), font6));
+				PdfPCell cell60 = new PdfPCell(new Paragraph(supply.getBondingConductorSize(), font6));
 				cell60.setGrayFill(0.92f);
 				cell60.setBorder(PdfPCell.NO_BORDER);
 				table10.addCell(cell60);
