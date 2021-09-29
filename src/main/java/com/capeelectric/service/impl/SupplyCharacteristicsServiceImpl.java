@@ -48,7 +48,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	
 	private SupplyCharacteristicComment supplyCharacteristicComment;
 
-	private List<SupplyCharacteristicComment> listOfComments = new ArrayList<SupplyCharacteristicComment>();
+	private List<SupplyCharacteristicComment> listOfComments;
 	
 	private String viewerName;
 	
@@ -61,6 +61,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	@Override
 	public void addCharacteristics(SupplyCharacteristics supplyCharacteristics)
 			throws SupplyCharacteristicsException, DecimalConversionException {
+		listOfComments = new ArrayList<SupplyCharacteristicComment>();
 		if (supplyCharacteristics != null && supplyCharacteristics.getUserName() != null
 				&& !supplyCharacteristics.getUserName().isEmpty() && supplyCharacteristics.getSiteId() != null
 				&& supplyCharacteristics.getSiteId() != 0) {
