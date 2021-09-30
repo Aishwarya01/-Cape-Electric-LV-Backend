@@ -74,8 +74,8 @@ public class TestingRecords implements Serializable {
 	@Column(name = "CONTINUTIY_R1_R2")
 	private String continutiyRR;
 
-	@Column(name = "CONTINUTIY_LE")
-	private String continutiyLE;
+	@Column(name = "CONTINUTIY_R2")
+	private String continutiyR2;
 
 	@Column(name = "CONTINUTIY_POLARITY")
 	private String continutiyPolarity;
@@ -241,12 +241,12 @@ public class TestingRecords implements Serializable {
 		this.continutiyRR = continutiyRR;
 	}
 
-	public String getContinutiyLE() {
-		return continutiyLE;
+	public String getContinutiyR2() {
+		return continutiyR2;
 	}
 
-	public void setContinutiyLE(String continutiyLE) {
-		this.continutiyLE = continutiyLE;
+	public void setContinutiyR2(String continutiyR2) {
+		this.continutiyR2 = continutiyR2;
 	}
 
 	public String getContinutiyPolarity() {
