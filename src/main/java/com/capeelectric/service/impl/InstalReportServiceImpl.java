@@ -173,7 +173,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 		Boolean flagInspectionComment = true;
 		if (userName != null && siteId != null && reportDetailsComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
-			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
+			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)
+					&& siteRepo.get().getAssignedTo().equalsIgnoreCase(userName) && siteRepo.get().getUserName() != null
+					&& siteRepo.get().getSite() != null) {
 				Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(siteId);
 				if (reportDetailsRepo.isPresent() && reportDetailsRepo.get() != null
 						&& reportDetailsRepo.get().getUserName() != null
@@ -191,6 +193,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 							reportDetailsCommentItr.setReportDetails(reportDetails);
 
 							if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
+								reportDetailsCommentItr.setSiteName(siteRepo.get().getSite());
+								reportDetailsCommentItr.setInspectorEmail(siteRepo.get().getUserName());
+								reportDetailsCommentItr.setViewerUserEmail(siteRepo.get().getAssignedTo());
 								reportDetailsCommentItr.setViewerDate(LocalDateTime.now());
 								reportDetailsCommentItr.setViewerComment(reportDetailsComment.getViewerComment());
 								reportDetailsCommentItr.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
@@ -223,6 +228,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 							reportDetailsComment
 									.setNoOfComment(checkNoOfComments(reportDetails.getReportDetailsComment()));
 							reportDetailsComment.setReportDetails(reportDetails);
+							reportDetailsComment.setSiteName(siteRepo.get().getSite());
+							reportDetailsComment.setInspectorEmail(siteRepo.get().getUserName());
+							reportDetailsComment.setViewerUserEmail(siteRepo.get().getAssignedTo());
 							reportDetailsComment.setViewerDate(LocalDateTime.now());
 							reportDetailsComment.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
 							reportDetailsComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);

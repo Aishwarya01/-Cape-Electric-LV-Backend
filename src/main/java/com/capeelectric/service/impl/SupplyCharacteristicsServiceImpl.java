@@ -236,7 +236,9 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		Boolean flagInspectionComment = true;
 		if (userName != null && siteId != null && supplyCharacteristicComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
-			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
+			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)
+					&& siteRepo.get().getAssignedTo().equalsIgnoreCase(userName) && siteRepo.get().getUserName() != null
+					&& siteRepo.get().getSite() != null) {
 				Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
 						.findBySiteId(siteId);
 
@@ -256,6 +258,9 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 							supplyCharacteristicCommentItr.setSupplyCharacteristics(supplyCharacteristics);
 
 							if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
+								supplyCharacteristicCommentItr.setSiteName(siteRepo.get().getSite());
+								supplyCharacteristicCommentItr.setInspectorEmail(siteRepo.get().getUserName());
+								supplyCharacteristicCommentItr.setViewerUserEmail(siteRepo.get().getAssignedTo());
 								supplyCharacteristicCommentItr.setViewerDate(LocalDateTime.now());
 								supplyCharacteristicCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								supplyCharacteristicCommentItr
@@ -291,6 +296,9 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 							supplyCharacteristicComment.setNoOfComment(
 									checkNoOfComments(supplyCharacteristics.getSupplyCharacteristicComment()));
 							supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
+							supplyCharacteristicComment.setSiteName(siteRepo.get().getSite());
+							supplyCharacteristicComment.setInspectorEmail(siteRepo.get().getUserName());
+							supplyCharacteristicComment.setViewerUserEmail(siteRepo.get().getAssignedTo());
 							supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
 							supplyCharacteristicComment.setViewerUserName(userFullName.findByUserName(userName));
 							supplyCharacteristicComment.setViewerFlag(Constants.INCREASED_FLAG_VALUE);

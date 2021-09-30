@@ -171,7 +171,9 @@ public class InspectionServiceImpl implements InspectionService {
 		Boolean flagInspectionComment = true;
 		if (userName != null && siteId != null && periodicInspectionComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
-			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
+			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)
+					&& siteRepo.get().getAssignedTo().equalsIgnoreCase(userName) && siteRepo.get().getUserName() != null
+					&& siteRepo.get().getSite() != null) {
 				Optional<PeriodicInspection> periodicInspectionRepo = inspectionRepository.findBySiteId(siteId);
 				if (periodicInspectionRepo.isPresent() && periodicInspectionRepo.get() != null
 						&& periodicInspectionRepo.get().getUserName() != null
@@ -190,6 +192,9 @@ public class InspectionServiceImpl implements InspectionService {
 							periodicInspectionCommentItr.setPeriodicInspection(periodicInspection);
 
 							if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
+								periodicInspectionCommentItr.setSiteName(siteRepo.get().getSite());
+								periodicInspectionCommentItr.setInspectorEmail(siteRepo.get().getUserName());
+								periodicInspectionCommentItr.setViewerUserEmail(siteRepo.get().getAssignedTo());
 								periodicInspectionCommentItr.setViewerDate(LocalDateTime.now());
 								periodicInspectionCommentItr
 										.setViewerComment(periodicInspectionComment.getViewerComment());
@@ -201,7 +206,8 @@ public class InspectionServiceImpl implements InspectionService {
 							}
 							if (process.equalsIgnoreCase(Constants.REPLY_COMMENT)) {
 								periodicInspectionCommentItr.setInspectorDate(LocalDateTime.now());
-								periodicInspectionCommentItr.setInspectorUserName(userFullName.findByUserName(userName));
+								periodicInspectionCommentItr
+										.setInspectorUserName(userFullName.findByUserName(userName));
 								periodicInspectionCommentItr
 										.setInspectorComment(periodicInspectionComment.getInspectorComment());
 								periodicInspectionCommentItr.setInspectorFlag(Constants.INCREASED_FLAG_VALUE);
@@ -225,6 +231,9 @@ public class InspectionServiceImpl implements InspectionService {
 							periodicInspectionComment.setNoOfComment(
 									checkNoOfComments(periodicInspection.getPeriodicInspectorComment()));
 							periodicInspectionComment.setPeriodicInspection(periodicInspection);
+							periodicInspectionComment.setSiteName(siteRepo.get().getSite());
+							periodicInspectionComment.setInspectorEmail(siteRepo.get().getUserName());
+							periodicInspectionComment.setViewerUserEmail(siteRepo.get().getAssignedTo());
 							periodicInspectionComment.setViewerDate(LocalDateTime.now());
 							periodicInspectionComment.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
 							periodicInspectionComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);

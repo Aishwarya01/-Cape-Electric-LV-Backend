@@ -164,7 +164,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		Boolean flagInspectionComment = true;
 		if (userName != null && siteId != null && testingReportComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
-			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
+			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)
+					&& siteRepo.get().getAssignedTo().equalsIgnoreCase(userName) && siteRepo.get().getUserName() != null
+					&& siteRepo.get().getSite() != null) {
 				Optional<TestingReport> testingReportRepo = testingReportRepository.findBySiteId(siteId);
 				if (testingReportRepo.isPresent() && testingReportRepo.get() != null
 						&& checkInspectorViewer(userName, process, siteRepo, testingReportRepo)) {
@@ -180,6 +182,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 							testingReportCommentItr.setTestingReport(testingReport);
 
 							if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
+								testingReportCommentItr.setSiteName(siteRepo.get().getSite());
+								testingReportCommentItr.setInspectorEmail(siteRepo.get().getUserName());
+								testingReportCommentItr.setViewerUserEmail(siteRepo.get().getAssignedTo());
 								testingReportCommentItr.setViewerDate(LocalDateTime.now());
 								testingReportCommentItr.setViewerComment(testingReportComment.getViewerComment());
 								testingReportCommentItr.setViewerFlag(Constants.INCREASED_FLAG_VALUE);
@@ -211,6 +216,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 						if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
 							testingReportComment.setNoOfComment(checkNoOfComments(testingReport.getTestingComment()));
 							testingReportComment.setTestingReport(testingReport);
+							testingReportComment.setSiteName(siteRepo.get().getSite());
+							testingReportComment.setInspectorEmail(siteRepo.get().getUserName());
+							testingReportComment.setViewerUserEmail(siteRepo.get().getAssignedTo());
 							testingReportComment.setViewerDate(LocalDateTime.now());
 							testingReportComment.setViewerUserName(userFullName.findByUserName(userName));
 							testingReportComment.setViewerFlag(Constants.INCREASED_FLAG_VALUE);

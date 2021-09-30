@@ -182,12 +182,14 @@ public class SummaryServiceImpl implements SummaryService {
 		Boolean flagInspectionComment = true;
 		if (userName != null && siteId != null && summaryComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
-			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)) {
+			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)
+					&& siteRepo.get().getAssignedTo().equalsIgnoreCase(userName) && siteRepo.get().getUserName() != null
+					&& siteRepo.get().getSite() != null) {
 				Optional<Summary> summaryRepo = summaryRepository.findBySiteId(siteId);
 
 				if (summaryRepo.isPresent() && summaryRepo.get() != null
 						&& checkInspectorViewer(userName, process, siteRepo, summaryRepo)) {
-					
+
 					Summary summary = summaryRepo.get();
 					summary.setUpdatedDate(LocalDateTime.now());
 					summary.setUpdatedBy(userName);
@@ -200,6 +202,9 @@ public class SummaryServiceImpl implements SummaryService {
 							summaryCommentItr.setSummary(summary);
 
 							if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
+								summaryCommentItr.setSiteName(siteRepo.get().getSite());
+								summaryCommentItr.setInspectorEmail(siteRepo.get().getUserName());
+								summaryCommentItr.setViewerUserEmail(siteRepo.get().getAssignedTo());
 								summaryCommentItr.setViewerDate(LocalDateTime.now());
 								summaryCommentItr.setViewerUserName(userFullName.findByUserName(userName));
 								summaryCommentItr.setViewerComment(summaryComment.getViewerComment());
@@ -230,6 +235,9 @@ public class SummaryServiceImpl implements SummaryService {
 						if (process.equalsIgnoreCase(Constants.SEND_COMMENT)) {
 							summaryComment.setNoOfComment(checkNoOfComments(summary.getSummaryComment()));
 							summaryComment.setSummary(summary);
+							summaryComment.setSiteName(siteRepo.get().getSite());
+							summaryComment.setInspectorEmail(siteRepo.get().getUserName());
+							summaryComment.setViewerUserEmail(siteRepo.get().getAssignedTo());
 							summaryComment.setViewerDate(LocalDateTime.now());
 							summaryComment.setViewerUserName(userFullName.findByUserName(userName));
 							summaryComment.setViewerFlag(Constants.INCREASED_FLAG_VALUE);

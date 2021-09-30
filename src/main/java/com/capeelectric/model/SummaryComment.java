@@ -38,6 +38,15 @@ public class SummaryComment implements Serializable {
 	
 	@Column(name = "INSPECTOR_USERNAME")
 	private String inspectorUserName;
+
+	@Column(name = "VIEWER_EMAIL")
+	private String viewerUserEmail;
+
+	@Column(name = "INSPECTOR_EMAIL")
+	private String inspectorEmail;
+
+	@Column(name = "SITE_NAME")
+	private String siteName;
 	
 	@Column(name = "VIEWER_COMMENT")
 	private String viewerComment;
@@ -90,6 +99,30 @@ public class SummaryComment implements Serializable {
 
 	public void setInspectorUserName(String inspectorUserName) {
 		this.inspectorUserName = inspectorUserName;
+	}
+
+	public String getViewerUserEmail() {
+		return viewerUserEmail;
+	}
+
+	public void setViewerUserEmail(String viewerUserEmail) {
+		this.viewerUserEmail = viewerUserEmail;
+	}
+
+	public String getInspectorEmail() {
+		return inspectorEmail;
+	}
+
+	public void setInspectorEmail(String inspectorEmail) {
+		this.inspectorEmail = inspectorEmail;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
 	}
 
 	public String getViewerComment() {
