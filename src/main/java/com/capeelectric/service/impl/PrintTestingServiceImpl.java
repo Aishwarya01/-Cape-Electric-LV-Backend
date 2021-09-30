@@ -168,7 +168,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitRating(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getShortCircuitSetting(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -334,7 +334,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(3);
 		table466.addCell(cell1);
 		
-		String insulationResistance = testingRecords1.getTestVoltage();
+		String insulationResistance = testingRecords1.getInsulationResistance();
 		String insulationResistance_list[] = insulationResistance.split(",");
 		String IR1 = insulationResistance_list[0];
 		String IR2 = insulationResistance_list[1];
