@@ -11,8 +11,10 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CompanyDetailsException;
+import com.capeelectric.model.Register;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
+import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.repository.SitePersonsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.SiteService;
@@ -29,6 +31,9 @@ public class SiteServiceImpl implements SiteService {
 
 	@Autowired
 	private UserFullName userName;
+	
+	@Autowired
+	private RegistrationRepository registrationRepository;
 
 	/*
 	 * @param Site addSite method to c comparing department client_name, comparing
@@ -49,6 +54,7 @@ public class SiteServiceImpl implements SiteService {
 				site.setUpdatedBy(userName.findByUserName(site.getUserName()));
 				boolean email = checkSitePersonEmail(site.getSite(), site.getSitePersons());
 				if (email) {
+					reduceLicence(site.getUserName());
 					siteRepository.save(site);
 				} else {
 					throw new CompanyDetailsException("PersonInchargEmail already present");
@@ -168,10 +174,14 @@ public class SiteServiceImpl implements SiteService {
 		return sitePersonSet;
 	}
 
+	/*
+	 * @param companyName, departmentName, siteName
+	 * retrieveSiteByName method to retrive based on companyName, departmentName, siteName
+	 * DB
+	 */
 	@Override
 	public Site retrieveSiteByName(String companyName, String departmentName, String siteName)
 			throws CompanyDetailsException {
-		// TODO Auto-generated method stub
 		if(null != companyName && null != departmentName && null != siteName) {
 			return siteRepository.findByCompanyNameAndDepartmentNameAndSite(companyName, departmentName, siteName);
 		} else {
@@ -181,4 +191,31 @@ public class SiteServiceImpl implements SiteService {
 		}
 	}
 
+	/*
+	 * @param inspectorUserName
+	 * reduceLicence method to one license decreased if inspector license except zero
+	 * DB
+	 */
+	private void reduceLicence(String inspectorUserName) throws CompanyDetailsException {
+		if (inspectorUserName != null) {
+			Optional<Register> inspectorRepo = registrationRepository.findByUsername(inspectorUserName);
+			if (inspectorRepo.isPresent()) {
+				Register inspector = inspectorRepo.get();
+				if (!inspector.getNoOfLicence().equals("0")) {
+					inspector.setNoOfLicence(String.valueOf(Integer.parseInt(inspector.getNoOfLicence()) - 1));
+					inspector.setUpdatedBy(userName.findByUserName(inspectorUserName));
+					inspector.setUpdatedDate(LocalDateTime.now());
+					registrationRepository.save(inspector);
+				} else {
+					throw new CompanyDetailsException(inspectorUserName + " Given Inspector doesn't have Licence");
+				}
+			} else {
+				throw new CompanyDetailsException(inspectorUserName + " Given Inspector doesn't exist");
+			}
+
+		} else {
+			throw new CompanyDetailsException("Invalid Inspector Name");
+		}
+
+	}
 }

@@ -1,12 +1,9 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +19,6 @@ import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
-import com.capeelectric.model.Site;
-import com.capeelectric.model.SitePersons;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.util.Constants;
@@ -48,15 +43,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 	private RegistrationRepository registerRepository;
 	
 	@Autowired
-	private SiteServiceImpl siteServiceImpl;
-	
-	@Autowired
 	private RestTemplate restTemplate;
 	
 	@Value("${number.of.licence}")
 	private String numberOfLicence;
-	
-	private Set<SitePersons> setSitePersons;
 	
 	@Autowired
 	private UserFullName userFullName;
@@ -120,7 +110,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					viewer.setUpdatedDate(LocalDateTime.now());
 					viewer.setCreatedBy(userFullName.findByUserName(viewer.getAssignedBy()));
 					viewer.setUpdatedBy(userFullName.findByUserName(viewer.getAssignedBy()));
-					reduceLicence(viewer.getAssignedBy(),viewer.getSiteName());
+					//reduceLicence(viewer.getAssignedBy(),viewer.getSiteName());
 					Register createdRegister = registerRepository.save(viewer);
 					//saveSiteInfo(createdRegister);
 					logger.debug("Sucessfully Registration Information Saved");
@@ -182,7 +172,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 				} else {
 					register.setUpdatedBy(userFullName.findByUserName(register.getAssignedBy()));
 					if (isLicenseUpdate) {
-						reduceLicence(register.getAssignedBy(), register.getSiteName());
+						//reduceLicence(register.getAssignedBy(), register.getSiteName());
 						//saveSiteInfo(register);
 						registerRepository.save(register);
 					} else {
@@ -269,20 +259,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 		} else {
 			throw new RegistrationException("Invalid Input");
-		}
-	}
-	
-	
-	private void reduceLicence(String inspectorUserName, String siteName) throws RegistrationException {
-		try {
-			Optional<Register> inspectorInfo = registerRepository.findByUsername(inspectorUserName);
-			Register inspector = inspectorInfo.get();
-			inspector.setNoOfLicence(String.valueOf(Integer.parseInt(inspector.getNoOfLicence()) - 1));
-			inspector.setUpdatedBy(userFullName.findByUserName(inspectorUserName));
-			inspector.setUpdatedDate(LocalDateTime.now());
-			registerRepository.save(inspector);
-		} catch (Exception e) {
-			throw new RegistrationException("Inspector License updating failed");
 		}
 	}
 	
