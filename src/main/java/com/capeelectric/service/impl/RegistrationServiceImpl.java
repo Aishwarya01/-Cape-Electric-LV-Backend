@@ -122,7 +122,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					viewer.setUpdatedBy(userFullName.findByUserName(viewer.getAssignedBy()));
 					reduceLicence(viewer.getAssignedBy(),viewer.getSiteName());
 					Register createdRegister = registerRepository.save(viewer);
-					saveSiteInfo(createdRegister);
+					//saveSiteInfo(createdRegister);
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
 				} else {
@@ -183,7 +183,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setUpdatedBy(userFullName.findByUserName(register.getAssignedBy()));
 					if (isLicenseUpdate) {
 						reduceLicence(register.getAssignedBy(), register.getSiteName());
-						saveSiteInfo(register);
+						//saveSiteInfo(register);
 						registerRepository.save(register);
 					} else {
 						registerRepository.save(register);
@@ -286,44 +286,44 @@ public class RegistrationServiceImpl implements RegistrationService {
 		}
 	}
 	
-	private void saveSiteInfo(Register viewer) throws CompanyDetailsException, RegistrationException {
-		SitePersons sitePersons = null;
-		setSitePersons = new HashSet<SitePersons>();
-		if (viewer != null) {
-			Optional<Register> registerRepo = registerRepository.findByUsername(viewer.getAssignedBy());
-			if (registerRepo.isPresent() && registerRepo.get() != null
-					&& registerRepo.get().getUsername().equalsIgnoreCase(viewer.getAssignedBy())) {
-				Register register = registerRepo.get();
-				Site site = new Site();
-				site.setCountry(register.getCountry());
-				site.setSite(viewer.getSiteName());
-				site.setState(register.getState());
-				site.setAddressLine_1(register.getAddress());
-				site.setZipCode(register.getPinCode());
-				site.setLandMark(register.getDistrict());
-				site.setUserName(register.getUsername());
-				site.setCompanyName(viewer.getCompanyName());
-				site.setDepartmentName(viewer.getDepartment());
-				site.setAssignedTo(viewer.getUsername());
-				sitePersons = new SitePersons();
-
-				sitePersons.setPersonInchargeEmail(viewer.getUsername());
-				sitePersons.setSiteName(viewer.getSiteName());
-				sitePersons.setPersonIncharge(viewer.getName());
-				sitePersons.setContactNo(viewer.getContactNumber());
-				sitePersons.setDesignation(viewer.getDesignation());
-				sitePersons.setInActive(true);
-				sitePersons.setSite(site);
-				setSitePersons.add(sitePersons);
-				site.setSitePersons(setSitePersons);
-				siteServiceImpl.addSite(site);
-			} else {
-				throw new RegistrationException("Site_creation Faild ,Given inspector UserName  does not Exist");
-			}
-		} else {
-			throw new RegistrationException("Registration Failed");
-		}
-
-	}
+//	private void saveSiteInfo(Register viewer) throws CompanyDetailsException, RegistrationException {
+//		SitePersons sitePersons = null;
+//		setSitePersons = new HashSet<SitePersons>();
+//		if (viewer != null) {
+//			Optional<Register> registerRepo = registerRepository.findByUsername(viewer.getAssignedBy());
+//			if (registerRepo.isPresent() && registerRepo.get() != null
+//					&& registerRepo.get().getUsername().equalsIgnoreCase(viewer.getAssignedBy())) {
+//				Register register = registerRepo.get();
+//				Site site = new Site();
+//				site.setCountry(register.getCountry());
+//				site.setSite(viewer.getSiteName());
+//				site.setState(register.getState());
+//				site.setAddressLine_1(register.getAddress());
+//				site.setZipCode(register.getPinCode());
+//				site.setLandMark(register.getDistrict());
+//				site.setUserName(register.getUsername());
+//				site.setCompanyName(viewer.getCompanyName());
+//				site.setDepartmentName(viewer.getDepartment());
+//				site.setAssignedTo(viewer.getUsername());
+//				sitePersons = new SitePersons();
+//
+//				sitePersons.setPersonInchargeEmail(viewer.getUsername());
+//				sitePersons.setSiteName(viewer.getSiteName());
+//				sitePersons.setPersonIncharge(viewer.getName());
+//				sitePersons.setContactNo(viewer.getContactNumber());
+//				sitePersons.setDesignation(viewer.getDesignation());
+//				sitePersons.setInActive(true);
+//				sitePersons.setSite(site);
+//				setSitePersons.add(sitePersons);
+//				site.setSitePersons(setSitePersons);
+//				siteServiceImpl.addSite(site);
+//			} else {
+//				throw new RegistrationException("Site_creation Faild ,Given inspector UserName  does not Exist");
+//			}
+//		} else {
+//			throw new RegistrationException("Registration Failed");
+//		}
+//
+//	}
 
 }
