@@ -172,7 +172,7 @@ public class InspectionServiceImpl implements InspectionService {
 		if (userName != null && siteId != null && periodicInspectionComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)
-					&& siteRepo.get().getAssignedTo().equalsIgnoreCase(userName) && siteRepo.get().getUserName() != null
+					&& siteRepo.get().getAssignedTo() != null && siteRepo.get().getUserName() != null
 					&& siteRepo.get().getSite() != null) {
 				Optional<PeriodicInspection> periodicInspectionRepo = inspectionRepository.findBySiteId(siteId);
 				if (periodicInspectionRepo.isPresent() && periodicInspectionRepo.get() != null

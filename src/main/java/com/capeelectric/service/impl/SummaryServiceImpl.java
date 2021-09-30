@@ -183,7 +183,7 @@ public class SummaryServiceImpl implements SummaryService {
 		if (userName != null && siteId != null && summaryComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)
-					&& siteRepo.get().getAssignedTo().equalsIgnoreCase(userName) && siteRepo.get().getUserName() != null
+					&& siteRepo.get().getAssignedTo() != null && siteRepo.get().getUserName() != null
 					&& siteRepo.get().getSite() != null) {
 				Optional<Summary> summaryRepo = summaryRepository.findBySiteId(siteId);
 

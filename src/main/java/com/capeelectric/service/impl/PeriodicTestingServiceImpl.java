@@ -165,7 +165,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		if (userName != null && siteId != null && testingReportComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)
-					&& siteRepo.get().getAssignedTo().equalsIgnoreCase(userName) && siteRepo.get().getUserName() != null
+					&& siteRepo.get().getAssignedTo() != null && siteRepo.get().getUserName() != null
 					&& siteRepo.get().getSite() != null) {
 				Optional<TestingReport> testingReportRepo = testingReportRepository.findBySiteId(siteId);
 				if (testingReportRepo.isPresent() && testingReportRepo.get() != null

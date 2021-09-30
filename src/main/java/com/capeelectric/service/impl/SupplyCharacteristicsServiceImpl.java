@@ -237,7 +237,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		if (userName != null && siteId != null && supplyCharacteristicComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)
-					&& siteRepo.get().getAssignedTo().equalsIgnoreCase(userName) && siteRepo.get().getUserName() != null
+					&& siteRepo.get().getAssignedTo() != null && siteRepo.get().getUserName() != null
 					&& siteRepo.get().getSite() != null) {
 				Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
 						.findBySiteId(siteId);

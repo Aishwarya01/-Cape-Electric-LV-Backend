@@ -174,7 +174,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 		if (userName != null && siteId != null && reportDetailsComment != null) {
 			Optional<Site> siteRepo = siteRepository.findById(siteId);
 			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(siteId)
-					&& siteRepo.get().getAssignedTo().equalsIgnoreCase(userName) && siteRepo.get().getUserName() != null
+					&& siteRepo.get().getAssignedTo() != null && siteRepo.get().getUserName() != null
 					&& siteRepo.get().getSite() != null) {
 				Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(siteId);
 				if (reportDetailsRepo.isPresent() && reportDetailsRepo.get() != null
