@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capeelectric.service.NotificationService;
+
 /**
  * 
  * @author capeelectricsoftware
@@ -20,6 +22,9 @@ public class NotificationController {
 
 	
 	private static final Logger logger = LoggerFactory.getLogger(NotificationController.class);
+	
+	private NotificationService notificationService;
+	
 	@GetMapping("/retrieveComments/{username}")
 	public ResponseEntity<String> retrieveCommentsForUser(@PathVariable String userName){
 		logger.debug("Retrieve Comments Starts");
