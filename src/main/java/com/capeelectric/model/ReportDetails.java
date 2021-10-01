@@ -98,6 +98,12 @@ public class ReportDetails implements Serializable {
 	@Column(name = "COMPANY")
 	private String company;
 	
+	@Column(name = "INSPECTOR_DESIGNATION")
+	private String inspectorDesignation;
+	
+	@Column(name = "INSPECTOR_COMPANYNAME")
+	private String inspectorCompanyName;
+	
 	@Column(name = "LIMITATIONS")
 	private String limitations;
 	
@@ -279,6 +285,22 @@ public class ReportDetails implements Serializable {
 
 	public void setCompany(String company) {
 		this.company = company;
+	}
+
+	public String getInspectorDesignation() {
+		return inspectorDesignation;
+	}
+
+	public void setInspectorDesignation(String inspectorDesignation) {
+		this.inspectorDesignation = inspectorDesignation;
+	}
+
+	public String getInspectorCompanyName() {
+		return inspectorCompanyName;
+	}
+
+	public void setInspectorCompanyName(String inspectorCompanyName) {
+		this.inspectorCompanyName = inspectorCompanyName;
 	}
 
 	public String getLimitations() {
