@@ -33,6 +33,7 @@ import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.service.impl.RegistrationServiceImpl;
 import com.capeelectric.service.impl.SiteServiceImpl;
+import com.capeelectric.util.UserFullName;
 
 
 @ExtendWith(SpringExtension.class)
@@ -55,6 +56,9 @@ public class RegistrationServiceTest {
 	
 	@MockBean
 	private SiteServiceImpl siteServiceImpl;
+	
+	@MockBean
+	private UserFullName userFullName;
 
 
 	private Register register;
