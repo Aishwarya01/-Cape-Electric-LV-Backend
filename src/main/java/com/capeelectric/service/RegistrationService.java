@@ -6,8 +6,6 @@ import java.util.Optional;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
-=======
-import java.util.List;
 
 
 
