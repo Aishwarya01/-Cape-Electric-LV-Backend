@@ -1,13 +1,13 @@
 package com.capeelectric.util;
 
 import java.io.IOException;
-
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.ExceptionConverter;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BaseFont;
@@ -23,6 +23,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class HeaderFooterPageEvent extends PdfPageEventHelper {
 
+	private static final int DARK_GRAY = 0;
 	private PdfTemplate t;
 	private Image total;
 
@@ -38,51 +39,51 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 
 	@Override
 	public void onEndPage(PdfWriter writer, Document document) {
-		addFooter(writer, document );
+		addFooter(writer, document);
+
 	}
 
-	private void addFooter(PdfWriter writer , Document document) {
+	private void addFooter(PdfWriter writer, Document document) {
 		PdfPTable footer = new PdfPTable(2);
 		footer.getDefaultCell().setBorder(0);
 		try {
 			final com.itextpdf.text.Rectangle pageSize = document.getPageSize();
 			final PdfContentByte directContent = writer.getDirectContent();
+			directContent.setColorFill(new GrayColor(DARK_GRAY));
 
-			directContent.setColorFill(new GrayColor(0.50f));
-			directContent.setFontAndSize(BaseFont.createFont(), 8);
-			directContent.setTextMatrix(pageSize.getRight(520), pageSize.getBottom(30));
-			
-			String file = "file:///C:/Users/capeelectricsoftware/Documents/GitHub/Cape-Electric-Software-BackEnd/src/main/resources/image/rush-logo.png";
+			String file = "file:///D:/project%20cape/siva/Cape-Back-end/src/main/resources/image/rush-logo.png";
 			Image image = Image.getInstance(file);
 			image.scaleToFit(185, 185);
 			image.setAbsolutePosition(-3, -9);
 			document.add(image);
-
-			directContent.setTextMatrix(pageSize.getRight(425), pageSize.getBottom(45));
-			directContent.showText(
-					String.valueOf("Testing Inspection and Verification (TIC) of LV electrical installation"));
-			directContent.setTextMatrix(pageSize.getRight(405), pageSize.getBottom(36));
-			directContent.showText(String.valueOf("Electrical safety in Industrial and Commercial premises"));
-			directContent.setTextMatrix(pageSize.getRight(360), pageSize.getBottom(26));
-			directContent.showText(String.valueOf("as per IEC 60364 – 6 (IS 732)"));
 			
+			Font font = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.DARK_GRAY);
+
+			ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER,
+					new Phrase("Testing Inspection and Verification (TIC) of LV electrical installation", font), 300,
+					40, 0);
+			ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER,
+					new Phrase("Electrical safety in Industrial and Commercial premises", font), 290, 30, 0);
+			ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER,
+					new Phrase("as per IEC 60364 – 6 (IS 732)", font), 280, 20, 0);
+
 			footer.setWidths(new int[] { 2, 1 });
 			footer.setTotalWidth(70);
 			footer.setLockedWidth(true);
 			footer.getDefaultCell().setFixedHeight(40);
 			footer.getDefaultCell().setBorderColor(BaseColor.BLACK);
 			footer.getDefaultCell().setHorizontalAlignment(Element.ALIGN_RIGHT);
+
 			footer.addCell(new Phrase(String.format("Page %d of", writer.getPageNumber()),
 					new Font(Font.FontFamily.HELVETICA, 8)));
-		
-			// add placeholder for total page count
+
 			PdfPCell totalPageCount = new PdfPCell(total);
 			totalPageCount.setBorder(0);
 			footer.addCell(totalPageCount);
-			
+
 			PdfContentByte canvas = writer.getDirectContent();
 			canvas.beginMarkedContentSequence(PdfName.ARTIFACT);
-			footer.writeSelectedRows(0, -1, 470, 52, canvas);
+			footer.writeSelectedRows(0, -1, 470, 45, canvas);
 			footer.getDefaultCell().setBorder(0);
 			canvas.endMarkedContentSequence();
 		} catch (DocumentException | IOException de) {
