@@ -92,4 +92,6 @@ public class Constants {
 	public static final String EMAIL_SUBJECT_URL_AWS = "https://www.rushforsafety.com";
 	
 	public static final String EMAIL_SUBJECT_ADMIN_URL_AWS = "https://admin.rushforsafety.com";
+	
+	public static final int LIST_ZERO = 0;
 }
