@@ -11,15 +11,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
@@ -29,7 +26,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "site_table")
 @NamedQueries(value = {
-		@NamedQuery(name = "SiteRepository.findByClientNameAndDepartmentName", query = "select s from Site s where s.clientName=:clientName and s.departmentName=:departmentName") })
+		@NamedQuery(name = "SiteRepository.findByUserNameAndSite", query = "select s from Site s where s.userName=:userName and s.site=:site"),
+		@NamedQuery(name = "SiteRepository.findByCompanyNameAndDepartmentNameAndSite",
+		            query = "select s from Site s where s.companyName=:companyName and s.departmentName=:departmentName and s.site=:site") })
 public class Site implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -44,14 +43,14 @@ public class Site implements Serializable {
 	@Column(name = "USER_NAME")
 	private String userName;
 
-	@Column(name = "CLIENT_NAME")
-	private String clientName;
-
-	@Column(name = "DEPARTMENT_NAME")
-	private String departmentName;
-
 	@Column(name = "SITE")
 	private String site;
+	
+	@Column(name = "COMPANY_NAME")
+	private String companyName;
+	
+	@Column(name = "DEPARTMENT_NAME")
+	private String departmentName;
 
 	@Column(name = "ADDRESSLINE_1")
 	private String addressLine_1;
@@ -73,6 +72,12 @@ public class Site implements Serializable {
 
 	@Column(name = "ZIP_CODE")
 	private String zipCode;
+	
+	@Column(name = "ALL_STEPS_COMPLETED")
+	private String allStepsCompleted;
+	
+	@Column(name = "SITE_ASSIGNED_TO")
+	private String assignedTo;
 
 	@Column(name = "CREATED_BY")
 	private String createdBy;
@@ -85,14 +90,8 @@ public class Site implements Serializable {
 
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
-
-	@JsonBackReference
-	@ManyToOne
-	@JoinColumn(name = "DEPARTMENT_ID")
-	private Department department;
-
 	
-	@OneToMany(mappedBy="Site",fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="site",fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	private Set<SitePersons> sitePersons;
 	
 	public Integer getSiteId() {
@@ -111,12 +110,20 @@ public class Site implements Serializable {
 		this.userName = userName;
 	}
 
-	public String getClientName() {
-		return clientName;
+	public String getSite() {
+		return site;
 	}
 
-	public void setClientName(String clientName) {
-		this.clientName = clientName;
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 
 	public String getDepartmentName() {
@@ -125,14 +132,6 @@ public class Site implements Serializable {
 
 	public void setDepartmentName(String departmentName) {
 		this.departmentName = departmentName;
-	}
-
-	public String getSite() {
-		return site;
-	}
-
-	public void setSite(String site) {
-		this.site = site;
 	}
 
 	public String getAddressLine_1() {
@@ -191,6 +190,22 @@ public class Site implements Serializable {
 		this.zipCode = zipCode;
 	}
 
+	public String getAllStepsCompleted() {
+		return allStepsCompleted;
+	}
+
+	public void setAllStepsCompleted(String allStepsCompleted) {
+		this.allStepsCompleted = allStepsCompleted;
+	}
+	
+	public String getAssignedTo() {
+		return assignedTo;
+	}
+
+	public void setAssignedTo(String assignedTo) {
+		this.assignedTo = assignedTo;
+	}
+
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -223,14 +238,6 @@ public class Site implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
-	public Department getDepartment() {
-		return department;
-	}
-
-	public void setDepartment(Department department) {
-		this.department = department;
-	}
-
 	public String getSiteCd() {
 		return siteCd;
 	}
@@ -247,5 +254,5 @@ public class Site implements Serializable {
 	public void setSitePersons(Set<SitePersons> sitePersons) {
 		this.sitePersons = sitePersons;
 	}
-
+	
 }

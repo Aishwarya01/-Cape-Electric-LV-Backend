@@ -15,9 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
+import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.ReportDetails;
+import com.capeelectric.model.ReportDetailsComment;
 import com.capeelectric.service.InstalReportService;
+import com.capeelectric.util.SendReplyComments;
 
 /**
  * @author capeelectricsoftware
@@ -31,6 +35,9 @@ public class InstallReportController {
 
 	@Autowired
 	private InstalReportService instalReportService;
+	
+	@Autowired
+	private SendReplyComments sendReplyComments;
 
 	@PostMapping("/addInstalReport")
 	public ResponseEntity<String> addInstallationReport(@RequestBody ReportDetails reportDetails)
@@ -44,7 +51,7 @@ public class InstallReportController {
 	@GetMapping("/retrieveInstalReport/{userName}/{siteId}")
 	public ResponseEntity<List<ReportDetails>> retrieveInstallationReport(@PathVariable String userName,
 			@PathVariable Integer siteId)
-			throws InstalReportException {
+			throws InstalReportException, InspectionException {
 		logger.info("called retrieveInstallationReport function UserName: {}, SiteId : {}", userName, siteId);
 		return new ResponseEntity<List<ReportDetails>>(instalReportService.retrieveInstallationReport(userName,siteId),
 				HttpStatus.OK);
@@ -56,6 +63,40 @@ public class InstallReportController {
 		logger.info("called updateInstallationReport function UserName : {},SiteId : {},ReportId : {}", reportDetails.getUserName(),
 				reportDetails.getSiteId(),reportDetails.getReportId());
 		instalReportService.updateInstallationReport(reportDetails);
-		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.CREATED);
+		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.OK);
+	}
+	
+	@PostMapping("/sendBasicInfoComments/{userName}/{siteId}")
+	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
+			@RequestBody ReportDetailsComment reportDetailsComment)
+			throws InstalReportException, RegistrationException, Exception {
+		logger.info("called sendComments function UserName : {},SiteId : {}", userName, siteId);
+		instalReportService.sendComments(userName, siteId, reportDetailsComment);
+		sendReplyComments.sendComments(userName);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/replyBasicInfoComments/{inspectorUserName}/{siteId}")
+	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
+			@RequestBody ReportDetailsComment reportDetailsComment)
+			throws InstalReportException, RegistrationException, Exception {
+		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
+		String viewerUserName = instalReportService.replyComments(inspectorUserName, siteId, reportDetailsComment);
+		if (viewerUserName != null) {
+			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
+		} else {
+			throw new InstalReportException("No viewer userName avilable");
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/approveBasicInfoComments/{userName}/{siteId}")
+	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
+			@RequestBody ReportDetailsComment reportDetailsComment)
+			throws InstalReportException, RegistrationException, Exception {
+		logger.info("called approveComments function UserName : {},SiteId : {}", userName, siteId);
+		instalReportService.approveComments(userName, siteId, reportDetailsComment);
+		sendReplyComments.approveComments(userName,reportDetailsComment.getApproveOrReject());
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

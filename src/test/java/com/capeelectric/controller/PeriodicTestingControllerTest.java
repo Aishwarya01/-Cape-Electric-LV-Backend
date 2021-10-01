@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,8 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.PeriodicTestingException;
+import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.service.impl.PeriodicTestingServiceImpl;
+import com.capeelectric.util.SendReplyComments;
 
 /**
  * 
@@ -41,6 +44,9 @@ public class PeriodicTestingControllerTest {
 
 	@MockBean
 	private PeriodicTestingException periodicTestingException;
+	
+	@MockBean
+	private SendReplyComments sendReplyComments;
 
 	private TestingReport testingReport;
 
@@ -80,11 +86,42 @@ public class PeriodicTestingControllerTest {
 	@Test
 	public void testUpdatePeriodicTesting() throws PeriodicTestingException {
 		logger.info("testUpdatePeriodicTesting Function Started");
-		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		ResponseEntity<String> actualResponseEntity = periodicTestingController
 				.updatePeriodicTesting(testingReport);
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
 		logger.info("testUpdatePeriodicTesting Function Ended");
 	}
+	
+	@Test
+	public void testSendComments() throws PeriodicTestingException, Exception, RegistrationException {
+		/*
+		 * 
+		 * ResponseEntity<Void> sendComments =
+		 * periodicTestingController.sendComments("Viewer@gmail.com", 1,
+		 * "I have a question?");
+		 * 
+		 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+		 */}
 
+	/*
+	 * @Test public void testReplyComments() throws
+	 * PeriodicTestingException,Exception, RegistrationException {
+	 * 
+	 * PeriodicTestingException exception =
+	 * Assertions.assertThrows(PeriodicTestingException.class, () ->
+	 * periodicTestingController.replyComments("Inspector@gmail.com", 1,
+	 * "I have a question?"));
+	 * 
+	 * assertEquals(exception.getMessage(), "No viewer userName avilable");
+	 * 
+	 * when(periodicTestingServiceImpl.replyComments("Inspector@gmail.com", 1,
+	 * "I have a question?")) .thenReturn("Viewer@gmail.com");
+	 * 
+	 * ResponseEntity<Void> sendComments =
+	 * periodicTestingController.replyComments("Inspector@gmail.com", 1,
+	 * "I have a question?");
+	 * 
+	 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK); }
+	 */
 }

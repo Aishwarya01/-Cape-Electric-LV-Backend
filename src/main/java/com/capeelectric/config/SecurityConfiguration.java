@@ -12,14 +12,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.capeelectric.repository.UserRepository;
+import com.capeelectric.repository.RegistrationRepository;
 
 /**
  * 
@@ -29,7 +28,7 @@ import com.capeelectric.repository.UserRepository;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
-@EnableJpaRepositories(basePackageClasses = UserRepository.class)
+@EnableJpaRepositories(basePackageClasses = RegistrationRepository.class)
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -37,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 	@Autowired
-	private UserDetailsService jwtUserDetailsService;
+	private JwtRegisterDetailsService jwtRegisterDetailsService;
 
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
@@ -47,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		// configure AuthenticationManager so that it knows from where to load
 		// user for matching credentials
 		// Use BCryptPasswordEncoder
-		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(jwtRegisterDetailsService).passwordEncoder(passwordEncoder());
 	}
 
 	@Bean
@@ -67,14 +66,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		httpSecurity.csrf().disable();
 		httpSecurity.cors().and()
 				// dont authenticate this particular request
-				.authorizeRequests().antMatchers("/api/v1/authenticate",
-						"/api/v1/registerUser",
-						"/api/v1/forgotPassword/**",
-						"/api/v1/updatePassword/**",
-						"/api/v2/retrieveAllRegistration",
-						"/api/v2/updatePermission"
-						).permitAll()
-				.antMatchers(HttpMethod.OPTIONS, "/**").permitAll().
+				.authorizeRequests().antMatchers("/api/v2/authenticate",
+						"/api/v2/addRegistration",
+						"/api/v2/forgotPassword/**", 
+						"/api/v2/updatePassword/**",
+						"/api/v2/createPassword/**",
+						"/api/v2/sendOtp/**",
+						"/api/v2/fetchStatesByCountryCode/**",
+						"/api/v2/retrieveApplicationTypes",
+						"/api/v2/fetchCountries",
+						"/api/v2/retrieveRegistration/**")
+				.permitAll().antMatchers(HttpMethod.OPTIONS, "/**").permitAll().
 				// all other requests need to be authenticated
 				anyRequest().authenticated().and().
 				// make sure we use stateless session; session won't be used to

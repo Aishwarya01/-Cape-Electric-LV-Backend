@@ -3,6 +3,7 @@ package com.capeelectric.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
+import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.PeriodicTestingServiceImpl;
 import com.capeelectric.util.UserFullName;
@@ -49,12 +51,21 @@ public class PeriodicTestingServiceTest {
 
 	private TestingReport testingReport;
 	
+	private TestingReportComment testingReportComment;
+	
 	private Testing testing;
 	
 	{
 		testingReport = new TestingReport();
 		testingReport.setSiteId(1);
 		testingReport.setUserName("LVsystem@gmail.com");
+
+		testingReportComment = new TestingReportComment();
+		testingReportComment.setViewerDate(LocalDateTime.now());
+		
+		ArrayList<TestingReportComment> listOfComment = new ArrayList<TestingReportComment>();
+		listOfComment.add(testingReportComment);
+		testingReport.setTestingComment(listOfComment);
 	}
 	
 	@Test

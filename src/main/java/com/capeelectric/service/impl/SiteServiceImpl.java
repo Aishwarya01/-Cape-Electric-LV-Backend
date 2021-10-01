@@ -11,17 +11,14 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CompanyDetailsException;
-import com.capeelectric.model.Company;
-import com.capeelectric.model.Department;
+import com.capeelectric.model.Register;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
-import com.capeelectric.model.User;
-import com.capeelectric.repository.CompanyRepository;
-import com.capeelectric.repository.DepartmentRepository;
+import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.repository.SitePersonsRepository;
 import com.capeelectric.repository.SiteRepository;
-import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.SiteService;
+import com.capeelectric.util.UserFullName;
 
 @Service
 public class SiteServiceImpl implements SiteService {
@@ -30,16 +27,13 @@ public class SiteServiceImpl implements SiteService {
 	private SiteRepository siteRepository;
 
 	@Autowired
-	private CompanyRepository companyRepository;
+	private SitePersonsRepository sitePersonsRepository;
 
 	@Autowired
-	private DepartmentRepository departmentRepository;
-
-	@Autowired
-	private UserRepository userRepository;
+	private UserFullName userName;
 	
 	@Autowired
-	private SitePersonsRepository sitePersonsRepository;
+	private RegistrationRepository registrationRepository;
 
 	/*
 	 * @param Site addSite method to c comparing department client_name, comparing
@@ -48,90 +42,59 @@ public class SiteServiceImpl implements SiteService {
 	@Override
 	public void addSite(Site site) throws CompanyDetailsException {
 		int count = 0;
- 
-		if (site.getClientName() != null && site.getDepartmentName() != null) {
-			Optional<Company> companyRepo = companyRepository.findByClientName(site.getClientName());
-			if (companyRepo.isPresent() && companyRepo.get() != null
-					&& companyRepo.get().getClientName().equalsIgnoreCase(site.getClientName())) {
-				Department department = departmentRepository.findByClientNameAndDepartmentName(site.getClientName(),
-						site.getDepartmentName());
-				if (department != null && department.getClientName().equalsIgnoreCase(site.getClientName())
-						&& department.getDepartmentName().equalsIgnoreCase(site.getDepartmentName())) {
-					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
-							site.getDepartmentName(), site.getSite());
 
-					if (siteRepo == null || !siteRepo.getSite().equalsIgnoreCase(site.getSite())) {
-						site.setDepartment(department);
-						site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
-						site.setCreatedDate(LocalDateTime.now());
-						site.setUpdatedDate(LocalDateTime.now());
-						site.setCreatedBy(generateFullName(department.getUserName()));
-						site.setUpdatedBy(generateFullName(department.getUserName()));
-						boolean email = checkSitePersonEmail(site.getSitePersons());
-						if (email) {
-							siteRepository.save(site);
-						}else {
-							throw new CompanyDetailsException("Email-Id Already Existing");
-						}
-					} else {
-						throw new CompanyDetailsException("Site_Name Already Available");
-					}
+		if (site.getUserName() != null && site.getSite() != null) {
+			Optional<Site> siteRepo = siteRepository.findByUserNameAndSite(site.getUserName(), site.getSite());
 
+			if (!siteRepo.isPresent() || !siteRepo.get().getSite().equalsIgnoreCase(site.getSite())) {
+				site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
+				site.setCreatedDate(LocalDateTime.now());
+				site.setUpdatedDate(LocalDateTime.now());
+				site.setCreatedBy(userName.findByUserName(site.getUserName()));
+				site.setUpdatedBy(userName.findByUserName(site.getUserName()));
+				boolean email = checkSitePersonEmail(site.getSite(), site.getSitePersons());
+				if (email) {
+					reduceLicence(site.getUserName());
+					siteRepository.save(site);
 				} else {
-					throw new CompanyDetailsException("Department_Name Not Available");
+					throw new CompanyDetailsException("PersonInchargEmail already present");
 				}
 			} else {
-				throw new CompanyDetailsException("Client_Name Not Available");
+				throw new CompanyDetailsException(site.getSite() + ": site already present");
 			}
+
 		} else {
 			throw new CompanyDetailsException("Invalid Inputs");
 		}
 	}
 
 	/*
-	 * @param Site 
-	 * updateSite method to comparing department_ClientName,
-	 * department_name comparing, then comparing site  
+	 * @param Site updateSite method to comparing department_ClientName,
+	 * department_name comparing, then comparing site
 	 */
 	@Override
 	public void updateSite(Site site) throws CompanyDetailsException {
 		int count = 0;
-		if (site.getDepartmentName() != null && site.getClientName() != null && site.getUserName() != null
-				&& site.getSiteId() != null) {
-			Department department = departmentRepository.findByClientNameAndDepartmentName(site.getClientName(),
-					site.getDepartmentName());
-			if (department != null && department.getClientName().equalsIgnoreCase(site.getClientName())) {
-				if (department != null && department.getDepartmentName().equalsIgnoreCase(site.getDepartmentName())) {
 
-					Site siteRepo = siteRepository.findByClientNameAndDepartmentNameAndSite(site.getClientName(),
-							site.getDepartmentName(), site.getSite());
-					
-		 			Set<SitePersons> sitePersons = deleteSitePersonDetails(site.getSitePersons());
-					if(!sitePersons.isEmpty()) {
-						site.getSitePersons().removeAll(sitePersons);
-					}
-					if (siteRepo != null && siteRepo.getSite().equalsIgnoreCase(site.getSite())
-							&& siteRepo.getSiteId().equals(site.getSiteId())) {
-						site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
-						site.setUpdatedDate(LocalDateTime.now());
-						site.setUpdatedBy(generateFullName(department.getUserName()));
-						boolean email = checkSitePersonEmail(site.getSitePersons());
-						if (email) {
-							site.setDepartment(department);
-							siteRepository.save(site);
-						}else {
-							throw new CompanyDetailsException("PersonInchargEmail Already Available");
-						}
-					} else {
-						throw new CompanyDetailsException("Site_Name Not Available");
-					}
-
+		if (site.getUserName() != null && site.getSite() != null) {
+			Optional<Site> siteRepo = siteRepository.findByUserNameAndSite(site.getUserName(), site.getSite());
+			Set<SitePersons> sitePersons = deleteSitePersonDetails(site.getSitePersons());
+			if (!sitePersons.isEmpty()) {
+				site.getSitePersons().removeAll(sitePersons);
+			}
+			if (siteRepo.isPresent() && siteRepo.get().getSite().equalsIgnoreCase(site.getSite())
+					&& siteRepo.get().getSiteId().equals(site.getSiteId())) {
+				site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
+				site.setUpdatedDate(LocalDateTime.now());
+				site.setUpdatedBy(userName.findByUserName(site.getUserName()));
+				boolean email = checkSitePersonEmail(site.getSite(), site.getSitePersons());
+				if (email) {
+					siteRepository.save(site);
 				} else {
-					throw new CompanyDetailsException("Department_Name Not Available");
+					throw new CompanyDetailsException("PersonInchargEmail already present");
 				}
-
 			} else {
-				throw new CompanyDetailsException("Client_Name Not Available");
+				throw new CompanyDetailsException(site.getSite() + " site not present");
 			}
 		} else {
 			throw new CompanyDetailsException("Invalid Inputs");
@@ -151,58 +114,50 @@ public class SiteServiceImpl implements SiteService {
 
 				siteRepository.deleteById(siteId);
 			} else {
-				throw new CompanyDetailsException("Site_Name Not Available");
+				throw new CompanyDetailsException(siteId + " : this siteId not present");
 			}
 
 		} else {
-			throw new CompanyDetailsException("Invalid Input");
+			throw new CompanyDetailsException("Invalid Inputs");
 		}
 
 	}
 
 	/*
-	 * @param clientName,departmentName
-	 * retriveSite method to retrieving site from DB
+	 * @param clientName,departmentName retriveSite method to retrieving site from
+	 * DB
 	 */
 	@Override
-	public List<Site> retriveSite(String clientName, String departmentName) throws CompanyDetailsException {
-		if (clientName != null && departmentName != null) {
-			return siteRepository.findByClientNameAndDepartmentName(clientName, departmentName);
+	public List<Site> retriveSite(String userName) throws CompanyDetailsException {
+		if (userName != null) {
+			return siteRepository.findByUserName(userName);
 		} else {
 			throw new CompanyDetailsException("Invalid Inputs");
 		}
 	}
 
-	private String generateFullName(String userName) {
-		Optional<User> user = userRepository.findByUsername(userName);
-		if (user.isPresent() && user.get() != null)
-			return user.get().getFirstname() + " " + user.get().getLastname();
-		return "";
-	}
-
 	/*
-	 * @param sitePersons
-	 * checkSitePersonEmail method to finding duplicate personInchargeMail entry
+	 * @param sitePersons checkSitePersonEmail method to finding duplicate
+	 * personInchargeMail entry
 	 */
-	private boolean checkSitePersonEmail(Set<SitePersons> sitePersons) throws CompanyDetailsException {
+	private boolean checkSitePersonEmail(String siteName, Set<SitePersons> sitePersons) throws CompanyDetailsException {
 		boolean emailAvailable = true;
 		for (SitePersons sitePersonsItr : sitePersons) {
-
-			Optional<SitePersons> inchargeEmail = sitePersonsRepository
-					.findByPersonInchargeEmail(sitePersonsItr.getPersonInchargeEmail());
+			sitePersonsItr.setSiteName(siteName);
+			Optional<SitePersons> inchargeEmail = sitePersonsRepository.findBySiteNameAndPersonInchargeEmail(siteName,
+					sitePersonsItr.getPersonInchargeEmail());
 
 			if (inchargeEmail.isPresent() && inchargeEmail != null) {
 				if (inchargeEmail.get().getPersonInchargeEmail()
 						.equalsIgnoreCase(sitePersonsItr.getPersonInchargeEmail())
 						&& inchargeEmail.get().getPersonId().equals(sitePersonsItr.getPersonId())) {
 				} else {
-					emailAvailable = false; 
+					emailAvailable = false;
 				}
 			}
 		}
 		return emailAvailable;
 	}
-	
 
 	/**
 	 * 
@@ -211,7 +166,7 @@ public class SiteServiceImpl implements SiteService {
 	private Set<SitePersons> deleteSitePersonDetails(Set<SitePersons> sitePersons) {
 		Set<SitePersons> sitePersonSet = new HashSet<SitePersons>();
 		for (SitePersons sitePersonsItr : sitePersons) {
-			if(sitePersonsItr !=null && !sitePersonsItr.getInActive()) {
+			if (sitePersonsItr != null && !sitePersonsItr.getInActive()) {
 				sitePersonsRepository.deleteById(sitePersonsItr.getPersonId());
 				sitePersonSet.add(sitePersonsItr);
 			}
@@ -219,4 +174,48 @@ public class SiteServiceImpl implements SiteService {
 		return sitePersonSet;
 	}
 
+	/*
+	 * @param companyName, departmentName, siteName
+	 * retrieveSiteByName method to retrive based on companyName, departmentName, siteName
+	 * DB
+	 */
+	@Override
+	public Site retrieveSiteByName(String companyName, String departmentName, String siteName)
+			throws CompanyDetailsException {
+		if(null != companyName && null != departmentName && null != siteName) {
+			return siteRepository.findByCompanyNameAndDepartmentNameAndSite(companyName, departmentName, siteName);
+		} else {
+			throw new CompanyDetailsException("Company Name "
+					+ companyName +", " +"Department Name "+ departmentName + ", "
+					+ " Site Name " + siteName + " is not available");
+		}
+	}
+
+	/*
+	 * @param inspectorUserName
+	 * reduceLicence method to one license decreased if inspector license except zero
+	 * DB
+	 */
+	private void reduceLicence(String inspectorUserName) throws CompanyDetailsException {
+		if (inspectorUserName != null) {
+			Optional<Register> inspectorRepo = registrationRepository.findByUsername(inspectorUserName);
+			if (inspectorRepo.isPresent()) {
+				Register inspector = inspectorRepo.get();
+				if (!inspector.getNoOfLicence().equals("0")) {
+					inspector.setNoOfLicence(String.valueOf(Integer.parseInt(inspector.getNoOfLicence()) - 1));
+					inspector.setUpdatedBy(userName.findByUserName(inspectorUserName));
+					inspector.setUpdatedDate(LocalDateTime.now());
+					registrationRepository.save(inspector);
+				} else {
+					throw new CompanyDetailsException(inspectorUserName + " Given Inspector doesn't have Licence");
+				}
+			} else {
+				throw new CompanyDetailsException(inspectorUserName + " Given Inspector doesn't exist");
+			}
+
+		} else {
+			throw new CompanyDetailsException("Invalid Inspector Name");
+		}
+
+	}
 }

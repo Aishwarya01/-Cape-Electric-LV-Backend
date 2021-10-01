@@ -71,16 +71,15 @@ public class GlobalExceptionHandler {
             ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
             return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
     }
-    
     @ExceptionHandler({RegistrationException.class})
-    public ResponseEntity<ErrorMessage> handleUserException(RegistrationException e){
-    		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
-    		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
-    }
-    
-    @ExceptionHandler({RegisterPermissionRequestException.class})
-    public ResponseEntity<ErrorMessage> handleChangePasswordException(RegisterPermissionRequestException e){
+    public ResponseEntity<ErrorMessage> handleRegistrationException(RegistrationException e){
     		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
     		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+    }
+    
+    @ExceptionHandler({AuthenticationException.class})
+    public ResponseEntity<ErrorMessage> handleAuthenticationException(AuthenticationException e){
+    		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
+    		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 }

@@ -151,7 +151,7 @@ public class SupplyCharacteristics implements Serializable {
 
 	@Column(name = "EARTHING_NO_OF_JOINTS")
 	private Integer earthingNoOfJoints;
-
+	
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 	
@@ -183,6 +183,10 @@ public class SupplyCharacteristics implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<EarthingLocationReport> earthingLocationReport;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<SupplyCharacteristicComment> supplyCharacteristicComment;
 
 	public Integer getSupplyCharacteristicsId() {
 		return supplyCharacteristicsId;
@@ -550,6 +554,14 @@ public class SupplyCharacteristics implements Serializable {
 
 	public void setEarthingLocationReport(List<EarthingLocationReport> earthingLocationReport) {
 		this.earthingLocationReport = earthingLocationReport;
+	}
+
+	public List<SupplyCharacteristicComment> getSupplyCharacteristicComment() {
+		return supplyCharacteristicComment;
+	}
+
+	public void setSupplyCharacteristicComment(List<SupplyCharacteristicComment> supplyCharacteristicComment) {
+		this.supplyCharacteristicComment = supplyCharacteristicComment;
 	}
 
  

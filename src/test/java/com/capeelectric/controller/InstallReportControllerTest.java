@@ -1,11 +1,13 @@
 package com.capeelectric.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,10 +17,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
+import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.SignatorDetails;
 import com.capeelectric.service.InstalReportService;
+import com.capeelectric.util.SendReplyComments;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +34,9 @@ public class InstallReportControllerTest {
 	
 	@MockBean
 	private InstalReportService instalReportService;
+	
+	@MockBean
+	private SendReplyComments sendReplyComments;
 	
 	ReportDetails reportDetails;
 		
@@ -68,7 +76,7 @@ public class InstallReportControllerTest {
 	}
 	
 	@Test
-	public void testRetrieveInstallationReport() throws InstalReportException { 
+	public void testRetrieveInstallationReport() throws InstalReportException, InspectionException { 
 
 		ResponseEntity<List<ReportDetails>> report = instalReportController.retrieveInstallationReport(reportDetails.getUserName(),reportDetails.getSiteId());
 		assertEquals(report.getStatusCode(), HttpStatus.OK);
@@ -76,9 +84,42 @@ public class InstallReportControllerTest {
 	
 	@Test
 	public void testUpdateInstallationReport() throws InstalReportException {
-		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		ResponseEntity<String> actualResponseEntity = instalReportController
 				.updateInstallationReport(reportDetails);
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
 	}
+	
+	@Test
+	public void testSendComments() throws InstalReportException, RegistrationException, Exception {
+		/*
+		 * 
+		 * ResponseEntity<Void> sendComments =
+		 * instalReportController.sendComments("Viewer@gmail.com", 1,
+		 * "I have a question?");
+		 * 
+		 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+		 */}
+
+	/*
+	 * @Test public void testReplyComments() throws RegistrationException,
+	 * Exception, InstalReportException {
+	 * 
+	 * InstalReportException exception =
+	 * Assertions.assertThrows(InstalReportException.class, () ->
+	 * instalReportController.replyComments("Inspector@gmail.com", 1,
+	 * "I have a question?"));
+	 * 
+	 * assertEquals(exception.getMessage(), "No viewer userName avilable");
+	 * 
+	 * when(instalReportService.replyComments("Inspector@gmail.com", 1,
+	 * "I have a question?")) .thenReturn("Viewer@gmail.com");
+	 * 
+	 * ResponseEntity<Void> sendComments =
+	 * instalReportController.replyComments("Inspector@gmail.com", 1,
+	 * "I have a question?");
+	 * 
+	 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK); }
+	 */
+
 }
