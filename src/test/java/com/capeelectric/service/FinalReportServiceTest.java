@@ -43,7 +43,7 @@ import com.capeelectric.service.impl.FinalReportServiceImpl;
 @ExtendWith(MockitoExtension.class)
 public class FinalReportServiceTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(SummaryServiceTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(FinalReportServiceTest.class);
 
 	@InjectMocks
 	private FinalReportServiceImpl finalReportServiceImpl;

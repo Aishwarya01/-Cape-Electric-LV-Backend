@@ -23,10 +23,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
 import com.capeelectric.config.OtpConfig;
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.service.impl.RegistrationServiceImpl;
+import com.capeelectric.service.impl.SiteServiceImpl;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -45,6 +47,9 @@ public class RegistrationServiceTest {
 	
 	@Mock
 	private RestTemplate restTemplate;
+	
+	@MockBean
+	private SiteServiceImpl siteServiceImpl;
 
 	private Register register;
 
@@ -59,11 +64,13 @@ public class RegistrationServiceTest {
 		register.setCountry("INDIA");
 		register.setDepartment("ECE");
 		register.setDesignation("INSPECTOR");
-		register.setInterestedAreas("Learning");
 		register.setName("Cape");
 		register.setUsername("lvsystem@capeindia.net");
 		register.setState("TN");
 		register.setPermission("yes");
+		register.setAssignedBy("lvsystem@capeindia.net");
+		register.setNoOfLicence("5");
+		register.setRole("INSPECTOR");
 	}
 
 	@Test
@@ -75,15 +82,9 @@ public class RegistrationServiceTest {
 		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionalRegister);
 		when(registrationRepository.save(register)).thenReturn(register);
 
-		/*
-		 * when(restTemplate.exchange(otpConfig.getSendOtp() + "9023092802",
-		 * HttpMethod.GET, null, String.class)) .thenReturn(new ResponseEntity<String>(
-		 * "{\"Status\":\"Success\",\"Details\":\"a2075b4a-25f8-44c1-824a-fd89cc310821\"}",
-		 * HttpStatus.ACCEPTED));
-		 */
-
 		// Success flow
 		register.setUsername("lvsystem123@capeindia.net");
+		register.setRole("INSPECTOR");
 		Register addRegistration = registrationServiceImpl.addRegistration(register);
 		assertEquals(addRegistration.getUsername(), "lvsystem123@capeindia.net");
 
@@ -110,9 +111,51 @@ public class RegistrationServiceTest {
 		logger.info("RegistrationServiceTest testAddRegistration_funcion Started");
 
 	}
+	
+	@Test
+	public void testAddViewerRegistration() throws RegistrationException, CompanyDetailsException {
+		/*
+		 * logger.
+		 * info("RegistrationServiceTest testAddViewerRegistration_funcion Started");
+		 * 
+		 * Optional<Register> optionalRegister = Optional.of(register);
+		 * 
+		 * when(registrationRepository.findByUsername("lvsystem@capeindia.net")).
+		 * thenReturn(optionalRegister);
+		 * when(registrationRepository.save(register)).thenReturn(register);
+		 * when(registrationRepository.findById(register.getRegisterId())).thenReturn(
+		 * optionalRegister);
+		 * 
+		 * // Success flow register.setUsername("lvsystem123@capeindia.net"); Register
+		 * addRegistration = registrationServiceImpl.addViewerRegistration(register);
+		 * assertEquals(addRegistration.getUsername(), "lvsystem123@capeindia.net");
+		 * 
+		 * // Exception --> Invalid MobileNumber register.setContactNumber("89988");
+		 * RegistrationException invalidMobileNumber =
+		 * Assertions.assertThrows(RegistrationException.class, () ->
+		 * registrationServiceImpl.addViewerRegistration(register));
+		 * 
+		 * assertEquals("Invalid MobileNumber", invalidMobileNumber.getMessage());
+		 * 
+		 * // Exception --> Given UserName Already Present
+		 * register.setUsername("lvsystem@capeindia.net"); RegistrationException
+		 * assertThrows = Assertions.assertThrows(RegistrationException.class, () ->
+		 * registrationServiceImpl.addViewerRegistration(register));
+		 * 
+		 * assertEquals("Given UserName Already Present", assertThrows.getMessage());
+		 * 
+		 * // Exception --> Invalid Inputs register.setUsername(null);
+		 * RegistrationException assertThrows_1 =
+		 * Assertions.assertThrows(RegistrationException.class, () ->
+		 * registrationServiceImpl.addViewerRegistration(register));
+		 * 
+		 * assertEquals("Invalid Inputs", assertThrows_1.getMessage()); logger.
+		 * info("RegistrationServiceTest testAddViewerRegistration_funcion Started");
+		 * 
+		 */}
 
 	@Test
-	public void testUpdateRegistration() throws RegistrationException {
+	public void testUpdateRegistration() throws RegistrationException, CompanyDetailsException {
 		logger.info("RegistrationServiceTest testUpdateRegistration_funcion Started");
 
 		Optional<Register> optionalRegister = Optional.of(register);
@@ -121,18 +164,18 @@ public class RegistrationServiceTest {
 		when(registrationRepository.save(register)).thenReturn(register);
 
 		// Success flow 
-		registrationServiceImpl.updateRegistration(register);
+		registrationServiceImpl.updateRegistration(register,true);
 
 		// Throwing Exception 
 		RegistrationException assertThrows = Assertions.assertThrows(RegistrationException.class,
-				() -> registrationServiceImpl.updateRegistration(register()));
+				() -> registrationServiceImpl.updateRegistration(register(),true));
 
 		assertEquals("Given User not present", assertThrows.getMessage());
 
 		// Throwing Exception
 		register.setUsername(null); 
 		RegistrationException assertThrows_1 = Assertions.assertThrows(RegistrationException.class,
-				() -> registrationServiceImpl.updateRegistration(register));
+				() -> registrationServiceImpl.updateRegistration(register,true));
 
 		assertEquals("Invalid Inputs", assertThrows_1.getMessage());
 
@@ -148,11 +191,19 @@ public class RegistrationServiceTest {
 		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionalRegister);
 
 		// Success flow
-		Optional<Register> retrieveRegistration = registrationServiceImpl.retrieveRegistration("lvsystem@capeindia.net");
+		Optional<Register> retrieveRegistration = registrationServiceImpl
+				.retrieveRegistration("lvsystem@capeindia.net");
 		assertNotNull(retrieveRegistration);
 
+		// Email-Id doesn't exist
+		RegistrationException exception = Assertions.assertThrows(RegistrationException.class,
+				() -> registrationServiceImpl.retrieveRegistration("lvsystem1@capeindia.net"));
+
+		assertEquals("Email Id doesn't exist!", exception.getMessage());
+
 		// Throwing Exception
-		RegistrationException assertThrows = Assertions.assertThrows(RegistrationException.class, () -> registrationServiceImpl.retrieveRegistration(null));
+		RegistrationException assertThrows = Assertions.assertThrows(RegistrationException.class,
+				() -> registrationServiceImpl.retrieveRegistration(null));
 
 		assertEquals("Invalid Inputs", assertThrows.getMessage());
 
@@ -208,7 +259,6 @@ public class RegistrationServiceTest {
 		register2.setCountry("INDIA");
 		register2.setDepartment("ECE");
 		register2.setDesignation("INSPECTOR");
-		register2.setInterestedAreas("Learning");
 		register2.setName("Cape");
 		register2.setUsername("lvsystem12@capeindia.net");
 		register2.setState("TN");

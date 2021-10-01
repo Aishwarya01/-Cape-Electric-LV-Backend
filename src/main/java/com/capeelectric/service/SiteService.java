@@ -13,4 +13,6 @@ public interface SiteService {
 	public void deleteSite(Integer site) throws CompanyDetailsException;
 
 	public List<Site> retriveSite(String userName) throws CompanyDetailsException;
+	
+	public Site retrieveSiteByName(String companyName, String departmentName, String siteName) throws CompanyDetailsException;
 }

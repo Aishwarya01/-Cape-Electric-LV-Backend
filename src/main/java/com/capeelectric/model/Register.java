@@ -71,14 +71,17 @@ public class Register {
 	@Column(name = "PERMISSION_BY")
 	private String permissionBy;
 
-	@Column(name = "INTERESTED_AREAS")
-	private String interestedAreas;
-	
 	@Column(name = "COMMENT")
 	private String comment;
 	
 	@Column(name = "OTP_SESSION_KEY")
 	private String otpSessionKey;
+	
+	@Column(name = "ASSIGNED_BY")
+	private String assignedBy;
+	
+	@Column(name = "NO_OF_LICENCE")
+	private String noOfLicence;
 
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
@@ -91,6 +94,9 @@ public class Register {
 	
 	@Column(name = "UPDATED_BY")
 	private String updatedBy;
+	
+	@Column(name = "SITE_NAME")
+	private String siteName;
 
 	public Integer getRegisterId() {
 		return registerId;
@@ -220,14 +226,6 @@ public class Register {
 		this.permissionBy = permissionBy;
 	}
 
-	public String getInterestedAreas() {
-		return interestedAreas;
-	}
-
-	public void setInterestedAreas(String interestedAreas) {
-		this.interestedAreas = interestedAreas;
-	}
-
 	public String getComment() {
 		return comment;
 	}
@@ -242,6 +240,22 @@ public class Register {
 
 	public void setOtpSessionKey(String otpSessionKey) {
 		this.otpSessionKey = otpSessionKey;
+	}
+
+	public String getAssignedBy() {
+		return assignedBy;
+	}
+
+	public void setAssignedBy(String assignedBy) {
+		this.assignedBy = assignedBy;
+	}
+
+	public String getNoOfLicence() {
+		return noOfLicence;
+	}
+
+	public void setNoOfLicence(String noOfLicence) {
+		this.noOfLicence = noOfLicence;
 	}
 
 	public LocalDateTime getCreatedDate() {
@@ -282,6 +296,14 @@ public class Register {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
 	}
 	
 }

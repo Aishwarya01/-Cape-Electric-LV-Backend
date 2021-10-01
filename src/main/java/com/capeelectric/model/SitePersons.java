@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "site_person_table")
 @NamedQueries(value = {
-		@NamedQuery(name = "SitePersonsRepository.RepositoryfindByPersonInchargeEmail", query = "select p.personInchargeEmail from SitePersons p where p.personInchargeEmail=:personInchargeEmail") })
+		@NamedQuery(name = "SitePersonsRepository.RepositoryfindByPersonInchargeEmail", query = "select p.personInchargeEmail from SitePersons p where p.siteName=:siteName and p.personInchargeEmail=:personInchargeEmail") })
 public class SitePersons implements Serializable {
 
 	/**
@@ -31,6 +31,9 @@ public class SitePersons implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "PERSON_ID")
 	private Integer personId;
+	
+	@Column(name = "SITE_NAME")
+	private String siteName;
 
 	@Column(name = "PERSON_INCHARGE")
 	private String personIncharge;
@@ -47,10 +50,9 @@ public class SitePersons implements Serializable {
 	@Column(name = "CONTACT_NO")
 	private String contactNo;
 
-	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "SITE_ID")
-	private Site Site;
+	private Site site;
 
 	public Integer getPersonId() {
 		return personId;
@@ -58,6 +60,14 @@ public class SitePersons implements Serializable {
 
 	public void setPersonId(Integer personId) {
 		this.personId = personId;
+	}
+
+	public String getSiteName() {
+		return siteName;
+	}
+
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
 	}
 
 	public String getPersonIncharge() {
@@ -94,11 +104,11 @@ public class SitePersons implements Serializable {
 
 	@JsonBackReference
 	public Site getSite() {
-		return Site;
+		return site;
 	}
 
 	public void setSite(Site site) {
-		Site = site;
+		this.site = site;
 	}
 
 	public Boolean getInActive() {

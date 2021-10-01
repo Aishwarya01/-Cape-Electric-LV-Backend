@@ -18,13 +18,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.CompanyDetailsException;
+import com.capeelectric.model.Register;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.User;
+import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.repository.SitePersonsRepository;
 import com.capeelectric.repository.SiteRepository;
-import com.capeelectric.repository.UserRepository;
 import com.capeelectric.service.impl.SiteServiceImpl;
+import com.capeelectric.util.UserFullName;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -37,13 +39,16 @@ public class SiteDetailsServiceTest {
 	private SiteServiceImpl siteServiceImpl;
 
 	@MockBean
-	private UserRepository userRepository;
+	private RegistrationRepository registrationRepository;
 
 	@MockBean
 	private CompanyDetailsException companyDetailsException;
 
 	@MockBean
 	private SitePersonsRepository sitePersonsRepository;
+	
+	@MockBean
+	private UserFullName userName;
 
 	private SitePersons sitePersons1 = new SitePersons();
 
@@ -54,17 +59,24 @@ public class SiteDetailsServiceTest {
 	private Set<SitePersons> sitePersonsSet;
 
 	private Site site;
+	
+	private Register register;
 
 	{
+		register =new Register();
+		register.setUsername("hasan");
+		
 		site = new Site();
 		site.setUserName("hasan");
 		site.setSiteId(1);
 		site.setSite("user");
 
 		sitePersons1.setPersonId(1);
+		sitePersons1.setSiteName("user");
 		sitePersons1.setPersonInchargeEmail("LVsystem@gmail.com");
 		sitePersons1.setInActive(true);
 		sitePersons2.setPersonId(2);
+		sitePersons2.setSiteName("user");
 		sitePersons2.setPersonInchargeEmail("Cape@gmail.com");
 		sitePersons2.setInActive(true);
 		sitePersonsSet = new HashSet<SitePersons>();
@@ -84,7 +96,6 @@ public class SiteDetailsServiceTest {
 	@Test
 	public void testupdateSiteRemovedInactivePerson() throws CompanyDetailsException {
 		test();
-
 		sitePersons1.setInActive(false);
 		sitePersonsSet.add(sitePersons1);
 		site.setSitePersons(sitePersonsSet);
@@ -94,6 +105,7 @@ public class SiteDetailsServiceTest {
 		when(siteRepository.save(site)).thenReturn(site);
 
 		sitePersons3.setPersonInchargeEmail("Cape1@gmail.com");
+		sitePersons3.setSiteName("user");
 		sitePersons3.setInActive(true);
 		sitePersonsSet.add(sitePersons3);
 		site.setSitePersons(sitePersonsSet);
@@ -154,13 +166,14 @@ public class SiteDetailsServiceTest {
 		ArrayList<Site> list = new ArrayList<Site>();
 		list.add(site);
 		when(siteRepository.findByUserName(site.getUserName())).thenReturn(list);
-		when(sitePersonsRepository.findByPersonInchargeEmail(sitePersons2.getPersonInchargeEmail()))
+		when(sitePersonsRepository.findBySiteNameAndPersonInchargeEmail("user1","Cape@gmail.com"))
 				.thenReturn(Optional.of(sitePersons2));
 		when(siteRepository.findByUserNameAndSite("hasan", "user1")).thenReturn(Optional.of(site));
 
 		Site site2 = new Site();
 		site2.setSite("user1");
 		site2.setUserName("hasan");
+		sitePersons3.setSiteName("user1");
 		sitePersons3.setPersonInchargeEmail("Cape@gmail.com");
 		sitePersons3.setInActive(true);
 		sitePersonsSet.add(sitePersons3);
@@ -220,14 +233,15 @@ public class SiteDetailsServiceTest {
 	}
 
 	public void test() {
+		when(userName.findByUserName("hasan")).thenReturn("hasan");
 		List<Site> deptlist = new ArrayList<>();
 		deptlist.add(site);
 
 		when(siteRepository.findByUserName(site.getUserName())).thenReturn(deptlist);
 		when(siteRepository.findByUserNameAndSite(site.getUserName(), site.getSite())).thenReturn(Optional.of(site));
-		when(sitePersonsRepository.findByPersonInchargeEmail(sitePersons1.getPersonInchargeEmail()))
+		when(sitePersonsRepository.findBySiteNameAndPersonInchargeEmail(site.getSite(),sitePersons1.getPersonInchargeEmail()))
 				.thenReturn(Optional.of(sitePersons1));
-		when(sitePersonsRepository.findByPersonInchargeEmail(sitePersons2.getPersonInchargeEmail()))
+		when(sitePersonsRepository.findBySiteNameAndPersonInchargeEmail(site.getSite(),sitePersons2.getPersonInchargeEmail()))
 				.thenReturn(Optional.of(sitePersons2));
 	}
 

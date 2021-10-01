@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  *
  */
 @Entity
-@Table(name = "periodic_inspection_table")
+@Table(name = "PERIODIC_INSPECTION_TABLE")
 @NamedQueries(value = {
 		@NamedQuery(name = "InspectionRepository.findBySiteId", query = "select i.siteId from PeriodicInspection i where i.siteId=:siteId"),
 		@NamedQuery(name = "InspectionRepository.findByUserNameAndSiteId", query = "select i from PeriodicInspection i where i.userName=:userName and i.siteId=:siteId"), })
@@ -42,7 +42,7 @@ public class PeriodicInspection implements Serializable {
 
 	@Column(name = "USER_NAME")
 	private String userName;
-
+	
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 
@@ -58,6 +58,10 @@ public class PeriodicInspection implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "periodicInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<IpaoInspection> ipaoInspection;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "periodicInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<PeriodicInspectionComment> periodicInspectorComment;
 
 	public Integer getPeriodicInspectionId() {
 		return periodicInspectionId;
@@ -121,6 +125,14 @@ public class PeriodicInspection implements Serializable {
 
 	public void setIpaoInspection(List<IpaoInspection> ipaoInspection) {
 		this.ipaoInspection = ipaoInspection;
+	}
+	
+	public List<PeriodicInspectionComment> getPeriodicInspectorComment() {
+		return periodicInspectorComment;
+	}
+
+	public void setPeriodicInspectorComment(List<PeriodicInspectionComment> periodicInspectorComment) {
+		this.periodicInspectorComment = periodicInspectorComment;
 	}
  
 }

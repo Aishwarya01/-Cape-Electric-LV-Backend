@@ -118,6 +118,9 @@ public class IpaoInspection implements Serializable {
 
 	@Column(name = "O_BASIC_ELECTRICAL_SEPARTION")
 	private String basicElectricalSepartion;
+	
+	@Column(name = "O_ISOLATE_PUBLIC_SUPPLY")
+	private String isolatePublicSupply;
 
 	@Column(name = "O_INSULATION_LIVE_PARTS")
 	private String insulationLiveParts;
@@ -390,6 +393,14 @@ public class IpaoInspection implements Serializable {
 
 	public void setBasicElectricalSepartion(String basicElectricalSepartion) {
 		this.basicElectricalSepartion = basicElectricalSepartion;
+	}
+
+	public String getIsolatePublicSupply() {
+		return isolatePublicSupply;
+	}
+
+	public void setIsolatePublicSupply(String isolatePublicSupply) {
+		this.isolatePublicSupply = isolatePublicSupply;
 	}
 
 	public String getInsulationLiveParts() {

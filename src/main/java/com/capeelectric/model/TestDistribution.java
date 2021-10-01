@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.capeelectric.exception.DecimalConversionException;
+import com.capeelectric.util.Constants;
+import com.capeelectric.util.DecimalConversion;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
@@ -60,10 +63,10 @@ public class TestDistribution implements Serializable {
 	private String incomingVoltage;
 
 	@Column(name = "INCOMING_ZS")
-	private String incomingZs;
+	private String incomingLoopImpedance;
 
 	@Column(name = "INCOMING_IPF")
-	private String incomingIpf;
+	private String incomingFaultCurrent;
 
 	@JsonBackReference
 	@ManyToOne
@@ -158,20 +161,24 @@ public class TestDistribution implements Serializable {
 		this.incomingVoltage = incomingVoltage;
 	}
 
-	public String getIncomingZs() {
-		return incomingZs;
+	public String getIncomingLoopImpedance() {
+		return incomingLoopImpedance;
 	}
 
-	public void setIncomingZs(String incomingZs) {
-		this.incomingZs = incomingZs;
+	public void setIncomingLoopImpedance(String incomingLoopImpedance) throws DecimalConversionException {
+		if (incomingLoopImpedance != null) {
+			this.incomingLoopImpedance = DecimalConversion.convertToDecimal(incomingLoopImpedance,
+					Constants.test_Incoming_LoopImpedance);
+		}
+		this.incomingLoopImpedance = incomingLoopImpedance;
 	}
 
-	public String getIncomingIpf() {
-		return incomingIpf;
+	public String getIncomingFaultCurrent() {
+		return incomingFaultCurrent;
 	}
 
-	public void setIncomingIpf(String incomingIpf) {
-		this.incomingIpf = incomingIpf;
+	public void setIncomingFaultCurrent(String incomingFaultCurrent) {
+		this.incomingFaultCurrent = incomingFaultCurrent;
 	}
 
 }

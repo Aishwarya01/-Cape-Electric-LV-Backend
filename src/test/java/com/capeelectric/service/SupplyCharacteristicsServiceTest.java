@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
+import com.capeelectric.model.SupplyCharacteristicComment;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.SupplyParameters;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
@@ -41,6 +43,8 @@ public class SupplyCharacteristicsServiceTest {
 
 	private SupplyCharacteristics supplyCharacteristics;
 	
+	private SupplyCharacteristicComment supplyCharacteristicComment;
+	
 	@MockBean
 	private UserFullName userFullName;
 
@@ -54,6 +58,13 @@ public class SupplyCharacteristicsServiceTest {
 		supplyCharacteristics.setMainNominalVoltage("3.00,152.1212,455.051,56.9459");
 		supplyCharacteristics.setMainLoopImpedance("4.000,12.12245,455.21265,56.766456");
 		supplyCharacteristics.setLiveConductorAC("3");
+		
+		supplyCharacteristicComment = new SupplyCharacteristicComment();
+		supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
+		
+		ArrayList<SupplyCharacteristicComment> listOfComments = new ArrayList<SupplyCharacteristicComment>();
+	    listOfComments.add(supplyCharacteristicComment);
+	    supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
 		
 	}
 

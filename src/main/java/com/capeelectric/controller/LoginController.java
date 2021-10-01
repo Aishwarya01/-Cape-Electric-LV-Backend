@@ -26,6 +26,7 @@ import com.capeelectric.config.JwtTokenUtil;
 import com.capeelectric.exception.AuthenticationException;
 import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.ForgotPasswordException;
+import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.RegisterDetails;
@@ -126,6 +127,14 @@ public class LoginController {
 		
 	}
 
+	@GetMapping("/retrieveUserInformation/{email}")
+	public ResponseEntity<Register> retrieveInformation(@PathVariable String email)
+			throws RegistrationException, IOException, MessagingException, ForgotPasswordException {
+		logger.debug("retrieveInformation_function started");
+		Register registerUser = registrationDetailsServiceImpl.loadUserByUsername(email);
+		return new ResponseEntity<Register>(registerUser, HttpStatus.OK);
+		
+	}
 	private void authenticate(String username, String password) throws Exception, AuthenticationException {
 
 		Optional<Register> registerRepo = registrationRepository.findByUsername(username);
@@ -141,7 +150,7 @@ public class LoginController {
 				throw new Exception("INVALID_CREDENTIALS", e);
 			}
 		} else {
-			throw new AuthenticationException("Authentication faild");
+			throw new AuthenticationException("Admin not approved for Your registration");
 
 		}
 	}
