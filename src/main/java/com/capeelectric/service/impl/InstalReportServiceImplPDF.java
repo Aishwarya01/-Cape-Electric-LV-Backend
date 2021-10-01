@@ -91,7 +91,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				document.add(gap2);
 
 				Font fonta = new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.NORMAL, BaseColor.BLACK);
-				Paragraph certificate6 = new Paragraph("NAME:", fonta);
+				Paragraph certificate6 = new Paragraph("Name:", fonta);
 				document.add(certificate6);
 
 				Font gapFont1 = new Font(BaseFont.createFont(), 5, Font.ITALIC | Font.NORMAL, BaseColor.BLACK);
@@ -105,7 +105,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				Paragraph gap3 = new Paragraph(" ", gapFont1);
 				document.add(gap3);
 
-				Paragraph certificate8 = new Paragraph("Organisation:", fonta1);
+				Paragraph certificate8 = new Paragraph("Organization:", fonta1);
 				document.add(certificate8);
 
 				PdfPTable tableIEC = new PdfPTable(1);
@@ -460,7 +460,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				table1.addCell(site71);
 				
 
-				PdfPCell Date = new PdfPCell(new Paragraph("Date of starting the verfication:",
+				PdfPCell Date = new PdfPCell(new Paragraph("Date of starting the verification:",
 						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				Date.setBackgroundColor(new GrayColor(0.93f));
 				Date.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -562,7 +562,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 						noteFont);
 				document.add(paragraph11);
 
-				Paragraph paragraph12 = new Paragraph("Designer 1", font10N);
+				Paragraph paragraph12 = new Paragraph("Designer: 1", font10N);
 				document.add(paragraph12);
 
 				for (SignatorDetails arr : convertion) {
@@ -573,7 +573,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 					}
 				}
 
-				Paragraph paragraph13 = new Paragraph("Designer 2", font10N);
+				Paragraph paragraph13 = new Paragraph("Designer: 2", font10N);
 				document.add(paragraph13);
 
 				for (SignatorDetails arr : convertion) {
@@ -591,7 +591,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				DeclarationC.setWidthPercentage(100);
 				DeclarationC.getDefaultCell().setBorder(0);
 
-				PdfPCell contactor = new PdfPCell(new Paragraph("Declaration of contactor of installation",
+				PdfPCell contactor = new PdfPCell(new Paragraph("Declaration of contractor of installation",
 						new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
 				contactor.setBackgroundColor(new GrayColor(0.82f));
 //				contactor.setFixedHeight(30f);

@@ -303,7 +303,7 @@ public class PrintServiceImpl implements PrintService {
 				table9.setWidthPercentage(100);
 				table9.getDefaultCell().setBorder(0);
 
-				addRow(table9, "Inspected and Tested  By ", "Authorised By");
+				addRow(table9, "Inspected and Tested  By ", "Authorized By");
 				PdfPTable table = new PdfPTable(4); // 3 columns.
 				table.setWidthPercentage(100); // Width 100%
 				addRow(table, "Name", declaration.getName(), "Name", declaration11.getName());
