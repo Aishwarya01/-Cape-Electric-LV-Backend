@@ -1,49 +1,32 @@
 package com.capeelectric.service.impl;
 
-import java.awt.Color;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-
-import javax.swing.text.StyleConstants.FontConstants;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.capeelectric.exception.SummaryException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.BoundingLocationReport;
 import com.capeelectric.model.CircuitBreaker;
 import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.InstalLocationReport;
-import com.capeelectric.model.Summary;
-import com.capeelectric.model.SummaryDeclaration;
-import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.SupplyParameters;
-import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.service.PrintSupplyService;
-import com.capeelectric.service.SupplyCharacteristicsService;
-import com.capeelectric.util.HeaderFooterPageEvent;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.log.SysoCounter;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfPageEvent;
 import com.itextpdf.text.pdf.PdfWriter;
 
 @Service
@@ -149,7 +132,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table16.setSpacingBefore(10f); // Space before table
 				table16.setWidthPercentage(100);
 				table16.getDefaultCell().setBorder(0);
-				PdfPCell cell8 = new PdfPCell(new Paragraph(30, "Section - 1:Mains incoming", font5));
+				PdfPCell cell8 = new PdfPCell(new Paragraph(30, "Section - 1: Mains incoming", font5));
 				cell8.setBorder(PdfPCell.NO_BORDER);
 				cell8.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table16.addCell(cell8);
@@ -285,7 +268,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table21.setSpacingBefore(10f); // Space before table
 				table21.setWidthPercentage(100);
 				table21.getDefaultCell().setBorder(0);
-				PdfPCell cell53 = new PdfPCell(new Paragraph("Section - 2:Alternative source of supply", font5));
+				PdfPCell cell53 = new PdfPCell(new Paragraph("Section - 2: Alternative source of supply", font5));
 				cell53.setBorder(PdfPCell.NO_BORDER);
 				cell53.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table21.addCell(cell53);
@@ -921,11 +904,11 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		cell51.setBorder(PdfPCell.NO_BORDER);
 		table9.addCell(cell51);
 		PdfPCell cell38 = new PdfPCell(new Paragraph(circute1.getResidualCurrent(), font6));
-		table9.addCell(new Phrase("Rated residual operating Current I∆n:", font6));
+		table9.addCell(new Phrase("Rated residual operating current In:", font6));
 		cell38.setBorder(PdfPCell.NO_BORDER);
 		table9.addCell(cell38);
 		PdfPCell cell39 = new PdfPCell(new Paragraph(circute1.getResidualTime(), font6));
-		table9.addCell(new Phrase("Rated residual operating time @I∆n     T∆n:", font6));
+		table9.addCell(new Phrase("Rated residual operating time @In Tn:", font6));
 
 		cell39.setBorder(PdfPCell.NO_BORDER);
 		table9.addCell(cell39);
