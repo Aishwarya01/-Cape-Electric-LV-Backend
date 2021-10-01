@@ -1,10 +1,15 @@
 package com.capeelectric.service;
 
+
 import java.util.Optional;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
+=======
+import java.util.List;
+
+
 
 /**
  * 
@@ -12,6 +17,7 @@ import com.capeelectric.model.Register;
  *
  */
 public interface RegistrationService {
+
 
 	public Register addRegistration(Register inspector) throws RegistrationException;
 
@@ -24,5 +30,6 @@ public interface RegistrationService {
 	public Register addViewerRegistration(Register register) throws RegistrationException, CompanyDetailsException;
 
 	public void updateLicence(String userName, String numoflicence) throws RegistrationException;
+
 
 }
