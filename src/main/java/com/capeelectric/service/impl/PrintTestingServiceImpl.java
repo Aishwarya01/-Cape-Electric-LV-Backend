@@ -48,6 +48,9 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				document.open();
 
 				Font font = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
+				Font font6 =new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+				Font font9=new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+
 				Paragraph paragraphOne = new Paragraph("TIC of LV electrical installation ", font);
 				paragraphOne.setAlignment(Element.ALIGN_CENTER);
 
@@ -69,6 +72,71 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				for (Testing testing1 : testing) {
 					testingIteration(document, testing1);
 				}
+				PdfPTable table19 = new PdfPTable(1);
+				table19.setWidthPercentage(100); // Width 100%
+				table19.setSpacingBefore(10f); // Space before table
+				table19.setWidthPercentage(100);
+				table19.getDefaultCell().setBorder(0);
+
+				PdfPCell cell65 = new PdfPCell(new Paragraph(15, "Section - 3:Viewer And Inspector Comment:", font));
+				cell65.setBorder(PdfPCell.NO_BORDER);
+				cell65.setBackgroundColor(BaseColor.LIGHT_GRAY);
+				table19.addCell(cell65);
+				document.add(table19);
+
+				float[] pointColumnWidths4 = { 50F, 90F };
+
+				PdfPTable table44 = new PdfPTable(pointColumnWidths4);
+				table44.setWidthPercentage(100); // Width 100%
+				table44.setSpacingBefore(10f); // Space before table
+				table44.setWidthPercentage(100);
+				table44.getDefaultCell().setBorder(0);
+
+				PdfPCell cell55 = new PdfPCell(new Paragraph("", font6));
+				table44.addCell(new Phrase("ViewerUserName:", font9));
+				cell55.setBorder(PdfPCell.NO_BORDER);
+				table44.addCell(cell55);
+				PdfPCell cell38 = new PdfPCell(new Paragraph("", font6));
+				cell38.setGrayFill(0.92f);
+				cell38.setBorder(PdfPCell.NO_BORDER);
+				PdfPCell cell37 = new PdfPCell(new Paragraph("InspectorUserName:", font9));
+				cell37.setBorder(PdfPCell.NO_BORDER);
+				cell37.setGrayFill(0.92f);
+				table44.addCell(cell37);
+				table44.addCell(cell38);
+
+				PdfPCell cell56 = new PdfPCell(new Paragraph("", font6));
+				table44.addCell(new Phrase("ViewerComment:", font9));
+				cell56.setBorder(PdfPCell.NO_BORDER);
+				table44.addCell(cell56);
+
+				PdfPCell cell40 = new PdfPCell(new Paragraph("", font6));
+				cell40.setGrayFill(0.92f);
+				cell40.setBorder(PdfPCell.NO_BORDER);
+				PdfPCell cell39 = new PdfPCell(new Paragraph("InspectorComment:", font9));
+				cell39.setBorder(PdfPCell.NO_BORDER);
+				cell39.setGrayFill(0.92f);
+				table44.addCell(cell39);
+				table44.addCell(cell40);
+
+				PdfPCell cell57 = new PdfPCell(new Paragraph("", font6));
+				table44.addCell(new Phrase("ViewerDate:", font9));
+				cell57.setBorder(PdfPCell.NO_BORDER);
+				table44.addCell(cell57);
+
+				PdfPCell cell58 = new PdfPCell(new Paragraph("", font6));
+				cell58.setGrayFill(0.92f);
+				cell58.setBorder(PdfPCell.NO_BORDER);
+				PdfPCell cell59 = new PdfPCell(new Paragraph("InspectorDate:", font9));
+				cell59.setBorder(PdfPCell.NO_BORDER);
+				cell59.setGrayFill(0.92f);
+				table44.addCell(cell59);
+				table44.addCell(cell58);
+
+			document.add(table44);
+
+
+
 				document.close();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -92,7 +160,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		Font font26 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
 		Font font27 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
 		PdfPCell cell1;
-		cell1 = new PdfPCell(new Phrase("Circuite details", font22));
+		cell1 = new PdfPCell(new Phrase("Circuit details", font22));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(12);

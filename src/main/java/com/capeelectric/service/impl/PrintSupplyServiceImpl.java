@@ -122,6 +122,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				document.open();
 
 				Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+				Font font7 = new Font(BaseFont.createFont(), 10, Font.NORMAL|Font.BOLD);
 				Font font1 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
                 Font font4 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
                 Font font5 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
@@ -252,7 +253,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table17.setWidthPercentage(100);
 				table17.getDefaultCell().setBorder(0);
 				PdfPCell cell46 = new PdfPCell(
-						new Paragraph("Incoming (supply) protective device characteristics	", font10));
+						new Paragraph("1.1:Incoming (supply) protective device characteristics	", font10));
 				cell46.setBorder(PdfPCell.NO_BORDER);
 				cell46.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table17.addCell(cell46);
@@ -296,11 +297,11 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table15.getDefaultCell().setBorder(0);
 
 				PdfPCell cell9 = new PdfPCell(new Paragraph(supply.getAlternativeSupply(), font6));
-				table15.addCell(new Phrase(" Availability of alternate supply:", font9));
+				table15.addCell(new Phrase("Availability of alternate supply:", font9));
 				cell9.setBorder(PdfPCell.NO_BORDER);
 				table15.addCell(cell9);
 
-				PdfPCell cell10 = new PdfPCell(new Paragraph(8, " Number of alternate sources of supply:", font9));
+				PdfPCell cell10 = new PdfPCell(new Paragraph(8, "Number of alternate sources of supply:", font9));
 				cell10.setBorder(PdfPCell.NO_BORDER);
 				cell10.setGrayFill(0.92f);
 				table15.addCell(cell10);
@@ -548,7 +549,70 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				for (CircuitBreaker circuteitr : circuitBreaker) {
 					circuteBraker(document, circuteitr);
 				}
-				document.close();
+				document.newPage();
+				PdfPTable table191 = new PdfPTable(1);
+				table191.setWidthPercentage(100); // Width 100%
+				table191.setSpacingBefore(10f); // Space before table
+				table191.setWidthPercentage(100);
+				table191.getDefaultCell().setBorder(0);
+
+				PdfPCell cell65 = new PdfPCell(new Paragraph(15, "Section - 6:Viewer And Inspector Comment:", font7));
+				cell65.setBorder(PdfPCell.NO_BORDER);
+				cell65.setBackgroundColor(BaseColor.LIGHT_GRAY);
+				table191.addCell(cell65);
+				document.add(table191);
+
+				float[] pointColumnWidths4 = { 50F, 90F };
+
+				PdfPTable table44 = new PdfPTable(pointColumnWidths4);
+				table44.setWidthPercentage(100); // Width 100%
+				table44.setSpacingBefore(10f); // Space before table
+				table44.setWidthPercentage(100);
+				table44.getDefaultCell().setBorder(0);
+
+				PdfPCell cell55 = new PdfPCell(new Paragraph("", font6));
+				table44.addCell(new Phrase("ViewerUserName:", font9));
+				cell55.setBorder(PdfPCell.NO_BORDER);
+				table44.addCell(cell55);
+				PdfPCell cell381 = new PdfPCell(new Paragraph("", font6));
+				cell381.setGrayFill(0.92f);
+				cell381.setBorder(PdfPCell.NO_BORDER);
+				PdfPCell cell371 = new PdfPCell(new Paragraph("InspectorUserName:", font9));
+				cell371.setBorder(PdfPCell.NO_BORDER);
+				cell371.setGrayFill(0.92f);
+				table44.addCell(cell371);
+				table44.addCell(cell381);
+
+				PdfPCell cell561 = new PdfPCell(new Paragraph("", font6));
+				table44.addCell(new Phrase("ViewerComment:", font9));
+				cell561.setBorder(PdfPCell.NO_BORDER);
+				table44.addCell(cell561);
+
+				PdfPCell cell401 = new PdfPCell(new Paragraph("", font6));
+				cell401.setGrayFill(0.92f);
+				cell401.setBorder(PdfPCell.NO_BORDER);
+				PdfPCell cell391 = new PdfPCell(new Paragraph("InspectorComment:", font9));
+				cell391.setBorder(PdfPCell.NO_BORDER);
+				cell391.setGrayFill(0.92f);
+				table44.addCell(cell391);
+				table44.addCell(cell401);
+
+				PdfPCell cell571 = new PdfPCell(new Paragraph("", font6));
+				table44.addCell(new Phrase("ViewerDate:", font9));
+				cell571.setBorder(PdfPCell.NO_BORDER);
+				table44.addCell(cell571);
+
+				PdfPCell cell581 = new PdfPCell(new Paragraph("", font6));
+				cell581.setGrayFill(0.92f);
+				cell581.setBorder(PdfPCell.NO_BORDER);
+				PdfPCell cell591 = new PdfPCell(new Paragraph("InspectorDate:", font9));
+				cell591.setBorder(PdfPCell.NO_BORDER);
+				cell591.setGrayFill(0.92f);
+				table44.addCell(cell591);
+				table44.addCell(cell581);
+                document.add(table44);
+                 
+			document.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -617,11 +681,11 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		table3.getDefaultCell().setBorder(0);
 		Font font6 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 		PdfPCell cell11 = new PdfPCell(new Paragraph(supplyParameters.getaLSupplyNo(), font6));
-		table3.addCell(new Phrase(" Alternate supply no :", font6));
+		table3.addCell(new Phrase("Alternate supply no :", font6));
 		cell11.setBorder(PdfPCell.NO_BORDER);
 		table3.addCell(cell11);
 
-		PdfPCell cell12 = new PdfPCell(new Paragraph(8, " Short name of alternate supply:", font6));
+		PdfPCell cell12 = new PdfPCell(new Paragraph(8, "Short name of alternate supply:", font6));
 		cell12.setBorder(PdfPCell.NO_BORDER);
 		cell12.setGrayFill(0.92f);
 		table3.addCell(cell12);
@@ -738,7 +802,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		table20.setSpacingBefore(10f); // Space before table
 		table20.setWidthPercentage(100);
 		table20.getDefaultCell().setBorder(0);
-		PdfPCell cell51 = new PdfPCell(new Paragraph("Incoming (supply) protective device characteristics",
+		PdfPCell cell51 = new PdfPCell(new Paragraph("2.1:Incoming (supply) protective device characteristics",
 				new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD)));
 		cell51.setBorder(PdfPCell.NO_BORDER);
 		cell51.setBackgroundColor(BaseColor.LIGHT_GRAY);

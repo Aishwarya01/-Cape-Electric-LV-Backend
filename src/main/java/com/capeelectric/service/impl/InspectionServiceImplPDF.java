@@ -103,6 +103,70 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 					
 				}
 				
+				document.newPage();
+				PdfPTable table199 = new PdfPTable(1);
+				table199.setWidthPercentage(100); // Width 100%
+				table199.setSpacingBefore(10f); // Space before table
+				table199.setWidthPercentage(100);
+				table199.getDefaultCell().setBorder(0);
+				Font font  = new Font(BaseFont.createFont(), 12, Font.NORMAL|Font.BOLD);
+				PdfPCell cell65 = new PdfPCell(new Paragraph(15, "Section - 9:Viewer And Inspector Comment:", font));
+				cell65.setBorder(PdfPCell.NO_BORDER);
+				cell65.setBackgroundColor(BaseColor.LIGHT_GRAY);
+				table199.addCell(cell65);
+				document.add(table199);
+				Font font91 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+				float[] pointColumnWidths4 = { 50F, 90F };
+
+				PdfPTable table44 = new PdfPTable(pointColumnWidths4);
+				table44.setWidthPercentage(100); // Width 100%
+				table44.setSpacingBefore(10f); // Space before table
+				table44.setWidthPercentage(100);
+				table44.getDefaultCell().setBorder(0);
+
+				PdfPCell cell55 = new PdfPCell(new Paragraph("", font91));
+				table44.addCell(new Phrase("ViewerUserName:", font91));
+				cell55.setBorder(PdfPCell.NO_BORDER);
+				table44.addCell(cell55);
+				PdfPCell cell388 = new PdfPCell(new Paragraph("", font91));
+				cell388.setGrayFill(0.92f);
+				cell388.setBorder(PdfPCell.NO_BORDER);
+				PdfPCell cell377 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
+				cell377.setBorder(PdfPCell.NO_BORDER);
+				cell377.setGrayFill(0.92f);
+				table44.addCell(cell377);
+				table44.addCell(cell388);
+
+				PdfPCell cell567 = new PdfPCell(new Paragraph("", font91));
+				table44.addCell(new Phrase("ViewerComment:", font91));
+				cell567.setBorder(PdfPCell.NO_BORDER);
+				table44.addCell(cell567);
+
+				PdfPCell cell401 = new PdfPCell(new Paragraph("", font91));
+				cell401.setGrayFill(0.92f);
+				cell401.setBorder(PdfPCell.NO_BORDER);
+				PdfPCell cell390 = new PdfPCell(new Paragraph("InspectorComment:", font91));
+				cell390.setBorder(PdfPCell.NO_BORDER);
+				cell390.setGrayFill(0.92f);
+				table44.addCell(cell390);
+				table44.addCell(cell401);
+
+				PdfPCell cell578 = new PdfPCell(new Paragraph("", font91));
+				table44.addCell(new Phrase("ViewerDate:", font91));
+				cell578.setBorder(PdfPCell.NO_BORDER);
+				table44.addCell(cell578);
+
+				PdfPCell cell589 = new PdfPCell(
+						new Paragraph("", font91));
+				cell589.setGrayFill(0.92f);
+				cell589.setBorder(PdfPCell.NO_BORDER);
+				PdfPCell cell590 = new PdfPCell(new Paragraph("InspectorDate:", font91));
+				cell590.setBorder(PdfPCell.NO_BORDER);
+				cell590.setGrayFill(0.92f);
+				table44.addCell(cell590);
+				table44.addCell(cell589);
+
+				document.add(table44);
 				document.close();
 				writer.close();
 			} catch (Exception e) {
