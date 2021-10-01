@@ -824,7 +824,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		table14.setWidthPercentage(100);
 		table14.getDefaultCell().setBorder(0);
 
-		PdfPCell cell31 = new PdfPCell(new Paragraph(30, "Section - 2:Detailed Testing:", font2));
+		PdfPCell cell31 = new PdfPCell(new Paragraph(30, "Section - 2: Detailed Testing:", font2));
 		cell31.setBorder(PdfPCell.NO_BORDER);
 		cell31.setBackgroundColor(BaseColor.LIGHT_GRAY);
 		table14.addCell(cell31);

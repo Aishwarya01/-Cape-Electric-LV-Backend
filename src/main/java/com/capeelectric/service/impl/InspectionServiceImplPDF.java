@@ -825,7 +825,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		addRow(table8, "4", "Adequacy / security of barriers", consumerUnit.getSecurityBarriers());
 		addRow(table8, "5", "Suitability of enclosure(s) for IP and fire ratings", consumerUnit.getSuitabilityEnclosure());
 		addRow(table8, "6", "Enclosure not damaged during installation", consumerUnit.getEnclosureDamaged());
-		addRow(table8, "7", "presence and effectiveness of obstacles", consumerUnit.getPresenceObstacles());
+		addRow(table8, "7", "Presence and effectiveness of obstacles", consumerUnit.getPresenceObstacles());
 		addRow(table8, "8", "Placing out of reach", consumerUnit.getPlacingOutOfConsumer());
 		addRow(table8, "9", "Presence of main switches linked where required", consumerUnit.getPresenceMainSwitches());
 		addRow(table8, "10", "Operation of main switches (functional checks)", consumerUnit.getOperationMainSwitches());
