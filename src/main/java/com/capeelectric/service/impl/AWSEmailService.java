@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.util.AWSEmailConfig;
+import com.capeelectric.util.Constants;
 
 /**
  * 
@@ -27,8 +28,7 @@ import com.capeelectric.util.AWSEmailConfig;
 @Service
 public class AWSEmailService {
 
-	@Value("${app.email.from}")
-	private String FROM;
+	private String FROM = Constants.FROM_EMAIL;
 	
 	@Value("${app.email.multiple.person.first}")
 	private String firstPersonEmail;
@@ -77,7 +77,7 @@ public class AWSEmailService {
 			message.setSentDate(new Date());
 			message.setFrom(new InternetAddress(FROM));
 			message.setRecipient(Message.RecipientType.TO, new InternetAddress(TO));
-			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(emailConfig.getSMTP_HOST_PORT()), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
+			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
 			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 			transport.close();
 		}
@@ -110,7 +110,7 @@ public class AWSEmailService {
 			message.setSentDate(new Date());
 			message.setFrom(new InternetAddress(FROM));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(TO) );
-			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(emailConfig.getSMTP_HOST_PORT()), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
+			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
 			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 			transport.close();
 		}
@@ -148,7 +148,7 @@ public class AWSEmailService {
 		message.setFrom(new InternetAddress(FROM));
 		message.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
 		message.addRecipient(Message.RecipientType.CC, new InternetAddress(ccEmail));
-		transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(emailConfig.getSMTP_HOST_PORT()), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
+		transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
 		transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 	    transport.sendMessage(message, message.getRecipients(Message.RecipientType.CC));
 		transport.close();

@@ -15,9 +15,6 @@ public class AWSEmailConfig {
 	@Value("${app.email.password}")
 	private String SMTP_AUTH_PWD;	
 	
-	@Value("${app.email.port}")
-	private String SMTP_HOST_PORT;
-
 	public String getSMTP_HOST_NAME() {
 		return SMTP_HOST_NAME;
 	}
@@ -29,11 +26,4 @@ public class AWSEmailConfig {
 	public String getSMTP_AUTH_PWD() {
 		return SMTP_AUTH_PWD;
 	}
-
-	public String getSMTP_HOST_PORT() {
-		return SMTP_HOST_PORT;
-	}
-	
-	
-	
 }

@@ -47,9 +47,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	@Value("${number.of.licence}")
-	private String numberOfLicence;
-	
 	@Autowired
 	private UserFullName userFullName;
 	
@@ -66,7 +63,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					|| !registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
 				if (isValidIndianMobileNumber(register.getContactNumber())) {
 					if (register.getRole() != null && register.getRole().equalsIgnoreCase("INSPECTOR")) {
-						register.setNoOfLicence(numberOfLicence);
+						register.setNoOfLicence(Constants.NUMBER_OF_LICENSES);
 						register.setPermission(Constants.before_Approve_Permission);
 					}
 					register.setCreatedDate(LocalDateTime.now());

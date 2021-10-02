@@ -102,4 +102,10 @@ public class Constants {
 	public static final String EMAIL_APPROVE_COMMENT_MSG = "Your response to comments is satisfactory Approved.";
 	
 	public static final String EMAIL_REJECT_COMMENT_MSG = "Your response to comments was not satisfactory. Please provide valid response. \\n \\nYou may need to login to check on the comments.";
+
+	public static final String NUMBER_OF_LICENSES = String.valueOf(5);
+
+	public static final String FROM_EMAIL = "info@rushforsafety.com";
+	
+	public static final String AWS_EMAIL_PORT = String.valueOf(587);
 }
