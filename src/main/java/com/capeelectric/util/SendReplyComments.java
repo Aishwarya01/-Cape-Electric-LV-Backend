@@ -4,8 +4,6 @@ import java.net.URI;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -16,18 +14,6 @@ import com.capeelectric.service.impl.AWSEmailService;
 
 @Component
 public class SendReplyComments {
-
-	@Value("${email.send.comment.message}")
-	private String sendCommentMsg;
-
-	@Value("${email.reply.comment.message}")
-	private String replyCommentMsg;
-	
-	@Value("${email.approve.comment.message}")
-	private String approveCommentMsg;
-	
-	@Value("${email.reject.comment.message}")
-	private String rejectCommentMsg;
 
 	@Autowired
 	private AWSEmailService awsEmailService;
@@ -44,7 +30,7 @@ public class SendReplyComments {
 					.buildAndExpand(registerRepo.get().getRegisterId()).toUri();
 			String resetUrl = Utility.getSiteURL(uri.toURL());
 			awsEmailService.sendEmail(registerRepo.get().getAssignedBy(), userName,
-					sendCommentMsg + "\n" + "\n"
+					Constants.EMAIL_SEND_COMMENT_MSG + "\n" + "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
 									: "https://www.rushforsafety.com")
@@ -62,7 +48,7 @@ public class SendReplyComments {
 					.buildAndExpand(registerRepo.get().getRegisterId()).toUri();
 			String resetUrl = Utility.getSiteURL(uri.toURL());
 			awsEmailService.sendEmail(ViewerUserName, ViewerUserName,
-					replyCommentMsg + "\n" + "\n"
+					Constants.EMAIL_REPLY_COMMENT_MSG + "\n" + "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
 									: "https://www.rushforsafety.com")
@@ -78,13 +64,13 @@ public class SendReplyComments {
 		if (registerRepo.isPresent() && registerRepo.get().getAssignedBy() != null) {
 
 			if (approveOrReject.equalsIgnoreCase("APPROVED")) {
-				awsEmailService.sendEmail(registerRepo.get().getAssignedBy(), userName, approveCommentMsg);
+				awsEmailService.sendEmail(registerRepo.get().getAssignedBy(), userName, Constants.EMAIL_APPROVE_COMMENT_MSG);
 			} else {
 				URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 						.buildAndExpand(registerRepo.get().getRegisterId()).toUri();
 				String resetUrl = Utility.getSiteURL(uri.toURL());
 				awsEmailService.sendEmail(registerRepo.get().getAssignedBy(), userName,
-						rejectCommentMsg + "\n"
+						Constants.EMAIL_REJECT_COMMENT_MSG + "\n"
 								+ (resetUrl.contains("localhost:5000")
 										? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
 										: "https://www.rushforsafety.com")
