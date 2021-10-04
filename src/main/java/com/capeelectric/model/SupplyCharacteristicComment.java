@@ -74,7 +74,7 @@ public class SupplyCharacteristicComment implements Serializable {
 	
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "PERIODIC_INSPECTION_ID")
+	@JoinColumn(name = "SUPPLY_CHARACTERISTICS_ID")
 	private SupplyCharacteristics supplyCharacteristics;
 
 	public Integer getCommentsId() {
