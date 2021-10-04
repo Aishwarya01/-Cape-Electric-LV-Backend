@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,9 +20,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
+import com.capeelectric.model.Register;
+import com.capeelectric.model.ReportDetailsComment;
+import com.capeelectric.model.Site;
+import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.SupplyCharacteristicComment;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.SupplyParameters;
+import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.service.impl.SupplyCharacteristicsServiceImpl;
 import com.capeelectric.util.UserFullName;
@@ -47,6 +53,15 @@ public class SupplyCharacteristicsServiceTest {
 	
 	@MockBean
 	private UserFullName userFullName;
+	
+	@MockBean
+	private SiteRepository siteRepository;
+	
+	private ArrayList<SupplyCharacteristicComment> listOfComments;
+	
+    private Site site;
+	
+	private Register register;
 
 	{
 		supplyCharacteristics = new SupplyCharacteristics();
@@ -61,11 +76,35 @@ public class SupplyCharacteristicsServiceTest {
 		
 		supplyCharacteristicComment = new SupplyCharacteristicComment();
 		supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
+		supplyCharacteristicComment.setViewerComment("question");
+		supplyCharacteristicComment.setViewerFlag("1");
+		supplyCharacteristics.setUserName("Inspector@gmail.com");
+		supplyCharacteristics.setSiteId(1);
 		
 		ArrayList<SupplyCharacteristicComment> listOfComments = new ArrayList<SupplyCharacteristicComment>();
 	    listOfComments.add(supplyCharacteristicComment);
 	    supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
 		
+	}
+	{
+		register =new Register();
+		register.setUsername("cape");
+		
+		site = new Site();
+		site.setUserName("Inspector@gmail.com");
+		site.setSiteId(1);
+		site.setSite("user");
+		site.setAssignedTo("Viewer@gmail.com");
+
+		SitePersons sitePersons1 =new SitePersons();
+		sitePersons1.setPersonId(1);
+		sitePersons1.setSiteName("user");
+		sitePersons1.setPersonInchargeEmail("Viewer@gmail.com");
+		sitePersons1.setInActive(true);
+		 
+		HashSet sitePersonsSet = new HashSet<SitePersons>();
+		sitePersonsSet.add(sitePersons1);
+		site.setSitePersons(sitePersonsSet);
 	}
 
 	@Test
@@ -122,19 +161,6 @@ public class SupplyCharacteristicsServiceTest {
 	}
 
 	@Test
-	public void testRetrieveCharacteristics_Succes_Flow() throws SupplyCharacteristicsException {
-
-		List<SupplyCharacteristics> supplylist = new ArrayList<>();
-		supplylist.add(supplyCharacteristics);
-
-		when(supplyCharacteristicsRepository.findByUserNameAndSiteId(supplyCharacteristics.getUserName(),
-				supplyCharacteristics.getSiteId())).thenReturn(supplylist);
-		List<SupplyCharacteristics> installationReport = supplyCharacteristicsServiceImpl
-				.retrieveCharacteristics("cape", 1);
-		assertNotNull(installationReport);
-	}
-
-	@Test
 	public void testRetrieveCharacteristics_Invalid_Inputs() throws SupplyCharacteristicsException {
 
 		List<SupplyCharacteristics> supplylist = new ArrayList<>();
@@ -181,4 +207,114 @@ public class SupplyCharacteristicsServiceTest {
 		
 		assertEquals(assertThrows_1.getMessage(),"Invalid inputs");
 	}
+	
+	@Test
+	public void testretrieveCharacteristics_Success_Flow() throws SupplyCharacteristicsException {
+
+		List<SupplyCharacteristics> ipaolist = new ArrayList<>();
+		ipaolist.add(supplyCharacteristics);
+		listOfComments = new ArrayList<SupplyCharacteristicComment>();
+		listOfComments.add(supplyCharacteristicComment);
+		supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
+		
+		when(supplyCharacteristicsRepository.findByUserNameAndSiteId(supplyCharacteristics.getUserName(),
+				supplyCharacteristics.getSiteId())).thenReturn(ipaolist);
+		supplyCharacteristicsServiceImpl.retrieveCharacteristics("Inspector@gmail.com", 1);
+
+		SupplyCharacteristicsException assertThrows_1 = Assertions.assertThrows(SupplyCharacteristicsException.class,
+				() -> supplyCharacteristicsServiceImpl.retrieveCharacteristics("cape", 2));
+		assertEquals(assertThrows_1.getMessage(), "Given UserName & Site doesn't exist Inspection");
+
+		SupplyCharacteristicsException assertThrows_2 = Assertions.assertThrows(SupplyCharacteristicsException.class,
+				() -> supplyCharacteristicsServiceImpl.retrieveCharacteristics(null, 1));
+		assertEquals(assertThrows_2.getMessage(), "Invalid Inputs");
+	}
+	
+	@Test
+	public void testSendComments() throws SupplyCharacteristicsException {
+		listOfComments = new ArrayList<SupplyCharacteristicComment>();
+		when(supplyCharacteristicsRepository.findBySiteId(1)).thenReturn(Optional.of(supplyCharacteristics));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+
+		supplyCharacteristicsServiceImpl.sendComments("Viewer@gmail.com", 1, supplyCharacteristicComment);
+ 
+		supplyCharacteristicComment.setCommentsId(1);
+		listOfComments.add(supplyCharacteristicComment);
+		supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
+		when(supplyCharacteristicsRepository.findBySiteId(1)).thenReturn(Optional.of(supplyCharacteristics));
+		supplyCharacteristicsServiceImpl.sendComments("Viewer@gmail.com", 1, supplyCharacteristicComment);
+
+		listOfComments.remove(supplyCharacteristicComment);
+		supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
+		supplyCharacteristicsServiceImpl.sendComments("Viewer@gmail.com", 1, supplyCharacteristicComment);
+
+		SupplyCharacteristicsException assertThrows = Assertions.assertThrows(SupplyCharacteristicsException.class,
+				() -> supplyCharacteristicsServiceImpl.sendComments("Inspector@gmail.com", 1, supplyCharacteristicComment));
+
+		assertEquals(assertThrows.getMessage(), "Given userName not allowing for SEND comment");
+	}
+	
+	@Test
+	public void testReplyComments() throws SupplyCharacteristicsException {
+		listOfComments = new ArrayList<SupplyCharacteristicComment>();
+		supplyCharacteristicComment.setCommentsId(1);
+		listOfComments.add(supplyCharacteristicComment);
+		supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
+		when(supplyCharacteristicsRepository.findBySiteId(1)).thenReturn(Optional.of(supplyCharacteristics));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+		supplyCharacteristicsServiceImpl.replyComments("Inspector@gmail.com", 1, supplyCharacteristicComment);
+
+		SupplyCharacteristicsException assertThrows = Assertions.assertThrows(SupplyCharacteristicsException.class,
+				() -> supplyCharacteristicsServiceImpl.replyComments("Viewer@gmail.com", 1, supplyCharacteristicComment));
+
+		assertEquals(assertThrows.getMessage(), "Given userName not allowing for REPLY comment");
+	}
+	
+	@Test
+	public void testApproveComments() throws SupplyCharacteristicsException {
+		listOfComments = new ArrayList<SupplyCharacteristicComment>();
+		supplyCharacteristicComment.setCommentsId(1);
+		listOfComments.add(supplyCharacteristicComment);
+		supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
+		when(supplyCharacteristicsRepository.findBySiteId(1)).thenReturn(Optional.of(supplyCharacteristics));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+		supplyCharacteristicsServiceImpl.approveComments("Viewer@gmail.com", 1, supplyCharacteristicComment);
+		
+		SupplyCharacteristicsException assertThrows = Assertions.assertThrows(SupplyCharacteristicsException.class,
+				() -> supplyCharacteristicsServiceImpl.approveComments("Inspector@gmail.com", 1, supplyCharacteristicComment));
+		
+		assertEquals(assertThrows.getMessage(), "Given userName not allowing for APPROVED comment");
+	}
+	
+	@Test
+	public void testComments_Exception() throws SupplyCharacteristicsException {
+		/*
+		 * 
+		 * supplyCharacteristics.setUserName(null);
+		 * when(supplyCharacteristicsRepository.findBySiteId(1)).thenReturn(Optional.of(
+		 * supplyCharacteristics));
+		 * when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+		 * 
+		 * SupplyCharacteristicsException assertThrows_1 =
+		 * Assertions.assertThrows(SupplyCharacteristicsException.class, () ->
+		 * supplyCharacteristicsServiceImpl.sendComments("Viewer@gmail.com", 2,
+		 * supplyCharacteristicComment));
+		 * 
+		 * assertEquals(assertThrows_1.getMessage(),
+		 * "Given username not have access for comments");
+		 * 
+		 * supplyCharacteristics.setSupplyCharacteristicComment(null);
+		 * SupplyCharacteristicsException assertThrows_2 =
+		 * Assertions.assertThrows(SupplyCharacteristicsException.class, () ->
+		 * supplyCharacteristicsServiceImpl.sendComments("Viewer@gmail.com", 2,
+		 * supplyCharacteristicComment)); assertEquals(assertThrows_2.getMessage(),
+		 * "Siteinformation doesn't exist, try with different Site-Id");
+		 * 
+		 * SupplyCharacteristicsException assertThrows_3 =
+		 * Assertions.assertThrows(SupplyCharacteristicsException.class, () ->
+		 * supplyCharacteristicsServiceImpl.sendComments("Viewer@gmail.com", null,
+		 * supplyCharacteristicComment)); assertEquals(assertThrows_3.getMessage(),
+		 * "Invalid Inputs");
+		 * 
+		 */}
 }

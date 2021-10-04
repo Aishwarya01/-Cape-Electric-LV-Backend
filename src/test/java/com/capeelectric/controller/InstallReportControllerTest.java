@@ -1,6 +1,7 @@
 package com.capeelectric.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.HashSet;
@@ -21,6 +22,7 @@ import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.ReportDetails;
+import com.capeelectric.model.ReportDetailsComment;
 import com.capeelectric.model.SignatorDetails;
 import com.capeelectric.service.InstalReportService;
 import com.capeelectric.util.SendReplyComments;
@@ -39,6 +41,8 @@ public class InstallReportControllerTest {
 	private SendReplyComments sendReplyComments;
 	
 	ReportDetails reportDetails;
+	
+	private  ReportDetailsComment reportDetailsComment;
 		
 	{
 		Set<SignatorDetails> set = new HashSet<SignatorDetails>();
@@ -64,6 +68,12 @@ public class InstallReportControllerTest {
 		reportDetails.setVerificationDate("20-03-2023");
 		reportDetails.setVerifiedEngineer("cape");
 		reportDetails.setClientDetails(""); 
+		
+		reportDetailsComment = new ReportDetailsComment();
+		reportDetailsComment.setViewerComment("question");
+		reportDetailsComment.setViewerFlag("1");
+		reportDetails.setUserName("Inspector@gmail.com");
+		reportDetails.setSiteId(1);
 	}
 	
 	
@@ -91,35 +101,50 @@ public class InstallReportControllerTest {
 	}
 	
 	@Test
-	public void testSendComments() throws InstalReportException, RegistrationException, Exception {
+	public void testSendComments() throws RegistrationException, Exception, InstalReportException {
+		doNothing().when(instalReportService).sendComments("Viewer@gmail.com", 1, reportDetailsComment());
+		ResponseEntity<Void> sendComments = instalReportController.sendComments("Viewer@gmail.com", 1,
+				reportDetailsComment());
+		assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+	}
+
+	@Test
+	public void testReplyComments() throws RegistrationException, Exception, InstalReportException {
 		/*
 		 * 
+		 * when(instalReportService.replyComments("Inspector@gmail.com", 1,
+		 * reportDetailsComment)) .thenReturn("Viewer@gmail.com");
+		 * 
 		 * ResponseEntity<Void> sendComments =
-		 * instalReportController.sendComments("Viewer@gmail.com", 1,
-		 * "I have a question?");
+		 * instalReportController.replyComments("Inspector@gmail.com", 1,
+		 * reportDetailsComment);
 		 * 
 		 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+		 * 
+		 * when(instalReportService.replyComments("Inspector@gmail.com", 1,
+		 * reportDetailsComment)).thenReturn(null); InspectionException exception =
+		 * Assertions.assertThrows(InspectionException.class, () ->
+		 * instalReportController.replyComments("Inspector@gmail.com", 1,
+		 * reportDetailsComment));
+		 * 
+		 * assertEquals(exception.getMessage(), "No viewer userName avilable");
+		 * 
 		 */}
 
-	/*
-	 * @Test public void testReplyComments() throws RegistrationException,
-	 * Exception, InstalReportException {
-	 * 
-	 * InstalReportException exception =
-	 * Assertions.assertThrows(InstalReportException.class, () ->
-	 * instalReportController.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?"));
-	 * 
-	 * assertEquals(exception.getMessage(), "No viewer userName avilable");
-	 * 
-	 * when(instalReportService.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?")) .thenReturn("Viewer@gmail.com");
-	 * 
-	 * ResponseEntity<Void> sendComments =
-	 * instalReportController.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?");
-	 * 
-	 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK); }
-	 */
+	@Test
+	public void testApproveComments() throws InstalReportException, RegistrationException, Exception{
+
+		instalReportController.approveComments("Inspector@gmail.com", 1, reportDetailsComment);
+
+	}
+
+	private ReportDetailsComment reportDetailsComment() {
+		reportDetailsComment = new ReportDetailsComment();
+		reportDetailsComment.setViewerComment("question");
+		reportDetailsComment.setViewerFlag("1");
+		reportDetails.setUserName("Inspector@gmail.com");
+		reportDetails.setSiteId(1);
+		return reportDetailsComment;
+	}
 
 }

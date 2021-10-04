@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +21,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.PeriodicTestingException;
+import com.capeelectric.model.Register;
+import com.capeelectric.model.Site;
+import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.model.TestingReportComment;
+import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.PeriodicTestingServiceImpl;
 import com.capeelectric.util.UserFullName;
@@ -48,6 +53,9 @@ public class PeriodicTestingServiceTest {
 	
 	@MockBean
 	private UserFullName userFullName;
+	
+	@MockBean
+	private SiteRepository siteRepository;
 
 	private TestingReport testingReport;
 	
@@ -55,6 +63,32 @@ public class PeriodicTestingServiceTest {
 	
 	private Testing testing;
 	
+	private ArrayList<TestingReportComment> listOfComments;
+	
+    private Site site;
+	
+	private Register register;
+
+	{
+		register =new Register();
+		register.setUsername("cape");
+		
+		site = new Site();
+		site.setUserName("Inspector@gmail.com");
+		site.setSiteId(1);
+		site.setSite("user");
+		site.setAssignedTo("Viewer@gmail.com");
+
+		SitePersons sitePersons1 =new SitePersons();
+		sitePersons1.setPersonId(1);
+		sitePersons1.setSiteName("user");
+		sitePersons1.setPersonInchargeEmail("Viewer@gmail.com");
+		sitePersons1.setInActive(true);
+		 
+		HashSet sitePersonsSet = new HashSet<SitePersons>();
+		sitePersonsSet.add(sitePersons1);
+		site.setSitePersons(sitePersonsSet);
+	}
 	{
 		testingReport = new TestingReport();
 		testingReport.setSiteId(1);
@@ -62,6 +96,10 @@ public class PeriodicTestingServiceTest {
 
 		testingReportComment = new TestingReportComment();
 		testingReportComment.setViewerDate(LocalDateTime.now());
+		testingReportComment.setViewerComment("question");
+		testingReportComment.setViewerFlag("1");
+		testingReport.setUserName("Inspector@gmail.com");
+		testingReport.setSiteId(1);
 		
 		ArrayList<TestingReportComment> listOfComment = new ArrayList<TestingReportComment>();
 		listOfComment.add(testingReportComment);
@@ -175,6 +213,84 @@ public class PeriodicTestingServiceTest {
 		PeriodicTestingException assertThrows_1 = Assertions.assertThrows(PeriodicTestingException.class,
 				() -> periodicTestingServiceImpl.updatePeriodicTesting(testingReport));
 		assertEquals(assertThrows_1.getMessage(), "Invalid inputs");
+	}
+	
+	@Test
+	public void testSendComments() throws PeriodicTestingException {
+		listOfComments = new ArrayList<TestingReportComment>();
+		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+		periodicTestingServiceImpl.sendComments("Viewer@gmail.com", 1, testingReportComment);
+ 
+		testingReportComment.setCommentsId(1);
+		listOfComments.add(testingReportComment);
+		testingReport.setTestingComment(listOfComments);
+		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
+		periodicTestingServiceImpl.sendComments("Viewer@gmail.com", 1, testingReportComment);
+
+		listOfComments.remove(testingReportComment);
+		testingReport.setTestingComment(listOfComments);
+		periodicTestingServiceImpl.sendComments("Viewer@gmail.com", 1, testingReportComment);
+
+		PeriodicTestingException assertThrows = Assertions.assertThrows(PeriodicTestingException.class,
+				() -> periodicTestingServiceImpl.sendComments("Inspector@gmail.com", 1, testingReportComment));
+
+		assertEquals(assertThrows.getMessage(), "Given userName not allowing for SEND comment");
+	}
+	
+	@Test
+	public void testReplyComments() throws PeriodicTestingException {
+		listOfComments = new ArrayList<TestingReportComment>();
+		testingReportComment.setCommentsId(1);
+		listOfComments.add(testingReportComment);
+		testingReport.setTestingComment(listOfComments);
+		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+		periodicTestingServiceImpl.replyComments("Inspector@gmail.com", 1, testingReportComment);
+
+		PeriodicTestingException assertThrows = Assertions.assertThrows(PeriodicTestingException.class,
+				() -> periodicTestingServiceImpl.replyComments("Viewer@gmail.com", 1, testingReportComment));
+
+		assertEquals(assertThrows.getMessage(), "Given userName not allowing for REPLY comment");
+	}
+	
+	@Test
+	public void testApproveComments() throws PeriodicTestingException {
+		listOfComments = new ArrayList<TestingReportComment>();
+		testingReportComment.setCommentsId(1);
+		listOfComments.add(testingReportComment);
+		testingReport.setTestingComment(listOfComments);
+		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+		periodicTestingServiceImpl.approveComments("Viewer@gmail.com", 1, testingReportComment);
+		
+		PeriodicTestingException assertThrows = Assertions.assertThrows(PeriodicTestingException.class,
+				() -> periodicTestingServiceImpl.approveComments("Inspector@gmail.com", 1, testingReportComment));
+		
+		assertEquals(assertThrows.getMessage(), "Given userName not allowing for APPROVED comment");
+	}
+	
+	@Test
+	public void testComments_Exception() throws PeriodicTestingException {
+
+		testingReport.setUserName(null);
+		when(testingReportRepository.findBySiteId(2)).thenReturn(Optional.of(testingReport));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+
+		PeriodicTestingException assertThrows_1 = Assertions.assertThrows(PeriodicTestingException.class,
+				() -> periodicTestingServiceImpl.sendComments("Viewer@gmail.com", 1, testingReportComment));
+
+		assertEquals(assertThrows_1.getMessage(), "Given username not have access for comments");
+
+		testingReport.setTestingComment(null);
+		PeriodicTestingException assertThrows_2 = Assertions.assertThrows(PeriodicTestingException.class,
+				() -> periodicTestingServiceImpl.sendComments("Viewer@gmail.com", 2, testingReportComment));
+		assertEquals(assertThrows_2.getMessage(), "Siteinformation doesn't exist, try with different Site-Id");
+
+		PeriodicTestingException assertThrows_3 = Assertions.assertThrows(PeriodicTestingException.class,
+				() -> periodicTestingServiceImpl.sendComments("Viewer@gmail.com", null, testingReportComment));
+		assertEquals(assertThrows_3.getMessage(), "Invalid Inputs");
+
 	}
 
 }

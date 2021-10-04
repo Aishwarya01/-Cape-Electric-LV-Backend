@@ -87,17 +87,17 @@ public class InstalReportServiceImpl implements InstalReportService {
 	*/
 	@Override
 	public List<ReportDetails> retrieveInstallationReport(String userName, Integer siteId)
-			throws InstalReportException, InspectionException {
+			throws InstalReportException {
 		if (userName != null) {
 			List<ReportDetails> reportDetailsRepo = installationReportRepository.findByUserNameAndSiteId(userName,
 					siteId);
-			if (reportDetailsRepo != null) {
+			if (reportDetailsRepo != null && !reportDetailsRepo.isEmpty()) {
 				for (ReportDetails reportDetails : reportDetailsRepo) {
 					sortingDateTime(reportDetails.getReportDetailsComment());
 				}
 				return reportDetailsRepo;
 			} else {
-				throw new InspectionException("Given UserName & Site doesn't exist Basic-information");
+				throw new InstalReportException("Given UserName & Site doesn't exist Basic-information");
 			}
 		} else {
 			throw new InstalReportException("invalid inputs");
@@ -187,7 +187,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 					List<ReportDetailsComment> reportDetailsCommentRepo = reportDetails.getReportDetailsComment();
 
 					for (ReportDetailsComment reportDetailsCommentItr : reportDetailsCommentRepo) {
-						if (reportDetailsCommentItr.getCommentsId().equals(reportDetailsComment.getCommentsId())) {
+						if (reportDetailsCommentItr != null && reportDetailsCommentItr.getCommentsId() != null
+								&& reportDetailsCommentItr.getCommentsId()
+										.equals(reportDetailsComment.getCommentsId())) {
 							flagInspectionComment = false;
 
 							reportDetailsCommentItr.setReportDetails(reportDetails);
@@ -252,7 +254,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 			}
 
 		} else {
-			throw new InstalReportException("Invalid inputs");
+			throw new InstalReportException("Invalid Inputs");
 		}
 		return null;
 	}
@@ -265,7 +267,8 @@ public class InstalReportServiceImpl implements InstalReportService {
 		Integer maxNum = 0;
 		String approveRejectedFlag = "";
 		for (ReportDetailsComment reportDetailsCommentItr : listOfComments) {
-			if (reportDetailsCommentItr != null && maxNum <= reportDetailsCommentItr.getNoOfComment()) {
+			if (reportDetailsCommentItr != null && reportDetailsCommentItr.getNoOfComment() != null
+					&& maxNum <= reportDetailsCommentItr.getNoOfComment()) {
 				maxNum = reportDetailsCommentItr.getNoOfComment();
 				approveRejectedFlag = reportDetailsCommentItr.getApproveOrReject();
 			}
