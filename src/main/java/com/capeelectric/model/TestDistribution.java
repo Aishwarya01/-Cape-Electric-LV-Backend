@@ -62,10 +62,10 @@ public class TestDistribution implements Serializable {
 	@Column(name = "INCOMING_VOLTAGE")
 	private String incomingVoltage;
 
-	@Column(name = "INCOMING_ZS")
+	@Column(name = "INCOMING_LOOPIMPEDANCE")
 	private String incomingLoopImpedance;
 
-	@Column(name = "INCOMING_IPF")
+	@Column(name = "INCOMING_FAULTCURRENT")
 	private String incomingFaultCurrent;
 
 	@JsonBackReference

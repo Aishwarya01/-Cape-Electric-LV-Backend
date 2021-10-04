@@ -95,7 +95,7 @@ public class Register {
 	@Column(name = "UPDATED_BY")
 	private String updatedBy;
 
-  @Column(name = "SITE_NAME")
+	@Column(name = "SITE_NAME")
 	private String siteName;
 
 	public Integer getRegisterId() {
