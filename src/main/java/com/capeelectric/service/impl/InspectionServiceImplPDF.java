@@ -115,58 +115,50 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				cell65.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table199.addCell(cell65);
 				document.add(table199);
-				Font font91 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-				float[] pointColumnWidths4 = { 50F, 90F };
+				Font font61 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+				Font font91=new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+				float[] pointColumnWidths4 = { 90F, 90F,90F,90F };
 
 				PdfPTable table44 = new PdfPTable(pointColumnWidths4);
 				table44.setWidthPercentage(100); // Width 100%
 				table44.setSpacingBefore(10f); // Space before table
 				table44.setWidthPercentage(100);
-				table44.getDefaultCell().setBorder(0);
 
-				PdfPCell cell55 = new PdfPCell(new Paragraph("", font91));
-				table44.addCell(new Phrase("ViewerUserName:", font91));
-				cell55.setBorder(PdfPCell.NO_BORDER);
+				PdfPCell cell55 = new PdfPCell(new Paragraph("Sivaraju", font91));
+				cell55.setHorizontalAlignment(Element.ALIGN_CENTER);
+				PdfPCell cell371 = new PdfPCell(new Paragraph("ViewerUserName:", font91));
+				cell371.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell371.setGrayFill(0.92f);
+				table44.addCell(cell371);
 				table44.addCell(cell55);
-				PdfPCell cell388 = new PdfPCell(new Paragraph("", font91));
-				cell388.setGrayFill(0.92f);
-				cell388.setBorder(PdfPCell.NO_BORDER);
-				PdfPCell cell377 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
-				cell377.setBorder(PdfPCell.NO_BORDER);
-				cell377.setGrayFill(0.92f);
-				table44.addCell(cell377);
-				table44.addCell(cell388);
+				PdfPCell cell381 = new PdfPCell(new Paragraph("Hasan", font91));
+				cell381.setHorizontalAlignment(Element.ALIGN_CENTER);
+				PdfPCell cell3711 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
+				cell3711.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell3711.setGrayFill(0.92f);
+				table44.addCell(cell3711);
+				table44.addCell(cell381);
 
-				PdfPCell cell567 = new PdfPCell(new Paragraph("", font91));
-				table44.addCell(new Phrase("ViewerComment:", font91));
-				cell567.setBorder(PdfPCell.NO_BORDER);
-				table44.addCell(cell567);
+				PdfPCell cell561 = new PdfPCell(new Paragraph("ViewerComment Date:", font91));
+				cell561.setGrayFill(0.92f);
+				cell561.setHorizontalAlignment(Element.ALIGN_CENTER);
 
-				PdfPCell cell401 = new PdfPCell(new Paragraph("", font91));
+				PdfPCell cell5611 = new PdfPCell(new Paragraph("ViewerComment:", font91));
+				cell5611.setGrayFill(0.92f);
+				cell5611.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table44.addCell(cell5611);
+				table44.addCell(cell561);
+
+               PdfPCell cell401 = new PdfPCell(new Paragraph("InspectorComment Date:", font91));
 				cell401.setGrayFill(0.92f);
-				cell401.setBorder(PdfPCell.NO_BORDER);
-				PdfPCell cell390 = new PdfPCell(new Paragraph("InspectorComment:", font91));
-				cell390.setBorder(PdfPCell.NO_BORDER);
-				cell390.setGrayFill(0.92f);
-				table44.addCell(cell390);
+				cell401.setHorizontalAlignment(Element.ALIGN_CENTER);
+				PdfPCell cell391 = new PdfPCell(new Paragraph("InspectorComment:", font91));
+				cell391.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell391.setGrayFill(0.92f);
+        		table44.addCell(cell391);
 				table44.addCell(cell401);
-
-				PdfPCell cell578 = new PdfPCell(new Paragraph("", font91));
-				table44.addCell(new Phrase("ViewerDate:", font91));
-				cell578.setBorder(PdfPCell.NO_BORDER);
-				table44.addCell(cell578);
-
-				PdfPCell cell589 = new PdfPCell(
-						new Paragraph("", font91));
-				cell589.setGrayFill(0.92f);
-				cell589.setBorder(PdfPCell.NO_BORDER);
-				PdfPCell cell590 = new PdfPCell(new Paragraph("InspectorDate:", font91));
-				cell590.setBorder(PdfPCell.NO_BORDER);
-				cell590.setGrayFill(0.92f);
-				table44.addCell(cell590);
-				table44.addCell(cell589);
-
-				document.add(table44);
+				
+			   document.add(table44);
 				document.close();
 				writer.close();
 			} catch (Exception e) {
