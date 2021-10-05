@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import javax.mail.MessagingException;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +26,7 @@ import com.capeelectric.config.JwtTokenUtil;
 import com.capeelectric.exception.AuthenticationException;
 import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.ForgotPasswordException;
+import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.RegisterDetails;
@@ -87,8 +89,15 @@ public class LoginControllerTest {
 		when(registrationDetailsServiceImpl.loadUserByUsername("lvsystem@capeindia.net")).thenReturn(registerDetails);
 		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
 		ResponseEntity<?> token = loginController.createAuthenticationToken(authenticationRequest);
-
 		assertNotNull(token);
+
+		register.setPermission("NO");
+		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
+		AuthenticationException assertThrows = Assertions.assertThrows(AuthenticationException.class,
+				() -> loginController.createAuthenticationToken(authenticationRequest));
+		
+		assertEquals(assertThrows.getMessage(), "Admin not approved for Your registration");
+		
 	}
 
 	@Test
@@ -138,5 +147,12 @@ public class LoginControllerTest {
 		ResponseEntity<String> createPassword = loginController.createPassword(authenticationRequest);
 		assertEquals(createPassword.getBody(), "You have Successfully Created Your Password");
 
+	}
+	
+	@Test
+	public void testRetrieveInformation()
+			throws RegistrationException, ForgotPasswordException, IOException, MessagingException {
+		ResponseEntity<Register> retrieveInformation = loginController.retrieveInformation("lvsystem@capeindia.net");
+		assertEquals(retrieveInformation.getStatusCode(), HttpStatus.OK);
 	}
 }

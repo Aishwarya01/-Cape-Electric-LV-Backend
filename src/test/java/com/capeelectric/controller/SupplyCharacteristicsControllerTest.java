@@ -1,6 +1,7 @@
 package com.capeelectric.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
+import com.capeelectric.model.SupplyCharacteristicComment;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.service.impl.SupplyCharacteristicsServiceImpl;
 import com.capeelectric.util.SendReplyComments;
@@ -39,12 +41,18 @@ public class SupplyCharacteristicsControllerTest {
 	private SendReplyComments sendReplyComments;
 
 	private SupplyCharacteristics supplyCharacteristics;
+	
+	private SupplyCharacteristicComment supplyCharacteristicComment;
 
 	{
 		supplyCharacteristics = new SupplyCharacteristics();
 		supplyCharacteristics.setSupplyCharacteristicsId(1);
 		supplyCharacteristics.setUserName("cape");
 		supplyCharacteristics.setSiteId(1);
+		
+		supplyCharacteristicComment = new SupplyCharacteristicComment();
+		supplyCharacteristicComment.setViewerComment("question");
+		supplyCharacteristicComment.setViewerFlag("1");
 	}
 
 	@Test
@@ -73,35 +81,46 @@ public class SupplyCharacteristicsControllerTest {
 	}
 	
 	@Test
-	public void testSendComments() throws SupplyCharacteristicsException, RegistrationException, Exception {
-		/*
-		 * 
-		 * ResponseEntity<Void> sendComments =
-		 * supplyCharacteristicsController.sendComments("Viewer@gmail.com", 1,
-		 * "I have a question?");
-		 * 
-		 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
-		 */}
+	public void testSendComments() throws RegistrationException, Exception, SupplyCharacteristicsException {
+		doNothing().when(supplyCharacteristicsServiceImpl).sendComments("Viewer@gmail.com", 1, supplyCharacteristicComment());
+		ResponseEntity<Void> sendComments = supplyCharacteristicsController.sendComments("Viewer@gmail.com", 1,
+				supplyCharacteristicComment());
+		assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+	}
 
-	/*
-	 * @Test public void testReplyComments() throws RegistrationException,
-	 * Exception, SupplyCharacteristicsException {
-	 * 
-	 * SupplyCharacteristicsException exception =
-	 * Assertions.assertThrows(SupplyCharacteristicsException.class, () ->
-	 * supplyCharacteristicsController.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?"));
-	 * 
-	 * assertEquals(exception.getMessage(), "No viewer userName avilable");
-	 * 
-	 * when(supplyCharacteristicsServiceImpl.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?")) .thenReturn("Viewer@gmail.com");
-	 * 
-	 * ResponseEntity<Void> sendComments =
-	 * supplyCharacteristicsController.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?");
-	 * 
-	 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK); }
-	 */
+	@Test
+	public void testReplyComments() throws RegistrationException, Exception, SupplyCharacteristicsException {
+
+		when(supplyCharacteristicsServiceImpl.replyComments("Inspector@gmail.com", 1, supplyCharacteristicComment))
+				.thenReturn("Viewer@gmail.com");
+
+		ResponseEntity<Void> sendComments = supplyCharacteristicsController.replyComments("Inspector@gmail.com", 1,
+				supplyCharacteristicComment);
+
+		assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+
+		when(supplyCharacteristicsServiceImpl.replyComments("Inspector@gmail.com", 1, supplyCharacteristicComment)).thenReturn(null);
+		SupplyCharacteristicsException exception = Assertions.assertThrows(SupplyCharacteristicsException.class,
+				() -> supplyCharacteristicsController.replyComments("Inspector@gmail.com", 1, supplyCharacteristicComment));
+
+		assertEquals(exception.getMessage(), "No viewer userName avilable");
+
+	}
+
+	@Test
+	public void testApproveComments() throws RegistrationException, Exception, SupplyCharacteristicsException {
+
+		supplyCharacteristicsController.approveComments("Inspector@gmail.com", 1, supplyCharacteristicComment());
+
+	}
+
+	private SupplyCharacteristicComment supplyCharacteristicComment() {
+		SupplyCharacteristicComment supplyCharacteristicComment = new SupplyCharacteristicComment();
+		supplyCharacteristicComment.setViewerComment("question");
+		supplyCharacteristicComment.setViewerFlag("1");
+		supplyCharacteristics.setUserName("Inspector@gmail.com");
+		supplyCharacteristics.setSiteId(1);
+		return supplyCharacteristicComment;
+	}
 
 }

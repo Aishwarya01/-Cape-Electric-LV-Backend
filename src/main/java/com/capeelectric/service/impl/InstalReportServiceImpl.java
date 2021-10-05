@@ -100,7 +100,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 				throw new InstalReportException("Given UserName & Site doesn't exist Basic-information");
 			}
 		} else {
-			throw new InstalReportException("invalid inputs");
+			throw new InstalReportException("Invalid Inputs");
 		}
 	}
 

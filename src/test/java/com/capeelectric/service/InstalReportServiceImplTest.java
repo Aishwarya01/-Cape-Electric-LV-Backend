@@ -18,7 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.InstalReportException;
-import com.capeelectric.model.Register;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.ReportDetailsComment;
 import com.capeelectric.model.SignatorDetails;
@@ -48,8 +47,6 @@ public class InstalReportServiceImplTest {
 
 	private ReportDetails reportDetails;
 	
-	private Register register;
-
 	@MockBean
 	private SiteRepository siteRepository;
 	
@@ -102,7 +99,7 @@ public class InstalReportServiceImplTest {
 		sitePersons1.setPersonInchargeEmail("Viewer@gmail.com");
 		sitePersons1.setInActive(true);
 		 
-		HashSet sitePersonsSet = new HashSet<SitePersons>();
+		HashSet<SitePersons> sitePersonsSet = new HashSet<SitePersons>();
 		sitePersonsSet.add(sitePersons1);
 		site.setSitePersons(sitePersonsSet);
 		
@@ -238,26 +235,23 @@ public class InstalReportServiceImplTest {
 	
 	@Test
 	public void testRetrieveInstalReportDetails_Success_Flow() throws InstalReportException {
-		/*
-		 * 
-		 * List<ReportDetails> ipaolist = new ArrayList<ReportDetails>();
-		 * ipaolist.add(reportDetails); listOfComments = new
-		 * ArrayList<ReportDetailsComment>(); listOfComments.add(reportDetailsComment);
-		 * reportDetails.setReportDetailsComment(listOfComments);
-		 * 
-		 * when(installationReportRepository.findByUserNameAndSiteId(reportDetails.
-		 * getUserName(), reportDetails.getSiteId())).thenReturn(ipaolist);
-		 * instalReportServiceImpl.retrieveInstallationReport("Inspector@gmail.com", 1);
-		 * 
-		 * InstalReportException assertThrows_1 =
-		 * Assertions.assertThrows(InstalReportException.class, () ->
-		 * instalReportServiceImpl.retrieveInstallationReport("cape", 2));
-		 * assertEquals(assertThrows_1.getMessage(),
-		 * "Given UserName & Site doesn't exist Inspection");
-		 * 
-		 * InstalReportException assertThrows_2 =
-		 * Assertions.assertThrows(InstalReportException.class, () ->
-		 * instalReportServiceImpl.retrieveInstallationReport(null, 1));
-		 * assertEquals(assertThrows_2.getMessage(), "Invalid Inputs");
-		 */}
+
+		List<ReportDetails> ipaolist = new ArrayList<ReportDetails>();
+		ipaolist.add(reportDetails);
+		listOfComments = new ArrayList<ReportDetailsComment>();
+		listOfComments.add(reportDetailsComment);
+		reportDetails.setReportDetailsComment(listOfComments);
+
+		when(installationReportRepository.findByUserNameAndSiteId(reportDetails.getUserName(),
+				reportDetails.getSiteId())).thenReturn(ipaolist);
+		instalReportServiceImpl.retrieveInstallationReport("Inspector@gmail.com", 1);
+
+		InstalReportException assertThrows_1 = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.retrieveInstallationReport("cape", 2));
+		assertEquals(assertThrows_1.getMessage(), "Given UserName & Site doesn't exist Basic-information");
+
+		InstalReportException assertThrows_2 = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.retrieveInstallationReport(null, 1));
+		assertEquals(assertThrows_2.getMessage(), "Invalid Inputs");
+	}
 }
