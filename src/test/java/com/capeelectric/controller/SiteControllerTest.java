@@ -63,13 +63,20 @@ public class SiteControllerTest {
 		assertEquals(actualResponseEntity.getBody(), "Site Succesfully Deleted");
 	}
     
-	 @Test
-	    public void testretriveSite() throws CompanyDetailsException {
-	    	 List<Site> list = new ArrayList<>();
-	    	 list.add(site);
-	    	 ResponseEntity<List<Site>> expectedResponseEntity =new  ResponseEntity<List<Site>>(list, HttpStatus.OK);
-		     ResponseEntity<List<Site>> actualResponseEntity = siteController.retriveSite(site.getUserName());
-		     assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
+	@Test
+	public void testretriveSite() throws CompanyDetailsException {
+		List<Site> list = new ArrayList<>();
+		list.add(site);
+		ResponseEntity<List<Site>> expectedResponseEntity = new ResponseEntity<List<Site>>(list, HttpStatus.OK);
+		ResponseEntity<List<Site>> actualResponseEntity = siteController.retriveSite(site.getUserName());
+		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
 
-	    }
+	}
+
+	@Test
+	public void testRetrieveSiteByName() throws CompanyDetailsException {
+		ResponseEntity<Site> retrieveSiteByName = siteController.retrieveSiteByName(null, null, null);
+		assertEquals(retrieveSiteByName.getStatusCode(), HttpStatus.OK);
+
+	}
 }

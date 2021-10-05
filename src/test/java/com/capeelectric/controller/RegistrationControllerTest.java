@@ -34,7 +34,6 @@ import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.AWSEmailService;
 
 @ExtendWith(SpringExtension.class)
-
 @ExtendWith(MockitoExtension.class)
 public class RegistrationControllerTest {
 
@@ -158,5 +157,15 @@ public class RegistrationControllerTest {
 		assertEquals(addRegistration.getStatusCode(), HttpStatus.CREATED);
 		logger.info("RegistrationControllerTest testViewerRegistration_funcion Ended");
 
+	}
+	
+	@Test
+	public void testUpdateLicence()
+			throws UserException, URISyntaxException, IOException, MessagingException, RegistrationException,
+			CompanyDetailsException {
+		logger.info("RegistrationControllerTest testUpdateLicence_funcion Started");
+		ResponseEntity<String> updateLicence = registrationController.updateLicence("lvsystem@capeindia.net", "2");
+		assertEquals(updateLicence.getStatusCode(), HttpStatus.OK);
+		logger.info("RegistrationControllerTest testUpdateLicence_funcion Ended");
 	}
 }

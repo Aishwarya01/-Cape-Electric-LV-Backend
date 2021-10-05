@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -19,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -124,45 +121,43 @@ public class RegistrationServiceTest {
 	
 	@Test
 	public void testAddViewerRegistration() throws RegistrationException, CompanyDetailsException {
-		/*
-		 * logger.
-		 * info("RegistrationServiceTest testAddViewerRegistration_funcion Started");
-		 * 
-		 * Optional<Register> optionalRegister = Optional.of(register);
-		 * 
-		 * when(registrationRepository.findByUsername("lvsystem@capeindia.net")).
-		 * thenReturn(optionalRegister);
-		 * when(registrationRepository.save(register)).thenReturn(register);
-		 * when(registrationRepository.findById(register.getRegisterId())).thenReturn(
-		 * optionalRegister);
-		 * 
-		 * // Success flow register.setUsername("lvsystem123@capeindia.net"); Register
-		 * addRegistration = registrationServiceImpl.addViewerRegistration(register);
-		 * assertEquals(addRegistration.getUsername(), "lvsystem123@capeindia.net");
-		 * 
-		 * // Exception --> Invalid MobileNumber register.setContactNumber("89988");
-		 * RegistrationException invalidMobileNumber =
-		 * Assertions.assertThrows(RegistrationException.class, () ->
-		 * registrationServiceImpl.addViewerRegistration(register));
-		 * 
-		 * assertEquals("Invalid MobileNumber", invalidMobileNumber.getMessage());
-		 * 
-		 * // Exception --> Given UserName Already Present
-		 * register.setUsername("lvsystem@capeindia.net"); RegistrationException
-		 * assertThrows = Assertions.assertThrows(RegistrationException.class, () ->
-		 * registrationServiceImpl.addViewerRegistration(register));
-		 * 
-		 * assertEquals("Given UserName Already Present", assertThrows.getMessage());
-		 * 
-		 * // Exception --> Invalid Inputs register.setUsername(null);
-		 * RegistrationException assertThrows_1 =
-		 * Assertions.assertThrows(RegistrationException.class, () ->
-		 * registrationServiceImpl.addViewerRegistration(register));
-		 * 
-		 * assertEquals("Invalid Inputs", assertThrows_1.getMessage()); logger.
-		 * info("RegistrationServiceTest testAddViewerRegistration_funcion Started");
-		 * 
-		 */}
+
+		logger.info("RegistrationServiceTest testAddViewerRegistration_funcion Started");
+
+		Optional<Register> optionalRegister = Optional.of(register);
+
+		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionalRegister);
+		when(registrationRepository.save(register)).thenReturn(register);
+		when(registrationRepository.findById(register.getRegisterId())).thenReturn(optionalRegister);
+
+		// Success flow 
+		register.setUsername("lvsystem123@capeindia.net"); 
+		Register addRegistration = registrationServiceImpl.addViewerRegistration(register);
+		assertEquals(addRegistration.getUsername(), "lvsystem123@capeindia.net");
+
+		// Exception --> Invalid MobileNumber 
+		register.setContactNumber("89988");
+		RegistrationException invalidMobileNumber = Assertions.assertThrows(RegistrationException.class,
+				() -> registrationServiceImpl.addViewerRegistration(register));
+
+		assertEquals("Invalid MobileNumber", invalidMobileNumber.getMessage());
+
+		// Exception --> Given UserName Already Present
+		register.setUsername("lvsystem@capeindia.net");
+		RegistrationException assertThrows = Assertions.assertThrows(RegistrationException.class,
+				() -> registrationServiceImpl.addViewerRegistration(register));
+
+		assertEquals("Given UserName Already Present", assertThrows.getMessage());
+
+		// Exception --> Invalid Inputs 
+		register.setUsername(null);
+		RegistrationException assertThrows_1 = Assertions.assertThrows(RegistrationException.class,
+				() -> registrationServiceImpl.addViewerRegistration(register));
+
+		assertEquals("Invalid Inputs", assertThrows_1.getMessage());
+		logger.info("RegistrationServiceTest testAddViewerRegistration_funcion Started");
+
+	}
 
 	@Test
 	public void testUpdateRegistration() throws RegistrationException, CompanyDetailsException {
@@ -173,7 +168,11 @@ public class RegistrationServiceTest {
 		when(registrationRepository.findById(register.getRegisterId())).thenReturn(optionalRegister);
 		when(registrationRepository.save(register)).thenReturn(register);
 
-		// Success flow 
+		// Success flow for INSPECTOR
+		registrationServiceImpl.updateRegistration(register,true);
+		
+		// Success flow for VIEWER
+		register.setRole("Viewer");
 		registrationServiceImpl.updateRegistration(register,true);
 
 		// Throwing Exception 
@@ -236,25 +235,58 @@ public class RegistrationServiceTest {
 		// Success flow
 		registrationServiceImpl.sendOtp("lvsystem@capeindia.net", "9023092802");
 		
+		when(restTemplate.exchange(otpConfig.getSendOtp() + "9023092802", HttpMethod.GET, null,
+				String.class))
+						.thenReturn(new ResponseEntity<String>(
+								"Failed",
+								HttpStatus.ACCEPTED));
+		
+		// Throwing Exception --> Otp send failed
+		RegistrationException assertThrows_1 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", "9023092802"));
+		assertEquals(assertThrows_1.getMessage(), "Failed");
+		
 		// Throwing Exception --> Invalid MobileNumber
-		RegistrationException assertThrows_1 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", "92802"));
-		assertEquals(assertThrows_1.getMessage(), "Invalid MobileNumber");
+		RegistrationException assertThrows_2 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", "92802"));
+		assertEquals(assertThrows_2.getMessage(), "Invalid MobileNumber");
 		
 		// Throwing Exception --> Enter registered MobileNumber
-		RegistrationException assertThrows_2 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", "9053092802"));
-		assertEquals(assertThrows_2.getMessage(), "Enter registered MobileNumber");
+		RegistrationException assertThrows_3 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", "9053092802"));
+		assertEquals(assertThrows_3.getMessage(), "Enter registered MobileNumber");
 		
 		// Throwing Exception --> Admin not approved for Your registration
 		register.setPermission("NO");
 		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
-		RegistrationException assertThrows_3 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", "9023092802"));
-		assertEquals(assertThrows_3.getMessage(), "Admin not approved for Your registration");
+		RegistrationException assertThrows_4 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", "9023092802"));
+		assertEquals(assertThrows_4.getMessage(), "Admin not approved for Your registration");
 		
 		// Throwing Exception --> Invalid Input
-		RegistrationException assertThrows_4 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", null));
-		assertEquals(assertThrows_4.getMessage(), "Invalid Input");
+		RegistrationException assertThrows_5 = Assertions.assertThrows(RegistrationException.class, ()-> registrationServiceImpl.sendOtp("lvsystem@capeindia.net", null));
+		assertEquals(assertThrows_5.getMessage(), "Invalid Input");
 		
 		logger.info("RegistrationServiceTest testSendOtp_funcion End");
+
+	}
+	
+	@Test
+	public void testUpdateLicence() throws RegistrationException {
+		logger.info("RegistrationServiceTest testUpdateLicence_funcion Started");
+
+		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
+
+		// Success flow
+		registrationServiceImpl.updateLicence("lvsystem@capeindia.net", "2");
+
+		// Throwing Exception --> Given UserName does not Exist
+		RegistrationException assertThrows_1 = Assertions.assertThrows(RegistrationException.class,
+				() -> registrationServiceImpl.updateLicence("lvsystem123@capeindia.net", "2"));
+		assertEquals(assertThrows_1.getMessage(), "Given UserName does not Exist");
+
+		// Throwing Exception --> Invalid Input
+		RegistrationException assertThrows_2 = Assertions.assertThrows(RegistrationException.class,
+				() -> registrationServiceImpl.updateLicence(null, "2"));
+		assertEquals(assertThrows_2.getMessage(), "Invalid Input");
+
+		logger.info("RegistrationServiceTest testUpdateLicence_funcion End");
 
 	}
 
