@@ -28,6 +28,8 @@ public interface RegistrationService {
 	public Register addViewerRegistration(Register register) throws RegistrationException, CompanyDetailsException;
 
 	public void updateLicence(String userName, String numoflicence) throws RegistrationException;
+	
+	public String sendNewOtp(String mobileNumber) throws RegistrationException;
 
 
 }

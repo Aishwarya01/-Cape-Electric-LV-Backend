@@ -5,11 +5,9 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -260,46 +258,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 			throw new RegistrationException("Invalid Input");
 		}
 	}
-	
-//	private void saveSiteInfo(Register viewer) throws CompanyDetailsException, RegistrationException {
-//		SitePersons sitePersons = null;
-//		setSitePersons = new HashSet<SitePersons>();
-//		if (viewer != null) {
-//			Optional<Register> registerRepo = registerRepository.findByUsername(viewer.getAssignedBy());
-//			if (registerRepo.isPresent() && registerRepo.get() != null
-//					&& registerRepo.get().getUsername().equalsIgnoreCase(viewer.getAssignedBy())) {
-//				Register register = registerRepo.get();
-//				Site site = new Site();
-//				site.setCountry(register.getCountry());
-//				site.setSite(viewer.getSiteName());
-//				site.setState(register.getState());
-//				site.setAddressLine_1(register.getAddress());
-//				site.setZipCode(register.getPinCode());
-//				site.setLandMark(register.getDistrict());
-//				site.setUserName(register.getUsername());
-//				site.setCompanyName(viewer.getCompanyName());
-//				site.setDepartmentName(viewer.getDepartment());
-//				site.setAssignedTo(viewer.getUsername());
-//				sitePersons = new SitePersons();
-//
-//				sitePersons.setPersonInchargeEmail(viewer.getUsername());
-//				sitePersons.setSiteName(viewer.getSiteName());
-//				sitePersons.setPersonIncharge(viewer.getName());
-//				sitePersons.setContactNo(viewer.getContactNumber());
-//				sitePersons.setDesignation(viewer.getDesignation());
-//				sitePersons.setInActive(true);
-//				sitePersons.setSite(site);
-//				setSitePersons.add(sitePersons);
-//				site.setSitePersons(setSitePersons);
-//				siteServiceImpl.addSite(site);
-//			} else {
-//				throw new RegistrationException("Site_creation Faild ,Given inspector UserName  does not Exist");
-//			}
-//		} else {
-//			throw new RegistrationException("Registration Failed");
-//		}
-//
-//	}
 
-
+	@Override
+	public String sendNewOtp(String mobileNumber) throws RegistrationException {
+		return otpSend(mobileNumber);
+	}
 }
