@@ -173,11 +173,11 @@ public class LoginServiceImpl implements LoginService {
 					logger.debug("Otp Verification Failed");
 				}
 			} else {
-				logger.debug("createPassword Ends");
+				logger.debug("saveContactNumber Ends");
 				throw new UpdatePasswordException("User Not available");
 			}
 		} else {
-			logger.debug("createPassword Ends");
+			logger.debug("saveContactNumber Ends");
 			throw new UsernameNotFoundException("Username not valid");
 		}
 		return null;
