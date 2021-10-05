@@ -110,26 +110,22 @@ public class InstallReportControllerTest {
 
 	@Test
 	public void testReplyComments() throws RegistrationException, Exception, InstalReportException {
-		/*
-		 * 
-		 * when(instalReportService.replyComments("Inspector@gmail.com", 1,
-		 * reportDetailsComment)) .thenReturn("Viewer@gmail.com");
-		 * 
-		 * ResponseEntity<Void> sendComments =
-		 * instalReportController.replyComments("Inspector@gmail.com", 1,
-		 * reportDetailsComment);
-		 * 
-		 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
-		 * 
-		 * when(instalReportService.replyComments("Inspector@gmail.com", 1,
-		 * reportDetailsComment)).thenReturn(null); InspectionException exception =
-		 * Assertions.assertThrows(InspectionException.class, () ->
-		 * instalReportController.replyComments("Inspector@gmail.com", 1,
-		 * reportDetailsComment));
-		 * 
-		 * assertEquals(exception.getMessage(), "No viewer userName avilable");
-		 * 
-		 */}
+
+		when(instalReportService.replyComments("Inspector@gmail.com", 1, reportDetailsComment))
+				.thenReturn("Viewer@gmail.com");
+
+		ResponseEntity<Void> sendComments = instalReportController.replyComments("Inspector@gmail.com", 1,
+				reportDetailsComment);
+
+		assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+
+		when(instalReportService.replyComments("Inspector@gmail.com", 1, reportDetailsComment)).thenReturn(null);
+		InstalReportException exception = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportController.replyComments("Inspector@gmail.com", 1, reportDetailsComment));
+
+		assertEquals(exception.getMessage(), "No viewer userName avilable");
+
+	}
 
 	@Test
 	public void testApproveComments() throws InstalReportException, RegistrationException, Exception{

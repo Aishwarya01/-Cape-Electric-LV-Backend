@@ -22,6 +22,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.TestingReport;
+import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.service.impl.PeriodicTestingServiceImpl;
 import com.capeelectric.util.SendReplyComments;
 
@@ -49,11 +50,19 @@ public class PeriodicTestingControllerTest {
 	private SendReplyComments sendReplyComments;
 
 	private TestingReport testingReport;
+	
+	private TestingReportComment testingReportComment;
 
 	{
 		testingReport = new TestingReport();
 		testingReport.setSiteId(1);
 		testingReport.setUserName("LVsystem@gmail.com");
+		
+		testingReportComment = new TestingReportComment();
+		testingReportComment.setViewerComment("question");
+		testingReportComment.setViewerFlag("1");
+		testingReport.setUserName("Inspector@gmail.com");
+		testingReport.setSiteId(1);
 	}
 
 	@Test
@@ -94,34 +103,45 @@ public class PeriodicTestingControllerTest {
 	}
 	
 	@Test
-	public void testSendComments() throws PeriodicTestingException, Exception, RegistrationException {
-		/*
-		 * 
-		 * ResponseEntity<Void> sendComments =
-		 * periodicTestingController.sendComments("Viewer@gmail.com", 1,
-		 * "I have a question?");
-		 * 
-		 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
-		 */}
+	public void testSendComments() throws RegistrationException, PeriodicTestingException, Exception {
+		doNothing().when(periodicTestingServiceImpl).sendComments("Viewer@gmail.com", 1, testingReportComment());
+		ResponseEntity<Void> sendComments = periodicTestingController.sendComments("Viewer@gmail.com", 1,
+				testingReportComment());
+		assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+	}
 
-	/*
-	 * @Test public void testReplyComments() throws
-	 * PeriodicTestingException,Exception, RegistrationException {
-	 * 
-	 * PeriodicTestingException exception =
-	 * Assertions.assertThrows(PeriodicTestingException.class, () ->
-	 * periodicTestingController.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?"));
-	 * 
-	 * assertEquals(exception.getMessage(), "No viewer userName avilable");
-	 * 
-	 * when(periodicTestingServiceImpl.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?")) .thenReturn("Viewer@gmail.com");
-	 * 
-	 * ResponseEntity<Void> sendComments =
-	 * periodicTestingController.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?");
-	 * 
-	 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK); }
-	 */
+	@Test
+	public void testReplyComments() throws RegistrationException, PeriodicTestingException, Exception {
+
+		when(periodicTestingServiceImpl.replyComments("Inspector@gmail.com", 1, testingReportComment))
+				.thenReturn("Viewer@gmail.com");
+
+		ResponseEntity<Void> sendComments = periodicTestingController.replyComments("Inspector@gmail.com", 1,
+				testingReportComment);
+
+		assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+
+		when(periodicTestingServiceImpl.replyComments("Inspector@gmail.com", 1, testingReportComment)).thenReturn(null);
+		PeriodicTestingException exception = Assertions.assertThrows(PeriodicTestingException.class,
+				() -> periodicTestingController.replyComments("Inspector@gmail.com", 1, testingReportComment));
+
+		assertEquals(exception.getMessage(), "No viewer userName avilable");
+
+	}
+
+	@Test
+	public void testApproveComments() throws PeriodicTestingException, RegistrationException, Exception {
+
+		periodicTestingController.approveComments("Inspector@gmail.com", 1, testingReportComment());
+
+	}
+
+	private TestingReportComment testingReportComment() {
+		TestingReportComment testingReportComment = new TestingReportComment();
+		testingReportComment.setViewerComment("question");
+		testingReportComment.setViewerFlag("1");
+		testingReport.setUserName("Inspector@gmail.com");
+		testingReport.setSiteId(1);
+		return testingReportComment;
+	}
 }
