@@ -176,7 +176,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 					List<TestingReportComment> testingReportCommentRepo = testingReport.getTestingComment();
 
 					for (TestingReportComment testingReportCommentItr : testingReportCommentRepo) {
-						if (testingReportCommentItr.getCommentsId().equals(testingReportComment.getCommentsId())) {
+						if (testingReportCommentItr != null && testingReportCommentItr.getCommentsId() != null
+								&& testingReportCommentItr.getCommentsId()
+										.equals(testingReportComment.getCommentsId())) {
 							flagInspectionComment = false;
 
 							testingReportCommentItr.setTestingReport(testingReport);
@@ -239,7 +241,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 			}
 
 		} else {
-			throw new PeriodicTestingException("Invalid inputs");
+			throw new PeriodicTestingException("Invalid Inputs");
 		}
 		return null;
 	}
@@ -252,7 +254,8 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		Integer maxNum = 0;
 		String approveRejectedFlag = "";
 		for (TestingReportComment testingReportCommentItr : listOfComments) {
-			if (testingReportCommentItr != null && maxNum <= testingReportCommentItr.getNoOfComment()) {
+			if (testingReportCommentItr != null && testingReportCommentItr.getNoOfComment() != null
+					&& maxNum <= testingReportCommentItr.getNoOfComment()) {
 				maxNum = testingReportCommentItr.getNoOfComment();
 				approveRejectedFlag = testingReportCommentItr.getApproveOrReject();
 			}

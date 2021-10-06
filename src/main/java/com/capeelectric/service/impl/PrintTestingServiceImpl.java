@@ -325,7 +325,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(testingRecords1.getContinutiyR2(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getContinutiyR(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);

@@ -86,7 +86,7 @@ public class InspectionServiceImpl implements InspectionService {
 			throws InspectionException {
 		if (userName != null && !userName.isEmpty() && siteId != null) {
 			List<PeriodicInspection> inspectionRepo = inspectionRepository.findByUserNameAndSiteId(userName, siteId);
-			if (inspectionRepo != null) {
+			if (inspectionRepo != null && !inspectionRepo.isEmpty()) {
 				for (PeriodicInspection periodicInspection : inspectionRepo) {
 					sortingDateTime(periodicInspection.getPeriodicInspectorComment());
 				}
@@ -254,7 +254,7 @@ public class InspectionServiceImpl implements InspectionService {
 			}
 
 		} else {
-			throw new InspectionException("Invalid inputs");
+			throw new InspectionException("Invalid Inputs");
 		}
 		return null;
 	}

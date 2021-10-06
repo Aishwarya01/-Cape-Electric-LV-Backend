@@ -5,11 +5,9 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -63,14 +61,13 @@ public class RegistrationServiceImpl implements RegistrationService {
 					|| !registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
 				if (isValidIndianMobileNumber(register.getContactNumber())) {
 					if (register.getRole() != null && register.getRole().equalsIgnoreCase("INSPECTOR")) {
-						register.setNoOfLicence(Constants.NUMBER_OF_LICENSES);
+						register.setNoOfLicence("0");
 						register.setPermission(Constants.before_Approve_Permission);
 					}
 					register.setCreatedDate(LocalDateTime.now());
 					register.setUpdatedDate(LocalDateTime.now());
-					register.setCreatedBy(userFullName.findByUserName(register.getUsername()));
-					register.setUpdatedBy(userFullName.findByUserName(register.getUsername()));
-					register.setNoOfLicence("0");
+					register.setCreatedBy(register.getName());
+					register.setUpdatedBy(register.getName());
 					Register createdRegister = registerRepository.save(register);
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
@@ -97,21 +94,19 @@ public class RegistrationServiceImpl implements RegistrationService {
 		logger.debug("AddingRegistration Starts with User : {} ", viewer.getUsername());
 		if (viewer.getUsername() != null && viewer.getCompanyName() != null && viewer.getAddress() != null
 				&& viewer.getContactNumber() != null && viewer.getDepartment() != null
-				&& viewer.getDesignation() != null && viewer.getName() != null && viewer.getState() != null
-				&& viewer.getSiteName() != null) {
+				&& viewer.getDesignation() != null && viewer.getName() != null && viewer.getState() != null) {
 
 			Optional<Register> registerRepo = registerRepository.findByUsername(viewer.getUsername());
-			if (!registerRepo.isPresent()
-					|| !registerRepo.get().getUsername().equalsIgnoreCase(viewer.getUsername())) {
+			if (!registerRepo.isPresent() || !registerRepo.get().getUsername().equalsIgnoreCase(viewer.getUsername())) {
 				if (isValidIndianMobileNumber(viewer.getContactNumber())) {
 					viewer.setCreatedDate(LocalDateTime.now());
 					viewer.setPermission("YES");
 					viewer.setUpdatedDate(LocalDateTime.now());
-					viewer.setCreatedBy(userFullName.findByUserName(viewer.getAssignedBy()));
-					viewer.setUpdatedBy(userFullName.findByUserName(viewer.getAssignedBy()));
+					viewer.setCreatedBy(viewer.getName());
+					viewer.setUpdatedBy(viewer.getName());
 					//reduceLicence(viewer.getAssignedBy(),viewer.getSiteName());
 					Register createdRegister = registerRepository.save(viewer);
-					//saveSiteInfo(createdRegister);
+					// saveSiteInfo(createdRegister);
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
 				} else {
@@ -169,14 +164,14 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setUpdatedBy(userFullName.findByUserName(register.getUsername()));
 					registerRepository.save(register);
 				} else {
-					register.setUpdatedBy(userFullName.findByUserName(register.getAssignedBy()));
-					if (isLicenseUpdate) {
+					//if (isLicenseUpdate) {
 						//reduceLicence(register.getAssignedBy(), register.getSiteName());
 						//saveSiteInfo(register);
-						registerRepository.save(register);
-					} else {
-						registerRepository.save(register);
-					}
+					//	registerRepository.save(register);
+					//} else {
+					//}
+					register.setUpdatedBy(userFullName.findByUserName(register.getAssignedBy()));
+					registerRepository.save(register);
 				}
 
 			} else {
@@ -246,7 +241,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 		if (userName != null && numoflicence != null) {
 
 			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
-			if (registerRepo.isPresent() && registerRepo.get().getUsername().equalsIgnoreCase(userName)) {
+			if (registerRepo.isPresent() && registerRepo.get().getUsername() != null
+					&& registerRepo.get().getUsername().equalsIgnoreCase(userName)) {
 				Register register = registerRepo.get();
 				register.setNoOfLicence(numoflicence);
 				register.setUpdatedDate(LocalDateTime.now());
@@ -260,46 +256,4 @@ public class RegistrationServiceImpl implements RegistrationService {
 			throw new RegistrationException("Invalid Input");
 		}
 	}
-	
-//	private void saveSiteInfo(Register viewer) throws CompanyDetailsException, RegistrationException {
-//		SitePersons sitePersons = null;
-//		setSitePersons = new HashSet<SitePersons>();
-//		if (viewer != null) {
-//			Optional<Register> registerRepo = registerRepository.findByUsername(viewer.getAssignedBy());
-//			if (registerRepo.isPresent() && registerRepo.get() != null
-//					&& registerRepo.get().getUsername().equalsIgnoreCase(viewer.getAssignedBy())) {
-//				Register register = registerRepo.get();
-//				Site site = new Site();
-//				site.setCountry(register.getCountry());
-//				site.setSite(viewer.getSiteName());
-//				site.setState(register.getState());
-//				site.setAddressLine_1(register.getAddress());
-//				site.setZipCode(register.getPinCode());
-//				site.setLandMark(register.getDistrict());
-//				site.setUserName(register.getUsername());
-//				site.setCompanyName(viewer.getCompanyName());
-//				site.setDepartmentName(viewer.getDepartment());
-//				site.setAssignedTo(viewer.getUsername());
-//				sitePersons = new SitePersons();
-//
-//				sitePersons.setPersonInchargeEmail(viewer.getUsername());
-//				sitePersons.setSiteName(viewer.getSiteName());
-//				sitePersons.setPersonIncharge(viewer.getName());
-//				sitePersons.setContactNo(viewer.getContactNumber());
-//				sitePersons.setDesignation(viewer.getDesignation());
-//				sitePersons.setInActive(true);
-//				sitePersons.setSite(site);
-//				setSitePersons.add(sitePersons);
-//				site.setSitePersons(setSitePersons);
-//				siteServiceImpl.addSite(site);
-//			} else {
-//				throw new RegistrationException("Site_creation Faild ,Given inspector UserName  does not Exist");
-//			}
-//		} else {
-//			throw new RegistrationException("Registration Failed");
-//		}
-//
-//	}
-
-
 }

@@ -142,7 +142,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		if (userName != null && !userName.isEmpty() && siteId != null) {
 			List<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
 					.findByUserNameAndSiteId(userName, siteId);
-			if (supplyCharacteristicsRepo != null) {
+			if (supplyCharacteristicsRepo != null && !supplyCharacteristicsRepo.isEmpty()) {
 				for (SupplyCharacteristics supplyCharacteristics : supplyCharacteristicsRepo) {
 					sortingDateTime(supplyCharacteristics.getSupplyCharacteristicComment());
 				}
@@ -251,8 +251,10 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 							.getSupplyCharacteristicComment();
 
 					for (SupplyCharacteristicComment supplyCharacteristicCommentItr : supplyCharacteristicCommentRepo) {
-						if (supplyCharacteristicCommentItr.getCommentsId()
-								.equals(supplyCharacteristicComment.getCommentsId())) {
+						if (supplyCharacteristicCommentItr != null
+								&& supplyCharacteristicCommentItr.getCommentsId() != null
+								&& supplyCharacteristicCommentItr.getCommentsId()
+										.equals(supplyCharacteristicComment.getCommentsId())) {
 							flagInspectionComment = false;
 
 							supplyCharacteristicCommentItr.setSupplyCharacteristics(supplyCharacteristics);
@@ -330,7 +332,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		Integer maxNum = 0;
 		String approveRejectedFlag = "";
 		for (SupplyCharacteristicComment supplyCharacteristicCommentItr : listOfComments) {
-			if (supplyCharacteristicCommentItr != null && maxNum <= supplyCharacteristicCommentItr.getNoOfComment()) {
+			if (supplyCharacteristicCommentItr != null && supplyCharacteristicCommentItr.getNoOfComment() != null
+					&& maxNum <= supplyCharacteristicCommentItr.getNoOfComment()) {
 				maxNum = supplyCharacteristicCommentItr.getNoOfComment();
 				approveRejectedFlag = supplyCharacteristicCommentItr.getApproveOrReject();
 			}
