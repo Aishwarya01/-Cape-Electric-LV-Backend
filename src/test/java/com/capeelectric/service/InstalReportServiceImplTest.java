@@ -3,7 +3,9 @@ package com.capeelectric.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,11 +18,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.InstalReportException;
-import com.capeelectric.model.Register;
 import com.capeelectric.model.ReportDetails;
+import com.capeelectric.model.ReportDetailsComment;
 import com.capeelectric.model.SignatorDetails;
+import com.capeelectric.model.Site;
+import com.capeelectric.model.SitePersons;
 import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.RegistrationRepository;
+import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.impl.InstalReportServiceImpl;
 import com.capeelectric.util.UserFullName;
 
@@ -42,18 +47,15 @@ public class InstalReportServiceImplTest {
 
 	private ReportDetails reportDetails;
 	
-	private Register register;
-
-	private Optional<Register> optionalRegister;
-
-	{
-		register = new Register();
-		register.setUsername("lvsystem@capeindia.net");
-		register.setPassword("cape");
-
-		optionalRegister = Optional.of(register);
-	}
-		
+	@MockBean
+	private SiteRepository siteRepository;
+	
+	private ArrayList<ReportDetailsComment> listOfComments;
+	
+	private ReportDetailsComment reportDetailsComment;
+	
+    private Site site;
+	
 	{
 		Set<SignatorDetails> set = new HashSet<SignatorDetails>();
 
@@ -83,6 +85,30 @@ public class InstalReportServiceImplTest {
 		reportDetails.setClientDetails("");
 		reportDetails.setSiteId(12);
 	}
+	
+	{
+		site = new Site();
+		site.setUserName("Inspector@gmail.com");
+		site.setSiteId(1);
+		site.setSite("user");
+		site.setAssignedTo("Viewer@gmail.com");
+
+		SitePersons sitePersons1 =new SitePersons();
+		sitePersons1.setPersonId(1);
+		sitePersons1.setSiteName("user");
+		sitePersons1.setPersonInchargeEmail("Viewer@gmail.com");
+		sitePersons1.setInActive(true);
+		 
+		HashSet<SitePersons> sitePersonsSet = new HashSet<SitePersons>();
+		sitePersonsSet.add(sitePersons1);
+		site.setSitePersons(sitePersonsSet);
+		
+		reportDetailsComment = new ReportDetailsComment();
+		reportDetailsComment.setViewerComment("question");
+		reportDetailsComment.setViewerFlag("1");
+		reportDetails.setUserName("Inspector@gmail.com");
+		reportDetails.setSiteId(1);
+	}
 
 	@Test
 	public void testAddInstallationReport() throws InstalReportException {
@@ -91,10 +117,7 @@ public class InstalReportServiceImplTest {
 		when(installationReportRepository.save(reportDetails)).thenReturn(reportDetails);
 		instalReportServiceImpl.addInstallationReport(reportDetails);
 
-		when(registrationRepository.findByUsername("software@capeindia.com")).thenReturn(optionalRegister);
-		instalReportServiceImpl.addInstallationReport(reportDetails);
-		
-		when(installationReportRepository.findBySiteId(12)).thenReturn(Optional.of(reportDetails));
+		when(installationReportRepository.findBySiteId(1)).thenReturn(Optional.of(reportDetails));
 		InstalReportException exception_SiteId = Assertions.assertThrows(InstalReportException.class,
 				() -> instalReportServiceImpl.addInstallationReport(reportDetails));
 		assertEquals(exception_SiteId.getMessage(), "Site-Id Details Already Available,Create New Site-Id");
@@ -104,23 +127,6 @@ public class InstalReportServiceImplTest {
 		assertEquals(exception.getMessage(), "Invalid Inputs");
 
 	}
- 
-	@Test
-	public void testRetrieveInstallationReport() throws InstalReportException {
-		/*
-		 * reportDetails.setUserName("software@capeindia.com");
-		 * 
-		 * ArrayList<ReportDetails> list = new ArrayList<ReportDetails>();
-		 * list.add(reportDetails); List<ReportDetails> installationReport =
-		 * instalReportServiceImpl
-		 * .retrieveInstallationReport("software@capeindia.com",12);
-		 * assertNotNull(installationReport);
-		 * 
-		 * InstalReportException exception =
-		 * Assertions.assertThrows(InstalReportException.class, () ->
-		 * instalReportServiceImpl.retrieveInstallationReport(null,12));
-		 * assertEquals(exception.getMessage(), "invalid inputs");
-		 */}
 	
 	@Test
 	public void testUpdateInstallationReport() throws InstalReportException {
@@ -144,5 +150,108 @@ public class InstalReportServiceImplTest {
 		InstalReportException assertThrows_1 = Assertions.assertThrows(InstalReportException.class,
 				() -> instalReportServiceImpl.updateInstallationReport(reportDetails));
 		assertEquals(assertThrows_1.getMessage(), "Invalid inputs");
+	}
+	
+	@Test
+	public void testSendComments() throws InstalReportException {
+		listOfComments = new ArrayList<ReportDetailsComment>();
+		listOfComments.add(reportDetailsComment);
+		reportDetails.setReportDetailsComment(listOfComments);
+		when(installationReportRepository.findBySiteId(1)).thenReturn(Optional.of(reportDetails));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+
+		instalReportServiceImpl.sendComments("Viewer@gmail.com", 1, reportDetailsComment);
+ 
+		reportDetailsComment.setCommentsId(1);
+		listOfComments.add(reportDetailsComment);
+		reportDetails.setReportDetailsComment(listOfComments);
+		when(installationReportRepository.findBySiteId(1)).thenReturn(Optional.of(reportDetails));
+		instalReportServiceImpl.sendComments("Viewer@gmail.com", 1, reportDetailsComment);
+
+		listOfComments.remove(reportDetailsComment);
+		reportDetails.setReportDetailsComment(listOfComments);
+		instalReportServiceImpl.sendComments("Viewer@gmail.com", 1, reportDetailsComment);
+
+		InstalReportException assertThrows = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.sendComments("Inspector@gmail.com", 1, reportDetailsComment));
+
+		assertEquals(assertThrows.getMessage(), "Given userName not allowing for SEND comment");
+	}
+	
+	@Test
+	public void testReplyComments() throws InstalReportException {
+		listOfComments = new ArrayList<>();
+		reportDetailsComment.setCommentsId(1);
+		listOfComments.add(reportDetailsComment);
+		reportDetails.setReportDetailsComment(listOfComments);
+		when(installationReportRepository.findBySiteId(1)).thenReturn(Optional.of(reportDetails));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+		instalReportServiceImpl.replyComments("Inspector@gmail.com", 1, reportDetailsComment);
+
+		InstalReportException assertThrows = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.replyComments("Viewer@gmail.com", 1, reportDetailsComment));
+
+		assertEquals(assertThrows.getMessage(), "Given userName not allowing for REPLY comment");
+	}
+	
+	@Test
+	public void testApproveComments() throws InstalReportException {
+		listOfComments = new ArrayList<ReportDetailsComment>();
+		reportDetailsComment.setCommentsId(1);
+		listOfComments.add(reportDetailsComment);
+		reportDetails.setReportDetailsComment(listOfComments);
+		when(installationReportRepository.findBySiteId(1)).thenReturn(Optional.of(reportDetails));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+		instalReportServiceImpl.approveComments("Viewer@gmail.com", 1, reportDetailsComment);
+		
+		InstalReportException assertThrows = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.approveComments("Inspector@gmail.com", 1, reportDetailsComment));
+		
+		assertEquals(assertThrows.getMessage(), "Given userName not allowing for APPROVED comment");
+	}
+	
+	@Test
+	public void testComments_Exception() throws InstalReportException {
+
+		reportDetails.setUserName(null);
+		when(installationReportRepository.findBySiteId(1)).thenReturn(Optional.of(reportDetails));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+
+		InstalReportException assertThrows_1 = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.sendComments("Viewer@gmail.com", 1, reportDetailsComment));
+
+		assertEquals(assertThrows_1.getMessage(), "Given username not have access for comments");
+
+		reportDetails.setReportDetailsComment(null);
+		InstalReportException assertThrows_2 = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.sendComments("Viewer@gmail.com", 2, reportDetailsComment));
+		assertEquals(assertThrows_2.getMessage(), "Siteinformation doesn't exist, try with different Site-Id");
+
+		InstalReportException assertThrows_3 = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.sendComments("Viewer@gmail.com", null, reportDetailsComment));
+		assertEquals(assertThrows_3.getMessage(), "Invalid Inputs");
+
+	}
+	
+	@Test
+	public void testRetrieveInstalReportDetails_Success_Flow() throws InstalReportException {
+
+		List<ReportDetails> ipaolist = new ArrayList<ReportDetails>();
+		ipaolist.add(reportDetails);
+		listOfComments = new ArrayList<ReportDetailsComment>();
+		listOfComments.add(reportDetailsComment);
+		reportDetails.setReportDetailsComment(listOfComments);
+
+		when(installationReportRepository.findByUserNameAndSiteId(reportDetails.getUserName(),
+				reportDetails.getSiteId())).thenReturn(ipaolist);
+		instalReportServiceImpl.retrieveInstallationReport("Inspector@gmail.com", 1);
+
+		InstalReportException assertThrows_1 = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.retrieveInstallationReport("cape", 2));
+		assertEquals(assertThrows_1.getMessage(), "Given UserName & Site doesn't exist Basic-information");
+
+		InstalReportException assertThrows_2 = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.retrieveInstallationReport(null, 1));
+		assertEquals(assertThrows_2.getMessage(), "Invalid Inputs");
 	}
 }

@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +20,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.PeriodicInspectionComment;
+import com.capeelectric.model.Register;
+import com.capeelectric.model.Site;
+import com.capeelectric.model.SitePersons;
 import com.capeelectric.repository.InspectionRepository;
+import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.impl.InspectionServiceImpl;
 import com.capeelectric.util.UserFullName;
 
@@ -43,6 +48,36 @@ public class InspectionServiceImplTest {
 	
 	private PeriodicInspectionComment periodicInspectionComment;
 
+	@MockBean
+	private SiteRepository siteRepository;
+	
+	private ArrayList<PeriodicInspectionComment> listOfComments;
+
+    private Site site;
+	
+	private Register register;
+
+	{
+		register =new Register();
+		register.setUsername("cape");
+		
+		site = new Site();
+		site.setUserName("Inspector@gmail.com");
+		site.setSiteId(1);
+		site.setSite("user");
+		site.setAssignedTo("Viewer@gmail.com");
+
+		SitePersons sitePersons1 =new SitePersons();
+		sitePersons1.setPersonId(1);
+		sitePersons1.setSiteName("user");
+		sitePersons1.setPersonInchargeEmail("Viewer@gmail.com");
+		sitePersons1.setInActive(true);
+		 
+		HashSet<SitePersons> sitePersonsSet = new HashSet<SitePersons>();
+		sitePersonsSet.add(sitePersons1);
+		site.setSitePersons(sitePersonsSet);
+	}
+	
 	{
 		periodicInspection = new PeriodicInspection();
 		periodicInspection.setUserName("cape");
@@ -50,8 +85,13 @@ public class InspectionServiceImplTest {
 		
 		periodicInspectionComment = new PeriodicInspectionComment();
 		periodicInspectionComment.setViewerDate(LocalDateTime.now());
+		periodicInspectionComment = new PeriodicInspectionComment();
+		periodicInspectionComment.setViewerComment("question");
+		periodicInspectionComment.setViewerFlag("1");
+		periodicInspection.setUserName("Inspector@gmail.com");
+		periodicInspection.setSiteId(1);
 		
-		ArrayList<PeriodicInspectionComment> listOfComments = new ArrayList<PeriodicInspectionComment>();
+		listOfComments = new ArrayList<PeriodicInspectionComment>();
 	    listOfComments.add(periodicInspectionComment);
 	    periodicInspection.setPeriodicInspectorComment(listOfComments);
 		
@@ -92,20 +132,6 @@ public class InspectionServiceImplTest {
 				() -> inspectionServiceImpl.addInspectionDetails(periodicInspection));
 		equals(assertThrows.getMessage());
 	}
-
-	@Test
-	public void testRetrieveInspectionDetails_Success_Flow() throws InspectionException {
-
-		List<PeriodicInspection> ipaolist = new ArrayList<>();
-		ipaolist.add(periodicInspection);
-
-		when(inspectionRepository.findByUserNameAndSiteId(periodicInspection.getUserName(), periodicInspection.getSiteId()))
-				.thenReturn(ipaolist);
-		inspectionServiceImpl.retrieveInspectionDetails("cape", 1);
-		InspectionException assertThrows = Assertions.assertThrows(InspectionException.class,
-				() -> inspectionServiceImpl.retrieveInspectionDetails(null, 1));
-		equals(assertThrows.getMessage());
-	}
 	
 	@Test
 	public void testUpdateInspectionDetails() throws InspectionException {
@@ -129,5 +155,78 @@ public class InspectionServiceImplTest {
 		InspectionException assertThrows_1 = Assertions.assertThrows(InspectionException.class,
 				() -> inspectionServiceImpl.updateInspectionDetails(periodicInspection));
 		assertEquals(assertThrows_1.getMessage(), "Invalid inputs");
+	}
+	
+	@Test
+	public void testRetrieveInspectionDetails_Success_Flow() throws InspectionException {
+
+		List<PeriodicInspection> ipaolist = new ArrayList<>();
+		ipaolist.add(periodicInspection);
+
+		when(inspectionRepository.findByUserNameAndSiteId(periodicInspection.getUserName(),
+				periodicInspection.getSiteId())).thenReturn(ipaolist);
+		inspectionServiceImpl.retrieveInspectionDetails("Inspector@gmail.com", 1);
+
+		InspectionException assertThrows_1 = Assertions.assertThrows(InspectionException.class,
+				() -> inspectionServiceImpl.retrieveInspectionDetails("cape", 2));
+		assertEquals(assertThrows_1.getMessage(), "Given UserName & Site doesn't exist Inspection");
+
+		InspectionException assertThrows_2 = Assertions.assertThrows(InspectionException.class,
+				() -> inspectionServiceImpl.retrieveInspectionDetails(null, 1));
+		assertEquals(assertThrows_2.getMessage(), "Invalid Inputs");
+	}
+	
+	@Test
+	public void testReplyComments() throws InspectionException {
+		periodicInspectionComment.setCommentsId(1);
+		listOfComments.add(periodicInspectionComment);
+		periodicInspection.setPeriodicInspectorComment(listOfComments);
+		when(inspectionRepository.findBySiteId(1)).thenReturn(Optional.of(periodicInspection));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+		inspectionServiceImpl.replyComments("Inspector@gmail.com", 1, periodicInspectionComment);
+
+		InspectionException assertThrows = Assertions.assertThrows(InspectionException.class,
+				() -> inspectionServiceImpl.replyComments("Viewer@gmail.com", 1, periodicInspectionComment));
+
+		assertEquals(assertThrows.getMessage(), "Given userName not allowing for REPLY comment");
+	}
+	
+	@Test
+	public void testApproveComments() throws InspectionException {
+		
+		periodicInspectionComment.setCommentsId(1);
+		listOfComments.add(periodicInspectionComment);
+		periodicInspection.setPeriodicInspectorComment(listOfComments);
+		when(inspectionRepository.findBySiteId(1)).thenReturn(Optional.of(periodicInspection));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+		inspectionServiceImpl.approveComments("Viewer@gmail.com", 1, periodicInspectionComment);
+		
+		InspectionException assertThrows = Assertions.assertThrows(InspectionException.class,
+				() -> inspectionServiceImpl.approveComments("Inspector@gmail.com", 1, periodicInspectionComment));
+		
+		assertEquals(assertThrows.getMessage(), "Given userName not allowing for APPROVED comment");
+	}
+	
+	@Test
+	public void testComments_Exception() throws InspectionException {
+
+		periodicInspection.setUserName(null);
+		when(inspectionRepository.findBySiteId(1)).thenReturn(Optional.of(periodicInspection));
+		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+
+		InspectionException assertThrows_1 = Assertions.assertThrows(InspectionException.class,
+				() -> inspectionServiceImpl.sendComments("Viewer@gmail.com", 1, periodicInspectionComment));
+
+		assertEquals(assertThrows_1.getMessage(), "Given username not have access for comments");
+
+		periodicInspection.setPeriodicInspectorComment(null);
+		InspectionException assertThrows_2 = Assertions.assertThrows(InspectionException.class,
+				() -> inspectionServiceImpl.sendComments("Viewer@gmail.com", 2, periodicInspectionComment));
+		assertEquals(assertThrows_2.getMessage(), "Siteinformation doesn't exist, try with different Site-Id");
+
+		InspectionException assertThrows_3 = Assertions.assertThrows(InspectionException.class,
+				() -> inspectionServiceImpl.sendComments("Viewer@gmail.com", null, periodicInspectionComment));
+		assertEquals(assertThrows_3.getMessage(), "Invalid Inputs");
+
 	}
 }

@@ -1,6 +1,7 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,9 +17,11 @@ import org.springframework.web.client.RestTemplate;
 
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
+import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
+import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.util.Constants;
 import com.capeelectric.util.UserFullName;
@@ -94,12 +97,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 		logger.debug("AddingRegistration Starts with User : {} ", viewer.getUsername());
 		if (viewer.getUsername() != null && viewer.getCompanyName() != null && viewer.getAddress() != null
 				&& viewer.getContactNumber() != null && viewer.getDepartment() != null
-				&& viewer.getDesignation() != null && viewer.getName() != null && viewer.getState() != null
-				&& viewer.getSiteName() != null) {
+				&& viewer.getDesignation() != null && viewer.getName() != null && viewer.getState() != null) {
 
 			Optional<Register> registerRepo = registerRepository.findByUsername(viewer.getUsername());
-			if (!registerRepo.isPresent()
-					|| !registerRepo.get().getUsername().equalsIgnoreCase(viewer.getUsername())) {
+			if (!registerRepo.isPresent() || !registerRepo.get().getUsername().equalsIgnoreCase(viewer.getUsername())) {
 				if (isValidIndianMobileNumber(viewer.getContactNumber())) {
 					viewer.setCreatedDate(LocalDateTime.now());
 					viewer.setPermission("YES");
@@ -108,7 +109,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					viewer.setUpdatedBy(viewer.getName());
 					//reduceLicence(viewer.getAssignedBy(),viewer.getSiteName());
 					Register createdRegister = registerRepository.save(viewer);
-					//saveSiteInfo(createdRegister);
+					// saveSiteInfo(createdRegister);
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
 				} else {
@@ -166,14 +167,14 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setUpdatedBy(userFullName.findByUserName(register.getUsername()));
 					registerRepository.save(register);
 				} else {
-					register.setUpdatedBy(userFullName.findByUserName(register.getAssignedBy()));
-					if (isLicenseUpdate) {
+					//if (isLicenseUpdate) {
 						//reduceLicence(register.getAssignedBy(), register.getSiteName());
 						//saveSiteInfo(register);
-						registerRepository.save(register);
-					} else {
-						registerRepository.save(register);
-					}
+					//	registerRepository.save(register);
+					//} else {
+					//}
+					register.setUpdatedBy(userFullName.findByUserName(register.getAssignedBy()));
+					registerRepository.save(register);
 				}
 
 			} else {
@@ -243,7 +244,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 		if (userName != null && numoflicence != null) {
 
 			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
-			if (registerRepo.isPresent() && registerRepo.get().getUsername().equalsIgnoreCase(userName)) {
+			if (registerRepo.isPresent() && registerRepo.get().getUsername() != null
+					&& registerRepo.get().getUsername().equalsIgnoreCase(userName)) {
 				Register register = registerRepo.get();
 				register.setNoOfLicence(numoflicence);
 				register.setUpdatedDate(LocalDateTime.now());
@@ -255,6 +257,72 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 		} else {
 			throw new RegistrationException("Invalid Input");
+		}
+	}
+
+	@Override
+	public String sendNewOtp(String mobileNumber) throws RegistrationException {
+		return otpSend(mobileNumber);
+	}
+	
+	@Override
+	public Register updatePermission(RegisterPermissionRequest registerPermissionRequest)
+			throws RegisterPermissionRequestException {
+		logger.debug("updatePermission_function called");
+
+		if (registerPermissionRequest != null && registerPermissionRequest.getAdminUserName() != null
+				&& registerPermissionRequest.getPermission() != null
+				&& registerPermissionRequest.getRegisterId() != null
+				&& registerPermissionRequest.getRegisterId() != 0) {
+
+			Optional<Register> registerRepo = registerRepository.findById(registerPermissionRequest.getRegisterId());
+			
+			if (registerRepo.isPresent()) {
+				Register register = registerRepo.get();
+				
+				if (registerPermissionRequest.getPermission().equalsIgnoreCase("YES")) {
+
+					logger.debug("Admin accepted Registration Permission");
+					register.setApplicationType(registerPermissionRequest.getApplicationType());
+					register.setComment(registerPermissionRequest.getComment());
+					register.setPermission(registerPermissionRequest.getPermission());
+					register.setPermissionBy(registerPermissionRequest.getAdminUserName());
+					register.setUpdatedBy(registerPermissionRequest.getAdminUserName());
+					register.setUpdatedDate(LocalDateTime.now());
+					registerRepository.save(register);
+					return register;
+				} else {
+					logger.debug("Admin Not-acepted Registration Permission");
+					
+					register.setApplicationType(registerPermissionRequest.getApplicationType());
+					register.setComment(registerPermissionRequest.getComment());
+					register.setPermission(registerPermissionRequest.getPermission());
+					register.setUpdatedBy(registerPermissionRequest.getAdminUserName());
+					registerRepository.save(register);
+					return register;
+
+				}
+
+			} else {
+				logger.debug("Given RegisterId not Avilable in DB");
+				throw new RegisterPermissionRequestException("Given User not avilable");
+			}
+
+		} else {
+			logger.debug("Given RegisterId not Avilable in DB");
+			throw new RegisterPermissionRequestException("RegisterPermissionRequest has Invaild Input");
+		}
+
+	}
+
+	@Override
+	public List<Register> retrieveAllRegistration() throws RegistrationException {
+		try {
+			logger.debug("Started retrieveAllRegistration");
+			return (List<Register>) registerRepository.findAll();
+
+		} catch (Exception exception) {
+			throw new RegistrationException("Retrieve function failed ExceptionMessage is : " + exception.getMessage());
 		}
 	}
 }

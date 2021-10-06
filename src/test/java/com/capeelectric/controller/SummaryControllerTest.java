@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
+import com.capeelectric.model.SummaryComment;
 import com.capeelectric.service.impl.SummaryServiceImpl;
 import com.capeelectric.util.SendReplyComments;
 
@@ -49,11 +51,17 @@ public class SummaryControllerTest {
 	private SendReplyComments sendReplyComments;
 
 	private Summary summary;
+	
+	private SummaryComment summaryComment;
 
 	{
 		summary = new Summary();
 		summary.setUserName("LVsystem@gmail.com");
 		summary.setSiteId(12);
+		
+		summaryComment = new SummaryComment();
+		summaryComment.setViewerComment("question");
+		summaryComment.setViewerFlag("1");
 	}
 
 	@Test
@@ -94,33 +102,46 @@ public class SummaryControllerTest {
 	}
 	
 	@Test
-	public void testSendComments() throws SummaryException, RegistrationException, Exception {
-		/*
-		 * 
-		 * ResponseEntity<Void> sendComments =
-		 * summaryController.sendComments("Viewer@gmail.com", 1, "I have a question?");
-		 * 
-		 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
-		 */}
+	public void testSendComments() throws RegistrationException, Exception, SummaryException {
+		doNothing().when(summaryServiceImpl).sendComments("Viewer@gmail.com", 1, summaryComment());
+		ResponseEntity<Void> sendComments = summaryController.sendComments("Viewer@gmail.com", 1,
+				summaryComment());
+		assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+	}
 
-	/*
-	 * @Test public void testReplyComments() throws RegistrationException,
-	 * Exception, SummaryException {
-	 * 
-	 * SummaryException exception = Assertions.assertThrows(SummaryException.class,
-	 * () -> summaryController.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?"));
-	 * 
-	 * assertEquals(exception.getMessage(), "No viewer userName avilable");
-	 * 
-	 * when(summaryServiceImpl.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?")) .thenReturn("Viewer@gmail.com");
-	 * 
-	 * ResponseEntity<Void> sendComments =
-	 * summaryController.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?");
-	 * 
-	 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK); }
-	 */
+	@Test
+	public void testReplyComments() throws RegistrationException, Exception, SummaryException {
+
+		when(summaryServiceImpl.replyComments("Inspector@gmail.com", 1, summaryComment))
+				.thenReturn("Viewer@gmail.com");
+
+		ResponseEntity<Void> sendComments = summaryController.replyComments("Inspector@gmail.com", 1,
+				summaryComment);
+
+		assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+
+		when(summaryServiceImpl.replyComments("Inspector@gmail.com", 1, summaryComment)).thenReturn(null);
+		SummaryException exception = Assertions.assertThrows(SummaryException.class,
+				() -> summaryController.replyComments("Inspector@gmail.com", 1, summaryComment));
+
+		assertEquals(exception.getMessage(), "No viewer userName avilable");
+
+	}
+
+	@Test
+	public void testApproveComments() throws RegistrationException, Exception, SummaryException {
+
+		summaryController.approveComments("Inspector@gmail.com", 1, summaryComment());
+
+	}
+
+	private SummaryComment summaryComment() {
+		SummaryComment summaryComment = new SummaryComment();
+		summaryComment.setViewerComment("question");
+		summaryComment.setViewerFlag("1");
+		summary.setUserName("Inspector@gmail.com");
+		summary.setSiteId(1);
+		return summaryComment;
+	}
 
 }

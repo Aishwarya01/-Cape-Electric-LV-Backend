@@ -117,6 +117,13 @@ public class RegistrationController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
+	@GetMapping("/newOtpGeneration/{mobileNumber}")
+	public String sendNewOtp(@PathVariable String mobileNumber)
+			throws IOException, MessagingException, RegistrationException {
+		logger.debug("called sendOtp function MobileNumber : {}", mobileNumber);
+		return registrationService.sendNewOtp(mobileNumber);
+	}
+	
 	@PutMapping("/updateLicence/{userName}/{numoflicence}")
 	public ResponseEntity<String> updateLicence(@PathVariable String userName, @PathVariable String numoflicence)
 			throws RegistrationException {

@@ -196,7 +196,8 @@ public class SummaryServiceImpl implements SummaryService {
 					List<SummaryComment> summaryCommentRepo = summary.getSummaryComment();
 
 					for (SummaryComment summaryCommentItr : summaryCommentRepo) {
-						if (summaryCommentItr.getCommentsId().equals(summaryComment.getCommentsId())) {
+						if (summaryCommentRepo != null && summaryCommentItr.getCommentsId() != null
+								&& summaryCommentItr.getCommentsId().equals(summaryComment.getCommentsId())) {
 							flagInspectionComment = false;
 
 							summaryCommentItr.setSummary(summary);
@@ -271,7 +272,8 @@ public class SummaryServiceImpl implements SummaryService {
 		Integer maxNum = 0;
 		String approveRejectedFlag = "";
 		for (SummaryComment SummaryCommentItr : listOfComments) {
-			if (SummaryCommentItr != null && maxNum <= SummaryCommentItr.getNoOfComment()) {
+			if (SummaryCommentItr != null && SummaryCommentItr.getNoOfComment() != null
+					&& maxNum <= SummaryCommentItr.getNoOfComment()) {
 				maxNum = SummaryCommentItr.getNoOfComment();
 				approveRejectedFlag = SummaryCommentItr.getApproveOrReject();
 			}

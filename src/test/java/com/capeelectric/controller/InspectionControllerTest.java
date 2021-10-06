@@ -1,6 +1,7 @@
 package com.capeelectric.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.PeriodicInspection;
+import com.capeelectric.model.PeriodicInspectionComment;
 import com.capeelectric.service.impl.InspectionServiceImpl;
 import com.capeelectric.util.SendReplyComments;
 
@@ -36,12 +38,20 @@ public class InspectionControllerTest {
 	
 	@MockBean
 	private SendReplyComments replyComments;
+	
+	private  PeriodicInspectionComment periodicInspectionComment;
 
 	private PeriodicInspection periodicInspection;
 
 	{
 		periodicInspection = new PeriodicInspection();
 		periodicInspection.setUserName("cape");
+		periodicInspection.setSiteId(1);
+		
+		periodicInspectionComment = new PeriodicInspectionComment();
+		periodicInspectionComment.setViewerComment("question");
+		periodicInspectionComment.setViewerFlag("1");
+		periodicInspection.setUserName("Inspector@gmail.com");
 		periodicInspection.setSiteId(1);
 	}
 
@@ -70,34 +80,42 @@ public class InspectionControllerTest {
 	
 	@Test
 	public void testSendComments() throws InspectionException, RegistrationException, Exception {
-		/*
-		 * 
-		 * ResponseEntity<Void> sendComments =
-		 * inspectionController.sendComments("Viewer@gmail.com", 1,
-		 * "I have a question?");
-		 * 
-		 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
-		 */}
+		doNothing().when(inspectionServiceImpl).sendComments("Viewer@gmail.com", 1, periodicInspectionComment());
+		ResponseEntity<Void> sendComments = inspectionController.sendComments("Viewer@gmail.com", 1,
+				periodicInspectionComment());
+		assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+	}
 
-	/*
-	 * @Test public void testReplyComments() throws RegistrationException,
-	 * Exception, InspectionException {
-	 * 
-	 * InspectionException exception =
-	 * Assertions.assertThrows(InspectionException.class, () ->
-	 * inspectionController.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?"));
-	 * 
-	 * assertEquals(exception.getMessage(), "No viewer userName avilable");
-	 * 
-	 * when(inspectionServiceImpl.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?")) .thenReturn("Viewer@gmail.com");
-	 * 
-	 * ResponseEntity<Void> sendComments =
-	 * inspectionController.replyComments("Inspector@gmail.com", 1,
-	 * "I have a question?");
-	 * 
-	 * assertEquals(sendComments.getStatusCode(), HttpStatus.OK); }
-	 */
+	@Test
+	public void testReplyComments() throws RegistrationException, Exception, InspectionException {
+		
+		when(inspectionServiceImpl.replyComments("Inspector@gmail.com", 1,periodicInspectionComment)).thenReturn("Viewer@gmail.com");
+		
+		ResponseEntity<Void> sendComments = inspectionController.replyComments("Inspector@gmail.com", 1,
+				periodicInspectionComment);
 
+		assertEquals(sendComments.getStatusCode(), HttpStatus.OK);
+	
+		when(inspectionServiceImpl.replyComments("Inspector@gmail.com", 1,periodicInspectionComment)).thenReturn(null);
+		InspectionException exception = Assertions.assertThrows(InspectionException.class,
+				() -> inspectionController.replyComments("Inspector@gmail.com", 1, periodicInspectionComment));
+
+		assertEquals(exception.getMessage(), "No viewer userName avilable");
+	
+	}
+	@Test
+	public void testApproveComments() throws RegistrationException, Exception, InspectionException {
+
+		inspectionController.approveComments("Inspector@gmail.com", 1, periodicInspectionComment);
+
+	}
+	
+	private PeriodicInspectionComment periodicInspectionComment() {
+		periodicInspectionComment = new PeriodicInspectionComment();
+		periodicInspectionComment.setViewerComment("question");
+		periodicInspectionComment.setViewerFlag("1");
+		periodicInspection.setUserName("Inspector@gmail.com");
+		periodicInspection.setSiteId(1);
+ 		return periodicInspectionComment;
+	}
 }

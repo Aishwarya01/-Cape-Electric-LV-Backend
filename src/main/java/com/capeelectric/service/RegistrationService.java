@@ -1,11 +1,14 @@
 package com.capeelectric.service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import com.capeelectric.exception.CompanyDetailsException;
+import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
+import com.capeelectric.request.RegisterPermissionRequest;
 
 
 
@@ -28,6 +31,11 @@ public interface RegistrationService {
 	public Register addViewerRegistration(Register register) throws RegistrationException, CompanyDetailsException;
 
 	public void updateLicence(String userName, String numoflicence) throws RegistrationException;
+	
+	public String sendNewOtp(String mobileNumber) throws RegistrationException;
 
+	public Register updatePermission(RegisterPermissionRequest registerPermissionRequest) throws RegisterPermissionRequestException;
+	
+	public List<Register> retrieveAllRegistration() throws RegistrationException;
 
 }

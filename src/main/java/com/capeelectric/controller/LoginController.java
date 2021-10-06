@@ -33,6 +33,7 @@ import com.capeelectric.model.RegisterDetails;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
+import com.capeelectric.request.ContactNumberRequest;
 import com.capeelectric.response.AuthenticationResponseRegister;
 import com.capeelectric.service.impl.AWSEmailService;
 import com.capeelectric.service.impl.LoginServiceImpl;
@@ -99,6 +100,18 @@ public class LoginController {
 		logger.debug("CreatePassword ends");
 		return new ResponseEntity<String>("You have Successfully Created Your Password", HttpStatus.OK);
 
+	}
+	
+	@PutMapping("/saveContactNumber")
+	public ResponseEntity<String> saveContactNumber(@RequestBody ContactNumberRequest request)
+			throws IOException, MessagingException, UpdatePasswordException {
+		
+		logger.debug("Save Contact Number starts");
+		Register updatedUser = loginService.saveContactNumber(request);
+		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully updated your contact number");
+		logger.debug("Save Contact Number ends");
+		return new ResponseEntity<String>("You have successfully updated your contact number", HttpStatus.OK);
+		
 	}
 	
 	@PutMapping("/updatePassword")
