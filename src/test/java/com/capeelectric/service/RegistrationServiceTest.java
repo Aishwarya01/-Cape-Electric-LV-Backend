@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -25,9 +27,11 @@ import org.springframework.web.client.RestTemplate;
 
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
+import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
+import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.impl.RegistrationServiceImpl;
 import com.capeelectric.service.impl.SiteServiceImpl;
 import com.capeelectric.util.UserFullName;
@@ -288,6 +292,67 @@ public class RegistrationServiceTest {
 
 		logger.info("RegistrationServiceTest testUpdateLicence_funcion End");
 
+	}
+	
+	@Test
+	public void testRetrieveAllRegistration() throws RegistrationException {
+		logger.info("RegistrationServiceTest testRetrieveAllRegistration_funcion Started");
+
+		List<Register> listOfRegistration = new ArrayList<Register>();
+		listOfRegistration.add(register);
+		listOfRegistration.add(register());
+
+		when(registrationRepository.findAll()).thenReturn(listOfRegistration);
+
+		//Success flow
+		List<Register> retrieveAllRegistration = registrationServiceImpl.retrieveAllRegistration();
+		assertNotNull(retrieveAllRegistration);
+
+		logger.info("RegistrationServiceTest testRetrieveAllRegistration_funcion Started");
+	}
+	
+	@Test
+	public void testUpdatePermission() throws RegistrationException, RegisterPermissionRequestException {
+		logger.info("RegistrationServiceTest testUpdatePermission_funcion Started");
+
+		Optional<Register> optionalRegister = Optional.of(register);
+		
+		when(registrationRepository.findById(permissionRequest("YES").getRegisterId())).thenReturn(optionalRegister);
+		when(registrationRepository.save(register)).thenReturn(register);
+
+		//Success flow
+		Register updatePermission_1 = registrationServiceImpl.updatePermission(permissionRequest("YES"));
+		assertEquals(updatePermission_1.getPermission(), permissionRequest("YES").getPermission());
+		
+		//Success flow
+		Register updatePermission_2 = registrationServiceImpl.updatePermission(permissionRequest("NO"));
+		assertEquals(updatePermission_2.getPermission(), permissionRequest("NO").getPermission());
+
+		//Throwing Exception
+		RegisterPermissionRequest permissionRequest = permissionRequest("YES");
+		permissionRequest.setRegisterId(2);
+		  RegisterPermissionRequestException assertThrows = Assertions.assertThrows(RegisterPermissionRequestException.class,
+				() -> registrationServiceImpl.updatePermission(permissionRequest));
+
+		assertEquals("Given User not avilable", assertThrows.getMessage());
+
+		//Throwing Exception
+		RegisterPermissionRequestException assertThrows_1 = Assertions.assertThrows(RegisterPermissionRequestException.class,
+				() -> registrationServiceImpl.updatePermission(null));
+
+		assertEquals("RegisterPermissionRequest has Invaild Input", assertThrows_1.getMessage());
+		
+		logger.info("RegistrationServiceTest testUpdatePermission_funcion Started");
+
+	}
+	
+	private RegisterPermissionRequest permissionRequest(String permission) {
+		RegisterPermissionRequest permissionRequest = new RegisterPermissionRequest();
+		permissionRequest.setAdminUserName("lvsystem@capeindia.net");
+		permissionRequest.setComment("your company information not avilable");
+		permissionRequest.setRegisterId(1);
+		permissionRequest.setPermission(permission);
+		return permissionRequest;
 	}
 
 	private Register register() {
