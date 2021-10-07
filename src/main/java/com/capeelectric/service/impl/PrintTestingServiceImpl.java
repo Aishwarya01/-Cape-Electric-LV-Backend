@@ -133,7 +133,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
         		table44.addCell(cell391);
 				table44.addCell(cell401);
 			
-				tableData(table44, ReportComments);
+//				tableData(table44, ReportComments);
 				
 			   document.add(table44);
 
@@ -147,33 +147,33 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		}
 
 	}
-
-	private void tableData(PdfPTable table44, List<TestingReportComment> reportComments) throws DocumentException, IOException {
-
-		Collections.sort(reportComments, new Comparator<TestingReportComment>() {
-			  public int compare(TestingReportComment o1, TestingReportComment o2) {
-			      return o1.getViewerDate().compareTo(o2.getViewerDate());
-			  }
-			});
-		
-		for (TestingReportComment arr : reportComments) {
-			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-			PdfPCell cell = new PdfPCell();
-			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table44.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table44.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table44.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table44.addCell(cell);
-			
-			}
-	}
+//
+//	private void tableData(PdfPTable table44, List<TestingReportComment> reportComments) throws DocumentException, IOException {
+//
+////		Collections.sort(reportComments, new Comparator<TestingReportComment>() {
+////			  public int compare(TestingReportComment o1, TestingReportComment o2) {
+////			      return o1.getViewerDate().compareTo(o2.getViewerDate());
+////			  }
+////			});
+//		
+//		for (TestingReportComment arr : reportComments) {
+//			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+//			PdfPCell cell = new PdfPCell();
+//			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
+//			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+//			table44.addCell(cell);
+//			cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
+//			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+//			table44.addCell(cell);
+//			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
+//			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+//			table44.addCell(cell);
+//			cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
+//			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+//			table44.addCell(cell);
+//			
+//			}
+//	}
 
 	private void testingTableIteration(Document document, TestingRecords testingRecords1)
 			throws DocumentException, IOException {
@@ -716,7 +716,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		String IV8 = incomingVoltage_list[7];
 		String IV9 = incomingVoltage_list[8];
 
-		String incomingIPF = distribution.getIncomingFaultCurrent();
+		String incomingIPF = distribution.getIncomingVoltage();
 		String incomingIPF_list[] = incomingIPF.split(",");
 		String IPF1 = incomingIPF_list[0];
 		String IPF2 = incomingIPF_list[1];
@@ -728,7 +728,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		String IPF8 = incomingIPF_list[7];
 		String IPF9 = incomingIPF_list[8];
 
-		String incomingZS = distribution.getIncomingLoopImpedance();
+		String incomingZS = distribution.getIncomingVoltage();
 		String incomingZS_list[] = incomingZS.split(",");
 		String ZS1 = incomingZS_list[0];
 		String ZS2 = incomingZS_list[1];

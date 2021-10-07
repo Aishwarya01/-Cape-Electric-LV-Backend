@@ -68,9 +68,9 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				List<IsolationCurrent> isolationCurrentDetails = ipoInspection.getIsolationCurrent();
 				IsolationCurrent isolationCurrent = isolationCurrentDetails.get(0);
 				
-				List<PeriodicInspectionComment> ReportComments = inspection.getPeriodicInspectorComment();
-				PeriodicInspectionComment comments = ReportComments.get(0);
-				
+//				List<PeriodicInspectionComment> ReportComments = inspection.getPeriodicInspectorComment();
+//				PeriodicInspectionComment comments = ReportComments.get(0);
+//				
 				document.open();
 				
 				Font font11B = new Font(BaseFont.createFont( ), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
@@ -130,41 +130,41 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				table44.setSpacingBefore(10f); // Space before table
 				table44.setWidthPercentage(100);
 
-				PdfPCell cell55 = new PdfPCell(new Paragraph(comments.getViewerUserName(), font91));
-				cell55.setHorizontalAlignment(Element.ALIGN_CENTER);
-				PdfPCell cell371 = new PdfPCell(new Paragraph("ViewerUserName:", font91));
-				cell371.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell371.setGrayFill(0.92f);
-				table44.addCell(cell371);
-				table44.addCell(cell55);
-				PdfPCell cell381 = new PdfPCell(new Paragraph(comments.getInspectorUserName(), font91));
-				cell381.setHorizontalAlignment(Element.ALIGN_CENTER);
-				PdfPCell cell3711 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
-				cell3711.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell3711.setGrayFill(0.92f);
-				table44.addCell(cell3711);
-				table44.addCell(cell381);
-
-				PdfPCell cell561 = new PdfPCell(new Paragraph("ViewerComment Date:", font91));
-				cell561.setGrayFill(0.92f);
-				cell561.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-				PdfPCell cell5611 = new PdfPCell(new Paragraph("ViewerComment:", font91));
-				cell5611.setGrayFill(0.92f);
-				cell5611.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table44.addCell(cell5611);
-				table44.addCell(cell561);
-
-               PdfPCell cell401 = new PdfPCell(new Paragraph("InspectorComment Date:", font91));
-				cell401.setGrayFill(0.92f);
-				cell401.setHorizontalAlignment(Element.ALIGN_CENTER);
-				PdfPCell cell391 = new PdfPCell(new Paragraph("InspectorComment:", font91));
-				cell391.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell391.setGrayFill(0.92f);
-        		table44.addCell(cell391);
-				table44.addCell(cell401);
-				
-				tableData(table44, ReportComments);
+//				PdfPCell cell55 = new PdfPCell(new Paragraph(comments.getViewerUserName(), font91));
+//				cell55.setHorizontalAlignment(Element.ALIGN_CENTER);
+//				PdfPCell cell371 = new PdfPCell(new Paragraph("ViewerUserName:", font91));
+//				cell371.setHorizontalAlignment(Element.ALIGN_CENTER);
+//				cell371.setGrayFill(0.92f);
+//				table44.addCell(cell371);
+//				table44.addCell(cell55);
+//				PdfPCell cell381 = new PdfPCell(new Paragraph(comments.getInspectorUserName(), font91));
+//				cell381.setHorizontalAlignment(Element.ALIGN_CENTER);
+//				PdfPCell cell3711 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
+//				cell3711.setHorizontalAlignment(Element.ALIGN_CENTER);
+//				cell3711.setGrayFill(0.92f);
+//				table44.addCell(cell3711);
+//				table44.addCell(cell381);
+//
+//				PdfPCell cell561 = new PdfPCell(new Paragraph("ViewerComment Date:", font91));
+//				cell561.setGrayFill(0.92f);
+//				cell561.setHorizontalAlignment(Element.ALIGN_CENTER);
+//
+//				PdfPCell cell5611 = new PdfPCell(new Paragraph("ViewerComment:", font91));
+//				cell5611.setGrayFill(0.92f);
+//				cell5611.setHorizontalAlignment(Element.ALIGN_CENTER);
+//				table44.addCell(cell5611);
+//				table44.addCell(cell561);
+//
+//               PdfPCell cell401 = new PdfPCell(new Paragraph("InspectorComment Date:", font91));
+//				cell401.setGrayFill(0.92f);
+//				cell401.setHorizontalAlignment(Element.ALIGN_CENTER);
+//				PdfPCell cell391 = new PdfPCell(new Paragraph("InspectorComment:", font91));
+//				cell391.setHorizontalAlignment(Element.ALIGN_CENTER);
+//				cell391.setGrayFill(0.92f);
+//        		table44.addCell(cell391);
+//				table44.addCell(cell401);
+//				
+//				tableData(table44, ReportComments);
 				
 			   document.add(table44);
 				document.close();
