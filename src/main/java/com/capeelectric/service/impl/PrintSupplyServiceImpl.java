@@ -2,6 +2,8 @@ package com.capeelectric.service.impl;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import com.capeelectric.model.BoundingLocationReport;
 import com.capeelectric.model.CircuitBreaker;
 import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.InstalLocationReport;
+import com.capeelectric.model.SupplyCharacteristicComment;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.SupplyParameters;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
@@ -50,6 +53,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 				List<CircuitBreaker> circuitBreaker = supply.getCircuitBreaker();
 				List<InstalLocationReport> instalLocationReport = supply.getInstalLocationReport();
+				
+				List<SupplyCharacteristicComment> ReportComments = supply.getSupplyCharacteristicComment();
+				SupplyCharacteristicComment comments = ReportComments.get(0);
 
 				String nominal = supply.getMainNominalVoltage();
 				String nominal_list[] = nominal.split(",");
@@ -105,7 +111,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				document.open();
 
 				Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-				Font font7 = new Font(BaseFont.createFont(), 10, Font.NORMAL|Font.BOLD);
+				Font font7 = new Font(BaseFont.createFont(), 11, Font.NORMAL|Font.BOLD);
 				Font font1 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
                 Font font4 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
                 Font font5 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
@@ -553,14 +559,14 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table44.setSpacingBefore(10f); // Space before table
 				table44.setWidthPercentage(100);
 
-				PdfPCell cell55 = new PdfPCell(new Paragraph("Sivaraju", font91));
+				PdfPCell cell55 = new PdfPCell(new Paragraph(comments.getViewerUserName(), font91));
 				cell55.setHorizontalAlignment(Element.ALIGN_CENTER);
 				PdfPCell cell371 = new PdfPCell(new Paragraph("ViewerUserName:", font91));
 				cell371.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell371.setGrayFill(0.92f);
 				table44.addCell(cell371);
 				table44.addCell(cell55);
-				PdfPCell cell381 = new PdfPCell(new Paragraph("Hasan", font91));
+				PdfPCell cell381 = new PdfPCell(new Paragraph(comments.getInspectorUserName(), font91));
 				cell381.setHorizontalAlignment(Element.ALIGN_CENTER);
 				PdfPCell cell3711 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
 				cell3711.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -587,6 +593,8 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
         		table44.addCell(cell391);
 				table44.addCell(cell401);
 				
+				tableData10(table44, ReportComments);
+				
 			   document.add(table44);
                  
 			document.close();
@@ -597,6 +605,35 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		} else {
 			throw new SupplyCharacteristicsException("Invalid Inputs");
 		}
+	}
+
+	private void tableData10(PdfPTable table44, List<SupplyCharacteristicComment> reportComments) throws DocumentException, IOException {
+
+		
+		Collections.sort(reportComments, new Comparator<SupplyCharacteristicComment>() {
+			  public int compare(SupplyCharacteristicComment o1, SupplyCharacteristicComment o2) {
+			      return o1.getViewerDate().compareTo(o2.getViewerDate());
+			  }
+			});
+		
+		for (SupplyCharacteristicComment arr : reportComments) {
+			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+			PdfPCell cell = new PdfPCell();
+			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			
+			}
+		
 	}
 
 	private void altenateSupply(Document document, SupplyParameters supplyParameters)
@@ -963,6 +1000,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 	}
 
 	private void tableData(PdfPTable table8, List<InstalLocationReport> instalLocationReport) {
+	
+		
+		
 		for (InstalLocationReport arr : instalLocationReport) {
 			PdfPCell cell = new PdfPCell();
 			Font font = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);

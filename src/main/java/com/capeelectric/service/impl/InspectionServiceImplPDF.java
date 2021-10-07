@@ -2,6 +2,8 @@ package com.capeelectric.service.impl;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +16,7 @@ import com.capeelectric.model.ConsumerUnit;
 import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.IsolationCurrent;
 import com.capeelectric.model.PeriodicInspection;
+import com.capeelectric.model.PeriodicInspectionComment;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.service.InspectionServicePDF;
 import com.itextpdf.text.BaseColor;
@@ -65,6 +68,9 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				List<IsolationCurrent> isolationCurrentDetails = ipoInspection.getIsolationCurrent();
 				IsolationCurrent isolationCurrent = isolationCurrentDetails.get(0);
 				
+				List<PeriodicInspectionComment> ReportComments = inspection.getPeriodicInspectorComment();
+				PeriodicInspectionComment comments = ReportComments.get(0);
+				
 				document.open();
 				
 				Font font11B = new Font(BaseFont.createFont( ), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
@@ -84,7 +90,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				part3.getDefaultCell().setBorder(0);
 
 				PdfPCell basic = new PdfPCell(new Paragraph("Part - 3: Inspection",
-						new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
+						new Font(BaseFont.createFont( ), 11, Font.NORMAL | Font.BOLD)));
 				basic.setBackgroundColor(new GrayColor(0.82f));
 				basic.setHorizontalAlignment(Element.ALIGN_LEFT);
 				basic.setBorder(PdfPCell.NO_BORDER);
@@ -109,7 +115,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				table199.setSpacingBefore(10f); // Space before table
 				table199.setWidthPercentage(100);
 				table199.getDefaultCell().setBorder(0);
-				Font font  = new Font(BaseFont.createFont(), 12, Font.NORMAL|Font.BOLD);
+				Font font  = new Font(BaseFont.createFont(), 11, Font.NORMAL|Font.BOLD);
 				PdfPCell cell65 = new PdfPCell(new Paragraph(15, "Section - 9:Viewer And Inspector Comment:", font));
 				cell65.setBorder(PdfPCell.NO_BORDER);
 				cell65.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -124,14 +130,14 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				table44.setSpacingBefore(10f); // Space before table
 				table44.setWidthPercentage(100);
 
-				PdfPCell cell55 = new PdfPCell(new Paragraph("Sivaraju", font91));
+				PdfPCell cell55 = new PdfPCell(new Paragraph(comments.getViewerUserName(), font91));
 				cell55.setHorizontalAlignment(Element.ALIGN_CENTER);
 				PdfPCell cell371 = new PdfPCell(new Paragraph("ViewerUserName:", font91));
 				cell371.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell371.setGrayFill(0.92f);
 				table44.addCell(cell371);
 				table44.addCell(cell55);
-				PdfPCell cell381 = new PdfPCell(new Paragraph("Hasan", font91));
+				PdfPCell cell381 = new PdfPCell(new Paragraph(comments.getInspectorUserName(), font91));
 				cell381.setHorizontalAlignment(Element.ALIGN_CENTER);
 				PdfPCell cell3711 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
 				cell3711.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -158,6 +164,8 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
         		table44.addCell(cell391);
 				table44.addCell(cell401);
 				
+				tableData(table44, ReportComments);
+				
 			   document.add(table44);
 				document.close();
 				writer.close();
@@ -169,6 +177,35 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 			throw new InspectionException("Invalid Inputs");
 		}
 		return null;
+	}
+
+
+	private void tableData(PdfPTable table44, List<PeriodicInspectionComment> reportComments) throws DocumentException, IOException {
+		
+		Collections.sort(reportComments, new Comparator<PeriodicInspectionComment>() {
+			  public int compare(PeriodicInspectionComment o1, PeriodicInspectionComment o2) {
+			      return o1.getViewerDate().compareTo(o2.getViewerDate());
+			  }
+			});
+		
+		for (PeriodicInspectionComment arr : reportComments) {
+			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+			PdfPCell cell = new PdfPCell();
+			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			
+			}
+		
 	}
 
 
@@ -188,7 +225,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		part3.getDefaultCell().setBorder(0);
 
 		PdfPCell Section1 = new PdfPCell(new Paragraph("Section - 1: Incoming equipment",
-				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
+				new Font(BaseFont.createFont( ), 11, Font.NORMAL | Font.BOLD)));
 		Section1.setBackgroundColor(new GrayColor(0.82f));
 		Section1.setHorizontalAlignment(Element.ALIGN_LEFT);
 		Section1.setBorder(PdfPCell.NO_BORDER);
@@ -307,7 +344,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		section2.getDefaultCell().setBorder(0);
 
 		PdfPCell arrangements = new PdfPCell(new Paragraph("Section - 2: Arrangements for parallel or switched alternative sources of supply",
-				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
+				new Font(BaseFont.createFont( ), 11, Font.NORMAL | Font.BOLD)));
 		arrangements.setBackgroundColor(new GrayColor(0.82f));
 		arrangements.setHorizontalAlignment(Element.ALIGN_LEFT);
 		arrangements.setBorder(PdfPCell.NO_BORDER);
@@ -407,7 +444,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		section3.getDefaultCell().setBorder(0);
 
 		PdfPCell Automatic = new PdfPCell(new Paragraph("Section - 3: Automatic disconnection of supply",
-				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
+				new Font(BaseFont.createFont( ), 11, Font.NORMAL | Font.BOLD)));
 		Automatic.setBackgroundColor(new GrayColor(0.82f));
 		Automatic.setHorizontalAlignment(Element.ALIGN_LEFT);
 		Automatic.setBorder(PdfPCell.NO_BORDER);
@@ -517,7 +554,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		section4.getDefaultCell().setBorder(0);
 
 		PdfPCell protection = new PdfPCell(new Paragraph("Section - 4: Other methods of protection ",
-				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
+				new Font(BaseFont.createFont( ), 11, Font.NORMAL | Font.BOLD)));
 		protection.setBackgroundColor(new GrayColor(0.82f));
 		protection.setHorizontalAlignment(Element.ALIGN_LEFT);
 		protection.setBorder(PdfPCell.NO_BORDER);
@@ -796,7 +833,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		Section5.getDefaultCell().setBorder(0);
 
 		PdfPCell consumer = new PdfPCell(new Paragraph("Section - 5: Consumer unit(s) / distribution board(s) / distribution equipment",
-				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
+				new Font(BaseFont.createFont( ), 11, Font.NORMAL | Font.BOLD)));
 		consumer.setBackgroundColor(new GrayColor(0.82f));
 		consumer.setHorizontalAlignment(Element.ALIGN_LEFT);
 		consumer.setBorder(PdfPCell.NO_BORDER);
@@ -853,7 +890,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		Section6.getDefaultCell().setBorder(0);
 
 		PdfPCell circuit1 = new PdfPCell(new Paragraph("Section - 6: Circuits",
-				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
+				new Font(BaseFont.createFont( ), 11, Font.NORMAL | Font.BOLD)));
 		circuit1.setHorizontalAlignment(Element.ALIGN_LEFT);
 		circuit1.setBackgroundColor(new GrayColor(0.82f));
 		circuit1.setBorder(PdfPCell.NO_BORDER);
@@ -911,7 +948,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		Section7.getDefaultCell().setBorder(0);
 
 		PdfPCell isolation = new PdfPCell(new Paragraph("Section - 7: Isolation and switching",
-				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
+				new Font(BaseFont.createFont( ), 11, Font.NORMAL | Font.BOLD)));
 		isolation.setHorizontalAlignment(Element.ALIGN_LEFT);
 		isolation.setBackgroundColor(new GrayColor(0.82f));
 		isolation.setBorder(PdfPCell.NO_BORDER);
@@ -960,7 +997,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 		Section8.getDefaultCell().setBorder(0);
 
 		PdfPCell current = new PdfPCell(new Paragraph("Section - 8: Current – using equipment (permanently connected)",
-				new Font(BaseFont.createFont( ), 10, Font.NORMAL | Font.BOLD)));
+				new Font(BaseFont.createFont( ), 11, Font.NORMAL | Font.BOLD)));
 		current.setHorizontalAlignment(Element.ALIGN_LEFT);
 		current.setBackgroundColor(new GrayColor(0.82f));
 		current.setBorder(PdfPCell.NO_BORDER);

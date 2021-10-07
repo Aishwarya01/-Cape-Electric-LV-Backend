@@ -2,6 +2,8 @@ package com.capeelectric.service.impl;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import com.capeelectric.model.TestDistribution;
 import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
+import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.PrintTestingService;
 import com.itextpdf.text.BaseColor;
@@ -44,6 +47,9 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				TestingReport supply2 = supply1.get(0);
 				List<Testing> testing = supply2.getTesting();
 				Testing testRecords = testing.get(0);
+				
+				List<TestingReportComment> ReportComments = supply2.getTestingComment();
+				TestingReportComment comments = ReportComments.get(0);
 
 				document.open();
 
@@ -126,10 +132,10 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				cell391.setGrayFill(0.92f);
         		table44.addCell(cell391);
 				table44.addCell(cell401);
+			
+				tableData(table44, ReportComments);
 				
 			   document.add(table44);
-
-
 
 				document.close();
 			} catch (Exception e) {
@@ -140,6 +146,33 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			throw new PeriodicTestingException("Invalid Inputs");
 		}
 
+	}
+
+	private void tableData(PdfPTable table44, List<TestingReportComment> reportComments) throws DocumentException, IOException {
+
+		Collections.sort(reportComments, new Comparator<TestingReportComment>() {
+			  public int compare(TestingReportComment o1, TestingReportComment o2) {
+			      return o1.getViewerDate().compareTo(o2.getViewerDate());
+			  }
+			});
+		
+		for (TestingReportComment arr : reportComments) {
+			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+			PdfPCell cell = new PdfPCell();
+			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			
+			}
 	}
 
 	private void testingTableIteration(Document document, TestingRecords testingRecords1)

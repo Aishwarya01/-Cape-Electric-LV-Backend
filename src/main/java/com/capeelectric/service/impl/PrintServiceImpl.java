@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.BoundingLocationReport;
 import com.capeelectric.model.Summary;
+import com.capeelectric.model.SummaryComment;
 import com.capeelectric.model.SummaryDeclaration;
 import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.repository.SummaryRepository;
@@ -70,6 +73,9 @@ public class PrintServiceImpl implements PrintService {
 				List<SummaryDeclaration> declaration1 = summary.getSummaryDeclaration();
 				SummaryDeclaration declaration = declaration1.get(0);
 				SummaryDeclaration declaration11 = declaration1.get(1);
+				
+				List<SummaryComment> ReportComments = summary.getSummaryComment();
+				SummaryComment comments = ReportComments.get(0);
 
 				document.open();
 				Font font = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
@@ -336,14 +342,14 @@ public class PrintServiceImpl implements PrintService {
 				table44.setSpacingBefore(10f); // Space before table
 				table44.setWidthPercentage(100);
 
-				PdfPCell cell55 = new PdfPCell(new Paragraph("Sivaraju", font91));
+				PdfPCell cell55 = new PdfPCell(new Paragraph(comments.getViewerUserName(), font91));
 				cell55.setHorizontalAlignment(Element.ALIGN_CENTER);
 				PdfPCell cell371 = new PdfPCell(new Paragraph("ViewerUserName:", font91));
 				cell371.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell371.setGrayFill(0.92f);
 				table44.addCell(cell371);
 				table44.addCell(cell55);
-				PdfPCell cell381 = new PdfPCell(new Paragraph("Hasan", font91));
+				PdfPCell cell381 = new PdfPCell(new Paragraph(comments.getInspectorUserName(), font91));
 				cell381.setHorizontalAlignment(Element.ALIGN_CENTER);
 				PdfPCell cell3711 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
 				cell3711.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -370,6 +376,8 @@ public class PrintServiceImpl implements PrintService {
         		table44.addCell(cell391);
 				table44.addCell(cell401);
 				
+				tableData1(table44, ReportComments);
+				
 			   document.add(table44);
 				document.close();
 				writer.close();
@@ -380,6 +388,34 @@ public class PrintServiceImpl implements PrintService {
 		} else {
 			throw new SummaryException("Invalid Inputs");
 		}
+	}
+
+	private void tableData1(PdfPTable table44, List<SummaryComment> reportComments) throws DocumentException, IOException {
+		
+		Collections.sort(reportComments, new Comparator<SummaryComment>() {
+			  public int compare(SummaryComment o1, SummaryComment o2) {
+			      return o1.getViewerDate().compareTo(o2.getViewerDate());
+			  }
+			});
+		
+		for (SummaryComment arr : reportComments) {
+			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+			PdfPCell cell = new PdfPCell();
+			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			
+			}
+		
 	}
 
 	private void addRow(PdfPTable table9, String string, String string2) throws DocumentException, IOException {
