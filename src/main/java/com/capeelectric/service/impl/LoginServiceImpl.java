@@ -22,6 +22,7 @@ import com.capeelectric.exception.UserException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.AuthenticationRequest;
+import com.capeelectric.request.ContactNumberRequest;
 import com.capeelectric.service.LoginService;
 
 @Service
@@ -77,7 +78,7 @@ public class LoginServiceImpl implements LoginService {
 			if (register != null && register.getUsername().equalsIgnoreCase(request.getEmail())) {
 				boolean value = verifyOtp(request);
 				if(value) {
-					register.setOtpSessionKey(null);
+					register.setOtpSessionKey(request.getOtpSession());
 					logger.debug("Successfully Otp Verified");
 					register.setPassword(passwordEncoder.encode(request.getPassword()));
 					register.setUpdatedDate(LocalDateTime.now());
@@ -151,12 +152,76 @@ public class LoginServiceImpl implements LoginService {
 		return null;
 	}
 	
+	@Override
+	public Register saveContactNumber(ContactNumberRequest request) throws UpdatePasswordException {
+
+		logger.debug("saveContactNumber Starts");
+		if (request.getEmail() != null) {
+			Register register = registrationRepository.findByUsername(request.getEmail()).get();
+			if (register != null && register.getUsername().equalsIgnoreCase(request.getEmail())) {
+				boolean value = verifyOtpForSavingContactNumber(request);
+				if(value) {
+					register.setOtpSessionKey(request.getOtpSession());
+					register.setContactNumber(request.getMobileNumber());
+					logger.debug("Successfully Otp Verified");
+					register.setUpdatedDate(LocalDateTime.now());
+					register.setUpdatedBy(request.getEmail());
+					logger.debug("saveContactNumber Ends");
+					return registrationRepository.save(register);
+				}
+				else {
+					logger.debug("Otp Verification Failed");
+				}
+			} else {
+				logger.debug("saveContactNumber Ends");
+				throw new UpdatePasswordException("User Not available");
+			}
+		} else {
+			logger.debug("saveContactNumber Ends");
+			throw new UsernameNotFoundException("Username not valid");
+		}
+		return null;
+	
+		
+	}
+	
 	private boolean verifyOtp(AuthenticationRequest request) throws UpdatePasswordException {
 
 		boolean success = false;
 
 		if (request.getEmail() != null && request.getOtp() != null && request.getOtpSession() != null
 				&& request.getPassword() != null) {
+
+			Optional<Register> registerRepo = registrationRepository.findByUsername(request.getEmail());
+
+			if (registerRepo.isPresent() && registerRepo.get().getPermission() != null
+					&& registerRepo.get().getPermission().equalsIgnoreCase("YES")) {
+				ResponseEntity<String> otpVerifyResponse = restTemplate.exchange(
+						otpConfig.getVerifyOtp() + request.getOtpSession() + "/" + request.getOtp(), HttpMethod.GET, null,
+						String.class);
+
+				if (!otpVerifyResponse.getBody().matches("(.*)Success(.*)")) {
+					throw new UpdatePasswordException("OTP Mismatched");
+				} else {
+					success = true;
+				}
+			} else {
+				throw new UpdatePasswordException("You may need to wait for getting approved from Admin");
+			}
+
+		} else {
+			throw new UpdatePasswordException("Invalid Inputs");
+		}
+
+		return success;
+	}
+	
+	private boolean verifyOtpForSavingContactNumber(AuthenticationRequest request) throws UpdatePasswordException {
+
+		boolean success = false;
+
+		if (request.getEmail() != null && request.getOtp() != null && request.getOtpSession() != null
+				) {
 
 			Optional<Register> registerRepo = registrationRepository.findByUsername(request.getEmail());
 
