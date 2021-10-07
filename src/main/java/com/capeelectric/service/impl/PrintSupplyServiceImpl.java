@@ -53,57 +53,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 				List<CircuitBreaker> circuitBreaker = supply.getCircuitBreaker();
 				List<InstalLocationReport> instalLocationReport = supply.getInstalLocationReport();
-				
+
 //				List<SupplyCharacteristicComment> ReportComments = supply.getSupplyCharacteristicComment();
 //				SupplyCharacteristicComment comments = ReportComments.get(0);
-
-				String nominal = supply.getMainNominalVoltage();
-				String nominal_list[] = nominal.split(",");
-				String N1 = nominal_list[0];
-				String N2 = nominal_list[1];
-				String N3 = nominal_list[2];
-				String N4 = nominal_list[3];
-				String N5 = nominal_list[4];
-				String N6 = nominal_list[5];
-				String N7 = nominal_list[6];
-				String N8 = nominal_list[7];
-				String N9 = nominal_list[8];
-
-				String nominalFrequency = supply.getMainNominalFrequency();
-				String nominalFrequency_list[] = nominalFrequency.split(",");
-				String NF1 = nominalFrequency_list[0];
-				String NF2 = nominalFrequency_list[1];
-				String NF3 = nominalFrequency_list[2];
-				String NF4 = nominalFrequency_list[3];
-				String NF5 = nominalFrequency_list[4];
-				String NF6 = nominalFrequency_list[5];
-				String NF7 = nominalFrequency_list[6];
-				String NF8 = nominalFrequency_list[7];
-				String NF9 = nominalFrequency_list[8];
-
-				String nominalFaultCurrent = supply.getMainNominalCurrent();
-				String nominalFaultCurrent_list[] = nominalFaultCurrent.split(",");
-				String NFC1 = nominalFaultCurrent_list[0];
-				String NFC2 = nominalFaultCurrent_list[1];
-				String NFC3 = nominalFaultCurrent_list[2];
-				String NFC4 = nominalFaultCurrent_list[3];
-				String NFC5 = nominalFaultCurrent_list[4];
-				String NFC6 = nominalFaultCurrent_list[5];
-				String NFC7 = nominalFaultCurrent_list[6];
-				String NFC8 = nominalFaultCurrent_list[7];
-				String NFC9 = nominalFaultCurrent_list[8];
-
-				String nominalFaultLoop = supply.getMainLoopImpedance();
-				String nominalFaultLoop_list[] = nominalFaultLoop.split(",");
-				String NFL1 = nominalFaultLoop_list[0];
-				String NFL2 = nominalFaultLoop_list[1];
-				String NFL3 = nominalFaultLoop_list[2];
-				String NFL4 = nominalFaultLoop_list[3];
-				String NFL5 = nominalFaultLoop_list[4];
-				String NFL6 = nominalFaultLoop_list[5];
-				String NFL7 = nominalFaultLoop_list[6];
-				String NFL8 = nominalFaultLoop_list[7];
-				String NFL9 = nominalFaultLoop_list[8];
 
 				List<BoundingLocationReport> boundingLocationReport = supply.getBoundingLocationReport();
 				List<EarthingLocationReport> earthingLocationReport = supply.getEarthingLocationReport();
@@ -111,10 +63,10 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				document.open();
 
 				Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-				Font font7 = new Font(BaseFont.createFont(), 11, Font.NORMAL|Font.BOLD);
+				Font font7 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD);
 				Font font1 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
-                Font font4 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
-                Font font5 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
+				Font font4 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
+				Font font5 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
 				Font font6 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				Font font9 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				Font font10 = new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
@@ -182,6 +134,55 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				document.add(table);
 
 				if (supply.getLiveConductorType().equals("AC")) {
+
+					String nominal = supply.getMainNominalVoltage();
+					String nominal_list[] = nominal.split(",");
+					String N1 = nominal_list[0];
+					String N2 = nominal_list[1];
+					String N3 = nominal_list[2];
+					String N4 = nominal_list[3];
+					String N5 = nominal_list[4];
+					String N6 = nominal_list[5];
+					String N7 = nominal_list[6];
+					String N8 = nominal_list[7];
+					String N9 = nominal_list[8];
+
+					String nominalFrequency = supply.getMainNominalFrequency();
+					String nominalFrequency_list[] = nominalFrequency.split(",");
+					String NF1 = nominalFrequency_list[0];
+					String NF2 = nominalFrequency_list[1];
+					String NF3 = nominalFrequency_list[2];
+					String NF4 = nominalFrequency_list[3];
+					String NF5 = nominalFrequency_list[4];
+					String NF6 = nominalFrequency_list[5];
+					String NF7 = nominalFrequency_list[6];
+					String NF8 = nominalFrequency_list[7];
+					String NF9 = nominalFrequency_list[8];
+
+					String nominalFaultCurrent = supply.getMainNominalCurrent();
+					String nominalFaultCurrent_list[] = nominalFaultCurrent.split(",");
+					String NFC1 = nominalFaultCurrent_list[0];
+					String NFC2 = nominalFaultCurrent_list[1];
+					String NFC3 = nominalFaultCurrent_list[2];
+					String NFC4 = nominalFaultCurrent_list[3];
+					String NFC5 = nominalFaultCurrent_list[4];
+					String NFC6 = nominalFaultCurrent_list[5];
+					String NFC7 = nominalFaultCurrent_list[6];
+					String NFC8 = nominalFaultCurrent_list[7];
+					String NFC9 = nominalFaultCurrent_list[8];
+
+					String nominalFaultLoop = supply.getMainLoopImpedance();
+					String nominalFaultLoop_list[] = nominalFaultLoop.split(",");
+					String NFL1 = nominalFaultLoop_list[0];
+					String NFL2 = nominalFaultLoop_list[1];
+					String NFL3 = nominalFaultLoop_list[2];
+					String NFL4 = nominalFaultLoop_list[3];
+					String NFL5 = nominalFaultLoop_list[4];
+					String NFL6 = nominalFaultLoop_list[5];
+					String NFL7 = nominalFaultLoop_list[6];
+					String NFL8 = nominalFaultLoop_list[7];
+					String NFL9 = nominalFaultLoop_list[8];
+
 					float[] pointColumnWidths1 = { 90F, 90F };
 					PdfPTable table15 = new PdfPTable(pointColumnWidths1);
 					table15.setWidthPercentage(100); // Width 100%
@@ -551,8 +552,8 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table191.addCell(cell65);
 				document.add(table191);
 				Font font61 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-				Font font91=new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-				float[] pointColumnWidths4 = { 90F, 90F,90F,90F };
+				Font font91 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+				float[] pointColumnWidths4 = { 90F, 90F, 90F, 90F };
 
 				PdfPTable table44 = new PdfPTable(pointColumnWidths4);
 				table44.setWidthPercentage(100); // Width 100%
@@ -594,10 +595,10 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 //				table44.addCell(cell401);
 //				
 //				tableData10(table44, ReportComments);
-				
-			   document.add(table44);
-                 
-			document.close();
+
+				document.add(table44);
+
+				document.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -607,15 +608,15 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		}
 	}
 
-	private void tableData10(PdfPTable table44, List<SupplyCharacteristicComment> reportComments) throws DocumentException, IOException {
+	private void tableData10(PdfPTable table44, List<SupplyCharacteristicComment> reportComments)
+			throws DocumentException, IOException {
 
-		
 		Collections.sort(reportComments, new Comparator<SupplyCharacteristicComment>() {
-			  public int compare(SupplyCharacteristicComment o1, SupplyCharacteristicComment o2) {
-			      return o1.getViewerDate().compareTo(o2.getViewerDate());
-			  }
-			});
-		
+			public int compare(SupplyCharacteristicComment o1, SupplyCharacteristicComment o2) {
+				return o1.getViewerDate().compareTo(o2.getViewerDate());
+			}
+		});
+
 		for (SupplyCharacteristicComment arr : reportComments) {
 			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 			PdfPCell cell = new PdfPCell();
@@ -631,9 +632,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 			cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			table44.addCell(cell);
-			
-			}
-		
+
+		}
+
 	}
 
 	private void altenateSupply(Document document, SupplyParameters supplyParameters)
@@ -1000,9 +1001,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 	}
 
 	private void tableData(PdfPTable table8, List<InstalLocationReport> instalLocationReport) {
-	
-		
-		
+
 		for (InstalLocationReport arr : instalLocationReport) {
 			PdfPCell cell = new PdfPCell();
 			Font font = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
