@@ -48,10 +48,6 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 						siteId);
 				SupplyCharacteristics supply = supply1.get(0);
 
-				List<SupplyParameters> supplyParameters1 = supply.getSupplyParameters();
-				SupplyParameters supplyParameters = supplyParameters1.get(0);
-
-				List<CircuitBreaker> circuitBreaker = supply.getCircuitBreaker();
 				List<InstalLocationReport> instalLocationReport = supply.getInstalLocationReport();
 
 //				List<SupplyCharacteristicComment> ReportComments = supply.getSupplyCharacteristicComment();
@@ -290,23 +286,29 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table15.addCell(new Phrase("Availability of alternate supply:", font9));
 				cell9.setBorder(PdfPCell.NO_BORDER);
 				table15.addCell(cell9);
-
-				PdfPCell cell10 = new PdfPCell(new Paragraph(8, "Number of alternate sources of supply:", font9));
-				cell10.setBorder(PdfPCell.NO_BORDER);
-				cell10.setGrayFill(0.92f);
-				table15.addCell(cell10);
-				PdfPCell cell68 = new PdfPCell(new Paragraph(supply.getAlternativeSupply(), font6));
-				cell68.setGrayFill(0.92f);
-				cell68.setBorder(PdfPCell.NO_BORDER);
-				table15.addCell(cell68);
-				document.add(table);
-
 				document.add(table15);
 
-				for (SupplyParameters arr : supplyParameters1) {
-					altenateSupply(document, arr);
-				}
+				PdfPTable table151 = new PdfPTable(pointColumnWidths);
+				table151.setWidthPercentage(100); // Width 100%
+				table151.setWidthPercentage(100);
+				table151.getDefaultCell().setBorder(0);
+				if (supply.getAlternativeSupply().equals("Yes")) {
 
+					PdfPCell cell10 = new PdfPCell(new Paragraph(8, "Number of alternate sources of supply:", font9));
+					cell10.setBorder(PdfPCell.NO_BORDER);
+					cell10.setGrayFill(0.92f);
+					table151.addCell(cell10);
+					PdfPCell cell68 = new PdfPCell(new Paragraph(supply.getSupplyNumber(), font6));
+					cell68.setGrayFill(0.92f);
+					cell68.setBorder(PdfPCell.NO_BORDER);
+					table151.addCell(cell68);
+					document.add(table151);
+
+					List<SupplyParameters> supplyParameters1 = supply.getSupplyParameters();
+					for (SupplyParameters arr : supplyParameters1) {
+						altenateSupply(document, arr);
+					}
+				}
 				document.newPage();
 
 				PdfPTable table18 = new PdfPTable(1);
@@ -524,20 +526,25 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				document.add(table13);
 				document.newPage();
 
-				PdfPTable table20 = new PdfPTable(1);
-				table20.setWidthPercentage(100); // Width 100%
-				table20.setSpacingBefore(10f); // Space before table
-				table20.setWidthPercentage(100);
-				table20.getDefaultCell().setBorder(0);
+				if (supply.getAlternativeSupply().equals("Yes")) {
+					PdfPTable table20 = new PdfPTable(1);
+					table20.setWidthPercentage(100); // Width 100%
+					table20.setSpacingBefore(10f); // Space before table
+					table20.setWidthPercentage(100);
+					table20.getDefaultCell().setBorder(0);
 
-				PdfPCell cell49 = new PdfPCell(
-						new Paragraph("Section - 5: Details of main switch or circuit breaker", font5));
-				cell49.setBorder(PdfPCell.NO_BORDER);
-				cell49.setBackgroundColor(BaseColor.LIGHT_GRAY);
-				table20.addCell(cell49);
-				document.add(table20);
-				for (CircuitBreaker circuteitr : circuitBreaker) {
-					circuteBraker(document, circuteitr);
+					PdfPCell cell49 = new PdfPCell(
+							new Paragraph("Section - 5: Details of main switch or circuit breaker", font5));
+					cell49.setBorder(PdfPCell.NO_BORDER);
+					cell49.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					table20.addCell(cell49);
+					document.add(table20);
+
+					List<CircuitBreaker> circuitBreaker = supply.getCircuitBreaker();
+
+					for (CircuitBreaker circuteitr : circuitBreaker) {
+						circuteBraker(document, circuteitr);
+					}
 				}
 				document.newPage();
 				PdfPTable table191 = new PdfPTable(1);
@@ -640,8 +647,6 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 	private void altenateSupply(Document document, SupplyParameters supplyParameters)
 			throws DocumentException, IOException {
 
-	
-
 		float[] pointColumnWidths = { 90F, 90F };
 		PdfPTable table3 = new PdfPTable(pointColumnWidths);
 		table3.setWidthPercentage(100); // Width 100%
@@ -680,7 +685,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		cell70.setGrayFill(0.92f);
 		cell70.setBorder(PdfPCell.NO_BORDER);
 		table4.addCell(cell70);
- 
+
 		PdfPCell cell18 = new PdfPCell(new Paragraph(supplyParameters.getaLSystemEarthingBNote(), font6));
 		table4.addCell(new Phrase("Brief note:", font6));
 		cell18.setBorder(PdfPCell.NO_BORDER);
@@ -688,7 +693,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		document.add(table4);
 
 		if (supplyParameters.getaLLiveConductorType().equals("AC")) {
-			
+
 			String parameternominal = supplyParameters.getNominalVoltage();
 			String parameternominal_list[] = parameternominal.split(",");
 			String PN1 = parameternominal_list[0];
@@ -737,8 +742,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 			String PI7 = parameterImpedance_list[6];
 			String PI8 = parameterImpedance_list[7];
 			String PI9 = parameterImpedance_list[8];
-			
-			
+
 			float[] pointColumnWidths1 = { 90F, 90F };
 			PdfPTable table16 = new PdfPTable(pointColumnWidths1);
 			table16.setWidthPercentage(100); // Width 100%
