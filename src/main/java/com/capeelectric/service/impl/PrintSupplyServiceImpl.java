@@ -640,54 +640,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 	private void altenateSupply(Document document, SupplyParameters supplyParameters)
 			throws DocumentException, IOException {
 
-		String parameternominal = supplyParameters.getNominalVoltage();
-		String parameternominal_list[] = parameternominal.split(",");
-		String PN1 = parameternominal_list[0];
-		String PN2 = parameternominal_list[1];
-		String PN3 = parameternominal_list[2];
-		String PN4 = parameternominal_list[3];
-		String PN5 = parameternominal_list[4];
-		String PN6 = parameternominal_list[5];
-		String PN7 = parameternominal_list[6];
-		String PN8 = parameternominal_list[7];
-		String PN9 = parameternominal_list[8];
-
-		String parameterFrequency = supplyParameters.getNominalFrequency();
-
-		String parameterFrequency_list[] = parameterFrequency.split(",");
-		String PFN1 = parameterFrequency_list[0];
-		String PFN2 = parameterFrequency_list[1];
-		String PFN3 = parameterFrequency_list[2];
-		String PFN4 = parameterFrequency_list[3];
-		String PFN5 = parameterFrequency_list[4];
-		String PFN6 = parameterFrequency_list[5];
-		String PFN7 = parameterFrequency_list[6];
-		String PFN8 = parameterFrequency_list[7];
-		String PFN9 = parameterFrequency_list[8];
-
-		String parameterCurrent = supplyParameters.getFaultCurrent();
-		String parameterCurrent_list[] = parameterCurrent.split(",");
-		String PC1 = parameterCurrent_list[0];
-		String PC2 = parameterCurrent_list[1];
-		String PC3 = parameterCurrent_list[2];
-		String PC4 = parameterCurrent_list[3];
-		String PC5 = parameterCurrent_list[4];
-		String PC6 = parameterCurrent_list[5];
-		String PC7 = parameterCurrent_list[6];
-		String PC8 = parameterCurrent_list[7];
-		String PC9 = parameterCurrent_list[8];
-
-		String parameterImpedance = supplyParameters.getLoopImpedance();
-		String parameterImpedance_list[] = parameterImpedance.split(",");
-		String PI1 = parameterImpedance_list[0];
-		String PI2 = parameterImpedance_list[1];
-		String PI3 = parameterImpedance_list[2];
-		String PI4 = parameterImpedance_list[3];
-		String PI5 = parameterImpedance_list[4];
-		String PI6 = parameterImpedance_list[5];
-		String PI7 = parameterImpedance_list[6];
-		String PI8 = parameterImpedance_list[7];
-		String PI9 = parameterImpedance_list[8];
+	
 
 		float[] pointColumnWidths = { 90F, 90F };
 		PdfPTable table3 = new PdfPTable(pointColumnWidths);
@@ -727,11 +680,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		cell70.setGrayFill(0.92f);
 		cell70.setBorder(PdfPCell.NO_BORDER);
 		table4.addCell(cell70);
-//     	  String file= "D:\\Rushlogo.PNG";
-//          Image image = Image.getInstance(file);
-//          image.scaleToFit(20, 20);
-//        document.add(image);
-
+ 
 		PdfPCell cell18 = new PdfPCell(new Paragraph(supplyParameters.getaLSystemEarthingBNote(), font6));
 		table4.addCell(new Phrase("Brief note:", font6));
 		cell18.setBorder(PdfPCell.NO_BORDER);
@@ -739,6 +688,57 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		document.add(table4);
 
 		if (supplyParameters.getaLLiveConductorType().equals("AC")) {
+			
+			String parameternominal = supplyParameters.getNominalVoltage();
+			String parameternominal_list[] = parameternominal.split(",");
+			String PN1 = parameternominal_list[0];
+			String PN2 = parameternominal_list[1];
+			String PN3 = parameternominal_list[2];
+			String PN4 = parameternominal_list[3];
+			String PN5 = parameternominal_list[4];
+			String PN6 = parameternominal_list[5];
+			String PN7 = parameternominal_list[6];
+			String PN8 = parameternominal_list[7];
+			String PN9 = parameternominal_list[8];
+
+			String parameterFrequency = supplyParameters.getNominalFrequency();
+
+			String parameterFrequency_list[] = parameterFrequency.split(",");
+			String PFN1 = parameterFrequency_list[0];
+			String PFN2 = parameterFrequency_list[1];
+			String PFN3 = parameterFrequency_list[2];
+			String PFN4 = parameterFrequency_list[3];
+			String PFN5 = parameterFrequency_list[4];
+			String PFN6 = parameterFrequency_list[5];
+			String PFN7 = parameterFrequency_list[6];
+			String PFN8 = parameterFrequency_list[7];
+			String PFN9 = parameterFrequency_list[8];
+
+			String parameterCurrent = supplyParameters.getFaultCurrent();
+			String parameterCurrent_list[] = parameterCurrent.split(",");
+			String PC1 = parameterCurrent_list[0];
+			String PC2 = parameterCurrent_list[1];
+			String PC3 = parameterCurrent_list[2];
+			String PC4 = parameterCurrent_list[3];
+			String PC5 = parameterCurrent_list[4];
+			String PC6 = parameterCurrent_list[5];
+			String PC7 = parameterCurrent_list[6];
+			String PC8 = parameterCurrent_list[7];
+			String PC9 = parameterCurrent_list[8];
+
+			String parameterImpedance = supplyParameters.getLoopImpedance();
+			String parameterImpedance_list[] = parameterImpedance.split(",");
+			String PI1 = parameterImpedance_list[0];
+			String PI2 = parameterImpedance_list[1];
+			String PI3 = parameterImpedance_list[2];
+			String PI4 = parameterImpedance_list[3];
+			String PI5 = parameterImpedance_list[4];
+			String PI6 = parameterImpedance_list[5];
+			String PI7 = parameterImpedance_list[6];
+			String PI8 = parameterImpedance_list[7];
+			String PI9 = parameterImpedance_list[8];
+			
+			
 			float[] pointColumnWidths1 = { 90F, 90F };
 			PdfPTable table16 = new PdfPTable(pointColumnWidths1);
 			table16.setWidthPercentage(100); // Width 100%
