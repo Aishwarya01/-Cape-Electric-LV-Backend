@@ -103,11 +103,11 @@ CREATE TABLE applicationtypes(
 
 			 INSERT INTO APPLICATIONTYPES VALUES  (1,'Verification Of LV Systems (IEC 60364-6)', 'LV Systems','LV');
 			 INSERT INTO APPLICATIONTYPES VALUES  (2,'Verification Of HV Systems (up to 33 kV) (IEC 61936-1)', 'HV Systems','HV');
-			 INSERT INTO APPLICATIONTYPES VALUES  (3,'Lightning Protection Conformity Assessment, Risk Assessment, Inspection And Maintenance (IEC 62305-3 & 4)', 'Risk Assessment', 'LPS');
+			 INSERT INTO APPLICATIONTYPES VALUES  (3,'Lightning Protection Conformity Assessment, Risk Assessment, Inspection And Maintenance (IEC 62305-3 & 4)', 'Risk Assessment', 'RIA');
 			 INSERT INTO APPLICATIONTYPES VALUES  (4,'EMC Assessment Of An Installation (IEC 61000-5-1)', 'EMC Assessment','EMC');
 			 INSERT INTO APPLICATIONTYPES VALUES  (5,'Failure Analysis Of Electronic Systems', 'Failure Analysis','FAS');
 			 INSERT INTO APPLICATIONTYPES VALUES  (6,'Conformity And Project Analysis', 'Conformity Project','CPA');
-
+		     INSERT INTO APPLICATIONTYPES VALUES  (7,'Testing Inspection and Certification of Lightning protection system', 'LPS System', 'LPS');
 
 --------> Site Table <------------
 
