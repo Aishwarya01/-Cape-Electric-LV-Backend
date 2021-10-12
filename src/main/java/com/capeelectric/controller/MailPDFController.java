@@ -70,7 +70,7 @@ public class MailPDFController {
 		printTestingService.printTesting(userName, siteId);
 		printService.printSummary(userName, siteId);
 		printFinalPDFService.printFinalPDF(userName, siteId);
-		awsEmailService.sendEmail(userName);
+		awsEmailService.sendEmailPDF(userName);
 		return new ResponseEntity("Final PDF fie sent to your registration mail id please check your mail", HttpStatus.OK);
 	}
 }

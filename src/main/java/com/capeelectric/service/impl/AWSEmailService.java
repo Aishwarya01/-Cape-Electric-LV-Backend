@@ -163,7 +163,7 @@ public class AWSEmailService {
 
 		}
 	}
-	public void sendEmail(String userName) throws MessagingException {
+	public void sendEmailPDF(String userName) throws MessagingException {
 		
 		String to = userName;
 		String from = FROM;
