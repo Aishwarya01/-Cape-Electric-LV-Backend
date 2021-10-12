@@ -71,6 +71,6 @@ public class MailPDFController {
 		printService.printSummary(userName, siteId);
 		printFinalPDFService.printFinalPDF(userName, siteId);
 		awsEmailService.sendEmailPDF(userName);
-		return new ResponseEntity("Final PDF fie sent to your registration mail id please check your mail", HttpStatus.OK);
+		return new ResponseEntity("Final PDF file has been sent to your registered mail id.", HttpStatus.OK);
 	}
 }
