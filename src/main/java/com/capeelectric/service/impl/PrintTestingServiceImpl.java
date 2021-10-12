@@ -54,8 +54,6 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				document.open();
 
 				Font font = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
-				Font font6 =new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-				Font font9=new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 
 				Paragraph paragraphOne = new Paragraph("TIC of LV electrical installation ", font);
 				paragraphOne.setAlignment(Element.ALIGN_CENTER);
@@ -84,13 +82,12 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				table19.setWidthPercentage(100);
 				table19.getDefaultCell().setBorder(0);
 
-				PdfPCell cell65 = new PdfPCell(new Paragraph(15, "Section - 3:Viewer And Inspector Comment:", font));
+				PdfPCell cell65 = new PdfPCell(new Paragraph(15, "Section - 3: Viewer And Inspector Comment:", font));
 				cell65.setBorder(PdfPCell.NO_BORDER);
 				cell65.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table19.addCell(cell65);
 				document.add(table19);
 
-				Font font61 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				Font font91=new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				float[] pointColumnWidths4 = { 90F, 90F,90F,90F };
 
@@ -99,17 +96,20 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				table44.setSpacingBefore(10f); // Space before table
 				table44.setWidthPercentage(100);
 
-				PdfPCell cell55 = new PdfPCell(new Paragraph("Sivaraju", font91));
+				PdfPCell cell55 = new PdfPCell(new Paragraph(comments.getViewerUserName(), font91));
 				cell55.setHorizontalAlignment(Element.ALIGN_CENTER);
 				PdfPCell cell371 = new PdfPCell(new Paragraph("ViewerUserName:", font91));
 				cell371.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell371.setGrayFill(0.92f);
+				cell371.setFixedHeight(25f);
 				table44.addCell(cell371);
 				table44.addCell(cell55);
-				PdfPCell cell381 = new PdfPCell(new Paragraph("Hasan", font91));
+				
+				PdfPCell cell381 = new PdfPCell(new Paragraph(comments.getInspectorUserName(), font91));
 				cell381.setHorizontalAlignment(Element.ALIGN_CENTER);
 				PdfPCell cell3711 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
 				cell3711.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell3711.setFixedHeight(25f);
 				cell3711.setGrayFill(0.92f);
 				table44.addCell(cell3711);
 				table44.addCell(cell381);
@@ -133,7 +133,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
         		table44.addCell(cell391);
 				table44.addCell(cell401);
 			
-//				tableData(table44, ReportComments);
+				tableData(table44, ReportComments);
 				
 			   document.add(table44);
 
@@ -147,33 +147,33 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		}
 
 	}
-//
-//	private void tableData(PdfPTable table44, List<TestingReportComment> reportComments) throws DocumentException, IOException {
-//
-////		Collections.sort(reportComments, new Comparator<TestingReportComment>() {
-////			  public int compare(TestingReportComment o1, TestingReportComment o2) {
-////			      return o1.getViewerDate().compareTo(o2.getViewerDate());
-////			  }
-////			});
-//		
-//		for (TestingReportComment arr : reportComments) {
-//			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-//			PdfPCell cell = new PdfPCell();
-//			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
-//			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-//			table44.addCell(cell);
-//			cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
-//			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-//			table44.addCell(cell);
-//			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
-//			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-//			table44.addCell(cell);
-//			cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
-//			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-//			table44.addCell(cell);
-//			
-//			}
-//	}
+
+	private void tableData(PdfPTable table44, List<TestingReportComment> reportComments) throws DocumentException, IOException {
+
+		Collections.sort(reportComments, new Comparator<TestingReportComment>() {
+			  public int compare(TestingReportComment o1, TestingReportComment o2) {
+			      return o1.getViewerDate().compareTo(o2.getViewerDate());
+			  }
+			});
+		
+		for (TestingReportComment arr : reportComments) {
+			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+			PdfPCell cell = new PdfPCell();
+			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+			
+			}
+	}
 
 	private void testingTableIteration(Document document, TestingRecords testingRecords1)
 			throws DocumentException, IOException {
