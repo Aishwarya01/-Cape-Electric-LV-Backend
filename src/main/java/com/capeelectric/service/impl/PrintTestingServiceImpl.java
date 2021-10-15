@@ -201,7 +201,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				table44.addCell(cell);
 			} else {
-				cell.setPhrase(new Phrase("No viewer date available", font));
+				cell.setPhrase(new Phrase("No inspector date available", font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table44.addCell(cell);
 			}
