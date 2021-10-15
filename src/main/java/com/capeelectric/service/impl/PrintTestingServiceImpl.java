@@ -47,9 +47,9 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				TestingReport supply2 = supply1.get(0);
 				List<Testing> testing = supply2.getTesting();
 				Testing testRecords = testing.get(0);
-				
-				List<TestingReportComment> ReportComments = supply2.getTestingComment();
-				TestingReportComment comments = ReportComments.get(0);
+
+				List<TestingReportComment> reportComments = supply2.getTestingComment();
+				TestingReportComment comments = reportComments.get(0);
 
 				document.open();
 
@@ -82,61 +82,66 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				table19.setWidthPercentage(100);
 				table19.getDefaultCell().setBorder(0);
 
-				PdfPCell cell65 = new PdfPCell(new Paragraph(15, "Section - 3: Viewer And Inspector Comment:", font));
-				cell65.setBorder(PdfPCell.NO_BORDER);
-				cell65.setBackgroundColor(BaseColor.LIGHT_GRAY);
-				table19.addCell(cell65);
-				document.add(table19);
+				if (comments.getViewerUserName() != null && comments.getInspectorUserName() != null) {
+					document.newPage();
 
-				Font font91=new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-				float[] pointColumnWidths4 = { 90F, 90F,90F,90F };
+					PdfPCell cell65 = new PdfPCell(
+							new Paragraph(15, "Section - 3: Viewer And Inspector Comment:", font));
+					cell65.setBorder(PdfPCell.NO_BORDER);
+					cell65.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					table19.addCell(cell65);
+					document.add(table19);
 
-				PdfPTable table44 = new PdfPTable(pointColumnWidths4);
-				table44.setWidthPercentage(100); // Width 100%
-				table44.setSpacingBefore(10f); // Space before table
-				table44.setWidthPercentage(100);
+					Font font91 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+					float[] pointColumnWidths4 = { 90F, 90F, 90F, 90F };
 
-				PdfPCell cell55 = new PdfPCell(new Paragraph(comments.getViewerUserName(), font91));
-				cell55.setHorizontalAlignment(Element.ALIGN_CENTER);
-				PdfPCell cell371 = new PdfPCell(new Paragraph("ViewerUserName:", font91));
-				cell371.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell371.setGrayFill(0.92f);
-				cell371.setFixedHeight(25f);
-				table44.addCell(cell371);
-				table44.addCell(cell55);
-				
-				PdfPCell cell381 = new PdfPCell(new Paragraph(comments.getInspectorUserName(), font91));
-				cell381.setHorizontalAlignment(Element.ALIGN_CENTER);
-				PdfPCell cell3711 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
-				cell3711.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell3711.setFixedHeight(25f);
-				cell3711.setGrayFill(0.92f);
-				table44.addCell(cell3711);
-				table44.addCell(cell381);
+					PdfPTable table44 = new PdfPTable(pointColumnWidths4);
+					table44.setWidthPercentage(100); // Width 100%
+					table44.setSpacingBefore(10f); // Space before table
+					table44.setWidthPercentage(100);
 
-				PdfPCell cell561 = new PdfPCell(new Paragraph("ViewerComment Date:", font91));
-				cell561.setGrayFill(0.92f);
-				cell561.setHorizontalAlignment(Element.ALIGN_CENTER);
+					PdfPCell cell55 = new PdfPCell(new Paragraph(comments.getViewerUserName(), font91));
+					cell55.setHorizontalAlignment(Element.ALIGN_CENTER);
+					PdfPCell cell371 = new PdfPCell(new Paragraph("ViewerUserName:", font91));
+					cell371.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell371.setGrayFill(0.92f);
+					cell371.setFixedHeight(25f);
+					table44.addCell(cell371);
+					table44.addCell(cell55);
 
-				PdfPCell cell5611 = new PdfPCell(new Paragraph("ViewerComment:", font91));
-				cell5611.setGrayFill(0.92f);
-				cell5611.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table44.addCell(cell5611);
-				table44.addCell(cell561);
+					PdfPCell cell381 = new PdfPCell(new Paragraph(comments.getInspectorUserName(), font91));
+					cell381.setHorizontalAlignment(Element.ALIGN_CENTER);
+					PdfPCell cell3711 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
+					cell3711.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell3711.setFixedHeight(25f);
+					cell3711.setGrayFill(0.92f);
+					table44.addCell(cell3711);
+					table44.addCell(cell381);
 
-               PdfPCell cell401 = new PdfPCell(new Paragraph("InspectorComment Date:", font91));
-				cell401.setGrayFill(0.92f);
-				cell401.setHorizontalAlignment(Element.ALIGN_CENTER);
-				PdfPCell cell391 = new PdfPCell(new Paragraph("InspectorComment:", font91));
-				cell391.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell391.setGrayFill(0.92f);
-        		table44.addCell(cell391);
-				table44.addCell(cell401);
-			
-				tableData(table44, ReportComments);
-				
-			   document.add(table44);
+					PdfPCell cell561 = new PdfPCell(new Paragraph("ViewerComment Date:", font91));
+					cell561.setGrayFill(0.92f);
+					cell561.setHorizontalAlignment(Element.ALIGN_CENTER);
 
+					PdfPCell cell5611 = new PdfPCell(new Paragraph("ViewerComment:", font91));
+					cell5611.setGrayFill(0.92f);
+					cell5611.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table44.addCell(cell5611);
+					table44.addCell(cell561);
+
+					PdfPCell cell401 = new PdfPCell(new Paragraph("InspectorComment Date:", font91));
+					cell401.setGrayFill(0.92f);
+					cell401.setHorizontalAlignment(Element.ALIGN_CENTER);
+					PdfPCell cell391 = new PdfPCell(new Paragraph("InspectorComment:", font91));
+					cell391.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell391.setGrayFill(0.92f);
+					table44.addCell(cell391);
+					table44.addCell(cell401);
+
+					tableData(table44, reportComments);
+
+					document.add(table44);
+
+				}
 				document.close();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -148,31 +153,60 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 	}
 
-	private void tableData(PdfPTable table44, List<TestingReportComment> reportComments) throws DocumentException, IOException {
+	private void tableData(PdfPTable table44, List<TestingReportComment> reportComments)
+			throws DocumentException, IOException {
 
 		Collections.sort(reportComments, new Comparator<TestingReportComment>() {
-			  public int compare(TestingReportComment o1, TestingReportComment o2) {
-			      return o1.getViewerDate().compareTo(o2.getViewerDate());
-			  }
-			});
-		
+			public int compare(TestingReportComment periodic1, TestingReportComment periodic2) {
+				if (periodic1.getViewerDate() != null && periodic2.getViewerDate() != null) {
+					return periodic1.getViewerDate().compareTo(periodic2.getViewerDate());
+				} else {
+					return 0;
+				}
+			}
+		});
+
+		Collections.sort(reportComments, new Comparator<TestingReportComment>() {
+			public int compare(TestingReportComment periodic1, TestingReportComment periodic2) {
+				if (periodic1.getInspectorDate() != null && periodic2.getInspectorDate() != null) {
+					return periodic1.getInspectorDate().compareTo(periodic2.getInspectorDate());
+				} else {
+					return 0;
+				}
+			}
+		});
 		for (TestingReportComment arr : reportComments) {
 			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 			PdfPCell cell = new PdfPCell();
 			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			table44.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table44.addCell(cell);
+
+			if (arr.getViewerDate() != null) {
+				cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table44.addCell(cell);
+			} else {
+				cell.setPhrase(new Phrase("No viewer date available", font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table44.addCell(cell);
+			}
+
 			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			table44.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table44.addCell(cell);
-			
+
+			if (arr.getInspectorDate() != null) {
+				cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table44.addCell(cell);
+			} else {
+				cell.setPhrase(new Phrase("No viewer date available", font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table44.addCell(cell);
 			}
+
+		}
 	}
 
 	private void testingTableIteration(Document document, TestingRecords testingRecords1)
@@ -192,7 +226,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(12);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Circuit no", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -201,7 +235,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Description", font25));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(3);
@@ -217,7 +251,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setRowspan(6);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Standart No", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
@@ -227,7 +261,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Type", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
@@ -237,7 +271,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Rating", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
@@ -247,7 +281,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Breaking capacity", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
@@ -257,7 +291,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Shot circuit setting", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
@@ -267,7 +301,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("E and F setting", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
@@ -277,13 +311,13 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("	Conductor details", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setRowspan(4);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Installation reference method", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
@@ -293,13 +327,13 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Cross sectional area", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setRowspan(3);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Phase", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -308,7 +342,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Neutral", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -317,7 +351,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("PE", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -335,7 +369,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Length", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -344,7 +378,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("(R1+R2)", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -353,7 +387,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("R2", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -362,7 +396,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Polarity", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(3);
@@ -372,63 +406,63 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Parameters", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(3);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("L1-L2", font26));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("L2-L3", font26));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("L1-L3", font26));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("L1-N", font26));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("L2-N", font26));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("L3-N", font26));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("L1-PE", font26));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("L2-PE", font26));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("L3-PE", font26));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		
+
 		cell1 = new PdfPCell(new Phrase("Insulation resistance (MΩ)", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(3);
 		table466.addCell(cell1);
-		
+
 		String insulationResistance = testingRecords1.getInsulationResistance();
 		String insulationResistance_list[] = insulationResistance.split(",");
 		String IR1 = insulationResistance_list[0];

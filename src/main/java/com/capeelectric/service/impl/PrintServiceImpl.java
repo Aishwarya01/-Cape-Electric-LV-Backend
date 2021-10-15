@@ -340,67 +340,71 @@ public class PrintServiceImpl implements PrintService {
 				document.add(table9);
 				document.add(table);
 
-				document.newPage();
+				if (comments.getViewerUserName() != null && comments.getInspectorUserName() != null) {
 
-				PdfPTable table19911 = new PdfPTable(1);
-				table19911.setWidthPercentage(100); // Width 100%
-				table19911.setSpacingBefore(10f); // Space before table
-				table19911.setWidthPercentage(100);
-				table19911.getDefaultCell().setBorder(0);
-				PdfPCell cell6511 = new PdfPCell(new Paragraph(15, "Section - 6: Viewer And Inspector Comment:", font));
-				cell6511.setBorder(PdfPCell.NO_BORDER);
-				cell6511.setBackgroundColor(BaseColor.LIGHT_GRAY);
-				table19911.addCell(cell6511);
-				document.add(table19911);
+					document.newPage();
 
-				Font font91111 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+					PdfPTable table19911 = new PdfPTable(1);
+					table19911.setWidthPercentage(100); // Width 100%
+					table19911.setSpacingBefore(10f); // Space before table
+					table19911.setWidthPercentage(100);
+					table19911.getDefaultCell().setBorder(0);
+					PdfPCell cell6511 = new PdfPCell(
+							new Paragraph(15, "Section - 6: Viewer And Inspector Comment:", font));
+					cell6511.setBorder(PdfPCell.NO_BORDER);
+					cell6511.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					table19911.addCell(cell6511);
+					document.add(table19911);
 
-				float[] pointColumnWidths4 = { 90F, 90F,90F,90F };
+					Font font91111 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 
-				PdfPTable table440 = new PdfPTable(pointColumnWidths4);
-				table440.setWidthPercentage(100); // Width 100%
-				table440.setSpacingBefore(10f); // Space before table
-				table440.setWidthPercentage(100);
+					float[] pointColumnWidths4 = { 90F, 90F, 90F, 90F };
 
-				PdfPCell cell550 = new PdfPCell(new Paragraph(comments.getViewerUserName(), font91111));
-				cell550.setHorizontalAlignment(Element.ALIGN_CENTER);
-				PdfPCell cell3710 = new PdfPCell(new Paragraph("ViewerUserName:", font91111));
-				cell3710.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell3710.setFixedHeight(25f);
-				cell3710.setGrayFill(0.92f);
-				table440.addCell(cell3710);
-				table440.addCell(cell550);
+					PdfPTable table440 = new PdfPTable(pointColumnWidths4);
+					table440.setWidthPercentage(100); // Width 100%
+					table440.setSpacingBefore(10f); // Space before table
+					table440.setWidthPercentage(100);
 
-				PdfPCell cell3801 = new PdfPCell(new Paragraph(comments.getInspectorUserName(), font91111));
-				cell3801.setHorizontalAlignment(Element.ALIGN_CENTER);
-				PdfPCell cell37101 = new PdfPCell(new Paragraph("InspectorUserName:", font91111));
-				cell37101.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell37101.setFixedHeight(25f);
-				cell37101.setGrayFill(0.92f);
-				table440.addCell(cell37101);
-				table440.addCell(cell3801);
+					PdfPCell cell550 = new PdfPCell(new Paragraph(comments.getViewerUserName(), font91111));
+					cell550.setHorizontalAlignment(Element.ALIGN_CENTER);
+					PdfPCell cell3710 = new PdfPCell(new Paragraph("ViewerUserName:", font91111));
+					cell3710.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell3710.setFixedHeight(25f);
+					cell3710.setGrayFill(0.92f);
+					table440.addCell(cell3710);
+					table440.addCell(cell550);
 
-				PdfPCell cell5610 = new PdfPCell(new Paragraph("ViewerComment Date:", font91111));
-				cell5610.setGrayFill(0.92f);
-				cell5610.setHorizontalAlignment(Element.ALIGN_CENTER);
+					PdfPCell cell3801 = new PdfPCell(new Paragraph(comments.getInspectorUserName(), font91111));
+					cell3801.setHorizontalAlignment(Element.ALIGN_CENTER);
+					PdfPCell cell37101 = new PdfPCell(new Paragraph("InspectorUserName:", font91111));
+					cell37101.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell37101.setFixedHeight(25f);
+					cell37101.setGrayFill(0.92f);
+					table440.addCell(cell37101);
+					table440.addCell(cell3801);
 
-				PdfPCell cell56110 = new PdfPCell(new Paragraph("ViewerComment:", font91111));
-				cell56110.setGrayFill(0.92f);
-				cell56110.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table440.addCell(cell56110);
-				table440.addCell(cell5610);
+					PdfPCell cell5610 = new PdfPCell(new Paragraph("ViewerComment Date:", font91111));
+					cell5610.setGrayFill(0.92f);
+					cell5610.setHorizontalAlignment(Element.ALIGN_CENTER);
 
-				PdfPCell cell4010 = new PdfPCell(new Paragraph("InspectorComment Date:", font91111));
-				cell4010.setGrayFill(0.92f);
-				cell4010.setHorizontalAlignment(Element.ALIGN_CENTER);
-				PdfPCell cell39101 = new PdfPCell(new Paragraph("InspectorComment:", font91111));
-				cell39101.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell39101.setGrayFill(0.92f);
-				table440.addCell(cell39101);
-				table440.addCell(cell4010);
+					PdfPCell cell56110 = new PdfPCell(new Paragraph("ViewerComment:", font91111));
+					cell56110.setGrayFill(0.92f);
+					cell56110.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table440.addCell(cell56110);
+					table440.addCell(cell5610);
 
-				tableData1(table440, ReportComments);
-				document.add(table440);
+					PdfPCell cell4010 = new PdfPCell(new Paragraph("InspectorComment Date:", font91111));
+					cell4010.setGrayFill(0.92f);
+					cell4010.setHorizontalAlignment(Element.ALIGN_CENTER);
+					PdfPCell cell39101 = new PdfPCell(new Paragraph("InspectorComment:", font91111));
+					cell39101.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell39101.setGrayFill(0.92f);
+					table440.addCell(cell39101);
+					table440.addCell(cell4010);
+
+					tableData1(table440, ReportComments);
+					document.add(table440);
+				}
 				document.close();
 				writer.close();
 			} catch (Exception e) {
@@ -416,8 +420,22 @@ public class PrintServiceImpl implements PrintService {
 			throws DocumentException, IOException {
 
 		Collections.sort(reportComments, new Comparator<SummaryComment>() {
-			public int compare(SummaryComment o1, SummaryComment o2) {
-				return o1.getViewerDate().compareTo(o2.getViewerDate());
+			public int compare(SummaryComment periodic1, SummaryComment periodic2) {
+				if (periodic1.getViewerDate() != null && periodic2.getViewerDate() != null) {
+					return periodic1.getViewerDate().compareTo(periodic2.getViewerDate());
+				} else {
+					return 0;
+				}
+			}
+		});
+
+		Collections.sort(reportComments, new Comparator<SummaryComment>() {
+			public int compare(SummaryComment periodic1, SummaryComment periodic2) {
+				if (periodic1.getInspectorDate() != null && periodic2.getInspectorDate() != null) {
+					return periodic1.getInspectorDate().compareTo(periodic2.getInspectorDate());
+				} else {
+					return 0;
+				}
 			}
 		});
 
@@ -427,18 +445,32 @@ public class PrintServiceImpl implements PrintService {
 			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			table440.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table440.addCell(cell);
+
+			if (arr.getViewerDate() != null) {
+				cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table440.addCell(cell);
+			} else {
+				cell.setPhrase(new Phrase("No viewer date available", font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table440.addCell(cell);
+			}
+
 			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			table440.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table440.addCell(cell);
+
+			if (arr.getInspectorDate() != null) {
+				cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table440.addCell(cell);
+			} else {
+				cell.setPhrase(new Phrase("No viewer date available", font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table440.addCell(cell);
+			}
 
 		}
-
 	}
 
 	private void addRow(PdfPTable table9, String string, String string2) throws DocumentException, IOException {
