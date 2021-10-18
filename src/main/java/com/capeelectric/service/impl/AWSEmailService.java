@@ -183,13 +183,13 @@ public class AWSEmailService {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-			message.setSubject("Testing Subject");
+			message.setSubject("Welcome to Rush App Online Services");
 			BodyPart messageBodyPart = new MimeBodyPart();
-			messageBodyPart.setText("This is message body");
+			messageBodyPart.setText("Please find the attached final pdf submitted");
 			Multipart multipart = new MimeMultipart();
 			multipart.addBodyPart(messageBodyPart);
 			messageBodyPart = new MimeBodyPart();
-			String filename = ("Finalreport.pdf");
+			String filename = ("finalreport.pdf");
 
 			DataSource source = new FileDataSource(filename);
 			messageBodyPart.setDataHandler(new DataHandler(source));
