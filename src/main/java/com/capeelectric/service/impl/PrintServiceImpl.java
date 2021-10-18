@@ -1,74 +1,33 @@
 package com.capeelectric.service.impl;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import javax.swing.text.StyleConstants.FontConstants;
-import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter.Blue;
-import org.apache.logging.log4j.core.tools.picocli.CommandLine.Help.TextTable.Cell;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.SummaryException;
-import com.capeelectric.model.BoundingLocationReport;
-import com.capeelectric.model.Circuit;
-import com.capeelectric.model.ConsumerUnit;
-import com.capeelectric.model.InstalLocationReport;
-import com.capeelectric.model.IpaoInspection;
-import com.capeelectric.model.IsolationCurrent;
-import com.capeelectric.model.PeriodicInspection;
-import com.capeelectric.model.PeriodicInspectionComment;
-import com.capeelectric.model.ReportDetails;
-import com.capeelectric.model.ReportDetailsComment;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
 import com.capeelectric.model.SummaryDeclaration;
 import com.capeelectric.model.SummaryObervation;
-import com.capeelectric.model.SupplyCharacteristicComment;
-import com.capeelectric.model.SupplyCharacteristics;
-import com.capeelectric.model.Testing;
-import com.capeelectric.model.TestingReport;
-import com.capeelectric.model.TestingReportComment;
-import com.capeelectric.repository.InspectionRepository;
-import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SummaryRepository;
-import com.capeelectric.repository.SupplyCharacteristicsRepository;
-import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.PrintService;
-import com.itextpdf.awt.geom.Rectangle;
 import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.Font.FontFamily;
-import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.TabStop.Alignment;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfPageEvent;
-import com.itextpdf.text.pdf.PdfStamper;
-import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.capeelectric.util.HeaderFooterPageEvent;
 
 @Service
 public class PrintServiceImpl implements PrintService {
