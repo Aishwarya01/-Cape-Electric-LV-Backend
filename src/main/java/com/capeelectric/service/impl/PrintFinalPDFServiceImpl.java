@@ -39,7 +39,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 				OutputStream outputStream = new FileOutputStream("finalreport.pdf");
 				mergePdfFiles(inputPdfList, outputStream);
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.println(e);  
 			}
 		} else {
 			throw new Exception("Invalid Inputs");
