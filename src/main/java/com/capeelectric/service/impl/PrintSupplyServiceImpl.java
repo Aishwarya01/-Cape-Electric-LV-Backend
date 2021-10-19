@@ -2,6 +2,8 @@ package com.capeelectric.service.impl;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import com.capeelectric.model.BoundingLocationReport;
 import com.capeelectric.model.CircuitBreaker;
 import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.InstalLocationReport;
+import com.capeelectric.model.SupplyCharacteristicComment;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.SupplyParameters;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
@@ -45,59 +48,10 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 						siteId);
 				SupplyCharacteristics supply = supply1.get(0);
 
-				List<SupplyParameters> supplyParameters1 = supply.getSupplyParameters();
-				SupplyParameters supplyParameters = supplyParameters1.get(0);
-
-				List<CircuitBreaker> circuitBreaker = supply.getCircuitBreaker();
 				List<InstalLocationReport> instalLocationReport = supply.getInstalLocationReport();
 
-				String nominal = supply.getMainNominalVoltage();
-				String nominal_list[] = nominal.split(",");
-				String N1 = nominal_list[0];
-				String N2 = nominal_list[1];
-				String N3 = nominal_list[2];
-				String N4 = nominal_list[3];
-				String N5 = nominal_list[4];
-				String N6 = nominal_list[5];
-				String N7 = nominal_list[6];
-				String N8 = nominal_list[7];
-				String N9 = nominal_list[8];
-
-				String nominalFrequency = supply.getMainNominalFrequency();
-				String nominalFrequency_list[] = nominalFrequency.split(",");
-				String NF1 = nominalFrequency_list[0];
-				String NF2 = nominalFrequency_list[1];
-				String NF3 = nominalFrequency_list[2];
-				String NF4 = nominalFrequency_list[3];
-				String NF5 = nominalFrequency_list[4];
-				String NF6 = nominalFrequency_list[5];
-				String NF7 = nominalFrequency_list[6];
-				String NF8 = nominalFrequency_list[7];
-				String NF9 = nominalFrequency_list[8];
-
-				String nominalFaultCurrent = supply.getMainNominalCurrent();
-				String nominalFaultCurrent_list[] = nominalFaultCurrent.split(",");
-				String NFC1 = nominalFaultCurrent_list[0];
-				String NFC2 = nominalFaultCurrent_list[1];
-				String NFC3 = nominalFaultCurrent_list[2];
-				String NFC4 = nominalFaultCurrent_list[3];
-				String NFC5 = nominalFaultCurrent_list[4];
-				String NFC6 = nominalFaultCurrent_list[5];
-				String NFC7 = nominalFaultCurrent_list[6];
-				String NFC8 = nominalFaultCurrent_list[7];
-				String NFC9 = nominalFaultCurrent_list[8];
-
-				String nominalFaultLoop = supply.getMainLoopImpedance();
-				String nominalFaultLoop_list[] = nominalFaultLoop.split(",");
-				String NFL1 = nominalFaultLoop_list[0];
-				String NFL2 = nominalFaultLoop_list[1];
-				String NFL3 = nominalFaultLoop_list[2];
-				String NFL4 = nominalFaultLoop_list[3];
-				String NFL5 = nominalFaultLoop_list[4];
-				String NFL6 = nominalFaultLoop_list[5];
-				String NFL7 = nominalFaultLoop_list[6];
-				String NFL8 = nominalFaultLoop_list[7];
-				String NFL9 = nominalFaultLoop_list[8];
+				List<SupplyCharacteristicComment> reportComments = supply.getSupplyCharacteristicComment();
+				SupplyCharacteristicComment comments = reportComments.get(0);
 
 				List<BoundingLocationReport> boundingLocationReport = supply.getBoundingLocationReport();
 				List<EarthingLocationReport> earthingLocationReport = supply.getEarthingLocationReport();
@@ -105,10 +59,10 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				document.open();
 
 				Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-				Font font7 = new Font(BaseFont.createFont(), 10, Font.NORMAL|Font.BOLD);
+				Font font7 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD);
 				Font font1 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
-                Font font4 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
-                Font font5 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
+				Font font4 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
+				Font font5 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
 				Font font6 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				Font font9 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				Font font10 = new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
@@ -176,6 +130,55 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				document.add(table);
 
 				if (supply.getLiveConductorType().equals("AC")) {
+
+					String nominal = supply.getMainNominalVoltage();
+					String nominal_list[] = nominal.split(",");
+					String N1 = nominal_list[0];
+					String N2 = nominal_list[1];
+					String N3 = nominal_list[2];
+					String N4 = nominal_list[3];
+					String N5 = nominal_list[4];
+					String N6 = nominal_list[5];
+					String N7 = nominal_list[6];
+					String N8 = nominal_list[7];
+					String N9 = nominal_list[8];
+
+					String nominalFrequency = supply.getMainNominalFrequency();
+					String nominalFrequency_list[] = nominalFrequency.split(",");
+					String NF1 = nominalFrequency_list[0];
+					String NF2 = nominalFrequency_list[1];
+					String NF3 = nominalFrequency_list[2];
+					String NF4 = nominalFrequency_list[3];
+					String NF5 = nominalFrequency_list[4];
+					String NF6 = nominalFrequency_list[5];
+					String NF7 = nominalFrequency_list[6];
+					String NF8 = nominalFrequency_list[7];
+					String NF9 = nominalFrequency_list[8];
+
+					String nominalFaultCurrent = supply.getMainNominalCurrent();
+					String nominalFaultCurrent_list[] = nominalFaultCurrent.split(",");
+					String NFC1 = nominalFaultCurrent_list[0];
+					String NFC2 = nominalFaultCurrent_list[1];
+					String NFC3 = nominalFaultCurrent_list[2];
+					String NFC4 = nominalFaultCurrent_list[3];
+					String NFC5 = nominalFaultCurrent_list[4];
+					String NFC6 = nominalFaultCurrent_list[5];
+					String NFC7 = nominalFaultCurrent_list[6];
+					String NFC8 = nominalFaultCurrent_list[7];
+					String NFC9 = nominalFaultCurrent_list[8];
+
+					String nominalFaultLoop = supply.getMainLoopImpedance();
+					String nominalFaultLoop_list[] = nominalFaultLoop.split(",");
+					String NFL1 = nominalFaultLoop_list[0];
+					String NFL2 = nominalFaultLoop_list[1];
+					String NFL3 = nominalFaultLoop_list[2];
+					String NFL4 = nominalFaultLoop_list[3];
+					String NFL5 = nominalFaultLoop_list[4];
+					String NFL6 = nominalFaultLoop_list[5];
+					String NFL7 = nominalFaultLoop_list[6];
+					String NFL8 = nominalFaultLoop_list[7];
+					String NFL9 = nominalFaultLoop_list[8];
+
 					float[] pointColumnWidths1 = { 90F, 90F };
 					PdfPTable table15 = new PdfPTable(pointColumnWidths1);
 					table15.setWidthPercentage(100); // Width 100%
@@ -283,23 +286,29 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table15.addCell(new Phrase("Availability of alternate supply:", font9));
 				cell9.setBorder(PdfPCell.NO_BORDER);
 				table15.addCell(cell9);
-
-				PdfPCell cell10 = new PdfPCell(new Paragraph(8, "Number of alternate sources of supply:", font9));
-				cell10.setBorder(PdfPCell.NO_BORDER);
-				cell10.setGrayFill(0.92f);
-				table15.addCell(cell10);
-				PdfPCell cell68 = new PdfPCell(new Paragraph(supply.getAlternativeSupply(), font6));
-				cell68.setGrayFill(0.92f);
-				cell68.setBorder(PdfPCell.NO_BORDER);
-				table15.addCell(cell68);
-				document.add(table);
-
 				document.add(table15);
 
-				for (SupplyParameters arr : supplyParameters1) {
-					altenateSupply(document, arr);
-				}
+				PdfPTable table151 = new PdfPTable(pointColumnWidths);
+				table151.setWidthPercentage(100); // Width 100%
+				table151.setWidthPercentage(100);
+				table151.getDefaultCell().setBorder(0);
+				if (supply.getAlternativeSupply().equals("Yes")) {
 
+					PdfPCell cell10 = new PdfPCell(new Paragraph(8, "Number of alternate sources of supply:", font9));
+					cell10.setBorder(PdfPCell.NO_BORDER);
+					cell10.setGrayFill(0.92f);
+					table151.addCell(cell10);
+					PdfPCell cell68 = new PdfPCell(new Paragraph(supply.getSupplyNumber(), font6));
+					cell68.setGrayFill(0.92f);
+					cell68.setBorder(PdfPCell.NO_BORDER);
+					table151.addCell(cell68);
+					document.add(table151);
+
+					List<SupplyParameters> supplyParameters1 = supply.getSupplyParameters();
+					for (SupplyParameters arr : supplyParameters1) {
+						altenateSupply(document, arr);
+					}
+				}
 				document.newPage();
 
 				PdfPTable table18 = new PdfPTable(1);
@@ -517,79 +526,92 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				document.add(table13);
 				document.newPage();
 
-				PdfPTable table20 = new PdfPTable(1);
-				table20.setWidthPercentage(100); // Width 100%
-				table20.setSpacingBefore(10f); // Space before table
-				table20.setWidthPercentage(100);
-				table20.getDefaultCell().setBorder(0);
+				if (supply.getAlternativeSupply().equals("Yes")) {
+					PdfPTable table20 = new PdfPTable(1);
+					table20.setWidthPercentage(100); // Width 100%
+					table20.setSpacingBefore(10f); // Space before table
+					table20.setWidthPercentage(100);
+					table20.getDefaultCell().setBorder(0);
 
-				PdfPCell cell49 = new PdfPCell(
-						new Paragraph("Section - 5: Details of main switch or circuit breaker", font5));
-				cell49.setBorder(PdfPCell.NO_BORDER);
-				cell49.setBackgroundColor(BaseColor.LIGHT_GRAY);
-				table20.addCell(cell49);
-				document.add(table20);
-				for (CircuitBreaker circuteitr : circuitBreaker) {
-					circuteBraker(document, circuteitr);
+					PdfPCell cell49 = new PdfPCell(
+							new Paragraph("Section - 5: Details of main switch or circuit breaker", font5));
+					cell49.setBorder(PdfPCell.NO_BORDER);
+					cell49.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					table20.addCell(cell49);
+					document.add(table20);
+
+					List<CircuitBreaker> circuitBreaker = supply.getCircuitBreaker();
+
+					for (CircuitBreaker circuteitr : circuitBreaker) {
+						circuteBraker(document, circuteitr);
+					}
 				}
-				document.newPage();
-				PdfPTable table191 = new PdfPTable(1);
-				table191.setWidthPercentage(100); // Width 100%
-				table191.setSpacingBefore(10f); // Space before table
-				table191.setWidthPercentage(100);
-				table191.getDefaultCell().setBorder(0);
+				if (comments.getViewerUserName() != null && comments.getInspectorUserName() != null) {
 
-				PdfPCell cell65 = new PdfPCell(new Paragraph(15, "Section - 6:Viewer And Inspector Comment:", font7));
-				cell65.setBorder(PdfPCell.NO_BORDER);
-				cell65.setBackgroundColor(BaseColor.LIGHT_GRAY);
-				table191.addCell(cell65);
-				document.add(table191);
-				Font font61 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-				Font font91=new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-				float[] pointColumnWidths4 = { 90F, 90F,90F,90F };
+					document.newPage();
+					PdfPTable table191 = new PdfPTable(1);
+					table191.setWidthPercentage(100); // Width 100%
+					table191.setSpacingBefore(10f); // Space before table
+					table191.setWidthPercentage(100);
+					table191.getDefaultCell().setBorder(0);
 
-				PdfPTable table44 = new PdfPTable(pointColumnWidths4);
-				table44.setWidthPercentage(100); // Width 100%
-				table44.setSpacingBefore(10f); // Space before table
-				table44.setWidthPercentage(100);
+					PdfPCell cell65 = new PdfPCell(
+							new Paragraph(15, "Section - 6: Viewer And Inspector Comment:", font7));
+					cell65.setBorder(PdfPCell.NO_BORDER);
+					cell65.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					table191.addCell(cell65);
+					document.add(table191);
+					Font font61 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+					Font font91 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+					float[] pointColumnWidths4 = { 90F, 90F, 90F, 90F };
 
-				PdfPCell cell55 = new PdfPCell(new Paragraph("Sivaraju", font91));
-				cell55.setHorizontalAlignment(Element.ALIGN_CENTER);
-				PdfPCell cell371 = new PdfPCell(new Paragraph("ViewerUserName:", font91));
-				cell371.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell371.setGrayFill(0.92f);
-				table44.addCell(cell371);
-				table44.addCell(cell55);
-				PdfPCell cell381 = new PdfPCell(new Paragraph("Hasan", font91));
-				cell381.setHorizontalAlignment(Element.ALIGN_CENTER);
-				PdfPCell cell3711 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
-				cell3711.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell3711.setGrayFill(0.92f);
-				table44.addCell(cell3711);
-				table44.addCell(cell381);
+					PdfPTable table44 = new PdfPTable(pointColumnWidths4);
+					table44.setWidthPercentage(100); // Width 100%
+					table44.setSpacingBefore(10f); // Space before table
+					table44.setWidthPercentage(100);
 
-				PdfPCell cell561 = new PdfPCell(new Paragraph("ViewerComment Date:", font91));
-				cell561.setGrayFill(0.92f);
-				cell561.setHorizontalAlignment(Element.ALIGN_CENTER);
+					PdfPCell cell55 = new PdfPCell(new Paragraph(comments.getViewerUserName(), font91));
+					cell55.setHorizontalAlignment(Element.ALIGN_CENTER);
+					PdfPCell cell371 = new PdfPCell(new Paragraph("ViewerUserName:", font91));
+					cell371.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell371.setFixedHeight(25f);
+					cell371.setGrayFill(0.92f);
+					table44.addCell(cell371);
+					table44.addCell(cell55);
+					PdfPCell cell381 = new PdfPCell(new Paragraph(comments.getInspectorUserName(), font91));
+					cell381.setHorizontalAlignment(Element.ALIGN_CENTER);
+					PdfPCell cell3711 = new PdfPCell(new Paragraph("InspectorUserName:", font91));
+					cell3711.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell3711.setFixedHeight(25f);
+					cell3711.setGrayFill(0.92f);
+					table44.addCell(cell3711);
+					table44.addCell(cell381);
 
-				PdfPCell cell5611 = new PdfPCell(new Paragraph("ViewerComment:", font91));
-				cell5611.setGrayFill(0.92f);
-				cell5611.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table44.addCell(cell5611);
-				table44.addCell(cell561);
+					PdfPCell cell561 = new PdfPCell(new Paragraph("ViewerComment Date:", font91));
+					cell561.setGrayFill(0.92f);
+					cell561.setHorizontalAlignment(Element.ALIGN_CENTER);
 
-               PdfPCell cell401 = new PdfPCell(new Paragraph("InspectorComment Date:", font91));
-				cell401.setGrayFill(0.92f);
-				cell401.setHorizontalAlignment(Element.ALIGN_CENTER);
-				PdfPCell cell391 = new PdfPCell(new Paragraph("InspectorComment:", font91));
-				cell391.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell391.setGrayFill(0.92f);
-        		table44.addCell(cell391);
-				table44.addCell(cell401);
-				
-			   document.add(table44);
-                 
-			document.close();
+					PdfPCell cell5611 = new PdfPCell(new Paragraph("ViewerComment:", font91));
+					cell5611.setGrayFill(0.92f);
+					cell5611.setHorizontalAlignment(Element.ALIGN_CENTER);
+					table44.addCell(cell5611);
+					table44.addCell(cell561);
+
+					PdfPCell cell401 = new PdfPCell(new Paragraph("InspectorComment Date:", font91));
+					cell401.setGrayFill(0.92f);
+					cell401.setHorizontalAlignment(Element.ALIGN_CENTER);
+					PdfPCell cell391 = new PdfPCell(new Paragraph("InspectorComment:", font91));
+					cell391.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell391.setGrayFill(0.92f);
+					table44.addCell(cell391);
+					table44.addCell(cell401);
+
+					tableData10(table44, reportComments);
+
+					document.add(table44);
+
+				}
+				document.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -599,57 +621,66 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		}
 	}
 
-	private void altenateSupply(Document document, SupplyParameters supplyParameters)
+	private void tableData10(PdfPTable table44, List<SupplyCharacteristicComment> reportComments)
 			throws DocumentException, IOException {
 
-		String parameternominal = supplyParameters.getNominalVoltage();
-		String parameternominal_list[] = parameternominal.split(",");
-		String PN1 = parameternominal_list[0];
-		String PN2 = parameternominal_list[1];
-		String PN3 = parameternominal_list[2];
-		String PN4 = parameternominal_list[3];
-		String PN5 = parameternominal_list[4];
-		String PN6 = parameternominal_list[5];
-		String PN7 = parameternominal_list[6];
-		String PN8 = parameternominal_list[7];
-		String PN9 = parameternominal_list[8];
+		Collections.sort(reportComments, new Comparator<SupplyCharacteristicComment>() {
+			public int compare(SupplyCharacteristicComment periodic1, SupplyCharacteristicComment periodic2) {
+				if (periodic1.getViewerDate() != null && periodic2.getViewerDate() != null) {
+					return periodic1.getViewerDate().compareTo(periodic2.getViewerDate());
+				} else {
+					return 0;
+				}
+			}
+		});
 
-		String parameterFrequency = supplyParameters.getNominalFrequency();
+		Collections.sort(reportComments, new Comparator<SupplyCharacteristicComment>() {
+			public int compare(SupplyCharacteristicComment periodic1, SupplyCharacteristicComment periodic2) {
+				if (periodic1.getInspectorDate() != null && periodic2.getInspectorDate() != null) {
+					return periodic1.getInspectorDate().compareTo(periodic2.getInspectorDate());
+				} else {
+					return 0;
+				}
+			}
+		});
 
-		String parameterFrequency_list[] = parameterFrequency.split(",");
-		String PFN1 = parameterFrequency_list[0];
-		String PFN2 = parameterFrequency_list[1];
-		String PFN3 = parameterFrequency_list[2];
-		String PFN4 = parameterFrequency_list[3];
-		String PFN5 = parameterFrequency_list[4];
-		String PFN6 = parameterFrequency_list[5];
-		String PFN7 = parameterFrequency_list[6];
-		String PFN8 = parameterFrequency_list[7];
-		String PFN9 = parameterFrequency_list[8];
+		for (SupplyCharacteristicComment arr : reportComments) {
+			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+			PdfPCell cell = new PdfPCell();
+			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
 
-		String parameterCurrent = supplyParameters.getFaultCurrent();
-		String parameterCurrent_list[] = parameterCurrent.split(",");
-		String PC1 = parameterCurrent_list[0];
-		String PC2 = parameterCurrent_list[1];
-		String PC3 = parameterCurrent_list[2];
-		String PC4 = parameterCurrent_list[3];
-		String PC5 = parameterCurrent_list[4];
-		String PC6 = parameterCurrent_list[5];
-		String PC7 = parameterCurrent_list[6];
-		String PC8 = parameterCurrent_list[7];
-		String PC9 = parameterCurrent_list[8];
+			if (arr.getViewerDate() != null) {
+				cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table44.addCell(cell);
+			} else {
+				cell.setPhrase(new Phrase("No viewer date available", font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table44.addCell(cell);
 
-		String parameterImpedance = supplyParameters.getLoopImpedance();
-		String parameterImpedance_list[] = parameterImpedance.split(",");
-		String PI1 = parameterImpedance_list[0];
-		String PI2 = parameterImpedance_list[1];
-		String PI3 = parameterImpedance_list[2];
-		String PI4 = parameterImpedance_list[3];
-		String PI5 = parameterImpedance_list[4];
-		String PI6 = parameterImpedance_list[5];
-		String PI7 = parameterImpedance_list[6];
-		String PI8 = parameterImpedance_list[7];
-		String PI9 = parameterImpedance_list[8];
+			}
+			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			table44.addCell(cell);
+
+			if (arr.getInspectorDate() != null) {
+				cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table44.addCell(cell);
+			} else {
+				cell.setPhrase(new Phrase("No inspector date available", font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table44.addCell(cell);
+
+			}
+		}
+
+	}
+
+	private void altenateSupply(Document document, SupplyParameters supplyParameters)
+			throws DocumentException, IOException {
 
 		float[] pointColumnWidths = { 90F, 90F };
 		PdfPTable table3 = new PdfPTable(pointColumnWidths);
@@ -689,10 +720,6 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		cell70.setGrayFill(0.92f);
 		cell70.setBorder(PdfPCell.NO_BORDER);
 		table4.addCell(cell70);
-//     	  String file= "D:\\Rushlogo.PNG";
-//          Image image = Image.getInstance(file);
-//          image.scaleToFit(20, 20);
-//        document.add(image);
 
 		PdfPCell cell18 = new PdfPCell(new Paragraph(supplyParameters.getaLSystemEarthingBNote(), font6));
 		table4.addCell(new Phrase("Brief note:", font6));
@@ -701,6 +728,56 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		document.add(table4);
 
 		if (supplyParameters.getaLLiveConductorType().equals("AC")) {
+
+			String parameternominal = supplyParameters.getNominalVoltage();
+			String parameternominal_list[] = parameternominal.split(",");
+			String PN1 = parameternominal_list[0];
+			String PN2 = parameternominal_list[1];
+			String PN3 = parameternominal_list[2];
+			String PN4 = parameternominal_list[3];
+			String PN5 = parameternominal_list[4];
+			String PN6 = parameternominal_list[5];
+			String PN7 = parameternominal_list[6];
+			String PN8 = parameternominal_list[7];
+			String PN9 = parameternominal_list[8];
+
+			String parameterFrequency = supplyParameters.getNominalFrequency();
+
+			String parameterFrequency_list[] = parameterFrequency.split(",");
+			String PFN1 = parameterFrequency_list[0];
+			String PFN2 = parameterFrequency_list[1];
+			String PFN3 = parameterFrequency_list[2];
+			String PFN4 = parameterFrequency_list[3];
+			String PFN5 = parameterFrequency_list[4];
+			String PFN6 = parameterFrequency_list[5];
+			String PFN7 = parameterFrequency_list[6];
+			String PFN8 = parameterFrequency_list[7];
+			String PFN9 = parameterFrequency_list[8];
+
+			String parameterCurrent = supplyParameters.getFaultCurrent();
+			String parameterCurrent_list[] = parameterCurrent.split(",");
+			String PC1 = parameterCurrent_list[0];
+			String PC2 = parameterCurrent_list[1];
+			String PC3 = parameterCurrent_list[2];
+			String PC4 = parameterCurrent_list[3];
+			String PC5 = parameterCurrent_list[4];
+			String PC6 = parameterCurrent_list[5];
+			String PC7 = parameterCurrent_list[6];
+			String PC8 = parameterCurrent_list[7];
+			String PC9 = parameterCurrent_list[8];
+
+			String parameterImpedance = supplyParameters.getLoopImpedance();
+			String parameterImpedance_list[] = parameterImpedance.split(",");
+			String PI1 = parameterImpedance_list[0];
+			String PI2 = parameterImpedance_list[1];
+			String PI3 = parameterImpedance_list[2];
+			String PI4 = parameterImpedance_list[3];
+			String PI5 = parameterImpedance_list[4];
+			String PI6 = parameterImpedance_list[5];
+			String PI7 = parameterImpedance_list[6];
+			String PI8 = parameterImpedance_list[7];
+			String PI9 = parameterImpedance_list[8];
+
 			float[] pointColumnWidths1 = { 90F, 90F };
 			PdfPTable table16 = new PdfPTable(pointColumnWidths1);
 			table16.setWidthPercentage(100); // Width 100%
@@ -963,6 +1040,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 	}
 
 	private void tableData(PdfPTable table8, List<InstalLocationReport> instalLocationReport) {
+
 		for (InstalLocationReport arr : instalLocationReport) {
 			PdfPCell cell = new PdfPCell();
 			Font font = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);

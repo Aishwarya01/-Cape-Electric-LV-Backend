@@ -67,6 +67,9 @@ public class TestDistribution implements Serializable {
 
 	@Column(name = "INCOMING_FAULTCURRENT")
 	private String incomingFaultCurrent;
+	
+	@Column(name = "SOURCE_FROM_SUPPLY")
+	private String sourceFromSupply;
 
 	@JsonBackReference
 	@ManyToOne
@@ -180,5 +183,15 @@ public class TestDistribution implements Serializable {
 	public void setIncomingFaultCurrent(String incomingFaultCurrent) {
 		this.incomingFaultCurrent = incomingFaultCurrent;
 	}
+
+	public String getSourceFromSupply() {
+		return sourceFromSupply;
+	}
+
+	public void setSourceFromSupply(String sourceFromSupply) {
+		this.sourceFromSupply = sourceFromSupply;
+	}
+	
+	
 
 }

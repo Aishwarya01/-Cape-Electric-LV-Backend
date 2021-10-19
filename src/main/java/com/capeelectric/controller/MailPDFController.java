@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.service.ReturnPDFService;
+import com.capeelectric.service.impl.AWSEmailService;
 import com.capeelectric.service.InspectionServicePDF;
 import com.capeelectric.service.InstalReportPDFService;
 import com.capeelectric.service.PrintFinalPDFService;
@@ -33,56 +35,42 @@ import com.itextpdf.text.log.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 
- 
-
 @RestController
 @RequestMapping("api/v2")
-public class FinalPDFController {
- 
 
-    private final ReturnPDFService returnPDFService;
-
-    @Autowired
-    public FinalPDFController(ReturnPDFService returnPDFService) {
-    	   this.returnPDFService = returnPDFService;
-    }
+public class MailPDFController {
+	@Autowired
+	private PrintService printService;
 
 	@Autowired
-	private PrintService printService ;
-	
+	private PrintTestingService printTestingService;
+
 	@Autowired
-	private PrintTestingService printTestingService ;
-	
-	@Autowired
-	private PrintSupplyService printSupplyService ;
-	
+	private PrintSupplyService printSupplyService;
+
 	@Autowired
 	private PrintFinalPDFService printFinalPDFService;
-	
+
 	@Autowired
 	private InstalReportPDFService instalReportPDFService;
-	  
-	
+
 	@Autowired
 	private InspectionServicePDF inspectionServicePDF;
-	
-    @GetMapping("/printFinalPDF/{userName}/{siteId}")
-    @ResponseBody
-    public ResponseEntity<Resource> printFinalPDF(@PathVariable String userName,
-			@PathVariable Integer siteId) throws InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, SummaryException, Exception {
-    	instalReportPDFService.printBasicInfromation(userName,siteId);
-		printSupplyService.printSupply(userName,siteId);
-		inspectionServicePDF.retrieveInspectionDetails(userName,siteId);
-		printTestingService.printTesting(userName, siteId);
-		printService.printSummary(userName,siteId);
-		printFinalPDFService.printFinalPDF(userName, siteId);
-        Resource file = returnPDFService.printFinalPDF(userName,siteId);
-        Path path = file.getFile()
-                        .toPath();
 
-        return ResponseEntity.ok()
-                             .header(HttpHeaders.CONTENT_TYPE, Files.probeContentType(path))
-                             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-                             .body(file);
-    }
+	@Autowired
+	private AWSEmailService awsEmailService;
+
+	@GetMapping("/sendPDFinMail/{userName}/{siteId}")
+	public ResponseEntity<String> sendFinalPDF(@PathVariable String userName, @PathVariable Integer siteId)
+			throws InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException,
+			SummaryException, Exception {
+		instalReportPDFService.printBasicInfromation(userName, siteId);
+		printSupplyService.printSupply(userName, siteId);
+		inspectionServicePDF.retrieveInspectionDetails(userName, siteId);
+		printTestingService.printTesting(userName, siteId);
+		printService.printSummary(userName, siteId);
+		printFinalPDFService.printFinalPDF(userName, siteId);
+		awsEmailService.sendEmailPDF(userName);
+		return new ResponseEntity("Final PDF file has been sent to your registered mail id.", HttpStatus.OK);
+	}
 }

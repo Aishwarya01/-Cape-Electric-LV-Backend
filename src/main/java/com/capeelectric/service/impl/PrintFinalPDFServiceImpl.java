@@ -36,10 +36,10 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 				inputPdfList.add(new FileInputStream("Testing.pdf"));
 				inputPdfList.add(new FileInputStream("Summary.pdf"));
 
-				OutputStream outputStream = new FileOutputStream("TotalMergedData.pdf");
+				OutputStream outputStream = new FileOutputStream("finalreport.pdf");
 				mergePdfFiles(inputPdfList, outputStream);
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.println(e);  
 			}
 		} else {
 			throw new Exception("Invalid Inputs");
