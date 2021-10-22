@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.service.PrintFinalPDFService;
 import com.capeelectric.util.HeaderFooterPageEvent;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfImportedPage;
@@ -23,6 +25,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 
+	@Autowired
+	private AWSS3ServiceImpl awsS3ServiceImpl;
 	@Override
 	public void printFinalPDF(String userName, Integer siteId) throws Exception {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
@@ -37,7 +41,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 				inputPdfList.add(new FileInputStream("Summary.pdf"));
 
 				OutputStream outputStream = new FileOutputStream("TotalMergedData.pdf");
-				mergePdfFiles(inputPdfList, outputStream);
+				mergePdfFiles(inputPdfList, outputStream, awsS3ServiceImpl);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -46,7 +50,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 		}
 	}
 
-	private static void mergePdfFiles(List<InputStream> inputPdfList, OutputStream outputStream) throws Exception {
+	private static void mergePdfFiles(List<InputStream> inputPdfList, OutputStream outputStream, AWSS3ServiceImpl awss3ServiceImpl) throws Exception {
 		Document document = new Document();
 		List<PdfReader> readers = new ArrayList<PdfReader>();
 		int totalPages = 0;
@@ -58,6 +62,10 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 			totalPages = totalPages + pdfReader.getNumberOfPages();
 		}
 		PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+		Image image = Image.getInstance(awss3ServiceImpl.findByName("rush-logo.png"));
+		image.scaleToFit(185, 185);
+		image.setAbsolutePosition(-3, -9);
+		
 		HeaderFooterPageEvent event = new HeaderFooterPageEvent();
 		writer.setPageEvent((PdfPageEvent) event);
 		document.open();
@@ -69,6 +77,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 			PdfReader pdfReader = iteratorPDFReader.next();
 			while (currentPdfReaderPage <= pdfReader.getNumberOfPages()) {
 				document.newPage();
+				document.add(image);
 				pdfImportedPage = writer.getImportedPage(pdfReader, currentPdfReaderPage);
 				pageContentByte.addTemplate(pdfImportedPage, 0, 0);
 				currentPdfReaderPage++;

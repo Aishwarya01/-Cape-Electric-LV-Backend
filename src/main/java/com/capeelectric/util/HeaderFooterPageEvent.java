@@ -51,11 +51,11 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 			final PdfContentByte directContent = writer.getDirectContent();
 			directContent.setColorFill(new GrayColor(DARK_GRAY));
 
-			String file = "file:///D:/project%20cape/siva/Cape-Back-end/src/main/resources/image/rush-logo.png";
-			Image image = Image.getInstance(file);
-			image.scaleToFit(185, 185);
-			image.setAbsolutePosition(-3, -9);
-			document.add(image);
+//			String file = "file:///D:/project%20cape/siva/Cape-Back-end/src/main/resources/image/rush-logo.png";
+//			Image image = Image.getInstance(file);
+//			image.scaleToFit(185, 185);
+//			image.setAbsolutePosition(-3, -9);
+//			document.add(image);
 			
 			Font font = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.DARK_GRAY);
 
