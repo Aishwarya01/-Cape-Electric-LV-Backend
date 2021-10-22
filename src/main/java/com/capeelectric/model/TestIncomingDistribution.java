@@ -47,8 +47,8 @@ public class TestIncomingDistribution implements Serializable {
 
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "DISTRIBUTION_ID")
-	private TestDistribution testDistribution;
+	@JoinColumn(name = "TESTING_REPORT_ID")
+	private TestingReport testingReport;
 
 	public Integer getIncomingDistributionId() {
 		return incomingDistributionId;
@@ -81,13 +81,13 @@ public class TestIncomingDistribution implements Serializable {
 	public void setSourceFromSupply(String sourceFromSupply) {
 		this.sourceFromSupply = sourceFromSupply;
 	}
-
-	public TestDistribution getTestDistribution() {
-		return testDistribution;
+ 
+	public TestingReport getTestingReport() {
+		return testingReport;
 	}
 
-	public void setTestDistribution(TestDistribution testDistribution) {
-		this.testDistribution = testDistribution;
+	public void setTestingReport(TestingReport testingReport) {
+		this.testingReport = testingReport;
 	}
 
 	public String getIncomingLoopImpedance() {

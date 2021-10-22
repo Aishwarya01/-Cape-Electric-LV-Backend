@@ -67,6 +67,10 @@ public class TestingReport implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "testingReport", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<TestingReportComment> testingComment;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "testingReport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<TestIncomingDistribution> testIncomingDistribution;
 
 	public Integer getTestingReportId() {
 		return testingReportId;

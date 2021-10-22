@@ -66,10 +66,6 @@ public class TestDistribution implements Serializable {
 	@JoinColumn(name = "TESTING_ID")
 	private Testing testing;
 	
-	@JsonManagedReference
-	@OneToMany(mappedBy = "testDistribution", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<TestIncomingDistribution> testIncomingDistribution;
-
 	public Integer getDistributionId() {
 		return distributionId;
 	}
@@ -148,14 +144,6 @@ public class TestDistribution implements Serializable {
 
 	public void setTesting(Testing testing) {
 		this.testing = testing;
-	}
-
-	public List<TestIncomingDistribution> getTestIncomingDistribution() {
-		return testIncomingDistribution;
-	}
-
-	public void setTestIncomingDistribution(List<TestIncomingDistribution> testIncomingDistribution) {
-		this.testIncomingDistribution = testIncomingDistribution;
 	}
 
 }
