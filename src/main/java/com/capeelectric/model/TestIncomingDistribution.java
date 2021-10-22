@@ -20,8 +20,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  *
  */
 @Entity
-@Table(name = "testing_incomming_distribution_table")
-public class TestIncommingDistribution implements Serializable {
+@Table(name = "TESTING_INCOMING_DISTRIBUTION_TABLE")
+public class TestIncomingDistribution implements Serializable {
 
 	/**
 	 * 
@@ -30,8 +30,8 @@ public class TestIncommingDistribution implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "INCOMMING_DISTRIBUTION_ID")
-	private Integer incommingDistributionId;
+	@Column(name = "INCOMING_DISTRIBUTION_ID")
+	private Integer incomingDistributionId;
 
 	@Column(name = "INCOMING_VOLTAGE")
 	private String incomingVoltage;
@@ -50,12 +50,12 @@ public class TestIncommingDistribution implements Serializable {
 	@JoinColumn(name = "DISTRIBUTION_ID")
 	private TestDistribution testDistribution;
 
-	public Integer getIncommingDistributionId() {
-		return incommingDistributionId;
+	public Integer getIncomingDistributionId() {
+		return incomingDistributionId;
 	}
 
-	public void setIncommingDistributionId(Integer incommingDistributionId) {
-		this.incommingDistributionId = incommingDistributionId;
+	public void setIncomingDistributionId(Integer incomingDistributionId) {
+		this.incomingDistributionId = incomingDistributionId;
 	}
 
 	public String getIncomingVoltage() {

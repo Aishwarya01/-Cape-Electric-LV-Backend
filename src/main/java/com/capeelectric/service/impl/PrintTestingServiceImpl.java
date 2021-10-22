@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.TestDistribution;
-import com.capeelectric.model.TestIncommingDistribution;
+import com.capeelectric.model.TestIncomingDistribution;
 import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
@@ -738,10 +738,10 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 		List<TestDistribution> testDistribution = testing1.getTestDistribution();
 		TestDistribution distribution = testDistribution.get(0);
-		TestIncommingDistribution testIncommingDistribution = distribution.getTestIncommingDistribution().get(0);
+		TestIncomingDistribution testIncomingDistribution = distribution.getTestIncomingDistribution().get(0);
 		List<TestingRecords> testRecords = testing1.getTestingRecords();
 		
-		String incomingVoltage = testIncommingDistribution.getIncomingVoltage();
+		String incomingVoltage = testIncomingDistribution.getIncomingVoltage();
 		String incomingVoltage_list[] = incomingVoltage.split(",");
 		String IV1 = incomingVoltage_list[0];
 		String IV2 = incomingVoltage_list[1];
@@ -753,7 +753,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		String IV8 = incomingVoltage_list[7];
 		String IV9 = incomingVoltage_list[8];
 
-		String incomingIPF = testIncommingDistribution.getIncomingVoltage();
+		String incomingIPF = testIncomingDistribution.getIncomingVoltage();
 		String incomingIPF_list[] = incomingIPF.split(",");
 		String IPF1 = incomingIPF_list[0];
 		String IPF2 = incomingIPF_list[1];
@@ -765,7 +765,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		String IPF8 = incomingIPF_list[7];
 		String IPF9 = incomingIPF_list[8];
 
-		String incomingZS = testIncommingDistribution.getIncomingVoltage();
+		String incomingZS = testIncomingDistribution.getIncomingVoltage();
 		String incomingZS_list[] = incomingZS.split(",");
 		String ZS1 = incomingZS_list[0];
 		String ZS2 = incomingZS_list[1];
