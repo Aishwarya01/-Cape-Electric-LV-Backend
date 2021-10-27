@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,8 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 
 	@Value("${access.key.secret}")
 	private String accessKeySecret;
+	
+	private static final Logger logger = LoggerFactory.getLogger(PrintFinalPDFServiceImpl.class);
 
 	@Override
 	public void printFinalPDF(String userName, Integer siteId) throws Exception {
@@ -80,7 +84,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 					PutObjectRequest request = new PutObjectRequest(s3BucketName, folderName + "/" + fileNameInS3,
 							new File(fileNameInLocalPC));
 					s3Client.putObject(request);
-					System.out.println("Uploading file done in AWS s3 ");
+					logger.info("Uploading file done in AWS s3 ");
 					
 //				    5 seconds of time for executing File Upload And Download in AWS s3 bucket
 					Thread.sleep(5000);
@@ -89,14 +93,13 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 					S3Object fullObject;
 					fullObject = s3Client
 							.getObject(new GetObjectRequest(s3BucketName, folderName + "/" + fileNameInS3));
-					System.out.println("Downloading file done from AWS s3");
+					logger.info("Downloading file done from AWS s3");
 					// Print file content line by line
 					InputStream is = fullObject.getObjectContent();
 					BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 					String line;
-					System.out.println("--File content:");
 					while ((line = reader.readLine()) != null) {
-						System.out.println(line);
+						logger.info(line);
 					}
 
 				} catch (AmazonS3Exception e) {
