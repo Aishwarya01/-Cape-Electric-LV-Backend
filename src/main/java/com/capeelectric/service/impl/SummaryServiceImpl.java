@@ -84,6 +84,7 @@ public class SummaryServiceImpl implements SummaryService {
 				}
 
 			} else {
+				System.out.println("Site-Id Already Available");
 				throw new SummaryException("Site-Id Already Available");
 			}
 

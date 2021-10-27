@@ -61,11 +61,22 @@ public class TestDistribution implements Serializable {
 	@Column(name = "INSTALLED_EQUIPMENT_VULNARABLE")
 	private String installedEquipmentVulnarable;
 	
+	@Column(name = "SOURCE_FROM_SUPPLY")
+	private String sourceFromSupply;
+	
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "TESTING_ID")
 	private Testing testing;
 	
+	public String getSourceFromSupply() {
+		return sourceFromSupply;
+	}
+
+	public void setSourceFromSupply(String sourceFromSupply) {
+		this.sourceFromSupply = sourceFromSupply;
+	}
+
 	public Integer getDistributionId() {
 		return distributionId;
 	}
