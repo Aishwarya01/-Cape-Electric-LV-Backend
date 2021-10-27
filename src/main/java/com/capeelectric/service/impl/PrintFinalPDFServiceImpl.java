@@ -1,11 +1,9 @@
 package com.capeelectric.service.impl;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,9 +21,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
 import com.capeelectric.service.PrintFinalPDFService;
 import com.capeelectric.util.HeaderFooterPageEvent;
 import com.itextpdf.text.Document;
@@ -89,19 +85,6 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 //				    5 seconds of time for executing File Upload And Download in AWS s3 bucket
 					Thread.sleep(5000);
 					
-//					SECTION 3: Get file from S3 bucket
-					S3Object fullObject;
-					fullObject = s3Client
-							.getObject(new GetObjectRequest(s3BucketName, folderName + "/" + fileNameInS3));
-					logger.info("Downloading file done from AWS s3");
-					// Print file content line by line
-					InputStream is = fullObject.getObjectContent();
-					BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-					String line;
-					while ((line = reader.readLine()) != null) {
-						logger.info(line);
-					}
-
 				} catch (AmazonS3Exception e) {
 					e.printStackTrace();
 				}
