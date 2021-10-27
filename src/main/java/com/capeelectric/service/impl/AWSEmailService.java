@@ -183,9 +183,9 @@ public class AWSEmailService {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-			message.setSubject("Testing Subject");
+			message.setSubject("Final Report PDF");
 			BodyPart messageBodyPart = new MimeBodyPart();
-			messageBodyPart.setText("This is message body");
+			messageBodyPart.setText("Attached is the final report PDF for your kind reference");
 			Multipart multipart = new MimeMultipart();
 			multipart.addBodyPart(messageBodyPart);
 			messageBodyPart = new MimeBodyPart();
