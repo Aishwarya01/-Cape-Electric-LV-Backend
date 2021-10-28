@@ -1,20 +1,22 @@
 package com.capeelectric.model;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.capeelectric.exception.DecimalConversionException;
-import com.capeelectric.util.Constants;
-import com.capeelectric.util.DecimalConversion;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * 
@@ -59,22 +61,21 @@ public class TestDistribution implements Serializable {
 	@Column(name = "INSTALLED_EQUIPMENT_VULNARABLE")
 	private String installedEquipmentVulnarable;
 	
-	@Column(name = "INCOMING_VOLTAGE")
-	private String incomingVoltage;
-
-	@Column(name = "INCOMING_LOOPIMPEDANCE")
-	private String incomingLoopImpedance;
-
-	@Column(name = "INCOMING_FAULTCURRENT")
-	private String incomingFaultCurrent;
-	
 	@Column(name = "SOURCE_FROM_SUPPLY")
 	private String sourceFromSupply;
-
+	
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "TESTING_ID")
 	private Testing testing;
+	
+	public String getSourceFromSupply() {
+		return sourceFromSupply;
+	}
+
+	public void setSourceFromSupply(String sourceFromSupply) {
+		this.sourceFromSupply = sourceFromSupply;
+	}
 
 	public Integer getDistributionId() {
 		return distributionId;
@@ -155,43 +156,5 @@ public class TestDistribution implements Serializable {
 	public void setTesting(Testing testing) {
 		this.testing = testing;
 	}
-
-	public String getIncomingVoltage() {
-		return incomingVoltage;
-	}
-
-	public void setIncomingVoltage(String incomingVoltage) {
-		this.incomingVoltage = incomingVoltage;
-	}
-
-	public String getIncomingLoopImpedance() {
-		return incomingLoopImpedance;
-	}
-
-	public void setIncomingLoopImpedance(String incomingLoopImpedance) throws DecimalConversionException {
-		if (incomingLoopImpedance != null) {
-			this.incomingLoopImpedance = DecimalConversion.convertToDecimal(incomingLoopImpedance,
-					Constants.test_Incoming_LoopImpedance);
-		}
-		this.incomingLoopImpedance = incomingLoopImpedance;
-	}
-
-	public String getIncomingFaultCurrent() {
-		return incomingFaultCurrent;
-	}
-
-	public void setIncomingFaultCurrent(String incomingFaultCurrent) {
-		this.incomingFaultCurrent = incomingFaultCurrent;
-	}
-
-	public String getSourceFromSupply() {
-		return sourceFromSupply;
-	}
-
-	public void setSourceFromSupply(String sourceFromSupply) {
-		this.sourceFromSupply = sourceFromSupply;
-	}
-	
-	
 
 }

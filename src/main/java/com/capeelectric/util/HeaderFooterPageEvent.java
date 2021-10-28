@@ -63,9 +63,9 @@ public class HeaderFooterPageEvent extends PdfPageEventHelper {
 					new Phrase("Testing Inspection and Verification (TIC) of LV electrical installation", font), 300,
 					40, 0);
 			ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER,
-					new Phrase("Electrical safety in Industrial and Commercial premises", font), 290, 30, 0);
+					new Phrase("Electrical safety in Industrial and Commercial premises", font), 302, 30, 0);
 			ColumnText.showTextAligned(writer.getDirectContent(), Element.ALIGN_CENTER,
-					new Phrase("as per IEC 60364 – 6 (IS 732)", font), 280, 20, 0);
+					new Phrase("as per IEC 60364 – 6 (IS 732)", font), 300, 20, 0);
 
 			footer.setWidths(new int[] { 2, 1 });
 			footer.setTotalWidth(70);

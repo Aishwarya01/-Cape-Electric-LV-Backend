@@ -87,7 +87,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 				}
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.out.println(e);  
 			}
 		} else {
 			throw new Exception("Invalid Inputs");
