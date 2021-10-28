@@ -144,4 +144,13 @@ public class TestingReport implements Serializable {
 		this.testingComment = testingComment;
 	}
 
+	public List<TestIncomingDistribution> getTestIncomingDistribution() {
+		return testIncomingDistribution;
+	}
+
+	public void setTestIncomingDistribution(List<TestIncomingDistribution> testIncomingDistribution) {
+		this.testIncomingDistribution = testIncomingDistribution;
+	}
+
+	
 }
