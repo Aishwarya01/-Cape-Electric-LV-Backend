@@ -25,12 +25,9 @@ import com.capeelectric.service.PrintSupplyService;
 import com.capeelectric.service.PrintTestingService;
 import com.capeelectric.service.ReturnPDFService;
 
-
-
 @RestController
 @RequestMapping("api/v2")
 public class FinalPDFController {
-
 
 	private final ReturnPDFService returnPDFService;
 
@@ -40,13 +37,13 @@ public class FinalPDFController {
 	}
 
 	@Autowired
-	private PrintService printService ;
+	private PrintService printService;
 
 	@Autowired
-	private PrintTestingService printTestingService ;
+	private PrintTestingService printTestingService;
 
 	@Autowired
-	private PrintSupplyService printSupplyService ;
+	private PrintSupplyService printSupplyService;
 
 	@Autowired
 	private PrintFinalPDFService printFinalPDFService;
@@ -54,24 +51,23 @@ public class FinalPDFController {
 	@Autowired
 	private InstalReportPDFService instalReportPDFService;
 
-
 	@Autowired
 	private InspectionServicePDF inspectionServicePDF;
 
 	@GetMapping("/printFinalPDF/{userName}/{siteId}")
 	@ResponseBody
-	public ResponseEntity<byte[]> printFinalPDF(@PathVariable String userName,
-			@PathVariable Integer siteId) throws InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, SummaryException, Exception {
-		instalReportPDFService.printBasicInfromation(userName,siteId);
-		printSupplyService.printSupply(userName,siteId);
-		inspectionServicePDF.retrieveInspectionDetails(userName,siteId);
+	public ResponseEntity<byte[]> printFinalPDF(@PathVariable String userName, @PathVariable Integer siteId)
+			throws InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException,
+			SummaryException, Exception {
+		instalReportPDFService.printBasicInfromation(userName, siteId);
+		printSupplyService.printSupply(userName, siteId);
+		inspectionServicePDF.retrieveInspectionDetails(userName, siteId);
 		printTestingService.printTesting(userName, siteId);
-		printService.printSummary(userName,siteId);
+		printService.printSummary(userName, siteId);
 		printFinalPDFService.printFinalPDF(userName, siteId);
-		String keyname = "TotalMergedData.pdf";
+
+		String keyname = "finalreport.pdf";
 		ByteArrayOutputStream downloadInputStream = returnPDFService.printFinalPDF();
-
-
 
 		return ResponseEntity.ok().contentType(contentType(keyname))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + keyname + "\"")

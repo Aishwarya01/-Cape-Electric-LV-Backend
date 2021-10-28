@@ -67,12 +67,12 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 				mergePdfFiles(inputPdfList, outputStream, awsS3ServiceImpl);
 
 				try {
-//					SECTION 1 : Create a S3 client with in-program credential
+//					Create a S3 client with in-program credential
 					BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, accessKeySecret);
 					AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.AP_SOUTH_1)
 							.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
 
-//					SECTION 2: Put file in S3 bucket
+//					Uploading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
 					String folderName = "pdffiles";
 					String fileNameInS3 = "finalreport.pdf";
 					String fileNameInLocalPC = "finalreport.pdf";
@@ -81,9 +81,6 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 							new File(fileNameInLocalPC));
 					s3Client.putObject(request);
 					logger.info("Uploading file done in AWS s3 ");
-					
-//				    5 seconds of time for executing File Upload And Download in AWS s3 bucket
-					Thread.sleep(5000);
 					
 				} catch (AmazonS3Exception e) {
 					e.printStackTrace();
