@@ -213,8 +213,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 				} else {
 					throw new RegistrationException("Admin not approved for Your registration");
 				}
+			} else {
+				throw new RegistrationException("Invalid Email");
 			}
-
 		} else {
 			throw new RegistrationException("Invalid Input");
 		}
