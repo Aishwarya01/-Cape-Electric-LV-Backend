@@ -44,14 +44,16 @@ public class PrintServiceImpl implements PrintService {
 
 				PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("Summary.pdf"));
 
-				List<Summary> s = summaryRepository.findByUserNameAndSiteId(userName, siteId);
-				Summary summary = s.get(0);
-				List<SummaryObervation> observation1 = summary.getSummaryObervation();
-				List<SummaryDeclaration> declaration1 = summary.getSummaryDeclaration();
+				List<Summary> summary = summaryRepository.findByUserNameAndSiteId(userName, siteId);
+				Summary summary11 = summary.get(0);
+
+				List<SummaryObervation> observation1 = summary11.getSummaryObervation();
+
+				List<SummaryDeclaration> declaration1 = summary11.getSummaryDeclaration();
 				SummaryDeclaration declaration = declaration1.get(0);
 				SummaryDeclaration declaration11 = declaration1.get(1);
 
-				List<SummaryComment> ReportComments = summary.getSummaryComment();
+				List<SummaryComment> ReportComments = summary11.getSummaryComment();
 				SummaryComment comments = ReportComments.get(0);
 
 				document.open();
@@ -91,174 +93,182 @@ public class PrintServiceImpl implements PrintService {
 				document.add(table13);
 
 				float[] pointColumnWidths = { 90F, 90F };
-				PdfPTable table4 = new PdfPTable(pointColumnWidths);
-				table4.setWidthPercentage(100); // Width 100%
-				table4.setSpacingBefore(10f); // Space before table
-				table4.setWidthPercentage(100);
-				table4.getDefaultCell().setBorder(0);
-				Font font8 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
-				Font font9 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-				PdfPCell cell = new PdfPCell(new Paragraph(summary.getExtentInstallation(),
-						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				table4.addCell(new Phrase("Extent of installation covered by this Report:", font8));
 
-				cell.setBorder(PdfPCell.NO_BORDER);
-				table4.addCell(cell);
+				for (Summary summary1 : summary) {
 
-				PdfPCell cell1 = new PdfPCell(new Paragraph("Agreed limitations including the reasons:", font9));
-				cell1.setBorder(PdfPCell.NO_BORDER);
-				cell1.setGrayFill(0.92f);
-				table4.addCell(cell1);
-				PdfPCell cell22 = new PdfPCell(new Paragraph(summary.getAgreedLimitations(), font9));
-				cell22.setGrayFill(0.92f);
-				cell22.setBorder(PdfPCell.NO_BORDER);
-				table4.addCell(cell22);
+					PdfPTable table4 = new PdfPTable(pointColumnWidths);
+					table4.setWidthPercentage(100); // Width 100%
+					table4.setSpacingBefore(10f); // Space before table
+					table4.setWidthPercentage(100);
+					table4.getDefaultCell().setBorder(0);
+					Font font8 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
+					Font font9 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+					PdfPCell cell = new PdfPCell(new Paragraph(summary1.getExtentInstallation(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					table4.addCell(new Phrase("Extent of installation covered by this Report:", font8));
 
-				PdfPCell cell2 = new PdfPCell(new Paragraph(summary.getAgreedWith(), font9));
-				cell2.setBorder(PdfPCell.NO_BORDER);
+					cell.setBorder(PdfPCell.NO_BORDER);
+					table4.addCell(cell);
 
-				table4.addCell(new Phrase("Agreed with:", font8));
-				table4.addCell(cell2);
+					PdfPCell cell1 = new PdfPCell(new Paragraph("Agreed limitations including the reasons:", font9));
+					cell1.setBorder(PdfPCell.NO_BORDER);
+					cell1.setGrayFill(0.92f);
+					table4.addCell(cell1);
+					PdfPCell cell22 = new PdfPCell(new Paragraph(summary1.getAgreedLimitations(), font9));
+					cell22.setGrayFill(0.92f);
+					cell22.setBorder(PdfPCell.NO_BORDER);
+					table4.addCell(cell22);
 
-				PdfPCell cell123 = new PdfPCell(new Paragraph("Operational limitations including the reasons:", font9));
-				cell123.setBorder(PdfPCell.NO_BORDER);
-				cell123.setGrayFill(0.92f);
-				table4.addCell(cell123);
-				PdfPCell cell24 = new PdfPCell(new Paragraph(summary.getOperationalLimitations(), font9));
-				cell24.setGrayFill(0.92f);
-				cell24.setBorder(PdfPCell.NO_BORDER);
-				table4.addCell(cell24);
+					PdfPCell cell2 = new PdfPCell(new Paragraph(summary1.getAgreedWith(), font9));
+					cell2.setBorder(PdfPCell.NO_BORDER);
 
-				Paragraph paragraphOne5 = new Paragraph(
-						"The inspection and testing detailed in this report have been carried out in accordance with IEC60364. It should be note that cables concealed within trunk/trench and conduits, under floors which are generally within the fabric of the building or underground, have not been inspected unless it is specifically agreed between the client and inspector prior to the inspection :"
-								+ summary.getInspectionTestingDetailed(),
-						font8);
-				document.add(table4);
-				document.add(paragraphOne5);
-				Font font3 = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.ITALIC, BaseColor.BLACK);
+					table4.addCell(new Phrase("Agreed with:", font8));
+					table4.addCell(cell2);
 
-				PdfPTable table15 = new PdfPTable(1);
-				table15.setWidthPercentage(100); // Width 100%
-				table15.setSpacingBefore(10f); // Space before table
-				table15.setWidthPercentage(100);
-				table15.getDefaultCell().setBorder(0);
+					PdfPCell cell123 = new PdfPCell(
+							new Paragraph("Operational limitations including the reasons:", font9));
+					cell123.setBorder(PdfPCell.NO_BORDER);
+					cell123.setGrayFill(0.92f);
+					table4.addCell(cell123);
+					PdfPCell cell24 = new PdfPCell(new Paragraph(summary1.getOperationalLimitations(), font9));
+					cell24.setGrayFill(0.92f);
+					cell24.setBorder(PdfPCell.NO_BORDER);
+					table4.addCell(cell24);
 
-				PdfPCell cell25 = new PdfPCell(new Paragraph(15, "Section - 2: Observations ", font5));
-				cell25.setBorder(PdfPCell.NO_BORDER);
-				cell25.setBackgroundColor(BaseColor.LIGHT_GRAY);
-				table15.addCell(cell25);
-				document.add(table15);
+					Paragraph paragraphOne5 = new Paragraph(
+							"The inspection and testing detailed in this report have been carried out in accordance with IEC60364. It should be note that cables concealed within trunk/trench and conduits, under floors which are generally within the fabric of the building or underground, have not been inspected unless it is specifically agreed between the client and inspector prior to the inspection :"
+									+ summary1.getInspectionTestingDetailed(),
+							font8);
+					document.add(table4);
+					document.add(paragraphOne5);
+					Font font3 = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.ITALIC, BaseColor.BLACK);
 
-				Paragraph paragraphOne6 = new Paragraph(
-						"Referring to attached inspection report and test results and subject to the limitations specified at the extent and limitations of inspection and testing:"
-								+ summary.getLimitationsInspection(),
-						font8);
-				document.add(paragraphOne6);
+					PdfPTable table15 = new PdfPTable(1);
+					table15.setWidthPercentage(100); // Width 100%
+					table15.setSpacingBefore(10f); // Space before table
+					table15.setWidthPercentage(100);
+					table15.getDefaultCell().setBorder(0);
 
-				PdfPTable table6 = new PdfPTable(4);
-				table6.setWidthPercentage(100); // Width 100%
-				table6.setSpacingBefore(10f); // Space before table
-				table6.setSpacingAfter(10f); // Space after table
-				table6.setWidthPercentage(100);
+					PdfPCell cell25 = new PdfPCell(new Paragraph(15, "Section - 2: Observations ", font5));
+					cell25.setBorder(PdfPCell.NO_BORDER);
+					cell25.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					table15.addCell(cell25);
+					document.add(table15);
 
-				tableHeader(table6);
-				tableData(table6, observation1);
-				document.add(table6);
-				Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
+					Paragraph paragraphOne6 = new Paragraph(
+							"Referring to attached inspection report and test results and subject to the limitations specified at the extent and limitations of inspection and testing:"
+									+ summary1.getLimitationsInspection(),
+							font8);
+					document.add(paragraphOne6);
 
-				PdfPTable table16 = new PdfPTable(1);
-				table16.setWidthPercentage(100); // Width 100%
-				table16.setSpacingBefore(10f); // Space before table
-				table16.setWidthPercentage(100);
-				table16.getDefaultCell().setBorder(0);
+					PdfPTable table6 = new PdfPTable(4);
+					table6.setWidthPercentage(100); // Width 100%
+					table6.setSpacingBefore(10f); // Space before table
+					table6.setSpacingAfter(10f); // Space after table
+					table6.setWidthPercentage(100);
 
-				PdfPCell cell26 = new PdfPCell(new Paragraph(15, "Section - 3:Recommendations", font5));
-				cell26.setBorder(PdfPCell.NO_BORDER);
-				cell26.setBackgroundColor(BaseColor.LIGHT_GRAY);
-				table16.addCell(cell26);
-				document.add(table16);
+					tableHeader(table6);
+					tableData(table6, observation1);
+					document.add(table6);
+					Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
 
-				Paragraph paragraphThree22 = new Paragraph(
-						"The overall assessment of the suitability of installation for continuous use is stated as unsatisfactory, I/We recommend that any observations that are classified as “danger present” (Code C1) or “potentially dangerous” (Code C2) should be acted upon as a matter of urgency.\r\n"
-								+ "Investigation without delay is recommended for observations which are identified as “Required further investigation”. Observations classified as “Improvement recommended” (Code C3) should be given due consideration. Subject to necessary remedial action being taken, I/We recommended that the installations should be further inspected and tested.	\r\n",
-						font9);
-				document.add(paragraphThree22);
-				PdfPTable table11 = new PdfPTable(2);
-				table11.setWidthPercentage(100); // Width 100%
-				table11.setSpacingBefore(10f); // Space before table
-				table11.setSpacingAfter(10f); // Space after table
-				table11.setWidthPercentage(100);
-				table11.getDefaultCell().setBorder(0);
+					PdfPTable table16 = new PdfPTable(1);
+					table16.setWidthPercentage(100); // Width 100%
+					table16.setSpacingBefore(10f); // Space before table
+					table16.setWidthPercentage(100);
+					table16.getDefaultCell().setBorder(0);
 
-				PdfPCell cell23 = new PdfPCell(new Paragraph(summary.getRecommendationsDate(), font9));
-				table11.addCell(new Phrase(" Date:", font8));
+					PdfPCell cell26 = new PdfPCell(new Paragraph(15, "Section - 3:Recommendations", font5));
+					cell26.setBorder(PdfPCell.NO_BORDER);
+					cell26.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					table16.addCell(cell26);
+					document.add(table16);
 
-				cell23.setBorder(PdfPCell.NO_BORDER);
-				table11.addCell(cell23);
-				document.add(table11);
-				PdfPTable table22 = new PdfPTable(pointColumnWidths);
-				table22.setWidthPercentage(100); // Width 100%
-				table22.setSpacingBefore(10f); // Space before table
-				table22.setSpacingAfter(10f); // Space after table
-				table22.setWidthPercentage(100);
-				table22.getDefaultCell().setBorder(0);
+					Paragraph paragraphThree22 = new Paragraph(
+							"The overall assessment of the suitability of installation for continuous use is stated as unsatisfactory, I/We recommend that any observations that are classified as “danger present” (Code C1) or “potentially dangerous” (Code C2) should be acted upon as a matter of urgency.\r\n"
+									+ "Investigation without delay is recommended for observations which are identified as “Required further investigation”. Observations classified as “Improvement recommended” (Code C3) should be given due consideration. Subject to necessary remedial action being taken, I/We recommended that the installations should be further inspected and tested.	\r\n",
+							font9);
+					document.add(paragraphThree22);
+					PdfPTable table11 = new PdfPTable(2);
+					table11.setWidthPercentage(100); // Width 100%
+					table11.setSpacingBefore(10f); // Space before table
+					table11.setSpacingAfter(10f); // Space after table
+					table11.setWidthPercentage(100);
+					table11.getDefaultCell().setBorder(0);
 
-				float[] pointColumnWidths1 = { 160F, 90F };
+					PdfPCell cell23 = new PdfPCell(new Paragraph(summary1.getRecommendationsDate(), font9));
+					table11.addCell(new Phrase(" Date:", font8));
 
-				PdfPTable table7 = new PdfPTable(pointColumnWidths1); // 3 columns.
-				table7.setWidthPercentage(100); // Width 100%
-				table7.setSpacingBefore(10f); // Space before table
-				table7.setSpacingAfter(10f); // Space after table
-				table7.setWidthPercentage(100);
-				table7.getDefaultCell().setBorder(0);
+					cell23.setBorder(PdfPCell.NO_BORDER);
+					table11.addCell(cell23);
+					document.add(table11);
+					PdfPTable table22 = new PdfPTable(pointColumnWidths);
+					table22.setWidthPercentage(100); // Width 100%
+					table22.setSpacingBefore(10f); // Space before table
+					table22.setSpacingAfter(10f); // Space after table
+					table22.setWidthPercentage(100);
+					table22.getDefaultCell().setBorder(0);
 
-				PdfPTable table17 = new PdfPTable(1);
-				table17.setWidthPercentage(100); // Width 100%
-				table17.setSpacingBefore(10f); // Space before table
-				table17.setWidthPercentage(100);
-				table17.getDefaultCell().setBorder(0);
+					float[] pointColumnWidths1 = { 160F, 90F };
 
-				PdfPCell cell27 = new PdfPCell(
-						new Paragraph(15, "Section - 4:Summary And Conditions Of The Installation ", font5));
-				cell27.setBorder(PdfPCell.NO_BORDER);
-				cell27.setBackgroundColor(BaseColor.LIGHT_GRAY);
-				table17.addCell(cell27);
-				document.add(table17);
+					PdfPTable table7 = new PdfPTable(pointColumnWidths1); // 3 columns.
+					table7.setWidthPercentage(100); // Width 100%
+					table7.setSpacingBefore(10f); // Space before table
+					table7.setSpacingAfter(10f); // Space after table
+					table7.setWidthPercentage(100);
+					table7.getDefaultCell().setBorder(0);
 
-				PdfPCell cell132 = new PdfPCell(
-						new Paragraph("General condition of the installation in terms of electrical safety:", font9));
-				cell132.setBorder(PdfPCell.NO_BORDER);
+					PdfPTable table17 = new PdfPTable(1);
+					table17.setWidthPercentage(100); // Width 100%
+					table17.setSpacingBefore(10f); // Space before table
+					table17.setWidthPercentage(100);
+					table17.getDefaultCell().setBorder(0);
 
-				cell132.setGrayFill(0.92f);
-				table7.addCell(cell132);
-				PdfPCell cell29 = new PdfPCell(new Paragraph(summary.getGeneralConditionInstallation(), font9));
-				cell29.setGrayFill(0.92f);
+					PdfPCell cell27 = new PdfPCell(
+							new Paragraph(15, "Section - 4:Summary And Conditions Of The Installation ", font5));
+					cell27.setBorder(PdfPCell.NO_BORDER);
+					cell27.setBackgroundColor(BaseColor.LIGHT_GRAY);
+					table17.addCell(cell27);
+					document.add(table17);
 
-				cell29.setFixedHeight(30f);
-				cell29.setBorder(PdfPCell.NO_BORDER);
-				table7.addCell(cell29);
+					PdfPCell cell132 = new PdfPCell(new Paragraph(
+							"General condition of the installation in terms of electrical safety:", font9));
+					cell132.setBorder(PdfPCell.NO_BORDER);
 
-				PdfPTable table8 = new PdfPTable(pointColumnWidths1); // 3 columns.
-				table8.setWidthPercentage(100); // Width 100%
-				table8.setSpacingBefore(10f); // Space before table
-				table8.setSpacingAfter(10f); // Space after table
-				table8.setWidthPercentage(100);
-				table8.getDefaultCell().setBorder(0);
+					cell132.setGrayFill(0.92f);
+					table7.addCell(cell132);
+					PdfPCell cell29 = new PdfPCell(new Paragraph(summary1.getGeneralConditionInstallation(), font9));
+					cell29.setGrayFill(0.92f);
 
-				PdfPCell cell30 = new PdfPCell(new Paragraph(summary.getOverallAssessmentInstallation(), font9));
-				cell30.setBorder(PdfPCell.NO_BORDER);
-				cell30.setFixedHeight(30f);
-				cell30.setGrayFill(0.92f);
+					cell29.setFixedHeight(30f);
+					cell29.setBorder(PdfPCell.NO_BORDER);
+					table7.addCell(cell29);
 
-				PdfPCell cell31 = new PdfPCell(new Paragraph(
-						"Overall assessment of the installation in terms of suitability on continuous use:", font9));
-				cell31.setGrayFill(0.92f);
-				cell31.setFixedHeight(30f);
-				cell31.setBorder(PdfPCell.NO_BORDER);
-				table8.addCell(cell31);
-				table8.addCell(cell30);
-				document.add(table7);
-				document.add(table8);
+					PdfPTable table8 = new PdfPTable(pointColumnWidths1); // 3 columns.
+					table8.setWidthPercentage(100); // Width 100%
+					table8.setSpacingBefore(10f); // Space before table
+					table8.setSpacingAfter(10f); // Space after table
+					table8.setWidthPercentage(100);
+					table8.getDefaultCell().setBorder(0);
+
+					PdfPCell cell30 = new PdfPCell(new Paragraph(summary1.getOverallAssessmentInstallation(), font9));
+					cell30.setBorder(PdfPCell.NO_BORDER);
+					cell30.setFixedHeight(30f);
+					cell30.setGrayFill(0.92f);
+
+					PdfPCell cell31 = new PdfPCell(new Paragraph(
+							"Overall assessment of the installation in terms of suitability on continuous use:",
+							font9));
+					cell31.setGrayFill(0.92f);
+					cell31.setFixedHeight(30f);
+					cell31.setBorder(PdfPCell.NO_BORDER);
+					table8.addCell(cell31);
+					table8.addCell(cell30);
+					document.add(table7);
+					document.add(table8);
+
+				}
+
 				document.newPage();
 
 				PdfPTable table18 = new PdfPTable(1);
@@ -273,11 +283,15 @@ public class PrintServiceImpl implements PrintService {
 				table18.addCell(cell28);
 				document.add(table18);
 
+				Font font09 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+
 				Paragraph paragraph1 = new Paragraph(
 						"I/we being the person responsible for the inspection & testing  of the electrical installation (as indicated by my/our signatures below), particulars of which are described in this report, having exercised reasonable skill and care when carrying out the inspection and testing, hereby declare that information in this report including the observations provides an accurate assessment of condition of electrical installation taking into account the stated extent and limitations in part 5 of this report",
-						font9);
+						font09);
 
 				document.add(paragraph1);
+
+//				for (SummaryDeclaration declaration : declaration1) {
 
 				PdfPTable table9 = new PdfPTable(2);
 				table9.setWidthPercentage(100); // Width 100%
@@ -401,9 +415,16 @@ public class PrintServiceImpl implements PrintService {
 		for (SummaryComment arr : reportComments) {
 			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 			PdfPCell cell = new PdfPCell();
-			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table440.addCell(cell);
+
+			if (arr.getViewerComment() != null) {
+				cell.setPhrase(new Phrase(arr.getViewerComment(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table440.addCell(cell);
+			} else {
+				cell.setPhrase(new Phrase("No viewer comment available", font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table440.addCell(cell);
+			}
 
 			if (arr.getViewerDate() != null) {
 				cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
@@ -415,9 +436,15 @@ public class PrintServiceImpl implements PrintService {
 				table440.addCell(cell);
 			}
 
-			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table440.addCell(cell);
+			if (arr.getInspectorComment() != null) {
+				cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table440.addCell(cell);
+			} else {
+				cell.setPhrase(new Phrase("No inspector comment available", font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table440.addCell(cell);
+			}
 
 			if (arr.getInspectorDate() != null) {
 				cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));

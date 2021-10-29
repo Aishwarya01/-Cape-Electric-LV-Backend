@@ -47,7 +47,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				List<TestingReport> supply1 = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
 				TestingReport supply2 = supply1.get(0);
 				List<Testing> testing = supply2.getTesting();
-				Testing testRecords = testing.get(0);
+//				Testing testRecords = testing.get(0);
 
 				List<TestingReportComment> reportComments = supply2.getTestingComment();
 				TestingReportComment comments = reportComments.get(0);
@@ -179,9 +179,16 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		for (TestingReportComment arr : reportComments) {
 			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 			PdfPCell cell = new PdfPCell();
-			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table44.addCell(cell);
+
+			if (arr.getViewerComment() != null) {
+				cell.setPhrase(new Phrase(arr.getViewerComment(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table44.addCell(cell);
+			} else {
+				cell.setPhrase(new Phrase("No viewer comment available", font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table44.addCell(cell);
+			}
 
 			if (arr.getViewerDate() != null) {
 				cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
@@ -193,9 +200,15 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				table44.addCell(cell);
 			}
 
-			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table44.addCell(cell);
+			if (arr.getInspectorComment() != null) {
+				cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table44.addCell(cell);
+			} else {
+				cell.setPhrase(new Phrase("No inspector comment available", font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table44.addCell(cell);
+			}
 
 			if (arr.getInspectorDate() != null) {
 				cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
@@ -738,13 +751,13 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 		List<TestDistribution> testDistribution = testing1.getTestDistribution();
 		TestDistribution distribution = testDistribution.get(0);
-		
+
 		TestingReport testreport = testing1.getTestingReport();
 		List<TestIncomingDistribution> testIncomingDistribution = testreport.getTestIncomingDistribution();
 		TestIncomingDistribution testincomingDist = testIncomingDistribution.get(0);
-		
+
 		List<TestingRecords> testRecords = testing1.getTestingRecords();
-		
+
 		String incomingVoltage = testincomingDist.getIncomingVoltage();
 		String incomingVoltage_list[] = incomingVoltage.split(",");
 		String IV1 = incomingVoltage_list[0];
