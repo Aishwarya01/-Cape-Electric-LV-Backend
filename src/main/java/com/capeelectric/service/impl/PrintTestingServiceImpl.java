@@ -750,49 +750,56 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		Font font5 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
 
 		List<TestDistribution> testDistribution = testing1.getTestDistribution();
-		TestDistribution distribution = testDistribution.get(0);
+		
 
 		TestingReport testreport = testing1.getTestingReport();
 		List<TestIncomingDistribution> testIncomingDistribution = testreport.getTestIncomingDistribution();
-		TestIncomingDistribution testincomingDist = testIncomingDistribution.get(0);
+		PdfPTable table2 = new PdfPTable(10);
+		table2.setWidthPercentage(100); // Width 100%
 
+		table2.getDefaultCell().setBorder(0);
 		List<TestingRecords> testRecords = testing1.getTestingRecords();
+		for(TestIncomingDistribution testincomingDist: testIncomingDistribution) {
+			String incomingVoltage = testincomingDist.getIncomingVoltage();
+			String incomingVoltage_list[] = incomingVoltage.split(",");
+			String IV1 = incomingVoltage_list[0];
+			String IV2 = incomingVoltage_list[1];
+			String IV3 = incomingVoltage_list[2];
+			String IV4 = incomingVoltage_list[3];
+			String IV5 = incomingVoltage_list[4];
+			String IV6 = incomingVoltage_list[5];
+			String IV7 = incomingVoltage_list[6];
+			String IV8 = incomingVoltage_list[7];
+			String IV9 = incomingVoltage_list[8];
 
-		String incomingVoltage = testincomingDist.getIncomingVoltage();
-		String incomingVoltage_list[] = incomingVoltage.split(",");
-		String IV1 = incomingVoltage_list[0];
-		String IV2 = incomingVoltage_list[1];
-		String IV3 = incomingVoltage_list[2];
-		String IV4 = incomingVoltage_list[3];
-		String IV5 = incomingVoltage_list[4];
-		String IV6 = incomingVoltage_list[5];
-		String IV7 = incomingVoltage_list[6];
-		String IV8 = incomingVoltage_list[7];
-		String IV9 = incomingVoltage_list[8];
+			String incomingIPF = testincomingDist.getIncomingVoltage();
+			String incomingIPF_list[] = incomingIPF.split(",");
+			String IPF1 = incomingIPF_list[0];
+			String IPF2 = incomingIPF_list[1];
+			String IPF3 = incomingIPF_list[2];
+			String IPF4 = incomingIPF_list[3];
+			String IPF5 = incomingIPF_list[4];
+			String IPF6 = incomingIPF_list[5];
+			String IPF7 = incomingIPF_list[6];
+			String IPF8 = incomingIPF_list[7];
+			String IPF9 = incomingIPF_list[8];
 
-		String incomingIPF = testincomingDist.getIncomingVoltage();
-		String incomingIPF_list[] = incomingIPF.split(",");
-		String IPF1 = incomingIPF_list[0];
-		String IPF2 = incomingIPF_list[1];
-		String IPF3 = incomingIPF_list[2];
-		String IPF4 = incomingIPF_list[3];
-		String IPF5 = incomingIPF_list[4];
-		String IPF6 = incomingIPF_list[5];
-		String IPF7 = incomingIPF_list[6];
-		String IPF8 = incomingIPF_list[7];
-		String IPF9 = incomingIPF_list[8];
-
-		String incomingZS = testincomingDist.getIncomingVoltage();
-		String incomingZS_list[] = incomingZS.split(",");
-		String ZS1 = incomingZS_list[0];
-		String ZS2 = incomingZS_list[1];
-		String ZS3 = incomingZS_list[2];
-		String ZS4 = incomingZS_list[3];
-		String ZS5 = incomingZS_list[4];
-		String ZS6 = incomingZS_list[5];
-		String ZS7 = incomingZS_list[6];
-		String ZS8 = incomingZS_list[7];
-		String ZS9 = incomingZS_list[8];
+			String incomingZS = testincomingDist.getIncomingVoltage();
+			String incomingZS_list[] = incomingZS.split(",");
+			String ZS1 = incomingZS_list[0];
+			String ZS2 = incomingZS_list[1];
+			String ZS3 = incomingZS_list[2];
+			String ZS4 = incomingZS_list[3];
+			String ZS5 = incomingZS_list[4];
+			String ZS6 = incomingZS_list[5];
+			String ZS7 = incomingZS_list[6];
+			String ZS8 = incomingZS_list[7];
+			String ZS9 = incomingZS_list[8];
+			addRow(table2, "Incoming Voltage", IV1, IV2, IV3, IV4, IV5, IV6, IV7, IV8, IV9);
+			addRow(table2, "Incoming Zs (Ω)", IPF1, IPF2, IPF3, IPF4, IPF5, IPF6, IPF7, IPF8, IPF9);
+			addRow(table2, "Incoming Ipf (Amps) ", ZS1, ZS2, ZS3, ZS4, ZS5, ZS6, ZS7, ZS8, ZS9);
+		}
+		
 		float[] pointColumnWidths = { 60F, 80F };
 		PdfPTable table = new PdfPTable(pointColumnWidths);
 		table.setWidthPercentage(100); // Width 100%
@@ -916,74 +923,72 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		table1.setSpacingBefore(10f); // Space after table
 
 		table1.getDefaultCell().setBorder(0);
-
-		PdfPCell cell13 = new PdfPCell(new Paragraph(distribution.getDistributionBoardDetails(), font5));
-		table1.addCell(new Phrase("Distribution Board Details:", font5));
-		cell13.setBorder(PdfPCell.NO_BORDER);
-		table1.addCell(cell13);
-
-		PdfPCell cell14 = new PdfPCell(new Paragraph("Referance (name):", font5));
-		cell14.setBorder(PdfPCell.NO_BORDER);
-		cell14.setGrayFill(0.92f);
-		table1.addCell(cell14);
-		PdfPCell cell28 = new PdfPCell(new Paragraph(distribution.getReferance(), font5));
-		cell28.setGrayFill(0.92f);
-		cell28.setBorder(PdfPCell.NO_BORDER);
-		table1.addCell(cell28);
-
-		PdfPCell cell15 = new PdfPCell(new Paragraph(distribution.getLocation(), font5));
-		table1.addCell(new Phrase("Location:", font5));
-		cell15.setBorder(PdfPCell.NO_BORDER);
-		table1.addCell(cell15);
-
-		PdfPCell cell16 = new PdfPCell(new Paragraph("Correct Supply Polarity:", font7));
-		cell16.setBorder(PdfPCell.NO_BORDER);
-		cell16.setGrayFill(0.92f);
-		table1.addCell(cell16);
-		PdfPCell cell29 = new PdfPCell(new Paragraph(distribution.getCorrectSupplyPolarity(), font5));
-		cell29.setGrayFill(0.92f);
-		cell29.setBorder(PdfPCell.NO_BORDER);
-		table1.addCell(cell29);
-
-		PdfPCell cell17 = new PdfPCell(new Paragraph(distribution.getNumOutputCircuitsSpare(), font5));
-		table1.addCell(new Phrase("Number Of Output Circuits - Spare:", font5));
-		cell17.setBorder(PdfPCell.NO_BORDER);
-		table1.addCell(cell17);
-
-		PdfPCell cell18 = new PdfPCell(new Paragraph("Installed Equipment Vulnarable To Testing:", font7));
-		cell18.setBorder(PdfPCell.NO_BORDER);
-		cell18.setGrayFill(0.92f);
-		table1.addCell(cell16);
-		PdfPCell cell32 = new PdfPCell(new Paragraph(distribution.getInstalledEquipmentVulnarable(), font5));
-		cell32.setGrayFill(0.92f);
-		cell32.setBorder(PdfPCell.NO_BORDER);
-		table1.addCell(cell32);
-
-		PdfPCell cell19 = new PdfPCell(new Paragraph(distribution.getNumOutputCircuitsUse(), font5));
-		table1.addCell(new Phrase("Number Of Output Circuits In Use:", font5));
-		cell19.setBorder(PdfPCell.NO_BORDER);
-		table1.addCell(cell19);
-
-		document.add(table1);
-		String ratingsInAmpsvalue = distribution.getRatingsAmps();
-
-		String[] ratingAmpIter = ratingsInAmpsvalue.split(",");
-
-		for (String arr : ratingAmpIter) {
-			ratingAmpsiterate(document, arr);
-		}
-		PdfPTable table2 = new PdfPTable(10);
-		table2.setWidthPercentage(100); // Width 100%
-
-		table2.getDefaultCell().setBorder(0);
 		PdfPTable table34 = new PdfPTable(10);
 		table34.setSpacingBefore(10f); // Space before table
 		table34.setWidthPercentage(100); // Width 100%
 		table34.getDefaultCell().setBorder(0);
+		for(TestDistribution distribution: testDistribution) {
+			PdfPCell cell13 = new PdfPCell(new Paragraph(distribution.getDistributionBoardDetails(), font5));
+			table1.addCell(new Phrase("Distribution Board Details:", font5));
+			cell13.setBorder(PdfPCell.NO_BORDER);
+			table1.addCell(cell13);
+
+			PdfPCell cell14 = new PdfPCell(new Paragraph("Referance (name):", font5));
+			cell14.setBorder(PdfPCell.NO_BORDER);
+			cell14.setGrayFill(0.92f);
+			table1.addCell(cell14);
+			PdfPCell cell28 = new PdfPCell(new Paragraph(distribution.getReferance(), font5));
+			cell28.setGrayFill(0.92f);
+			cell28.setBorder(PdfPCell.NO_BORDER);
+			table1.addCell(cell28);
+
+			PdfPCell cell15 = new PdfPCell(new Paragraph(distribution.getLocation(), font5));
+			table1.addCell(new Phrase("Location:", font5));
+			cell15.setBorder(PdfPCell.NO_BORDER);
+			table1.addCell(cell15);
+
+			PdfPCell cell16 = new PdfPCell(new Paragraph("Correct Supply Polarity:", font7));
+			cell16.setBorder(PdfPCell.NO_BORDER);
+			cell16.setGrayFill(0.92f);
+			table1.addCell(cell16);
+			PdfPCell cell29 = new PdfPCell(new Paragraph(distribution.getCorrectSupplyPolarity(), font5));
+			cell29.setGrayFill(0.92f);
+			cell29.setBorder(PdfPCell.NO_BORDER);
+			table1.addCell(cell29);
+
+			PdfPCell cell17 = new PdfPCell(new Paragraph(distribution.getNumOutputCircuitsSpare(), font5));
+			table1.addCell(new Phrase("Number Of Output Circuits - Spare:", font5));
+			cell17.setBorder(PdfPCell.NO_BORDER);
+			table1.addCell(cell17);
+
+			PdfPCell cell18 = new PdfPCell(new Paragraph("Installed Equipment Vulnarable To Testing:", font7));
+			cell18.setBorder(PdfPCell.NO_BORDER);
+			cell18.setGrayFill(0.92f);
+			table1.addCell(cell16);
+			PdfPCell cell32 = new PdfPCell(new Paragraph(distribution.getInstalledEquipmentVulnarable(), font5));
+			cell32.setGrayFill(0.92f);
+			cell32.setBorder(PdfPCell.NO_BORDER);
+			table1.addCell(cell32);
+
+			PdfPCell cell19 = new PdfPCell(new Paragraph(distribution.getNumOutputCircuitsUse(), font5));
+			table1.addCell(new Phrase("Number Of Output Circuits In Use:", font5));
+			cell19.setBorder(PdfPCell.NO_BORDER);
+			table1.addCell(cell19);
+
+			document.add(table1);
+			String ratingsInAmpsvalue = distribution.getRatingsAmps();
+
+			String[] ratingAmpIter = ratingsInAmpsvalue.split(",");
+
+			for (String arr : ratingAmpIter) {
+				ratingAmpsiterate(document, arr);
+			}
+		}
+		
+		
+		
 		tableHead(table34);
-		addRow(table2, "Incoming Voltage", IV1, IV2, IV3, IV4, IV5, IV6, IV7, IV8, IV9);
-		addRow(table2, "Incoming Zs (Ω)", IPF1, IPF2, IPF3, IPF4, IPF5, IPF6, IPF7, IPF8, IPF9);
-		addRow(table2, "Incoming Ipf (Amps) ", ZS1, ZS2, ZS3, ZS4, ZS5, ZS6, ZS7, ZS8, ZS9);
+		
 		document.add(table34);
 		document.add(table2);
 
