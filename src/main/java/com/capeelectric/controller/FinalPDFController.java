@@ -61,7 +61,7 @@ public class FinalPDFController {
 			SummaryException, Exception {
 		instalReportPDFService.printBasicInfromation(userName, siteId);
 		printSupplyService.printSupply(userName, siteId);
-		inspectionServicePDF.retrieveInspectionDetails(userName, siteId);
+		inspectionServicePDF.printInspectionDetails(userName, siteId);
 		printTestingService.printTesting(userName, siteId);
 		printService.printSummary(userName, siteId);
 		printFinalPDFService.printFinalPDF(userName, siteId);
