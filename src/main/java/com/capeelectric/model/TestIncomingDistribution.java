@@ -36,8 +36,8 @@ public class TestIncomingDistribution implements Serializable {
 	@Column(name = "INCOMING_VOLTAGE")
 	private String incomingVoltage;
 
-	@Column(name = "INCOMING_FREQUENCY")
-	private String incomingFrequency;
+	@Column(name = "INCOMING_LOOP_IMPEDANCE")
+	private String incomingLoopImpedance;
 
 	@Column(name = "INCOMING_FAULTCURRENT")
 	private String incomingFaultCurrent;
@@ -90,13 +90,15 @@ public class TestIncomingDistribution implements Serializable {
 		this.testingReport = testingReport;
 	}
 
-	public String getIncomingFrequency() {
-		return incomingFrequency;
+	public String getIncomingLoopImpedance() {
+		return incomingLoopImpedance;
 	}
 
-	public void setIncomingFrequency(String incomingFrequency) {
-		this.incomingFrequency = incomingFrequency;
+	public void setIncomingLoopImpedance(String incomingLoopImpedance) {
+		this.incomingLoopImpedance = incomingLoopImpedance;
 	}
+
+	
 
 	
 
