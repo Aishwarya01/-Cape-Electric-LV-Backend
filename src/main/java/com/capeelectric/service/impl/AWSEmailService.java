@@ -38,15 +38,6 @@ public class AWSEmailService {
 
 	private String FROM = Constants.FROM_EMAIL;
 	
-	@Value("${app.email.multiple.person.first}")
-	private String firstPersonEmail;
-	
-	@Value("${app.email.multiple.person.second}")
-	private String secondPersonEmail;
-	
-	@Value("${app.email.multiple.person.third}")
-	private String thirdPersonEmail;
-
 	@Value("${app.email.disable}")
 	private String emailDisable;
 	
@@ -98,7 +89,7 @@ public class AWSEmailService {
 
 		if(!emailDisable.equalsIgnoreCase("Y")) {
 			logger.debug("Inside AWS Email");
-			final String TO = firstPersonEmail+","+secondPersonEmail+","+thirdPersonEmail; // {YOUR_RECIPIENT_EMAIL_ADDRESS}
+			final String TO = Constants.FIRST_PERSON_EMAIL+","+Constants.SECOND_PERSON_EMAIL+","+Constants.THIRD_PERSON_EMAIL; // {YOUR_RECIPIENT_EMAIL_ADDRESS}
 
 			Properties props = new Properties();
 			props.put("mail.transport.protocol", "smtp");
@@ -183,9 +174,9 @@ public class AWSEmailService {
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(from));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-			message.setSubject("Welcome to Rush App Online Services");
+			message.setSubject("Welcome To Rush App Online Services");
 			BodyPart messageBodyPart = new MimeBodyPart();
-			messageBodyPart.setText("Please find the attached final pdf submitted");
+			messageBodyPart.setText("Attached is the final report PDF for your kind reference");
 			Multipart multipart = new MimeMultipart();
 			multipart.addBodyPart(messageBodyPart);
 			messageBodyPart = new MimeBodyPart();

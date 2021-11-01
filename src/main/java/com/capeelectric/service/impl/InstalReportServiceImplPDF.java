@@ -126,11 +126,11 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				document.newPage();
 
 				List<Site> siteDetails = siteRepository.findBysiteId(siteId);
-				Site siteInformation = siteDetails.get(0);
+				Site siteInformation1 = siteDetails.get(0);
 
-				Set<SitePersons> sitePersonDetails = siteInformation.getSitePersons();
+				Set<SitePersons> sitePersonDetails = siteInformation1.getSitePersons();
 				List<SitePersons> convertion1 = new ArrayList<>(sitePersonDetails);
-				SitePersons sitepersons = convertion1.get(0);
+//				SitePersons sitepersons = convertion1.get(0);
 
 				Optional<ReportDetails> reportDetails = installationReportRepository.findBySiteId(siteId);
 				ReportDetails report = reportDetails.get();
@@ -206,117 +206,129 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				table0.setWidthPercentage(100);
 				table0.getDefaultCell().setBorder(0);
 
-				PdfPCell site1 = new PdfPCell(new Paragraph(siteInformation.getCompanyName(),
-						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				table0.addCell(new Phrase("Client name:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				site1.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site1.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site1);
+				for (Site siteInformation : siteDetails) {
 
-				PdfPCell site60 = new PdfPCell(
-						new Paragraph("Department", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				site60.setBackgroundColor(new GrayColor(0.93f));
-				site60.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site60.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site60);
-				PdfPCell site2 = new PdfPCell(new Paragraph(siteInformation.getDepartmentName(),
-						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				site2.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site2.setBackgroundColor(new GrayColor(0.93f));
-				site2.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site2);
+					PdfPCell site1 = new PdfPCell(new Paragraph(siteInformation.getCompanyName(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					table0.addCell(new Phrase("Client name:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site1.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site1.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site1);
 
-				PdfPCell site3 = new PdfPCell(
-						new Paragraph(siteInformation.getSite(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				table0.addCell(new Phrase("Site Name:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				site3.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site3.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site3);
+					PdfPCell site60 = new PdfPCell(
+							new Paragraph("Department", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site60.setBackgroundColor(new GrayColor(0.93f));
+					site60.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site60.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site60);
+					PdfPCell site2 = new PdfPCell(new Paragraph(siteInformation.getDepartmentName(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site2.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site2.setBackgroundColor(new GrayColor(0.93f));
+					site2.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site2);
 
-				PdfPCell site61 = new PdfPCell(
-						new Paragraph("Person In-charge:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				site61.setBackgroundColor(new GrayColor(0.93f));
-				site61.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site61.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site61);
-				PdfPCell site4 = new PdfPCell(new Paragraph(sitepersons.getPersonIncharge(),
-						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				site4.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site4.setBackgroundColor(new GrayColor(0.93f));
-				site4.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site4);
+					PdfPCell site3 = new PdfPCell(
+							new Paragraph(siteInformation.getSite(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					table0.addCell(new Phrase("Site Name:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site3.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site3.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site3);
 
-				PdfPCell site5 = new PdfPCell(
-						new Paragraph(sitepersons.getContactNo(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				table0.addCell(new Phrase("Contact No:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				}
+
+				for (SitePersons sitepersons : convertion1) {
+
+					PdfPCell site61 = new PdfPCell(
+							new Paragraph("Person In-charge:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site61.setBackgroundColor(new GrayColor(0.93f));
+					site61.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site61.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site61);
+					PdfPCell site4 = new PdfPCell(new Paragraph(sitepersons.getPersonIncharge(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site4.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site4.setBackgroundColor(new GrayColor(0.93f));
+					site4.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site4);
+
+					PdfPCell site5 = new PdfPCell(new Paragraph(sitepersons.getContactNo(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					table0.addCell(new Phrase("Contact No:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //				site5.setFixedHeight(30f);
-				site5.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site5.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site5);
+					site5.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site5.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site5);
 
-				PdfPCell site62 = new PdfPCell(
-						new Paragraph("Mail id:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				site62.setBackgroundColor(new GrayColor(0.93f));
-				site62.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site62.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site62);
-				PdfPCell site6 = new PdfPCell(new Paragraph(sitepersons.getPersonInchargeEmail(),
-						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				site6.setBackgroundColor(new GrayColor(0.93f));
-				site6.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site6.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site6);
+					PdfPCell site62 = new PdfPCell(
+							new Paragraph("Mail id:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site62.setBackgroundColor(new GrayColor(0.93f));
+					site62.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site62.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site62);
+					PdfPCell site6 = new PdfPCell(new Paragraph(sitepersons.getPersonInchargeEmail(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site6.setBackgroundColor(new GrayColor(0.93f));
+					site6.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site6.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site6);
 
-				PdfPCell site7 = new PdfPCell(new Paragraph(siteInformation.getAddressLine_1(),
-						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				table0.addCell(new Phrase("Site Address line1:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				}
+
+				for (Site siteInformation : siteDetails) {
+
+					PdfPCell site7 = new PdfPCell(new Paragraph(siteInformation.getAddressLine_1(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					table0.addCell(new Phrase("Site Address line1:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //				site7.setFixedHeight(30f);
-				site7.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site7.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site7);
+					site7.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site7.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site7);
 
-				PdfPCell site63 = new PdfPCell(
-						new Paragraph("Site Address line2:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				site63.setBackgroundColor(new GrayColor(0.93f));
-				site63.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site63.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site63);
-				PdfPCell site8 = new PdfPCell(new Paragraph(siteInformation.getAddressLine_2(),
-						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				site8.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site8.setBackgroundColor(new GrayColor(0.93f));
-				site8.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site8);
+					PdfPCell site63 = new PdfPCell(
+							new Paragraph("Site Address line2:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site63.setBackgroundColor(new GrayColor(0.93f));
+					site63.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site63.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site63);
+					PdfPCell site8 = new PdfPCell(new Paragraph(siteInformation.getAddressLine_2(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site8.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site8.setBackgroundColor(new GrayColor(0.93f));
+					site8.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site8);
 
-				PdfPCell site64 = new PdfPCell(
-						new Paragraph(siteInformation.getState(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				table0.addCell(new Phrase("State:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					PdfPCell site64 = new PdfPCell(new Paragraph(siteInformation.getState(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					table0.addCell(new Phrase("State:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //				site64.setFixedHeight(30f);
-				site64.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site64.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site64);
+					site64.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site64.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site64);
 
-				PdfPCell pin = new PdfPCell(
-						new Paragraph("Pin code:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				pin.setBackgroundColor(new GrayColor(0.93f));
-				pin.setHorizontalAlignment(Element.ALIGN_LEFT);
-				pin.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(pin);
-				PdfPCell site11 = new PdfPCell(
-						new Paragraph(siteInformation.getZipCode(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				site11.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site11.setBackgroundColor(new GrayColor(0.93f));
-				site11.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site11);
+					PdfPCell pin = new PdfPCell(
+							new Paragraph("Pin code:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					pin.setBackgroundColor(new GrayColor(0.93f));
+					pin.setHorizontalAlignment(Element.ALIGN_LEFT);
+					pin.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(pin);
+					PdfPCell site11 = new PdfPCell(new Paragraph(siteInformation.getZipCode(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site11.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site11.setBackgroundColor(new GrayColor(0.93f));
+					site11.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site11);
 
-				PdfPCell site65 = new PdfPCell(
-						new Paragraph(siteInformation.getCountry(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				table0.addCell(new Phrase("Country:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					PdfPCell site65 = new PdfPCell(new Paragraph(siteInformation.getCountry(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					table0.addCell(new Phrase("Country:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //				site65.setFixedHeight(30f);
-				site65.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site65.setBorder(PdfPCell.NO_BORDER);
-				table0.addCell(site65);
-				document.add(table0);
+					site65.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site65.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site65);
+					document.add(table0);
+
+				}
 
 				PdfPTable table1 = new PdfPTable(pointColumnWidths);
 
@@ -817,6 +829,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 						inspector(document, arr);
 					}
 				}
+
 				if (comments.getViewerUserName() != null && comments.getInspectorUserName() != null) {
 
 					document.newPage();
@@ -880,8 +893,8 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 					tableData(table44, reportComments);
 
 					document.add(table44);
-
 				}
+
 				document.close();
 				writer.close();
 			} catch (Exception e) {
@@ -921,9 +934,16 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 			PdfPCell cell = new PdfPCell();
-			cell.setPhrase(new Phrase(arr.getViewerComment(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table44.addCell(cell);
+
+			if (arr.getViewerComment() != null) {
+				cell.setPhrase(new Phrase(arr.getViewerComment(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table44.addCell(cell);
+			} else {
+				cell.setPhrase(new Phrase("No viewer comment available", font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table44.addCell(cell);
+			}
 
 			if (arr.getViewerDate() != null) {
 				cell.setPhrase(new Phrase(arr.getViewerDate().toString(), font));
@@ -934,9 +954,15 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table44.addCell(cell);
 			}
-			cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-			table44.addCell(cell);
+			if (arr.getInspectorComment() != null) {
+				cell.setPhrase(new Phrase(arr.getInspectorComment(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				table44.addCell(cell);
+			} else {
+				cell.setPhrase(new Phrase("No inspector comment available", font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table44.addCell(cell);
+			}
 
 			if (arr.getInspectorDate() != null) {
 				cell.setPhrase(new Phrase(arr.getInspectorDate().toString(), font));
