@@ -7,6 +7,6 @@ import com.capeelectric.model.PeriodicInspection;
 
 public interface InspectionServicePDF {
 
-	public List<PeriodicInspection> retrieveInspectionDetails(String userName, Integer siteId)
+	public List<PeriodicInspection> printInspectionDetails(String userName, Integer siteId)
 			throws InspectionException;
 }

@@ -108,4 +108,10 @@ public class Constants {
 	public static final String FROM_EMAIL = "info@rushforsafety.com";
 	
 	public static final String AWS_EMAIL_PORT = String.valueOf(587);
+	
+	public static final String FIRST_PERSON_EMAIL = "sd@capeindia.net";
+	
+	public static final String SECOND_PERSON_EMAIL = "gk@capeindia.net";
+	
+	public static final String THIRD_PERSON_EMAIL = "deepak@capeindia.net";
 }

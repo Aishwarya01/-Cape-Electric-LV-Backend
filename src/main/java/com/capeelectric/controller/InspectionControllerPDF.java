@@ -29,7 +29,7 @@ public class InspectionControllerPDF {
 	public ResponseEntity<List<PeriodicInspection>> retrieveInspectionDetails(@PathVariable String userName,
 			@PathVariable Integer siteId) throws InspectionException {
 		logger.info("called addInspectionDetails function UserName : {},SiteId : {}", userName, siteId);
-		return new ResponseEntity<List<PeriodicInspection>>(inspectionServicePDF.retrieveInspectionDetails(userName, siteId),
+		return new ResponseEntity<List<PeriodicInspection>>(inspectionServicePDF.printInspectionDetails(userName, siteId),
 				HttpStatus.OK);
 	}
 }
