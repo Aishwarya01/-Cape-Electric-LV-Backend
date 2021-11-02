@@ -62,7 +62,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			Optional<Register> registerRepo = registerRepository.findByUsername(register.getUsername());
 			if (!registerRepo.isPresent()
 					|| !registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
-				if (isValidIndianMobileNumber(register.getContactNumber())) {
+				if (isValidMobileNumber(register.getContactNumber())) {
 					if (register.getRole() != null && register.getRole().equalsIgnoreCase("INSPECTOR")) {
 						register.setNoOfLicence("0");
 						register.setPermission(Constants.before_Approve_Permission);
@@ -76,7 +76,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					return createdRegister;
 				} else {
 					logger.debug(
-							isValidIndianMobileNumber(register.getContactNumber()) + "  Given MobileNumber is Invalid");
+							isValidMobileNumber(register.getContactNumber()) + "  Given MobileNumber is Invalid");
 					throw new RegistrationException("Invalid MobileNumber");
 				}
 
@@ -101,7 +101,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 			Optional<Register> registerRepo = registerRepository.findByUsername(viewer.getUsername());
 			if (!registerRepo.isPresent() || !registerRepo.get().getUsername().equalsIgnoreCase(viewer.getUsername())) {
-				if (isValidIndianMobileNumber(viewer.getContactNumber())) {
+				if (isValidMobileNumber(viewer.getContactNumber())) {
 					viewer.setCreatedDate(LocalDateTime.now());
 					viewer.setPermission("YES");
 					viewer.setUpdatedDate(LocalDateTime.now());
@@ -114,7 +114,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					return createdRegister;
 				} else {
 					logger.debug(
-							isValidIndianMobileNumber(viewer.getContactNumber()) + "  Given MobileNumber is Invalid");
+							isValidMobileNumber(viewer.getContactNumber()) + "  Given MobileNumber is Invalid");
 					throw new RegistrationException("Invalid MobileNumber");
 				}
 
@@ -197,7 +197,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			if (registerRepo.isPresent() && registerRepo.get() != null) {
 				if (registerRepo.get().getPermission().equalsIgnoreCase("Yes")) {
 					if (registerRepo.get().getContactNumber().contains(mobileNumber)) {
-						if (isValidIndianMobileNumber(mobileNumber)) {
+						if (isValidMobileNumber(mobileNumber)) {
 							String sessionKey = otpSend(mobileNumber);
 							Register register = registerRepo.get();
 							register.setOtpSessionKey(sessionKey);
@@ -221,8 +221,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 		}
 	}
 	
-	private boolean isValidIndianMobileNumber(String mobileNumber) {
-		Pattern p = Pattern.compile("^(?:(?:\\+|0{0,2})91(\\s*[\\-]\\s*)?|[0]?)?[789]\\d{9}$");
+	private boolean isValidMobileNumber(String mobileNumber) {
+		Pattern p = Pattern.compile("^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$");
 		Matcher m = p.matcher(mobileNumber);
 		return (m.find() && m.group().equals(mobileNumber));
 	}
