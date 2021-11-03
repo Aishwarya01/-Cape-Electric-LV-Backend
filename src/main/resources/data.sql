@@ -49,7 +49,7 @@ CREATE TABLE country_table (
 			INSERT INTO country_table VALUES (18, 'GERMANY', 'GNY');
 			INSERT INTO country_table VALUES (19, 'FRANCE', 'FRN');
 			INSERT INTO country_table VALUES (20, 'RUSSIA', 'RUS');
-			INSERT INTO country_table VALUES (21, 'NEPAL, 'NPL');
+			INSERT INTO country_table VALUES (21, 'NEPAL', 'NPL');
 
 --------> State Table with insert queries <------------
 
