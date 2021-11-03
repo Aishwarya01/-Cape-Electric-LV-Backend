@@ -222,7 +222,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 	
 	private boolean isValidMobileNumber(String mobileNumber) {
-		Pattern p = Pattern.compile("^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$");
+		Pattern p = Pattern.compile("^(\\+\\d{1,3}( )?)?(\\s*[\\-]\\s*)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$");
 		Matcher m = p.matcher(mobileNumber);
 		return (m.find() && m.group().equals(mobileNumber));
 	}
