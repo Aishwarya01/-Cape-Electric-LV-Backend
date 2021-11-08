@@ -90,6 +90,8 @@ CREATE TABLE state_table (
 			INSERT INTO state_table VALUES (26,1,'Manipur','GU');
 			INSERT INTO state_table VALUES (27,1,'Goa','GA');
 			INSERT INTO STATE_TABLE VALUES (28,2,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (29,21,'Others','OT');
+
 
 --------> Applicationtypes Table with insert queries <------------
 
