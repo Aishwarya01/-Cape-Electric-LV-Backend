@@ -91,6 +91,24 @@ CREATE TABLE state_table (
 			INSERT INTO state_table VALUES (27,1,'Goa','GA');
 			INSERT INTO STATE_TABLE VALUES (28,2,'Others','OT');
             INSERT INTO STATE_TABLE VALUES (29,21,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (30,3,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (31,4,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (32,5,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (33,6,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (34,7,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (35,8,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (36,9,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (37,10,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (39,11,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (40,12,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (41,13,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (42,14,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (43,15,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (44,16,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (45,17,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (46,18,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (47,19,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (48,20,'Others','OT');
 
 
 --------> Applicationtypes Table with insert queries <------------
