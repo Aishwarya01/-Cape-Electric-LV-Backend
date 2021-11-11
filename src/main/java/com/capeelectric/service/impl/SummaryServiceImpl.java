@@ -11,12 +11,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.SummaryException;
+import com.capeelectric.model.PeriodicInspection;
+import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
+import com.capeelectric.model.SupplyCharacteristics;
+import com.capeelectric.model.TestingReport;
+import com.capeelectric.repository.InspectionRepository;
+import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.SummaryRepository;
+import com.capeelectric.repository.SupplyCharacteristicsRepository;
+import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.SummaryService;
 import com.capeelectric.util.Constants;
 import com.capeelectric.util.UserFullName;
@@ -31,6 +39,18 @@ public class SummaryServiceImpl implements SummaryService {
 
 	@Autowired
 	private SummaryRepository summaryRepository;
+	
+	@Autowired
+	private InstalReportDetailsRepository installationReportRepository;
+	
+	@Autowired
+	private SupplyCharacteristicsRepository supplyCharacteristicsRepository;
+	
+	@Autowired
+	private InspectionRepository inspectionRepository;
+	
+	@Autowired
+	private TestingReportRepository testingReportRepository;
 	
 	@Autowired
 	private UserFullName userFullName;
@@ -61,32 +81,43 @@ public class SummaryServiceImpl implements SummaryService {
 		if (summary.getUserName() != null && !summary.getUserName().isEmpty() && summary.getSiteId() != null
 				&& summary.getSiteId() != 0) {
 			Optional<Summary> summaryRepo = summaryRepository.findBySiteId(summary.getSiteId());
-			if (!summaryRepo.isPresent() || !summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
-				summaryComment = new SummaryComment();
-				summaryComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
-				summaryComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
-				summaryComment.setNoOfComment(1);
-				summaryComment.setSummary(summary);
-				listOfComments.add(summaryComment);
-				summary.setSummaryComment(listOfComments);
-				summary.setCreatedDate(LocalDateTime.now());
-				summary.setUpdatedDate(LocalDateTime.now());
-				summary.setCreatedBy(userFullName.findByUserName(summary.getUserName()));
-				summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
-				summaryRepository.save(summary);
-				siteRepo = siteRepository.findById(summary.getSiteId());
-				if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
-					site = siteRepo.get();
-					site.setAllStepsCompleted("AllStepCompleted");
-					siteRepository.save(site);
-				} else {
-					throw new SummaryException("Site-Id Information not Available in site_Table");
-				}
+			Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository.findBySiteId(summary.getSiteId());
+			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(summary.getSiteId());
+			Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(summary.getSiteId());
+			Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(summary.getSiteId());
+			
+			if(supplyCharacteristics.isPresent() && testingRepo.isPresent() && periodicInspection.isPresent() && reportDetailsRepo.isPresent()) {
+				if (!summaryRepo.isPresent() || !summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
+					summaryComment = new SummaryComment();
+					summaryComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+					summaryComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
+					summaryComment.setNoOfComment(1);
+					summaryComment.setSummary(summary);
+					listOfComments.add(summaryComment);
+					summary.setSummaryComment(listOfComments);
+					summary.setCreatedDate(LocalDateTime.now());
+					summary.setUpdatedDate(LocalDateTime.now());
+					summary.setCreatedBy(userFullName.findByUserName(summary.getUserName()));
+					summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
+					summaryRepository.save(summary);
+					siteRepo = siteRepository.findById(summary.getSiteId());
+					if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
+						site = siteRepo.get();
+						site.setAllStepsCompleted("AllStepCompleted");
+						siteRepository.save(site);
+					} else {
+						throw new SummaryException("Site-Id Information not Available in site_Table");
+					}
 
-			} else {
-				System.out.println("Site-Id Already Available");
-				throw new SummaryException("Site-Id Already Available");
+				} else {
+					System.out.println("Site-Id Already Available");
+					throw new SummaryException("Site-Id Already Available");
+				}
+			} 
+			else {
+				throw new SummaryException("Please enter previous steps to proceed further");
 			}
+			
 
 		} else {
 			throw new SummaryException("Invalid Inputs");
