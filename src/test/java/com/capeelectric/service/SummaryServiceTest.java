@@ -22,15 +22,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SummaryException;
-import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
-import com.capeelectric.model.SupplyCharacteristicComment;
+import com.capeelectric.repository.InspectionRepository;
+import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.SummaryRepository;
+import com.capeelectric.repository.SupplyCharacteristicsRepository;
+import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.SummaryServiceImpl;
 import com.capeelectric.util.UserFullName;
 
@@ -43,6 +45,18 @@ public class SummaryServiceTest {
 
 	@MockBean
 	private SummaryRepository summaryRepository;
+	
+	@MockBean
+	private InstalReportDetailsRepository installationReportRepository;
+	
+	@MockBean
+	private InspectionRepository inspectionRepository;
+	
+	@MockBean
+	private TestingReportRepository testingReportRepository;
+	
+	@MockBean
+	private SupplyCharacteristicsRepository supplyCharacteristicsRepository;
 
 	@InjectMocks
 	private SummaryServiceImpl summaryServiceImpl;
@@ -93,12 +107,11 @@ public class SummaryServiceTest {
 		sitePersons1.setPersonInchargeEmail("Viewer@gmail.com");
 		sitePersons1.setInActive(true);
 		 
-		HashSet sitePersonsSet = new HashSet<SitePersons>();
+		HashSet<SitePersons> sitePersonsSet = new HashSet<SitePersons>();
 		sitePersonsSet.add(sitePersons1);
 		site.setSitePersons(sitePersonsSet);
 	}
 
-	@Test
 	public void testAddSummary() throws SummaryException {
 
 		when(summaryRepository.findBySiteId(12)).thenReturn(Optional.of(summary));
