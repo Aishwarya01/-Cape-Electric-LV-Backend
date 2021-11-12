@@ -77,9 +77,8 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 					BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, accessKeySecret);
 					AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.AP_SOUTH_1)
 							.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
-					Optional<Site> siteDetails =  siteRepository.findById(siteId);
 //					Uploading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
-					String folderName = ((siteDetails.isPresent() && siteDetails.get() != null) ? siteDetails.get().getSite() : "");
+					String folderName = ((siteRepository.findById(siteId).isPresent() && siteRepository.findById(siteId).get() != null) ? siteRepository.findById(siteId).get().getSite() : "");
 					String fileNameInS3 = "finalreport.pdf";
 					String fileNameInLocalPC = "finalreport.pdf";
 					if(folderName.length() > 0) {
