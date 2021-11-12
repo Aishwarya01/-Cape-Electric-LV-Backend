@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.capeelectric.model.Site;
+import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.PrintFinalPDFService;
 import com.capeelectric.util.HeaderFooterPageEvent;
 import com.itextpdf.text.Document;
@@ -48,6 +51,9 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 	@Value("${access.key.secret}")
 	private String accessKeySecret;
 	
+	@Autowired
+	private SiteRepository siteRepository;
+	
 	private static final Logger logger = LoggerFactory.getLogger(PrintFinalPDFServiceImpl.class);
 
 	@Override
@@ -71,16 +77,20 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 					BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, accessKeySecret);
 					AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.AP_SOUTH_1)
 							.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
-
+					Optional<Site> siteDetails =  siteRepository.findById(siteId);
 //					Uploading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
-					String folderName = "pdffiles";
+					String folderName = ((siteDetails.isPresent() && siteDetails.get() != null) ? siteDetails.get().getSite() : "");
 					String fileNameInS3 = "finalreport.pdf";
 					String fileNameInLocalPC = "finalreport.pdf";
-//
+					if(folderName.length() > 0) {
 					PutObjectRequest request = new PutObjectRequest(s3BucketName, folderName + "/" + fileNameInS3,
 							new File(fileNameInLocalPC));
 					s3Client.putObject(request);
 					logger.info("Uploading file done in AWS s3 ");
+					} else {
+						logger.error("There is no site available");
+						throw new Exception("There is no site available");
+					}
 					
 				} catch (AmazonS3Exception e) {
 					e.printStackTrace();
