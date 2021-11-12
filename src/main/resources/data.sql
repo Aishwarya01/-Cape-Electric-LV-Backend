@@ -82,7 +82,7 @@ CREATE TABLE state_table (
 			INSERT INTO state_table VALUES (18,1,'Sikkim','SK');
 			INSERT INTO state_table VALUES (19,1,'West Bengal','WB');
 			INSERT INTO state_table VALUES (20,1,'Assam','AS');
-			INSERT INTO state_table VALUES (21,1,'Arunachala Pradesh','AR');
+			INSERT INTO state_table VALUES (21,1,'Arunachal Pradesh','AR');
 			INSERT INTO state_table VALUES (22,1,'Nagaland','NG');
 			INSERT INTO state_table VALUES (23,1,'Tripura','TP');
 			INSERT INTO state_table VALUES (24,1,'Meghalaya','MG');
@@ -99,17 +99,29 @@ CREATE TABLE state_table (
             INSERT INTO STATE_TABLE VALUES (35,8,'Others','OT');
             INSERT INTO STATE_TABLE VALUES (36,9,'Others','OT');
             INSERT INTO STATE_TABLE VALUES (37,10,'Others','OT');
-            INSERT INTO STATE_TABLE VALUES (39,11,'Others','OT');
-            INSERT INTO STATE_TABLE VALUES (40,12,'Others','OT');
-            INSERT INTO STATE_TABLE VALUES (41,13,'Others','OT');
-            INSERT INTO STATE_TABLE VALUES (42,14,'Others','OT');
-            INSERT INTO STATE_TABLE VALUES (43,15,'Others','OT');
-            INSERT INTO STATE_TABLE VALUES (44,16,'Others','OT');
-            INSERT INTO STATE_TABLE VALUES (45,17,'Others','OT');
-            INSERT INTO STATE_TABLE VALUES (46,18,'Others','OT');
-            INSERT INTO STATE_TABLE VALUES (47,19,'Others','OT');
-            INSERT INTO STATE_TABLE VALUES (48,20,'Others','OT');
-
+            INSERT INTO STATE_TABLE VALUES (38,11,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (39,12,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (40,13,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (41,14,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (42,15,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (43,16,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (44,17,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (45,18,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (46,19,'Others','OT');
+            INSERT INTO STATE_TABLE VALUES (47,20,'Others','OT');
+			INSERT INTO state_table VALUES (48,1,'NewDelhi','DE');
+			INSERT INTO state_table VALUES (49,1,'Puducherry','PO');
+			INSERT INTO state_table VALUES (50,1,'Daman and Diu','DA');
+			INSERT INTO state_table VALUES (51,1,'Dadra and Nagar Haveli','DN');
+			INSERT INTO state_table VALUES (52,1,'Himachal Pradesh','HP');
+			INSERT INTO state_table VALUES (53,1,'Jammu and Kashmir','JK');
+			INSERT INTO state_table VALUES (54,1,'Ladakh','LH');
+			INSERT INTO state_table VALUES (55,1,'Chandigarh','CH');
+			INSERT INTO state_table VALUES (56,1,'Lakshadeep','LK');
+			
+			
+			
+			
 
 --------> Applicationtypes Table with insert queries <------------
 
