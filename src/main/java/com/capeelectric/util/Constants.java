@@ -114,4 +114,8 @@ public class Constants {
 	public static final String SECOND_PERSON_EMAIL = "gk@capeindia.net";
 	
 	public static final String THIRD_PERSON_EMAIL = "deepak@capeindia.net";
+	
+	public static final String EMAIL_SUBJECT = "Rush Electrical Safety Digital TIC Platform";
+	
+	public static final String EMAIL_ADMIN_SUBJECT = "Approval For Inspector";
 }

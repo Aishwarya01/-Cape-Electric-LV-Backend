@@ -70,7 +70,7 @@ public class AWSEmailService {
 
 			MimeMessage message = new MimeMessage(mailSession);
 
-			message.setSubject("Welcome to Rush Safety Application");
+			message.setSubject(Constants.EMAIL_SUBJECT);
 			message.setContent(content, "text/plain");
 			message.setSentDate(new Date());
 			message.setFrom(new InternetAddress(FROM));
@@ -103,7 +103,7 @@ public class AWSEmailService {
 
 			MimeMessage message = new MimeMessage(mailSession);
 
-			message.setSubject("Approval For Inspector");
+			message.setSubject(Constants.EMAIL_ADMIN_SUBJECT);
 			message.setContent(content, "text/plain");
 			message.setSentDate(new Date());
 			message.setFrom(new InternetAddress(FROM));
@@ -140,7 +140,7 @@ public class AWSEmailService {
 
 		MimeMessage message = new MimeMessage(mailSession);
 
-		message.setSubject("Welcome to Rush Safety Application");
+		message.setSubject(Constants.EMAIL_SUBJECT);
 		message.setContent(content, "text/plain");
 		message.setSentDate(new Date());
 		message.setFrom(new InternetAddress(FROM));
@@ -176,7 +176,7 @@ public class AWSEmailService {
 				Transport transport = mailSession.getTransport("smtp");
 				message.setFrom(new InternetAddress(from));
 				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-				message.setSubject("Welcome To Rush App Online Services");
+				message.setSubject(Constants.EMAIL_SUBJECT);
 				BodyPart messageBodyPart = new MimeBodyPart();
 				messageBodyPart.setText("Attached is the final report PDF for your kind reference");
 				Multipart multipart = new MimeMultipart();
