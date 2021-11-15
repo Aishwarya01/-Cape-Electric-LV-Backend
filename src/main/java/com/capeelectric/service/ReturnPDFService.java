@@ -6,6 +6,7 @@ import java.io.InputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
+import com.capeelectric.repository.SiteRepository;
 
 @Service
 public class ReturnPDFService {
@@ -29,38 +31,44 @@ public class ReturnPDFService {
 	private String accessKeyId;
 	@Value("${access.key.secret}")
 	private String accessKeySecret;
+	
+	@Autowired
+	private SiteRepository siteRepository;
 
-	public ByteArrayOutputStream printFinalPDF() throws Exception {
-		String folderName = "pdffiles";
-		String fileNameInS3 = "finalreport.pdf";
-		try {
-			BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, accessKeySecret);
-			AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.AP_SOUTH_1)
-					.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
+	public ByteArrayOutputStream printFinalPDF(String userName, Integer siteId) throws Exception {
+		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
+			String folderName = ((siteRepository.findById(siteId).isPresent() && siteRepository.findById(siteId).get() != null) ? siteRepository.findById(siteId).get().getSite() : "");
+			String fileNameInS3 = "finalreport.pdf";
+			try {
+				BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, accessKeySecret);
+				AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.AP_SOUTH_1)
+						.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
 
-//		    5 seconds of time for executing between FileUpload And FileDownload in AWS s3 bucket
-			Thread.sleep(5000);
+				//			    5 seconds of time for executing between FileUpload And FileDownload in AWS s3 bucket
+				Thread.sleep(5000);
 
-//		    Downloading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
-			S3Object fullObject;
-			fullObject = s3Client.getObject(new GetObjectRequest(s3BucketName, folderName + "/" + fileNameInS3));
-			logger.info("Downloading file done from AWS s3");
-			InputStream is = fullObject.getObjectContent();
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			int len;
-			byte[] buffer = new byte[4096];
-			while ((len = is.read(buffer, 0, buffer.length)) != -1) {
-				outputStream.write(buffer, 0, len);
+				//			    Downloading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
+				S3Object fullObject;
+				fullObject = s3Client.getObject(new GetObjectRequest(s3BucketName, "Site Name_".concat(folderName) + "/" + fileNameInS3));
+				logger.info("Downloading file done from AWS s3");
+				InputStream is = fullObject.getObjectContent();
+				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				int len;
+				byte[] buffer = new byte[4096];
+				while ((len = is.read(buffer, 0, buffer.length)) != -1) {
+					outputStream.write(buffer, 0, len);
+				}
+				return outputStream;
+			} catch (IOException ioException) {
+				logger.error("IOException: " + ioException.getMessage());
+			} catch (AmazonServiceException serviceException) {
+				logger.info("AmazonServiceException Message: " + serviceException.getMessage());
+				throw serviceException;
+			} catch (AmazonClientException clientException) {
+				logger.info("AmazonClientException Message: " + clientException.getMessage());
+				throw clientException;
 			}
-			return outputStream;
-		} catch (IOException ioException) {
-			logger.error("IOException: " + ioException.getMessage());
-		} catch (AmazonServiceException serviceException) {
-			logger.info("AmazonServiceException Message: " + serviceException.getMessage());
-			throw serviceException;
-		} catch (AmazonClientException clientException) {
-			logger.info("AmazonClientException Message: " + clientException.getMessage());
-			throw clientException;
+
 		}
 		return null;
 	}
