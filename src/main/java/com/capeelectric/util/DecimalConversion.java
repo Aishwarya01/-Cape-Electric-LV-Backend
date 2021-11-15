@@ -26,29 +26,31 @@ public class DecimalConversion {
 	 */
 	public static String convertToDecimal(String value, String type) throws DecimalConversionException {
 		DecimalConversion conversion = new DecimalConversion();
-		DecimalFormat decimalSize = conversion.findDecimalSize(type);
 		String nominalValues = "";
-		String decimalValue = "NA";
-		if (value != null && !value.isEmpty()) {
-			StringTokenizer stringTokenizer = new StringTokenizer(value, ",");
+		DecimalFormat decimalSize = conversion.findDecimalSize(type);
+		if(type.equalsIgnoreCase(Constants.supply_MainNominal_Frequency) || type.equalsIgnoreCase(Constants.supply_Nominal_Frequency)) {
+			nominalValues = (value.equalsIgnoreCase("NA") ? value : decimalSize.format(new DecimalFormat(Constants.supply_MainNominal_Frequency)));
+		}else {
+			String decimalValue = "NA";
+			if (value != null && !value.isEmpty()) {
+				StringTokenizer stringTokenizer = new StringTokenizer(value, ",");
 
-			logger.info("started DecimalConversion process");
-			while (stringTokenizer.hasMoreElements()) {
-				String token = stringTokenizer.nextToken();
-				if (token.equalsIgnoreCase("NA")) {
-					nominalValues = nominalValues.concat("NA").concat(",");
-				} else {
-					decimalValue = decimalSize.format(Double.parseDouble(token));
-					nominalValues = nominalValues.concat(decimalValue).concat(",");
+				logger.info("started DecimalConversion process");
+				while (stringTokenizer.hasMoreElements()) {
+					String token = stringTokenizer.nextToken();
+					if (token.equalsIgnoreCase("NA")) {
+						nominalValues = nominalValues.concat("NA").concat(",");
+					} else {
+						decimalValue = decimalSize.format(Double.parseDouble(token));
+						nominalValues = nominalValues.concat(decimalValue).concat(",");
+					}
+
 				}
-
+			} else {
+				logger.info("failed DecimalConversion process");
+				throw new DecimalConversionException("invalid input of value for DecimalConversion");
 			}
-		} else {
-			logger.info("failed DecimalConversion process");
-			throw new DecimalConversionException("invalid input of value for DecimalConversion");
-
 		}
-
 		logger.info("ended DecimalConversion process");
 		return nominalValues.substring(0, nominalValues.length() - 1);
 	}

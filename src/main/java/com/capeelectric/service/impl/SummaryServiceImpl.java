@@ -85,8 +85,17 @@ public class SummaryServiceImpl implements SummaryService {
 			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(summary.getSiteId());
 			Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(summary.getSiteId());
 			Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(summary.getSiteId());
-			
-			if(supplyCharacteristics.isPresent() && testingRepo.isPresent() && periodicInspection.isPresent() && reportDetailsRepo.isPresent()) {
+
+			if(!reportDetailsRepo.isPresent()) {
+				throw new SummaryException("Please enter Basic Information step to proceed further");
+			} else if(!supplyCharacteristics.isPresent()) {
+				throw new SummaryException("Please enter Supply Characteristics step to proceed further");
+			} else if(!periodicInspection.isPresent()) {
+				throw new SummaryException("Please enter Periodic Inspection step to proceed further");
+			} else if (!testingRepo.isPresent()) {
+				throw new SummaryException("Please enter Periodic Testing step to proceed further");
+			}
+			else {
 				if (!summaryRepo.isPresent() || !summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
 					summaryComment = new SummaryComment();
 					summaryComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
@@ -110,18 +119,11 @@ public class SummaryServiceImpl implements SummaryService {
 					}
 
 				} else {
-					System.out.println("Site-Id Already Available");
 					throw new SummaryException("Site-Id Already Available");
 				}
 			} 
-			else {
-				throw new SummaryException("Please enter previous steps to proceed further");
-			}
-			
-
 		} else {
 			throw new SummaryException("Invalid Inputs");
-
 		}
 
 	}
