@@ -145,4 +145,9 @@ public class FinalReportServiceImpl implements FinalReportService {
 		}
 	}
 
+	@Override
+	public List<Site> retrieveAllSites() throws FinalReportException {
+		return (List<Site>)siteRepository.findAll();
+	}
+
 }
