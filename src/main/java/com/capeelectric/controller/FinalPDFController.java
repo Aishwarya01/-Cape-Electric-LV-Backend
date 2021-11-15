@@ -67,7 +67,7 @@ public class FinalPDFController {
 		printFinalPDFService.printFinalPDF(userName, siteId);
 
 		String keyname = "finalreport.pdf";
-		ByteArrayOutputStream downloadInputStream = returnPDFService.printFinalPDF();
+		ByteArrayOutputStream downloadInputStream = returnPDFService.printFinalPDF(userName, siteId);
 
 		return ResponseEntity.ok().contentType(contentType(keyname))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + keyname + "\"")
