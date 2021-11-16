@@ -85,8 +85,10 @@ public class SummaryServiceImpl implements SummaryService {
 			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(summary.getSiteId());
 			Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(summary.getSiteId());
 			Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(summary.getSiteId());
-
-			if(!reportDetailsRepo.isPresent()) {
+			if(!reportDetailsRepo.isPresent() && !supplyCharacteristics.isPresent() && !periodicInspection.isPresent() && !testingRepo.isPresent()) {
+				throw new SummaryException("Please enter details for all previous steps to proceed further");
+              }
+	        else if(!reportDetailsRepo.isPresent()) {
 				throw new SummaryException("Please enter Basic Information step to proceed further");
 			} else if(!supplyCharacteristics.isPresent()) {
 				throw new SummaryException("Please enter Supply Characteristics step to proceed further");
