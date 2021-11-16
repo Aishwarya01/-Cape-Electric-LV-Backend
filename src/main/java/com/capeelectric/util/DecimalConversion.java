@@ -29,7 +29,7 @@ public class DecimalConversion {
 		String nominalValues = "";
 		DecimalFormat decimalSize = conversion.findDecimalSize(type);
 		if(type.equalsIgnoreCase(Constants.supply_MainNominal_Frequency) || type.equalsIgnoreCase(Constants.supply_Nominal_Frequency)) {
-			nominalValues = (value.equalsIgnoreCase("NA") ? value : decimalSize.format(new DecimalFormat(Constants.supply_MainNominal_Frequency)));
+			return (value.equalsIgnoreCase("NA") ? value : decimalSize.format(Double.parseDouble(value)));
 		}else {
 			String decimalValue = "NA";
 			if (value != null && !value.isEmpty()) {

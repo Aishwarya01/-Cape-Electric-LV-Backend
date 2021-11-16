@@ -107,6 +107,7 @@ public class SupplyCharacteristicsServiceTest {
 		site.setSitePersons(sitePersonsSet);
 	}
 
+	@Test
 	public void testAddCharacteristics_Succes_Flow() throws SupplyCharacteristicsException, DecimalConversionException {
 		
 		supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics);
@@ -114,6 +115,7 @@ public class SupplyCharacteristicsServiceTest {
 		assertNotNull(supplyCharacteristics);
 	}
 
+	@Test
 	public void testAddCharacteristics_Supply_Parameters_Succes_Flow() throws SupplyCharacteristicsException, DecimalConversionException {
 
 		supplyCharacteristics.setMainNominalCurrent("1.2012,12.1212,455,566");
@@ -181,6 +183,7 @@ public class SupplyCharacteristicsServiceTest {
 		supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics);
 	}
 	 
+	@Test
 	public void testUpdateCharacteristics() throws SupplyCharacteristicsException, DecimalConversionException {
 		
 		when(supplyCharacteristicsRepository.findById(1)).thenReturn(Optional.of(supplyCharacteristics));
