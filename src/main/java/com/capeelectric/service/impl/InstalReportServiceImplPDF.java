@@ -396,7 +396,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				PdfPCell site68 = new PdfPCell(
 						new Paragraph(report.getEvidanceAddition(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				table1.addCell(new Phrase("Evidance of addition / altrations:",
+				table1.addCell(new Phrase("Evidence of addition / alterations:",
 						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //				site68.setFixedHeight(30f);
 				site68.setHorizontalAlignment(Element.ALIGN_LEFT);
