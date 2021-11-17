@@ -21,7 +21,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.Register;
-import com.capeelectric.model.ReportDetailsComment;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.SupplyCharacteristicComment;
@@ -102,7 +101,7 @@ public class SupplyCharacteristicsServiceTest {
 		sitePersons1.setPersonInchargeEmail("Viewer@gmail.com");
 		sitePersons1.setInActive(true);
 		 
-		HashSet sitePersonsSet = new HashSet<SitePersons>();
+		HashSet<SitePersons> sitePersonsSet = new HashSet<SitePersons>();
 		sitePersonsSet.add(sitePersons1);
 		site.setSitePersons(sitePersonsSet);
 	}

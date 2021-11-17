@@ -20,7 +20,7 @@ public interface SupplyCharacteristicsService {
 			throws SupplyCharacteristicsException;
 
 	public void updateCharacteristics(SupplyCharacteristics supplyCharacteristics)
-			throws SupplyCharacteristicsException;
+			throws SupplyCharacteristicsException, DecimalConversionException;
 
 	public void sendComments(String userName, Integer siteId, SupplyCharacteristicComment supplyCharacteristicComment)
 			throws SupplyCharacteristicsException;

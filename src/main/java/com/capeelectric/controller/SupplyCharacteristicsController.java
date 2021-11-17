@@ -60,7 +60,7 @@ public class SupplyCharacteristicsController {
 
 	@PutMapping("/updateCharacteristics")
 	public ResponseEntity<String> updateCharacteristics(@RequestBody SupplyCharacteristics supplyCharacteristics)
-			throws SupplyCharacteristicsException {
+			throws SupplyCharacteristicsException, DecimalConversionException {
 		logger.info("called updateCharacteristics function UserName : {},SiteId : {},SupplyCharacteristicsId : {}",
 				supplyCharacteristics.getUserName(), supplyCharacteristics.getSiteId(),
 				supplyCharacteristics.getSupplyCharacteristicsId());
