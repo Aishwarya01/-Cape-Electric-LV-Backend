@@ -68,44 +68,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			Optional<SupplyCharacteristics> siteId = supplyCharacteristicsRepository
 					.findBySiteId(supplyCharacteristics.getSiteId());
 			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(supplyCharacteristics.getSiteId())) {
-				if (supplyCharacteristics.getLiveConductorAC() != null
-						&& supplyCharacteristics.getMainNominalCurrent() != null
-						&& supplyCharacteristics.getMainNominalFrequency() != null
-						&& supplyCharacteristics.getMainNominalVoltage() != null
-						&& supplyCharacteristics.getMainLoopImpedance() != null) {
-					logger.info("decimal formating corrections started for Main supply");
-					supplyCharacteristics.setMainNominalCurrent(DecimalConversion.convertToDecimal(
-							supplyCharacteristics.getMainNominalCurrent(), Constants.supply_MainNominal_Current));
-					supplyCharacteristics.setMainNominalFrequency(DecimalConversion.convertToDecimal(
-							supplyCharacteristics.getMainNominalFrequency(), Constants.supply_MainNominal_Frequency));
-					supplyCharacteristics.setMainNominalVoltage(DecimalConversion.convertToDecimal(
-							supplyCharacteristics.getMainNominalVoltage(), Constants.supply_MainNominal_Voltage));
-					supplyCharacteristics.setMainLoopImpedance(DecimalConversion.convertToDecimal(
-							supplyCharacteristics.getMainLoopImpedance(), Constants.supply_MainLoop_Impedance));
-					logger.info("decimal formating corrections ended for Main supply");
-				}
-				if (supplyCharacteristics.getSupplyParameters() != null) {
-					List<SupplyParameters> supplyParameters = supplyCharacteristics.getSupplyParameters();
-					for (SupplyParameters supplyParametersItr : supplyParameters) {
-						if (supplyParametersItr.getaLLiveConductorAC() != null
-								&& !supplyParametersItr.getaLLiveConductorAC().isEmpty()
-								&& supplyParametersItr.getNominalFrequency() != null
-								&& supplyParametersItr.getNominalVoltage() != null
-								&& supplyParametersItr.getFaultCurrent() != null
-								&& supplyParametersItr.getLoopImpedance() != null) {
-							logger.info("decimal formating corrections started for alternative supply");
-							supplyParametersItr.setNominalFrequency(DecimalConversion.convertToDecimal(
-									supplyParametersItr.getNominalFrequency(), Constants.supply_Nominal_Frequency));
-							supplyParametersItr.setNominalVoltage(DecimalConversion.convertToDecimal(
-									supplyParametersItr.getNominalVoltage(), Constants.supply_Nominal_Voltage));
-							supplyParametersItr.setFaultCurrent(DecimalConversion.convertToDecimal(
-									supplyParametersItr.getFaultCurrent(), Constants.supply_Fault_Current));
-							supplyParametersItr.setLoopImpedance(DecimalConversion.convertToDecimal(
-									supplyParametersItr.getLoopImpedance(), Constants.supply_LoopImpedance));
-							logger.info("decimal formating corrections ended for alternative supply");
-						}
-					}
-				}
+				decimalConversion(supplyCharacteristics);
 				supplyCharacteristicComment = new SupplyCharacteristicComment();
 				supplyCharacteristicComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 				supplyCharacteristicComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
@@ -128,7 +91,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			throw new SupplyCharacteristicsException("Invalid Inputs");
 		}
 	}
-	
+
 	/**
 	 * @param userName,siteId
 	 * retrieveCharacteristics method to retrieve list of supplyCharacteristic objects based on userName and siteId
@@ -162,10 +125,11 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	 * @param SupplyCharacteristics Object
 	 * updateCharacteristics method to finding the given SupplyCharacteristicsId is available or not in DB,
 	 * if available only allowed for updating 
+	 * @throws DecimalConversionException 
 	 * 
 	*/
 	@Override
-	public void updateCharacteristics(SupplyCharacteristics supplyCharacteristics) throws SupplyCharacteristicsException {
+	public void updateCharacteristics(SupplyCharacteristics supplyCharacteristics) throws SupplyCharacteristicsException, DecimalConversionException {
 		if (supplyCharacteristics != null && supplyCharacteristics.getSupplyCharacteristicsId() != null && supplyCharacteristics.getSupplyCharacteristicsId() != 0
 				&& supplyCharacteristics.getSiteId() != null && supplyCharacteristics.getSiteId() != 0) {
 			Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
@@ -174,6 +138,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 					&& supplyCharacteristicsRepo.get().getSiteId().equals(supplyCharacteristics.getSiteId())) {
 				supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
 				supplyCharacteristics.setUpdatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
+				decimalConversion(supplyCharacteristics);
 				supplyCharacteristicsRepository.save(supplyCharacteristics);
 			} else {
 				throw new SupplyCharacteristicsException("Given SiteId and ReportId is Invalid");
@@ -376,5 +341,51 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			}
 		}
 		return flag;
+	}
+	
+	/**
+	 * THis logic does the conversion of values from request to appropriate decimal converted values.
+	 * @param supplyCharacteristics
+	 * @throws DecimalConversionException
+	 */
+	private void decimalConversion(SupplyCharacteristics supplyCharacteristics) throws DecimalConversionException {
+		if (supplyCharacteristics.getLiveConductorAC() != null
+				&& supplyCharacteristics.getMainNominalCurrent() != null
+				&& supplyCharacteristics.getMainNominalFrequency() != null
+				&& supplyCharacteristics.getMainNominalVoltage() != null
+				&& supplyCharacteristics.getMainLoopImpedance() != null) {
+			logger.info("decimal formating corrections started for Main supply");
+			supplyCharacteristics.setMainNominalCurrent(DecimalConversion.convertToDecimal(
+					supplyCharacteristics.getMainNominalCurrent(), Constants.supply_MainNominal_Current));
+			supplyCharacteristics.setMainNominalFrequency(DecimalConversion.convertToDecimal(
+					supplyCharacteristics.getMainNominalFrequency(), Constants.supply_MainNominal_Frequency));
+			supplyCharacteristics.setMainNominalVoltage(DecimalConversion.convertToDecimal(
+					supplyCharacteristics.getMainNominalVoltage(), Constants.supply_MainNominal_Voltage));
+			supplyCharacteristics.setMainLoopImpedance(DecimalConversion.convertToDecimal(
+					supplyCharacteristics.getMainLoopImpedance(), Constants.supply_MainLoop_Impedance));
+			logger.info("decimal formating corrections ended for Main supply");
+		}
+		if (supplyCharacteristics.getSupplyParameters() != null) {
+			List<SupplyParameters> supplyParameters = supplyCharacteristics.getSupplyParameters();
+			for (SupplyParameters supplyParametersItr : supplyParameters) {
+				if (supplyParametersItr.getaLLiveConductorAC() != null
+						&& !supplyParametersItr.getaLLiveConductorAC().isEmpty()
+						&& supplyParametersItr.getNominalFrequency() != null
+						&& supplyParametersItr.getNominalVoltage() != null
+						&& supplyParametersItr.getFaultCurrent() != null
+						&& supplyParametersItr.getLoopImpedance() != null) {
+					logger.info("decimal formating corrections started for alternative supply");
+					supplyParametersItr.setNominalFrequency(DecimalConversion.convertToDecimal(
+							supplyParametersItr.getNominalFrequency(), Constants.supply_Nominal_Frequency));
+					supplyParametersItr.setNominalVoltage(DecimalConversion.convertToDecimal(
+							supplyParametersItr.getNominalVoltage(), Constants.supply_Nominal_Voltage));
+					supplyParametersItr.setFaultCurrent(DecimalConversion.convertToDecimal(
+							supplyParametersItr.getFaultCurrent(), Constants.supply_Fault_Current));
+					supplyParametersItr.setLoopImpedance(DecimalConversion.convertToDecimal(
+							supplyParametersItr.getLoopImpedance(), Constants.supply_LoopImpedance));
+					logger.info("decimal formating corrections ended for alternative supply");
+				}
+			}
+		}
 	}
 }

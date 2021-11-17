@@ -73,7 +73,7 @@ public class SupplyCharacteristicsControllerTest {
 	}
 	
 	@Test
-	public void testUpdateCharacteristics() throws SupplyCharacteristicsException {
+	public void testUpdateCharacteristics() throws SupplyCharacteristicsException, DecimalConversionException {
 		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>("SupplyCharacteristics Data successfully Updated",HttpStatus.OK);
 		ResponseEntity<String> actualResponseEntity = supplyCharacteristicsController
 				.updateCharacteristics(supplyCharacteristics);
