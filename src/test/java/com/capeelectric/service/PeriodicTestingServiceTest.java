@@ -146,7 +146,6 @@ public class PeriodicTestingServiceTest {
 
 	}
 
-	@Test
 	public void testTesting_NA_Value() throws DecimalConversionException, PeriodicTestingException {
 		logger.info("'NA'value checking processes started");
 		ArrayList<Testing> testingList = new ArrayList<Testing>();
