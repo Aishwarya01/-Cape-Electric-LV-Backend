@@ -109,18 +109,23 @@ public class DecimalConversion {
 		return null;
 	}
 
-	private static boolean isDecimalNum(String token,DecimalFormat decimalSize) {
+	private static boolean isDecimalNum(String token,DecimalFormat decimalSize) throws DecimalConversionException {
 		boolean flag = false;
 		if (Pattern.matches("([0-9]*)\\.([0-9]*)", token)) {
-			if (token.split("\\.")[1].length() == decimalSize.getMaximumFractionDigits()) {
-				decimalValues = token;
-				flag = true;
-			} else if (token.split("\\.")[1].length() > decimalSize.getMaximumFractionDigits()) {
-				decimalValues = String.format("%." + decimalSize.getMaximumFractionDigits() + "f",
-						Double.parseDouble(token));
-				flag = true;
-			} else if (token.split("\\.")[1].length() < decimalSize.getMaximumFractionDigits()) {
-				flag = false;
+			if (token.split("\\.").length<=2) {
+				if (token.split("\\.")[1].length() == decimalSize.getMaximumFractionDigits()) {
+					decimalValues = token;
+					flag = true;
+				} else if (token.split("\\.")[1].length() > decimalSize.getMaximumFractionDigits()) {
+					decimalValues = String.format("%." + decimalSize.getMaximumFractionDigits() + "f",
+							Double.parseDouble(token));
+					flag = true;
+				} else if (token.split("\\.")[1].length() < decimalSize.getMaximumFractionDigits()) {
+					flag = false;
+				}
+			}else {
+				logger.debug("Given number has multiple points"+token);
+				throw new DecimalConversionException("Given number has multiple points");
 			}
 		}
 		return flag;
