@@ -85,7 +85,7 @@ public class PeriodicTestingServiceTest {
 		sitePersons1.setPersonInchargeEmail("Viewer@gmail.com");
 		sitePersons1.setInActive(true);
 		 
-		HashSet sitePersonsSet = new HashSet<SitePersons>();
+		HashSet<SitePersons> sitePersonsSet = new HashSet<SitePersons>();
 		sitePersonsSet.add(sitePersons1);
 		site.setSitePersons(sitePersonsSet);
 	}
@@ -146,6 +146,7 @@ public class PeriodicTestingServiceTest {
 
 	}
 
+	@Test
 	public void testTesting_NA_Value() throws DecimalConversionException, PeriodicTestingException {
 		logger.info("'NA'value checking processes started");
 		ArrayList<Testing> testingList = new ArrayList<Testing>();
