@@ -191,8 +191,7 @@ public class SummaryServiceTest {
 	@Test
 	public void testUpdateSummary() throws DecimalConversionException, SummaryException {
 		summary.setUserName("LVsystem@gmail.com");
-		summary.setSummaryId(1);
-		when(summaryRepository.findById(1)).thenReturn(Optional.of(summary));
+		when(summaryRepository.findById(10)).thenReturn(Optional.of(summary));
 		summaryServiceImpl.updateSummary(summary);
 		
 		Summary summary_1 = new Summary();
@@ -220,22 +219,22 @@ public class SummaryServiceTest {
 	@Test
 	public void testSendComments() throws SummaryException {
 		listOfComments = new ArrayList<SummaryComment>();
-		when(summaryRepository.findBySiteId(1)).thenReturn(Optional.of(summary));
-		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
-		summaryServiceImpl.sendComments("Viewer@gmail.com", 1, summaryComment);
+		when(summaryRepository.findBySiteId(6)).thenReturn(Optional.of(summary));
+		when(siteRepository.findById(6)).thenReturn(Optional.of(site));
+		summaryServiceImpl.sendComments("Viewer@gmail.com", 6, summaryComment);
  
 		summaryComment.setCommentsId(1);
 		listOfComments.add(summaryComment);
 		summary.setSummaryComment(listOfComments);
 		when(summaryRepository.findBySiteId(1)).thenReturn(Optional.of(summary));
-		summaryServiceImpl.sendComments("Viewer@gmail.com", 1, summaryComment);
+		summaryServiceImpl.sendComments("Viewer@gmail.com", 6, summaryComment);
 
 		listOfComments.remove(summaryComment);
 		summary.setSummaryComment(listOfComments);
-		summaryServiceImpl.sendComments("Viewer@gmail.com", 1, summaryComment);
+		summaryServiceImpl.sendComments("Viewer@gmail.com", 6, summaryComment);
 
 		SummaryException assertThrows = Assertions.assertThrows(SummaryException.class,
-				() -> summaryServiceImpl.sendComments("Inspector@gmail.com", 1, summaryComment));
+				() -> summaryServiceImpl.sendComments("Inspector@gmail.com", 6, summaryComment));
 
 		assertEquals(assertThrows.getMessage(), "Given userName not allowing for SEND comment");
 	}
@@ -247,12 +246,14 @@ public class SummaryServiceTest {
 		listOfComments.add(summaryComment);
 		summary.setUserName("Inspector@gmail.com");
 		summary.setSummaryComment(listOfComments);
-		when(summaryRepository.findBySiteId(1)).thenReturn(Optional.of(summary));
-		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
-		summaryServiceImpl.replyComments("Inspector@gmail.com", 1, summaryComment);
+//		site.setSiteId(1);
+//		summary.setSummaryId(1);
+		when(summaryRepository.findBySiteId(6)).thenReturn(Optional.of(summary));
+		when(siteRepository.findById(6)).thenReturn(Optional.of(site));
+		summaryServiceImpl.replyComments("Inspector@gmail.com", 6, summaryComment);
 
 		SummaryException assertThrows = Assertions.assertThrows(SummaryException.class,
-				() -> summaryServiceImpl.replyComments("Viewer@gmail.com", 1, summaryComment));
+				() -> summaryServiceImpl.replyComments("Viewer@gmail.com", 6, summaryComment));
 
 		assertEquals(assertThrows.getMessage(), "Given userName not allowing for REPLY comment");
 	}
@@ -263,12 +264,14 @@ public class SummaryServiceTest {
 		summaryComment.setCommentsId(1);
 		listOfComments.add(summaryComment);
 		summary.setSummaryComment(listOfComments);
-		when(summaryRepository.findBySiteId(1)).thenReturn(Optional.of(summary));
-		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
-		summaryServiceImpl.approveComments("Viewer@gmail.com", 1, summaryComment);
+//		site.setSiteId(1);
+//		summary.setSummaryId(1);
+		when(summaryRepository.findBySiteId(6)).thenReturn(Optional.of(summary));
+		when(siteRepository.findById(6)).thenReturn(Optional.of(site));
+		summaryServiceImpl.approveComments("Viewer@gmail.com", 6, summaryComment);
 		
 		SummaryException assertThrows = Assertions.assertThrows(SummaryException.class,
-				() -> summaryServiceImpl.approveComments("Inspector@gmail.com", 1, summaryComment));
+				() -> summaryServiceImpl.approveComments("Inspector@gmail.com", 6, summaryComment));
 		
 		assertEquals(assertThrows.getMessage(), "Given userName not allowing for APPROVED comment");
 	}
@@ -277,12 +280,13 @@ public class SummaryServiceTest {
 	public void testComments_Exception() throws SummaryException {
 
 		summary.setUserName(null); 
+		site.setSiteId(1);
+		summary.setSummaryId(1);
 		when(summaryRepository.findBySiteId(2)).thenReturn(Optional.of(summary));
 		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
 
 		SummaryException assertThrows_1 = Assertions.assertThrows(SummaryException.class,
 				() -> summaryServiceImpl.sendComments("Viewer@gmail.com", 1, summaryComment));
-
 		assertEquals(assertThrows_1.getMessage(), "Given username not have access for comments");
 
 		summary.setSummaryComment(null);
