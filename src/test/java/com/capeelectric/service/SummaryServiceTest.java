@@ -22,11 +22,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SummaryException;
+import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
+import com.capeelectric.model.SupplyCharacteristics;
+import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SiteRepository;
@@ -80,8 +84,8 @@ public class SummaryServiceTest {
 	{
 		summary = new Summary();
 		summary.setUserName("LVsystem@gmail.com");
-		summary.setSiteId(12);
-		summary.setSummaryId(1);
+		summary.setSiteId(6);
+		summary.setSummaryId(10);
 		
 		summaryComment = new SummaryComment();
 		summaryComment.setViewerDate(LocalDateTime.now());
@@ -97,7 +101,7 @@ public class SummaryServiceTest {
 		
 		site = new Site();
 		site.setUserName("Inspector@gmail.com");
-		site.setSiteId(1);
+		site.setSiteId(6);
 		site.setSite("user");
 		site.setAssignedTo("Viewer@gmail.com");
 
@@ -112,33 +116,60 @@ public class SummaryServiceTest {
 		site.setSitePersons(sitePersonsSet);
 	}
 
+	@Test
 	public void testAddSummary() throws SummaryException {
 
-		when(summaryRepository.findBySiteId(12)).thenReturn(Optional.of(summary));
+		SupplyCharacteristics supplyCharacteristics = new SupplyCharacteristics();
+		supplyCharacteristics.setSiteId(6);
+		Optional<SupplyCharacteristics> supply = Optional.of(supplyCharacteristics);
 
-		logger.info("SiteId already Present_flow");
-		SummaryException summaryException_1 = Assertions.assertThrows(SummaryException.class,
-				() -> summaryServiceImpl.addSummary(summary));
-		assertEquals(summaryException_1.getMessage(), "Site-Id Already Available");
+		TestingReport testingReport = new TestingReport();
+		testingReport.setSiteId(6);
+		Optional<TestingReport> testreport = Optional.of(testingReport);
 
-		logger.info("Successfully added Summary_Object flow");
-		summary.setSiteId(1);
+		PeriodicInspection periodicInspection = new PeriodicInspection();
+		periodicInspection.setSiteId(6);
+		Optional<PeriodicInspection> periodicreport = Optional.of(periodicInspection);
 
+		ReportDetails reportDetails = new ReportDetails();
+		reportDetails.setSiteId(6);
+		Optional<ReportDetails> reportdet = Optional.of(reportDetails);
+		
+		when(siteRepository.findById(6)).thenReturn(Optional.of(site));
+		when(summaryRepository.findBySiteId(10)).thenReturn(Optional.of(summary));
+		when(installationReportRepository.findBySiteId(6)).thenReturn(reportdet);
+		when(supplyCharacteristicsRepository.findBySiteId(6)).thenReturn(supply);
+		when(inspectionRepository.findBySiteId(6)).thenReturn(periodicreport);
+		when(testingReportRepository.findBySiteId(6)).thenReturn(testreport);
+
+		summaryServiceImpl.addSummary(summary);
+		
+		when(summaryRepository.findBySiteId(6)).thenReturn(Optional.of(summary));
 		SummaryException summaryException_2 = Assertions.assertThrows(SummaryException.class,
 				() -> summaryServiceImpl.addSummary(summary));
-		assertEquals(summaryException_2.getMessage(), "Site-Id Information not Available in site_Table");
-		
-		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
-		summaryServiceImpl.addSummary(summary);
+		assertEquals(summaryException_2.getMessage(), "Site-Id Already Available");
 
-		logger.info("Invalid Present_flow");
 		summary.setUserName(null);
 		SummaryException summaryException_3 = Assertions.assertThrows(SummaryException.class,
 				() -> summaryServiceImpl.addSummary(summary));
 		assertEquals(summaryException_3.getMessage(), "Invalid Inputs");
 
+//		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+//		when(summaryRepository.findBySiteId(6)).thenReturn(Optional.of(summary));
+//		SummaryException summaryException_1 = Assertions.assertThrows(SummaryException.class,
+//				() -> summaryServiceImpl.addSummary(summary));
+//		assertEquals(summaryException_1.getMessage(), "Site-Id Information not Available in site_Table");
+		
+//		summary.setSiteId(1);
+//		SummaryException summaryException_2 = Assertions.assertThrows(SummaryException.class,
+//				() -> summaryServiceImpl.addSummary(summary));
+//		assertEquals(summaryException_2.getMessage(), "Site-Id Information not Available in site_Table");
+//		
+//		when(siteRepository.findById(1)).thenReturn(Optional.of(site));
+//		summaryServiceImpl.addSummary(summary);
+//
+//		
 	}
-
 	@Test
 	public void testRetrieveSummary() throws SummaryException {
 		
@@ -160,6 +191,7 @@ public class SummaryServiceTest {
 	@Test
 	public void testUpdateSummary() throws DecimalConversionException, SummaryException {
 		summary.setUserName("LVsystem@gmail.com");
+		summary.setSummaryId(1);
 		when(summaryRepository.findById(1)).thenReturn(Optional.of(summary));
 		summaryServiceImpl.updateSummary(summary);
 		
@@ -181,6 +213,7 @@ public class SummaryServiceTest {
 		
 		assertEquals(assertThrows_1.getMessage(),"Invalid inputs");
 	}
+	
 	
 
 	
