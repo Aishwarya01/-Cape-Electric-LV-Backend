@@ -26,16 +26,18 @@ public class DecimalConversion {
 	 * @param String value,decimalSize convertToDecimal method to StringInt value
 	 *               convert to StringDecimal
 	 * @return string
+	 * @throws DecimalConversionException 
 	 */
-	public static String convertToDecimal(String value, String type)  {
+	public static String convertToDecimal(String value, String type) throws DecimalConversionException {
 		try {
 			DecimalConversion conversion = new DecimalConversion();
 			String nominalValues = "";
 			DecimalFormat decimalSize;
 			decimalSize = conversion.findDecimalSize(type);
-			if(type.equalsIgnoreCase(Constants.supply_MainNominal_Frequency) || type.equalsIgnoreCase(Constants.supply_Nominal_Frequency)) {
+			if (type.equalsIgnoreCase(Constants.supply_MainNominal_Frequency)
+					|| type.equalsIgnoreCase(Constants.supply_Nominal_Frequency)) {
 				return (value.equalsIgnoreCase("NA") ? value : decimalSize.format(Double.parseDouble(value)));
-			}else {
+			} else {
 				String decimalValue = "NA";
 				if (value != null && !value.isEmpty()) {
 					StringTokenizer stringTokenizer = new StringTokenizer(value, ",");
@@ -48,8 +50,7 @@ public class DecimalConversion {
 						} else {
 							if (isDecimalNum(token, decimalSize)) {
 								nominalValues = nominalValues.concat(decimalValues).concat(",");
-							}
-							else {
+							} else {
 								decimalValue = decimalSize.format(Double.parseDouble(token));
 								nominalValues = nominalValues.concat(decimalValue).concat(",");
 							}
@@ -63,11 +64,16 @@ public class DecimalConversion {
 			}
 			logger.info("ended DecimalConversion process");
 			return nominalValues.substring(0, nominalValues.length() - 1);
+
 		} catch (DecimalConversionException e) {
-			e.setMessage(type);
 			logger.error(type);
+			throw new DecimalConversionException(e.getMessage());
+
+		} catch (Exception e) {
+			logger.error(e.getMessage() + "" + type);
+			throw new DecimalConversionException(type);
+
 		}
-		return "";
 	}
 
 	private DecimalFormat findDecimalSize(String type) throws DecimalConversionException {
