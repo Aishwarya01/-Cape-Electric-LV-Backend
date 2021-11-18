@@ -207,7 +207,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 						addRow(table1, "Nominal voltage U/U0 (V)", N1, N2, N3, N4, N5, N6, N7, N8, N9);
 						addRow(table1, "Nominal Frequency f (HZ)", NF1, NF2, NF3, NF4, NF5, NF6, NF7, NF8, NF9);
 						addRow(table1, "Prospective fault current Ipfc (kA) ", NFC1, NFC2, NFC3, NFC4, NFC5, NFC6, NFC7,
-								NFC8, NF9);
+								NFC8, NFC9);
 						addRow(table1, "External Loop Impedance Ze (Ω)", NFL1, NFL2, NFL3, NFL4, NFL5, NFL6, NFL7, NFL8,
 								NFL9);
 						document.add(table34);
