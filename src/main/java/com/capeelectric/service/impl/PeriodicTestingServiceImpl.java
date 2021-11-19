@@ -79,13 +79,11 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	 * @return Optional<Testing>
 	 */
 	@Override
-	public List<TestingReport> retrieveTestingReport(String userName, Integer siteId) throws PeriodicTestingException {
+	public TestingReport retrieveTestingReport(String userName, Integer siteId) throws PeriodicTestingException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
-			List<TestingReport> testingReportRepo = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
+			TestingReport testingReportRepo = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
 			if (testingReportRepo != null) {
-				for (TestingReport testingReport : testingReportRepo) {
-					sortingDateTime(testingReport.getTestingComment());
-				}
+					sortingDateTime(testingReportRepo.getTestingComment());
 				return testingReportRepo;
 			} else {
 				throw new PeriodicTestingException("Given UserName & Site doesn't exist Testing");

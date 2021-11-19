@@ -134,7 +134,7 @@ public class PeriodicTestingServiceTest {
 		
 		List<TestingReport> arrayList = new ArrayList<TestingReport>();
 		arrayList.add(testingReport);
-		when(testingReportRepository.findByUserNameAndSiteId("LVsystem@gmail.com", 12)).thenReturn(arrayList);
+		when(testingReportRepository.findByUserNameAndSiteId("LVsystem@gmail.com", 12)).thenReturn(testingReport);
 
 		logger.info("SuccessFlow of Retrieve Summary Obeject");
 		periodicTestingServiceImpl.retrieveTestingReport("LVsystem@gmail.com", 12);

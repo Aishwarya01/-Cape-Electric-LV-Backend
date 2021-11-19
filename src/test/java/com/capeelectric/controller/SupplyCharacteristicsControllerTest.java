@@ -67,7 +67,7 @@ public class SupplyCharacteristicsControllerTest {
 	public void testRetrieveCharacteristics() throws SupplyCharacteristicsException {
 		ResponseEntity<List<SupplyCharacteristics>> expectedResponseEntity = new ResponseEntity<List<SupplyCharacteristics>>(
 				HttpStatus.OK);
-		ResponseEntity<List<SupplyCharacteristics>> actualResponseEntity = supplyCharacteristicsController
+		ResponseEntity<SupplyCharacteristics> actualResponseEntity = supplyCharacteristicsController
 				.retrieveCharacteristics(supplyCharacteristics.getUserName(), supplyCharacteristics.getSiteId());
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
 	}

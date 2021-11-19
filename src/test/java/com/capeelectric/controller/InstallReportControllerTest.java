@@ -88,7 +88,7 @@ public class InstallReportControllerTest {
 	@Test
 	public void testRetrieveInstallationReport() throws InstalReportException, InspectionException { 
 
-		ResponseEntity<List<ReportDetails>> report = instalReportController.retrieveInstallationReport(reportDetails.getUserName(),reportDetails.getSiteId());
+		ResponseEntity<ReportDetails> report = instalReportController.retrieveInstallationReport(reportDetails.getUserName(),reportDetails.getSiteId());
 		assertEquals(report.getStatusCode(), HttpStatus.OK);
 	}
 	

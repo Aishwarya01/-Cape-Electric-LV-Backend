@@ -86,15 +86,13 @@ public class InstalReportServiceImpl implements InstalReportService {
 	 * 
 	*/
 	@Override
-	public List<ReportDetails> retrieveInstallationReport(String userName, Integer siteId)
+	public ReportDetails retrieveInstallationReport(String userName, Integer siteId)
 			throws InstalReportException {
 		if (userName != null) {
-			List<ReportDetails> reportDetailsRepo = installationReportRepository.findByUserNameAndSiteId(userName,
+			ReportDetails reportDetailsRepo = installationReportRepository.findByUserNameAndSiteId(userName,
 					siteId);
-			if (reportDetailsRepo != null && !reportDetailsRepo.isEmpty()) {
-				for (ReportDetails reportDetails : reportDetailsRepo) {
-					sortingDateTime(reportDetails.getReportDetailsComment());
-				}
+			if (reportDetailsRepo != null ) {
+					sortingDateTime(reportDetailsRepo.getReportDetailsComment());
 				return reportDetailsRepo;
 			} else {
 				throw new InstalReportException("Given UserName & Site doesn't exist Basic-information");

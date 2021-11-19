@@ -1,7 +1,5 @@
 package com.capeelectric.service;
 
-import java.util.List;
-
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.PeriodicInspectionComment;
@@ -15,7 +13,7 @@ public interface InspectionService {
 
 	public void addInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException;
 
-	public List<PeriodicInspection> retrieveInspectionDetails(String userName, Integer siteId)
+	public PeriodicInspection retrieveInspectionDetails(String userName, Integer siteId)
 			throws InspectionException;
 
 	public void updateInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException;

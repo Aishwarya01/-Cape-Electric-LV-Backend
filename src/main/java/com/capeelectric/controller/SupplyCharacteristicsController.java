@@ -1,7 +1,5 @@
 package com.capeelectric.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +49,10 @@ public class SupplyCharacteristicsController {
 	}
 
 	@GetMapping("/retrieveCharacteristics/{userName}/{siteId}")
-	public ResponseEntity<List<SupplyCharacteristics>> retrieveCharacteristics(@PathVariable String userName,
+	public ResponseEntity<SupplyCharacteristics> retrieveCharacteristics(@PathVariable String userName,
 			@PathVariable Integer siteId) throws SupplyCharacteristicsException {
 		logger.info("started retrieveCharacteristics function UserName : {}, SiteId : {}", userName, siteId);
-		return new ResponseEntity<List<SupplyCharacteristics>>(
+		return new ResponseEntity<SupplyCharacteristics>(
 				supplyCharacteristicsService.retrieveCharacteristics(userName, siteId), HttpStatus.OK);
 	}
 

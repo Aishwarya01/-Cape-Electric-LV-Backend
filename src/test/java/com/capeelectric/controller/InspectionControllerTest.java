@@ -65,7 +65,7 @@ public class InspectionControllerTest {
 	@Test
 	public void testRetrieveInspectionDetails() throws InspectionException {
 		ResponseEntity<List<PeriodicInspection>> expectedResponseEntity = new ResponseEntity<List<PeriodicInspection>>(HttpStatus.OK);
-		ResponseEntity<List<PeriodicInspection>> actualResponseEntity = inspectionController
+		ResponseEntity<PeriodicInspection> actualResponseEntity = inspectionController
 				.retrieveInspectionDetails(periodicInspection.getUserName(), periodicInspection.getSiteId());
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
 	}

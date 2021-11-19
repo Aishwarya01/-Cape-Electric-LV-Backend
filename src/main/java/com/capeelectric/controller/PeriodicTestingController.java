@@ -1,7 +1,5 @@
 package com.capeelectric.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +51,13 @@ public class PeriodicTestingController {
 	}
 
 	@GetMapping("/retrievePeriodicTesting/{userName}/{siteId}")
-	public ResponseEntity<List<TestingReport>> retrievePeriodicTesting(@PathVariable String userName,
+	public ResponseEntity<TestingReport> retrievePeriodicTesting(@PathVariable String userName,
 			@PathVariable Integer siteId) throws PeriodicTestingException {
 		logger.info("Started retrievePeriodicTesting function userName: {},siteId : {}", userName, siteId);
-		List<TestingReport> retrieveTestingReport = periodicTestingService.retrieveTestingReport(userName, siteId);
+		TestingReport retrieveTestingReport = periodicTestingService.retrieveTestingReport(userName, siteId);
 		logger.info("ended retrievePeriodicTesting function");
 
-		return new ResponseEntity<List<TestingReport>>(retrieveTestingReport, HttpStatus.OK);
+		return new ResponseEntity<TestingReport>(retrieveTestingReport, HttpStatus.OK);
 	}
 
 
