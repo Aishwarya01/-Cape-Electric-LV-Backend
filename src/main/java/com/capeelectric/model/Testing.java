@@ -46,30 +46,6 @@ public class Testing implements Serializable {
 	@Column(name = "DATE")
 	private String date;
 
-	@Column(name = "DETAILS_TEST_INSTRUMENT")
-	private String detailsTestInstrument;
-
-	@Column(name = "CONTINUITY")
-	private String continuity;
-
-	@Column(name = "INSULATION_RESISANCE")
-	private String insulationResisance;
-
-	@Column(name = "IMPEDANCE")
-	private String impedance;
-
-	@Column(name = "RCD")
-	private String rcd;
-
-	@Column(name = "EARTH_ELECTRODE_RESISTANCE")
-	private String earthElectrodeResistance;
-
-	@Column(name = "DESIGNATION")
-	private String designation;
-
-	@Column(name = "COMPANY_NAME")
-	private String companyName;
-
 	@JsonManagedReference
 	@OneToMany(mappedBy = "testing", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<TestDistribution> testDistribution;
@@ -121,70 +97,6 @@ public class Testing implements Serializable {
 
 	public void setDate(String date) {
 		this.date = date;
-	}
-
-	public String getDetailsTestInstrument() {
-		return detailsTestInstrument;
-	}
-
-	public void setDetailsTestInstrument(String detailsTestInstrument) {
-		this.detailsTestInstrument = detailsTestInstrument;
-	}
-
-	public String getContinuity() {
-		return continuity;
-	}
-
-	public void setContinuity(String continuity) {
-		this.continuity = continuity;
-	}
-
-	public String getInsulationResisance() {
-		return insulationResisance;
-	}
-
-	public void setInsulationResisance(String insulationResisance) {
-		this.insulationResisance = insulationResisance;
-	}
-
-	public String getImpedance() {
-		return impedance;
-	}
-
-	public void setImpedance(String impedance) {
-		this.impedance = impedance;
-	}
-
-	public String getRcd() {
-		return rcd;
-	}
-
-	public void setRcd(String rcd) {
-		this.rcd = rcd;
-	}
-
-	public String getEarthElectrodeResistance() {
-		return earthElectrodeResistance;
-	}
-
-	public void setEarthElectrodeResistance(String earthElectrodeResistance) {
-		this.earthElectrodeResistance = earthElectrodeResistance;
-	}
-
-	public String getDesignation() {
-		return designation;
-	}
-
-	public void setDesignation(String designation) {
-		this.designation = designation;
-	}
-
-	public String getCompanyName() {
-		return companyName;
-	}
-
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
 	}
 
 	public List<TestDistribution> getTestDistribution() {
