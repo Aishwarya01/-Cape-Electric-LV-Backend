@@ -83,8 +83,8 @@ public class PeriodicTestingControllerTest {
 
 		logger.info("testRetrievePeriodicTesting Function Started");
 
-		when(periodicTestingServiceImpl.retrieveTestingReport("LVsystem@gmail.com", 12)).thenReturn(arrayList);
-		ResponseEntity<List<TestingReport>> retrieveTestingReport = periodicTestingController
+		when(periodicTestingServiceImpl.retrieveTestingReport("LVsystem@gmail.com", 12)).thenReturn(testingReport);
+		ResponseEntity<TestingReport> retrieveTestingReport = periodicTestingController
 				.retrievePeriodicTesting("LVsystem@gmail.com", 12);
 		assertEquals(HttpStatus.OK, retrieveTestingReport.getStatusCode());
 

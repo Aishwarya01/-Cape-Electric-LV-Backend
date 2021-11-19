@@ -167,7 +167,7 @@ public class SupplyCharacteristicsServiceTest {
 		supplylist.add(supplyCharacteristics);
 
 		when(supplyCharacteristicsRepository.findByUserNameAndSiteId(supplyCharacteristics.getUserName(),
-				supplyCharacteristics.getSiteId())).thenReturn(supplylist);
+				supplyCharacteristics.getSiteId())).thenReturn(supplyCharacteristics);
 		SupplyCharacteristicsException assertThrows = Assertions.assertThrows(SupplyCharacteristicsException.class,
 				() -> supplyCharacteristicsServiceImpl.retrieveCharacteristics(null, 1));
 		assertEquals(assertThrows.getMessage(), "Invalid Inputs");
@@ -217,7 +217,7 @@ public class SupplyCharacteristicsServiceTest {
 		supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
 		
 		when(supplyCharacteristicsRepository.findByUserNameAndSiteId(supplyCharacteristics.getUserName(),
-				supplyCharacteristics.getSiteId())).thenReturn(ipaolist);
+				supplyCharacteristics.getSiteId())).thenReturn(supplyCharacteristics);
 		supplyCharacteristicsServiceImpl.retrieveCharacteristics("Inspector@gmail.com", 1);
 
 		SupplyCharacteristicsException assertThrows_1 = Assertions.assertThrows(SupplyCharacteristicsException.class,

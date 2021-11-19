@@ -243,7 +243,7 @@ public class InstalReportServiceImplTest {
 		reportDetails.setReportDetailsComment(listOfComments);
 
 		when(installationReportRepository.findByUserNameAndSiteId(reportDetails.getUserName(),
-				reportDetails.getSiteId())).thenReturn(ipaolist);
+				reportDetails.getSiteId())).thenReturn(reportDetails);
 		instalReportServiceImpl.retrieveInstallationReport("Inspector@gmail.com", 1);
 
 		InstalReportException assertThrows_1 = Assertions.assertThrows(InstalReportException.class,

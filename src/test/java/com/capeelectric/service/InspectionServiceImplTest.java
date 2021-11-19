@@ -164,7 +164,7 @@ public class InspectionServiceImplTest {
 		ipaolist.add(periodicInspection);
 
 		when(inspectionRepository.findByUserNameAndSiteId(periodicInspection.getUserName(),
-				periodicInspection.getSiteId())).thenReturn(ipaolist);
+				periodicInspection.getSiteId())).thenReturn(periodicInspection);
 		inspectionServiceImpl.retrieveInspectionDetails("Inspector@gmail.com", 1);
 
 		InspectionException assertThrows_1 = Assertions.assertThrows(InspectionException.class,
