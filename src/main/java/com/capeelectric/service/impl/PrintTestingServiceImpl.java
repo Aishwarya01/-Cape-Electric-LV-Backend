@@ -44,8 +44,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			try {
 				PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("Testing.pdf"));
 
-				List<TestingReport> supply1 = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
-				TestingReport supply2 = supply1.get(0);
+				TestingReport supply2 = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
 				List<Testing> testing = supply2.getTesting();
 //				Testing testRecords = testing.get(0);
 
@@ -259,61 +258,6 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell23.setBorder(PdfPCell.NO_BORDER);
 		table.addCell(cell23);
 
-		PdfPCell cell5 = new PdfPCell(new Paragraph(testing1.getDesignation(), font7));
-		table.addCell(new Phrase("Designation:", font7));
-		cell5.setBorder(PdfPCell.NO_BORDER);
-		table.addCell(cell5);
-
-		PdfPCell cell6 = new PdfPCell(new Paragraph("Company Name:", font7));
-		cell6.setBorder(PdfPCell.NO_BORDER);
-		cell6.setGrayFill(0.92f);
-		table.addCell(cell6);
-		PdfPCell cell24 = new PdfPCell(new Paragraph(testing1.getCompanyName(), font7));
-		cell24.setGrayFill(0.92f);
-		cell24.setBorder(PdfPCell.NO_BORDER);
-		table.addCell(cell24);
-
-		PdfPCell cell7 = new PdfPCell(new Paragraph(testing1.getDetailsTestInstrument(), font7));
-		table.addCell(new Phrase("Details Of Test Instrument:", font7));
-		cell7.setBorder(PdfPCell.NO_BORDER);
-		table.addCell(cell7);
-
-		PdfPCell cell8 = new PdfPCell(new Paragraph("Continuity:", font7));
-		cell8.setBorder(PdfPCell.NO_BORDER);
-		cell8.setGrayFill(0.92f);
-		table.addCell(cell8);
-		PdfPCell cell25 = new PdfPCell(new Paragraph(testing1.getContinuity(), font7));
-		cell25.setGrayFill(0.92f);
-		cell25.setBorder(PdfPCell.NO_BORDER);
-		table.addCell(cell25);
-
-		PdfPCell cell9 = new PdfPCell(new Paragraph(testing1.getInsulationResisance(), font7));
-		table.addCell(new Phrase("Insulation Resistance:", font7));
-		cell9.setBorder(PdfPCell.NO_BORDER);
-		table.addCell(cell9);
-
-		PdfPCell cell10 = new PdfPCell(new Paragraph("Impedance:", font7));
-		cell10.setBorder(PdfPCell.NO_BORDER);
-		cell10.setGrayFill(0.92f);
-		table.addCell(cell10);
-		PdfPCell cell26 = new PdfPCell(new Paragraph(testing1.getImpedance(), font7));
-		cell26.setGrayFill(0.92f);
-		cell26.setBorder(PdfPCell.NO_BORDER);
-		table.addCell(cell26);
-
-		PdfPCell cell11 = new PdfPCell(new Paragraph(testing1.getRcd(), font7));
-		table.addCell(new Phrase("RCD:", font7));
-		cell11.setBorder(PdfPCell.NO_BORDER);
-		table.addCell(cell11);
-
-		PdfPCell cell12 = new PdfPCell(new Paragraph("Earth Electrode Resistance:", font7));
-		cell12.setBorder(PdfPCell.NO_BORDER);
-		cell12.setGrayFill(0.92f);
-		table.addCell(cell12);
-		PdfPCell cell27 = new PdfPCell(new Paragraph(testing1.getEarthElectrodeResistance(), font7));
-		cell27.setGrayFill(0.92f);
-		cell27.setBorder(PdfPCell.NO_BORDER);
-		table.addCell(cell27);
 		document.add(table);
 
 		PdfPTable table14 = new PdfPTable(1);
