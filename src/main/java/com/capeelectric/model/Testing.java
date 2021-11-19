@@ -53,6 +53,10 @@ public class Testing implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "testing", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<TestingRecords> testingRecords;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "testingReport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<TestingEquipment> testingEquipment;
 
 	@JsonBackReference
 	@ManyToOne
@@ -123,4 +127,11 @@ public class Testing implements Serializable {
 		this.testingReport = testingReport;
 	}
 
+	public List<TestingEquipment> getTestingEquipment() {
+		return testingEquipment;
+	}
+
+	public void setTestingEquipment(List<TestingEquipment> testingEquipment) {
+		this.testingEquipment = testingEquipment;
+	}
 }

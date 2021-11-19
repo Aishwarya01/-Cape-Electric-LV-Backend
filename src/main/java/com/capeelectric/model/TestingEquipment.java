@@ -53,8 +53,8 @@ public class TestingEquipment implements Serializable {
 	
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "TESTING_REPORT_ID")
-	private TestingReport testingReport;
+	@JoinColumn(name = "TESTING_ID")
+	private Testing testingReport;
 
 	public Integer getEquipmentId() {
 		return equipmentId;
@@ -104,15 +104,12 @@ public class TestingEquipment implements Serializable {
 		this.equipmentCalibrationDueDate = equipmentCalibrationDueDate;
 	}
 
-	public TestingReport getTestingReport() {
+	public Testing getTestingReport() {
 		return testingReport;
 	}
 
-	public void setTestingReport(TestingReport testingReport) {
+	public void setTestingReport(Testing testingReport) {
 		this.testingReport = testingReport;
 	}
-	
-	
-	
 
 }
