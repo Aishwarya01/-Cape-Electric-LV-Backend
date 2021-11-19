@@ -1,6 +1,5 @@
 package com.capeelectric.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
@@ -12,6 +11,6 @@ import com.capeelectric.model.TestingReport;
 public interface TestingReportRepository extends CrudRepository<TestingReport, Integer> {
 	Optional<TestingReport> findBySiteId(Integer siteId);
 
-	List<TestingReport> findByUserNameAndSiteId(String userName, Integer siteId);
+	TestingReport findByUserNameAndSiteId(String userName, Integer siteId);
 
 }

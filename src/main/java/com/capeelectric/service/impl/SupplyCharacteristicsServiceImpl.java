@@ -99,16 +99,14 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	 * 	
 	*/
 	@Override 
-	public List<SupplyCharacteristics> retrieveCharacteristics(String userName, Integer siteId)
+	public SupplyCharacteristics retrieveCharacteristics(String userName, Integer siteId)
 			throws SupplyCharacteristicsException {
 
 		if (userName != null && !userName.isEmpty() && siteId != null) {
-			List<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
+			SupplyCharacteristics supplyCharacteristicsRepo = supplyCharacteristicsRepository
 					.findByUserNameAndSiteId(userName, siteId);
-			if (supplyCharacteristicsRepo != null && !supplyCharacteristicsRepo.isEmpty()) {
-				for (SupplyCharacteristics supplyCharacteristics : supplyCharacteristicsRepo) {
-					sortingDateTime(supplyCharacteristics.getSupplyCharacteristicComment());
-				}
+			if (supplyCharacteristicsRepo != null) {
+					sortingDateTime(supplyCharacteristicsRepo.getSupplyCharacteristicComment());
 				return supplyCharacteristicsRepo;
 			} else {
 				throw new SupplyCharacteristicsException("Given UserName & Site doesn't exist Inspection");

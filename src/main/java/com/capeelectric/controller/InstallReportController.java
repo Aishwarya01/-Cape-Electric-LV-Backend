@@ -1,7 +1,5 @@
 package com.capeelectric.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,11 +47,11 @@ public class InstallReportController {
 	}
 
 	@GetMapping("/retrieveInstalReport/{userName}/{siteId}")
-	public ResponseEntity<List<ReportDetails>> retrieveInstallationReport(@PathVariable String userName,
+	public ResponseEntity<ReportDetails> retrieveInstallationReport(@PathVariable String userName,
 			@PathVariable Integer siteId)
 			throws InstalReportException, InspectionException {
 		logger.info("called retrieveInstallationReport function UserName: {}, SiteId : {}", userName, siteId);
-		return new ResponseEntity<List<ReportDetails>>(instalReportService.retrieveInstallationReport(userName,siteId),
+		return new ResponseEntity<ReportDetails>(instalReportService.retrieveInstallationReport(userName,siteId),
 				HttpStatus.OK);
 	}
 	

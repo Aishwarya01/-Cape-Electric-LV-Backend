@@ -82,14 +82,12 @@ public class InspectionServiceImpl implements InspectionService {
 	 * @return List<IpaoInspection> object 
 	*/
 	@Override
-	public List<PeriodicInspection> retrieveInspectionDetails(String userName, Integer siteId)
+	public PeriodicInspection retrieveInspectionDetails(String userName, Integer siteId)
 			throws InspectionException {
 		if (userName != null && !userName.isEmpty() && siteId != null) {
-			List<PeriodicInspection> inspectionRepo = inspectionRepository.findByUserNameAndSiteId(userName, siteId);
-			if (inspectionRepo != null && !inspectionRepo.isEmpty()) {
-				for (PeriodicInspection periodicInspection : inspectionRepo) {
-					sortingDateTime(periodicInspection.getPeriodicInspectorComment());
-				}
+			PeriodicInspection inspectionRepo = inspectionRepository.findByUserNameAndSiteId(userName, siteId);
+			if (inspectionRepo != null) {
+					sortingDateTime(inspectionRepo.getPeriodicInspectorComment());
 				return inspectionRepo;
 			} else {
 				throw new InspectionException("Given UserName & Site doesn't exist Inspection");

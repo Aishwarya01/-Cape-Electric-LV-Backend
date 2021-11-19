@@ -16,7 +16,7 @@ import com.capeelectric.model.ReportDetails;
  */
 @Repository
 public interface InstalReportDetailsRepository extends CrudRepository<ReportDetails, Integer> {
-	List<ReportDetails> findByUserNameAndSiteId(String userName, Integer siteId);
+	ReportDetails findByUserNameAndSiteId(String userName, Integer siteId);
 
 	Optional<ReportDetails> findBySiteId(Integer siteId);
 }
