@@ -45,17 +45,16 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 			try {
 				PdfWriter writer = PdfWriter.getInstance(document,
 						new FileOutputStream("SupplyCharacteristic.pdf"));
-				List<SupplyCharacteristics> supply1 = supplyCharacteristicsRepository.findByUserNameAndSiteId(userName,
+				SupplyCharacteristics supply = supplyCharacteristicsRepository.findByUserNameAndSiteId(userName,
 						siteId);
-				SupplyCharacteristics supply11 = supply1.get(0);
 
-				List<InstalLocationReport> instalLocationReport = supply11.getInstalLocationReport();
+				List<InstalLocationReport> instalLocationReport = supply.getInstalLocationReport();
 
-				List<SupplyCharacteristicComment> reportComments = supply11.getSupplyCharacteristicComment();
+				List<SupplyCharacteristicComment> reportComments = supply.getSupplyCharacteristicComment();
 				SupplyCharacteristicComment comments = reportComments.get(0);
 
-				List<BoundingLocationReport> boundingLocationReport = supply11.getBoundingLocationReport();
-				List<EarthingLocationReport> earthingLocationReport = supply11.getEarthingLocationReport();
+				List<BoundingLocationReport> boundingLocationReport = supply.getBoundingLocationReport();
+				List<EarthingLocationReport> earthingLocationReport = supply.getEarthingLocationReport();
 
 				document.open();
 
@@ -95,7 +94,6 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 				float[] pointColumnWidths = { 90F, 90F };
 
-				for (SupplyCharacteristics supply : supply1) {
 
 					PdfPTable table = new PdfPTable(pointColumnWidths);
 					table.setWidthPercentage(100); // Width 100%
@@ -575,13 +573,12 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 					}
 
-					List<CircuitBreaker> circuitBreaker = supply11.getCircuitBreaker();
+					List<CircuitBreaker> circuitBreaker = supply.getCircuitBreaker();
 
 					for (CircuitBreaker circuteitr : circuitBreaker) {
 						circuteBraker(document, circuteitr);
 
 					}
-				}
 				if (comments.getViewerUserName() != null && comments.getInspectorUserName() != null) {
 
 					document.newPage();
