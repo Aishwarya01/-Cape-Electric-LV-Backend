@@ -44,7 +44,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 			try {
 				PdfWriter writer = PdfWriter.getInstance(document,
-						new FileOutputStream("PrintSupplyCharacteristic.pdf"));
+						new FileOutputStream("SupplyCharacteristic.pdf"));
 				List<SupplyCharacteristics> supply1 = supplyCharacteristicsRepository.findByUserNameAndSiteId(userName,
 						siteId);
 				SupplyCharacteristics supply11 = supply1.get(0);
