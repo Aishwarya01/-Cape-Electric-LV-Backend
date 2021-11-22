@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.TestingReport;
@@ -66,7 +67,7 @@ public class PeriodicTestingControllerTest {
 	}
 
 	@Test
-	public void testSavePeriodicTesting() throws PeriodicTestingException {
+	public void testSavePeriodicTesting() throws PeriodicTestingException, CompanyDetailsException {
 		logger.info("testSavePeriodicTesting Function Started");
 
 		doNothing().when(periodicTestingServiceImpl).addTestingReport(testingReport);
@@ -93,7 +94,7 @@ public class PeriodicTestingControllerTest {
 	}
 	
 	@Test
-	public void testUpdatePeriodicTesting() throws PeriodicTestingException {
+	public void testUpdatePeriodicTesting() throws PeriodicTestingException, CompanyDetailsException {
 		logger.info("testUpdatePeriodicTesting Function Started");
 		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		ResponseEntity<String> actualResponseEntity = periodicTestingController

@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.model.Circuit;
 import com.capeelectric.model.ConsumerUnit;
@@ -30,6 +31,7 @@ import com.capeelectric.model.SitePersons;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.impl.InspectionServiceImpl;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
 @ExtendWith(SpringExtension.class)
@@ -54,6 +56,9 @@ public class InspectionServiceImplTest {
 
 	@MockBean
 	private SiteRepository siteRepository;
+	
+	@MockBean
+	private SiteDetails siteDetails;
 	
 	private ArrayList<PeriodicInspectionComment> listOfComments;
 
@@ -102,7 +107,7 @@ public class InspectionServiceImplTest {
 	}
 
 	@Test
-	public void testAddInspectionDetails_Success_Flow() throws InspectionException {
+	public void testAddInspectionDetails_Success_Flow() throws InspectionException, CompanyDetailsException {
 		List<IpaoInspection> listofIpaoInspection = new ArrayList<IpaoInspection>();
 		listofIpaoInspection.add(new IpaoInspection());
 		List<ConsumerUnit> listofConsumerUnit = new ArrayList<ConsumerUnit>();
@@ -159,7 +164,7 @@ public class InspectionServiceImplTest {
 	}
 	
 	@Test
-	public void testUpdateInspectionDetails() throws InspectionException {
+	public void testUpdateInspectionDetails() throws InspectionException, CompanyDetailsException {
 		periodicInspection.setUserName("LVsystem@gmail.com");
 		periodicInspection.setPeriodicInspectionId(1);
 		when(inspectionRepository.findById(1)).thenReturn(Optional.of(periodicInspection));

@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.BoundingLocationReport;
@@ -33,6 +34,7 @@ import com.capeelectric.model.SupplyParameters;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.service.impl.SupplyCharacteristicsServiceImpl;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
 @ExtendWith(SpringExtension.class)
@@ -61,6 +63,9 @@ public class SupplyCharacteristicsServiceTest {
 	private SiteRepository siteRepository;
 	
 	private ArrayList<SupplyCharacteristicComment> listOfComments;
+	
+	@MockBean
+	private SiteDetails siteDetails;
 	
     private Site site;
 	
@@ -111,7 +116,7 @@ public class SupplyCharacteristicsServiceTest {
 	}
 
 	@Test
-	public void testAddCharacteristics_Succes_Flow() throws SupplyCharacteristicsException, DecimalConversionException {
+	public void testAddCharacteristics_Succes_Flow() throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
 		
 		SupplyCharacteristicsException exception_reqiredValue = Assertions.assertThrows(SupplyCharacteristicsException.class,
 				() -> supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics));
@@ -140,7 +145,7 @@ public class SupplyCharacteristicsServiceTest {
 	}
 
 	@Test
-	public void testAddCharacteristics_Supply_Parameters_Succes_Flow() throws SupplyCharacteristicsException, DecimalConversionException {
+	public void testAddCharacteristics_Supply_Parameters_Succes_Flow() throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
 
 		List<SupplyParameters> listofSupplyParameters= new ArrayList<SupplyParameters>();
 		listofSupplyParameters.add(new SupplyParameters());
@@ -232,7 +237,7 @@ public class SupplyCharacteristicsServiceTest {
 	}
 	
 	@Test
-	public void testAddCharacteristics_With_NA_Value() throws SupplyCharacteristicsException, DecimalConversionException {
+	public void testAddCharacteristics_With_NA_Value() throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
 		List<SupplyParameters> listofSupplyParameters= new ArrayList<SupplyParameters>();
 		listofSupplyParameters.add(new SupplyParameters());
 		List<CircuitBreaker> listofCircuitBreaker= new ArrayList<CircuitBreaker>();
@@ -258,7 +263,7 @@ public class SupplyCharacteristicsServiceTest {
 	}
 	 
 	@Test
-	public void testUpdateCharacteristics() throws SupplyCharacteristicsException, DecimalConversionException {
+	public void testUpdateCharacteristics() throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
 		
 		when(supplyCharacteristicsRepository.findById(1)).thenReturn(Optional.of(supplyCharacteristics));
 		supplyCharacteristicsServiceImpl.updateCharacteristics(supplyCharacteristics);

@@ -10,6 +10,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
@@ -27,6 +28,7 @@ import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.SummaryService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
 /**
@@ -68,15 +70,19 @@ public class SummaryServiceImpl implements SummaryService {
 	
 	private String viewerName;
 	
+	@Autowired
+	private SiteDetails siteDetails;
+	
 	/**
 	 * @ siteId unique for summary object
 	 * @param Summary object
 	 * addSummary method to find summary object based on input summary_siteId
 	 * if not available summary object will be saved
+	 * @throws CompanyDetailsException 
 	 * 
 	*/
 	@Override
-	public void addSummary(Summary summary) throws SummaryException {
+	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException {
 		listOfComments = new ArrayList<SummaryComment>();
 		if (summary != null && summary.getUserName() != null && !summary.getUserName().isEmpty()
 				&& summary.getSiteId() != null && summary.getSiteId() != 0) {
@@ -119,6 +125,7 @@ public class SummaryServiceImpl implements SummaryService {
 							site = siteRepo.get();
 							site.setAllStepsCompleted("AllStepCompleted");
 							siteRepository.save(site);
+							siteDetails.updateSite(summary.getSiteId(), summary.getUserName());
 						} else {
 							throw new SummaryException("Site-Id Information not Available in site_Table");
 						}
@@ -165,10 +172,11 @@ public class SummaryServiceImpl implements SummaryService {
 	 * @param Summary Object
 	 * updateSummary method to finding the given SummaryId is available or not in DB,
 	 * if available only allowed for updating 
+	 * @throws CompanyDetailsException 
 	 * 
 	*/
 	@Override
-	public void updateSummary(Summary summary) throws SummaryException {
+	public void updateSummary(Summary summary) throws SummaryException, CompanyDetailsException {
 
 		if (summary != null && summary.getSummaryId() != null && summary.getSummaryId() != 0
 				&& summary.getSiteId() != null && summary.getSiteId() != 0) {
@@ -177,6 +185,7 @@ public class SummaryServiceImpl implements SummaryService {
 				summary.setUpdatedDate(LocalDateTime.now());
 				summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
 				summaryRepository.save(summary);
+				siteDetails.updateSite(summary.getSiteId(), summary.getUserName());
 			} else {
 				throw new SummaryException("Given SiteId and ReportId is Invalid");
 			}

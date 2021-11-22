@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.exception.RegistrationException;
@@ -39,7 +40,7 @@ public class InstallReportController {
 
 	@PostMapping("/addInstalReport")
 	public ResponseEntity<String> addInstallationReport(@RequestBody ReportDetails reportDetails)
-			throws InstalReportException {
+			throws InstalReportException, CompanyDetailsException {
 		logger.info("called addInstallationReport function UserName : {}, SiteId", reportDetails.getUserName(),
 				reportDetails.getSiteId());
 		instalReportService.addInstallationReport(reportDetails);
@@ -57,7 +58,7 @@ public class InstallReportController {
 	
 	@PutMapping("/updateInstalReport")
 	public ResponseEntity<String> updateInstallationReport(@RequestBody ReportDetails reportDetails)
-			throws InstalReportException {
+			throws InstalReportException, CompanyDetailsException {
 		logger.info("called updateInstallationReport function UserName : {},SiteId : {},ReportId : {}", reportDetails.getUserName(),
 				reportDetails.getSiteId(),reportDetails.getReportId());
 		instalReportService.updateInstallationReport(reportDetails);

@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.PeriodicInspection;
@@ -40,6 +41,7 @@ import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.SummaryServiceImpl;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
 @ExtendWith(SpringExtension.class)
@@ -73,6 +75,9 @@ public class SummaryServiceTest {
 	private Summary summary;
 	
 	private SummaryComment summaryComment;
+	
+	@MockBean
+	private SiteDetails siteDetails;
 	
 	@MockBean
 	private SiteRepository siteRepository;
@@ -119,7 +124,7 @@ public class SummaryServiceTest {
 	}
 
 	@Test
-	public void testAddSummary() throws SummaryException {
+	public void testAddSummary() throws SummaryException, CompanyDetailsException {
 
 		SupplyCharacteristics supplyCharacteristics = new SupplyCharacteristics();
 		supplyCharacteristics.setSiteId(6);
@@ -202,7 +207,7 @@ public class SummaryServiceTest {
 
 	
 	@Test
-	public void testUpdateSummary() throws DecimalConversionException, SummaryException {
+	public void testUpdateSummary() throws DecimalConversionException, SummaryException, CompanyDetailsException {
 		summary.setUserName("LVsystem@gmail.com");
 		when(summaryRepository.findById(10)).thenReturn(Optional.of(summary));
 		summaryServiceImpl.updateSummary(summary);

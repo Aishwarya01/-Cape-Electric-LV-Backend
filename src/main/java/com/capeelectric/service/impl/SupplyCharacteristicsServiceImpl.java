@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.Site;
@@ -24,6 +25,7 @@ import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.service.SupplyCharacteristicsService;
 import com.capeelectric.util.Constants;
 import com.capeelectric.util.DecimalConversion;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
 /**
@@ -52,15 +54,19 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	
 	private String viewerName;
 	
+	@Autowired
+	private SiteDetails siteDetails;
+	
 	/**
 	 * @param SupplyCharacteristics
 	 * addCharacteristics method to first formating the main and alternative_supply (NominalFrequency,NominalVoltage,LoopImpedance and NominalCurrent)
 	 * then save SupplyCharacteristics model and its child model also will be saved
 	 * @throws DecimalConversionException 
+	 * @throws CompanyDetailsException 
 	*/	
 	@Override
 	public void addCharacteristics(SupplyCharacteristics supplyCharacteristics)
-			throws SupplyCharacteristicsException, DecimalConversionException {
+			throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
 		listOfComments = new ArrayList<SupplyCharacteristicComment>();
 		if (supplyCharacteristics != null && supplyCharacteristics.getUserName() != null
 				&& !supplyCharacteristics.getUserName().isEmpty() && supplyCharacteristics.getSiteId() != null
@@ -93,6 +99,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 							.setUpdatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
 
 					supplyCharacteristicsRepository.save(supplyCharacteristics);
+					siteDetails.updateSite(supplyCharacteristics.getSiteId(), supplyCharacteristics.getUserName());
 				} else {
 					throw new SupplyCharacteristicsException("Site-Id Already Available");
 				}
@@ -137,10 +144,11 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	 * updateCharacteristics method to finding the given SupplyCharacteristicsId is available or not in DB,
 	 * if available only allowed for updating 
 	 * @throws DecimalConversionException 
+	 * @throws CompanyDetailsException 
 	 * 
 	*/
 	@Override
-	public void updateCharacteristics(SupplyCharacteristics supplyCharacteristics) throws SupplyCharacteristicsException, DecimalConversionException {
+	public void updateCharacteristics(SupplyCharacteristics supplyCharacteristics) throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
 		if (supplyCharacteristics != null && supplyCharacteristics.getSupplyCharacteristicsId() != null && supplyCharacteristics.getSupplyCharacteristicsId() != 0
 				&& supplyCharacteristics.getSiteId() != null && supplyCharacteristics.getSiteId() != 0) {
 			Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
@@ -151,6 +159,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				supplyCharacteristics.setUpdatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
 				decimalConversion(supplyCharacteristics);
 				supplyCharacteristicsRepository.save(supplyCharacteristics);
+				siteDetails.updateSite(supplyCharacteristics.getSiteId(), supplyCharacteristics.getUserName());
+				
 			} else {
 				throw new SupplyCharacteristicsException("Given SiteId and ReportId is Invalid");
 			}

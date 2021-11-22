@@ -2,6 +2,7 @@ package com.capeelectric.service;
 
 import java.util.List;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
@@ -13,11 +14,11 @@ import com.capeelectric.model.SummaryComment;
  */
 public interface SummaryService {
 
-	public void addSummary(Summary summary) throws SummaryException;
+	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException;
 
 	public List<Summary> retrieveSummary(String userName, Integer siteId) throws SummaryException;
 
-	public void updateSummary(Summary summary) throws SummaryException;
+	public void updateSummary(Summary summary) throws SummaryException, CompanyDetailsException;
 
 	public void sendComments(String userName, Integer siteId, SummaryComment summaryComment) throws SummaryException;
 

@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.Register;
@@ -33,6 +34,7 @@ import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.PeriodicTestingServiceImpl;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
 /**
@@ -70,6 +72,9 @@ public class PeriodicTestingServiceTest {
     private Site site;
 	
 	private Register register;
+	
+	@MockBean
+	private SiteDetails siteDetails;
 
 	{
 		register =new Register();
@@ -109,7 +114,7 @@ public class PeriodicTestingServiceTest {
 	}
 	
 	@Test
-	public void testAddTestingReport() throws PeriodicTestingException {
+	public void testAddTestingReport() throws PeriodicTestingException, CompanyDetailsException {
 		 
 		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
 
@@ -171,7 +176,7 @@ public class PeriodicTestingServiceTest {
 	}
 
 	@Test
-	public void testTesting_NA_Value() throws DecimalConversionException, PeriodicTestingException {
+	public void testTesting_NA_Value() throws DecimalConversionException, PeriodicTestingException, CompanyDetailsException {
 		logger.info("'NA'value checking processes started");
 
 		testing = new Testing();
@@ -226,7 +231,7 @@ public class PeriodicTestingServiceTest {
 	}
 	
 	@Test
-	public void testUpdateTesting() throws DecimalConversionException, PeriodicTestingException {
+	public void testUpdateTesting() throws DecimalConversionException, PeriodicTestingException, CompanyDetailsException {
 		testingReport.setUserName("LVsystem@gmail.com");
 		testingReport.setTestingReportId(1);
 		when(testingReportRepository.findById(1)).thenReturn(Optional.of(testingReport));

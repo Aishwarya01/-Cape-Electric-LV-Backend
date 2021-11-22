@@ -10,6 +10,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
@@ -20,6 +21,7 @@ import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.InspectionService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 /**
  * This InspectionServiceImpl class to add and retrieve the IpaoInspection object
@@ -43,14 +45,18 @@ public class InspectionServiceImpl implements InspectionService {
 	private List<PeriodicInspectionComment> listOfComments;
 	
 	private String viewerName;
+	
+	@Autowired
+	private SiteDetails siteDetails;
 
 	/**
 	 * @param IpaoInspection object 
 	 * addInspectionDetails method to save IpaoInspection object into table
+	 * @throws CompanyDetailsException 
 	 * 
 	*/
 	@Override
-	public void addInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException {
+	public void addInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException, CompanyDetailsException {
 		listOfComments = new ArrayList<PeriodicInspectionComment>();
 		
 		if (periodicInspection.getUserName() != null && periodicInspection.getSiteId() != null
@@ -83,6 +89,7 @@ public class InspectionServiceImpl implements InspectionService {
 							periodicInspection
 									.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 							inspectionRepository.save(periodicInspection);
+							siteDetails.updateSite(periodicInspection.getSiteId(), periodicInspection.getUserName());							
 						} else {
 							throw new InspectionException("SiteId already present");
 						}
@@ -127,10 +134,11 @@ public class InspectionServiceImpl implements InspectionService {
 	 * @param PeriodicInspection Object
 	 * updateInspectionDetails method to finding the given PeriodicInspectionId is available or not in DB,
 	 * if available only allowed for updating 
+	 * @throws CompanyDetailsException 
 	 * 
 	*/
 	@Override
-	public void updateInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException {
+	public void updateInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException, CompanyDetailsException {
 		if (periodicInspection != null && periodicInspection.getPeriodicInspectionId() != null
 				&& periodicInspection.getPeriodicInspectionId() != 0 && periodicInspection.getSiteId() != null
 				&& periodicInspection.getSiteId() != 0) {
@@ -141,6 +149,7 @@ public class InspectionServiceImpl implements InspectionService {
 				periodicInspection.setUpdatedDate(LocalDateTime.now());
 				periodicInspection.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 				inspectionRepository.save(periodicInspection);
+				siteDetails.updateSite(periodicInspection.getSiteId(), periodicInspection.getUserName());							
 			} else {
 				throw new InspectionException("Given SiteId and ReportId is Invalid");
 			}

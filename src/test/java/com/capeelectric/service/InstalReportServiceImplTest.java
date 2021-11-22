@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.ReportDetailsComment;
@@ -27,6 +28,7 @@ import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.impl.InstalReportServiceImpl;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
 @ExtendWith(SpringExtension.class)
@@ -55,6 +57,9 @@ public class InstalReportServiceImplTest {
 	private ReportDetailsComment reportDetailsComment;
 	
     private Site site;
+    
+	@MockBean
+	private SiteDetails siteDetails;
 	
 	{
 		Set<SignatorDetails> set = new HashSet<SignatorDetails>();
@@ -111,7 +116,7 @@ public class InstalReportServiceImplTest {
 	}
 
 	@Test
-	public void testAddInstallationReport() throws InstalReportException {
+	public void testAddInstallationReport() throws InstalReportException, CompanyDetailsException {
 		reportDetails.setUserName("software@capeindia.com");
 
 		InstalReportException exception_reqiredValue = Assertions.assertThrows(InstalReportException.class,
@@ -137,7 +142,7 @@ public class InstalReportServiceImplTest {
 	}
 	
 	@Test
-	public void testUpdateInstallationReport() throws InstalReportException {
+	public void testUpdateInstallationReport() throws InstalReportException, CompanyDetailsException {
 		reportDetails.setUserName("LVsystem@gmail.com");
 		reportDetails.setReportId(1);
 		when(installationReportRepository.findById(1)).thenReturn(Optional.of(reportDetails));
