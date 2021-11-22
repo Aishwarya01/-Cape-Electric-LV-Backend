@@ -171,36 +171,33 @@ public class PeriodicTestingServiceTest {
 	}
 
 	@Test
-//	public void testTesting_NA_Value() throws DecimalConversionException, PeriodicTestingException {
-//		logger.info("'NA'value checking processes started");
-//		 
-//		testing=new Testing();
-//		ArrayList<Testing> testingList = new ArrayList<Testing>();
-//		testingList.add(testing);
-//		List<TestDistribution> listofTestDistribution = new ArrayList<TestDistribution>();
-//		listofTestDistribution.add(new TestDistribution());
-//		List<TestIncomingDistribution> listofTestIncomingDistribution = new ArrayList<TestIncomingDistribution>();
-//		listofTestIncomingDistribution.add(new TestIncomingDistribution());
-////		List<TestingRecords> listofTestingRecords = new ArrayList<TestingRecords>();
-////		listofTestingRecords.add(new TestingRecords());
-//		
-//		Testing testing = testingList.get(0);
-//		testing.setTestDistribution(listofTestDistribution);
-//		//testing.setTestingRecords(listofTestingRecords); 
-//		testingList.add(utill_withDemcimal_Records());
-//		testingReport.setTestIncomingDistribution(listofTestIncomingDistribution);
-//		testingReport.setTesting(testingList);
-//
-//		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
-//		logger.info("Successfully added Summary_Object flow");
-//		testingReport.setSiteId(2);
-//		periodicTestingServiceImpl.addTestingReport(testingReport);
-//		
-//		utill_withOutDemcimal_Records();		
-// 		 
-//		logger.info("'NA'value checking processes started");
-//
-//	}
+	public void testTesting_NA_Value() throws DecimalConversionException, PeriodicTestingException {
+		logger.info("'NA'value checking processes started");
+
+		testing = new Testing();
+		ArrayList<Testing> testingList = new ArrayList<Testing>();
+
+		List<TestDistribution> listofTestDistribution = new ArrayList<TestDistribution>();
+		listofTestDistribution.add(new TestDistribution());
+		List<TestIncomingDistribution> listofTestIncomingDistribution = new ArrayList<TestIncomingDistribution>();
+		listofTestIncomingDistribution.add(new TestIncomingDistribution());
+
+		testingList.add(utill_withDemcimal_Records());
+		Testing testing = testingList.get(0);
+		testing.setTestDistribution(listofTestDistribution);
+		testingReport.setTestIncomingDistribution(listofTestIncomingDistribution);
+		testingReport.setTesting(testingList);
+
+		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
+		logger.info("Successfully added Summary_Object flow");
+		testingReport.setSiteId(2);
+		periodicTestingServiceImpl.addTestingReport(testingReport);
+
+		utill_withOutDemcimal_Records();
+
+		logger.info("'NA'value checking processes started");
+
+	}
 
 	private Testing utill_withDemcimal_Records() throws DecimalConversionException {
 		logger.info("Demcimal_Conversion success case");
@@ -212,7 +209,6 @@ public class PeriodicTestingServiceTest {
 		records.setTestFaultCurrent("312,122,na,234");
 
 		testingRecordsList.add(records);
-		//testing = new Testing();
 		testing.setTestingRecords(testingRecordsList);
 
 		return testing;

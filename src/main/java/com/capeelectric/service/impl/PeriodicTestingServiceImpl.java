@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
-import com.capeelectric.model.TestIncomingDistribution;
 import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.model.TestingReportComment;
