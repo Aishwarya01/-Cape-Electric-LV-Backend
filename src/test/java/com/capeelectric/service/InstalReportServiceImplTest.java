@@ -114,6 +114,14 @@ public class InstalReportServiceImplTest {
 	public void testAddInstallationReport() throws InstalReportException {
 		reportDetails.setUserName("software@capeindia.com");
 
+		InstalReportException exception_reqiredValue = Assertions.assertThrows(InstalReportException.class,
+				() -> instalReportServiceImpl.addInstallationReport(reportDetails));
+		assertEquals(exception_reqiredValue.getMessage(), "Please fill all the fields before clicking next button");
+		
+		Set<SignatorDetails> listReportDetails = new HashSet<SignatorDetails>();
+		listReportDetails.add(new SignatorDetails());
+		reportDetails.setSignatorDetails(listReportDetails);
+		
 		when(installationReportRepository.save(reportDetails)).thenReturn(reportDetails);
 		instalReportServiceImpl.addInstallationReport(reportDetails);
 

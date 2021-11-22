@@ -78,52 +78,59 @@ public class SummaryServiceImpl implements SummaryService {
 	@Override
 	public void addSummary(Summary summary) throws SummaryException {
 		listOfComments = new ArrayList<SummaryComment>();
-		if (summary.getUserName() != null && !summary.getUserName().isEmpty() && summary.getSiteId() != null
-				&& summary.getSiteId() != 0) {
+		if (summary != null && summary.getUserName() != null && !summary.getUserName().isEmpty()
+				&& summary.getSiteId() != null && summary.getSiteId() != 0) {
 			Optional<Summary> summaryRepo = summaryRepository.findBySiteId(summary.getSiteId());
-			Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository.findBySiteId(summary.getSiteId());
+			Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository
+					.findBySiteId(summary.getSiteId());
 			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(summary.getSiteId());
 			Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(summary.getSiteId());
 			Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(summary.getSiteId());
-			if(!reportDetailsRepo.isPresent() && !supplyCharacteristics.isPresent() && !periodicInspection.isPresent() && !testingRepo.isPresent()) {
+			if (!reportDetailsRepo.isPresent() && !supplyCharacteristics.isPresent() && !periodicInspection.isPresent()
+					&& !testingRepo.isPresent()) {
 				throw new SummaryException("Please enter details for all previous steps to proceed further");
-              }
-	        else if(!reportDetailsRepo.isPresent()) {
+			} else if (!reportDetailsRepo.isPresent()) {
 				throw new SummaryException("Please enter Basic Information step to proceed further");
-			} else if(!supplyCharacteristics.isPresent()) {
+			} else if (!supplyCharacteristics.isPresent()) {
 				throw new SummaryException("Please enter Supply Characteristics step to proceed further");
-			} else if(!periodicInspection.isPresent()) {
+			} else if (!periodicInspection.isPresent()) {
 				throw new SummaryException("Please enter Periodic Inspection step to proceed further");
 			} else if (!testingRepo.isPresent()) {
 				throw new SummaryException("Please enter Periodic Testing step to proceed further");
-			}
-			else {
-				if (!summaryRepo.isPresent() || !summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
-					summaryComment = new SummaryComment();
-					summaryComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
-					summaryComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
-					summaryComment.setNoOfComment(1);
-					summaryComment.setSummary(summary);
-					listOfComments.add(summaryComment);
-					summary.setSummaryComment(listOfComments);
-					summary.setCreatedDate(LocalDateTime.now());
-					summary.setUpdatedDate(LocalDateTime.now());
-					summary.setCreatedBy(userFullName.findByUserName(summary.getUserName()));
-					summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
-					summaryRepository.save(summary);
-					siteRepo = siteRepository.findById(summary.getSiteId());
-					if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
-						site = siteRepo.get();
-						site.setAllStepsCompleted("AllStepCompleted");
-						siteRepository.save(site);
+			} else {
+				if (summary.getSummaryDeclaration() != null && summary.getSummaryObervation() != null
+						&& summary.getSummaryDeclaration().size() > 0 && summary.getSummaryObervation().size() > 0) {
+
+					if (!summaryRepo.isPresent() || !summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
+						summaryComment = new SummaryComment();
+						summaryComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+						summaryComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
+						summaryComment.setNoOfComment(1);
+						summaryComment.setSummary(summary);
+						listOfComments.add(summaryComment);
+						summary.setSummaryComment(listOfComments);
+						summary.setCreatedDate(LocalDateTime.now());
+						summary.setUpdatedDate(LocalDateTime.now());
+						summary.setCreatedBy(userFullName.findByUserName(summary.getUserName()));
+						summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
+						summaryRepository.save(summary);
+						siteRepo = siteRepository.findById(summary.getSiteId());
+						if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
+							site = siteRepo.get();
+							site.setAllStepsCompleted("AllStepCompleted");
+							siteRepository.save(site);
+						} else {
+							throw new SummaryException("Site-Id Information not Available in site_Table");
+						}
+
 					} else {
-						throw new SummaryException("Site-Id Information not Available in site_Table");
+						throw new SummaryException("Site-Id Already Available");
 					}
 
 				} else {
-					throw new SummaryException("Site-Id Already Available");
+					throw new SummaryException("Please fill all the fields before clicking next button");
 				}
-			} 
+			}
 		} else {
 			throw new SummaryException("Invalid Inputs");
 		}

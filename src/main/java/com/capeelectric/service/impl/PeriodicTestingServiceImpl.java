@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
+import com.capeelectric.model.TestIncomingDistribution;
+import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.repository.SiteRepository;
@@ -51,23 +53,44 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		List<TestingReportComment> listOfComments = new ArrayList<TestingReportComment>();
 		if (testingReport.getUserName() != null && testingReport.getSiteId() != null) {
 
-			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(testingReport.getSiteId());
-			if (!testingRepo.isPresent() || !testingRepo.get().getSiteId().equals(testingReport.getSiteId())) {
-				testingComment = new TestingReportComment();
-				testingComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
-				testingComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
-				testingComment.setNoOfComment(1);
-				testingComment.setTestingReport(testingReport);
-				listOfComments.add(testingComment);
-				testingReport.setTestingComment(listOfComments);
-				testingReport.setCreatedDate(LocalDateTime.now());
-				testingReport.setCreatedBy(userFullName.findByUserName(testingReport.getUserName()));
-				testingReport.setUpdatedDate(LocalDateTime.now());
-				testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
-				testingReportRepository.save(testingReport);
+			List<Testing> testing = testingReport.getTesting();
+			if (testing != null && testing.size() == 1) {
+				for (Testing testingItr : testing) {
+					if (testingItr != null && testingItr.getTestDistribution() != null
+							&& testingItr.getTestingRecords() != null
+							&& testingReport.getTestIncomingDistribution() != null
+							&& testingItr.getTestDistribution().size() > 0 && testingItr.getTestingRecords().size() > 0
+							&& testingReport.getTestIncomingDistribution().size() > 0) {
+
+						Optional<TestingReport> testingRepo = testingReportRepository
+								.findBySiteId(testingReport.getSiteId());
+
+						if (!testingRepo.isPresent() 
+								|| !testingRepo.get().getSiteId().equals(testingReport.getSiteId())) {
+							testingComment = new TestingReportComment();
+							testingComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+							testingComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
+							testingComment.setNoOfComment(1);
+							testingComment.setTestingReport(testingReport);
+							listOfComments.add(testingComment);
+							testingReport.setTestingComment(listOfComments);
+							testingReport.setCreatedDate(LocalDateTime.now());
+							testingReport.setCreatedBy(userFullName.findByUserName(testingReport.getUserName()));
+							testingReport.setUpdatedDate(LocalDateTime.now());
+							testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
+							testingReportRepository.save(testingReport);
+						} else {
+							throw new PeriodicTestingException("Site-Id Already Present");
+						}
+					} else {
+						throw new PeriodicTestingException("Please fill all the fields before clicking next button");
+					}
+
+				}
 			} else {
-				throw new PeriodicTestingException("Site-Id Already Present");
+				throw new PeriodicTestingException("Testing data contains duplicate Object");
 			}
+
 		} else {
 			throw new PeriodicTestingException("Invalid Inputs");
 		}

@@ -29,6 +29,8 @@ import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
+import com.capeelectric.model.SummaryDeclaration;
+import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
@@ -142,6 +144,17 @@ public class SummaryServiceTest {
 		when(inspectionRepository.findBySiteId(6)).thenReturn(periodicreport);
 		when(testingReportRepository.findBySiteId(6)).thenReturn(testreport);
 
+		SummaryException exception_reqiredValue = Assertions.assertThrows(SummaryException.class,
+				() -> summaryServiceImpl.addSummary(summary));
+		assertEquals(exception_reqiredValue.getMessage(), "Please fill all the fields before clicking next button");
+		
+		List<SummaryDeclaration> listofSummaryDeclaration= new ArrayList<SummaryDeclaration>();
+		listofSummaryDeclaration.add(new SummaryDeclaration());
+		List<SummaryObervation> listofSummaryObervation= new ArrayList<SummaryObervation>();
+		listofSummaryObervation.add(new SummaryObervation());
+		summary.setSummaryDeclaration(listofSummaryDeclaration);
+		summary.setSummaryObervation(listofSummaryObervation);
+		
 		summaryServiceImpl.addSummary(summary);
 		
 		when(summaryRepository.findBySiteId(6)).thenReturn(Optional.of(summary));

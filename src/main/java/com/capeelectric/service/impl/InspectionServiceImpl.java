@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.InspectionException;
+import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.PeriodicInspectionComment;
 import com.capeelectric.model.Site;
@@ -52,23 +53,46 @@ public class InspectionServiceImpl implements InspectionService {
 	public void addInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException {
 		listOfComments = new ArrayList<PeriodicInspectionComment>();
 		
-		if (periodicInspection.getUserName() != null && periodicInspection.getSiteId() != null) {
-			Optional<PeriodicInspection> siteId = inspectionRepository.findBySiteId(periodicInspection.getSiteId());
-			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(periodicInspection.getSiteId())) {
-				periodicInspectionComment = new PeriodicInspectionComment();
-				periodicInspectionComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
-				periodicInspectionComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
-				periodicInspectionComment.setNoOfComment(1);
-				periodicInspectionComment.setPeriodicInspection(periodicInspection);
-				listOfComments.add(periodicInspectionComment);
-				periodicInspection.setPeriodicInspectorComment(listOfComments);
-				periodicInspection.setCreatedDate(LocalDateTime.now());
-				periodicInspection.setUpdatedDate(LocalDateTime.now());
-				periodicInspection.setCreatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
-				periodicInspection.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
-				inspectionRepository.save(periodicInspection);
+		if (periodicInspection.getUserName() != null && periodicInspection.getSiteId() != null
+				&& periodicInspection.getIpaoInspection() != null) {
+			List<IpaoInspection> ipaoInspection = periodicInspection.getIpaoInspection();
+			
+			if (ipaoInspection != null && ipaoInspection.size() == 1) {
+				for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
+
+					if (ipaoInspectionItr !=null && ipaoInspectionItr.getConsumerUnit() != null && ipaoInspectionItr.getCircuit() != null
+							&& ipaoInspectionItr.getIsolationCurrent() != null
+							&& ipaoInspectionItr.getConsumerUnit().size() > 0
+							&& ipaoInspectionItr.getCircuit().size() > 0
+							&& ipaoInspectionItr.getIsolationCurrent().size() > 0) {
+						 
+						Optional<PeriodicInspection> siteId = inspectionRepository
+								.findBySiteId(periodicInspection.getSiteId());
+						if (!siteId.isPresent() || !siteId.get().getSiteId().equals(periodicInspection.getSiteId())) {
+							periodicInspectionComment = new PeriodicInspectionComment();
+							periodicInspectionComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+							periodicInspectionComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
+							periodicInspectionComment.setNoOfComment(1);
+							periodicInspectionComment.setPeriodicInspection(periodicInspection);
+							listOfComments.add(periodicInspectionComment);
+							periodicInspection.setPeriodicInspectorComment(listOfComments);
+							periodicInspection.setCreatedDate(LocalDateTime.now());
+							periodicInspection.setUpdatedDate(LocalDateTime.now());
+							periodicInspection
+									.setCreatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
+							periodicInspection
+									.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
+							inspectionRepository.save(periodicInspection);
+						} else {
+							throw new InspectionException("SiteId already present");
+						}
+					} else {
+						throw new InspectionException("Please fill all the fields before clicking next button");
+					}
+				}
+
 			} else {
-				throw new InspectionException("SiteId already present");
+				throw new InspectionException("Inspection data contains duplicate Object");
 			}
 
 		} else {

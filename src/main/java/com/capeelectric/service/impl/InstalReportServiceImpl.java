@@ -52,26 +52,30 @@ public class InstalReportServiceImpl implements InstalReportService {
 	@Override
 	public void addInstallationReport(ReportDetails reportDetails) throws InstalReportException {
 		List<ReportDetailsComment> listOfComments = new ArrayList<ReportDetailsComment>();
-		
+
 		if (reportDetails != null && reportDetails.getUserName() != null && reportDetails.getSiteId() != null) {
-			Optional<ReportDetails> reportDetailsRepo = installationReportRepository
-					.findBySiteId(reportDetails.getSiteId());
-			if (!reportDetailsRepo.isPresent()
-					|| !reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
-				reportDetailsComment = new ReportDetailsComment();
-				reportDetailsComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
-				reportDetailsComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
-				reportDetailsComment.setNoOfComment(1);
-				reportDetailsComment.setReportDetails(reportDetails);
-				listOfComments.add(reportDetailsComment);
-				reportDetails.setReportDetailsComment(listOfComments);
-				reportDetails.setCreatedDate(LocalDateTime.now());
-				reportDetails.setUpdatedDate(LocalDateTime.now());
-				reportDetails.setCreatedBy(userFullName.findByUserName(reportDetails.getUserName()));
-				reportDetails.setUpdatedBy(userFullName.findByUserName(reportDetails.getUserName()));
-				installationReportRepository.save(reportDetails);
+			if (reportDetails.getSignatorDetails() != null && reportDetails.getSignatorDetails().size() > 0) {
+				Optional<ReportDetails> reportDetailsRepo = installationReportRepository
+						.findBySiteId(reportDetails.getSiteId());
+				if (!reportDetailsRepo.isPresent()
+						|| !reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
+					reportDetailsComment = new ReportDetailsComment();
+					reportDetailsComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+					reportDetailsComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
+					reportDetailsComment.setNoOfComment(1);
+					reportDetailsComment.setReportDetails(reportDetails);
+					listOfComments.add(reportDetailsComment);
+					reportDetails.setReportDetailsComment(listOfComments);
+					reportDetails.setCreatedDate(LocalDateTime.now());
+					reportDetails.setUpdatedDate(LocalDateTime.now());
+					reportDetails.setCreatedBy(userFullName.findByUserName(reportDetails.getUserName()));
+					reportDetails.setUpdatedBy(userFullName.findByUserName(reportDetails.getUserName()));
+					installationReportRepository.save(reportDetails);
+				} else {
+					throw new InstalReportException("Site-Id Details Already Available,Create New Site-Id");
+				}
 			} else {
-				throw new InstalReportException("Site-Id Details Already Available,Create New Site-Id");
+				throw new InstalReportException("Please fill all the fields before clicking next button");
 			}
 
 		} else {

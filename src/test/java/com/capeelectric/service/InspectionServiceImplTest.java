@@ -18,6 +18,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.InspectionException;
+import com.capeelectric.model.Circuit;
+import com.capeelectric.model.ConsumerUnit;
+import com.capeelectric.model.IpaoInspection;
+import com.capeelectric.model.IsolationCurrent;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.PeriodicInspectionComment;
 import com.capeelectric.model.Register;
@@ -99,10 +103,31 @@ public class InspectionServiceImplTest {
 
 	@Test
 	public void testAddInspectionDetails_Success_Flow() throws InspectionException {
-		Optional<PeriodicInspection> ipaolist;
-		ipaolist = Optional.of(periodicInspection);
+		List<IpaoInspection> listofIpaoInspection = new ArrayList<IpaoInspection>();
+		listofIpaoInspection.add(new IpaoInspection());
+		List<ConsumerUnit> listofConsumerUnit = new ArrayList<ConsumerUnit>();
+		listofConsumerUnit.add(new ConsumerUnit());
+		List<Circuit> listofCircuit = new ArrayList<Circuit>();
+		listofCircuit.add(new Circuit());
+		List<IsolationCurrent> listofIsolationCurrent = new ArrayList<IsolationCurrent>();
+		listofIsolationCurrent.add(new IsolationCurrent());
+
+		IpaoInspection ipaoInspection = listofIpaoInspection.get(0);
+		ipaoInspection.setConsumerUnit(listofConsumerUnit);
+		ipaoInspection.setCircuit(listofCircuit);
+		ipaoInspection.setIsolationCurrent(listofIsolationCurrent);
+		periodicInspection.setIpaoInspection(listofIpaoInspection);
+		Optional<PeriodicInspection> ipaolist = Optional.of(periodicInspection);
 
 		inspectionServiceImpl.addInspectionDetails(periodicInspection);
+		
+		ipaoInspection.setConsumerUnit(null);
+		periodicInspection.setIpaoInspection(listofIpaoInspection);
+		InspectionException assertThrows_1 = Assertions.assertThrows(InspectionException.class,
+				() -> inspectionServiceImpl.addInspectionDetails(periodicInspection));
+		assertEquals(assertThrows_1.getMessage(), "Please fill all the fields before clicking next button");
+		
+		
 		when(inspectionRepository.findBySiteId(periodicInspection.getSiteId())).thenReturn(ipaolist);
 		InspectionException assertThrows = Assertions.assertThrows(InspectionException.class,
 				() -> inspectionServiceImpl.addInspectionDetails(periodicInspection));

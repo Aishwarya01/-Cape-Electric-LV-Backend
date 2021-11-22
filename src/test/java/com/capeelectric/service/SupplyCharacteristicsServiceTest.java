@@ -20,6 +20,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
+import com.capeelectric.model.BoundingLocationReport;
+import com.capeelectric.model.CircuitBreaker;
+import com.capeelectric.model.EarthingLocationReport;
+import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
@@ -109,6 +113,27 @@ public class SupplyCharacteristicsServiceTest {
 	@Test
 	public void testAddCharacteristics_Succes_Flow() throws SupplyCharacteristicsException, DecimalConversionException {
 		
+		SupplyCharacteristicsException exception_reqiredValue = Assertions.assertThrows(SupplyCharacteristicsException.class,
+				() -> supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics));
+		assertEquals(exception_reqiredValue.getMessage(), "Please fill all the fields before clicking next button");
+		
+		List<SupplyParameters> listofSupplyParameters= new ArrayList<SupplyParameters>();
+		listofSupplyParameters.add(new SupplyParameters());
+		List<CircuitBreaker> listofCircuitBreaker= new ArrayList<CircuitBreaker>();
+		listofCircuitBreaker.add(new CircuitBreaker());
+		List<InstalLocationReport> listofInstalLocationReport= new ArrayList<InstalLocationReport>();
+		listofInstalLocationReport.add(new InstalLocationReport());
+		List<BoundingLocationReport> listofBoundingLocationReport= new ArrayList<BoundingLocationReport>();
+		listofBoundingLocationReport.add(new BoundingLocationReport());
+		List<EarthingLocationReport> listofEarthingLocationReport= new ArrayList<EarthingLocationReport>();
+		listofEarthingLocationReport.add(new EarthingLocationReport());
+	 
+		supplyCharacteristics.setBoundingLocationReport(listofBoundingLocationReport);
+		supplyCharacteristics.setEarthingLocationReport(listofEarthingLocationReport);
+		supplyCharacteristics.setInstalLocationReport(listofInstalLocationReport);
+		supplyCharacteristics.setCircuitBreaker(listofCircuitBreaker);
+		supplyCharacteristics.setSupplyParameters(listofSupplyParameters);
+		
 		supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics);
 		when(supplyCharacteristicsRepository.save(supplyCharacteristics)).thenReturn(supplyCharacteristics);
 		assertNotNull(supplyCharacteristics);
@@ -117,6 +142,23 @@ public class SupplyCharacteristicsServiceTest {
 	@Test
 	public void testAddCharacteristics_Supply_Parameters_Succes_Flow() throws SupplyCharacteristicsException, DecimalConversionException {
 
+		List<SupplyParameters> listofSupplyParameters= new ArrayList<SupplyParameters>();
+		listofSupplyParameters.add(new SupplyParameters());
+		List<CircuitBreaker> listofCircuitBreaker= new ArrayList<CircuitBreaker>();
+		listofCircuitBreaker.add(new CircuitBreaker());
+		List<InstalLocationReport> listofInstalLocationReport= new ArrayList<InstalLocationReport>();
+		listofInstalLocationReport.add(new InstalLocationReport());
+		List<BoundingLocationReport> listofBoundingLocationReport= new ArrayList<BoundingLocationReport>();
+		listofBoundingLocationReport.add(new BoundingLocationReport());
+		List<EarthingLocationReport> listofEarthingLocationReport= new ArrayList<EarthingLocationReport>();
+		listofEarthingLocationReport.add(new EarthingLocationReport());
+	 
+		supplyCharacteristics.setBoundingLocationReport(listofBoundingLocationReport);
+		supplyCharacteristics.setEarthingLocationReport(listofEarthingLocationReport);
+		supplyCharacteristics.setInstalLocationReport(listofInstalLocationReport);
+		supplyCharacteristics.setCircuitBreaker(listofCircuitBreaker);
+		supplyCharacteristics.setSupplyParameters(listofSupplyParameters);
+		
 		supplyCharacteristics.setMainNominalCurrent("1.2012,12.1212,455,566");
 		supplyCharacteristics.setMainNominalFrequency("2.00");
 		supplyCharacteristics.setMainNominalVoltage("3.00,152.1212,455.051,56.9459");
@@ -149,7 +191,23 @@ public class SupplyCharacteristicsServiceTest {
 
 	@Test
 	public void testAddCharacteristics_Site_Alredy_Present() throws SupplyCharacteristicsException {
-
+		List<SupplyParameters> listofSupplyParameters= new ArrayList<SupplyParameters>();
+		listofSupplyParameters.add(new SupplyParameters());
+		List<CircuitBreaker> listofCircuitBreaker= new ArrayList<CircuitBreaker>();
+		listofCircuitBreaker.add(new CircuitBreaker());
+		List<InstalLocationReport> listofInstalLocationReport= new ArrayList<InstalLocationReport>();
+		listofInstalLocationReport.add(new InstalLocationReport());
+		List<BoundingLocationReport> listofBoundingLocationReport= new ArrayList<BoundingLocationReport>();
+		listofBoundingLocationReport.add(new BoundingLocationReport());
+		List<EarthingLocationReport> listofEarthingLocationReport= new ArrayList<EarthingLocationReport>();
+		listofEarthingLocationReport.add(new EarthingLocationReport());
+	 
+		supplyCharacteristics.setBoundingLocationReport(listofBoundingLocationReport);
+		supplyCharacteristics.setEarthingLocationReport(listofEarthingLocationReport);
+		supplyCharacteristics.setInstalLocationReport(listofInstalLocationReport);
+		supplyCharacteristics.setCircuitBreaker(listofCircuitBreaker);
+		supplyCharacteristics.setSupplyParameters(listofSupplyParameters);
+		
 		Optional<SupplyCharacteristics> supplylist;
 		supplylist = Optional.of(supplyCharacteristics);
 
@@ -175,6 +233,23 @@ public class SupplyCharacteristicsServiceTest {
 	
 	@Test
 	public void testAddCharacteristics_With_NA_Value() throws SupplyCharacteristicsException, DecimalConversionException {
+		List<SupplyParameters> listofSupplyParameters= new ArrayList<SupplyParameters>();
+		listofSupplyParameters.add(new SupplyParameters());
+		List<CircuitBreaker> listofCircuitBreaker= new ArrayList<CircuitBreaker>();
+		listofCircuitBreaker.add(new CircuitBreaker());
+		List<InstalLocationReport> listofInstalLocationReport= new ArrayList<InstalLocationReport>();
+		listofInstalLocationReport.add(new InstalLocationReport());
+		List<BoundingLocationReport> listofBoundingLocationReport= new ArrayList<BoundingLocationReport>();
+		listofBoundingLocationReport.add(new BoundingLocationReport());
+		List<EarthingLocationReport> listofEarthingLocationReport= new ArrayList<EarthingLocationReport>();
+		listofEarthingLocationReport.add(new EarthingLocationReport());
+	 
+		supplyCharacteristics.setBoundingLocationReport(listofBoundingLocationReport);
+		supplyCharacteristics.setEarthingLocationReport(listofEarthingLocationReport);
+		supplyCharacteristics.setInstalLocationReport(listofInstalLocationReport);
+		supplyCharacteristics.setCircuitBreaker(listofCircuitBreaker);
+		supplyCharacteristics.setSupplyParameters(listofSupplyParameters);
+		
 		supplyCharacteristics.setMainNominalCurrent("1.2012,na,455,566");
 		supplyCharacteristics.setMainNominalFrequency("NA");
 		
