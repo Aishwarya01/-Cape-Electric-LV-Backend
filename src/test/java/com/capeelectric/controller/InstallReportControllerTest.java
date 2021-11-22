@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.exception.RegistrationException;
@@ -78,7 +79,7 @@ public class InstallReportControllerTest {
 	
 	
 	@Test
-	public void testAddInstallationReport() throws InstalReportException {
+	public void testAddInstallationReport() throws InstalReportException, CompanyDetailsException {
 		
 		ResponseEntity<String> response = instalReportController.addInstallationReport(reportDetails);
 		assertEquals(response.getBody(), "Basic Information Successfully Saved");
@@ -93,7 +94,7 @@ public class InstallReportControllerTest {
 	}
 	
 	@Test
-	public void testUpdateInstallationReport() throws InstalReportException {
+	public void testUpdateInstallationReport() throws InstalReportException, CompanyDetailsException {
 		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		ResponseEntity<String> actualResponseEntity = instalReportController
 				.updateInstallationReport(reportDetails);

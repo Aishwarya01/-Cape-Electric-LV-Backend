@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
@@ -65,7 +66,7 @@ public class SummaryControllerTest {
 	}
 
 	@Test
-	public void testAddSummary() throws SummaryException {
+	public void testAddSummary() throws SummaryException, CompanyDetailsException {
 		logger.info("testAddSummary Function Started");
 
 		doNothing().when(summaryServiceImpl).addSummary(summary);
@@ -91,7 +92,7 @@ public class SummaryControllerTest {
 	}
 	
 	@Test
-	public void testUpdateSummary() throws SummaryException{
+	public void testUpdateSummary() throws SummaryException, CompanyDetailsException{
 		
 		logger.info("testUpdateSummary Function Started");
 		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);

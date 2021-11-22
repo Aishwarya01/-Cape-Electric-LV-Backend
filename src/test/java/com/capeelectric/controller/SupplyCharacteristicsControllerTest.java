@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
@@ -56,7 +57,7 @@ public class SupplyCharacteristicsControllerTest {
 	}
 
 	@Test
-	public void testAddCharacteristics() throws SupplyCharacteristicsException, DecimalConversionException {
+	public void testAddCharacteristics() throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
 		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
 		ResponseEntity<String> actualResponseEntity = supplyCharacteristicsController
 				.addCharacteristics(supplyCharacteristics);
@@ -73,7 +74,7 @@ public class SupplyCharacteristicsControllerTest {
 	}
 	
 	@Test
-	public void testUpdateCharacteristics() throws SupplyCharacteristicsException, DecimalConversionException {
+	public void testUpdateCharacteristics() throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
 		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>("SupplyCharacteristics Data successfully Updated",HttpStatus.OK);
 		ResponseEntity<String> actualResponseEntity = supplyCharacteristicsController
 				.updateCharacteristics(supplyCharacteristics);

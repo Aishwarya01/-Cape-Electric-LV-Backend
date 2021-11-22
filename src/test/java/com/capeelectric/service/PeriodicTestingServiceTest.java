@@ -19,11 +19,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
+import com.capeelectric.model.TestDistribution;
+import com.capeelectric.model.TestIncomingDistribution;
 import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
@@ -31,6 +34,7 @@ import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.PeriodicTestingServiceImpl;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
 /**
@@ -68,6 +72,9 @@ public class PeriodicTestingServiceTest {
     private Site site;
 	
 	private Register register;
+	
+	@MockBean
+	private SiteDetails siteDetails;
 
 	{
 		register =new Register();
@@ -107,11 +114,33 @@ public class PeriodicTestingServiceTest {
 	}
 	
 	@Test
-	public void testAddTestingReport() throws PeriodicTestingException {
+	public void testAddTestingReport() throws PeriodicTestingException, CompanyDetailsException {
 		 
 		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
 
 		logger.info("SiteId already Present_flow");
+		List<Testing> listofTesting = new ArrayList<Testing>();
+		listofTesting.add(new Testing());
+		 
+		List<TestDistribution> listofTestDistribution = new ArrayList<TestDistribution>();
+		listofTestDistribution.add(new TestDistribution());
+		List<TestIncomingDistribution> listofTestIncomingDistribution = new ArrayList<TestIncomingDistribution>();
+		listofTestIncomingDistribution.add(new TestIncomingDistribution());
+		List<TestingRecords> listofTestingRecords = new ArrayList<TestingRecords>();
+		listofTestingRecords.add(new TestingRecords());
+		
+		Testing testing = listofTesting.get(0);
+		testing.setTestDistribution(listofTestDistribution);
+		testing.setTestingRecords(listofTestingRecords);
+		
+		testingReport.setTesting(listofTesting);
+		
+		
+		PeriodicTestingException periodicTestingException = Assertions.assertThrows(PeriodicTestingException.class,
+				() -> periodicTestingServiceImpl.addTestingReport(testingReport));
+		assertEquals(periodicTestingException.getMessage(), "Please fill all the fields before clicking next button");
+
+		testingReport.setTestIncomingDistribution(listofTestIncomingDistribution);
 		PeriodicTestingException periodicTestingException_1 = Assertions.assertThrows(PeriodicTestingException.class,
 				() -> periodicTestingServiceImpl.addTestingReport(testingReport));
 		assertEquals(periodicTestingException_1.getMessage(), "Site-Id Already Present");
@@ -147,19 +176,30 @@ public class PeriodicTestingServiceTest {
 	}
 
 	@Test
-	public void testTesting_NA_Value() throws DecimalConversionException, PeriodicTestingException {
+	public void testTesting_NA_Value() throws DecimalConversionException, PeriodicTestingException, CompanyDetailsException {
 		logger.info("'NA'value checking processes started");
+
+		testing = new Testing();
 		ArrayList<Testing> testingList = new ArrayList<Testing>();
+
+		List<TestDistribution> listofTestDistribution = new ArrayList<TestDistribution>();
+		listofTestDistribution.add(new TestDistribution());
+		List<TestIncomingDistribution> listofTestIncomingDistribution = new ArrayList<TestIncomingDistribution>();
+		listofTestIncomingDistribution.add(new TestIncomingDistribution());
+
 		testingList.add(utill_withDemcimal_Records());
+		Testing testing = testingList.get(0);
+		testing.setTestDistribution(listofTestDistribution);
+		testingReport.setTestIncomingDistribution(listofTestIncomingDistribution);
 		testingReport.setTesting(testingList);
 
 		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
 		logger.info("Successfully added Summary_Object flow");
 		testingReport.setSiteId(2);
 		periodicTestingServiceImpl.addTestingReport(testingReport);
-		
-		utill_withOutDemcimal_Records();		
- 		 
+
+		utill_withOutDemcimal_Records();
+
 		logger.info("'NA'value checking processes started");
 
 	}
@@ -174,7 +214,6 @@ public class PeriodicTestingServiceTest {
 		records.setTestFaultCurrent("312,122,na,234");
 
 		testingRecordsList.add(records);
-		testing = new Testing();
 		testing.setTestingRecords(testingRecordsList);
 
 		return testing;
@@ -192,7 +231,7 @@ public class PeriodicTestingServiceTest {
 	}
 	
 	@Test
-	public void testUpdateTesting() throws DecimalConversionException, PeriodicTestingException {
+	public void testUpdateTesting() throws DecimalConversionException, PeriodicTestingException, CompanyDetailsException {
 		testingReport.setUserName("LVsystem@gmail.com");
 		testingReport.setTestingReportId(1);
 		when(testingReportRepository.findById(1)).thenReturn(Optional.of(testingReport));

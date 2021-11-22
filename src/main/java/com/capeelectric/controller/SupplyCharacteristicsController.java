@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
@@ -40,7 +41,7 @@ public class SupplyCharacteristicsController {
 
 	@PostMapping("/addCharacteristics")
 	public ResponseEntity<String> addCharacteristics(@RequestBody SupplyCharacteristics supplyCharacteristics)
-			throws SupplyCharacteristicsException, DecimalConversionException {
+			throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
 		logger.info("called addCharacteristics function UserName : {}, SiteId : {}",
 				supplyCharacteristics.getUserName(), supplyCharacteristics.getSiteId());
 		supplyCharacteristicsService.addCharacteristics(supplyCharacteristics);
@@ -58,7 +59,7 @@ public class SupplyCharacteristicsController {
 
 	@PutMapping("/updateCharacteristics")
 	public ResponseEntity<String> updateCharacteristics(@RequestBody SupplyCharacteristics supplyCharacteristics)
-			throws SupplyCharacteristicsException, DecimalConversionException {
+			throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
 		logger.info("called updateCharacteristics function UserName : {},SiteId : {},SupplyCharacteristicsId : {}",
 				supplyCharacteristics.getUserName(), supplyCharacteristics.getSiteId(),
 				supplyCharacteristics.getSupplyCharacteristicsId());

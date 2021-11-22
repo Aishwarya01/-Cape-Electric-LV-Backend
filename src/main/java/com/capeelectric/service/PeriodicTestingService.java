@@ -1,5 +1,6 @@
 package com.capeelectric.service;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.model.TestingReportComment;
@@ -11,11 +12,11 @@ import com.capeelectric.model.TestingReportComment;
  */
 public interface PeriodicTestingService {
 
-	public void addTestingReport(TestingReport testing) throws PeriodicTestingException;
+	public void addTestingReport(TestingReport testing) throws PeriodicTestingException, CompanyDetailsException;
 
 	public TestingReport retrieveTestingReport(String userName, Integer siteId) throws PeriodicTestingException;
 
-	public void updatePeriodicTesting(TestingReport testingReport) throws PeriodicTestingException;
+	public void updatePeriodicTesting(TestingReport testingReport) throws PeriodicTestingException, CompanyDetailsException;
 
 	public void sendComments(String userName, Integer siteId, TestingReportComment testingReportComment)
 			throws PeriodicTestingException;

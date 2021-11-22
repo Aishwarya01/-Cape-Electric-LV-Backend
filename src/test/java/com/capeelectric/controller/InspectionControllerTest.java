@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.PeriodicInspection;
@@ -56,7 +57,7 @@ public class InspectionControllerTest {
 	}
 
 	@Test
-	public void testAddInspectionDetails() throws InspectionException {
+	public void testAddInspectionDetails() throws InspectionException, CompanyDetailsException {
 		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.CREATED);
 		ResponseEntity<String> actualResponseEntity = inspectionController.addInspectionDetails(periodicInspection);
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
@@ -71,7 +72,7 @@ public class InspectionControllerTest {
 	}
 	
 	@Test
-	public void testUpdateInspectionDetails() throws InspectionException{
+	public void testUpdateInspectionDetails() throws InspectionException, CompanyDetailsException{
 		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		ResponseEntity<String> actualResponseEntity = inspectionController
 				.updateInspectionDetails(periodicInspection);

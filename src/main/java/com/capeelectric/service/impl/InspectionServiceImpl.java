@@ -10,7 +10,9 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
+import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.PeriodicInspectionComment;
 import com.capeelectric.model.Site;
@@ -19,6 +21,7 @@ import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.InspectionService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 /**
  * This InspectionServiceImpl class to add and retrieve the IpaoInspection object
@@ -42,33 +45,61 @@ public class InspectionServiceImpl implements InspectionService {
 	private List<PeriodicInspectionComment> listOfComments;
 	
 	private String viewerName;
+	
+	@Autowired
+	private SiteDetails siteDetails;
 
 	/**
 	 * @param IpaoInspection object 
 	 * addInspectionDetails method to save IpaoInspection object into table
+	 * @throws CompanyDetailsException 
 	 * 
 	*/
 	@Override
-	public void addInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException {
+	public void addInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException, CompanyDetailsException {
 		listOfComments = new ArrayList<PeriodicInspectionComment>();
 		
-		if (periodicInspection.getUserName() != null && periodicInspection.getSiteId() != null) {
-			Optional<PeriodicInspection> siteId = inspectionRepository.findBySiteId(periodicInspection.getSiteId());
-			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(periodicInspection.getSiteId())) {
-				periodicInspectionComment = new PeriodicInspectionComment();
-				periodicInspectionComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
-				periodicInspectionComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
-				periodicInspectionComment.setNoOfComment(1);
-				periodicInspectionComment.setPeriodicInspection(periodicInspection);
-				listOfComments.add(periodicInspectionComment);
-				periodicInspection.setPeriodicInspectorComment(listOfComments);
-				periodicInspection.setCreatedDate(LocalDateTime.now());
-				periodicInspection.setUpdatedDate(LocalDateTime.now());
-				periodicInspection.setCreatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
-				periodicInspection.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
-				inspectionRepository.save(periodicInspection);
+		if (periodicInspection.getUserName() != null && periodicInspection.getSiteId() != null
+				&& periodicInspection.getIpaoInspection() != null) {
+			List<IpaoInspection> ipaoInspection = periodicInspection.getIpaoInspection();
+			
+			if (ipaoInspection != null && ipaoInspection.size() == 1) {
+				for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
+
+					if (ipaoInspectionItr !=null && ipaoInspectionItr.getConsumerUnit() != null && ipaoInspectionItr.getCircuit() != null
+							&& ipaoInspectionItr.getIsolationCurrent() != null
+							&& ipaoInspectionItr.getConsumerUnit().size() > 0
+							&& ipaoInspectionItr.getCircuit().size() > 0
+							&& ipaoInspectionItr.getIsolationCurrent().size() > 0) {
+						 
+						Optional<PeriodicInspection> siteId = inspectionRepository
+								.findBySiteId(periodicInspection.getSiteId());
+						if (!siteId.isPresent() || !siteId.get().getSiteId().equals(periodicInspection.getSiteId())) {
+							periodicInspectionComment = new PeriodicInspectionComment();
+							periodicInspectionComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+							periodicInspectionComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
+							periodicInspectionComment.setNoOfComment(1);
+							periodicInspectionComment.setPeriodicInspection(periodicInspection);
+							listOfComments.add(periodicInspectionComment);
+							periodicInspection.setPeriodicInspectorComment(listOfComments);
+							periodicInspection.setCreatedDate(LocalDateTime.now());
+							periodicInspection.setUpdatedDate(LocalDateTime.now());
+							periodicInspection
+									.setCreatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
+							periodicInspection
+									.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
+							inspectionRepository.save(periodicInspection);
+							siteDetails.updateSite(periodicInspection.getSiteId(), periodicInspection.getUserName());							
+						} else {
+							throw new InspectionException("SiteId already present");
+						}
+					} else {
+						throw new InspectionException("Please fill all the fields before clicking next button");
+					}
+				}
+
 			} else {
-				throw new InspectionException("SiteId already present");
+				throw new InspectionException("Inspection data contains duplicate Object");
 			}
 
 		} else {
@@ -103,10 +134,11 @@ public class InspectionServiceImpl implements InspectionService {
 	 * @param PeriodicInspection Object
 	 * updateInspectionDetails method to finding the given PeriodicInspectionId is available or not in DB,
 	 * if available only allowed for updating 
+	 * @throws CompanyDetailsException 
 	 * 
 	*/
 	@Override
-	public void updateInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException {
+	public void updateInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException, CompanyDetailsException {
 		if (periodicInspection != null && periodicInspection.getPeriodicInspectionId() != null
 				&& periodicInspection.getPeriodicInspectionId() != 0 && periodicInspection.getSiteId() != null
 				&& periodicInspection.getSiteId() != 0) {
@@ -117,6 +149,7 @@ public class InspectionServiceImpl implements InspectionService {
 				periodicInspection.setUpdatedDate(LocalDateTime.now());
 				periodicInspection.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 				inspectionRepository.save(periodicInspection);
+				siteDetails.updateSite(periodicInspection.getSiteId(), periodicInspection.getUserName());							
 			} else {
 				throw new InspectionException("Given SiteId and ReportId is Invalid");
 			}
