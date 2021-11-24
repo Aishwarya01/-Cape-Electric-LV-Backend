@@ -49,7 +49,7 @@ public class ReturnPDFService {
 
 				//			    Downloading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
 				S3Object fullObject;
-				fullObject = s3Client.getObject(new GetObjectRequest(s3BucketName, "Site Name_".concat(folderName) + "/" + fileNameInS3));
+				fullObject = s3Client.getObject(new GetObjectRequest(s3BucketName, "LV Site Name_".concat(folderName) + "/" + fileNameInS3));
 				logger.info("Downloading file done from AWS s3");
 				InputStream is = fullObject.getObjectContent();
 				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
