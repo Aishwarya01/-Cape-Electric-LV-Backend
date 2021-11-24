@@ -11,6 +11,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.model.ReportDetails;
@@ -21,6 +22,7 @@ import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.InstalReportService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
 /**
@@ -44,34 +46,43 @@ public class InstalReportServiceImpl implements InstalReportService {
 	
 	private String viewerName;
 	
+	@Autowired
+	private SiteDetails siteDetails;
+	
 	/**
 	 * @param ReportDetails
 	 * addInstallationReport method to will be save ReportDetails object
+	 * @throws CompanyDetailsException 
 	 * 
 	*/
 	@Override
-	public void addInstallationReport(ReportDetails reportDetails) throws InstalReportException {
+	public void addInstallationReport(ReportDetails reportDetails) throws InstalReportException, CompanyDetailsException {
 		List<ReportDetailsComment> listOfComments = new ArrayList<ReportDetailsComment>();
-		
+
 		if (reportDetails != null && reportDetails.getUserName() != null && reportDetails.getSiteId() != null) {
-			Optional<ReportDetails> reportDetailsRepo = installationReportRepository
-					.findBySiteId(reportDetails.getSiteId());
-			if (!reportDetailsRepo.isPresent()
-					|| !reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
-				reportDetailsComment = new ReportDetailsComment();
-				reportDetailsComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
-				reportDetailsComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
-				reportDetailsComment.setNoOfComment(1);
-				reportDetailsComment.setReportDetails(reportDetails);
-				listOfComments.add(reportDetailsComment);
-				reportDetails.setReportDetailsComment(listOfComments);
-				reportDetails.setCreatedDate(LocalDateTime.now());
-				reportDetails.setUpdatedDate(LocalDateTime.now());
-				reportDetails.setCreatedBy(userFullName.findByUserName(reportDetails.getUserName()));
-				reportDetails.setUpdatedBy(userFullName.findByUserName(reportDetails.getUserName()));
-				installationReportRepository.save(reportDetails);
+			if (reportDetails.getSignatorDetails() != null && reportDetails.getSignatorDetails().size() > 0) {
+				Optional<ReportDetails> reportDetailsRepo = installationReportRepository
+						.findBySiteId(reportDetails.getSiteId());
+				if (!reportDetailsRepo.isPresent()
+						|| !reportDetailsRepo.get().getSiteId().equals(reportDetails.getSiteId())) {
+					reportDetailsComment = new ReportDetailsComment();
+					reportDetailsComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+					reportDetailsComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
+					reportDetailsComment.setNoOfComment(1);
+					reportDetailsComment.setReportDetails(reportDetails);
+					listOfComments.add(reportDetailsComment);
+					reportDetails.setReportDetailsComment(listOfComments);
+					reportDetails.setCreatedDate(LocalDateTime.now());
+					reportDetails.setUpdatedDate(LocalDateTime.now());
+					reportDetails.setCreatedBy(userFullName.findByUserName(reportDetails.getUserName()));
+					reportDetails.setUpdatedBy(userFullName.findByUserName(reportDetails.getUserName()));
+					installationReportRepository.save(reportDetails);
+					siteDetails.updateSite(reportDetails.getSiteId(), reportDetails.getUserName());
+				} else {
+					throw new InstalReportException("Site-Id Details Already Available,Create New Site-Id");
+				}
 			} else {
-				throw new InstalReportException("Site-Id Details Already Available,Create New Site-Id");
+				throw new InstalReportException("Please fill all the fields before clicking next button");
 			}
 
 		} else {
@@ -108,10 +119,11 @@ public class InstalReportServiceImpl implements InstalReportService {
 	 * @param ReportDetails Object
 	 * updateInstallationReport method to finding the given reportId is available or not in DB,
 	 * if available only allowed for updating 
+	 * @throws CompanyDetailsException 
 	 * 
 	*/
 	@Override
-	public void updateInstallationReport(ReportDetails reportDetails) throws InstalReportException {
+	public void updateInstallationReport(ReportDetails reportDetails) throws InstalReportException, CompanyDetailsException {
 
 		if (reportDetails != null && reportDetails.getReportId() != null && reportDetails.getReportId() != 0
 				&& reportDetails.getSiteId() != null && reportDetails.getSiteId() != 0) {
@@ -122,6 +134,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 				reportDetails.setUpdatedDate(LocalDateTime.now());
 				reportDetails.setUpdatedBy(userFullName.findByUserName(reportDetails.getUserName()));
 				installationReportRepository.save(reportDetails);
+				siteDetails.updateSite(reportDetails.getSiteId(), reportDetails.getUserName());
 			} else {
 				throw new InstalReportException("Given SiteId and ReportId is Invalid");
 			}

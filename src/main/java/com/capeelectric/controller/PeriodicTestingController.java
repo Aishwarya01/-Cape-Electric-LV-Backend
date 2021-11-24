@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.TestingReport;
@@ -39,7 +40,7 @@ public class PeriodicTestingController {
 
 	@PostMapping("/savePeriodicTesting")
 	public ResponseEntity<String> savePeriodicTesting(@RequestBody TestingReport testingReport)
-			throws PeriodicTestingException {
+			throws PeriodicTestingException, CompanyDetailsException {
 		logger.info("started savePeriodicTesting function userName: {},siteId : {}", testingReport.getUserName(),
 				testingReport.getSiteId());
 
@@ -63,7 +64,7 @@ public class PeriodicTestingController {
 
 	@PutMapping("/updatePeriodicTesting")
 	public ResponseEntity<String> updatePeriodicTesting(@RequestBody TestingReport testingReport)
-			throws PeriodicTestingException {
+			throws PeriodicTestingException, CompanyDetailsException {
 		logger.info("called updatePeriodicTesting function UserName : {},SiteId : {},TestingReportId : {}",
 				testingReport.getUserName(), testingReport.getSiteId(),
 				testingReport.getTestingReportId());

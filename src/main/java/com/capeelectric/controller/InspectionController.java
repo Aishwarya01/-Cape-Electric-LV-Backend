@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.PeriodicInspection;
@@ -38,7 +39,7 @@ public class InspectionController {
 
 	@PostMapping("/addInspectionDetails")
 	public ResponseEntity<String> addInspectionDetails(@RequestBody PeriodicInspection periodicInspection)
-			throws InspectionException {
+			throws InspectionException, CompanyDetailsException {
 		logger.info("called addInspectionDetails function UserName : {},SiteId : {}", periodicInspection.getUserName(),
 				periodicInspection.getSiteId());
 		inspectionService.addInspectionDetails(periodicInspection);
@@ -55,7 +56,7 @@ public class InspectionController {
 	
 	@PutMapping("/updateInspectionDetails")
 	public ResponseEntity<String> updateInspectionDetails(@RequestBody PeriodicInspection periodicInspection)
-			throws InspectionException {
+			throws InspectionException, CompanyDetailsException {
 		logger.info("called updateInspectionDetails function UserName : {},SiteId : {},PeriodicInspectionId : {}",
 				periodicInspection.getUserName(), periodicInspection.getSiteId(),
 				periodicInspection.getPeriodicInspectionId());

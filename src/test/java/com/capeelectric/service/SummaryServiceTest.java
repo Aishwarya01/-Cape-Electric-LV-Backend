@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.PeriodicInspection;
@@ -29,6 +30,8 @@ import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
+import com.capeelectric.model.SummaryDeclaration;
+import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
@@ -38,6 +41,7 @@ import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.SummaryServiceImpl;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
 @ExtendWith(SpringExtension.class)
@@ -71,6 +75,9 @@ public class SummaryServiceTest {
 	private Summary summary;
 	
 	private SummaryComment summaryComment;
+	
+	@MockBean
+	private SiteDetails siteDetails;
 	
 	@MockBean
 	private SiteRepository siteRepository;
@@ -117,7 +124,7 @@ public class SummaryServiceTest {
 	}
 
 	@Test
-	public void testAddSummary() throws SummaryException {
+	public void testAddSummary() throws SummaryException, CompanyDetailsException {
 
 		SupplyCharacteristics supplyCharacteristics = new SupplyCharacteristics();
 		supplyCharacteristics.setSiteId(6);
@@ -142,6 +149,17 @@ public class SummaryServiceTest {
 		when(inspectionRepository.findBySiteId(6)).thenReturn(periodicreport);
 		when(testingReportRepository.findBySiteId(6)).thenReturn(testreport);
 
+		SummaryException exception_reqiredValue = Assertions.assertThrows(SummaryException.class,
+				() -> summaryServiceImpl.addSummary(summary));
+		assertEquals(exception_reqiredValue.getMessage(), "Please fill all the fields before clicking next button");
+		
+		List<SummaryDeclaration> listofSummaryDeclaration= new ArrayList<SummaryDeclaration>();
+		listofSummaryDeclaration.add(new SummaryDeclaration());
+		List<SummaryObervation> listofSummaryObervation= new ArrayList<SummaryObervation>();
+		listofSummaryObervation.add(new SummaryObervation());
+		summary.setSummaryDeclaration(listofSummaryDeclaration);
+		summary.setSummaryObervation(listofSummaryObervation);
+		
 		summaryServiceImpl.addSummary(summary);
 		
 		when(summaryRepository.findBySiteId(6)).thenReturn(Optional.of(summary));
@@ -189,7 +207,7 @@ public class SummaryServiceTest {
 
 	
 	@Test
-	public void testUpdateSummary() throws DecimalConversionException, SummaryException {
+	public void testUpdateSummary() throws DecimalConversionException, SummaryException, CompanyDetailsException {
 		summary.setUserName("LVsystem@gmail.com");
 		when(summaryRepository.findById(10)).thenReturn(Optional.of(summary));
 		summaryServiceImpl.updateSummary(summary);

@@ -10,15 +10,18 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
+import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.PeriodicTestingService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
 /**
@@ -42,32 +45,58 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	
 	private String viewerName;
 	
+	@Autowired
+	private SiteDetails siteDetails;
+	
 	/**
 	 * @param Testing
 	 * addTestingReport method to Testing object will be storing corresponding tables
+	 * @throws CompanyDetailsException 
 	*/
 	@Override
-	public void addTestingReport(TestingReport testingReport) throws PeriodicTestingException {
+	public void addTestingReport(TestingReport testingReport) throws PeriodicTestingException, CompanyDetailsException {
 		List<TestingReportComment> listOfComments = new ArrayList<TestingReportComment>();
 		if (testingReport.getUserName() != null && testingReport.getSiteId() != null) {
 
-			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(testingReport.getSiteId());
-			if (!testingRepo.isPresent() || !testingRepo.get().getSiteId().equals(testingReport.getSiteId())) {
-				testingComment = new TestingReportComment();
-				testingComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
-				testingComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
-				testingComment.setNoOfComment(1);
-				testingComment.setTestingReport(testingReport);
-				listOfComments.add(testingComment);
-				testingReport.setTestingComment(listOfComments);
-				testingReport.setCreatedDate(LocalDateTime.now());
-				testingReport.setCreatedBy(userFullName.findByUserName(testingReport.getUserName()));
-				testingReport.setUpdatedDate(LocalDateTime.now());
-				testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
-				testingReportRepository.save(testingReport);
+			List<Testing> testing = testingReport.getTesting();
+			if (testing != null && testing.size() == 1) {
+				for (Testing testingItr : testing) {
+					if (testingItr != null && testingItr.getTestDistribution() != null
+							&& testingItr.getTestingRecords() != null
+							&& testingReport.getTestIncomingDistribution() != null
+							&& testingItr.getTestDistribution().size() > 0 && testingItr.getTestingRecords().size() > 0
+							&& testingReport.getTestIncomingDistribution().size() > 0) {
+
+						Optional<TestingReport> testingRepo = testingReportRepository
+								.findBySiteId(testingReport.getSiteId());
+
+						if (!testingRepo.isPresent() 
+								|| !testingRepo.get().getSiteId().equals(testingReport.getSiteId())) {
+							testingComment = new TestingReportComment();
+							testingComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+							testingComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
+							testingComment.setNoOfComment(1);
+							testingComment.setTestingReport(testingReport);
+							listOfComments.add(testingComment);
+							testingReport.setTestingComment(listOfComments);
+							testingReport.setCreatedDate(LocalDateTime.now());
+							testingReport.setCreatedBy(userFullName.findByUserName(testingReport.getUserName()));
+							testingReport.setUpdatedDate(LocalDateTime.now());
+							testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
+							testingReportRepository.save(testingReport);
+							siteDetails.updateSite(testingReport.getSiteId(), testingReport.getUserName());
+						} else {
+							throw new PeriodicTestingException("Site-Id Already Present");
+						}
+					} else {
+						throw new PeriodicTestingException("Please fill all the fields before clicking next button");
+					}
+
+				}
 			} else {
-				throw new PeriodicTestingException("Site-Id Already Present");
+				throw new PeriodicTestingException("Testing data contains duplicate Object");
 			}
+
 		} else {
 			throw new PeriodicTestingException("Invalid Inputs");
 		}
@@ -98,10 +127,11 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	 * @param TestingReport Object
 	 * updatePeriodicTesting method to finding the given TestingReportId is available or not in DB,
 	 * if available only allowed for updating 
+	 * @throws CompanyDetailsException 
 	 * 
 	*/
 	@Override
-	public void updatePeriodicTesting(TestingReport testingReport) throws PeriodicTestingException {
+	public void updatePeriodicTesting(TestingReport testingReport) throws PeriodicTestingException, CompanyDetailsException {
 		if (testingReport != null && testingReport.getTestingReportId() != null
 				&& testingReport.getTestingReportId() != 0 && testingReport.getSiteId() != null
 				&& testingReport.getSiteId() != 0) {
@@ -112,6 +142,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 				testingReport.setUpdatedDate(LocalDateTime.now());
 				testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
 				testingReportRepository.save(testingReport);
+				siteDetails.updateSite(testingReport.getSiteId(), testingReport.getUserName());
 			} else {
 				throw new PeriodicTestingException("Given SiteId and ReportId is Invalid");
 			}

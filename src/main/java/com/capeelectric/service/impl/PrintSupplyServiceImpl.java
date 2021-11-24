@@ -43,6 +43,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 
 			try {
+
 				PdfWriter writer = PdfWriter.getInstance(document,
 						new FileOutputStream("SupplyCharacteristic.pdf"));
 				SupplyCharacteristics supply = supplyCharacteristicsRepository.findByUserNameAndSiteId(userName,
@@ -223,8 +224,8 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 						addNominalRow(table2, "Nominal Frequency f (HZ)", supply.getMainNominalFrequency());
 						addRow(table3, "Prospective fault current Ipfc (kA) ", NFC1, NFC2, NFC3, NFC4, NFC5, NFC6, NFC7,
 								NFC8, NFC9);
-						addRow(table3, "External Loop Impedance Ze (ohms)", NFL1, NFL2, NFL3, NFL4, NFL5, NFL6, NFL7, NFL8,
-								NFL9);
+						addRow(table3, "External Loop Impedance Ze (ohms)", NFL1, NFL2, NFL3, NFL4, NFL5, NFL6, NFL7,
+								NFL8, NFL9);
 						document.add(table34);
 						document.add(table1);
 						document.add(table2);
@@ -283,18 +284,33 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 					cell88.setBorder(PdfPCell.NO_BORDER);
 					table2.addCell(cell88);
 
-					PdfPCell cell29 = new PdfPCell(new Paragraph("Brief note:", font9));
-					cell29.setBorder(PdfPCell.NO_BORDER);
-					cell29.setGrayFill(0.92f);
-					table2.addCell(cell29);
-					PdfPCell cell38 = new PdfPCell(new Paragraph(supply.getLiveConductorBNote(), font6));
-					cell38.setGrayFill(0.92f);
-					cell38.setBorder(PdfPCell.NO_BORDER);
-					table2.addCell(cell38);
-					document.add(table2);
+					if (!supply.getMainSystemEarthing().equals("Others")) {
+
+						PdfPCell cell29 = new PdfPCell(new Paragraph("Brief note:", font9));
+						cell29.setBorder(PdfPCell.NO_BORDER);
+						cell29.setGrayFill(0.92f);
+						table2.addCell(cell29);
+						PdfPCell cell38 = new PdfPCell(new Paragraph(supply.getLiveConductorBNote(), font6));
+						cell38.setGrayFill(0.92f);
+						cell38.setBorder(PdfPCell.NO_BORDER);
+						table2.addCell(cell38);
+						document.add(table2);
 					
+					} else {
+
+						PdfPCell cell29 = new PdfPCell(new Paragraph("Remarks", font9));
+						cell29.setBorder(PdfPCell.NO_BORDER);
+						cell29.setGrayFill(0.92f);
+						table2.addCell(cell29);
+						PdfPCell cell38 = new PdfPCell(new Paragraph(supply.getLiveConductorBNote(), font6));
+						cell38.setGrayFill(0.92f);
+						cell38.setBorder(PdfPCell.NO_BORDER);
+						table2.addCell(cell38);
+						document.add(table2);
+					}
+
 					document.newPage();
-					
+
 					PdfPTable table21 = new PdfPTable(1);
 					table21.setWidthPercentage(100); // Width 100%
 					table21.setSpacingBefore(10f); // Space before table
@@ -456,7 +472,8 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 					cell32.setBorder(PdfPCell.NO_BORDER);
 					table10.addCell(cell32);
 
-					PdfPCell cell33 = new PdfPCell(new Paragraph("Size of main protective bonding conductor (unit sq.mm):", font9));
+					PdfPCell cell33 = new PdfPCell(
+							new Paragraph("Size of main protective bonding conductor (unit sq.mm):", font9));
 					cell33.setBorder(PdfPCell.NO_BORDER);
 					cell33.setGrayFill(0.92f);
 					table10.addCell(cell33);
