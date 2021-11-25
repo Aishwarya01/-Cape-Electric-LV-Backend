@@ -12,127 +12,139 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
-*
-* @author capeelectricsoftware
-*
-*/
+ *
+ * @author capeelectricsoftware
+ *
+ */
 @Entity
 @Table(name = "installation_location_table")
 public class InstalLocationReport implements Serializable {
-private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-@Id
-@GeneratedValue(strategy = GenerationType.AUTO)
-@Column(name = "INSTALLATION_LOCATION_REPORT_ID")
-private Integer locationReportId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "INSTALLATION_LOCATION_REPORT_ID")
+	private Integer locationReportId;
 
-@Column(name = "LOCATION_NO")
-private String locationNo;
+	@Column(name = "LOCATION_NO")
+	private String locationNo;
 
-@Column(name = "LOCATION_NAME")
-private String locationName;
+	@Column(name = "LOCATION_NAME")
+	private String locationName;
 
-@Column(name = "ELECTRODE_EARTH_TYPE")
-private String electrodeEarthType;
+	@Column(name = "MEANS_EARTHING_REMARK")
+	private String meansEarthingRemark;
 
-@Column(name = "ELECTRODE_EARTH_MATERIAL")
-private String electrodeEarthMaterial;
+	@Column(name = "ELECTRODE_EARTH_TYPE")
+	private String electrodeEarthType;
 
-@Column(name = "ELECTRODE_EARTH_DEPTH")
-private String electrodeEarthDepth;
+	@Column(name = "ELECTRODE_EARTH_MATERIAL")
+	private String electrodeEarthMaterial;
 
-@Column(name = "ELECTRODE_EARTH_SIZE")
-private String electrodeEarthSize;
+	@Column(name = "ELECTRODE_EARTH_DEPTH")
+	private String electrodeEarthDepth;
 
-@Column(name = "ELECTORDE_RESISTANCE_EARTH")
-private String electrodeResistanceEarth;
+	@Column(name = "ELECTRODE_EARTH_SIZE")
+	private String electrodeEarthSize;
 
-@Column(name = "ELECTORDE_RESISTANCE_GRID")
-private String electrodeResistanceGird;
+	@Column(name = "ELECTORDE_RESISTANCE_EARTH")
+	private String electrodeResistanceEarth;
 
-@JsonBackReference
-@ManyToOne
-@JoinColumn(name = "SUPPLY_CHARACTERISTICS_ID")
-private SupplyCharacteristics supplyCharacteristics;
+	@Column(name = "ELECTORDE_RESISTANCE_GRID")
+	private String electrodeResistanceGird;
 
-public Integer getLocationReportId() {
-return locationReportId;
-}
+	@JsonBackReference
+	@ManyToOne
+	@JoinColumn(name = "SUPPLY_CHARACTERISTICS_ID")
+	private SupplyCharacteristics supplyCharacteristics;
 
-public void setLocationReportId(Integer locationReportId) {
-this.locationReportId = locationReportId;
-}
+	public Integer getLocationReportId() {
+		return locationReportId;
+	}
+	
 
-public String getLocationNo() {
-return locationNo;
-}
+	public String getMeansEarthingRemark() {
+		return meansEarthingRemark;
+	}
 
-public void setLocationNo(String locationNo) {
-this.locationNo = locationNo;
-}
+	public void setMeansEarthingRemark(String meansEarthingRemark) {
+		this.meansEarthingRemark = meansEarthingRemark;
+	}
 
-public String getLocationName() {
-return locationName;
-}
+	public void setLocationReportId(Integer locationReportId) {
+		this.locationReportId = locationReportId;
+	}
 
-public void setLocationName(String locationName) {
-this.locationName = locationName;
-}
+	public String getLocationNo() {
+		return locationNo;
+	}
 
-public String getElectrodeResistanceEarth() {
-return electrodeResistanceEarth;
-}
+	public void setLocationNo(String locationNo) {
+		this.locationNo = locationNo;
+	}
 
-public void setElectrodeResistanceEarth(String electrodeResistanceEarth) {
-this.electrodeResistanceEarth = electrodeResistanceEarth;
-}
+	public String getLocationName() {
+		return locationName;
+	}
 
-public String getElectrodeEarthType() {
-return electrodeEarthType;
-}
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
+	}
 
-public void setElectrodeEarthType(String electrodeEarthType) {
-this.electrodeEarthType = electrodeEarthType;
-}
+	public String getElectrodeResistanceEarth() {
+		return electrodeResistanceEarth;
+	}
 
-public String getElectrodeEarthMaterial() {
-return electrodeEarthMaterial;
-}
+	public void setElectrodeResistanceEarth(String electrodeResistanceEarth) {
+		this.electrodeResistanceEarth = electrodeResistanceEarth;
+	}
 
-public void setElectrodeEarthMaterial(String electrodeEarthMaterial) {
-this.electrodeEarthMaterial = electrodeEarthMaterial;
-}
+	public String getElectrodeEarthType() {
+		return electrodeEarthType;
+	}
 
-public String getElectrodeEarthDepth() {
-return electrodeEarthDepth;
-}
+	public void setElectrodeEarthType(String electrodeEarthType) {
+		this.electrodeEarthType = electrodeEarthType;
+	}
 
-public void setElectrodeEarthDepth(String electrodeEarthDepth) {
-this.electrodeEarthDepth = electrodeEarthDepth;
-}
+	public String getElectrodeEarthMaterial() {
+		return electrodeEarthMaterial;
+	}
 
-public String getElectrodeEarthSize() {
-return electrodeEarthSize;
-}
+	public void setElectrodeEarthMaterial(String electrodeEarthMaterial) {
+		this.electrodeEarthMaterial = electrodeEarthMaterial;
+	}
 
-public void setElectrodeEarthSize(String electrodeEarthSize) {
-this.electrodeEarthSize = electrodeEarthSize;
-}
+	public String getElectrodeEarthDepth() {
+		return electrodeEarthDepth;
+	}
 
-public String getElectrodeResistanceGird() {
-return electrodeResistanceGird;
-}
+	public void setElectrodeEarthDepth(String electrodeEarthDepth) {
+		this.electrodeEarthDepth = electrodeEarthDepth;
+	}
 
-public void setElectrodeResistanceGird(String electrodeResistanceGird) {
-this.electrodeResistanceGird = electrodeResistanceGird;
-}
+	public String getElectrodeEarthSize() {
+		return electrodeEarthSize;
+	}
 
-public SupplyCharacteristics getSupplyCharacteristics() {
-return supplyCharacteristics;
-}
+	public void setElectrodeEarthSize(String electrodeEarthSize) {
+		this.electrodeEarthSize = electrodeEarthSize;
+	}
 
-public void setSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics) {
-this.supplyCharacteristics = supplyCharacteristics;
-}
+	public String getElectrodeResistanceGird() {
+		return electrodeResistanceGird;
+	}
+
+	public void setElectrodeResistanceGird(String electrodeResistanceGird) {
+		this.electrodeResistanceGird = electrodeResistanceGird;
+	}
+
+	public SupplyCharacteristics getSupplyCharacteristics() {
+		return supplyCharacteristics;
+	}
+
+	public void setSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics) {
+		this.supplyCharacteristics = supplyCharacteristics;
+	}
 
 }

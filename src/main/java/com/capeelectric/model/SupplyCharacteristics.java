@@ -52,7 +52,7 @@ public class SupplyCharacteristics implements Serializable {
 
 	@Column(name = "SHORT_NAME")
 	private String shortName;
-	
+
 	@Column(name = "MAIN_SYSTEM_EARTING")
 	private String mainSystemEarthing;
 
@@ -74,8 +74,14 @@ public class SupplyCharacteristics implements Serializable {
 	@Column(name = "MAIN_NOMINAL_VOLTAGE")
 	private String mainNominalVoltage;
 
+	@Column(name = "MAIN_NOMINAL_CAPACITY")
+	private String mainNominalCapacity;
+
 	@Column(name = "MAIN_NOMINAL_FREQUENCY")
 	private String mainNominalFrequency;
+
+	@Column(name = "MAIN_ACTUALLOAD")
+	private String mainActualLoad;
 
 	@Column(name = "MAIN_FAULT_CURRENT")
 	private String mainNominalCurrent;
@@ -154,16 +160,16 @@ public class SupplyCharacteristics implements Serializable {
 
 	@Column(name = "EARTHING_NO_OF_JOINTS")
 	private Integer earthingNoOfJoints;
-	
+
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
-	
+
 	@Column(name = "CREATED_BY")
 	private String createdBy;
 
 	@Column(name = "UPDATED_BY")
 	private String updatedBy;
-	
+
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 
@@ -178,15 +184,15 @@ public class SupplyCharacteristics implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<InstalLocationReport> instalLocationReport;
-	
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<BoundingLocationReport> boundingLocationReport;
-	
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<EarthingLocationReport> earthingLocationReport;
-	
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<SupplyCharacteristicComment> supplyCharacteristicComment;
@@ -203,6 +209,30 @@ public class SupplyCharacteristics implements Serializable {
 		return userName;
 	}
 
+	public String getMainNominalCapacity() {
+		return mainNominalCapacity;
+	}
+
+	public void setMainNominalCapacity(String mainNominalCapacity) {
+		this.mainNominalCapacity = mainNominalCapacity;
+	}
+
+	public String getMainNominalFrequency() {
+		return mainNominalFrequency;
+	}
+
+	public void setMainNominalFrequency(String mainNominalFrequency) {
+		this.mainNominalFrequency = mainNominalFrequency;
+	}
+
+	public String getMainActualLoad() {
+		return mainActualLoad;
+	}
+
+	public void setMainActualLoad(String mainActualLoad) {
+		this.mainActualLoad = mainActualLoad;
+	}
+
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
@@ -215,7 +245,7 @@ public class SupplyCharacteristics implements Serializable {
 		this.siteId = siteId;
 	}
 
-    public String getShortName() {
+	public String getShortName() {
 		return shortName;
 	}
 
@@ -277,14 +307,6 @@ public class SupplyCharacteristics implements Serializable {
 
 	public void setMainNominalVoltage(String mainNominalVoltage) {
 		this.mainNominalVoltage = mainNominalVoltage;
-	}
-
-	public String getMainNominalFrequency() {
-		return mainNominalFrequency;
-	}
-
-	public void setMainNominalFrequency(String mainNominalFrequency) {
-		this.mainNominalFrequency = mainNominalFrequency;
 	}
 
 	public String getMainNominalCurrent() {
@@ -575,5 +597,4 @@ public class SupplyCharacteristics implements Serializable {
 		this.supplyCharacteristicComment = supplyCharacteristicComment;
 	}
 
- 
 }
