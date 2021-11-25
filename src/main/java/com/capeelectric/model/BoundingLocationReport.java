@@ -1,6 +1,5 @@
 package com.capeelectric.model;
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
@@ -20,66 +18,75 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "bounding_location_reports_table")
 public class BoundingLocationReport implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "BOUNDING_REPORT_ID")
-	private Integer locationReportId;
- 
-	@Column(name = "LOCATION")
-	private String location;
+@Id
+@GeneratedValue(strategy = GenerationType.AUTO)
+@Column(name = "BOUNDING_REPORT_ID")
+private Integer locationReportId;
 
-	@Column(name = "JOINT_NO")
-	private String jointNo;
+@Column(name = "LOCATION")
+private String location;
 
-	@Column(name = "JOINT_RESISTANCE")
-	private String jointResistance;
+@Column(name = "JOINT_NO")
+private String jointNo;
 
-	@JsonBackReference
-	@ManyToOne
-	@JoinColumn(name = "SUPPLY_CHARACTERISTICS_ID")
-	private SupplyCharacteristics supplyCharacteristics;
+@Column(name = "JOINT_REFERENCE")
+private String jointReference;
 
-	public Integer getLocationReportId() {
-		return locationReportId;
-	}
+@Column(name = "JOINT_RESISTANCE")
+private String jointResistance;
 
-	public void setLocationReportId(Integer locationReportId) {
-		this.locationReportId = locationReportId;
-	}
+@JsonBackReference
+@ManyToOne
+@JoinColumn(name = "SUPPLY_CHARACTERISTICS_ID")
+private SupplyCharacteristics supplyCharacteristics;
+public Integer getLocationReportId() {
+return locationReportId;
+}
 
-	public String getLocation() {
-		return location;
-	}
+public void setLocationReportId(Integer locationReportId) {
+this.locationReportId = locationReportId;
+}
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
+public String getLocation() {
+return location;
+}
 
-	public String getJointNo() {
-		return jointNo;
-	}
+public void setLocation(String location) {
+this.location = location;
+}
 
-	public void setJointNo(String jointNo) {
-		this.jointNo = jointNo;
-	}
+public String getJointNo() {
+return jointNo;
+}
 
-	public String getJointResistance() {
-		return jointResistance;
-	}
+public void setJointNo(String jointNo) {
+this.jointNo = jointNo;
+}
 
-	public void setJointResistance(String jointResistance) {
-		this.jointResistance = jointResistance;
-	}
+public String getJointReference() {
+return jointReference;
+}
 
-	public SupplyCharacteristics getSupplyCharacteristics() {
-		return supplyCharacteristics;
-	}
+public void setJointReference(String jointReference) {
+this.jointReference = jointReference;
+}
 
-	public void setSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics) {
-		this.supplyCharacteristics = supplyCharacteristics;
-	}	
+public String getJointResistance() {
+return jointResistance;
+}
+
+public void setJointResistance(String jointResistance) {
+this.jointResistance = jointResistance;
+}
+
+public SupplyCharacteristics getSupplyCharacteristics() {
+return supplyCharacteristics;
+}
+
+public void setSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics) {
+this.supplyCharacteristics = supplyCharacteristics;
+}
 
 }

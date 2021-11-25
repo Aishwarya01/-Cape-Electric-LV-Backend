@@ -50,6 +50,9 @@ public class SupplyCharacteristics implements Serializable {
 	@Column(name = "SITE_ID")
 	private Integer siteId;
 
+	@Column(name = "SHORT_NAME")
+	private String shortName;
+	
 	@Column(name = "MAIN_SYSTEM_EARTING")
 	private String mainSystemEarthing;
 
@@ -210,6 +213,14 @@ public class SupplyCharacteristics implements Serializable {
 
 	public void setSiteId(Integer siteId) {
 		this.siteId = siteId;
+	}
+
+    public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
 
 	public String getMainSystemEarthing() {
