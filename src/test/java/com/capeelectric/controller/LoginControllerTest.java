@@ -77,7 +77,7 @@ public class LoginControllerTest {
 	}
 
 	@Test
-	public void testCreateAuthenticationToken() throws AuthenticationException, Exception {
+	public void testCreateAuthenticationToken() throws AuthenticationException, Exception, RegistrationException {
 		RegisterDetails registerDetails = new RegisterDetails();
 		registerDetails.setUsername("lvsystem@capeindia.net");
 		registerDetails.setPassword("abcd12345");
@@ -131,7 +131,7 @@ public class LoginControllerTest {
 		when(loginServiceImpl.changePassword("lvsystem@capeindia.net", "abcd12345", "abcd")).thenReturn(register);
 
 		ResponseEntity<String> changePassword = loginController.changePassword(changePasswordRequest);
-		assertEquals(changePassword.getBody(), "lvsystem@capeindia.net");
+		assertEquals(changePassword.getBody(), "You have successfully changed your password");
 
 	}
 	
