@@ -134,9 +134,9 @@ public class LoginController {
 		logger.debug("Change Password Starts");
 		Register changePasswordUser = loginService.changePassword(request.getEmail(), request.getOldPassword(),
 				request.getPassword());
-		awsEmailService.sendEmail(changePasswordUser.getUsername(), "You have successfully updated your password");
+		awsEmailService.sendEmail(changePasswordUser.getUsername(), "You have successfully changed your password");
 		logger.debug("Change Password Ends");
-		return new ResponseEntity<String>(changePasswordUser.getUsername(), HttpStatus.OK);
+		return new ResponseEntity<String>("You have successfully changed your password", HttpStatus.OK);
 		
 	}
 
@@ -158,9 +158,9 @@ public class LoginController {
 				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
 			} catch (DisabledException e) {
-				throw new Exception("USER_DISABLED", e);
+				throw new DisabledException("USER_DISABLED", e);
 			} catch (BadCredentialsException e) {
-				throw new Exception("INVALID_CREDENTIALS", e);
+				throw new BadCredentialsException("INVALID_CREDENTIALS", e);
 			}
 		} else {
 			throw new AuthenticationException("Admin not approved for Your registration");
