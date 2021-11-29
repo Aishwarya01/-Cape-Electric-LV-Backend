@@ -65,7 +65,7 @@ public class LoginController {
 
 	@PostMapping("/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
-			throws Exception, AuthenticationException {
+			throws Exception, AuthenticationException, RegistrationException {
 		
 		logger.debug("Create Authenticate Token starts");
 		
@@ -134,9 +134,9 @@ public class LoginController {
 		logger.debug("Change Password Starts");
 		Register changePasswordUser = loginService.changePassword(request.getEmail(), request.getOldPassword(),
 				request.getPassword());
-		awsEmailService.sendEmail(changePasswordUser.getUsername(), "You have successfully updated your password");
+		awsEmailService.sendEmail(changePasswordUser.getUsername(), "You have successfully changed your password");
 		logger.debug("Change Password Ends");
-		return new ResponseEntity<String>(changePasswordUser.getUsername(), HttpStatus.OK);
+		return new ResponseEntity<String>("You have successfully changed your password", HttpStatus.OK);
 		
 	}
 
@@ -148,23 +148,26 @@ public class LoginController {
 		return new ResponseEntity<Register>(registerUser, HttpStatus.OK);
 		
 	}
-	private void authenticate(String username, String password) throws Exception, AuthenticationException {
+	private void authenticate(String username, String password) throws Exception, AuthenticationException, RegistrationException {
 
 		Optional<Register> registerRepo = registrationRepository.findByUsername(username);
 
-		if (registerRepo.isPresent() && registerRepo.get().getPermission() != null
-				&& registerRepo.get().getPermission().equalsIgnoreCase("YES")) {
-			try {
-				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		if (registerRepo.isPresent()) {
+			if( registerRepo.get().getPermission() != null
+					&& registerRepo.get().getPermission().equalsIgnoreCase("YES")) {
+				try {
+					authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
-			} catch (DisabledException e) {
-				throw new Exception("USER_DISABLED", e);
-			} catch (BadCredentialsException e) {
-				throw new Exception("INVALID_CREDENTIALS", e);
+				} catch (DisabledException e) {
+					throw new DisabledException("USER_DISABLED", e);
+				} catch (BadCredentialsException e) {
+					throw new BadCredentialsException("INVALID_CREDENTIALS", e);
+				}
+			} else {
+				throw new AuthenticationException("Admin not approved for Your registration");
 			}
 		} else {
-			throw new AuthenticationException("Admin not approved for Your registration");
-
+			throw new RegistrationException("There is no registered user available for this email");
 		}
 	}
 	

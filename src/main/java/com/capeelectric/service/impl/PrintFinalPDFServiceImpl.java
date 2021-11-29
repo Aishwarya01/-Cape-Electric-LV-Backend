@@ -82,7 +82,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 					String fileNameInS3 = "finalreport.pdf";
 					String fileNameInLocalPC = "finalreport.pdf";
 					if(folderName.length() > 0) {
-					PutObjectRequest request = new PutObjectRequest(s3BucketName, "Site Name_".concat(folderName) + "/" + fileNameInS3,
+					PutObjectRequest request = new PutObjectRequest(s3BucketName, "LV_Site Name_".concat(folderName) + "/" + fileNameInS3,
 							new File(fileNameInLocalPC));
 					s3Client.putObject(request);
 					logger.info("Uploading file done in AWS s3 ");
