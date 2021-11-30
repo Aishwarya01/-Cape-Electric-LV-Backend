@@ -100,9 +100,9 @@ public class SummaryServiceImpl implements SummaryService {
 			} else if (!supplyCharacteristics.isPresent()) {
 				throw new SummaryException("Please enter Supply Characteristics step to proceed further");
 			} else if (!periodicInspection.isPresent()) {
-				throw new SummaryException("Please enter Periodic Inspection step to proceed further");
+				throw new SummaryException("Please enter Inspection step to proceed further");
 			} else if (!testingRepo.isPresent()) {
-				throw new SummaryException("Please enter Periodic Testing step to proceed further");
+				throw new SummaryException("Please enter Testing step to proceed further");
 			} else {
 				if (summary.getSummaryDeclaration() != null && summary.getSummaryObervation() != null
 						&& summary.getSummaryDeclaration().size() > 0 && summary.getSummaryObervation().size() > 0) {
