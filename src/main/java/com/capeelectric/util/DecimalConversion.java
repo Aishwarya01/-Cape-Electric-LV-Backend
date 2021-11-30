@@ -45,8 +45,8 @@ public class DecimalConversion {
 					logger.info("started DecimalConversion process");
 					while (stringTokenizer.hasMoreElements()) {
 						String token = stringTokenizer.nextToken();
-						if (token.equalsIgnoreCase("NA")) {
-							nominalValues = nominalValues.concat("NA").concat(",");
+						if (token.equalsIgnoreCase("NA") || !Pattern.compile("-?\\d+(\\.\\d+)?").matcher(token).matches()) {
+							nominalValues = nominalValues.concat(token).concat(",");
 						} else {
 							if (isDecimalNum(token, decimalSize)) {
 								nominalValues = nominalValues.concat(decimalValues).concat(",");
