@@ -361,7 +361,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 			addRow(table2, "Nominal Voltage U/U0 (V)", IV1, IV2, IV3, IV4, IV5, IV6, IV7, IV8, IV9);
 			addRow(table2, "Prospective fault current Ipfc (kA)", IPF1, IPF2, IPF3, IPF4, IPF5, IPF6, IPF7, IPF8, IPF9);
-			addRow(table2, "External Loop Impedance Ze Ω", ZS1, ZS2, ZS3, ZS4, ZS5, ZS6, ZS7, ZS8, ZS9);
+			addRow(table2, "External Loop Impedance Ze (ohms)", ZS1, ZS2, ZS3, ZS4, ZS5, ZS6, ZS7, ZS8, ZS9);
 
 			document.add(table250);
 			document.add(table2);
@@ -618,7 +618,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 		cell1 = new PdfPCell(new Phrase(
-				"Continuity Ω\r\n"
+				"Continuity (ohms)\r\n"
 						+ "Applicable to live conductor in final circuits and protective conductors only\r\n" + "",
 				font23));
 		cell1.setGrayFill(0.92f);
