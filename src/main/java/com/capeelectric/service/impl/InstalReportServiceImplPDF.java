@@ -425,12 +425,14 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				site69.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(site69);
 
+				if(report.getPreviousRecords().equalsIgnoreCase("Yes")) {
 				PdfPCell Last = new PdfPCell(
 						new Paragraph("Last date of inspection:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				Last.setBackgroundColor(new GrayColor(0.93f));
 				Last.setHorizontalAlignment(Element.ALIGN_LEFT);
 				Last.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(Last);
+				}
 				PdfPCell cell8 = new PdfPCell(
 						new Paragraph(report.getLastInspection(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				cell8.setHorizontalAlignment(Element.ALIGN_LEFT);

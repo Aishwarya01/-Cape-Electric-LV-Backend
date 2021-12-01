@@ -224,7 +224,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 						addNominalRow(table2, "Nominal Frequency f (HZ)", supply.getMainNominalFrequency());
 						addRow(table3, "Prospective fault current Ipfc (kA) ", NFC1, NFC2, NFC3, NFC4, NFC5, NFC6, NFC7,
 								NFC8, NFC9);
-						addRow(table3, "External Loop Impedance Ze (ohms)", NFL1, NFL2, NFL3, NFL4, NFL5, NFL6, NFL7,
+						addRow(table3, "External Loop Impedance Ze Ω", NFL1, NFL2, NFL3, NFL4, NFL5, NFL6, NFL7,
 								NFL8, NFL9);
 						document.add(table34);
 						document.add(table1);
@@ -876,7 +876,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 			addRow(table5, "Nominal voltage U/U0 (V)", PN1, PN2, PN3, PN4, PN5, PN6, PN7, PN8, PN9);
 			addNominalRow2(table6, "Nominal Frequency f (HZ)", supplyParameters.getNominalFrequency());
 			addRow(table7, "Prospective fault current Ipfc (kA) ", PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9);
-			addRow(table7, "External Loop Impedance Ze (ohms)", PI1, PI2, PI3, PI4, PI5, PI6, PI7, PI8, PI9);
+			addRow(table7, "External Loop Impedance Ze Ω", PI1, PI2, PI3, PI4, PI5, PI6, PI7, PI8, PI9);
 			document.add(table34);
 			document.add(table5);
 			document.add(table6);
@@ -899,7 +899,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 			table9.addCell(cell72);
 
 			PdfPCell cell51 = new PdfPCell(new Paragraph(supplyParameters.getActualLoad(), font6));
-			table9.addCell(new Phrase("Actual Load Current (R,Y,B, N) unit A:", font6));
+			table9.addCell(new Phrase("Actual Load Current (R,Y,B,N) (A):", font6));
 			cell51.setBorder(PdfPCell.NO_BORDER);
 			table9.addCell(cell51);
 			document.add(table9);
@@ -1078,11 +1078,11 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		cell51.setBorder(PdfPCell.NO_BORDER);
 		table9.addCell(cell51);
 		PdfPCell cell38 = new PdfPCell(new Paragraph(circute1.getResidualCurrent(), font6));
-		table9.addCell(new Phrase("Rated residual operating current In mA:", font6));
+		table9.addCell(new Phrase("Rated residual operating current In (mA):", font6));
 		cell38.setBorder(PdfPCell.NO_BORDER);
 		table9.addCell(cell38);
 		PdfPCell cell39 = new PdfPCell(new Paragraph(circute1.getResidualTime(), font6));
-		table9.addCell(new Phrase("Rated residual operating time @In Tn mS:", font6));
+		table9.addCell(new Phrase("Rated residual operating time @In Tn (mS):", font6));
 
 		cell39.setBorder(PdfPCell.NO_BORDER);
 		table9.addCell(cell39);
@@ -1135,7 +1135,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell.setGrayFill(0.92f);
 		table11.addCell(cell);
-		cell.setPhrase(new Phrase("Joint resistance (ohms)", font1));
+		cell.setPhrase(new Phrase("Joint resistance Ω", font1));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table11.addCell(cell);
@@ -1174,11 +1174,11 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table8.addCell(cell);
-		cell.setPhrase(new Phrase("Electrode resistance to earth in (ohms)", font));
+		cell.setPhrase(new Phrase("Electrode resistance to earth in Ω", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table8.addCell(cell);
-		cell.setPhrase(new Phrase("Electrode resistance to grid (ohms) ", font));
+		cell.setPhrase(new Phrase("Electrode resistance to grid Ω ", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table8.addCell(cell);
