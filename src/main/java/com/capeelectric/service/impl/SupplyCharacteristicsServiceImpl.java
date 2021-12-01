@@ -103,6 +103,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			supplyCharacteristicComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 			supplyCharacteristicComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
 			supplyCharacteristicComment.setNoOfComment(1);
+			supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
 			supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
 			listOfComments.add(supplyCharacteristicComment);
 			supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
@@ -319,7 +320,10 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	}
 	
 	private void sortingDateTime(List<SupplyCharacteristicComment> listOfComments) {
-		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
+		if(listOfComments.size()>1) {
+			Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
+		}
+		
 	}
 	
 	private Integer checkNoOfComments(List<SupplyCharacteristicComment> listOfComments) {

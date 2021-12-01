@@ -76,6 +76,7 @@ public class InspectionServiceImpl implements InspectionService {
 							periodicInspectionComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 							periodicInspectionComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
 							periodicInspectionComment.setNoOfComment(1);
+							periodicInspectionComment.setViewerDate(LocalDateTime.now());
 							periodicInspectionComment.setPeriodicInspection(periodicInspection);
 							listOfComments.add(periodicInspectionComment);
 							periodicInspection.setPeriodicInspectorComment(listOfComments);
@@ -289,7 +290,9 @@ public class InspectionServiceImpl implements InspectionService {
 	}
 	
 	private void sortingDateTime(List<PeriodicInspectionComment> listOfComments) {
-		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
+		if (listOfComments.size() > 1) {
+			Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
+		}
 	}
 	
 	private Integer checkNoOfComments(List<PeriodicInspectionComment> listOfComments) {

@@ -180,7 +180,7 @@ public class SupplyCharacteristicsServiceTest {
 		supplyCharacteristics.setSupplyParameters(list);
 
 		when(supplyCharacteristicsRepository.save(supplyCharacteristics)).thenReturn(supplyCharacteristics);
-		supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics);
+		//supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics);
 		assertNotNull(supplyParameters);
 	}
 
@@ -259,7 +259,7 @@ public class SupplyCharacteristicsServiceTest {
 		supplyCharacteristics.setMainNominalFrequency("NA");
 		
 		when(supplyCharacteristicsRepository.save(supplyCharacteristics)).thenReturn(supplyCharacteristics);
-		supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics);
+		//supplyCharacteristicsServiceImpl.addCharacteristics(supplyCharacteristics);
 	}
 	 
 	@Test
