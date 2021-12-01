@@ -58,23 +58,20 @@ public class InspectionServiceImpl implements InspectionService {
 	@Override
 	public void addInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException, CompanyDetailsException {
 		listOfComments = new ArrayList<PeriodicInspectionComment>();
-		
+
 		if (periodicInspection.getUserName() != null && periodicInspection.getSiteId() != null
 				&& periodicInspection.getIpaoInspection() != null) {
 			List<IpaoInspection> ipaoInspection = periodicInspection.getIpaoInspection();
-			
-			if (ipaoInspection != null && ipaoInspection.size() == 1) {
-				for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
-
-					if (ipaoInspectionItr !=null && ipaoInspectionItr.getConsumerUnit() != null && ipaoInspectionItr.getCircuit() != null
-							&& ipaoInspectionItr.getIsolationCurrent() != null
-							&& ipaoInspectionItr.getConsumerUnit().size() > 0
-							&& ipaoInspectionItr.getCircuit().size() > 0
-							&& ipaoInspectionItr.getIsolationCurrent().size() > 0) {
-						 
-						Optional<PeriodicInspection> siteId = inspectionRepository
-								.findBySiteId(periodicInspection.getSiteId());
-						if (!siteId.isPresent() || !siteId.get().getSiteId().equals(periodicInspection.getSiteId())) {
+			Optional<PeriodicInspection> siteId = inspectionRepository
+					.findBySiteId(periodicInspection.getSiteId());
+			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(periodicInspection.getSiteId())) {
+				if (ipaoInspection != null && ipaoInspection.size() > 0) {
+					for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
+						if (ipaoInspectionItr !=null && ipaoInspectionItr.getConsumerUnit() != null && ipaoInspectionItr.getCircuit() != null
+								&& ipaoInspectionItr.getIsolationCurrent() != null
+								&& ipaoInspectionItr.getConsumerUnit().size() > 0
+								&& ipaoInspectionItr.getCircuit().size() > 0
+								&& ipaoInspectionItr.getIsolationCurrent().size() > 0) {
 							periodicInspectionComment = new PeriodicInspectionComment();
 							periodicInspectionComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 							periodicInspectionComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
@@ -85,17 +82,18 @@ public class InspectionServiceImpl implements InspectionService {
 							periodicInspection.setCreatedDate(LocalDateTime.now());
 							periodicInspection.setUpdatedDate(LocalDateTime.now());
 							periodicInspection
-									.setCreatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
+							.setCreatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 							periodicInspection
-									.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
+							.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 							inspectionRepository.save(periodicInspection);
-							siteDetails.updateSite(periodicInspection.getSiteId(), periodicInspection.getUserName());							
+							siteDetails.updateSite(periodicInspection.getSiteId(), periodicInspection.getUserName());	
+
 						} else {
-							throw new InspectionException("SiteId already present");
+							throw new InspectionException("Please fill all the fields before clicking next button");
 						}
-					} else {
-						throw new InspectionException("Please fill all the fields before clicking next button");
 					}
+				} else {
+					throw new InspectionException("SiteId already present");
 				}
 
 			} else {

@@ -71,7 +71,10 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		if (supplyCharacteristics != null && supplyCharacteristics.getUserName() != null
 				&& !supplyCharacteristics.getUserName().isEmpty() && supplyCharacteristics.getSiteId() != null
 				&& supplyCharacteristics.getSiteId() != 0) {
-			if (supplyCharacteristics.getSupplyParameters() != null && supplyCharacteristics.getCircuitBreaker() != null
+			if(supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("No")) {
+				saveSupplyCharacteristics(supplyCharacteristics);
+			}
+			else if (supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("Yes") && supplyCharacteristics.getSupplyParameters() != null && supplyCharacteristics.getCircuitBreaker() != null
 					&& supplyCharacteristics.getInstalLocationReport() != null
 					&& supplyCharacteristics.getBoundingLocationReport() != null
 					&& supplyCharacteristics.getEarthingLocationReport() != null
@@ -80,35 +83,40 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 					&& supplyCharacteristics.getInstalLocationReport().size() > 0
 					&& supplyCharacteristics.getBoundingLocationReport().size() > 0
 					&& supplyCharacteristics.getEarthingLocationReport().size() > 0) {
-				Optional<SupplyCharacteristics> siteId = supplyCharacteristicsRepository
-						.findBySiteId(supplyCharacteristics.getSiteId());
-				if (!siteId.isPresent() || !siteId.get().getSiteId().equals(supplyCharacteristics.getSiteId())) {
-					decimalConversion(supplyCharacteristics);
-					supplyCharacteristicComment = new SupplyCharacteristicComment();
-					supplyCharacteristicComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
-					supplyCharacteristicComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
-					supplyCharacteristicComment.setNoOfComment(1);
-					supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
-					listOfComments.add(supplyCharacteristicComment);
-					supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
-					supplyCharacteristics.setCreatedDate(LocalDateTime.now());
-					supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
-					supplyCharacteristics
-							.setCreatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
-					supplyCharacteristics
-							.setUpdatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
-
-					supplyCharacteristicsRepository.save(supplyCharacteristics);
-					siteDetails.updateSite(supplyCharacteristics.getSiteId(), supplyCharacteristics.getUserName());
-				} else {
-					throw new SupplyCharacteristicsException("Site-Id Already Available");
-				}
+				saveSupplyCharacteristics(supplyCharacteristics);
 			} else {
 				throw new SupplyCharacteristicsException("Please fill all the fields before clicking next button");
 			}
 		}
 		else {
 			throw new SupplyCharacteristicsException("Invalid Inputs");
+		}
+	}
+
+	private void saveSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics)
+			throws DecimalConversionException, CompanyDetailsException, SupplyCharacteristicsException {
+		Optional<SupplyCharacteristics> siteId = supplyCharacteristicsRepository
+				.findBySiteId(supplyCharacteristics.getSiteId());
+		if (!siteId.isPresent() || !siteId.get().getSiteId().equals(supplyCharacteristics.getSiteId())) {
+			decimalConversion(supplyCharacteristics);
+			supplyCharacteristicComment = new SupplyCharacteristicComment();
+			supplyCharacteristicComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+			supplyCharacteristicComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
+			supplyCharacteristicComment.setNoOfComment(1);
+			supplyCharacteristicComment.setSupplyCharacteristics(supplyCharacteristics);
+			listOfComments.add(supplyCharacteristicComment);
+			supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
+			supplyCharacteristics.setCreatedDate(LocalDateTime.now());
+			supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
+			supplyCharacteristics
+					.setCreatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
+			supplyCharacteristics
+					.setUpdatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
+
+			supplyCharacteristicsRepository.save(supplyCharacteristics);
+			siteDetails.updateSite(supplyCharacteristics.getSiteId(), supplyCharacteristics.getUserName());
+		} else {
+			throw new SupplyCharacteristicsException("Site-Id Already Available");
 		}
 	}
 
