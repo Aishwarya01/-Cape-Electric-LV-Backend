@@ -313,7 +313,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				String IV8 = incomingVoltage_list[7];
 				String IV9 = incomingVoltage_list[8];
 
-				String incomingIPF = testincomingDist.getIncomingVoltage();
+				String incomingIPF = testincomingDist.getIncomingFaultCurrent();
 				String incomingIPF_list[] = incomingIPF.split(",");
 				String IPF1 = incomingIPF_list[0];
 				String IPF2 = incomingIPF_list[1];
@@ -325,7 +325,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				String IPF8 = incomingIPF_list[7];
 				String IPF9 = incomingIPF_list[8];
 
-				String incomingZS = testincomingDist.getIncomingVoltage();
+				String incomingZS = testincomingDist.getIncomingLoopImpedance();
 				String incomingZS_list[] = incomingZS.split(",");
 				String ZS1 = incomingZS_list[0];
 				String ZS2 = incomingZS_list[1];
@@ -381,7 +381,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 						IPF9);
 				addRow(table2, "External Loop Impedance Ze (ohms)", ZS1, ZS2, ZS3, ZS4, ZS5, ZS6, ZS7, ZS8, ZS9);
 
-				addRow1(table22, "External Loop Impedance Ze (ohms)", loadCurrent, loadCurrent2, loadCurrent3,
+				addRow1(table22, "Actual load current connected to this source (A)", loadCurrent, loadCurrent2, loadCurrent3,
 						loadCurrent4);
 				document.add(table250);
 				document.add(table2);
@@ -591,12 +591,12 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 
-		cell1 = new PdfPCell(new Phrase("No Of Poles", font23));
+		cell1 = new PdfPCell(new Phrase("No of Poles", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitNo(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getNumberOfPoles(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
