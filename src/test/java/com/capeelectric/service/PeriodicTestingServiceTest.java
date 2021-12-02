@@ -138,7 +138,7 @@ public class PeriodicTestingServiceTest {
 		
 		PeriodicTestingException periodicTestingException = Assertions.assertThrows(PeriodicTestingException.class,
 				() -> periodicTestingServiceImpl.addTestingReport(testingReport));
-		assertEquals(periodicTestingException.getMessage(), "Please fill all the fields before clicking next button");
+		assertEquals(periodicTestingException.getMessage(), "Site-Id Already Present");
 
 		testingReport.setTestIncomingDistribution(listofTestIncomingDistribution);
 		PeriodicTestingException periodicTestingException_1 = Assertions.assertThrows(PeriodicTestingException.class,
