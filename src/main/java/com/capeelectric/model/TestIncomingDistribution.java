@@ -42,6 +42,9 @@ public class TestIncomingDistribution implements Serializable {
 	@Column(name = "INCOMING_FAULTCURRENT")
 	private String incomingFaultCurrent;
 
+	@Column(name = "INCOMING_ACTUALLOAD")
+	private String incomingActualLoad;
+
 	@Column(name = "SOURCE_FROM_SUPPLY")
 	private String sourceFromSupply;
 
@@ -81,13 +84,21 @@ public class TestIncomingDistribution implements Serializable {
 	public void setSourceFromSupply(String sourceFromSupply) {
 		this.sourceFromSupply = sourceFromSupply;
 	}
- 
+
 	public TestingReport getTestingReport() {
 		return testingReport;
 	}
 
 	public void setTestingReport(TestingReport testingReport) {
 		this.testingReport = testingReport;
+	}
+
+	public String getIncomingActualLoad() {
+		return incomingActualLoad;
+	}
+
+	public void setIncomingActualLoad(String incomingActualLoad) {
+		this.incomingActualLoad = incomingActualLoad;
 	}
 
 	public String getIncomingLoopImpedance() {
@@ -97,9 +108,5 @@ public class TestIncomingDistribution implements Serializable {
 	public void setIncomingLoopImpedance(String incomingLoopImpedance) {
 		this.incomingLoopImpedance = incomingLoopImpedance;
 	}
-
-	
-
-	
 
 }

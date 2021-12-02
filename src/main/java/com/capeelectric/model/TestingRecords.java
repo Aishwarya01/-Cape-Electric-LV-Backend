@@ -41,18 +41,27 @@ public class TestingRecords implements Serializable {
 	@Column(name = "CIRCUIT_STANDARD_NO")
 	private String circuitStandardNo;
 
+	@Column(name = "CIRCUIT_MAKE")
+	private String circuitMake;
+
 	@Column(name = "CIRCUIT_TYPE")
 	private String circuitType;
+
+	@Column(name = "CIRCUIT_NUMBER_OF_POLES")
+	private String numberOfPoles;
+
+	@Column(name = "CIRCUIT_CURRENT_CURVE")
+	private String circuitCurrentCurve;
 
 	@Column(name = "CIRCUIT_RATING")
 	private String circuitRating;
 
 	@Column(name = "CIRCUIT_BREAKING_CAPACITY")
 	private String circuitBreakingCapacity;
-	
+
 	@Column(name = "SHORT_CIRCUIT_SETTING")
 	private String shortCircuitSetting;
-	
+
 	@Column(name = "E_F_SETTING")
 	private String eFSetting;
 
@@ -61,7 +70,7 @@ public class TestingRecords implements Serializable {
 
 	@Column(name = "CONDUCTOR_PHASE")
 	private String conductorPhase;
-	
+
 	@Column(name = "CONDUCTOR_NEUTRAL")
 	private String conductorNeutral;
 
@@ -82,7 +91,7 @@ public class TestingRecords implements Serializable {
 
 	@Column(name = "INSULATION_RESISTANCE")
 	private String insulationResistance;
-	
+
 	@Column(name = "TEST_VOLTAGE")
 	private String testVoltage;
 
@@ -123,6 +132,22 @@ public class TestingRecords implements Serializable {
 		this.testingRecordId = testingRecordId;
 	}
 
+	public String getNumberOfPoles() {
+		return numberOfPoles;
+	}
+
+	public void setNumberOfPoles(String numberOfPoles) {
+		this.numberOfPoles = numberOfPoles;
+	}
+
+	public String getCircuitCurrentCurve() {
+		return circuitCurrentCurve;
+	}
+
+	public void setCircuitCurrentCurve(String circuitCurrentCurve) {
+		this.circuitCurrentCurve = circuitCurrentCurve;
+	}
+
 	public String getCircuitNo() {
 		return circuitNo;
 	}
@@ -137,6 +162,14 @@ public class TestingRecords implements Serializable {
 
 	public void setCircuitDesc(String circuitDesc) {
 		this.circuitDesc = circuitDesc;
+	}
+
+	public String getCircuitMake() {
+		return circuitMake;
+	}
+
+	public void setCircuitMake(String circuitMake) {
+		this.circuitMake = circuitMake;
 	}
 
 	public String getCircuitStandardNo() {
@@ -177,7 +210,8 @@ public class TestingRecords implements Serializable {
 
 	public void setShortCircuitSetting(String shortCircuitSetting) throws DecimalConversionException {
 		if (shortCircuitSetting != null) {
-			this.shortCircuitSetting = DecimalConversion.convertToDecimal(shortCircuitSetting, Constants.test_Short_CircuitSetting);
+			this.shortCircuitSetting = DecimalConversion.convertToDecimal(shortCircuitSetting,
+					Constants.test_Short_CircuitSetting);
 		}
 		this.shortCircuitSetting = shortCircuitSetting;
 	}
@@ -262,7 +296,8 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setInsulationResistance(String insulationResistance) throws DecimalConversionException {
-		this.insulationResistance = DecimalConversion.convertToDecimal(insulationResistance, Constants.test_Insulation_Resistance);
+		this.insulationResistance = DecimalConversion.convertToDecimal(insulationResistance,
+				Constants.test_Insulation_Resistance);
 	}
 
 	public String getTestVoltage() {
@@ -270,7 +305,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setTestVoltage(String testVoltage) throws DecimalConversionException {
-		this.testVoltage = DecimalConversion.convertToDecimal(testVoltage,Constants.test_Voltage);
+		this.testVoltage = DecimalConversion.convertToDecimal(testVoltage, Constants.test_Voltage);
 	}
 
 	public String getTestLoopImpedance() {

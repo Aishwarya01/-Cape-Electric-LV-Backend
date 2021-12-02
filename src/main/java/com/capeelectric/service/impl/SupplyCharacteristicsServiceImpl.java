@@ -390,8 +390,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			logger.info("decimal formating corrections started for Main supply");
 			supplyCharacteristics.setMainNominalCurrent(DecimalConversion.convertToDecimal(
 					supplyCharacteristics.getMainNominalCurrent(), Constants.supply_MainNominal_Current));
-			supplyCharacteristics.setMainNominalFrequency(DecimalConversion.convertToDecimal(
-					supplyCharacteristics.getMainNominalFrequency(), Constants.supply_MainNominal_Frequency));
+		//	supplyCharacteristics.setMainNominalFrequency(DecimalConversion.convertToDecimal(
+//					supplyCharacteristics.getMainNominalFrequency(), Constants.supply_MainNominal_Frequency));
 			supplyCharacteristics.setMainNominalVoltage(DecimalConversion.convertToDecimal(
 					supplyCharacteristics.getMainNominalVoltage(), Constants.supply_MainNominal_Voltage));
 			supplyCharacteristics.setMainLoopImpedance(DecimalConversion.convertToDecimal(
@@ -408,8 +408,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 						&& supplyParametersItr.getFaultCurrent() != null
 						&& supplyParametersItr.getLoopImpedance() != null) {
 					logger.info("decimal formating corrections started for alternative supply");
-					supplyParametersItr.setNominalFrequency(DecimalConversion.convertToDecimal(
-							supplyParametersItr.getNominalFrequency(), Constants.supply_Nominal_Frequency));
+//					supplyParametersItr.setNominalFrequency(DecimalConversion.convertToDecimal(
+//							supplyParametersItr.getNominalFrequency(), Constants.supply_Nominal_Frequency));
 					supplyParametersItr.setNominalVoltage(DecimalConversion.convertToDecimal(
 							supplyParametersItr.getNominalVoltage(), Constants.supply_Nominal_Voltage));
 					supplyParametersItr.setFaultCurrent(DecimalConversion.convertToDecimal(

@@ -1,7 +1,6 @@
 package com.capeelectric.model;
- 
-import java.io.Serializable;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,18 +9,16 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
-*
-* @author capeelectricsoftware
-*
-*/
+ *
+ * @author capeelectricsoftware
+ *
+ */
 @Entity
 @Table(name = "installation_location_table")
 public class InstalLocationReport implements Serializable {
-
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -34,6 +31,21 @@ public class InstalLocationReport implements Serializable {
 
 	@Column(name = "LOCATION_NAME")
 	private String locationName;
+
+	@Column(name = "MEANS_EARTHING_REMARK")
+	private String meansEarthingRemark;
+
+	@Column(name = "ELECTRODE_EARTH_TYPE")
+	private String electrodeEarthType;
+
+	@Column(name = "ELECTRODE_EARTH_MATERIAL")
+	private String electrodeEarthMaterial;
+
+	@Column(name = "ELECTRODE_EARTH_DEPTH")
+	private String electrodeEarthDepth;
+
+	@Column(name = "ELECTRODE_EARTH_SIZE")
+	private String electrodeEarthSize;
 
 	@Column(name = "ELECTORDE_RESISTANCE_EARTH")
 	private String electrodeResistanceEarth;
@@ -48,6 +60,15 @@ public class InstalLocationReport implements Serializable {
 
 	public Integer getLocationReportId() {
 		return locationReportId;
+	}
+	
+
+	public String getMeansEarthingRemark() {
+		return meansEarthingRemark;
+	}
+
+	public void setMeansEarthingRemark(String meansEarthingRemark) {
+		this.meansEarthingRemark = meansEarthingRemark;
 	}
 
 	public void setLocationReportId(Integer locationReportId) {
@@ -76,6 +97,38 @@ public class InstalLocationReport implements Serializable {
 
 	public void setElectrodeResistanceEarth(String electrodeResistanceEarth) {
 		this.electrodeResistanceEarth = electrodeResistanceEarth;
+	}
+
+	public String getElectrodeEarthType() {
+		return electrodeEarthType;
+	}
+
+	public void setElectrodeEarthType(String electrodeEarthType) {
+		this.electrodeEarthType = electrodeEarthType;
+	}
+
+	public String getElectrodeEarthMaterial() {
+		return electrodeEarthMaterial;
+	}
+
+	public void setElectrodeEarthMaterial(String electrodeEarthMaterial) {
+		this.electrodeEarthMaterial = electrodeEarthMaterial;
+	}
+
+	public String getElectrodeEarthDepth() {
+		return electrodeEarthDepth;
+	}
+
+	public void setElectrodeEarthDepth(String electrodeEarthDepth) {
+		this.electrodeEarthDepth = electrodeEarthDepth;
+	}
+
+	public String getElectrodeEarthSize() {
+		return electrodeEarthSize;
+	}
+
+	public void setElectrodeEarthSize(String electrodeEarthSize) {
+		this.electrodeEarthSize = electrodeEarthSize;
 	}
 
 	public String getElectrodeResistanceGird() {
