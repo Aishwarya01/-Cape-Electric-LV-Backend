@@ -295,84 +295,136 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			}
 		}
 
-		for(TestIncomingDistribution testincomingDist: testIncomingDistribution) {
+		for (TestIncomingDistribution testincomingDist : testIncomingDistribution) {
+			List<TestDistribution> testDistribution22 = testing1.getTestDistribution();
+			TestDistribution distribution = testDistribution22.get(0);
 
-			String incomingVoltage = testincomingDist.getIncomingVoltage();
-			String incomingVoltage_list[] = incomingVoltage.split(",");
-			String IV1 = incomingVoltage_list[0];
-			String IV2 = incomingVoltage_list[1];
-			String IV3 = incomingVoltage_list[2];
-			String IV4 = incomingVoltage_list[3];
-			String IV5 = incomingVoltage_list[4];
-			String IV6 = incomingVoltage_list[5];
-			String IV7 = incomingVoltage_list[6];
-			String IV8 = incomingVoltage_list[7];
-			String IV9 = incomingVoltage_list[8];
+			if (testincomingDist.getSourceFromSupply().equals(distribution.getSourceFromSupply())) {
 
-			String incomingIPF = testincomingDist.getIncomingVoltage();
-			String incomingIPF_list[] = incomingIPF.split(",");
-			String IPF1 = incomingIPF_list[0];
-			String IPF2 = incomingIPF_list[1];
-			String IPF3 = incomingIPF_list[2];
-			String IPF4 = incomingIPF_list[3];
-			String IPF5 = incomingIPF_list[4];
-			String IPF6 = incomingIPF_list[5];
-			String IPF7 = incomingIPF_list[6];
-			String IPF8 = incomingIPF_list[7];
-			String IPF9 = incomingIPF_list[8];
+				String incomingVoltage = testincomingDist.getIncomingVoltage();
+				String incomingVoltage_list[] = incomingVoltage.split(",");
+				String IV1 = incomingVoltage_list[0];
+				String IV2 = incomingVoltage_list[1];
+				String IV3 = incomingVoltage_list[2];
+				String IV4 = incomingVoltage_list[3];
+				String IV5 = incomingVoltage_list[4];
+				String IV6 = incomingVoltage_list[5];
+				String IV7 = incomingVoltage_list[6];
+				String IV8 = incomingVoltage_list[7];
+				String IV9 = incomingVoltage_list[8];
 
-			String incomingZS = testincomingDist.getIncomingVoltage();
-			String incomingZS_list[] = incomingZS.split(",");
-			String ZS1 = incomingZS_list[0];
-			String ZS2 = incomingZS_list[1];
-			String ZS3 = incomingZS_list[2];
-			String ZS4 = incomingZS_list[3];
-			String ZS5 = incomingZS_list[4];
-			String ZS6 = incomingZS_list[5];
-			String ZS7 = incomingZS_list[6];
-			String ZS8 = incomingZS_list[7];
-			String ZS9 = incomingZS_list[8];
+				String incomingIPF = testincomingDist.getIncomingVoltage();
+				String incomingIPF_list[] = incomingIPF.split(",");
+				String IPF1 = incomingIPF_list[0];
+				String IPF2 = incomingIPF_list[1];
+				String IPF3 = incomingIPF_list[2];
+				String IPF4 = incomingIPF_list[3];
+				String IPF5 = incomingIPF_list[4];
+				String IPF6 = incomingIPF_list[5];
+				String IPF7 = incomingIPF_list[6];
+				String IPF8 = incomingIPF_list[7];
+				String IPF9 = incomingIPF_list[8];
 
-			Font font9 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-			
-			PdfPTable table250 = new PdfPTable(2);
-			table250.setWidthPercentage(100); // Width 100%
-			table250.setSpacingBefore(5);
-			table250.setSpacingAfter(5);
-			table250.getDefaultCell().setBorder(0);
-			
-			PdfPCell celllabel = new PdfPCell(new Paragraph("Source Of Incoming:", font9));
-			celllabel.setBorder(PdfPCell.NO_BORDER);
-			celllabel.setBackgroundColor(BaseColor.LIGHT_GRAY);
-			table250.addCell(celllabel);
-			PdfPCell cell57 = new PdfPCell(new Paragraph(testincomingDist.getSourceFromSupply(), font9));
-			cell57.setGrayFill(0.92f);
-			cell57.setBorder(PdfPCell.NO_BORDER);
-			cell57.setBackgroundColor(BaseColor.LIGHT_GRAY);
-			table250.addCell(cell57);
+				String incomingZS = testincomingDist.getIncomingVoltage();
+				String incomingZS_list[] = incomingZS.split(",");
+				String ZS1 = incomingZS_list[0];
+				String ZS2 = incomingZS_list[1];
+				String ZS3 = incomingZS_list[2];
+				String ZS4 = incomingZS_list[3];
+				String ZS5 = incomingZS_list[4];
+				String ZS6 = incomingZS_list[5];
+				String ZS7 = incomingZS_list[6];
+				String ZS8 = incomingZS_list[7];
+				String ZS9 = incomingZS_list[8];
 
-			PdfPTable table2 = new PdfPTable(10);
-			table2.setWidthPercentage(100); // Width 100%
-			table2.setSpacingBefore(10);
-			table2.setSpacingAfter(5);
-			table2.getDefaultCell().setBorder(0);
+				String incomingActualLoadCurrent = testincomingDist.getIncomingActualLoad();
+				String incomingActual_Load_list[] = incomingActualLoadCurrent.split(",");
+				String loadCurrent = incomingActual_Load_list[0];
+				String loadCurrent2 = incomingActual_Load_list[1];
+				String loadCurrent3 = incomingActual_Load_list[2];
+				String loadCurrent4 = incomingActual_Load_list[3];
 
-			tableHead(table2);
+				Font font9 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 
-			addRow(table2, "Nominal Voltage U/U0 (V)", IV1, IV2, IV3, IV4, IV5, IV6, IV7, IV8, IV9);
-			addRow(table2, "Prospective fault current Ipfc (kA)", IPF1, IPF2, IPF3, IPF4, IPF5, IPF6, IPF7, IPF8, IPF9);
-			addRow(table2, "External Loop Impedance Ze (ohms)", ZS1, ZS2, ZS3, ZS4, ZS5, ZS6, ZS7, ZS8, ZS9);
+				PdfPTable table250 = new PdfPTable(2);
+				table250.setWidthPercentage(100); // Width 100%
+				table250.setSpacingBefore(5);
+				table250.setSpacingAfter(5);
+				table250.getDefaultCell().setBorder(0);
 
-			document.add(table250);
-			document.add(table2);
-			
+				PdfPCell celllabel = new PdfPCell(new Paragraph("Source Of Incoming:", font9));
+				celllabel.setBorder(PdfPCell.NO_BORDER);
+				celllabel.setBackgroundColor(BaseColor.LIGHT_GRAY);
+				table250.addCell(celllabel);
+				PdfPCell cell57 = new PdfPCell(new Paragraph(testincomingDist.getSourceFromSupply(), font9));
+				cell57.setGrayFill(0.92f);
+				cell57.setBorder(PdfPCell.NO_BORDER);
+				cell57.setBackgroundColor(BaseColor.LIGHT_GRAY);
+				table250.addCell(cell57);
+
+				PdfPTable table2 = new PdfPTable(10);
+				table2.setWidthPercentage(100); // Width 100%
+				table2.setSpacingBefore(10);
+				// table2.setSpacingAfter(5);
+				table2.getDefaultCell().setBorder(0);
+
+				float[] pointColumnWidths43 = { 45F, 90F, 90F, 135F, 90F };
+
+				PdfPTable table22 = new PdfPTable(pointColumnWidths43);
+				table22.setWidthPercentage(100); // Width 100%
+				table22.getDefaultCell().setBorder(0);
+
+				tableHead(table2);
+
+				addRow(table2, "Nominal Voltage U/U0 (V)", IV1, IV2, IV3, IV4, IV5, IV6, IV7, IV8, IV9);
+				addRow(table2, "Prospective fault current Ipfc (kA)", IPF1, IPF2, IPF3, IPF4, IPF5, IPF6, IPF7, IPF8,
+						IPF9);
+				addRow(table2, "External Loop Impedance Ze (ohms)", ZS1, ZS2, ZS3, ZS4, ZS5, ZS6, ZS7, ZS8, ZS9);
+
+				addRow1(table22, "External Loop Impedance Ze (ohms)", loadCurrent, loadCurrent2, loadCurrent3,
+						loadCurrent4);
+				document.add(table250);
+				document.add(table2);
+				document.add(table22);
+
 			}
-
+		}
 		document.newPage();
-		
+
 		for (TestingRecords testingRecords11 : testRecords) {
 			testingTableIteration(document, testingRecords11);
 		}
+
+	}
+
+	private void addRow1(PdfPTable table22, String string, String zS1, String zS9, String zS2, String zS22)
+			throws DocumentException, IOException {
+		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font));
+		nameCell.setGrayFill(0.92f);
+		PdfPCell valueCell2 = new PdfPCell(new Paragraph(zS1, font));
+		PdfPCell valueCell3 = new PdfPCell(new Paragraph(zS9, font));
+		PdfPCell valueCell4 = new PdfPCell(new Paragraph(zS9, font));
+		PdfPCell valueCell5 = new PdfPCell(new Paragraph(zS9, font));
+		PdfPCell valueCell6 = new PdfPCell(new Paragraph(zS2, font));
+		PdfPCell valueCell7 = new PdfPCell(new Paragraph(zS22, font));
+
+		// valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell5.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell6.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell7.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+		table22.addCell(nameCell);
+
+		table22.addCell(valueCell2);
+		table22.addCell(valueCell3);
+		table22.addCell(valueCell4);
+		table22.addCell(valueCell5);
+		table22.addCell(valueCell6);
+		table22.addCell(valueCell7);
 
 	}
 
@@ -505,7 +557,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 		cell1 = new PdfPCell(new Phrase("	OCPD", font23));
 		cell1.setGrayFill(0.92f);
-		cell1.setRowspan(6);
+		cell1.setRowspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 
@@ -519,12 +571,42 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 
+		cell1 = new PdfPCell(new Phrase("Make", font23));
+		cell1.setGrayFill(0.92f);
+		cell1.setColspan(2);
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table466.addCell(cell1);
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitMake(), font27));
+		cell1.setColspan(9);
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table466.addCell(cell1);
+
 		cell1 = new PdfPCell(new Phrase("Type", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitType(), font27));
+		cell1.setColspan(9);
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table466.addCell(cell1);
+
+		cell1 = new PdfPCell(new Phrase("No Of Poles", font23));
+		cell1.setGrayFill(0.92f);
+		cell1.setColspan(2);
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table466.addCell(cell1);
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitNo(), font27));
+		cell1.setColspan(9);
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table466.addCell(cell1);
+
+		cell1 = new PdfPCell(new Phrase("Model/ current curve", font23));
+		cell1.setGrayFill(0.92f);
+		cell1.setColspan(2);
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table466.addCell(cell1);
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getCircuitCurrentCurve(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
