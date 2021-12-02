@@ -131,20 +131,8 @@ public class TestingRecords implements Serializable {
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "testingRecords", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<TestingRecordsVoltage> testingRecordsVoltage;
-
-	@JsonManagedReference
-	@OneToMany(mappedBy = "testingRecords", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<TestingRecordsLoopImpedance> testingRecordsLoopImpedance;
-
-	@JsonManagedReference
-	@OneToMany(mappedBy = "testingRecords", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<TestingRecordsFaultCurrent> testingRecordsFaultCurrent;
-
-	@JsonManagedReference
-	@OneToMany(mappedBy = "testingRecords", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<TestingRecordsDisconnectionTime> testingRecordsDisconnectionTime;
-
+	private List<TestingRecordsSourceSupply> testingRecordsSourceSupply;
+	
 	public Integer getTestingRecordId() {
 		return testingRecordId;
 	}
@@ -399,38 +387,6 @@ public class TestingRecords implements Serializable {
 
 	public void setTesting(Testing testing) {
 		this.testing = testing;
-	}
-
-	public List<TestingRecordsVoltage> getTestingRecordsVoltage() {
-		return testingRecordsVoltage;
-	}
-
-	public void setTestingRecordsVoltage(List<TestingRecordsVoltage> testingRecordsVoltage) {
-		this.testingRecordsVoltage = testingRecordsVoltage;
-	}
-
-	public List<TestingRecordsLoopImpedance> getTestingRecordsLoopImpedance() {
-		return testingRecordsLoopImpedance;
-	}
-
-	public void setTestingRecordsLoopImpedance(List<TestingRecordsLoopImpedance> testingRecordsLoopImpedance) {
-		this.testingRecordsLoopImpedance = testingRecordsLoopImpedance;
-	}
-
-	public List<TestingRecordsFaultCurrent> getTestingRecordsFaultCurrent() {
-		return testingRecordsFaultCurrent;
-	}
-
-	public void setTestingRecordsFaultCurrent(List<TestingRecordsFaultCurrent> testingRecordsFaultCurrent) {
-		this.testingRecordsFaultCurrent = testingRecordsFaultCurrent;
-	}
-
-	public List<TestingRecordsDisconnectionTime> getTestingRecordsDisconnectionTime() {
-		return testingRecordsDisconnectionTime;
-	}
-
-	public void setTestingRecordsDisconnectionTime(List<TestingRecordsDisconnectionTime> testingRecordsDisconnectionTime) {
-		this.testingRecordsDisconnectionTime = testingRecordsDisconnectionTime;
 	}
 
 }
