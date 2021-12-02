@@ -88,7 +88,7 @@ public class SupplyCharacteristicsServiceTest {
 		supplyCharacteristicComment.setViewerFlag("1");
 		supplyCharacteristics.setUserName("Inspector@gmail.com");
 		supplyCharacteristics.setSiteId(1);
-		
+		supplyCharacteristics.setAlternativeSupply("Yes");
 		ArrayList<SupplyCharacteristicComment> listOfComments = new ArrayList<SupplyCharacteristicComment>();
 	    listOfComments.add(supplyCharacteristicComment);
 	    supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
@@ -206,7 +206,6 @@ public class SupplyCharacteristicsServiceTest {
 		listofBoundingLocationReport.add(new BoundingLocationReport());
 		List<EarthingLocationReport> listofEarthingLocationReport= new ArrayList<EarthingLocationReport>();
 		listofEarthingLocationReport.add(new EarthingLocationReport());
-	 
 		supplyCharacteristics.setBoundingLocationReport(listofBoundingLocationReport);
 		supplyCharacteristics.setEarthingLocationReport(listofEarthingLocationReport);
 		supplyCharacteristics.setInstalLocationReport(listofInstalLocationReport);

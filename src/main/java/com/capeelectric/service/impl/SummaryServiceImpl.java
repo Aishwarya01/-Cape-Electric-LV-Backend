@@ -112,6 +112,7 @@ public class SummaryServiceImpl implements SummaryService {
 						summaryComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 						summaryComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
 						summaryComment.setNoOfComment(1);
+						summaryComment.setViewerDate(LocalDateTime.now());
 						summaryComment.setSummary(summary);
 						listOfComments.add(summaryComment);
 						summary.setSummaryComment(listOfComments);
@@ -317,7 +318,9 @@ public class SummaryServiceImpl implements SummaryService {
 	}
 	
 	private void sortingDateTime(List<SummaryComment> listOfComments) {
-		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
+		if(listOfComments.size()>1) {
+			Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
+		}
 	}
 	
 	private Integer checkNoOfComments(List<SummaryComment> listOfComments) {
