@@ -397,37 +397,32 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 	}
 
-	private void addRow1(PdfPTable table22, String string, String zS1, String zS9, String zS2, String zS22)
-			throws DocumentException, IOException {
+	private void addRow1(PdfPTable table22, String string, String loadCurrent, String loadCurrent2, String loadCurrent3,
+			String loadCurrent4) throws DocumentException, IOException {
 		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font));
+		
+		Font font1 = new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK);
+		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font1));
 		nameCell.setGrayFill(0.92f);
-		PdfPCell valueCell2 = new PdfPCell(new Paragraph(zS1, font));
-		PdfPCell valueCell3 = new PdfPCell(new Paragraph(zS9, font));
-		PdfPCell valueCell4 = new PdfPCell(new Paragraph(zS9, font));
-		PdfPCell valueCell5 = new PdfPCell(new Paragraph(zS9, font));
-		PdfPCell valueCell6 = new PdfPCell(new Paragraph(zS2, font));
-		PdfPCell valueCell7 = new PdfPCell(new Paragraph(zS22, font));
-
-		// valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		PdfPCell valueCell2 = new PdfPCell(new Paragraph(loadCurrent, font));
+		PdfPCell valueCell3 = new PdfPCell(new Paragraph(loadCurrent2, font));
+		PdfPCell valueCell4 = new PdfPCell(new Paragraph(loadCurrent3, font));
+		PdfPCell valueCell5 = new PdfPCell(new Paragraph(loadCurrent4, font));
+	
 		valueCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell3.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell4.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell5.setHorizontalAlignment(Element.ALIGN_CENTER);
-		valueCell6.setHorizontalAlignment(Element.ALIGN_CENTER);
-		valueCell7.setHorizontalAlignment(Element.ALIGN_CENTER);
+	
 
 		table22.addCell(nameCell);
-
 		table22.addCell(valueCell2);
 		table22.addCell(valueCell3);
 		table22.addCell(valueCell4);
 		table22.addCell(valueCell5);
-		table22.addCell(valueCell6);
-		table22.addCell(valueCell7);
 
+		
 	}
-
 	private void ratingAmpsiterate(Document document, String arr) throws DocumentException, IOException {
 
 		Font font7 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
@@ -1119,7 +1114,8 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			String string6, String string7, String string8, String string9, String string10)
 			throws DocumentException, IOException {
 		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font));
+		Font font1 = new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK);
+		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font1));
 		nameCell.setGrayFill(0.92f);
 		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2, font));
 		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3, font));
