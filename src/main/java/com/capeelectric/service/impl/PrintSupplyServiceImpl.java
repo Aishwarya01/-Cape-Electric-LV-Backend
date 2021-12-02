@@ -118,6 +118,8 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table.addCell(cell2);
 				document.add(table);
 				
+				
+
 //				if (!supply.getMainSystemEarthing().equals("Others")) {
 //
 //					PdfPCell cell5 = new PdfPCell(new Paragraph("Brief note (in case of confusion):", font9));
@@ -183,6 +185,14 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 					String NFL7 = nominalFaultLoop_list[6];
 					String NFL8 = nominalFaultLoop_list[7];
 					String NFL9 = nominalFaultLoop_list[8];
+					
+					String incomingActualLoadCurrent = supply.getMainActualLoad();
+					String incomingActual_Load_list[] = incomingActualLoadCurrent.split(",");
+					String loadCurrent = incomingActual_Load_list[0];
+					String loadCurrent2 = incomingActual_Load_list[1];
+					String loadCurrent3 = incomingActual_Load_list[2];
+					String loadCurrent4 = incomingActual_Load_list[3];
+
 
 					float[] pointColumnWidths1 = { 90F, 90F };
 					PdfPTable table15 = new PdfPTable(pointColumnWidths1);
@@ -217,16 +227,26 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 					table34.setWidthPercentage(100); // Width 100%
 					table34.getDefaultCell().setBorder(0);
 					tableHead(table34);
+					
+					float[] pointColumnWidths43 = { 45F, 90F, 90F, 135F, 90F };
+
+					PdfPTable table22 = new PdfPTable(pointColumnWidths43);
+					table22.setWidthPercentage(100); // Width 100%
+					table22.getDefaultCell().setBorder(0);
+					
 					addRow(table1, "Nominal voltage U/U0 (V)", N1, N2, N3, N4, N5, N6, N7, N8, N9);
 					addNominalRow(table2, "Nominal Frequency f (HZ)", supply.getMainNominalFrequency());
 					addRow(table3, "Prospective fault current Ipfc (kA) ", NFC1, NFC2, NFC3, NFC4, NFC5, NFC6, NFC7,
 							NFC8, NFC9);
 					addRow(table3, "External Loop Impedance Ze (ohms)", NFL1, NFL2, NFL3, NFL4, NFL5, NFL6, NFL7, NFL8,
 							NFL9);
+					addRow1(table22, "Actual load current connected to this source (A)", loadCurrent, loadCurrent2, loadCurrent3,
+							loadCurrent4);
 					document.add(table34);
 					document.add(table1);
 					document.add(table2);
 					document.add(table3);
+					document.add(table22);
 				} else {
 
 					float[] pointColumnWidths1 = { 90F, 90F };
@@ -282,15 +302,15 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 //				if (!supply.getMainSystemEarthing().equals("Others")) {
 
-					PdfPCell cell291 = new PdfPCell(new Paragraph("Remarks :", font9));
-					cell291.setBorder(PdfPCell.NO_BORDER);
-					cell291.setGrayFill(0.92f);
-					table2.addCell(cell291);
-					PdfPCell cell381 = new PdfPCell(new Paragraph(supply.getLiveConductorBNote(), font6));
-					cell381.setGrayFill(0.92f);
-					cell381.setBorder(PdfPCell.NO_BORDER);
-					table2.addCell(cell381);
-					document.add(table2);
+				PdfPCell cell291 = new PdfPCell(new Paragraph("Remarks :", font9));
+				cell291.setBorder(PdfPCell.NO_BORDER);
+				cell291.setGrayFill(0.92f);
+				table2.addCell(cell291);
+				PdfPCell cell381 = new PdfPCell(new Paragraph(supply.getLiveConductorBNote(), font6));
+				cell381.setGrayFill(0.92f);
+				cell381.setBorder(PdfPCell.NO_BORDER);
+				table2.addCell(cell381);
+				document.add(table2);
 
 //				} else {
 //
@@ -774,7 +794,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		table4.addCell(new Phrase("Brief note:", font6));
 		cell18.setBorder(PdfPCell.NO_BORDER);
 		table4.addCell(cell18);
-		
+
 		PdfPCell cell15 = new PdfPCell(new Paragraph(8, "Number and type of live conductors:", font6));
 		cell15.setBorder(PdfPCell.NO_BORDER);
 		cell15.setGrayFill(0.92f);
@@ -862,20 +882,37 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 			table7.setWidthPercentage(100);
 			table7.getDefaultCell().setBorder(0);
 
+			String actualLoadCurrent = supplyParameters.getActualLoad();
+			String actual_Load_list[] = actualLoadCurrent.split(",");
+			String loadCurrent = actual_Load_list[0];
+			String loadCurrent2 = actual_Load_list[1];
+			String loadCurrent3 = actual_Load_list[2];
+			String loadCurrent4 = actual_Load_list[3];
+
 			PdfPTable table34 = new PdfPTable(10);
 			table34.setSpacingBefore(10f); // Space before table
 			table34.setWidthPercentage(100); // Width 100%
 			table34.getDefaultCell().setBorder(0);
+
+			float[] pointColumnWidths43 = { 45F, 90F, 90F, 135F, 90F };
+
+			PdfPTable table22 = new PdfPTable(pointColumnWidths43);
+			table22.setWidthPercentage(100); // Width 100%
+			table22.getDefaultCell().setBorder(0);
+
 			tableHead(table34);
 
 			addRow(table5, "Nominal voltage U/U0 (V)", PN1, PN2, PN3, PN4, PN5, PN6, PN7, PN8, PN9);
 			addNominalRow2(table6, "Nominal Frequency f (HZ)", supplyParameters.getNominalFrequency());
 			addRow(table7, "Prospective fault current Ipfc (kA) ", PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9);
 			addRow(table7, "External Loop Impedance Ze (ohms)", PI1, PI2, PI3, PI4, PI5, PI6, PI7, PI8, PI9);
+			addRow1(table22, "Actual load current connected to this source (A)", loadCurrent, loadCurrent2,
+					loadCurrent3, loadCurrent4);
 			document.add(table34);
 			document.add(table5);
 			document.add(table6);
 			document.add(table7);
+			document.add(table22);
 
 			PdfPTable table9 = new PdfPTable(pointColumnWidths);
 			table9.setWidthPercentage(100); // Width 100%
@@ -893,10 +930,10 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 			cell72.setBorder(PdfPCell.NO_BORDER);
 			table9.addCell(cell72);
 
-			PdfPCell cell51 = new PdfPCell(new Paragraph(supplyParameters.getActualLoad(), font6));
-			table9.addCell(new Phrase("Actual Load Current (R,Y,B, N) (A):", font6));
-			cell51.setBorder(PdfPCell.NO_BORDER);
-			table9.addCell(cell51);
+//			PdfPCell cell51 = new PdfPCell(new Paragraph(supplyParameters.getActualLoad(), font6));
+//			table9.addCell(new Phrase("Actual Load Current (R,Y,B, N) (A):", font6));
+//			cell51.setBorder(PdfPCell.NO_BORDER);
+//			table9.addCell(cell51);
 			document.add(table9);
 		} else {
 			PdfPTable table16 = new PdfPTable(pointColumnWidths);
@@ -958,6 +995,29 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		table6.addCell(cell73);
 		document.add(table6);
 		document.newPage();
+	}
+
+	private void addRow1(PdfPTable table22, String string, String loadCurrent, String loadCurrent2, String loadCurrent3,
+			String loadCurrent4) throws DocumentException, IOException {
+		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+		PdfPCell nameCell = new PdfPCell(new Paragraph(string,  new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK)));
+		nameCell.setGrayFill(0.92f);
+		PdfPCell valueCell2 = new PdfPCell(new Paragraph(loadCurrent, font));
+		PdfPCell valueCell3 = new PdfPCell(new Paragraph(loadCurrent2, font));
+		PdfPCell valueCell4 = new PdfPCell(new Paragraph(loadCurrent3, font));
+		PdfPCell valueCell5 = new PdfPCell(new Paragraph(loadCurrent4, font));
+
+		valueCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell3.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell4.setHorizontalAlignment(Element.ALIGN_CENTER);
+		valueCell5.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+		table22.addCell(nameCell);
+		table22.addCell(valueCell2);
+		table22.addCell(valueCell3);
+		table22.addCell(valueCell4);
+		table22.addCell(valueCell5);
+
 	}
 
 	private void addNominalRow(PdfPTable table2, String string, String pFN1) throws DocumentException, IOException {
@@ -1052,6 +1112,22 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		table9.addCell(new Phrase("Location:", font6));
 		cell29.setBorder(PdfPCell.NO_BORDER);
 		table9.addCell(cell29);
+
+		PdfPCell cell50 = new PdfPCell(new Paragraph(circute1.getSourceName(), font6));
+		table9.addCell(new Phrase("Source name:", font6));
+		cell50.setBorder(PdfPCell.NO_BORDER);
+		table9.addCell(cell50);
+
+		PdfPCell cell51 = new PdfPCell(new Paragraph(circute1.getMake(), font6));
+		table9.addCell(new Phrase("Make:", font6));
+		cell51.setBorder(PdfPCell.NO_BORDER);
+		table9.addCell(cell51);
+
+		PdfPCell cell52 = new PdfPCell(new Paragraph(circute1.getCurrentCurve(), font6));
+		table9.addCell(new Phrase("Model / Current curve:", font6));
+		cell52.setBorder(PdfPCell.NO_BORDER);
+		table9.addCell(cell52);
+
 		PdfPCell cell45 = new PdfPCell(new Paragraph(circute1.getType(), font6));
 		table9.addCell(new Phrase("Type:", font6));
 		cell45.setBorder(PdfPCell.NO_BORDER);
@@ -1064,14 +1140,20 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		table9.addCell(new Phrase("Current Rating (A):", font6));
 		cell55.setBorder(PdfPCell.NO_BORDER);
 		table9.addCell(cell55);
-		PdfPCell cell50 = new PdfPCell(new Paragraph(circute1.getVoltage(), font6));
+		PdfPCell cell501 = new PdfPCell(new Paragraph(circute1.getVoltage(), font6));
 		table9.addCell(new Phrase("Voltage Rating (V):", font6));
-		cell50.setBorder(PdfPCell.NO_BORDER);
-		table9.addCell(cell50);
-		PdfPCell cell51 = new PdfPCell(new Paragraph(circute1.getFuse(), font6));
+		cell501.setBorder(PdfPCell.NO_BORDER);
+		table9.addCell(cell501);
+		PdfPCell cell511 = new PdfPCell(new Paragraph(circute1.getFuse(), font6));
 		table9.addCell(new Phrase("Fuse Rating or Settings (A):", font6));
-		cell51.setBorder(PdfPCell.NO_BORDER);
-		table9.addCell(cell51);
+		cell511.setBorder(PdfPCell.NO_BORDER);
+		table9.addCell(cell511);
+
+		PdfPCell cell521 = new PdfPCell(new Paragraph(circute1.getTypeOfResidualCurrent(), font6));
+		table9.addCell(new Phrase("Type of residual current device:", font6));
+		cell521.setBorder(PdfPCell.NO_BORDER);
+		table9.addCell(cell521);
+
 		PdfPCell cell38 = new PdfPCell(new Paragraph(circute1.getResidualCurrent(), font6));
 		table9.addCell(new Phrase("Rated residual operating current In mA:", font6));
 		cell38.setBorder(PdfPCell.NO_BORDER);
