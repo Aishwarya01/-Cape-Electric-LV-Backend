@@ -76,6 +76,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 							testingComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 							testingComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
 							testingComment.setNoOfComment(1);
+							testingComment.setViewerDate(LocalDateTime.now());
 							testingComment.setTestingReport(testingReport);
 							listOfComments.add(testingComment);
 							testingReport.setTestingComment(listOfComments);
@@ -276,7 +277,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	}
 	
 	private void sortingDateTime(List<TestingReportComment> listOfComments) {
-		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
+		if (listOfComments.size() > 1) {
+			Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
+		}
 	}
 	
 	private Integer checkNoOfComments(List<TestingReportComment> listOfComments) {

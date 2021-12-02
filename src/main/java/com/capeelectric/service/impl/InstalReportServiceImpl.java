@@ -69,6 +69,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 					reportDetailsComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 					reportDetailsComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
 					reportDetailsComment.setNoOfComment(1);
+					reportDetailsComment.setViewerDate(LocalDateTime.now());
 					reportDetailsComment.setReportDetails(reportDetails);
 					listOfComments.add(reportDetailsComment);
 					reportDetails.setReportDetailsComment(listOfComments);
@@ -271,7 +272,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 	}
 	
 	private void sortingDateTime(List<ReportDetailsComment> listOfComments) {
-		Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
+		if (listOfComments.size() > 1) {
+			Collections.sort(listOfComments, (o1, o2) -> o1.getViewerDate().compareTo(o2.getViewerDate()));
+		}
 	}
 	
 	private Integer checkNoOfComments(List<ReportDetailsComment> listOfComments) {
