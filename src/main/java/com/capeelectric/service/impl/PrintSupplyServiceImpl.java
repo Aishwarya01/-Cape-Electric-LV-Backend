@@ -998,14 +998,13 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 	}
 
 	private void addRow1(PdfPTable table22, String string, String loadCurrent, String loadCurrent2, String loadCurrent3,
-			String loadCurrent4) throws DocumentException, IOException {
-		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+			String loadCurrent4) throws DocumentException, IOException  {
 		PdfPCell nameCell = new PdfPCell(new Paragraph(string,  new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK)));
 		nameCell.setGrayFill(0.92f);
-		PdfPCell valueCell2 = new PdfPCell(new Paragraph(loadCurrent, font));
-		PdfPCell valueCell3 = new PdfPCell(new Paragraph(loadCurrent2, font));
-		PdfPCell valueCell4 = new PdfPCell(new Paragraph(loadCurrent3, font));
-		PdfPCell valueCell5 = new PdfPCell(new Paragraph(loadCurrent4, font));
+		PdfPCell valueCell2 = new PdfPCell(new Paragraph(loadCurrent));
+		PdfPCell valueCell3 = new PdfPCell(new Paragraph(loadCurrent2));
+		PdfPCell valueCell4 = new PdfPCell(new Paragraph(loadCurrent3));
+		PdfPCell valueCell5 = new PdfPCell(new Paragraph(loadCurrent4));
 
 		valueCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell3.setHorizontalAlignment(Element.ALIGN_CENTER);

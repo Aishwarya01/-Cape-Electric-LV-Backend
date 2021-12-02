@@ -400,7 +400,9 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 	private void addRow1(PdfPTable table22, String string, String loadCurrent, String loadCurrent2, String loadCurrent3,
 			String loadCurrent4) throws DocumentException, IOException {
 		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font));
+		
+		Font font1 = new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK);
+		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font1));
 		nameCell.setGrayFill(0.92f);
 		PdfPCell valueCell2 = new PdfPCell(new Paragraph(loadCurrent, font));
 		PdfPCell valueCell3 = new PdfPCell(new Paragraph(loadCurrent2, font));
@@ -1112,7 +1114,8 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			String string6, String string7, String string8, String string9, String string10)
 			throws DocumentException, IOException {
 		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font));
+		Font font1 = new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK);
+		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font1));
 		nameCell.setGrayFill(0.92f);
 		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2, font));
 		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3, font));
