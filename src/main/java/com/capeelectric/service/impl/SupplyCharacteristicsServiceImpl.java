@@ -70,7 +70,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		listOfComments = new ArrayList<SupplyCharacteristicComment>();
 		if (supplyCharacteristics != null && supplyCharacteristics.getUserName() != null
 				&& !supplyCharacteristics.getUserName().isEmpty() && supplyCharacteristics.getSiteId() != null
-				&& supplyCharacteristics.getSiteId() != 0) {
+				&& supplyCharacteristics.getSiteId() != 0 && supplyCharacteristics.getAlternativeSupply() != null) {
 			if(supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("No")) {
 				saveSupplyCharacteristics(supplyCharacteristics);
 			}
