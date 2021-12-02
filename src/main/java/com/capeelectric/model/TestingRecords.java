@@ -1,20 +1,25 @@
 package com.capeelectric.model;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.util.Constants;
 import com.capeelectric.util.DecimalConversion;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * 
@@ -123,6 +128,22 @@ public class TestingRecords implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "TESTING_ID")
 	private Testing testing;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "testingRecords", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<TestingRecordsVoltage> testingRecordsVoltage;
+
+	@JsonManagedReference
+	@OneToMany(mappedBy = "testingRecords", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<TestingRecordsLoopImpedance> testingRecordsLoopImpedance;
+
+	@JsonManagedReference
+	@OneToMany(mappedBy = "testingRecords", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<TestingRecordsFaultCurrent> testingRecordsFaultCurrent;
+
+	@JsonManagedReference
+	@OneToMany(mappedBy = "testingRecords", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<TestingRecordsDisconnectionTime> testingRecordsDisconnectionTime;
 
 	public Integer getTestingRecordId() {
 		return testingRecordId;
@@ -378,6 +399,38 @@ public class TestingRecords implements Serializable {
 
 	public void setTesting(Testing testing) {
 		this.testing = testing;
+	}
+
+	public List<TestingRecordsVoltage> getTestingRecordsVoltage() {
+		return testingRecordsVoltage;
+	}
+
+	public void setTestingRecordsVoltage(List<TestingRecordsVoltage> testingRecordsVoltage) {
+		this.testingRecordsVoltage = testingRecordsVoltage;
+	}
+
+	public List<TestingRecordsLoopImpedance> getTestingRecordsLoopImpedance() {
+		return testingRecordsLoopImpedance;
+	}
+
+	public void setTestingRecordsLoopImpedance(List<TestingRecordsLoopImpedance> testingRecordsLoopImpedance) {
+		this.testingRecordsLoopImpedance = testingRecordsLoopImpedance;
+	}
+
+	public List<TestingRecordsFaultCurrent> getTestingRecordsFaultCurrent() {
+		return testingRecordsFaultCurrent;
+	}
+
+	public void setTestingRecordsFaultCurrent(List<TestingRecordsFaultCurrent> testingRecordsFaultCurrent) {
+		this.testingRecordsFaultCurrent = testingRecordsFaultCurrent;
+	}
+
+	public List<TestingRecordsDisconnectionTime> getTestingRecordsDisconnectionTime() {
+		return testingRecordsDisconnectionTime;
+	}
+
+	public void setTestingRecordsDisconnectionTime(List<TestingRecordsDisconnectionTime> testingRecordsDisconnectionTime) {
+		this.testingRecordsDisconnectionTime = testingRecordsDisconnectionTime;
 	}
 
 }
