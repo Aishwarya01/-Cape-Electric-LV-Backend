@@ -3,6 +3,7 @@ package com.capeelectric.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -12,9 +13,11 @@ import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.PeriodicTestingException;
+import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Testing;
+import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.repository.SiteRepository;
@@ -109,7 +112,8 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			TestingReport testingReportRepo = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
 			if (testingReportRepo != null) {
-					sortingDateTime(testingReportRepo.getTestingComment());
+				testingReportRepo.setTesting(findNonRemoveTesting(testingReportRepo.getTesting()));
+				sortingDateTime(testingReportRepo.getTestingComment());
 				return testingReportRepo;
 			} else {
 				throw new PeriodicTestingException("Given UserName & Site doesn't exist Testing");
@@ -326,5 +330,22 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 			}
 		}
 		return flag;
+	}
+	
+	private List<Testing> findNonRemoveTesting(List<Testing> listOfTesting) {
+		for (Testing testing : listOfTesting) {
+			testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
+		}
+		return listOfTesting;
+	}
+
+	private List<TestingRecords> findNonRemoveTestingRecord(List<TestingRecords> listOfTestingRecords) {
+		List<TestingRecords> listNonRemovedTestingRecord = new ArrayList<TestingRecords>();
+		for (TestingRecords testingRecords : listOfTestingRecords) {
+			if (testingRecords.getTestingRecordStatus().equalsIgnoreCase("R")) {
+				listNonRemovedTestingRecord.add(testingRecords);
+			}
+		}
+		return listNonRemovedTestingRecord;
 	}
 }

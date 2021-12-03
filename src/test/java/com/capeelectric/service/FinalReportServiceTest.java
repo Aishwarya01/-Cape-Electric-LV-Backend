@@ -20,12 +20,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.FinalReportException;
+import com.capeelectric.model.BoundingLocationReport;
+import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.FinalReport;
+import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SupplyCharacteristics;
+import com.capeelectric.model.Testing;
+import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.InstalReportDetailsRepository;
@@ -150,6 +155,25 @@ public class FinalReportServiceTest {
 		SupplyCharacteristics supplyCharacteristics = new SupplyCharacteristics();
 		supplyCharacteristics.setUserName("LVsystem@gmail.com");
 		supplyCharacteristics.setSiteId(1);
+		
+		List<InstalLocationReport> installList = new ArrayList<InstalLocationReport>();
+		InstalLocationReport instalLocationReport = new InstalLocationReport();
+		instalLocationReport.setInstalLocationReportStatus("A");
+		installList.add(instalLocationReport);
+
+		List<BoundingLocationReport> boundingList = new ArrayList<BoundingLocationReport>();
+		BoundingLocationReport boundingLocationReport = new BoundingLocationReport();
+		boundingLocationReport.setInstalLocationReportStatus("u");
+		boundingList.add(boundingLocationReport);
+
+		List<EarthingLocationReport> earthingList = new ArrayList<EarthingLocationReport>();
+		EarthingLocationReport earthingLocationReport = new EarthingLocationReport();
+		earthingLocationReport.setInstalLocationReportStatus("n");
+		earthingList.add(earthingLocationReport);
+
+		supplyCharacteristics.setInstalLocationReport(installList);
+		supplyCharacteristics.setBoundingLocationReport(boundingList);
+		supplyCharacteristics.setEarthingLocationReport(earthingList);
 		return supplyCharacteristics;
 	}
 
@@ -157,6 +181,7 @@ public class FinalReportServiceTest {
 		PeriodicInspection periodicInspection = new PeriodicInspection();
 		periodicInspection.setUserName("LVsystem@gmail.com");
 		periodicInspection.setSiteId(1);
+		
 		return periodicInspection;
 	}
 
@@ -164,6 +189,15 @@ public class FinalReportServiceTest {
 		TestingReport testingReport = new TestingReport();
 		testingReport.setUserName("LVsystem@gmail.com");
 		testingReport.setSiteId(1);
+		List<Testing> testingList = new ArrayList<Testing>();
+		List<TestingRecords> testingRecordsList = new ArrayList<TestingRecords>();
+		Testing testing = new Testing();
+		TestingRecords testingRecords = new TestingRecords();
+		testingRecords.setTestingRecordStatus("a");
+		testingRecordsList.add(testingRecords);
+		testing.setTestingRecords(testingRecordsList);
+		testingList.add(testing);
+		testingReport.setTesting(testingList);
 		return testingReport;
 	}
 

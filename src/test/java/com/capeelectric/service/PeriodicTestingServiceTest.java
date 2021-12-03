@@ -111,6 +111,15 @@ public class PeriodicTestingServiceTest {
 		ArrayList<TestingReportComment> listOfComment = new ArrayList<TestingReportComment>();
 		listOfComment.add(testingReportComment);
 		testingReport.setTestingComment(listOfComment);
+		List<Testing> testingList = new ArrayList<Testing>();
+		List<TestingRecords> testingRecordsList = new ArrayList<TestingRecords>();
+        Testing testing = new Testing();
+        TestingRecords testingRecords = new TestingRecords();
+        testingRecords.setTestingRecordStatus("a");
+        testingRecordsList.add(testingRecords);
+        testing.setTestingRecords(testingRecordsList);
+        testingList.add(testing);
+        testingReport.setTesting(testingList);
 	}
 	
 	@Test

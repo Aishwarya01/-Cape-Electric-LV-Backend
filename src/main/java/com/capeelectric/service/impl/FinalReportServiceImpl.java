@@ -1,6 +1,7 @@
 
 package com.capeelectric.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,12 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.FinalReportException;
+import com.capeelectric.model.BoundingLocationReport;
+import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.FinalReport;
+import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SupplyCharacteristics;
+import com.capeelectric.model.Testing;
+import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.InstalReportDetailsRepository;
@@ -106,6 +112,13 @@ public class FinalReportServiceImpl implements FinalReportService {
 						.findBySiteId(siteId);
 				logger.debug("SupplyCharacteristic_fetching ended");
 				if (supplyCharacteristics.isPresent() && supplyCharacteristics != null) {
+
+					supplyCharacteristics.get()
+							.setInstalLocationReport(findNonRemovedInstallLocation(supplyCharacteristics.get()));
+					supplyCharacteristics.get()
+							.setBoundingLocationReport(findNonRemovedBondingLocation(supplyCharacteristics.get()));
+					supplyCharacteristics.get()
+							.setEarthingLocationReport(findNonRemovedEarthingLocation(supplyCharacteristics.get()));
 					finalReport.setSupplyCharacteristics(supplyCharacteristics.get());
 
 					logger.debug("fetching process started for PriodicInspection");
@@ -120,6 +133,7 @@ public class FinalReportServiceImpl implements FinalReportService {
 						logger.debug("PriodicTesting_fetching ended");
 
 						if (testingReport.isPresent() && testingReport != null) {
+							testingReport.get().setTesting(findNonRemoveTesting(testingReport.get().getTesting()));
 							finalReport.setTestingReport(testingReport.get());
 
 							logger.debug("fetching process started for Summary");
@@ -150,4 +164,57 @@ public class FinalReportServiceImpl implements FinalReportService {
 		return (List<Site>)siteRepository.findAll();
 	}
 
+	
+	private List<InstalLocationReport> findNonRemovedInstallLocation(SupplyCharacteristics supplyCharacteristicsRepo) {
+		ArrayList<InstalLocationReport> locationReport = new ArrayList<InstalLocationReport>();
+		List<InstalLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getInstalLocationReport();
+		for (InstalLocationReport instalLocationReport : findNonRemoveLocation) {
+			if (!instalLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+				locationReport.add(instalLocationReport);
+			}
+		}
+		return locationReport;
+	}
+	
+	private List<BoundingLocationReport> findNonRemovedBondingLocation(
+			SupplyCharacteristics supplyCharacteristicsRepo) {
+		ArrayList<BoundingLocationReport> locationReport = new ArrayList<BoundingLocationReport>();
+		List<BoundingLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getBoundingLocationReport();
+		for (BoundingLocationReport bondingLocationReport : findNonRemoveLocation) {
+			if (!bondingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+				locationReport.add(bondingLocationReport);
+			}
+		}
+		return locationReport;
+	}
+	
+	private List<EarthingLocationReport> findNonRemovedEarthingLocation(
+			SupplyCharacteristics supplyCharacteristicsRepo) {
+		ArrayList<EarthingLocationReport> locationReport = new ArrayList<EarthingLocationReport>();
+		List<EarthingLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getEarthingLocationReport();
+		for (EarthingLocationReport earthingLocationReport : findNonRemoveLocation) {
+			if (!earthingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+				locationReport.add(earthingLocationReport);
+			}
+		}
+		return locationReport;
+	}
+	
+	private List<Testing> findNonRemoveTesting(List<Testing> listOfTesting) {
+		for (Testing testing : listOfTesting) {
+			testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
+		}
+		return listOfTesting;
+	}
+
+	private List<TestingRecords> findNonRemoveTestingRecord(List<TestingRecords> listOfTestingRecords) {
+		List<TestingRecords> listNonRemovedTestingRecord = new ArrayList<TestingRecords>();
+		for (TestingRecords testingRecords : listOfTestingRecords) {
+			if (testingRecords.getTestingRecordStatus().equalsIgnoreCase("R")) {
+				listNonRemovedTestingRecord.add(testingRecords);
+			}
+		}
+		return listNonRemovedTestingRecord;
+	}
 }
+
