@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
-import com.capeelectric.model.BoundingLocationReport;
-import com.capeelectric.model.EarthingLocationReport;
-import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.SupplyCharacteristicComment;
@@ -138,14 +135,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			SupplyCharacteristics supplyCharacteristicsRepo = supplyCharacteristicsRepository
 					.findByUserNameAndSiteId(userName, siteId);
 			if (supplyCharacteristicsRepo != null) {
-				supplyCharacteristicsRepo
-						.setInstalLocationReport(findNonRemovedInstallLocation(supplyCharacteristicsRepo));
-				supplyCharacteristicsRepo
-						.setBoundingLocationReport(findNonRemovedBondingLocation(supplyCharacteristicsRepo));
-				supplyCharacteristicsRepo
-						.setEarthingLocationReport(findNonRemovedEarthingLocation(supplyCharacteristicsRepo));
-
-				sortingDateTime(supplyCharacteristicsRepo.getSupplyCharacteristicComment());
+					sortingDateTime(supplyCharacteristicsRepo.getSupplyCharacteristicComment());
 				return supplyCharacteristicsRepo;
 			} else {
 				throw new SupplyCharacteristicsException("Given UserName & Site doesn't exist Inspection");
@@ -430,40 +420,5 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				}
 			}
 		}
-	}
-	
-	private List<InstalLocationReport> findNonRemovedInstallLocation(SupplyCharacteristics supplyCharacteristicsRepo) {
-		ArrayList<InstalLocationReport> locationReport = new ArrayList<InstalLocationReport>();
-		List<InstalLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getInstalLocationReport();
-		for (InstalLocationReport instalLocationReport : findNonRemoveLocation) {
-			if (!instalLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
-				locationReport.add(instalLocationReport);
-			}
-		}
-		return locationReport;
-	}
-	
-	private List<BoundingLocationReport> findNonRemovedBondingLocation(
-			SupplyCharacteristics supplyCharacteristicsRepo) {
-		ArrayList<BoundingLocationReport> locationReport = new ArrayList<BoundingLocationReport>();
-		List<BoundingLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getBoundingLocationReport();
-		for (BoundingLocationReport bondingLocationReport : findNonRemoveLocation) {
-			if (!bondingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
-				locationReport.add(bondingLocationReport);
-			}
-		}
-		return locationReport;
-	}
-	
-	private List<EarthingLocationReport> findNonRemovedEarthingLocation(
-			SupplyCharacteristics supplyCharacteristicsRepo) {
-		ArrayList<EarthingLocationReport> locationReport = new ArrayList<EarthingLocationReport>();
-		List<EarthingLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getEarthingLocationReport();
-		for (EarthingLocationReport earthingLocationReport : findNonRemoveLocation) {
-			if (!earthingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
-				locationReport.add(earthingLocationReport);
-			}
-		}
-		return locationReport;
 	}
 }
