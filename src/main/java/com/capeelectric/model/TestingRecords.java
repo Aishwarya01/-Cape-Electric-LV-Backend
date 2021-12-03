@@ -389,4 +389,12 @@ public class TestingRecords implements Serializable {
 		this.testing = testing;
 	}
 
+	public List<TestingRecordsSourceSupply> getTestingRecordsSourceSupply() {
+		return testingRecordsSourceSupply;
+	}
+
+	public void setTestingRecordsSourceSupply(List<TestingRecordsSourceSupply> testingRecordsSourceSupply) {
+		this.testingRecordsSourceSupply = testingRecordsSourceSupply;
+	}
+
 }
