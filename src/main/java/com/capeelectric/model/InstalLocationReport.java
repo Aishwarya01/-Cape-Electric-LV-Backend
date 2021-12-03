@@ -52,6 +52,9 @@ public class InstalLocationReport implements Serializable {
 
 	@Column(name = "ELECTORDE_RESISTANCE_GRID")
 	private String electrodeResistanceGird;
+	
+	@Column(name = "INSTALLOCATIONREPORT_STATUS")
+	private String instalLocationReportStatus;
 
 	@JsonBackReference
 	@ManyToOne
@@ -145,6 +148,14 @@ public class InstalLocationReport implements Serializable {
 
 	public void setSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics) {
 		this.supplyCharacteristics = supplyCharacteristics;
+	}
+
+	public String getInstalLocationReportStatus() {
+		return instalLocationReportStatus;
+	}
+
+	public void setInstalLocationReportStatus(String instalLocationReportStatus) {
+		this.instalLocationReportStatus = instalLocationReportStatus;
 	}
 
 }

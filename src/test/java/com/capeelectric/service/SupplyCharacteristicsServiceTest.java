@@ -81,7 +81,7 @@ public class SupplyCharacteristicsServiceTest {
 		supplyCharacteristics.setMainNominalVoltage("3.00,152.1212,455.051,56.9459");
 		supplyCharacteristics.setMainLoopImpedance("4.000,12.12245,455.21265,56.766456");
 		supplyCharacteristics.setLiveConductorAC("3");
-		
+
 		supplyCharacteristicComment = new SupplyCharacteristicComment();
 		supplyCharacteristicComment.setViewerDate(LocalDateTime.now());
 		supplyCharacteristicComment.setViewerComment("question");
@@ -90,9 +90,28 @@ public class SupplyCharacteristicsServiceTest {
 		supplyCharacteristics.setSiteId(1);
 		supplyCharacteristics.setAlternativeSupply("Yes");
 		ArrayList<SupplyCharacteristicComment> listOfComments = new ArrayList<SupplyCharacteristicComment>();
-	    listOfComments.add(supplyCharacteristicComment);
-	    supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
-		
+		listOfComments.add(supplyCharacteristicComment);
+		supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
+
+		List<InstalLocationReport> installList = new ArrayList<InstalLocationReport>();
+		InstalLocationReport instalLocationReport = new InstalLocationReport();
+		instalLocationReport.setInstalLocationReportStatus("A");
+		installList.add(instalLocationReport);
+
+		List<BoundingLocationReport> boundingList = new ArrayList<BoundingLocationReport>();
+		BoundingLocationReport boundingLocationReport = new BoundingLocationReport();
+		boundingLocationReport.setInstalLocationReportStatus("u");
+		boundingList.add(boundingLocationReport);
+
+		List<EarthingLocationReport> earthingList = new ArrayList<EarthingLocationReport>();
+		EarthingLocationReport earthingLocationReport = new EarthingLocationReport();
+		earthingLocationReport.setInstalLocationReportStatus("n");
+		earthingList.add(earthingLocationReport);
+
+		supplyCharacteristics.setInstalLocationReport(installList);
+		supplyCharacteristics.setBoundingLocationReport(boundingList);
+		supplyCharacteristics.setEarthingLocationReport(earthingList);
+
 	}
 	{
 		register =new Register();
