@@ -59,7 +59,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 				document.open();
 
-				Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+				Font font = new Font(BaseFont.createFont(), 12, Font.BOLD, BaseColor.BLACK);
 				Font font7 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD);
 				Font font1 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
 				Font font4 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
@@ -283,8 +283,10 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 					addRow(table3, "Prospective fault current Ipfc (kA) ", NFC1, NFC2, NFC3, NFC4, NFC5, NFC6, NFC7,
 							NFC8, NFC9);
 
-					addRow1(table22, "Actual load current connected to this source (A)", loadCurrent, loadCurrent2,
-							loadCurrent3, loadCurrent4);
+					addRow1(table22, "Actual load current connected to this source (A)",
+							"                       " + loadCurrent, "                       " + loadCurrent2,
+							"                                      " + loadCurrent3,
+							"                       " + loadCurrent4);
 					document.add(table34);
 					document.add(table1);
 					document.add(table2);
@@ -500,7 +502,8 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table8.getDefaultCell().setBorder(0);
 
 				tableHeader(table8);
-				// open the below tableData method remove the commented of if condition if we need to show
+				// open the below tableData method remove the commented of if condition if we
+				// need to show
 				// the data as based on installocation status
 				tableData(table8, instalLocationReport);
 
@@ -972,8 +975,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 //			addNominalRow2(table6, "Nominal Frequency f (HZ)", supplyParameters.getNominalFrequency());
 			addRow(table7, "External Loop Impedance Ze (ohms)", PI1, PI2, PI3, PI4, PI5, PI6, PI7, PI8, PI9);
 			addRow(table7, "Prospective fault current Ipfc (kA) ", PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9);
-			addRow1(table22, "Actual load current connected to this source (A)", loadCurrent, loadCurrent2,
-					loadCurrent3, loadCurrent4);
+			addRow1(table22, "Actual load current connected to this source (A)",
+					"                       " + loadCurrent, "                       " + loadCurrent2,
+					"                                      " + loadCurrent3, "                       " + loadCurrent4);
 			document.add(table34);
 			document.add(table5);
 			document.add(table6);

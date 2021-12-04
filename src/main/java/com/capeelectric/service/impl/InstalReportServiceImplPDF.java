@@ -461,29 +461,33 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				cell10.setBackgroundColor(new GrayColor(0.93f));
 				cell10.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(cell10);
-
-				PdfPCell site71 = new PdfPCell(new Paragraph(report.getInstallationDetails(),
-						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				table1.addCell(new Phrase("Details of installation referred in this report:",
-						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//				site71.setFixedHeight(30f);
-				site71.setHorizontalAlignment(Element.ALIGN_LEFT);
-				site71.setBorder(PdfPCell.NO_BORDER);
-				table1.addCell(site71);
-
-				PdfPCell Date = new PdfPCell(new Paragraph("Date of starting the verification:",
-						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				Date.setBackgroundColor(new GrayColor(0.93f));
-				Date.setHorizontalAlignment(Element.ALIGN_LEFT);
-				Date.setBorder(PdfPCell.NO_BORDER);
-				table1.addCell(Date);
-				PdfPCell cell12 = new PdfPCell(
-						new Paragraph(report.getVerificationDate(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				cell12.setHorizontalAlignment(Element.ALIGN_LEFT);
-				cell12.setBackgroundColor(new GrayColor(0.93f));
-				cell12.setBorder(PdfPCell.NO_BORDER);
-				table1.addCell(cell12);
-
+				
+				PdfPCell Designation = new PdfPCell(
+						new Paragraph("Designation:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+//				Designation.setBackgroundColor(new GrayColor(0.93f));
+				Designation.setHorizontalAlignment(Element.ALIGN_LEFT);
+				Designation.setBorder(PdfPCell.NO_BORDER);
+				table1.addCell(Designation);
+				PdfPCell cell14 = new PdfPCell(
+						new Paragraph(report.getDesignation(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				cell14.setHorizontalAlignment(Element.ALIGN_LEFT);
+//				cell14.setBackgroundColor(new GrayColor(0.93f));
+				cell14.setBorder(PdfPCell.NO_BORDER);
+				table1.addCell(cell14);
+				
+				PdfPCell company = new PdfPCell(
+						new Paragraph("Company:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				company.setBackgroundColor(new GrayColor(0.93f));
+				company.setHorizontalAlignment(Element.ALIGN_LEFT);
+				company.setBorder(PdfPCell.NO_BORDER);
+				table1.addCell(company);
+				PdfPCell company1 = new PdfPCell(
+						new Paragraph(report.getCompany(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				company1.setHorizontalAlignment(Element.ALIGN_LEFT);
+				company1.setBackgroundColor(new GrayColor(0.93f));
+				company1.setBorder(PdfPCell.NO_BORDER);
+				table1.addCell(company1);
+				
 				PdfPCell site72 = new PdfPCell(
 						new Paragraph(report.getVerifiedEngineer(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				table1.addCell(new Phrase("Name of engineer who carries out verification:",
@@ -493,26 +497,54 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				site72.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(site72);
 
-				PdfPCell Designation = new PdfPCell(
+				PdfPCell Designation1 = new PdfPCell(
 						new Paragraph("Designation:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				Designation.setBackgroundColor(new GrayColor(0.93f));
-				Designation.setHorizontalAlignment(Element.ALIGN_LEFT);
-				Designation.setBorder(PdfPCell.NO_BORDER);
-				table1.addCell(Designation);
-				PdfPCell cell14 = new PdfPCell(
-						new Paragraph(report.getDesignation(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				cell14.setHorizontalAlignment(Element.ALIGN_LEFT);
-				cell14.setBackgroundColor(new GrayColor(0.93f));
-				cell14.setBorder(PdfPCell.NO_BORDER);
-				table1.addCell(cell14);
+				Designation1.setBackgroundColor(new GrayColor(0.93f));
+				Designation1.setHorizontalAlignment(Element.ALIGN_LEFT);
+				Designation1.setBorder(PdfPCell.NO_BORDER);
+				table1.addCell(Designation1);
+				PdfPCell cell104 = new PdfPCell(
+						new Paragraph(report.getInspectorDesignation(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				cell104.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell104.setBackgroundColor(new GrayColor(0.93f));
+				cell104.setBorder(PdfPCell.NO_BORDER);
+				table1.addCell(cell104);
 
 				PdfPCell site73 = new PdfPCell(
-						new Paragraph(report.getCompany(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+						new Paragraph(report.getInspectorCompanyName(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				table1.addCell(new Phrase("Company:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //				site73.setFixedHeight(30f);
 				site73.setHorizontalAlignment(Element.ALIGN_LEFT);
 				site73.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(site73);
+				
+				PdfPCell site71 = new PdfPCell(new Paragraph("Details of installation referred in this report:",
+						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				site71.setBackgroundColor(new GrayColor(0.93f));
+				site71.setHorizontalAlignment(Element.ALIGN_LEFT);
+				site71.setBorder(PdfPCell.NO_BORDER);
+				table1.addCell(site71);
+				PdfPCell cell102 = new PdfPCell(
+						new Paragraph(report.getInstallationDetails(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				cell102.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell102.setBackgroundColor(new GrayColor(0.93f));
+				cell102.setBorder(PdfPCell.NO_BORDER);
+				table1.addCell(cell102);
+
+				PdfPCell Date = new PdfPCell(new Paragraph("Date of starting the verification:",
+						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+//				Date.setBackgroundColor(new GrayColor(0.93f));
+				Date.setHorizontalAlignment(Element.ALIGN_LEFT);
+				Date.setBorder(PdfPCell.NO_BORDER);
+				table1.addCell(Date);
+				PdfPCell cell12 = new PdfPCell(
+						new Paragraph(report.getVerificationDate(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				cell12.setHorizontalAlignment(Element.ALIGN_LEFT);
+//				cell12.setBackgroundColor(new GrayColor(0.93f));
+				cell12.setBorder(PdfPCell.NO_BORDER);
+				table1.addCell(cell12);
+
+				
 
 				PdfPCell Read = new PdfPCell(
 						new Paragraph("Read and confirmed the extent and limitations (part 5, section 1):",
@@ -533,8 +565,8 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				PdfPTable section2 = new PdfPTable(pointColumnWidths10);
 				section2.setWidthPercentage(100); // Width 100%
-				section2.setSpacingBefore(10f); // Space before table
-				section2.setSpacingAfter(7f); // Space after table
+				section2.setSpacingBefore(5f); // Space before table
+				section2.setSpacingAfter(5f); // Space after table
 				section2.setWidthPercentage(100);
 				section2.getDefaultCell().setBorder(0);
 
@@ -548,9 +580,8 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				PdfPTable Dsection2 = new PdfPTable(pointColumnWidths10);
 				Dsection2.setWidthPercentage(100); // Width 100%
-				Dsection2.setSpacingBefore(8f); // Space before table
+				Dsection2.setSpacingBefore(5f); // Space before table
 				Dsection2.setSpacingAfter(8f); // Space after table
-				Dsection2.setWidthPercentage(100);
 				Dsection2.getDefaultCell().setBorder(0);
 
 				PdfPCell Declaration = new PdfPCell(
@@ -682,7 +713,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				Paragraph paragraph22 = new Paragraph(
 						"I/we recommend that this installation is further inspected and tested after an interval of not more than__"
-								+ report.getNextInspection() + "__years",
+								+ report.getNextInspection()  + "__years",
 						font10N);
 				document.add(paragraph22);
 
@@ -704,7 +735,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				PdfPTable designer = new PdfPTable(pointColumnWidths10);
 				designer.setWidthPercentage(100); // Width 100%
-				designer.setSpacingBefore(10f); // Space before table
+				designer.setSpacingBefore(5f); // Space before table
 				designer.setSpacingAfter(5f); // Space after table
 				designer.setWidthPercentage(100);
 				designer.getDefaultCell().setBorder(0);
@@ -729,9 +760,8 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				PdfPTable designer2 = new PdfPTable(pointColumnWidths10);
 				designer2.setWidthPercentage(100); // Width 100%
-				designer2.setSpacingBefore(10f); // Space before table
+				designer2.setSpacingBefore(5f); // Space before table
 				designer2.setSpacingAfter(5f); // Space after table
-				designer2.setWidthPercentage(100);
 				designer2.getDefaultCell().setBorder(0);
 
 				PdfPCell ddesigner = new PdfPCell(
@@ -754,7 +784,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				PdfPTable contractor = new PdfPTable(pointColumnWidths10);
 				contractor.setWidthPercentage(100); // Width 100%
-				contractor.setSpacingBefore(10f); // Space before table
+				contractor.setSpacingBefore(5f); // Space before table
 				contractor.setSpacingAfter(5f); // Space after table
 				contractor.setWidthPercentage(100);
 				contractor.getDefaultCell().setBorder(0);
@@ -770,9 +800,8 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				PdfPTable contractor0 = new PdfPTable(pointColumnWidths10);
 				contractor0.setWidthPercentage(100); // Width 100%
-				contractor0.setSpacingBefore(10f); // Space before table
+				contractor0.setSpacingBefore(5f); // Space before table
 				contractor0.setSpacingAfter(5f); // Space after table
-				contractor0.setWidthPercentage(100);
 				contractor0.getDefaultCell().setBorder(0);
 
 				PdfPCell section5C = new PdfPCell(
@@ -794,7 +823,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				PdfPTable inspector = new PdfPTable(pointColumnWidths10);
 				inspector.setWidthPercentage(100); // Width 100%
-				inspector.setSpacingBefore(10f); // Space before table
+				inspector.setSpacingBefore(5f); // Space before table
 				inspector.setSpacingAfter(5f); // Space after table
 				inspector.setWidthPercentage(100);
 				inspector.getDefaultCell().setBorder(0);
@@ -810,7 +839,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				PdfPTable inspector0 = new PdfPTable(pointColumnWidths10);
 				inspector0.setWidthPercentage(100); // Width 100%
-				inspector0.setSpacingBefore(10f); // Space before table
+				inspector0.setSpacingBefore(5f); // Space before table
 				inspector0.setSpacingAfter(5f); // Space after table
 				inspector0.setWidthPercentage(100);
 				inspector0.getDefaultCell().setBorder(0);
