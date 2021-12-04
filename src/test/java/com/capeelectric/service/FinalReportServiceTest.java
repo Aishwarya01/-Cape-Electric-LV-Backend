@@ -24,6 +24,7 @@ import com.capeelectric.model.BoundingLocationReport;
 import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.FinalReport;
 import com.capeelectric.model.InstalLocationReport;
+import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
@@ -179,6 +180,11 @@ public class FinalReportServiceTest {
 
 	private PeriodicInspection retrievePeriodicInspection() {
 		PeriodicInspection periodicInspection = new PeriodicInspection();
+		IpaoInspection ipaoInspection = new IpaoInspection();
+		ipaoInspection.setInspectionFlag("a");
+		List<IpaoInspection> arrayList = new ArrayList<IpaoInspection>();
+		arrayList.add(ipaoInspection);
+		periodicInspection.setIpaoInspection(arrayList);
 		periodicInspection.setUserName("LVsystem@gmail.com");
 		periodicInspection.setSiteId(1);
 		
@@ -192,6 +198,7 @@ public class FinalReportServiceTest {
 		List<Testing> testingList = new ArrayList<Testing>();
 		List<TestingRecords> testingRecordsList = new ArrayList<TestingRecords>();
 		Testing testing = new Testing();
+		testing.setTestingStatus("a");
 		TestingRecords testingRecords = new TestingRecords();
 		testingRecords.setTestingRecordStatus("a");
 		testingRecordsList.add(testingRecords);

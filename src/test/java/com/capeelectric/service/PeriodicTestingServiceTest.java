@@ -114,6 +114,7 @@ public class PeriodicTestingServiceTest {
 		List<Testing> testingList = new ArrayList<Testing>();
 		List<TestingRecords> testingRecordsList = new ArrayList<TestingRecords>();
         Testing testing = new Testing();
+        testing.setTestingStatus("a");
         TestingRecords testingRecords = new TestingRecords();
         testingRecords.setTestingRecordStatus("a");
         testingRecordsList.add(testingRecords);

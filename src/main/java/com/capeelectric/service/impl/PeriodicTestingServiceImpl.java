@@ -3,7 +3,6 @@ package com.capeelectric.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.PeriodicTestingException;
-import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Testing;
@@ -58,6 +56,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	*/
 	@Override
 	public void addTestingReport(TestingReport testingReport) throws PeriodicTestingException, CompanyDetailsException {
+		int i=0;
 		List<TestingReportComment> listOfComments = new ArrayList<TestingReportComment>();
 		if (testingReport.getUserName() != null && testingReport.getSiteId() != null) {
 			Optional<TestingReport> testingRepo = testingReportRepository
@@ -72,6 +71,8 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 								&& testingReport.getTestIncomingDistribution() != null
 								&& testingItr.getTestDistribution().size() > 0 && testingItr.getTestingRecords().size() > 0
 								&& testingReport.getTestIncomingDistribution().size() > 0) {
+							i++;
+							if (i == testing.size()) {
 								testingComment = new TestingReportComment();
 								testingComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
 								testingComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
@@ -86,6 +87,8 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 								testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
 								testingReportRepository.save(testingReport);
 								siteDetails.updateSite(testingReport.getSiteId(), testingReport.getUserName());
+							}
+								
 						} else {
 							throw new PeriodicTestingException("Please fill all the fields before clicking next button");
 						}
@@ -333,9 +336,16 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	}
 	
 	private List<Testing> findNonRemoveTesting(List<Testing> listOfTesting) {
+
 		for (Testing testing : listOfTesting) {
-			testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
+			if (testing != null && testing.getTestingStatus().equalsIgnoreCase("R")) {
+				listOfTesting.remove(testing);
+			} else {
+				testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
+			}
+
 		}
+
 		return listOfTesting;
 	}
 

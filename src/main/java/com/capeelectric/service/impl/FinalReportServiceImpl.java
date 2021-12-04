@@ -218,7 +218,11 @@ public class FinalReportServiceImpl implements FinalReportService {
 	
 	private List<Testing> findNonRemoveTesting(List<Testing> listOfTesting) {
 		for (Testing testing : listOfTesting) {
-			testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
+			if (testing != null && testing.getTestingStatus().equalsIgnoreCase("R")) {
+				listOfTesting.remove(testing);
+			} else {
+				testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
+			}
 		}
 		return listOfTesting;
 	}

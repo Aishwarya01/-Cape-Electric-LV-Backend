@@ -11,4 +11,6 @@ import com.capeelectric.model.Testing;
  */
 public interface TestInfoRepository extends CrudRepository<Testing, Integer> {
 
+	public Testing findByLocationCount(Integer integer);
+
 }

@@ -35,6 +35,9 @@ public class IpaoInspection implements Serializable {
 	@Column(name = "IPAO_INSPECTION_ID")
 	private Integer ipaoInspectionId;
 
+	@Column(name = "LOCATION_COUNT")
+	private Integer locationCount;
+	
 	@Column(name = "LOCATION_NUMBER")
 	private Integer locationNumber;
 
@@ -147,7 +150,7 @@ public class IpaoInspection implements Serializable {
 	private String supplementaryBonding;
 
 	@Column(name = "INSPECTION_FLAG")
-	private String inspectionFlag;
+	private String inspectionFlag = "R";
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -508,6 +511,14 @@ public class IpaoInspection implements Serializable {
 
 	public void setPeriodicInspection(PeriodicInspection periodicInspection) {
 		this.periodicInspection = periodicInspection;
+	}
+
+	public Integer getLocationCount() {
+		return locationCount;
+	}
+
+	public void setLocationCount(Integer locationCount) {
+		this.locationCount = locationCount;
 	}
 
 }

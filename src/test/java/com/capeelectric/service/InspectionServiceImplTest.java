@@ -103,6 +103,12 @@ public class InspectionServiceImplTest {
 		listOfComments = new ArrayList<PeriodicInspectionComment>();
 	    listOfComments.add(periodicInspectionComment);
 	    periodicInspection.setPeriodicInspectorComment(listOfComments);
+	    
+	    IpaoInspection ipaoInspection = new IpaoInspection();
+		ipaoInspection.setInspectionFlag("a");
+		List<IpaoInspection> arrayList = new ArrayList<IpaoInspection>();
+		arrayList.add(ipaoInspection);
+		periodicInspection.setIpaoInspection(arrayList);
 		
 	}
 

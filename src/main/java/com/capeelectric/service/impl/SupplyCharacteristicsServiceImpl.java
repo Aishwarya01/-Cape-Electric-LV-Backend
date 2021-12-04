@@ -77,15 +77,11 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			if(supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("No")) {
 				saveSupplyCharacteristics(supplyCharacteristics);
 			}
-			else if (supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("Yes") && supplyCharacteristics.getSupplyParameters() != null && supplyCharacteristics.getCircuitBreaker() != null
-					&& supplyCharacteristics.getInstalLocationReport() != null
-					&& supplyCharacteristics.getBoundingLocationReport() != null
-					&& supplyCharacteristics.getEarthingLocationReport() != null
+			else if (supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("Yes")
+					&& supplyCharacteristics.getSupplyParameters() != null
+					&& supplyCharacteristics.getCircuitBreaker() != null
 					&& supplyCharacteristics.getSupplyParameters().size() > 0
-					&& supplyCharacteristics.getCircuitBreaker().size() > 0
-					&& supplyCharacteristics.getInstalLocationReport().size() > 0
-					&& supplyCharacteristics.getBoundingLocationReport().size() > 0
-					&& supplyCharacteristics.getEarthingLocationReport().size() > 0) {
+					&& supplyCharacteristics.getCircuitBreaker().size() > 0) {
 				saveSupplyCharacteristics(supplyCharacteristics);
 			} else {
 				throw new SupplyCharacteristicsException("Please fill all the fields before clicking next button");

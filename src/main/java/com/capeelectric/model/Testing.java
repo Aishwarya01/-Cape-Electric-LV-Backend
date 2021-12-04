@@ -45,6 +45,12 @@ public class Testing implements Serializable {
 
 	@Column(name = "DATE")
 	private String date;
+	
+	@Column(name = "TESTING_STATUS")
+	private String testingStatus;
+	
+	@Column(name = "LOCATION_COUNT")
+	private Integer locationCount;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "testing", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -134,4 +140,21 @@ public class Testing implements Serializable {
 	public void setTestingEquipment(List<TestingEquipment> testingEquipment) {
 		this.testingEquipment = testingEquipment;
 	}
+
+	public String getTestingStatus() {
+		return testingStatus;
+	}
+
+	public void setTestingStatus(String testingStatus) {
+		this.testingStatus = testingStatus;
+	}
+
+	public Integer getLocationCount() {
+		return locationCount;
+	}
+
+	public void setLocationCount(Integer locationCount) {
+		this.locationCount = locationCount;
+	}
+	
 }
