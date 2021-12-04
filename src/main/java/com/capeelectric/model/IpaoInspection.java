@@ -150,7 +150,7 @@ public class IpaoInspection implements Serializable {
 	private String supplementaryBonding;
 
 	@Column(name = "INSPECTION_FLAG")
-	private String inspectionFlag = "R";
+	private String inspectionFlag;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
