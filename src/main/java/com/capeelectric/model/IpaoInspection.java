@@ -34,10 +34,10 @@ public class IpaoInspection implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "IPAO_INSPECTION_ID")
 	private Integer ipaoInspectionId;
-	
+
 	@Column(name = "LOCATION_NUMBER")
 	private Integer locationNumber;
-	
+
 	@Column(name = "LOCATION_NAME")
 	private String locationName;
 
@@ -118,7 +118,7 @@ public class IpaoInspection implements Serializable {
 
 	@Column(name = "O_BASIC_ELECTRICAL_SEPARTION")
 	private String basicElectricalSepartion;
-	
+
 	@Column(name = "O_ISOLATE_PUBLIC_SUPPLY")
 	private String isolatePublicSupply;
 
@@ -138,7 +138,7 @@ public class IpaoInspection implements Serializable {
 	private String faultNonConductLocation;
 
 	@Column(name = "O_FAULT_ELECTRICAL_SEPARTION")
-	private String faultElectricalSepartion; 
+	private String faultElectricalSepartion;
 
 	@Column(name = "O_OPERATING_CURRENT")
 	private String operatingCurrent;
@@ -146,8 +146,11 @@ public class IpaoInspection implements Serializable {
 	@Column(name = "O_SUPPLEMENTARY_BONDING")
 	private String supplementaryBonding;
 
+	@Column(name = "INSPECTION_FLAG")
+	private String inspectionFlag;
+
 	@JsonManagedReference
-	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL , fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<ConsumerUnit> consumerUnit;
 
 	@JsonManagedReference
@@ -157,7 +160,7 @@ public class IpaoInspection implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<IsolationCurrent> isolationCurrent;
-	
+
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "PERIODIC_INSPECTION_ID")
@@ -165,6 +168,14 @@ public class IpaoInspection implements Serializable {
 
 	public Integer getIpaoInspectionId() {
 		return ipaoInspectionId;
+	}
+
+	public String getInspectionFlag() {
+		return inspectionFlag;
+	}
+
+	public void setInspectionFlag(String inspectionFlag) {
+		this.inspectionFlag = inspectionFlag;
 	}
 
 	public void setIpaoInspectionId(Integer ipaoInspectionId) {
@@ -467,7 +478,6 @@ public class IpaoInspection implements Serializable {
 		this.supplementaryBonding = supplementaryBonding;
 	}
 
-	
 	public List<ConsumerUnit> getConsumerUnit() {
 		return consumerUnit;
 	}

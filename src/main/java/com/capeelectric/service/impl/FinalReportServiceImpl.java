@@ -15,6 +15,7 @@ import com.capeelectric.model.BoundingLocationReport;
 import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.FinalReport;
 import com.capeelectric.model.InstalLocationReport;
+import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
@@ -126,6 +127,9 @@ public class FinalReportServiceImpl implements FinalReportService {
 					logger.debug("PriodicInspection_fetching ended");
 
 					if (periodicInspection.isPresent() && periodicInspection != null) {
+						
+						periodicInspection.get()
+						.setIpaoInspection(findNonRemovedInspectionLocation(periodicInspection.get()));
 						finalReport.setPeriodicInspection(periodicInspection.get());
 
 						logger.debug("fetching process started for PriodicTesting");
@@ -157,6 +161,18 @@ public class FinalReportServiceImpl implements FinalReportService {
 		} else {
 			throw new FinalReportException("Invalid Input");
 		}
+	}
+
+	private List<IpaoInspection> findNonRemovedInspectionLocation(PeriodicInspection inspectionRepo) {
+
+		ArrayList<IpaoInspection>inspectionReport = new ArrayList<IpaoInspection>();
+		List<IpaoInspection> findNonRemoveLocation = inspectionRepo.getIpaoInspection();
+		for (IpaoInspection inspectionLocationReport : findNonRemoveLocation) {
+			if (!inspectionLocationReport.getInspectionFlag().equalsIgnoreCase("R")) {
+				inspectionReport.add(inspectionLocationReport);
+			}
+		}
+		return inspectionReport;
 	}
 
 	@Override
