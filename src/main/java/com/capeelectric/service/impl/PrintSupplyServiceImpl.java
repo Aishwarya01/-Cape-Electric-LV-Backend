@@ -3,6 +3,7 @@ package com.capeelectric.service.impl;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -1234,73 +1235,10 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		document.add(table9);
 	}
 
-	private void TableData2(PdfPTable table13, List<EarthingLocationReport> earthingLocationReport) {
-		for (EarthingLocationReport arr : earthingLocationReport) {
-			PdfPCell cell = new PdfPCell();
-			Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
-			cell.setPhrase(new Phrase(arr.getLocation(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table13.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getJointNo(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table13.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getJointReference(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table13.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getJointResistance(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table13.addCell(cell);
-		}
-
-	}
-
-	private void tableData1(PdfPTable table11, List<BoundingLocationReport> boundingLocationReport) {
-		for (BoundingLocationReport arr : boundingLocationReport) {
-			PdfPCell cell = new PdfPCell();
-			Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
-			cell.setPhrase(new Phrase(arr.getLocation(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getJointNo(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getJointReference(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getJointResistance(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
-		}
-	}
-
-	private void tableHeader1(PdfPTable table11) throws DocumentException, IOException {
-		PdfPCell cell = new PdfPCell();
-		cell.setPadding(4);
-		Font font1 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-		cell.setPhrase(new Phrase("Location", font1));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		cell.setGrayFill(0.92f);
-		table11.addCell(cell);
-		cell.setPhrase(new Phrase("Joint No", font1));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		cell.setGrayFill(0.92f);
-		table11.addCell(cell);
-		cell.setPhrase(new Phrase("Joint Reference", font1));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		cell.setGrayFill(0.92f);
-		table11.addCell(cell);
-		cell.setPhrase(new Phrase("Joint resistance (ohms)", font1));
-		cell.setGrayFill(0.92f);
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table11.addCell(cell);
-
-	}
-
 	private void tableData(PdfPTable table8, List<InstalLocationReport> instalLocationReport) {
-
 		for (InstalLocationReport arr : instalLocationReport) {
-//			if (arr.getInstalLocationReportStatus().equalsIgnoreCase("a")
-//					|| arr.getInstalLocationReportStatus().equalsIgnoreCase("u")) {
+//			if (arr.getInstalLocationRportStatus().equalsIgnoreCase("a")
+//					|| arr.getInstalLocationRportStatus().equalsIgnoreCase("u")) {
 			PdfPCell cell = new PdfPCell();
 			Font font = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
 			cell.setPhrase(new Phrase(arr.getLocationNo(), font));
@@ -1329,6 +1267,73 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 			table8.addCell(cell);
 		}
 //		}
+	}
+
+	private void tableData1(PdfPTable table11, List<BoundingLocationReport> boundingLocationReport) {
+		for (BoundingLocationReport arr : boundingLocationReport) {
+//			if (arr.getInstalLocationRportStatus().equalsIgnoreCase("a")
+//					|| arr.getInstalLocationRportStatus().equalsIgnoreCase("u")) {
+			PdfPCell cell = new PdfPCell();
+			Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
+			cell.setPhrase(new Phrase(arr.getLocation(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table11.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getJointNo(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table11.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getJointReference(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table11.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getJointResistance(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table11.addCell(cell);
+		}
+//		}
+	}
+	
+	private void TableData2(PdfPTable table13, List<EarthingLocationReport> earthingLocationReport) {
+		for (EarthingLocationReport arr : earthingLocationReport) {
+//			if (arr.getInstalLocationRportStatus().equalsIgnoreCase("a")
+//					|| arr.getInstalLocationRportStatus().equalsIgnoreCase("u")) {
+			PdfPCell cell = new PdfPCell();
+			 Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
+			cell.setPhrase(new Phrase(arr.getLocation(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table13.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getJointNo(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table13.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getJointReference(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table13.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getJointResistance(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table13.addCell(cell);
+		}
+//		}
+	}
+	
+	private void tableHeader1(PdfPTable table11) throws DocumentException, IOException {
+		PdfPCell cell = new PdfPCell();
+		cell.setPadding(4);
+		Font font1 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+		cell.setPhrase(new Phrase("Location", font1));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell.setGrayFill(0.92f);
+		table11.addCell(cell);
+		cell.setPhrase(new Phrase("Joint No", font1));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell.setGrayFill(0.92f);
+		table11.addCell(cell);
+		cell.setPhrase(new Phrase("Joint Reference", font1));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell.setGrayFill(0.92f);
+		table11.addCell(cell);
+		cell.setPhrase(new Phrase("Joint resistance (ohms)", font1));
+		cell.setGrayFill(0.92f);
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table11.addCell(cell);
+
 	}
 
 	private void tableHeader(PdfPTable table8) throws DocumentException, IOException {
