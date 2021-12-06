@@ -83,7 +83,7 @@ public class SignatorDetails implements Serializable {
 	private String declarationSignature;
 	
 	@Column(name = "SIGNATOR_STATUS")
-	private Boolean signatorStatus;
+	private String signatorStatus;
 
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.ALL)
@@ -242,11 +242,13 @@ public class SignatorDetails implements Serializable {
 		this.reportDetails = reportDetails;
 	}
 
-	public Boolean getSignatorStatus() {
+	public String getSignatorStatus() {
 		return signatorStatus;
 	}
 
-	public void setSignatorStatus(Boolean signatorStatus) {
+	public void setSignatorStatus(String signatorStatus) {
 		this.signatorStatus = signatorStatus;
 	}
+
+ 
 }

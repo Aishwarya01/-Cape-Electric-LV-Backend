@@ -18,6 +18,7 @@ import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
+import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
@@ -156,6 +157,7 @@ public class SummaryServiceImpl implements SummaryService {
 			List<Summary> summaryRepo = summaryRepository.findByUserNameAndSiteId(userName, siteId);
 			if (summaryRepo != null) {
 				for (Summary summary : summaryRepo) {
+					summary.setSummaryObervation(findNonRemoveObservation(summary.getSummaryObervation()));
 					sortingDateTime(summary.getSummaryComment());
 				}
 				return summaryRepo;
@@ -371,5 +373,16 @@ public class SummaryServiceImpl implements SummaryService {
 			}
 		}
 		return flag;
+	}
+	
+	private List<SummaryObervation> findNonRemoveObservation(List<SummaryObervation> summaryObervation) {
+		List<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
+		for (SummaryObervation obervation : summaryObervation) {
+			if (obervation != null && obervation.getObervationStatus() != null
+					&& !obervation.getObervationStatus().equalsIgnoreCase("R")) {
+				obervationList.add(obervation);
+			}
+		}
+		return obervationList;
 	}
 }

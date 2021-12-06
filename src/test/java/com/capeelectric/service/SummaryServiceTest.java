@@ -100,6 +100,12 @@ public class SummaryServiceTest {
 		listComment.add(summaryComment);
 		summary.setSummaryComment(listComment);
 		
+		ArrayList<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
+		SummaryObervation obervation = new SummaryObervation();
+		obervation.setObervationStatus("a");
+		obervationList.add(obervation);
+		
+		summary.setSummaryObervation(obervationList);
 	}
 	
 	{

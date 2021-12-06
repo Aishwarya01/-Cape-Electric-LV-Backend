@@ -2,8 +2,10 @@
 package com.capeelectric.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +20,10 @@ import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
+import com.capeelectric.model.SignatorDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.Summary;
+import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingRecords;
@@ -106,6 +110,7 @@ public class FinalReportServiceImpl implements FinalReportService {
 			Optional<ReportDetails> reportDetails = instalReportDetailsRepository.findBySiteId(siteId);
 			logger.debug("InstallReport_Information fetching ended");
 			if (reportDetails.isPresent() && reportDetails != null) {
+				reportDetails.get().setSignatorDetails(findNonRemovedReport(reportDetails.get().getSignatorDetails()));
 				finalReport.setReportDetails(reportDetails.get());
 
 				logger.debug("fetching process started for SupplyCharacteristic");
@@ -127,9 +132,9 @@ public class FinalReportServiceImpl implements FinalReportService {
 					logger.debug("PriodicInspection_fetching ended");
 
 					if (periodicInspection.isPresent() && periodicInspection != null) {
-						
+
 						periodicInspection.get()
-						.setIpaoInspection(findNonRemovedInspectionLocation(periodicInspection.get()));
+								.setIpaoInspection(findNonRemovedInspectionLocation(periodicInspection.get()));
 						finalReport.setPeriodicInspection(periodicInspection.get());
 
 						logger.debug("fetching process started for PriodicTesting");
@@ -145,6 +150,8 @@ public class FinalReportServiceImpl implements FinalReportService {
 							logger.debug("Summary_fetching ended");
 
 							if (summary.isPresent() && summary != null) {
+								summary.get().setSummaryObervation(
+										findNonRemoveObservation(summary.get().getSummaryObervation()));
 								finalReport.setSummary(summary.get());
 
 								logger.debug("Successfully Five_Steps fetching Operation done");
@@ -235,6 +242,27 @@ public class FinalReportServiceImpl implements FinalReportService {
 			}
 		}
 		return listNonRemovedTestingRecord;
+	}
+	
+	private Set<SignatorDetails> findNonRemovedReport(Set<SignatorDetails> signatorDetails) {
+		 Set<SignatorDetails> signatorDetail = new HashSet<SignatorDetails>();
+		for (SignatorDetails signatorDetailItr : signatorDetails) {
+			if (signatorDetailItr !=null && signatorDetailItr.getSignatorStatus() !=null &&  !signatorDetailItr.getSignatorStatus().equalsIgnoreCase("R")) {
+				signatorDetail.add(signatorDetailItr);
+			}  
+		}
+		return signatorDetail;
+	}
+	
+	private List<SummaryObervation> findNonRemoveObservation(List<SummaryObervation> summaryObervation) {
+		List<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
+		for (SummaryObervation obervation : summaryObervation) {
+			if (obervation != null && obervation.getObervationStatus() != null
+					&& !obervation.getObervationStatus().equalsIgnoreCase("R")) {
+				obervationList.add(obervation);
+			}
+		}
+		return obervationList;
 	}
 }
 
