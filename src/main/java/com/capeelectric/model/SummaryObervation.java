@@ -40,6 +40,9 @@ public class SummaryObervation implements Serializable {
 
 	@Column(name = "COMMENT")
 	private String comment;
+	
+	@Column(name = "OBERVATION_STATUS")
+	private String obervationStatus;
 
 	@JsonBackReference
 	@ManyToOne
@@ -92,6 +95,14 @@ public class SummaryObervation implements Serializable {
 
 	public void setSummary(Summary summary) {
 		this.summary = summary;
+	}
+
+	public String getObervationStatus() {
+		return obervationStatus;
+	}
+
+	public void setObervationStatus(String obervationStatus) {
+		this.obervationStatus = obervationStatus;
 	}
 
 }
