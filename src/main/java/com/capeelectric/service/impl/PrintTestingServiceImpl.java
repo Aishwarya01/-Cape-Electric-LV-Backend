@@ -74,7 +74,9 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				document.add(table13);
 
 				for (Testing testing1 : testing) {
-					testingIteration(document, testing1);
+					if (!testing1.getTestingStatus().equalsIgnoreCase("R")) {
+						testingIteration(document, testing1);
+					}
 				}
 
 				PdfPTable table19 = new PdfPTable(1);
@@ -381,8 +383,8 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 						IPF9);
 				addRow(table2, "External Loop Impedance Ze (ohms)", ZS1, ZS2, ZS3, ZS4, ZS5, ZS6, ZS7, ZS8, ZS9);
 
-				addRow1(table22, "Actual load current connected to this source (A)", loadCurrent, loadCurrent2, loadCurrent3,
-						loadCurrent4);
+				addRow1(table22, "Actual load current connected to this source (A)", loadCurrent, loadCurrent2,
+						loadCurrent3, loadCurrent4);
 				document.add(table250);
 				document.add(table2);
 				document.add(table22);
@@ -400,7 +402,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 	private void addRow1(PdfPTable table22, String string, String loadCurrent, String loadCurrent2, String loadCurrent3,
 			String loadCurrent4) throws DocumentException, IOException {
 		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-		
+
 		Font font1 = new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK);
 		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font1));
 		nameCell.setGrayFill(0.92f);
@@ -408,12 +410,11 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		PdfPCell valueCell3 = new PdfPCell(new Paragraph(loadCurrent2, font));
 		PdfPCell valueCell4 = new PdfPCell(new Paragraph(loadCurrent3, font));
 		PdfPCell valueCell5 = new PdfPCell(new Paragraph(loadCurrent4, font));
-	
+
 		valueCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell3.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell4.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell5.setHorizontalAlignment(Element.ALIGN_CENTER);
-	
 
 		table22.addCell(nameCell);
 		table22.addCell(valueCell2);
@@ -421,8 +422,8 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		table22.addCell(valueCell4);
 		table22.addCell(valueCell5);
 
-		
 	}
+
 	private void ratingAmpsiterate(Document document, String arr) throws DocumentException, IOException {
 
 		Font font7 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
