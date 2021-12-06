@@ -130,7 +130,8 @@ public class InspectionServiceImpl implements InspectionService {
 		if (userName != null && !userName.isEmpty() && siteId != null) {
 			PeriodicInspection inspectionRepo = inspectionRepository.findByUserNameAndSiteId(userName, siteId);
 			if (inspectionRepo != null) {
-					sortingDateTime(inspectionRepo.getPeriodicInspectorComment());
+				inspectionRepo.setIpaoInspection(findNonRemovedInspectionLocation(inspectionRepo));
+				sortingDateTime(inspectionRepo.getPeriodicInspectorComment());
 				return inspectionRepo;
 			} else {
 				throw new InspectionException("Given UserName & Site doesn't exist Inspection");
@@ -384,5 +385,17 @@ public class InspectionServiceImpl implements InspectionService {
 				}
 			}
 		}
+	}
+	
+	private List<IpaoInspection> findNonRemovedInspectionLocation(PeriodicInspection inspectionRepo) {
+
+		ArrayList<IpaoInspection>inspectionReport = new ArrayList<IpaoInspection>();
+		List<IpaoInspection> findNonRemoveLocation = inspectionRepo.getIpaoInspection();
+		for (IpaoInspection inspectionLocationReport : findNonRemoveLocation) {
+			if (!inspectionLocationReport.getInspectionFlag().equalsIgnoreCase("R")) {
+				inspectionReport.add(inspectionLocationReport);
+			}
+		}
+		return inspectionReport;
 	}
 }
