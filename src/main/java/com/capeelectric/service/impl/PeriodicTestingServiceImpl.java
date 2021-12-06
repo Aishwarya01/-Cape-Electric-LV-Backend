@@ -338,7 +338,8 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	private List<Testing> findNonRemoveTesting(List<Testing> listOfTesting) {
 
 		for (Testing testing : listOfTesting) {
-			if (testing != null && testing.getTestingStatus().equalsIgnoreCase("R")) {
+			if (testing != null && testing.getTestingStatus() != null
+					&& testing.getTestingStatus().equalsIgnoreCase("R")) {
 				listOfTesting.remove(testing);
 			} else {
 				testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
@@ -352,7 +353,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	private List<TestingRecords> findNonRemoveTestingRecord(List<TestingRecords> listOfTestingRecords) {
 		List<TestingRecords> listNonRemovedTestingRecord = new ArrayList<TestingRecords>();
 		for (TestingRecords testingRecords : listOfTestingRecords) {
-			if (testingRecords.getTestingRecordStatus().equalsIgnoreCase("R")) {
+			if (testingRecords !=null &&  testingRecords.getTestingRecordStatus() !=null && testingRecords.getTestingRecordStatus().equalsIgnoreCase("R")) {
 				listNonRemovedTestingRecord.add(testingRecords);
 			}
 		}

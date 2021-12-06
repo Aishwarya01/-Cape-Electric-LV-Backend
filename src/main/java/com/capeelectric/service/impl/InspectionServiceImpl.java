@@ -369,8 +369,8 @@ public class InspectionServiceImpl implements InspectionService {
 			throws InspectionException {
 
 		for (IpaoInspection ipaoInspectionItr : listIpaoInspection) {
-			if (ipaoInspectionItr != null && ipaoInspectionItr.getInspectionFlag().equalsIgnoreCase("R")
-					&& ipaoInspectionItr.getLocationCount() != null) {
+			if (ipaoInspectionItr != null && ipaoInspectionItr.getLocationCount() != null && ipaoInspectionItr.getInspectionFlag().equalsIgnoreCase("R")
+					) {
 				try {
 					Testing testingRepo = testInfoRepository.findByLocationCount(ipaoInspectionItr.getLocationCount());
 					if (testingRepo != null

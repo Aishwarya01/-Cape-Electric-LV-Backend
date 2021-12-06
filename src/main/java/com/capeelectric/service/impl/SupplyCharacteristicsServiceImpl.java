@@ -444,7 +444,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		ArrayList<BoundingLocationReport> locationReport = new ArrayList<BoundingLocationReport>();
 		List<BoundingLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getBoundingLocationReport();
 		for (BoundingLocationReport bondingLocationReport : findNonRemoveLocation) {
-			if (!bondingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+			if (bondingLocationReport != null && bondingLocationReport.getInstalLocationReportStatus() != null
+					&& !bondingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
 				locationReport.add(bondingLocationReport);
 			}
 		}
@@ -456,7 +457,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		ArrayList<EarthingLocationReport> locationReport = new ArrayList<EarthingLocationReport>();
 		List<EarthingLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getEarthingLocationReport();
 		for (EarthingLocationReport earthingLocationReport : findNonRemoveLocation) {
-			if (!earthingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+			if (earthingLocationReport != null && earthingLocationReport.getInstalLocationReportStatus() != null
+					&& !earthingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
 				locationReport.add(earthingLocationReport);
 			}
 		}
