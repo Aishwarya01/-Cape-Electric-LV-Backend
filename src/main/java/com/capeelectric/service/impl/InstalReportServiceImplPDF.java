@@ -388,7 +388,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				age.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(age);
 				PdfPCell cell4 = new PdfPCell(
-						new Paragraph(report.getEstimatedWireAge(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+						new Paragraph(report.getEstimatedWireAge() + " In years", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell4.setBackgroundColor(new GrayColor(0.93f));
 				cell4.setBorder(PdfPCell.NO_BORDER);
