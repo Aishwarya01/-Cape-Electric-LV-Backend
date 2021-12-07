@@ -117,8 +117,6 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				cell2.setBorder(PdfPCell.NO_BORDER);
 				table.addCell(cell2);
 				document.add(table);
-				
-				
 
 //				if (!supply.getMainSystemEarthing().equals("Others")) {
 //
@@ -185,14 +183,13 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 					String NFL7 = nominalFaultLoop_list[6];
 					String NFL8 = nominalFaultLoop_list[7];
 					String NFL9 = nominalFaultLoop_list[8];
-					
+
 					String incomingActualLoadCurrent = supply.getMainActualLoad();
 					String incomingActual_Load_list[] = incomingActualLoadCurrent.split(",");
 					String loadCurrent = incomingActual_Load_list[0];
 					String loadCurrent2 = incomingActual_Load_list[1];
 					String loadCurrent3 = incomingActual_Load_list[2];
 					String loadCurrent4 = incomingActual_Load_list[3];
-
 
 					float[] pointColumnWidths1 = { 90F, 90F };
 					PdfPTable table15 = new PdfPTable(pointColumnWidths1);
@@ -227,21 +224,21 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 					table34.setWidthPercentage(100); // Width 100%
 					table34.getDefaultCell().setBorder(0);
 					tableHead(table34);
-					
+
 					float[] pointColumnWidths43 = { 45F, 90F, 90F, 135F, 90F };
 
 					PdfPTable table22 = new PdfPTable(pointColumnWidths43);
 					table22.setWidthPercentage(100); // Width 100%
 					table22.getDefaultCell().setBorder(0);
-					
+
 					addRow(table1, "Nominal voltage U/U0 (V)", N1, N2, N3, N4, N5, N6, N7, N8, N9);
 					addNominalRow(table2, "Nominal Frequency f (HZ)", supply.getMainNominalFrequency());
 					addRow(table3, "Prospective fault current Ipfc (kA) ", NFC1, NFC2, NFC3, NFC4, NFC5, NFC6, NFC7,
 							NFC8, NFC9);
 					addRow(table3, "External Loop Impedance Ze (ohms)", NFL1, NFL2, NFL3, NFL4, NFL5, NFL6, NFL7, NFL8,
 							NFL9);
-					addRow1(table22, "Actual load current connected to this source (A)", loadCurrent, loadCurrent2, loadCurrent3,
-							loadCurrent4);
+					addRow1(table22, "Actual load current connected to this source (A)", loadCurrent, loadCurrent2,
+							loadCurrent3, loadCurrent4);
 					document.add(table34);
 					document.add(table1);
 					document.add(table2);
@@ -367,7 +364,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 					List<SupplyParameters> supplyParameters1 = supply.getSupplyParameters();
 					for (SupplyParameters arr : supplyParameters1) {
-						altenateSupply(document, arr);
+						if (!arr.getSupplyParameterStatus().equalsIgnoreCase("R")) {
+							altenateSupply(document, arr);
+						}
 					}
 				}
 				document.newPage();
@@ -607,8 +606,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				List<CircuitBreaker> circuitBreaker = supply.getCircuitBreaker();
 
 				for (CircuitBreaker circuteitr : circuitBreaker) {
-					circuteBraker(document, circuteitr);
-
+					if (!circuteitr.getCircuitStatus().equalsIgnoreCase("R")) {
+						circuteBraker(document, circuteitr);
+					}
 				}
 				if (comments.getViewerUserName() != null && comments.getInspectorUserName() != null) {
 
@@ -998,8 +998,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 	}
 
 	private void addRow1(PdfPTable table22, String string, String loadCurrent, String loadCurrent2, String loadCurrent3,
-			String loadCurrent4) throws DocumentException, IOException  {
-		PdfPCell nameCell = new PdfPCell(new Paragraph(string,  new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK)));
+			String loadCurrent4) throws DocumentException, IOException {
+		PdfPCell nameCell = new PdfPCell(
+				new Paragraph(string, new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK)));
 		nameCell.setGrayFill(0.92f);
 		PdfPCell valueCell2 = new PdfPCell(new Paragraph(loadCurrent));
 		PdfPCell valueCell3 = new PdfPCell(new Paragraph(loadCurrent2));
