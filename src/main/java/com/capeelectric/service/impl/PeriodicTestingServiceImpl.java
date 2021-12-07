@@ -15,13 +15,13 @@ import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Testing;
-import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.PeriodicTestingService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -48,6 +48,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	
 	@Autowired
 	private SiteDetails siteDetails;
+	
+	@Autowired
+	private FindNonRemovedObject findNonRemovedObject;
 	
 	/**
 	 * @param Testing
@@ -115,7 +118,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			TestingReport testingReportRepo = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
 			if (testingReportRepo != null) {
-				testingReportRepo.setTesting(findNonRemoveTesting(testingReportRepo.getTesting()));
+				testingReportRepo.setTesting(findNonRemovedObject.findNonRemoveTesting(testingReportRepo.getTesting()));
 				sortingDateTime(testingReportRepo.getTestingComment());
 				return testingReportRepo;
 			} else {
@@ -334,29 +337,5 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		}
 		return flag;
 	}
-	
-	private List<Testing> findNonRemoveTesting(List<Testing> listOfTesting) {
-
-		for (Testing testing : listOfTesting) {
-			if (testing != null && testing.getTestingStatus() != null
-					&& testing.getTestingStatus().equalsIgnoreCase("R")) {
-				listOfTesting.remove(testing);
-			} else {
-				testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
-			}
-
-		}
-
-		return listOfTesting;
-	}
-
-	private List<TestingRecords> findNonRemoveTestingRecord(List<TestingRecords> listOfTestingRecords) {
-		List<TestingRecords> listNonRemovedTestingRecord = new ArrayList<TestingRecords>();
-		for (TestingRecords testingRecords : listOfTestingRecords) {
-			if (testingRecords !=null &&  testingRecords.getTestingRecordStatus() !=null && testingRecords.getTestingRecordStatus().equalsIgnoreCase("R")) {
-				listNonRemovedTestingRecord.add(testingRecords);
-			}
-		}
-		return listNonRemovedTestingRecord;
-	}
+ 
 }

@@ -34,6 +34,7 @@ import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.PeriodicTestingServiceImpl;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -60,6 +61,9 @@ public class PeriodicTestingServiceTest {
 	
 	@MockBean
 	private SiteRepository siteRepository;
+	
+	@MockBean
+	private FindNonRemovedObject findNonRemovedObject;
 
 	private TestingReport testingReport;
 	

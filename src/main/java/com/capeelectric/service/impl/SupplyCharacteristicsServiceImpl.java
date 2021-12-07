@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
-import com.capeelectric.model.BoundingLocationReport;
-import com.capeelectric.model.EarthingLocationReport;
-import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.SupplyCharacteristicComment;
@@ -28,6 +25,7 @@ import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.service.SupplyCharacteristicsService;
 import com.capeelectric.util.Constants;
 import com.capeelectric.util.DecimalConversion;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -59,6 +57,9 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	
 	@Autowired
 	private SiteDetails siteDetails;
+	
+	@Autowired
+	private FindNonRemovedObject findNonRemovedObject;
 	
 	/**
 	 * @param SupplyCharacteristics
@@ -135,11 +136,11 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 					.findByUserNameAndSiteId(userName, siteId);
 			if (supplyCharacteristicsRepo != null) {
 				supplyCharacteristicsRepo
-						.setInstalLocationReport(findNonRemovedInstallLocation(supplyCharacteristicsRepo));
+						.setInstalLocationReport(findNonRemovedObject.findNonRemovedInstallLocation(supplyCharacteristicsRepo));
 				supplyCharacteristicsRepo
-						.setBoundingLocationReport(findNonRemovedBondingLocation(supplyCharacteristicsRepo));
+						.setBoundingLocationReport(findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristicsRepo));
 				supplyCharacteristicsRepo
-						.setEarthingLocationReport(findNonRemovedEarthingLocation(supplyCharacteristicsRepo));
+						.setEarthingLocationReport(findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristicsRepo));
 
 				sortingDateTime(supplyCharacteristicsRepo.getSupplyCharacteristicComment());
 				return supplyCharacteristicsRepo;
@@ -428,40 +429,4 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		}
 	}
 	
-	private List<InstalLocationReport> findNonRemovedInstallLocation(SupplyCharacteristics supplyCharacteristicsRepo) {
-		ArrayList<InstalLocationReport> locationReport = new ArrayList<InstalLocationReport>();
-		List<InstalLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getInstalLocationReport();
-		for (InstalLocationReport instalLocationReport : findNonRemoveLocation) {
-			if (!instalLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
-				locationReport.add(instalLocationReport);
-			}
-		}
-		return locationReport;
-	}
-	
-	private List<BoundingLocationReport> findNonRemovedBondingLocation(
-			SupplyCharacteristics supplyCharacteristicsRepo) {
-		ArrayList<BoundingLocationReport> locationReport = new ArrayList<BoundingLocationReport>();
-		List<BoundingLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getBoundingLocationReport();
-		for (BoundingLocationReport bondingLocationReport : findNonRemoveLocation) {
-			if (bondingLocationReport != null && bondingLocationReport.getInstalLocationReportStatus() != null
-					&& !bondingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
-				locationReport.add(bondingLocationReport);
-			}
-		}
-		return locationReport;
-	}
-	
-	private List<EarthingLocationReport> findNonRemovedEarthingLocation(
-			SupplyCharacteristics supplyCharacteristicsRepo) {
-		ArrayList<EarthingLocationReport> locationReport = new ArrayList<EarthingLocationReport>();
-		List<EarthingLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getEarthingLocationReport();
-		for (EarthingLocationReport earthingLocationReport : findNonRemoveLocation) {
-			if (earthingLocationReport != null && earthingLocationReport.getInstalLocationReportStatus() != null
-					&& !earthingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
-				locationReport.add(earthingLocationReport);
-			}
-		}
-		return locationReport;
-	}
-}
+ }

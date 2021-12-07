@@ -28,6 +28,7 @@ import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.impl.InstalReportServiceImpl;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -51,6 +52,9 @@ public class InstalReportServiceImplTest {
 	
 	@MockBean
 	private SiteRepository siteRepository;
+	
+	@MockBean
+	private FindNonRemovedObject findNonRemovedObject;
 	
 	private ArrayList<ReportDetailsComment> listOfComments;
 	

@@ -41,6 +41,7 @@ import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.SummaryServiceImpl;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -71,6 +72,9 @@ public class SummaryServiceTest {
 	
 	@MockBean
 	private UserFullName userFullName;
+	
+	@MockBean
+	private FindNonRemovedObject findNonRemovedObject;
 
 	private Summary summary;
 	

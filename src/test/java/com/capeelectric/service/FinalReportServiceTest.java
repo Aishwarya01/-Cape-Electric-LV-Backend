@@ -43,6 +43,7 @@ import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.FinalReportServiceImpl;
+import com.capeelectric.util.FindNonRemovedObject;
 
 /**
  * @author capeelectricsoftware
@@ -75,6 +76,9 @@ public class FinalReportServiceTest {
 
 	@MockBean
 	private SummaryRepository summaryRepository;
+	
+	@MockBean
+	private FindNonRemovedObject findNonRemovedObject;
 
 	private Site site;
 

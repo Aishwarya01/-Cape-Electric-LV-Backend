@@ -1,11 +1,8 @@
 
 package com.capeelectric.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,20 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.FinalReportException;
-import com.capeelectric.model.BoundingLocationReport;
-import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.FinalReport;
-import com.capeelectric.model.InstalLocationReport;
-import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
-import com.capeelectric.model.SignatorDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.Summary;
-import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
-import com.capeelectric.model.Testing;
-import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.InstalReportDetailsRepository;
@@ -35,6 +24,7 @@ import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.FinalReportService;
+import com.capeelectric.util.FindNonRemovedObject;
 
 /**
  * This FinalReportServiceImpl class to doing retrieve_site and
@@ -67,6 +57,9 @@ public class FinalReportServiceImpl implements FinalReportService {
 	private SummaryRepository summaryRepository;
 
 	private FinalReport finalReport;
+	
+	@Autowired
+	private FindNonRemovedObject findNonRemovedObject;
 
 	/**
 	 * @param userName and departmentName also string retrieveSiteDetails method to
@@ -110,7 +103,8 @@ public class FinalReportServiceImpl implements FinalReportService {
 			Optional<ReportDetails> reportDetails = instalReportDetailsRepository.findBySiteId(siteId);
 			logger.debug("InstallReport_Information fetching ended");
 			if (reportDetails.isPresent() && reportDetails != null) {
-				reportDetails.get().setSignatorDetails(findNonRemovedReport(reportDetails.get().getSignatorDetails()));
+				reportDetails.get().setSignatorDetails(
+						findNonRemovedObject.findNonRemovedReport(reportDetails.get().getSignatorDetails()));
 				finalReport.setReportDetails(reportDetails.get());
 
 				logger.debug("fetching process started for SupplyCharacteristic");
@@ -119,12 +113,12 @@ public class FinalReportServiceImpl implements FinalReportService {
 				logger.debug("SupplyCharacteristic_fetching ended");
 				if (supplyCharacteristics.isPresent() && supplyCharacteristics != null) {
 
-					supplyCharacteristics.get()
-							.setInstalLocationReport(findNonRemovedInstallLocation(supplyCharacteristics.get()));
-					supplyCharacteristics.get()
-							.setBoundingLocationReport(findNonRemovedBondingLocation(supplyCharacteristics.get()));
-					supplyCharacteristics.get()
-							.setEarthingLocationReport(findNonRemovedEarthingLocation(supplyCharacteristics.get()));
+					supplyCharacteristics.get().setInstalLocationReport(
+							findNonRemovedObject.findNonRemovedInstallLocation(supplyCharacteristics.get()));
+					supplyCharacteristics.get().setBoundingLocationReport(
+							findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristics.get()));
+					supplyCharacteristics.get().setEarthingLocationReport(
+							findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristics.get()));
 					finalReport.setSupplyCharacteristics(supplyCharacteristics.get());
 
 					logger.debug("fetching process started for PriodicInspection");
@@ -133,8 +127,8 @@ public class FinalReportServiceImpl implements FinalReportService {
 
 					if (periodicInspection.isPresent() && periodicInspection != null) {
 
-						periodicInspection.get()
-								.setIpaoInspection(findNonRemovedInspectionLocation(periodicInspection.get()));
+						periodicInspection.get().setIpaoInspection(
+								findNonRemovedObject.findNonRemovedInspectionLocation(periodicInspection.get()));
 						finalReport.setPeriodicInspection(periodicInspection.get());
 
 						logger.debug("fetching process started for PriodicTesting");
@@ -142,7 +136,8 @@ public class FinalReportServiceImpl implements FinalReportService {
 						logger.debug("PriodicTesting_fetching ended");
 
 						if (testingReport.isPresent() && testingReport != null) {
-							testingReport.get().setTesting(findNonRemoveTesting(testingReport.get().getTesting()));
+							testingReport.get().setTesting(
+									findNonRemovedObject.findNonRemoveTesting(testingReport.get().getTesting()));
 							finalReport.setTestingReport(testingReport.get());
 
 							logger.debug("fetching process started for Summary");
@@ -150,8 +145,8 @@ public class FinalReportServiceImpl implements FinalReportService {
 							logger.debug("Summary_fetching ended");
 
 							if (summary.isPresent() && summary != null) {
-								summary.get().setSummaryObervation(
-										findNonRemoveObservation(summary.get().getSummaryObervation()));
+								summary.get().setSummaryObervation(findNonRemovedObject
+										.findNonRemoveObservation(summary.get().getSummaryObervation()));
 								finalReport.setSummary(summary.get());
 
 								logger.debug("Successfully Five_Steps fetching Operation done");
@@ -170,99 +165,10 @@ public class FinalReportServiceImpl implements FinalReportService {
 		}
 	}
 
-	private List<IpaoInspection> findNonRemovedInspectionLocation(PeriodicInspection inspectionRepo) {
-
-		ArrayList<IpaoInspection>inspectionReport = new ArrayList<IpaoInspection>();
-		List<IpaoInspection> findNonRemoveLocation = inspectionRepo.getIpaoInspection();
-		for (IpaoInspection inspectionLocationReport : findNonRemoveLocation) {
-			if (!inspectionLocationReport.getInspectionFlag().equalsIgnoreCase("R")) {
-				inspectionReport.add(inspectionLocationReport);
-			}
-		}
-		return inspectionReport;
-	}
-
 	@Override
 	public List<Site> retrieveAllSites() throws FinalReportException {
-		return (List<Site>)siteRepository.findAll();
+		return (List<Site>) siteRepository.findAll();
 	}
 
-	
-	private List<InstalLocationReport> findNonRemovedInstallLocation(SupplyCharacteristics supplyCharacteristicsRepo) {
-		ArrayList<InstalLocationReport> locationReport = new ArrayList<InstalLocationReport>();
-		List<InstalLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getInstalLocationReport();
-		for (InstalLocationReport instalLocationReport : findNonRemoveLocation) {
-			if (!instalLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
-				locationReport.add(instalLocationReport);
-			}
-		}
-		return locationReport;
-	}
-	
-	private List<BoundingLocationReport> findNonRemovedBondingLocation(
-			SupplyCharacteristics supplyCharacteristicsRepo) {
-		ArrayList<BoundingLocationReport> locationReport = new ArrayList<BoundingLocationReport>();
-		List<BoundingLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getBoundingLocationReport();
-		for (BoundingLocationReport bondingLocationReport : findNonRemoveLocation) {
-			if (!bondingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
-				locationReport.add(bondingLocationReport);
-			}
-		}
-		return locationReport;
-	}
-	
-	private List<EarthingLocationReport> findNonRemovedEarthingLocation(
-			SupplyCharacteristics supplyCharacteristicsRepo) {
-		ArrayList<EarthingLocationReport> locationReport = new ArrayList<EarthingLocationReport>();
-		List<EarthingLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getEarthingLocationReport();
-		for (EarthingLocationReport earthingLocationReport : findNonRemoveLocation) {
-			if (!earthingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
-				locationReport.add(earthingLocationReport);
-			}
-		}
-		return locationReport;
-	}
-	
-	private List<Testing> findNonRemoveTesting(List<Testing> listOfTesting) {
-		for (Testing testing : listOfTesting) {
-			if (testing != null && testing.getTestingStatus().equalsIgnoreCase("R")) {
-				listOfTesting.remove(testing);
-			} else {
-				testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
-			}
-		}
-		return listOfTesting;
-	}
-
-	private List<TestingRecords> findNonRemoveTestingRecord(List<TestingRecords> listOfTestingRecords) {
-		List<TestingRecords> listNonRemovedTestingRecord = new ArrayList<TestingRecords>();
-		for (TestingRecords testingRecords : listOfTestingRecords) {
-			if (testingRecords.getTestingRecordStatus().equalsIgnoreCase("R")) {
-				listNonRemovedTestingRecord.add(testingRecords);
-			}
-		}
-		return listNonRemovedTestingRecord;
-	}
-	
-	private Set<SignatorDetails> findNonRemovedReport(Set<SignatorDetails> signatorDetails) {
-		 Set<SignatorDetails> signatorDetail = new HashSet<SignatorDetails>();
-		for (SignatorDetails signatorDetailItr : signatorDetails) {
-			if (signatorDetailItr !=null && signatorDetailItr.getSignatorStatus() !=null &&  !signatorDetailItr.getSignatorStatus().equalsIgnoreCase("R")) {
-				signatorDetail.add(signatorDetailItr);
-			}  
-		}
-		return signatorDetail;
-	}
-	
-	private List<SummaryObervation> findNonRemoveObservation(List<SummaryObervation> summaryObervation) {
-		List<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
-		for (SummaryObervation obervation : summaryObervation) {
-			if (obervation != null && obervation.getObervationStatus() != null
-					&& !obervation.getObervationStatus().equalsIgnoreCase("R")) {
-				obervationList.add(obervation);
-			}
-		}
-		return obervationList;
-	}
 }
 

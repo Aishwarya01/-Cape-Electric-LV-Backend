@@ -23,6 +23,7 @@ import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.TestInfoRepository;
 import com.capeelectric.service.InspectionService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 /**
@@ -55,6 +56,9 @@ public class InspectionServiceImpl implements InspectionService {
 	
 	@Autowired
 	private TestInfoRepository testInfoRepository;
+	
+	@Autowired
+	private FindNonRemovedObject findNonRemovedObject;
 
 	/**
 	 * @param IpaoInspection object 
@@ -130,7 +134,7 @@ public class InspectionServiceImpl implements InspectionService {
 		if (userName != null && !userName.isEmpty() && siteId != null) {
 			PeriodicInspection inspectionRepo = inspectionRepository.findByUserNameAndSiteId(userName, siteId);
 			if (inspectionRepo != null) {
-				inspectionRepo.setIpaoInspection(findNonRemovedInspectionLocation(inspectionRepo));
+				inspectionRepo.setIpaoInspection(findNonRemovedObject.findNonRemovedInspectionLocation(inspectionRepo));
 				sortingDateTime(inspectionRepo.getPeriodicInspectorComment());
 				return inspectionRepo;
 			} else {
@@ -381,21 +385,9 @@ public class InspectionServiceImpl implements InspectionService {
 					}
 				} catch (Exception e) {
 					throw new InspectionException(
-							"Please check removed Inspection Location data not avlible in PeriodicTesting");
+							"Please check removed Inspection Location data not available in PeriodicTesting");
 				}
 			}
 		}
-	}
-	
-	private List<IpaoInspection> findNonRemovedInspectionLocation(PeriodicInspection inspectionRepo) {
-
-		ArrayList<IpaoInspection>inspectionReport = new ArrayList<IpaoInspection>();
-		List<IpaoInspection> findNonRemoveLocation = inspectionRepo.getIpaoInspection();
-		for (IpaoInspection inspectionLocationReport : findNonRemoveLocation) {
-			if (!inspectionLocationReport.getInspectionFlag().equalsIgnoreCase("R")) {
-				inspectionReport.add(inspectionLocationReport);
-			}
-		}
-		return inspectionReport;
 	}
 }

@@ -4,7 +4,6 @@ package com.capeelectric.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -17,13 +16,13 @@ import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.ReportDetailsComment;
-import com.capeelectric.model.SignatorDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.InstalReportService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -50,6 +49,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 	
 	@Autowired
 	private SiteDetails siteDetails;
+	
+	@Autowired
+	private FindNonRemovedObject findNonRemovedObject;
 	
 	/**
 	 * @param ReportDetails
@@ -105,7 +107,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 		if (userName != null) {
 			ReportDetails reportDetailsRepo = installationReportRepository.findByUserNameAndSiteId(userName, siteId);
 			if (reportDetailsRepo != null) {
-				reportDetailsRepo.setSignatorDetails(findNonRemovedReport(reportDetailsRepo.getSignatorDetails()));
+				reportDetailsRepo.setSignatorDetails(findNonRemovedObject.findNonRemovedReport(reportDetailsRepo.getSignatorDetails()));
 				sortingDateTime(reportDetailsRepo.getReportDetailsComment());
 				return reportDetailsRepo;
 			} else {
@@ -328,14 +330,5 @@ public class InstalReportServiceImpl implements InstalReportService {
 		}
 		return flag;
 	}
-	
-	private Set<SignatorDetails> findNonRemovedReport(Set<SignatorDetails> signatorDetails) {
-		 Set<SignatorDetails> signatorDetail = new HashSet<SignatorDetails>();
-		for (SignatorDetails signatorDetailItr : signatorDetails) {
-			if (signatorDetailItr !=null && signatorDetailItr.getSignatorStatus() !=null &&  !signatorDetailItr.getSignatorStatus().equalsIgnoreCase("R")) {
-				signatorDetail.add(signatorDetailItr);
-			}  
-		}
-		return signatorDetail;
-	}
+
 }
