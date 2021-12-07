@@ -141,7 +141,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 						.setBoundingLocationReport(findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristicsRepo));
 				supplyCharacteristicsRepo
 						.setEarthingLocationReport(findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristicsRepo));
-
+				supplyCharacteristicsRepo.setCircuitBreaker(findNonRemovedObject.findNonRemovedCircuitBreaker(supplyCharacteristicsRepo.getCircuitBreaker()));
+				supplyCharacteristicsRepo.setSupplyParameters(findNonRemovedObject.findNonRemovedSupplyParameters(supplyCharacteristicsRepo.getSupplyParameters()));
 				sortingDateTime(supplyCharacteristicsRepo.getSupplyCharacteristicComment());
 				return supplyCharacteristicsRepo;
 			} else {

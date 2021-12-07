@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.context.annotation.Configuration;
 
 import com.capeelectric.model.BoundingLocationReport;
+import com.capeelectric.model.CircuitBreaker;
 import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.IpaoInspection;
@@ -15,7 +16,9 @@ import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.SignatorDetails;
 import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
+import com.capeelectric.model.SupplyParameters;
 import com.capeelectric.model.Testing;
+import com.capeelectric.model.TestingEquipment;
 import com.capeelectric.model.TestingRecords;
 
 /**
@@ -76,19 +79,30 @@ public class FindNonRemovedObject {
 
 	public List<Testing> findNonRemoveTesting(List<Testing> listOfTesting) {
 		for (Testing testing : listOfTesting) {
-			if (testing != null && testing.getTestingStatus().equalsIgnoreCase("R")) {
+			if (testing != null && testing.getTestingStatus() !=null && testing.getTestingStatus().equalsIgnoreCase("R")) {
 				listOfTesting.remove(testing);
 			} else {
 				testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
+				testing.setTestingEquipment(findNonRemoveTestingEquipment(testing.getTestingEquipment()));
 			}
 		}
 		return listOfTesting;
 	}
 
+	private List<TestingEquipment> findNonRemoveTestingEquipment(List<TestingEquipment> testingEquipment) {
+		List<TestingEquipment> listNonRemovedTestingEquipment = new ArrayList<TestingEquipment>();
+		for (TestingEquipment testingEquipmentItr : testingEquipment) {
+			if (testingEquipmentItr !=null && testingEquipmentItr.getTestingEquipmentStatus() !=null && !testingEquipmentItr.getTestingEquipmentStatus().equalsIgnoreCase("R")) {
+				listNonRemovedTestingEquipment.add(testingEquipmentItr);
+			}
+		}
+		return listNonRemovedTestingEquipment;
+	}
+
 	public List<TestingRecords> findNonRemoveTestingRecord(List<TestingRecords> listOfTestingRecords) {
 		List<TestingRecords> listNonRemovedTestingRecord = new ArrayList<TestingRecords>();
 		for (TestingRecords testingRecords : listOfTestingRecords) {
-			if (testingRecords.getTestingRecordStatus().equalsIgnoreCase("R")) {
+			if (testingRecords.getTestingRecordStatus() !=null && !testingRecords.getTestingRecordStatus().equalsIgnoreCase("R")) {
 				listNonRemovedTestingRecord.add(testingRecords);
 			}
 		}
@@ -115,6 +129,28 @@ public class FindNonRemovedObject {
 			}
 		}
 		return obervationList;
+	}
+
+	public List<CircuitBreaker> findNonRemovedCircuitBreaker(List<CircuitBreaker> circuitBreaker) {
+		List<CircuitBreaker> circuitBreakerList = new ArrayList<CircuitBreaker>();
+		for (CircuitBreaker circuitBreakerItr : circuitBreaker) {
+			if (circuitBreakerItr != null && circuitBreakerItr.getCircuitStatus() != null
+					&& !circuitBreakerItr.getCircuitStatus().equalsIgnoreCase("R")) {
+				circuitBreakerList.add(circuitBreakerItr);
+			}
+		}
+		return circuitBreakerList;
+	}
+
+	public List<SupplyParameters> findNonRemovedSupplyParameters(List<SupplyParameters> supplyParameters) {
+		List<SupplyParameters> supplyParametersList = new ArrayList<SupplyParameters>();
+		for (SupplyParameters supplyParametersItr : supplyParameters) {
+			if (supplyParametersItr != null && supplyParametersItr.getSupplyParameterStatus() != null
+					&& !supplyParametersItr.getSupplyParameterStatus().equalsIgnoreCase("R")) {
+				supplyParametersList.add(supplyParametersItr);
+			}
+		}
+		return supplyParametersList;
 	}
 
 }

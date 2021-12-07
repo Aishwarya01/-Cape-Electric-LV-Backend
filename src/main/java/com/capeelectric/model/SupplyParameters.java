@@ -79,6 +79,9 @@ public class SupplyParameters implements Serializable {
 
 	@Column(name = "AL_CURRENT_DISCONNECTION")
 	private String currentDissconnection;
+	
+	@Column(name = "SUPPLY_PARAMETER_STATUS")
+	private String supplyParameterStatus;
 
 	@JsonBackReference
 	@ManyToOne
@@ -236,4 +239,13 @@ public class SupplyParameters implements Serializable {
 	public void setSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics) {
 		this.supplyCharacteristics = supplyCharacteristics;
 	}
+
+	public String getSupplyParameterStatus() {
+		return supplyParameterStatus;
+	}
+
+	public void setSupplyParameterStatus(String supplyParameterStatus) {
+		this.supplyParameterStatus = supplyParameterStatus;
+	}
+	
 }

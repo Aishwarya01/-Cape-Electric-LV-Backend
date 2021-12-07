@@ -119,6 +119,11 @@ public class FinalReportServiceImpl implements FinalReportService {
 							findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristics.get()));
 					supplyCharacteristics.get().setEarthingLocationReport(
 							findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristics.get()));
+					supplyCharacteristics.get().setCircuitBreaker(
+							findNonRemovedObject.findNonRemovedCircuitBreaker(supplyCharacteristics.get().getCircuitBreaker()));
+					supplyCharacteristics.get().setSupplyParameters(
+							findNonRemovedObject.findNonRemovedSupplyParameters(supplyCharacteristics.get().getSupplyParameters()));
+					
 					finalReport.setSupplyCharacteristics(supplyCharacteristics.get());
 
 					logger.debug("fetching process started for PriodicInspection");
