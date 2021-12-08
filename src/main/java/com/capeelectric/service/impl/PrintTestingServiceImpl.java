@@ -79,7 +79,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 				for (Testing testing1 : testing) {
 					if (!testing1.getTestingStatus().equalsIgnoreCase("R")) {
-						testingIteration(document, testing1);
+						testingIteration(document, testing1, testEquipment);
 					}
 				}
 
