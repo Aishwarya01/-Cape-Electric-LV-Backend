@@ -24,6 +24,7 @@ import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.FinalReportService;
+import com.capeelectric.util.FindNonRemovedObject;
 
 /**
  * This FinalReportServiceImpl class to doing retrieve_site and
@@ -56,6 +57,9 @@ public class FinalReportServiceImpl implements FinalReportService {
 	private SummaryRepository summaryRepository;
 
 	private FinalReport finalReport;
+	
+	@Autowired
+	private FindNonRemovedObject findNonRemovedObject;
 
 	/**
 	 * @param userName and departmentName also string retrieveSiteDetails method to
@@ -99,6 +103,8 @@ public class FinalReportServiceImpl implements FinalReportService {
 			Optional<ReportDetails> reportDetails = instalReportDetailsRepository.findBySiteId(siteId);
 			logger.debug("InstallReport_Information fetching ended");
 			if (reportDetails.isPresent() && reportDetails != null) {
+				reportDetails.get().setSignatorDetails(
+						findNonRemovedObject.findNonRemovedReport(reportDetails.get().getSignatorDetails()));
 				finalReport.setReportDetails(reportDetails.get());
 
 				logger.debug("fetching process started for SupplyCharacteristic");
@@ -106,6 +112,18 @@ public class FinalReportServiceImpl implements FinalReportService {
 						.findBySiteId(siteId);
 				logger.debug("SupplyCharacteristic_fetching ended");
 				if (supplyCharacteristics.isPresent() && supplyCharacteristics != null) {
+
+					supplyCharacteristics.get().setInstalLocationReport(
+							findNonRemovedObject.findNonRemovedInstallLocation(supplyCharacteristics.get()));
+					supplyCharacteristics.get().setBoundingLocationReport(
+							findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristics.get()));
+					supplyCharacteristics.get().setEarthingLocationReport(
+							findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristics.get()));
+					supplyCharacteristics.get().setCircuitBreaker(
+							findNonRemovedObject.findNonRemovedCircuitBreaker(supplyCharacteristics.get().getCircuitBreaker()));
+					supplyCharacteristics.get().setSupplyParameters(
+							findNonRemovedObject.findNonRemovedSupplyParameters(supplyCharacteristics.get().getSupplyParameters()));
+					
 					finalReport.setSupplyCharacteristics(supplyCharacteristics.get());
 
 					logger.debug("fetching process started for PriodicInspection");
@@ -113,6 +131,9 @@ public class FinalReportServiceImpl implements FinalReportService {
 					logger.debug("PriodicInspection_fetching ended");
 
 					if (periodicInspection.isPresent() && periodicInspection != null) {
+
+						periodicInspection.get().setIpaoInspection(
+								findNonRemovedObject.findNonRemovedInspectionLocation(periodicInspection.get()));
 						finalReport.setPeriodicInspection(periodicInspection.get());
 
 						logger.debug("fetching process started for PriodicTesting");
@@ -120,6 +141,8 @@ public class FinalReportServiceImpl implements FinalReportService {
 						logger.debug("PriodicTesting_fetching ended");
 
 						if (testingReport.isPresent() && testingReport != null) {
+							testingReport.get().setTesting(
+									findNonRemovedObject.findNonRemoveTesting(testingReport.get().getTesting()));
 							finalReport.setTestingReport(testingReport.get());
 
 							logger.debug("fetching process started for Summary");
@@ -127,6 +150,8 @@ public class FinalReportServiceImpl implements FinalReportService {
 							logger.debug("Summary_fetching ended");
 
 							if (summary.isPresent() && summary != null) {
+								summary.get().setSummaryObervation(findNonRemovedObject
+										.findNonRemoveObservation(summary.get().getSummaryObervation()));
 								finalReport.setSummary(summary.get());
 
 								logger.debug("Successfully Five_Steps fetching Operation done");
@@ -147,7 +172,8 @@ public class FinalReportServiceImpl implements FinalReportService {
 
 	@Override
 	public List<Site> retrieveAllSites() throws FinalReportException {
-		return (List<Site>)siteRepository.findAll();
+		return (List<Site>) siteRepository.findAll();
 	}
 
 }
+

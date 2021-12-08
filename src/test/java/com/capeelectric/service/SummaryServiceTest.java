@@ -41,6 +41,7 @@ import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.SummaryServiceImpl;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -71,6 +72,9 @@ public class SummaryServiceTest {
 	
 	@MockBean
 	private UserFullName userFullName;
+	
+	@MockBean
+	private FindNonRemovedObject findNonRemovedObject;
 
 	private Summary summary;
 	
@@ -100,6 +104,12 @@ public class SummaryServiceTest {
 		listComment.add(summaryComment);
 		summary.setSummaryComment(listComment);
 		
+		ArrayList<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
+		SummaryObervation obervation = new SummaryObervation();
+		obervation.setObervationStatus("a");
+		obervationList.add(obervation);
+		
+		summary.setSummaryObervation(obervationList);
 	}
 	
 	{

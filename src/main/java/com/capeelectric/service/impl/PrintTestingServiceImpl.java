@@ -78,7 +78,9 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				document.add(table13);
 
 				for (Testing testing1 : testing) {
-					testingIteration(document, testing1, testEquipment);
+					if (!testing1.getTestingStatus().equalsIgnoreCase("R")) {
+						testingIteration(document, testing1);
+					}
 				}
 
 				PdfPTable table19 = new PdfPTable(1);
@@ -424,11 +426,13 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				addRow(table2, "External Loop Impedance Ze (ohms)", ZS1, ZS2, ZS3, ZS4, ZS5, ZS6, ZS7, ZS8, ZS9);
 				addRow(table2, "Prospective fault current Ipfc (kA)", IPF1, IPF2, IPF3, IPF4, IPF5, IPF6, IPF7, IPF8,
 						IPF9);
+
 				addRow1(table22, "Actual load current connected to this source (A)",
 						"                               " + loadCurrent,
 						"                               " + loadCurrent2,
 						"                                                    " + loadCurrent3,
 						"                               " + loadCurrent4);
+
 				document.add(table250);
 				document.add(table2);
 				document.add(table22);

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
 import com.capeelectric.service.PrintService;
-import com.capeelectric.service.SummaryService;
 
 @RestController()
 @RequestMapping("/api/v1")
@@ -30,7 +29,7 @@ public class PrintDataController {
 	public ResponseEntity<List<Summary>> retrieveSummary(@PathVariable String userName,@PathVariable Integer siteId) throws SummaryException {
 		logger.info("called printSummary function userName: {},siteId : {}", userName,siteId);
 		printService.printSummary(userName,siteId);
-		return new ResponseEntity( HttpStatus.OK);
+		return new ResponseEntity<List<Summary>>( HttpStatus.OK);
 	}
 	
 }

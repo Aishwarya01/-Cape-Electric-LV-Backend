@@ -288,6 +288,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 							"                       " + loadCurrent, "                       " + loadCurrent2,
 							"                                      " + loadCurrent3,
 							"                       " + loadCurrent4);
+
 					document.add(table34);
 					document.add(table1);
 					document.add(table2);
@@ -428,7 +429,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 					List<SupplyParameters> supplyParameters1 = supply.getSupplyParameters();
 					for (SupplyParameters arr : supplyParameters1) {
-						altenateSupply(document, arr);
+						if (!arr.getSupplyParameterStatus().equalsIgnoreCase("R")) {
+							altenateSupply(document, arr);
+						}
 					}
 				}
 				document.newPage();
@@ -670,8 +673,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				List<CircuitBreaker> circuitBreaker = supply.getCircuitBreaker();
 
 				for (CircuitBreaker circuteitr : circuitBreaker) {
-					circuteBraker(document, circuteitr);
-
+					if (!circuteitr.getCircuitStatus().equalsIgnoreCase("R")) {
+						circuteBraker(document, circuteitr);
+					}
 				}
 				if (comments.getViewerUserName() != null && comments.getInspectorUserName() != null) {
 

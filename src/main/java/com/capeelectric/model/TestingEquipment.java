@@ -51,6 +51,9 @@ public class TestingEquipment implements Serializable {
 	@Column(name = "EQUIPMENT_CALIBRATION_DUE_DATE")
 	private Date equipmentCalibrationDueDate;
 	
+	@Column(name = "TESTING_EQUIPMENT_STATUS")
+	private String testingEquipmentStatus;
+	
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "TESTING_ID")
@@ -110,6 +113,14 @@ public class TestingEquipment implements Serializable {
 
 	public void setTestingReport(Testing testingReport) {
 		this.testingReport = testingReport;
+	}
+
+	public String getTestingEquipmentStatus() {
+		return testingEquipmentStatus;
+	}
+
+	public void setTestingEquipmentStatus(String testingEquipmentStatus) {
+		this.testingEquipmentStatus = testingEquipmentStatus;
 	}
 
 }

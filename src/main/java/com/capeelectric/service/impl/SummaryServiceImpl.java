@@ -28,6 +28,7 @@ import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.SummaryService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -72,6 +73,9 @@ public class SummaryServiceImpl implements SummaryService {
 	
 	@Autowired
 	private SiteDetails siteDetails;
+	
+	@Autowired
+	private FindNonRemovedObject findNonRemovedObject;
 	
 	/**
 	 * @ siteId unique for summary object
@@ -156,6 +160,7 @@ public class SummaryServiceImpl implements SummaryService {
 			List<Summary> summaryRepo = summaryRepository.findByUserNameAndSiteId(userName, siteId);
 			if (summaryRepo != null) {
 				for (Summary summary : summaryRepo) {
+					summary.setSummaryObervation(findNonRemovedObject.findNonRemoveObservation(summary.getSummaryObervation()));
 					sortingDateTime(summary.getSummaryComment());
 				}
 				return summaryRepo;
@@ -372,4 +377,5 @@ public class SummaryServiceImpl implements SummaryService {
 		}
 		return flag;
 	}
+	
 }

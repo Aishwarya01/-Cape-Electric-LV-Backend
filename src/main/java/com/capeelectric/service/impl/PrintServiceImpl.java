@@ -157,18 +157,23 @@ public class PrintServiceImpl implements PrintService {
 							font8);
 					document.add(paragraphOne6);
 
-					PdfPTable table6 = new PdfPTable(4);
-					table6.setWidthPercentage(100); // Width 100%
-					table6.setSpacingBefore(10f); // Space before table
-					table6.setSpacingAfter(10f); // Space after table
+					SummaryObervation observation = observation1.get(0);
+					
+					if (!observation.getObervationStatus().equalsIgnoreCase("R")) {
 
-					SummaryObervation summaryrefer = observation1.get(0);
-					if ( summaryrefer.getObservations() != null) {
-					tableHeader(table6);
-					tableData(table6, observation1);
-					document.add(table6);
-					} 
-						
+						PdfPTable table6 = new PdfPTable(4);
+						table6.setWidthPercentage(100); // Width 100%
+						table6.setSpacingBefore(10f); // Space before table
+						table6.setSpacingAfter(10f); // Space after table
+						table6.setWidthPercentage(100);
+
+						tableHeader(table6);
+						tableData(table6, observation1);
+
+						document.add(table6);
+					}
+					
+
 					Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
 
 					PdfPTable table16 = new PdfPTable(1);

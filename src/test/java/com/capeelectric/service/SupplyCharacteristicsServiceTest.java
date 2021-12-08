@@ -34,6 +34,7 @@ import com.capeelectric.model.SupplyParameters;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.service.impl.SupplyCharacteristicsServiceImpl;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -61,6 +62,9 @@ public class SupplyCharacteristicsServiceTest {
 	
 	@MockBean
 	private SiteRepository siteRepository;
+	
+	@MockBean
+	private FindNonRemovedObject findNonRemovedObject;
 	
 	private ArrayList<SupplyCharacteristicComment> listOfComments;
 	

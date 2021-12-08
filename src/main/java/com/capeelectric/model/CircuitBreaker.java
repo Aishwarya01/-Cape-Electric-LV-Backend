@@ -64,6 +64,9 @@ public class CircuitBreaker implements Serializable {
 
 	@Column(name = "RESIDUAL_TIME")
 	private String residualTime;
+	
+	@Column(name = "CIRCUIT_STATUS")
+	private String circuitStatus;
 
 	@JsonBackReference
 	@ManyToOne
@@ -180,6 +183,14 @@ public class CircuitBreaker implements Serializable {
 
 	public void setSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics) {
 		this.supplyCharacteristics = supplyCharacteristics;
+	}
+
+	public String getCircuitStatus() {
+		return circuitStatus;
+	}
+
+	public void setCircuitStatus(String circuitStatus) {
+		this.circuitStatus = circuitStatus;
 	}
 
 }
