@@ -1241,82 +1241,79 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 	private void tableData(PdfPTable table8, List<InstalLocationReport> instalLocationReport) {
 		for (InstalLocationReport arr : instalLocationReport) {
-//			if (arr.getInstalLocationRportStatus().equalsIgnoreCase("a")
-//					|| arr.getInstalLocationRportStatus().equalsIgnoreCase("u")) {
-			PdfPCell cell = new PdfPCell();
-			Font font = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
-			cell.setPhrase(new Phrase(arr.getLocationNo(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table8.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getLocationName(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table8.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getElectrodeEarthType(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table8.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getElectrodeEarthMaterial(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table8.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getElectrodeEarthSize(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table8.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getElectrodeEarthDepth(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table8.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getElectrodeResistanceEarth(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table8.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getElectrodeResistanceGird(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table8.addCell(cell);
+			if (!arr.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+				PdfPCell cell = new PdfPCell();
+				Font font = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
+				cell.setPhrase(new Phrase(arr.getLocationNo(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table8.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getLocationName(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table8.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getElectrodeEarthType(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table8.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getElectrodeEarthMaterial(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table8.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getElectrodeEarthSize(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table8.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getElectrodeEarthDepth(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table8.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getElectrodeResistanceEarth(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table8.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getElectrodeResistanceGird(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table8.addCell(cell);
+			}
 		}
-//		}
 	}
 
 	private void tableData1(PdfPTable table11, List<BoundingLocationReport> boundingLocationReport) {
 		for (BoundingLocationReport arr : boundingLocationReport) {
-//			if (arr.getInstalLocationRportStatus().equalsIgnoreCase("a")
-//					|| arr.getInstalLocationRportStatus().equalsIgnoreCase("u")) {
-			PdfPCell cell = new PdfPCell();
-			Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
-			cell.setPhrase(new Phrase(arr.getLocation(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getJointNo(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getJointReference(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getJointResistance(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
+			if (!arr.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+				PdfPCell cell = new PdfPCell();
+				Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
+				cell.setPhrase(new Phrase(arr.getLocation(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table11.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getJointNo(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table11.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getJointReference(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table11.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getJointResistance(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table11.addCell(cell);
+			}
 		}
-//		}
 	}
-	
+
 	private void TableData2(PdfPTable table13, List<EarthingLocationReport> earthingLocationReport) {
 		for (EarthingLocationReport arr : earthingLocationReport) {
-//			if (arr.getInstalLocationRportStatus().equalsIgnoreCase("a")
-//					|| arr.getInstalLocationRportStatus().equalsIgnoreCase("u")) {
-			PdfPCell cell = new PdfPCell();
-			 Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
-			cell.setPhrase(new Phrase(arr.getLocation(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table13.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getJointNo(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table13.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getJointReference(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table13.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getJointResistance(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table13.addCell(cell);
+			if (!arr.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+				PdfPCell cell = new PdfPCell();
+				Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
+				cell.setPhrase(new Phrase(arr.getLocation(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table13.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getJointNo(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table13.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getJointReference(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table13.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getJointResistance(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table13.addCell(cell);
+			}
 		}
-//		}
 	}
-	
+
 	private void tableHeader1(PdfPTable table11) throws DocumentException, IOException {
 		PdfPCell cell = new PdfPCell();
 		cell.setPadding(4);

@@ -389,8 +389,8 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				age.setHorizontalAlignment(Element.ALIGN_LEFT);
 				age.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(age);
-				PdfPCell cell4 = new PdfPCell(
-						new Paragraph(report.getEstimatedWireAge() + " In years", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				PdfPCell cell4 = new PdfPCell(new Paragraph(report.getEstimatedWireAge() + " In years",
+						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell4.setBackgroundColor(new GrayColor(0.93f));
 				cell4.setBorder(PdfPCell.NO_BORDER);
@@ -463,7 +463,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				cell10.setBackgroundColor(new GrayColor(0.93f));
 				cell10.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(cell10);
-				
+
 				PdfPCell Designation = new PdfPCell(
 						new Paragraph("Designation:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //				Designation.setBackgroundColor(new GrayColor(0.93f));
@@ -476,7 +476,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 //				cell14.setBackgroundColor(new GrayColor(0.93f));
 				cell14.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(cell14);
-				
+
 				PdfPCell company = new PdfPCell(
 						new Paragraph("Company:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				company.setBackgroundColor(new GrayColor(0.93f));
@@ -489,7 +489,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				company1.setBackgroundColor(new GrayColor(0.93f));
 				company1.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(company1);
-				
+
 				PdfPCell site72 = new PdfPCell(
 						new Paragraph(report.getVerifiedEngineer(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				table1.addCell(new Phrase("Name of engineer who carries out verification:",
@@ -505,29 +505,29 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				Designation1.setHorizontalAlignment(Element.ALIGN_LEFT);
 				Designation1.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(Designation1);
-				PdfPCell cell104 = new PdfPCell(
-						new Paragraph(report.getInspectorDesignation(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				PdfPCell cell104 = new PdfPCell(new Paragraph(report.getInspectorDesignation(),
+						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				cell104.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell104.setBackgroundColor(new GrayColor(0.93f));
 				cell104.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(cell104);
 
-				PdfPCell site73 = new PdfPCell(
-						new Paragraph(report.getInspectorCompanyName(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				PdfPCell site73 = new PdfPCell(new Paragraph(report.getInspectorCompanyName(),
+						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				table1.addCell(new Phrase("Company:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //				site73.setFixedHeight(30f);
 				site73.setHorizontalAlignment(Element.ALIGN_LEFT);
 				site73.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(site73);
-				
+
 				PdfPCell site71 = new PdfPCell(new Paragraph("Details of installation referred in this report:",
 						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				site71.setBackgroundColor(new GrayColor(0.93f));
 				site71.setHorizontalAlignment(Element.ALIGN_LEFT);
 				site71.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(site71);
-				PdfPCell cell102 = new PdfPCell(
-						new Paragraph(report.getInstallationDetails(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				PdfPCell cell102 = new PdfPCell(new Paragraph(report.getInstallationDetails(),
+						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				cell102.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell102.setBackgroundColor(new GrayColor(0.93f));
 				cell102.setBorder(PdfPCell.NO_BORDER);
@@ -545,8 +545,6 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 //				cell12.setBackgroundColor(new GrayColor(0.93f));
 				cell12.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(cell12);
-
-				
 
 				PdfPCell Read = new PdfPCell(
 						new Paragraph("Read and confirmed the extent and limitations (part 5, section 1):",
@@ -715,7 +713,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				Paragraph paragraph22 = new Paragraph(
 						"I/we recommend that this installation is further inspected and tested after an interval of not more than__"
-								+ report.getNextInspection()  + "__years",
+								+ report.getNextInspection() + "__years",
 						font10N);
 				document.add(paragraph22);
 
@@ -760,23 +758,24 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 					}
 				}
 
-				PdfPTable designer2 = new PdfPTable(pointColumnWidths10);
-				designer2.setWidthPercentage(100); // Width 100%
-				designer2.setSpacingBefore(5f); // Space before table
-				designer2.setSpacingAfter(5f); // Space after table
-				designer2.getDefaultCell().setBorder(0);
-
-				PdfPCell ddesigner = new PdfPCell(
-						new Paragraph("Designer - 2", new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
-				ddesigner.setBackgroundColor(new GrayColor(0.82f));
-//			    	ddesigner.setFixedHeight(30f);
-				ddesigner.setHorizontalAlignment(Element.ALIGN_LEFT);
-				ddesigner.setBorder(PdfPCell.NO_BORDER);
-				designer2.addCell(ddesigner);
-				document.add(designer2);
-
 				for (SignatorDetails arr : convertion) {
 					if (arr.getSignatorStatus() != null && !arr.getSignatorStatus().equalsIgnoreCase("R")) {
+
+						PdfPTable designer2 = new PdfPTable(pointColumnWidths10);
+						designer2.setWidthPercentage(100); // Width 100%
+						designer2.setSpacingBefore(5f); // Space before table
+						designer2.setSpacingAfter(5f); // Space after table
+						designer2.getDefaultCell().setBorder(0);
+
+						PdfPCell ddesigner = new PdfPCell(new Paragraph("Designer - 2",
+								new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+						ddesigner.setBackgroundColor(new GrayColor(0.82f));
+//			    	    ddesigner.setFixedHeight(30f);
+						ddesigner.setHorizontalAlignment(Element.ALIGN_LEFT);
+						ddesigner.setBorder(PdfPCell.NO_BORDER);
+						designer2.addCell(ddesigner);
+						document.add(designer2);
+
 						if (arr.getSignatorRole().equals("designer2") | arr.getSignatorRole().equals("designer2")
 								| arr.getSignatorRole().equals("designer2")) {
 

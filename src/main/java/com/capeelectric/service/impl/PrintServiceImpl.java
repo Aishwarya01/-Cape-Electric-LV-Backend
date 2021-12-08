@@ -157,9 +157,7 @@ public class PrintServiceImpl implements PrintService {
 							font8);
 					document.add(paragraphOne6);
 
-					SummaryObervation observation = observation1.get(0);
-					
-					if (!observation.getObervationStatus().equalsIgnoreCase("R")) {
+					if (summary1.getLimitationsInspection().equals("The following observations are made")) {
 
 						PdfPTable table6 = new PdfPTable(4);
 						table6.setWidthPercentage(100); // Width 100%
@@ -169,12 +167,8 @@ public class PrintServiceImpl implements PrintService {
 
 						tableHeader(table6);
 						tableData(table6, observation1);
-
 						document.add(table6);
 					}
-					
-
-					Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
 
 					PdfPTable table16 = new PdfPTable(1);
 					table16.setWidthPercentage(100); // Width 100%
@@ -463,20 +457,22 @@ public class PrintServiceImpl implements PrintService {
 	private void tableData(PdfPTable table6, List<SummaryObervation> observation1)
 			throws DocumentException, IOException {
 		for (SummaryObervation arr : observation1) {
-			Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-			PdfPCell cell = new PdfPCell();
-			cell.setPhrase(new Phrase(arr.getObservations(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table6.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getFurtherActions(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table6.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getReferanceNumberReport(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table6.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getComment(), font));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table6.addCell(cell);
+			if (!arr.getObervationStatus().equalsIgnoreCase("R")) {
+				Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+				PdfPCell cell = new PdfPCell();
+				cell.setPhrase(new Phrase(arr.getObservations(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table6.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getFurtherActions(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table6.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getReferanceNumberReport(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table6.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getComment(), font));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table6.addCell(cell);
+			}
 		}
 
 	}

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.PeriodicTestingException;
-import com.capeelectric.model.BoundingLocationReport;
 import com.capeelectric.model.TestDistribution;
 import com.capeelectric.model.TestIncomingDistribution;
 import com.capeelectric.model.Testing;
@@ -46,13 +45,13 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			try {
 				PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("Testing.pdf"));
 
-				TestingReport supply2 = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
-				List<Testing> testing = supply2.getTesting();
+				TestingReport testingReference = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
+				List<Testing> testing = testingReference.getTesting();
 
 				Testing testRecords = testing.get(0);
 				List<TestingEquipment> testEquipment = testRecords.getTestingEquipment();
 
-				List<TestingReportComment> reportComments = supply2.getTestingComment();
+				List<TestingReportComment> reportComments = testingReference.getTestingComment();
 				TestingReportComment comments = reportComments.get(0);
 
 				document.open();
@@ -442,9 +441,10 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		document.newPage();
 
 		for (TestingRecords testingRecords11 : testRecords) {
-			testingTableIteration(document, testingRecords11);
+			if (!testingRecords11.getTestingRecordStatus().equalsIgnoreCase("R")) {
+				testingTableIteration(document, testingRecords11);
+			}
 		}
-
 	}
 
 	private void tableHeader1(PdfPTable table11) throws DocumentException, IOException {
@@ -477,23 +477,25 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 	private void tableData1(PdfPTable table11, List<TestingEquipment> testEquipment)
 			throws DocumentException, IOException {
 		for (TestingEquipment arr : testEquipment) {
-			PdfPCell cell = new PdfPCell();
-			Font font6 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-			cell.setPhrase(new Phrase(arr.getEquipmentName(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getEquipmentMake(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getEquipmentModel(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getEquipmentSerialNo(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
-			cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString(), font6));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table11.addCell(cell);
+			if (!arr.getTestingEquipmentStatus().equalsIgnoreCase("R")) {
+				PdfPCell cell = new PdfPCell();
+				Font font6 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+				cell.setPhrase(new Phrase(arr.getEquipmentName(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table11.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getEquipmentMake(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table11.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getEquipmentModel(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table11.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getEquipmentSerialNo(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table11.addCell(cell);
+				cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString(), font6));
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table11.addCell(cell);
+			}
 		}
 	}
 
