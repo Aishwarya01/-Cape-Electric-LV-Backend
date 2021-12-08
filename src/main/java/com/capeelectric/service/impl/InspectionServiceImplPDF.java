@@ -1213,9 +1213,11 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						document.add(table44);
 					}
 
-					document.close();
-					writer.close();
+				
 				}
+				document.close();
+				writer.close();
+		
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
