@@ -35,7 +35,10 @@ public class FindNonRemovedObject {
 		ArrayList<IpaoInspection> inspectionReport = new ArrayList<IpaoInspection>();
 		List<IpaoInspection> findNonRemoveLocation = inspectionRepo.getIpaoInspection();
 		for (IpaoInspection inspectionLocationReport : findNonRemoveLocation) {
-			if (!inspectionLocationReport.getInspectionFlag().equalsIgnoreCase("R")) {
+			if (inspectionLocationReport.getInspectionFlag()==null || !inspectionLocationReport.getInspectionFlag().equalsIgnoreCase("R")) {
+				if(inspectionLocationReport.getInspectionFlag()==null) {
+					inspectionLocationReport.setInspectionFlag("N");
+				}
 				inspectionReport.add(inspectionLocationReport);
 			}
 		}
@@ -46,7 +49,10 @@ public class FindNonRemovedObject {
 		ArrayList<InstalLocationReport> locationReport = new ArrayList<InstalLocationReport>();
 		List<InstalLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getInstalLocationReport();
 		for (InstalLocationReport instalLocationReport : findNonRemoveLocation) {
-			if (!instalLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+			if (instalLocationReport.getInstalLocationReportStatus()==null || !instalLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+				if(instalLocationReport.getInstalLocationReportStatus()==null) {
+					instalLocationReport.setInstalLocationReportStatus("N");
+				}
 				locationReport.add(instalLocationReport);
 			}
 		}
@@ -58,7 +64,10 @@ public class FindNonRemovedObject {
 		ArrayList<BoundingLocationReport> locationReport = new ArrayList<BoundingLocationReport>();
 		List<BoundingLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getBoundingLocationReport();
 		for (BoundingLocationReport bondingLocationReport : findNonRemoveLocation) {
-			if (!bondingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+			if (bondingLocationReport.getInstalLocationReportStatus()==null || !bondingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+				if(bondingLocationReport.getInstalLocationReportStatus()==null) {
+					bondingLocationReport.setInstalLocationReportStatus("N");
+				}
 				locationReport.add(bondingLocationReport);
 			}
 		}
@@ -70,7 +79,10 @@ public class FindNonRemovedObject {
 		ArrayList<EarthingLocationReport> locationReport = new ArrayList<EarthingLocationReport>();
 		List<EarthingLocationReport> findNonRemoveLocation = supplyCharacteristicsRepo.getEarthingLocationReport();
 		for (EarthingLocationReport earthingLocationReport : findNonRemoveLocation) {
-			if (!earthingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+			if (earthingLocationReport.getInstalLocationReportStatus() ==null || !earthingLocationReport.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
+				if(earthingLocationReport.getInstalLocationReportStatus()==null) {
+					earthingLocationReport.setInstalLocationReportStatus("N");
+				}
 				locationReport.add(earthingLocationReport);
 			}
 		}
@@ -82,6 +94,9 @@ public class FindNonRemovedObject {
 			if (testing != null && testing.getTestingStatus() !=null && testing.getTestingStatus().equalsIgnoreCase("R")) {
 				listOfTesting.remove(testing);
 			} else {
+				if (testing.getTestingStatus() == null) {
+					testing.setTestingStatus("N");
+				}
 				testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
 				testing.setTestingEquipment(findNonRemoveTestingEquipment(testing.getTestingEquipment()));
 			}
@@ -92,7 +107,10 @@ public class FindNonRemovedObject {
 	private List<TestingEquipment> findNonRemoveTestingEquipment(List<TestingEquipment> testingEquipment) {
 		List<TestingEquipment> listNonRemovedTestingEquipment = new ArrayList<TestingEquipment>();
 		for (TestingEquipment testingEquipmentItr : testingEquipment) {
-			if (testingEquipmentItr !=null && testingEquipmentItr.getTestingEquipmentStatus() !=null && !testingEquipmentItr.getTestingEquipmentStatus().equalsIgnoreCase("R")) {
+			if (testingEquipmentItr.getTestingEquipmentStatus() == null || !testingEquipmentItr.getTestingEquipmentStatus().equalsIgnoreCase("R")) {
+				if(testingEquipmentItr.getTestingEquipmentStatus() ==null) {
+					testingEquipmentItr.setTestingEquipmentStatus("N");
+				}
 				listNonRemovedTestingEquipment.add(testingEquipmentItr);
 			}
 		}
@@ -102,7 +120,10 @@ public class FindNonRemovedObject {
 	public List<TestingRecords> findNonRemoveTestingRecord(List<TestingRecords> listOfTestingRecords) {
 		List<TestingRecords> listNonRemovedTestingRecord = new ArrayList<TestingRecords>();
 		for (TestingRecords testingRecords : listOfTestingRecords) {
-			if (testingRecords.getTestingRecordStatus() !=null && !testingRecords.getTestingRecordStatus().equalsIgnoreCase("R")) {
+			if (testingRecords.getTestingRecordStatus() ==null || !testingRecords.getTestingRecordStatus().equalsIgnoreCase("R")) {
+				if(testingRecords.getTestingRecordStatus() ==null) {
+					testingRecords.setTestingRecordStatus("N");
+				}
 				listNonRemovedTestingRecord.add(testingRecords);
 			}
 		}
@@ -112,8 +133,11 @@ public class FindNonRemovedObject {
 	public Set<SignatorDetails> findNonRemovedReport(Set<SignatorDetails> signatorDetails) {
 		Set<SignatorDetails> signatorDetail = new HashSet<SignatorDetails>();
 		for (SignatorDetails signatorDetailItr : signatorDetails) {
-			if (signatorDetailItr != null && signatorDetailItr.getSignatorStatus() != null
-					&& !signatorDetailItr.getSignatorStatus().equalsIgnoreCase("R")) {
+			if (signatorDetailItr.getSignatorStatus() == null
+					|| !signatorDetailItr.getSignatorStatus().equalsIgnoreCase("R")) {
+				if(signatorDetailItr.getSignatorStatus() == null) {
+					signatorDetailItr.setSignatorStatus("N");
+				}
 				signatorDetail.add(signatorDetailItr);
 			}
 		}
@@ -123,8 +147,11 @@ public class FindNonRemovedObject {
 	public List<SummaryObervation> findNonRemoveObservation(List<SummaryObervation> summaryObervation) {
 		List<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
 		for (SummaryObervation obervation : summaryObervation) {
-			if (obervation != null && obervation.getObervationStatus() != null
-					&& !obervation.getObervationStatus().equalsIgnoreCase("R")) {
+			if (obervation.getObervationStatus() == null
+					|| !obervation.getObervationStatus().equalsIgnoreCase("R")) {
+				if(obervation.getObervationStatus() == null) {
+					obervation.setObervationStatus("N");
+				}
 				obervationList.add(obervation);
 			}
 		}
@@ -134,8 +161,11 @@ public class FindNonRemovedObject {
 	public List<CircuitBreaker> findNonRemovedCircuitBreaker(List<CircuitBreaker> circuitBreaker) {
 		List<CircuitBreaker> circuitBreakerList = new ArrayList<CircuitBreaker>();
 		for (CircuitBreaker circuitBreakerItr : circuitBreaker) {
-			if (circuitBreakerItr != null && circuitBreakerItr.getCircuitStatus() != null
-					&& !circuitBreakerItr.getCircuitStatus().equalsIgnoreCase("R")) {
+			if (circuitBreakerItr.getCircuitStatus() == null
+					|| !circuitBreakerItr.getCircuitStatus().equalsIgnoreCase("R")) {
+				if(circuitBreakerItr.getCircuitStatus() == null) {
+					circuitBreakerItr.setCircuitStatus("N");
+				}
 				circuitBreakerList.add(circuitBreakerItr);
 			}
 		}
@@ -145,8 +175,11 @@ public class FindNonRemovedObject {
 	public List<SupplyParameters> findNonRemovedSupplyParameters(List<SupplyParameters> supplyParameters) {
 		List<SupplyParameters> supplyParametersList = new ArrayList<SupplyParameters>();
 		for (SupplyParameters supplyParametersItr : supplyParameters) {
-			if (supplyParametersItr != null && supplyParametersItr.getSupplyParameterStatus() != null
+			if (supplyParametersItr.getSupplyParameterStatus() == null
 					&& !supplyParametersItr.getSupplyParameterStatus().equalsIgnoreCase("R")) {
+				if(supplyParametersItr.getSupplyParameterStatus() == null) {
+					supplyParametersItr.setSupplyParameterStatus("N");
+				}
 				supplyParametersList.add(supplyParametersItr);
 			}
 		}
