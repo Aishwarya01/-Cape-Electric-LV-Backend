@@ -238,7 +238,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 					table100.setSpacingAfter(5f); // Space after table
 					table100.getDefaultCell().setBorder(0);
 
-					PdfPCell cell2911 = new PdfPCell(new Paragraph("Nominal Frequency f (HZ) :", font9));
+					PdfPCell cell2911 = new PdfPCell(new Paragraph("Nominal Frequency (HZ) :", font9));
 					cell2911.setBorder(PdfPCell.NO_BORDER);
 					cell2911.setGrayFill(0.92f);
 					table100.addCell(cell2911);
@@ -938,7 +938,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 			table100.getDefaultCell().setBorder(0);
 
 			PdfPCell cell291 = new PdfPCell(new Paragraph(supplyParameters.getNominalFrequency(), font6));
-			table100.addCell(new Phrase("Nominal Frequency f (HZ) :", font6));
+			table100.addCell(new Phrase("Nominal Frequency (HZ) :", font6));
 			cell291.setBorder(PdfPCell.NO_BORDER);
 			table100.addCell(cell291);
 			document.add(table100);
