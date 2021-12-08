@@ -211,7 +211,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell3.setBorder(PdfPCell.NO_BORDER);
 		table.addCell(cell3);
 
-		PdfPCell cell04 = new PdfPCell(new Paragraph("Designation", font7));
+		PdfPCell cell04 = new PdfPCell(new Paragraph("Designation:", font7));
 		cell04.setBorder(PdfPCell.NO_BORDER);
 		cell04.setGrayFill(0.92f);
 		table.addCell(cell04);
