@@ -176,7 +176,7 @@ public class FindNonRemovedObject {
 		List<SupplyParameters> supplyParametersList = new ArrayList<SupplyParameters>();
 		for (SupplyParameters supplyParametersItr : supplyParameters) {
 			if (supplyParametersItr.getSupplyParameterStatus() == null
-					&& !supplyParametersItr.getSupplyParameterStatus().equalsIgnoreCase("R")) {
+					|| !supplyParametersItr.getSupplyParameterStatus().equalsIgnoreCase("R")) {
 				if(supplyParametersItr.getSupplyParameterStatus() == null) {
 					supplyParametersItr.setSupplyParameterStatus("N");
 				}
