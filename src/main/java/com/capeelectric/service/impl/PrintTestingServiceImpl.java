@@ -624,7 +624,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		Font font23 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 		Font font25 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 		Font font26 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
-		Font font27 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
+		Font font27 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 		PdfPCell cell1;
 		cell1 = new PdfPCell(new Phrase("Circuit details", font22));
 		cell1.setGrayFill(0.92f);
