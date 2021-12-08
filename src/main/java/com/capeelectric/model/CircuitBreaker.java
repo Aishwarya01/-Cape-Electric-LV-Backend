@@ -14,10 +14,10 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
-*
-* @author capeelectricsoftware
-*
-*/
+ *
+ * @author capeelectricsoftware
+ *
+ */
 @Entity
 @Table(name = "circuit_breaker_table")
 public class CircuitBreaker implements Serializable {
@@ -35,23 +35,38 @@ public class CircuitBreaker implements Serializable {
 	@Column(name = "TYPE")
 	private String type;
 
+	@Column(name = "SOURCE_NAME")
+	private String sourceName;
+
+	@Column(name = "MAKE")
+	private String make;
+
+	@Column(name = "CURRENT_CURVE")
+	private String currentCurve;
+
 	@Column(name = "POLES_NO")
 	private String noPoles;
 
 	@Column(name = "CURRRENT")
 	private String current;
-	
+
 	@Column(name = "VOLTAGE")
 	private String voltage;
 
 	@Column(name = "FUSE")
 	private String fuse;
 
+	@Column(name = "TYPE_OF_RESIDUALCURRENT")
+	private String typeOfResidualCurrent;
+
 	@Column(name = "RESIDUAL_CURRENT")
 	private String residualCurrent;
 
 	@Column(name = "RESIDUAL_TIME")
 	private String residualTime;
+	
+	@Column(name = "CIRCUIT_STATUS")
+	private String circuitStatus;
 
 	@JsonBackReference
 	@ManyToOne
@@ -72,6 +87,30 @@ public class CircuitBreaker implements Serializable {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public String getSourceName() {
+		return sourceName;
+	}
+
+	public void setSourceName(String sourceName) {
+		this.sourceName = sourceName;
+	}
+
+	public String getMake() {
+		return make;
+	}
+
+	public void setMake(String make) {
+		this.make = make;
+	}
+
+	public String getCurrentCurve() {
+		return currentCurve;
+	}
+
+	public void setCurrentCurve(String currentCurve) {
+		this.currentCurve = currentCurve;
 	}
 
 	public String getType() {
@@ -122,6 +161,14 @@ public class CircuitBreaker implements Serializable {
 		this.residualCurrent = residualCurrent;
 	}
 
+	public String getTypeOfResidualCurrent() {
+		return typeOfResidualCurrent;
+	}
+
+	public void setTypeOfResidualCurrent(String typeOfResidualCurrent) {
+		this.typeOfResidualCurrent = typeOfResidualCurrent;
+	}
+
 	public String getResidualTime() {
 		return residualTime;
 	}
@@ -136,6 +183,14 @@ public class CircuitBreaker implements Serializable {
 
 	public void setSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics) {
 		this.supplyCharacteristics = supplyCharacteristics;
+	}
+
+	public String getCircuitStatus() {
+		return circuitStatus;
+	}
+
+	public void setCircuitStatus(String circuitStatus) {
+		this.circuitStatus = circuitStatus;
 	}
 
 }

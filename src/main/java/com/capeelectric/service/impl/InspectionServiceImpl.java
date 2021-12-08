@@ -17,10 +17,13 @@ import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.PeriodicInspectionComment;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
+import com.capeelectric.model.Testing;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.SiteRepository;
+import com.capeelectric.repository.TestInfoRepository;
 import com.capeelectric.service.InspectionService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 /**
@@ -48,6 +51,14 @@ public class InspectionServiceImpl implements InspectionService {
 	
 	@Autowired
 	private SiteDetails siteDetails;
+	
+	private static Integer locationCount=0;
+	
+	@Autowired
+	private TestInfoRepository testInfoRepository;
+	
+	@Autowired
+	private FindNonRemovedObject findNonRemovedObject;
 
 	/**
 	 * @param IpaoInspection object 
@@ -58,7 +69,7 @@ public class InspectionServiceImpl implements InspectionService {
 	@Override
 	public void addInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException, CompanyDetailsException {
 		listOfComments = new ArrayList<PeriodicInspectionComment>();
-
+        int i=0;
 		if (periodicInspection.getUserName() != null && periodicInspection.getSiteId() != null
 				&& periodicInspection.getIpaoInspection() != null) {
 			List<IpaoInspection> ipaoInspection = periodicInspection.getIpaoInspection();
@@ -67,27 +78,33 @@ public class InspectionServiceImpl implements InspectionService {
 			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(periodicInspection.getSiteId())) {
 				if (ipaoInspection != null && ipaoInspection.size() > 0) {
 					for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
+						ipaoInspectionItr.setLocationCount(++locationCount);
 						if (ipaoInspectionItr !=null && ipaoInspectionItr.getConsumerUnit() != null && ipaoInspectionItr.getCircuit() != null
 								&& ipaoInspectionItr.getIsolationCurrent() != null
 								&& ipaoInspectionItr.getConsumerUnit().size() > 0
 								&& ipaoInspectionItr.getCircuit().size() > 0
 								&& ipaoInspectionItr.getIsolationCurrent().size() > 0) {
-							periodicInspectionComment = new PeriodicInspectionComment();
-							periodicInspectionComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
-							periodicInspectionComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
-							periodicInspectionComment.setNoOfComment(1);
-							periodicInspectionComment.setViewerDate(LocalDateTime.now());
-							periodicInspectionComment.setPeriodicInspection(periodicInspection);
-							listOfComments.add(periodicInspectionComment);
-							periodicInspection.setPeriodicInspectorComment(listOfComments);
-							periodicInspection.setCreatedDate(LocalDateTime.now());
-							periodicInspection.setUpdatedDate(LocalDateTime.now());
-							periodicInspection
-							.setCreatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
-							periodicInspection
-							.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
-							inspectionRepository.save(periodicInspection);
-							siteDetails.updateSite(periodicInspection.getSiteId(), periodicInspection.getUserName());	
+							i++;
+							if (i == ipaoInspection.size()) {
+								periodicInspectionComment = new PeriodicInspectionComment();
+								periodicInspectionComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+								periodicInspectionComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
+								periodicInspectionComment.setNoOfComment(1);
+								periodicInspectionComment.setViewerDate(LocalDateTime.now());
+								periodicInspectionComment.setPeriodicInspection(periodicInspection);
+								listOfComments.add(periodicInspectionComment);
+								periodicInspection.setPeriodicInspectorComment(listOfComments);
+								periodicInspection.setCreatedDate(LocalDateTime.now());
+								periodicInspection.setUpdatedDate(LocalDateTime.now());
+								periodicInspection
+										.setCreatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
+								periodicInspection
+										.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
+
+								inspectionRepository.save(periodicInspection);
+								siteDetails.updateSite(periodicInspection.getSiteId(),
+										periodicInspection.getUserName());
+							}
 
 						} else {
 							throw new InspectionException("Please fill all the fields before clicking next button");
@@ -117,7 +134,8 @@ public class InspectionServiceImpl implements InspectionService {
 		if (userName != null && !userName.isEmpty() && siteId != null) {
 			PeriodicInspection inspectionRepo = inspectionRepository.findByUserNameAndSiteId(userName, siteId);
 			if (inspectionRepo != null) {
-					sortingDateTime(inspectionRepo.getPeriodicInspectorComment());
+				inspectionRepo.setIpaoInspection(findNonRemovedObject.findNonRemovedInspectionLocation(inspectionRepo));
+				sortingDateTime(inspectionRepo.getPeriodicInspectorComment());
 				return inspectionRepo;
 			} else {
 				throw new InspectionException("Given UserName & Site doesn't exist Inspection");
@@ -145,6 +163,14 @@ public class InspectionServiceImpl implements InspectionService {
 					.findById(periodicInspection.getPeriodicInspectionId());
 			if (periodicInspectionRepo.isPresent()
 					&& periodicInspectionRepo.get().getSiteId().equals(periodicInspection.getSiteId())) {
+				addRemoveStatusInTesting(periodicInspection.getIpaoInspection());
+				List<IpaoInspection> ipaoInspection = periodicInspection.getIpaoInspection();
+				 //locationcount value adding for new location
+				for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
+					if (ipaoInspectionItr !=null && ipaoInspectionItr.getLocationCount() == null) {
+						ipaoInspectionItr.setLocationCount(++locationCount);
+					}
+				}
 				periodicInspection.setUpdatedDate(LocalDateTime.now());
 				periodicInspection.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 				inspectionRepository.save(periodicInspection);
@@ -342,5 +368,26 @@ public class InspectionServiceImpl implements InspectionService {
 			}
 		}
 		return flag;
+	}
+	
+	private void addRemoveStatusInTesting(List<IpaoInspection> listIpaoInspection)
+			throws InspectionException {
+
+		for (IpaoInspection ipaoInspectionItr : listIpaoInspection) {
+			if (ipaoInspectionItr != null && ipaoInspectionItr.getLocationCount() != null && ipaoInspectionItr.getInspectionFlag().equalsIgnoreCase("R")
+					) {
+				try {
+					Testing testingRepo = testInfoRepository.findByLocationCount(ipaoInspectionItr.getLocationCount());
+					if (testingRepo != null
+							&& testingRepo.getLocationCount().equals(ipaoInspectionItr.getLocationCount())) {
+						testingRepo.setTestingStatus("R");
+						testInfoRepository.save(testingRepo);
+					}
+				} catch (Exception e) {
+					throw new InspectionException(
+							"Please check removed Inspection Location data not available in PeriodicTesting");
+				}
+			}
+		}
 	}
 }

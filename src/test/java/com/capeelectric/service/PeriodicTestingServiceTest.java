@@ -34,6 +34,7 @@ import com.capeelectric.model.TestingReportComment;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.PeriodicTestingServiceImpl;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -60,6 +61,9 @@ public class PeriodicTestingServiceTest {
 	
 	@MockBean
 	private SiteRepository siteRepository;
+	
+	@MockBean
+	private FindNonRemovedObject findNonRemovedObject;
 
 	private TestingReport testingReport;
 	
@@ -111,6 +115,16 @@ public class PeriodicTestingServiceTest {
 		ArrayList<TestingReportComment> listOfComment = new ArrayList<TestingReportComment>();
 		listOfComment.add(testingReportComment);
 		testingReport.setTestingComment(listOfComment);
+		List<Testing> testingList = new ArrayList<Testing>();
+		List<TestingRecords> testingRecordsList = new ArrayList<TestingRecords>();
+        Testing testing = new Testing();
+        testing.setTestingStatus("a");
+        TestingRecords testingRecords = new TestingRecords();
+        testingRecords.setTestingRecordStatus("a");
+        testingRecordsList.add(testingRecords);
+        testing.setTestingRecords(testingRecordsList);
+        testingList.add(testing);
+        testingReport.setTesting(testingList);
 	}
 	
 	@Test
@@ -138,7 +152,7 @@ public class PeriodicTestingServiceTest {
 		
 		PeriodicTestingException periodicTestingException = Assertions.assertThrows(PeriodicTestingException.class,
 				() -> periodicTestingServiceImpl.addTestingReport(testingReport));
-		assertEquals(periodicTestingException.getMessage(), "Please fill all the fields before clicking next button");
+		assertEquals(periodicTestingException.getMessage(), "Site-Id Already Present");
 
 		testingReport.setTestIncomingDistribution(listofTestIncomingDistribution);
 		PeriodicTestingException periodicTestingException_1 = Assertions.assertThrows(PeriodicTestingException.class,

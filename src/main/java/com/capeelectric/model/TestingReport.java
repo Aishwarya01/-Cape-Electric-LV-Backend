@@ -72,6 +72,8 @@ public class TestingReport implements Serializable {
 	@OneToMany(mappedBy = "testingReport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<TestIncomingDistribution> testIncomingDistribution;
 
+	
+
 	public Integer getTestingReportId() {
 		return testingReportId;
 	}
@@ -151,6 +153,4 @@ public class TestingReport implements Serializable {
 	public void setTestIncomingDistribution(List<TestIncomingDistribution> testIncomingDistribution) {
 		this.testIncomingDistribution = testIncomingDistribution;
 	}
-
-	
 }

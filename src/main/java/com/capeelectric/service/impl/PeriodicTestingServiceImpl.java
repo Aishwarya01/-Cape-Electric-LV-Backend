@@ -21,6 +21,7 @@ import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.PeriodicTestingService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -48,6 +49,9 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	@Autowired
 	private SiteDetails siteDetails;
 	
+	@Autowired
+	private FindNonRemovedObject findNonRemovedObject;
+	
 	/**
 	 * @param Testing
 	 * addTestingReport method to Testing object will be storing corresponding tables
@@ -55,49 +59,50 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	*/
 	@Override
 	public void addTestingReport(TestingReport testingReport) throws PeriodicTestingException, CompanyDetailsException {
+		int i=0;
 		List<TestingReportComment> listOfComments = new ArrayList<TestingReportComment>();
 		if (testingReport.getUserName() != null && testingReport.getSiteId() != null) {
-
-			List<Testing> testing = testingReport.getTesting();
-			if (testing != null && testing.size() == 1) {
-				for (Testing testingItr : testing) {
-					if (testingItr != null && testingItr.getTestDistribution() != null
-							&& testingItr.getTestingRecords() != null
-							&& testingReport.getTestIncomingDistribution() != null
-							&& testingItr.getTestDistribution().size() > 0 && testingItr.getTestingRecords().size() > 0
-							&& testingReport.getTestIncomingDistribution().size() > 0) {
-
-						Optional<TestingReport> testingRepo = testingReportRepository
-								.findBySiteId(testingReport.getSiteId());
-
-						if (!testingRepo.isPresent() 
-								|| !testingRepo.get().getSiteId().equals(testingReport.getSiteId())) {
-							testingComment = new TestingReportComment();
-							testingComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
-							testingComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
-							testingComment.setNoOfComment(1);
-							testingComment.setViewerDate(LocalDateTime.now());
-							testingComment.setTestingReport(testingReport);
-							listOfComments.add(testingComment);
-							testingReport.setTestingComment(listOfComments);
-							testingReport.setCreatedDate(LocalDateTime.now());
-							testingReport.setCreatedBy(userFullName.findByUserName(testingReport.getUserName()));
-							testingReport.setUpdatedDate(LocalDateTime.now());
-							testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
-							testingReportRepository.save(testingReport);
-							siteDetails.updateSite(testingReport.getSiteId(), testingReport.getUserName());
+			Optional<TestingReport> testingRepo = testingReportRepository
+					.findBySiteId(testingReport.getSiteId());
+			if (!testingRepo.isPresent() 
+					|| !testingRepo.get().getSiteId().equals(testingReport.getSiteId())) {
+				List<Testing> testing = testingReport.getTesting();
+				if (testing != null && testing.size() > 0) {
+					for (Testing testingItr : testing) {
+						if (testingItr != null && testingItr.getTestDistribution() != null
+								&& testingItr.getTestingRecords() != null
+								&& testingReport.getTestIncomingDistribution() != null
+								&& testingItr.getTestDistribution().size() > 0 && testingItr.getTestingRecords().size() > 0
+								&& testingReport.getTestIncomingDistribution().size() > 0) {
+							i++;
+							if (i == testing.size()) {
+								testingComment = new TestingReportComment();
+								testingComment.setInspectorFlag(Constants.INTIAL_FLAG_VALUE);
+								testingComment.setViewerFlag(Constants.INTIAL_FLAG_VALUE);
+								testingComment.setNoOfComment(1);
+								testingComment.setViewerDate(LocalDateTime.now());
+								testingComment.setTestingReport(testingReport);
+								listOfComments.add(testingComment);
+								testingReport.setTestingComment(listOfComments);
+								testingReport.setCreatedDate(LocalDateTime.now());
+								testingReport.setCreatedBy(userFullName.findByUserName(testingReport.getUserName()));
+								testingReport.setUpdatedDate(LocalDateTime.now());
+								testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
+								testingReportRepository.save(testingReport);
+								siteDetails.updateSite(testingReport.getSiteId(), testingReport.getUserName());
+							}
+								
 						} else {
-							throw new PeriodicTestingException("Site-Id Already Present");
+							throw new PeriodicTestingException("Please fill all the fields before clicking next button");
 						}
-					} else {
-						throw new PeriodicTestingException("Please fill all the fields before clicking next button");
-					}
 
+					}
+				} else {
+					throw new PeriodicTestingException("Testing data contains duplicate Object");
 				}
 			} else {
-				throw new PeriodicTestingException("Testing data contains duplicate Object");
+				throw new PeriodicTestingException("Site-Id Already Present");
 			}
-
 		} else {
 			throw new PeriodicTestingException("Invalid Inputs");
 		}
@@ -113,7 +118,8 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			TestingReport testingReportRepo = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
 			if (testingReportRepo != null) {
-					sortingDateTime(testingReportRepo.getTestingComment());
+				testingReportRepo.setTesting(findNonRemovedObject.findNonRemoveTesting(testingReportRepo.getTesting()));
+				sortingDateTime(testingReportRepo.getTestingComment());
 				return testingReportRepo;
 			} else {
 				throw new PeriodicTestingException("Given UserName & Site doesn't exist Testing");
@@ -331,4 +337,5 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		}
 		return flag;
 	}
+ 
 }

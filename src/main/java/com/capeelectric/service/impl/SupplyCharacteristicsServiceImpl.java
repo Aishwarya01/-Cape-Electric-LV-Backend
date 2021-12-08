@@ -25,6 +25,7 @@ import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.service.SupplyCharacteristicsService;
 import com.capeelectric.util.Constants;
 import com.capeelectric.util.DecimalConversion;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -57,6 +58,9 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	@Autowired
 	private SiteDetails siteDetails;
 	
+	@Autowired
+	private FindNonRemovedObject findNonRemovedObject;
+	
 	/**
 	 * @param SupplyCharacteristics
 	 * addCharacteristics method to first formating the main and alternative_supply (NominalFrequency,NominalVoltage,LoopImpedance and NominalCurrent)
@@ -74,15 +78,11 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			if(supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("No")) {
 				saveSupplyCharacteristics(supplyCharacteristics);
 			}
-			else if (supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("Yes") && supplyCharacteristics.getSupplyParameters() != null && supplyCharacteristics.getCircuitBreaker() != null
-					&& supplyCharacteristics.getInstalLocationReport() != null
-					&& supplyCharacteristics.getBoundingLocationReport() != null
-					&& supplyCharacteristics.getEarthingLocationReport() != null
+			else if (supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("Yes")
+					&& supplyCharacteristics.getSupplyParameters() != null
+					&& supplyCharacteristics.getCircuitBreaker() != null
 					&& supplyCharacteristics.getSupplyParameters().size() > 0
-					&& supplyCharacteristics.getCircuitBreaker().size() > 0
-					&& supplyCharacteristics.getInstalLocationReport().size() > 0
-					&& supplyCharacteristics.getBoundingLocationReport().size() > 0
-					&& supplyCharacteristics.getEarthingLocationReport().size() > 0) {
+					&& supplyCharacteristics.getCircuitBreaker().size() > 0) {
 				saveSupplyCharacteristics(supplyCharacteristics);
 			} else {
 				throw new SupplyCharacteristicsException("Please fill all the fields before clicking next button");
@@ -135,7 +135,17 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			SupplyCharacteristics supplyCharacteristicsRepo = supplyCharacteristicsRepository
 					.findByUserNameAndSiteId(userName, siteId);
 			if (supplyCharacteristicsRepo != null) {
-					sortingDateTime(supplyCharacteristicsRepo.getSupplyCharacteristicComment());
+
+				supplyCharacteristicsRepo
+						.setInstalLocationReport(findNonRemovedObject.findNonRemovedInstallLocation(supplyCharacteristicsRepo));
+				supplyCharacteristicsRepo
+						.setBoundingLocationReport(findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristicsRepo));
+				supplyCharacteristicsRepo
+						.setEarthingLocationReport(findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristicsRepo));
+				supplyCharacteristicsRepo.setCircuitBreaker(findNonRemovedObject.findNonRemovedCircuitBreaker(supplyCharacteristicsRepo.getCircuitBreaker()));
+				supplyCharacteristicsRepo.setSupplyParameters(findNonRemovedObject.findNonRemovedSupplyParameters(supplyCharacteristicsRepo.getSupplyParameters()));
+				sortingDateTime(supplyCharacteristicsRepo.getSupplyCharacteristicComment());
+
 				return supplyCharacteristicsRepo;
 			} else {
 				throw new SupplyCharacteristicsException("Given UserName & Site doesn't exist Inspection");
@@ -390,8 +400,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			logger.info("decimal formating corrections started for Main supply");
 			supplyCharacteristics.setMainNominalCurrent(DecimalConversion.convertToDecimal(
 					supplyCharacteristics.getMainNominalCurrent(), Constants.supply_MainNominal_Current));
-			supplyCharacteristics.setMainNominalFrequency(DecimalConversion.convertToDecimal(
-					supplyCharacteristics.getMainNominalFrequency(), Constants.supply_MainNominal_Frequency));
+		//	supplyCharacteristics.setMainNominalFrequency(DecimalConversion.convertToDecimal(
+//					supplyCharacteristics.getMainNominalFrequency(), Constants.supply_MainNominal_Frequency));
 			supplyCharacteristics.setMainNominalVoltage(DecimalConversion.convertToDecimal(
 					supplyCharacteristics.getMainNominalVoltage(), Constants.supply_MainNominal_Voltage));
 			supplyCharacteristics.setMainLoopImpedance(DecimalConversion.convertToDecimal(
@@ -408,8 +418,8 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 						&& supplyParametersItr.getFaultCurrent() != null
 						&& supplyParametersItr.getLoopImpedance() != null) {
 					logger.info("decimal formating corrections started for alternative supply");
-					supplyParametersItr.setNominalFrequency(DecimalConversion.convertToDecimal(
-							supplyParametersItr.getNominalFrequency(), Constants.supply_Nominal_Frequency));
+//					supplyParametersItr.setNominalFrequency(DecimalConversion.convertToDecimal(
+//							supplyParametersItr.getNominalFrequency(), Constants.supply_Nominal_Frequency));
 					supplyParametersItr.setNominalVoltage(DecimalConversion.convertToDecimal(
 							supplyParametersItr.getNominalVoltage(), Constants.supply_Nominal_Voltage));
 					supplyParametersItr.setFaultCurrent(DecimalConversion.convertToDecimal(
@@ -421,4 +431,5 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			}
 		}
 	}
+
 }

@@ -1,6 +1,6 @@
 package com.capeelectric.model;
-import java.io.Serializable;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,33 +9,37 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
-*
-* @author capeelectricsoftware
-*
-*/
+ *
+ * @author capeelectricsoftware
+ *
+ */
 @Entity
 @Table(name = "bounding_location_reports_table")
 public class BoundingLocationReport implements Serializable {
-	
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "BOUNDING_REPORT_ID")
 	private Integer locationReportId;
- 
+
 	@Column(name = "LOCATION")
 	private String location;
 
 	@Column(name = "JOINT_NO")
 	private String jointNo;
 
+	@Column(name = "JOINT_REFERENCE")
+	private String jointReference;
+
 	@Column(name = "JOINT_RESISTANCE")
 	private String jointResistance;
+
+	@Column(name = "INSTALLOCATIONREPORT_STATUS")
+	private String instalLocationReportStatus;
 
 	@JsonBackReference
 	@ManyToOne
@@ -66,6 +70,14 @@ public class BoundingLocationReport implements Serializable {
 		this.jointNo = jointNo;
 	}
 
+	public String getJointReference() {
+		return jointReference;
+	}
+
+	public void setJointReference(String jointReference) {
+		this.jointReference = jointReference;
+	}
+
 	public String getJointResistance() {
 		return jointResistance;
 	}
@@ -80,6 +92,14 @@ public class BoundingLocationReport implements Serializable {
 
 	public void setSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics) {
 		this.supplyCharacteristics = supplyCharacteristics;
-	}	
+	}
+
+	public String getInstalLocationReportStatus() {
+		return instalLocationReportStatus;
+	}
+
+	public void setInstalLocationReportStatus(String instalLocationReportStatus) {
+		this.instalLocationReportStatus = instalLocationReportStatus;
+	}
 
 }

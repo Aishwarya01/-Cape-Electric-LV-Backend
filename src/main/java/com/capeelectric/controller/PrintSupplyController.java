@@ -12,11 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.capeelectric.exception.SummaryException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
-import com.capeelectric.model.Summary;
 import com.capeelectric.model.SupplyCharacteristics;
-import com.capeelectric.service.PrintService;
 import com.capeelectric.service.PrintSupplyService;
 @RestController()
 @RequestMapping("/api/v1")
@@ -32,7 +29,7 @@ public class PrintSupplyController {
 	public ResponseEntity<List<SupplyCharacteristics>> printSupply(@PathVariable String userName,@PathVariable Integer siteId) throws  SupplyCharacteristicsException {
 		logger.info("called printSummary function userName: {},siteId : {}", userName,siteId);
 		printSupplyService.printSupply(userName,siteId);
-		return new ResponseEntity( HttpStatus.OK);
+		return new ResponseEntity<List<SupplyCharacteristics>>( HttpStatus.OK);
 	}	
 	
 }

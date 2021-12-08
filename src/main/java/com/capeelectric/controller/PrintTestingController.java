@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.TestingReport;
-import com.capeelectric.service.PrintSupplyService;
 import com.capeelectric.service.PrintTestingService;
 
 @RestController()
@@ -32,7 +31,7 @@ public class PrintTestingController {
 		logger.info("Started printTesting function userName: {},siteId : {}", userName, siteId);
 		printTestingService.printTesting(userName, siteId);
 		logger.info("ended printTesting function");
-         return new ResponseEntity( HttpStatus.OK);
+         return new ResponseEntity<List<TestingReport>>( HttpStatus.OK);
 	}
 
 }

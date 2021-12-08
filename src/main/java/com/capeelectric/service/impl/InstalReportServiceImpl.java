@@ -22,6 +22,7 @@ import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.InstalReportService;
 import com.capeelectric.util.Constants;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.SiteDetails;
 import com.capeelectric.util.UserFullName;
 
@@ -48,6 +49,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 	
 	@Autowired
 	private SiteDetails siteDetails;
+	
+	@Autowired
+	private FindNonRemovedObject findNonRemovedObject;
 	
 	/**
 	 * @param ReportDetails
@@ -101,10 +105,10 @@ public class InstalReportServiceImpl implements InstalReportService {
 	public ReportDetails retrieveInstallationReport(String userName, Integer siteId)
 			throws InstalReportException {
 		if (userName != null) {
-			ReportDetails reportDetailsRepo = installationReportRepository.findByUserNameAndSiteId(userName,
-					siteId);
-			if (reportDetailsRepo != null ) {
-					sortingDateTime(reportDetailsRepo.getReportDetailsComment());
+			ReportDetails reportDetailsRepo = installationReportRepository.findByUserNameAndSiteId(userName, siteId);
+			if (reportDetailsRepo != null) {
+				reportDetailsRepo.setSignatorDetails(findNonRemovedObject.findNonRemovedReport(reportDetailsRepo.getSignatorDetails()));
+				sortingDateTime(reportDetailsRepo.getReportDetailsComment());
 				return reportDetailsRepo;
 			} else {
 				throw new InstalReportException("Given UserName & Site doesn't exist Basic-information");
@@ -326,4 +330,5 @@ public class InstalReportServiceImpl implements InstalReportService {
 		}
 		return flag;
 	}
+
 }

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,12 +21,20 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.FinalReportException;
+import com.capeelectric.model.BoundingLocationReport;
+import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.FinalReport;
+import com.capeelectric.model.InstalLocationReport;
+import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
+import com.capeelectric.model.SignatorDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.Summary;
+import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
+import com.capeelectric.model.Testing;
+import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.InstalReportDetailsRepository;
@@ -34,9 +43,11 @@ import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.impl.FinalReportServiceImpl;
+import com.capeelectric.util.FindNonRemovedObject;
 
 /**
  * @author capeelectricsoftware
+ * @param <E>
  *
  */
 @ExtendWith(SpringExtension.class)
@@ -65,6 +76,9 @@ public class FinalReportServiceTest {
 
 	@MockBean
 	private SummaryRepository summaryRepository;
+	
+	@MockBean
+	private FindNonRemovedObject findNonRemovedObject;
 
 	private Site site;
 
@@ -141,6 +155,11 @@ public class FinalReportServiceTest {
 
 	private ReportDetails retrieveReportDetails() {
 		ReportDetails reportDetails = new ReportDetails();
+		
+		SignatorDetails signatorDetails = new SignatorDetails();
+		signatorDetails.setSignatorStatus("a");
+		HashSet<SignatorDetails> signatorDetailsList = new HashSet<SignatorDetails>();
+		reportDetails.setSignatorDetails(signatorDetailsList);
 		reportDetails.setUserName("LVsystem@gmail.com");
 		reportDetails.setSiteId(1);
 		return reportDetails;
@@ -150,13 +169,38 @@ public class FinalReportServiceTest {
 		SupplyCharacteristics supplyCharacteristics = new SupplyCharacteristics();
 		supplyCharacteristics.setUserName("LVsystem@gmail.com");
 		supplyCharacteristics.setSiteId(1);
+		
+		List<InstalLocationReport> installList = new ArrayList<InstalLocationReport>();
+		InstalLocationReport instalLocationReport = new InstalLocationReport();
+		instalLocationReport.setInstalLocationReportStatus("A");
+		installList.add(instalLocationReport);
+
+		List<BoundingLocationReport> boundingList = new ArrayList<BoundingLocationReport>();
+		BoundingLocationReport boundingLocationReport = new BoundingLocationReport();
+		boundingLocationReport.setInstalLocationReportStatus("u");
+		boundingList.add(boundingLocationReport);
+
+		List<EarthingLocationReport> earthingList = new ArrayList<EarthingLocationReport>();
+		EarthingLocationReport earthingLocationReport = new EarthingLocationReport();
+		earthingLocationReport.setInstalLocationReportStatus("n");
+		earthingList.add(earthingLocationReport);
+
+		supplyCharacteristics.setInstalLocationReport(installList);
+		supplyCharacteristics.setBoundingLocationReport(boundingList);
+		supplyCharacteristics.setEarthingLocationReport(earthingList);
 		return supplyCharacteristics;
 	}
 
 	private PeriodicInspection retrievePeriodicInspection() {
 		PeriodicInspection periodicInspection = new PeriodicInspection();
+		IpaoInspection ipaoInspection = new IpaoInspection();
+		ipaoInspection.setInspectionFlag("a");
+		List<IpaoInspection> arrayList = new ArrayList<IpaoInspection>();
+		arrayList.add(ipaoInspection);
+		periodicInspection.setIpaoInspection(arrayList);
 		periodicInspection.setUserName("LVsystem@gmail.com");
 		periodicInspection.setSiteId(1);
+		
 		return periodicInspection;
 	}
 
@@ -164,11 +208,27 @@ public class FinalReportServiceTest {
 		TestingReport testingReport = new TestingReport();
 		testingReport.setUserName("LVsystem@gmail.com");
 		testingReport.setSiteId(1);
+		List<Testing> testingList = new ArrayList<Testing>();
+		List<TestingRecords> testingRecordsList = new ArrayList<TestingRecords>();
+		Testing testing = new Testing();
+		testing.setTestingStatus("a");
+		TestingRecords testingRecords = new TestingRecords();
+		testingRecords.setTestingRecordStatus("a");
+		testingRecordsList.add(testingRecords);
+		testing.setTestingRecords(testingRecordsList);
+		testingList.add(testing);
+		testingReport.setTesting(testingList);
 		return testingReport;
 	}
 
 	private Summary retrieveSummary() {
 		Summary summary = new Summary();
+		
+		SummaryObervation obervation = new SummaryObervation();
+		obervation.setObervationStatus("a");
+		List<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
+		obervationList.add(obervation);
+		summary.setSummaryObervation(obervationList);
 		summary.setUserName("LVsystem@gmail.com");
 		summary.setSiteId(1);
 		return summary;
