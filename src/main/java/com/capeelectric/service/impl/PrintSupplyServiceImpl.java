@@ -981,8 +981,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 			addRow(table7, "External Loop Impedance Ze (ohms)", PI1, PI2, PI3, PI4, PI5, PI6, PI7, PI8, PI9);
 			addRow(table7, "Prospective fault current Ipfc (kA) ", PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9);
 			addRow1(table22, "Actual load current connected to this source (A)",
-					"                       " + loadCurrent, "                       " + loadCurrent2,
-					"                                      " + loadCurrent3, "                       " + loadCurrent4);
+					"                                " + loadCurrent, "                                  " + loadCurrent2,
+					"                                           " + loadCurrent3,
+					"                              " + loadCurrent4);
 			document.add(table34);
 			document.add(table5);
 			document.add(table6);
