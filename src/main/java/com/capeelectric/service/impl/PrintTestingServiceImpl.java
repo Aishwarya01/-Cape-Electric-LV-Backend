@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.PeriodicTestingException;
+import com.capeelectric.model.BoundingLocationReport;
 import com.capeelectric.model.TestDistribution;
 import com.capeelectric.model.TestIncomingDistribution;
 import com.capeelectric.model.Testing;
+import com.capeelectric.model.TestingEquipment;
 import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.model.TestingReportComment;
@@ -46,7 +48,9 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 				TestingReport supply2 = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
 				List<Testing> testing = supply2.getTesting();
-//				Testing testRecords = testing.get(0);
+
+				Testing testRecords = testing.get(0);
+				List<TestingEquipment> testEquipment = testRecords.getTestingEquipment();
 
 				List<TestingReportComment> reportComments = supply2.getTestingComment();
 				TestingReportComment comments = reportComments.get(0);
@@ -156,7 +160,8 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 	}
 
-	private void testingIteration(Document document, Testing testing1) throws DocumentException, IOException {
+	private void testingIteration(Document document, Testing testing1, List<TestingEquipment> testEquipment)
+			throws DocumentException, IOException {
 		Font font4 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 		new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
 		Font font5 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
@@ -170,7 +175,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		float[] pointColumnWidths = { 60F, 80F };
 		PdfPTable table = new PdfPTable(pointColumnWidths);
 		table.setWidthPercentage(100); // Width 100%
-		table.setSpacingBefore(10f); // Space before table
+		table.setSpacingBefore(5f); // Space before table
 		table.setWidthPercentage(100);
 		table.getDefaultCell().setBorder(0);
 
@@ -207,16 +212,55 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell3.setBorder(PdfPCell.NO_BORDER);
 		table.addCell(cell3);
 
+		PdfPCell cell04 = new PdfPCell(new Paragraph("Designation", font7));
+		cell04.setBorder(PdfPCell.NO_BORDER);
+		cell04.setGrayFill(0.92f);
+		table.addCell(cell04);
+		PdfPCell cell203 = new PdfPCell(new Paragraph(testing1.getDesignation(), font7));
+		cell203.setGrayFill(0.92f);
+		cell203.setBorder(PdfPCell.NO_BORDER);
+		table.addCell(cell203);
+
 		PdfPCell cell4 = new PdfPCell(new Paragraph("Date:", font7));
 		cell4.setBorder(PdfPCell.NO_BORDER);
-		cell4.setGrayFill(0.92f);
+//		cell4.setGrayFill(0.92f);
 		table.addCell(cell4);
 		PdfPCell cell23 = new PdfPCell(new Paragraph(testing1.getDate(), font7));
-		cell23.setGrayFill(0.92f);
+//		cell23.setGrayFill(0.92f);
 		cell23.setBorder(PdfPCell.NO_BORDER);
 		table.addCell(cell23);
 
+		PdfPCell cell41 = new PdfPCell(new Paragraph("Company Name:", font7));
+		cell41.setBorder(PdfPCell.NO_BORDER);
+		cell4.setGrayFill(0.92f);
+		table.addCell(cell41);
+		PdfPCell cell231 = new PdfPCell(new Paragraph(testing1.getCompanyName(), font7));
+		cell23.setGrayFill(0.92f);
+		cell231.setBorder(PdfPCell.NO_BORDER);
+		table.addCell(cell231);
 		document.add(table);
+
+		PdfPTable table104 = new PdfPTable(1);
+		table104.setWidthPercentage(100); // Width 100%
+		table104.setSpacingBefore(5f); // Space before table
+		table104.setWidthPercentage(100);
+		table104.getDefaultCell().setBorder(0);
+
+		PdfPCell cell031 = new PdfPCell(new Paragraph(30, "Details of testing instruments:", font2));
+		cell031.setBorder(PdfPCell.NO_BORDER);
+		cell031.setBackgroundColor(BaseColor.LIGHT_GRAY);
+		table104.addCell(cell031);
+		document.add(table104);
+
+		PdfPTable table11 = new PdfPTable(5);
+		table11.setWidthPercentage(100); // Width 100%
+		table11.setSpacingBefore(10f); // Space before table
+//		table11.setSpacingAfter(5f); // Space after table
+
+		tableHeader1(table11);
+		tableData1(table11, testEquipment);
+
+		document.add(table11);
 
 		PdfPTable table14 = new PdfPTable(1);
 		table14.setWidthPercentage(100); // Width 100%
@@ -245,7 +289,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			cell13.setBorder(PdfPCell.NO_BORDER);
 			table1.addCell(cell13);
 
-			PdfPCell cell14 = new PdfPCell(new Paragraph("Referance (name):", font5));
+			PdfPCell cell14 = new PdfPCell(new Paragraph("Distribution board name:", font5));
 			cell14.setBorder(PdfPCell.NO_BORDER);
 			cell14.setGrayFill(0.92f);
 			table1.addCell(cell14);
@@ -269,23 +313,23 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			table1.addCell(cell29);
 
 			PdfPCell cell17 = new PdfPCell(new Paragraph(distribution.getNumOutputCircuitsSpare(), font5));
-			table1.addCell(new Phrase("Number Of Output Circuits - Spare:", font5));
+			table1.addCell(new Phrase("Total number of output circuits including spare:", font5));
 			cell17.setBorder(PdfPCell.NO_BORDER);
 			table1.addCell(cell17);
-
-			PdfPCell cell18 = new PdfPCell(new Paragraph("Installed Equipment Vulnarable To Testing:", font7));
-			cell18.setBorder(PdfPCell.NO_BORDER);
-			cell18.setGrayFill(0.92f);
-			table1.addCell(cell16);
-			PdfPCell cell32 = new PdfPCell(new Paragraph(distribution.getInstalledEquipmentVulnarable(), font5));
-			cell32.setGrayFill(0.92f);
-			cell32.setBorder(PdfPCell.NO_BORDER);
-			table1.addCell(cell32);
 
 			PdfPCell cell19 = new PdfPCell(new Paragraph(distribution.getNumOutputCircuitsUse(), font5));
 			table1.addCell(new Phrase("Number Of Output Circuits In Use:", font5));
 			cell19.setBorder(PdfPCell.NO_BORDER);
 			table1.addCell(cell19);
+
+			PdfPCell cell18 = new PdfPCell(new Paragraph("Installed Equipment Vulnarable To Testing:", font7));
+			cell18.setBorder(PdfPCell.NO_BORDER);
+			cell18.setGrayFill(0.92f);
+			table1.addCell(cell18);
+			PdfPCell cell32 = new PdfPCell(new Paragraph(distribution.getInstalledEquipmentVulnarable(), font5));
+			cell32.setGrayFill(0.92f);
+			cell32.setBorder(PdfPCell.NO_BORDER);
+			table1.addCell(cell32);
 
 			document.add(table1);
 			String ratingsInAmpsvalue = distribution.getRatingsAmps();
@@ -379,12 +423,16 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				tableHead(table2);
 
 				addRow(table2, "Nominal Voltage U/U0 (V)", IV1, IV2, IV3, IV4, IV5, IV6, IV7, IV8, IV9);
+				addRow(table2, "External Loop Impedance Ze (ohms)", ZS1, ZS2, ZS3, ZS4, ZS5, ZS6, ZS7, ZS8, ZS9);
 				addRow(table2, "Prospective fault current Ipfc (kA)", IPF1, IPF2, IPF3, IPF4, IPF5, IPF6, IPF7, IPF8,
 						IPF9);
-				addRow(table2, "External Loop Impedance Ze (ohms)", ZS1, ZS2, ZS3, ZS4, ZS5, ZS6, ZS7, ZS8, ZS9);
 
-				addRow1(table22, "Actual load current connected to this source (A)", loadCurrent, loadCurrent2,
-						loadCurrent3, loadCurrent4);
+				addRow1(table22, "Actual load current connected to this source (A)",
+						"                               " + loadCurrent,
+						"                               " + loadCurrent2,
+						"                                                    " + loadCurrent3,
+						"                               " + loadCurrent4);
+
 				document.add(table250);
 				document.add(table2);
 				document.add(table22);
@@ -397,6 +445,56 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			testingTableIteration(document, testingRecords11);
 		}
 
+	}
+
+	private void tableHeader1(PdfPTable table11) throws DocumentException, IOException {
+		PdfPCell cell = new PdfPCell();
+		cell.setPadding(5);
+		Font font1 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+		cell.setPhrase(new Phrase("Equipment Name", font1));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell.setGrayFill(0.92f);
+		table11.addCell(cell);
+		cell.setPhrase(new Phrase("Equipment Make", font1));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell.setGrayFill(0.92f);
+		table11.addCell(cell);
+		cell.setPhrase(new Phrase("Equipment Model", font1));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell.setGrayFill(0.92f);
+		table11.addCell(cell);
+		cell.setPhrase(new Phrase("Equipment SL.NO", font1));
+		cell.setGrayFill(0.92f);
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table11.addCell(cell);
+		cell.setPhrase(new Phrase("Calibration Due Date", font1));
+		cell.setGrayFill(0.92f);
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table11.addCell(cell);
+
+	}
+
+	private void tableData1(PdfPTable table11, List<TestingEquipment> testEquipment)
+			throws DocumentException, IOException {
+		for (TestingEquipment arr : testEquipment) {
+			PdfPCell cell = new PdfPCell();
+			Font font6 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+			cell.setPhrase(new Phrase(arr.getEquipmentName(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table11.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getEquipmentMake(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table11.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getEquipmentModel(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table11.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getEquipmentSerialNo(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table11.addCell(cell);
+			cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString(), font6));
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table11.addCell(cell);
+		}
 	}
 
 	private void addRow1(PdfPTable table22, String string, String loadCurrent, String loadCurrent2, String loadCurrent3,
@@ -795,6 +893,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 		cell1 = new PdfPCell(new Phrase("Insulation resistance (M.ohms)", font23));
 		cell1.setGrayFill(0.92f);
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(3);
 		table466.addCell(cell1);
 
@@ -1010,11 +1109,19 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1 = new PdfPCell(new Phrase(FC99, font27));
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-
-		cell1 = new PdfPCell(new Phrase("	RCD", font23));
+		cell1 = new PdfPCell(new Phrase("\r\n\r\n\r\n\r\nRCD", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
-		cell1.setRowspan(4);
+		cell1.setRowspan(5);
+		table466.addCell(cell1);
+		cell1 = new PdfPCell(new Phrase("Type (A/B/AC/F)", font23));
+		cell1.setGrayFill(0.92f);
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell1.setColspan(2);
+		table466.addCell(cell1);
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getRcdType(), font27));
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell1.setColspan(9);
 		table466.addCell(cell1);
 		cell1 = new PdfPCell(new Phrase("Sensitivity", font23));
 		cell1.setGrayFill(0.92f);

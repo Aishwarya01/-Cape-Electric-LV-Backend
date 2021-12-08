@@ -124,8 +124,11 @@ public class TestingRecords implements Serializable {
 	@Column(name = "RCD_REMARKS")
 	private String rcdRemarks;
 	
+
 	@Column(name = "TESTING_RECORD_STATUS")
 	private String testingRecordStatus;
+	@Column(name = "RCD_TYPE")
+	private String rcdType;
 
 	@JsonBackReference
 	@ManyToOne
@@ -392,6 +395,7 @@ public class TestingRecords implements Serializable {
 		this.testing = testing;
 	}
 
+
 	public String getTestingRecordStatus() {
 		return testingRecordStatus;
 	}
@@ -406,6 +410,14 @@ public class TestingRecords implements Serializable {
 
 	public void setTestingRecordsSourceSupply(List<TestingRecordsSourceSupply> testingRecordsSourceSupply) {
 		this.testingRecordsSourceSupply = testingRecordsSourceSupply;
+	}
+
+	public String getRcdType() {
+		return rcdType;
+	}
+
+	public void setRcdType(String rcdType) {
+		this.rcdType = rcdType;
 	}
 
 }

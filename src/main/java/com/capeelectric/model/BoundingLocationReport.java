@@ -18,87 +18,75 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "bounding_location_reports_table")
 public class BoundingLocationReport implements Serializable {
-	private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "BOUNDING_REPORT_ID")
-	private Integer locationReportId;
+@Id
+@GeneratedValue(strategy = GenerationType.AUTO)
+@Column(name = "BOUNDING_REPORT_ID")
+private Integer locationReportId;
 
-	@Column(name = "LOCATION")
-	private String location;
+@Column(name = "LOCATION")
+private String location;
 
-	@Column(name = "JOINT_NO")
-	private String jointNo;
+@Column(name = "JOINT_NO")
+private String jointNo;
 
-	@Column(name = "JOINT_REFERENCE")
-	private String jointReference;
+@Column(name = "JOINT_REFERENCE")
+private String jointReference;
 
-	@Column(name = "JOINT_RESISTANCE")
-	private String jointResistance;
+@Column(name = "JOINT_RESISTANCE")
+private String jointResistance;
 
-	@Column(name = "INSTALLOCATIONREPORT_STATUS")
-	private String instalLocationReportStatus;
+@JsonBackReference
+@ManyToOne
+@JoinColumn(name = "SUPPLY_CHARACTERISTICS_ID")
+private SupplyCharacteristics supplyCharacteristics;
+public Integer getLocationReportId() {
+return locationReportId;
+}
 
-	@JsonBackReference
-	@ManyToOne
-	@JoinColumn(name = "SUPPLY_CHARACTERISTICS_ID")
-	private SupplyCharacteristics supplyCharacteristics;
+public void setLocationReportId(Integer locationReportId) {
+this.locationReportId = locationReportId;
+}
 
-	public Integer getLocationReportId() {
-		return locationReportId;
-	}
+public String getLocation() {
+return location;
+}
 
-	public void setLocationReportId(Integer locationReportId) {
-		this.locationReportId = locationReportId;
-	}
+public void setLocation(String location) {
+this.location = location;
+}
 
-	public String getLocation() {
-		return location;
-	}
+public String getJointNo() {
+return jointNo;
+}
 
-	public void setLocation(String location) {
-		this.location = location;
-	}
+public void setJointNo(String jointNo) {
+this.jointNo = jointNo;
+}
 
-	public String getJointNo() {
-		return jointNo;
-	}
+public String getJointReference() {
+return jointReference;
+}
 
-	public void setJointNo(String jointNo) {
-		this.jointNo = jointNo;
-	}
+public void setJointReference(String jointReference) {
+this.jointReference = jointReference;
+}
 
-	public String getJointReference() {
-		return jointReference;
-	}
+public String getJointResistance() {
+return jointResistance;
+}
 
-	public void setJointReference(String jointReference) {
-		this.jointReference = jointReference;
-	}
+public void setJointResistance(String jointResistance) {
+this.jointResistance = jointResistance;
+}
 
-	public String getJointResistance() {
-		return jointResistance;
-	}
+public SupplyCharacteristics getSupplyCharacteristics() {
+return supplyCharacteristics;
+}
 
-	public void setJointResistance(String jointResistance) {
-		this.jointResistance = jointResistance;
-	}
-
-	public SupplyCharacteristics getSupplyCharacteristics() {
-		return supplyCharacteristics;
-	}
-
-	public void setSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics) {
-		this.supplyCharacteristics = supplyCharacteristics;
-	}
-
-	public String getInstalLocationReportStatus() {
-		return instalLocationReportStatus;
-	}
-
-	public void setInstalLocationReportStatus(String instalLocationReportStatus) {
-		this.instalLocationReportStatus = instalLocationReportStatus;
-	}
+public void setSupplyCharacteristics(SupplyCharacteristics supplyCharacteristics) {
+this.supplyCharacteristics = supplyCharacteristics;
+}
 
 }

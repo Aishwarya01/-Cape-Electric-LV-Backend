@@ -65,7 +65,6 @@ public class PrintServiceImpl implements PrintService {
 				PdfPTable table10 = new PdfPTable(1);
 				table10.setWidthPercentage(100); // Width 100%
 				table10.setSpacingBefore(10f); // Space before table
-				table10.setWidthPercentage(100);
 				table10.getDefaultCell().setBorder(0);
 
 				PdfPCell cell9 = new PdfPCell(
@@ -77,7 +76,6 @@ public class PrintServiceImpl implements PrintService {
 				PdfPTable table13 = new PdfPTable(1);
 				table13.setWidthPercentage(100); // Width 100%
 				table13.setSpacingBefore(10f); // Space before table
-				table13.setWidthPercentage(100);
 				table13.getDefaultCell().setBorder(0);
 
 				PdfPCell cell8 = new PdfPCell(
@@ -97,7 +95,6 @@ public class PrintServiceImpl implements PrintService {
 				for (Summary summary1 : summary) {
 
 					PdfPTable table4 = new PdfPTable(pointColumnWidths);
-					table4.setWidthPercentage(100); // Width 100%
 					table4.setSpacingBefore(10f); // Space before table
 					table4.setWidthPercentage(100);
 					table4.getDefaultCell().setBorder(0);
@@ -146,7 +143,6 @@ public class PrintServiceImpl implements PrintService {
 					PdfPTable table15 = new PdfPTable(1);
 					table15.setWidthPercentage(100); // Width 100%
 					table15.setSpacingBefore(10f); // Space before table
-					table15.setWidthPercentage(100);
 					table15.getDefaultCell().setBorder(0);
 
 					PdfPCell cell25 = new PdfPCell(new Paragraph(15, "Section - 2: Observations ", font5));
@@ -177,6 +173,7 @@ public class PrintServiceImpl implements PrintService {
 						document.add(table6);
 					}
 					
+
 					Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
 
 					PdfPTable table16 = new PdfPTable(1);
@@ -210,7 +207,6 @@ public class PrintServiceImpl implements PrintService {
 					table11.addCell(cell23);
 					document.add(table11);
 					PdfPTable table22 = new PdfPTable(pointColumnWidths);
-					table22.setWidthPercentage(100); // Width 100%
 					table22.setSpacingBefore(10f); // Space before table
 					table22.setSpacingAfter(10f); // Space after table
 					table22.setWidthPercentage(100);
@@ -221,14 +217,12 @@ public class PrintServiceImpl implements PrintService {
 					PdfPTable table7 = new PdfPTable(pointColumnWidths1); // 3 columns.
 					table7.setWidthPercentage(100); // Width 100%
 					table7.setSpacingBefore(10f); // Space before table
-					table7.setSpacingAfter(10f); // Space after table
-					table7.setWidthPercentage(100);
+//					table7.setSpacingAfter(10f); // Space after table
 					table7.getDefaultCell().setBorder(0);
 
 					PdfPTable table17 = new PdfPTable(1);
 					table17.setWidthPercentage(100); // Width 100%
-					table17.setSpacingBefore(10f); // Space before table
-					table17.setWidthPercentage(100);
+					table17.setSpacingBefore(5f); // Space before table
 					table17.getDefaultCell().setBorder(0);
 
 					PdfPCell cell27 = new PdfPCell(
@@ -241,33 +235,25 @@ public class PrintServiceImpl implements PrintService {
 					PdfPCell cell132 = new PdfPCell(new Paragraph(
 							"General condition of the installation in terms of electrical safety:", font9));
 					cell132.setBorder(PdfPCell.NO_BORDER);
-
 					cell132.setGrayFill(0.92f);
 					table7.addCell(cell132);
 					PdfPCell cell29 = new PdfPCell(new Paragraph(summary1.getGeneralConditionInstallation(), font9));
 					cell29.setGrayFill(0.92f);
-
-					cell29.setFixedHeight(30f);
 					cell29.setBorder(PdfPCell.NO_BORDER);
 					table7.addCell(cell29);
 
 					PdfPTable table8 = new PdfPTable(pointColumnWidths1); // 3 columns.
 					table8.setWidthPercentage(100); // Width 100%
 					table8.setSpacingBefore(10f); // Space before table
-					table8.setSpacingAfter(10f); // Space after table
-					table8.setWidthPercentage(100);
 					table8.getDefaultCell().setBorder(0);
 
 					PdfPCell cell30 = new PdfPCell(new Paragraph(summary1.getOverallAssessmentInstallation(), font9));
 					cell30.setBorder(PdfPCell.NO_BORDER);
-					cell30.setFixedHeight(30f);
 					cell30.setGrayFill(0.92f);
-
 					PdfPCell cell31 = new PdfPCell(new Paragraph(
 							"Overall assessment of the installation in terms of suitability on continuous use:",
 							font9));
 					cell31.setGrayFill(0.92f);
-					cell31.setFixedHeight(30f);
 					cell31.setBorder(PdfPCell.NO_BORDER);
 					table8.addCell(cell31);
 					table8.addCell(cell30);
@@ -281,7 +267,6 @@ public class PrintServiceImpl implements PrintService {
 				PdfPTable table18 = new PdfPTable(1);
 				table18.setWidthPercentage(100); // Width 100%
 				table18.setSpacingBefore(10f); // Space before table
-				table18.setWidthPercentage(100);
 				table18.getDefaultCell().setBorder(0);
 
 				PdfPCell cell28 = new PdfPCell(new Paragraph(15, "Section - 5:Declaration", font5));
@@ -303,8 +288,6 @@ public class PrintServiceImpl implements PrintService {
 				PdfPTable table9 = new PdfPTable(2);
 				table9.setWidthPercentage(100); // Width 100%
 				table9.setSpacingBefore(10f); // Space before table
-
-				table9.setWidthPercentage(100);
 				table9.getDefaultCell().setBorder(0);
 
 				addRow(table9, "Inspected and Tested  By ", "Authorized By");
@@ -325,7 +308,6 @@ public class PrintServiceImpl implements PrintService {
 					document.newPage();
 
 					PdfPTable table19911 = new PdfPTable(1);
-					table19911.setWidthPercentage(100); // Width 100%
 					table19911.setSpacingBefore(10f); // Space before table
 					table19911.setWidthPercentage(100);
 					table19911.getDefaultCell().setBorder(0);
@@ -343,7 +325,6 @@ public class PrintServiceImpl implements PrintService {
 					PdfPTable table440 = new PdfPTable(pointColumnWidths4);
 					table440.setWidthPercentage(100); // Width 100%
 					table440.setSpacingBefore(10f); // Space before table
-					table440.setWidthPercentage(100);
 
 					PdfPCell cell550 = new PdfPCell(new Paragraph(comments.getViewerUserName(), font91111));
 					cell550.setHorizontalAlignment(Element.ALIGN_CENTER);

@@ -195,53 +195,54 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 //					cell81.setBorder(PdfPCell.NO_BORDER);
 //					table1.addCell(cell81);
 
-						PdfPCell cell = new PdfPCell(new Paragraph(ipoInspection.getServiceCable(),
-								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						table1.addCell(new Phrase("Service cable:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+
+					PdfPCell cell = new PdfPCell(new Paragraph(ipoInspection.getServiceCable(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					table1.addCell(new Phrase("Cable/Busbar trunking:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //					cell.setFixedHeight(30f);
-						cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-						cell.setBorder(PdfPCell.NO_BORDER);
-						table1.addCell(cell);
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setBorder(PdfPCell.NO_BORDER);
+					table1.addCell(cell);
 
-						PdfPCell cell37 = new PdfPCell(new Paragraph("Service cut out / fuse:",
-								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						cell37.setBackgroundColor(new GrayColor(0.93f));
-						cell37.setHorizontalAlignment(Element.ALIGN_LEFT);
-						cell37.setBorder(PdfPCell.NO_BORDER);
-						table1.addCell(cell37);
-						PdfPCell cell1 = new PdfPCell(new Paragraph(ipoInspection.getServiceFuse(),
-								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
-						cell1.setBackgroundColor(new GrayColor(0.93f));
-						cell1.setBorder(PdfPCell.NO_BORDER);
-						table1.addCell(cell1);
+					PdfPCell cell37 = new PdfPCell(
+							new Paragraph("Incoming Protective Device:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					cell37.setBackgroundColor(new GrayColor(0.93f));
+					cell37.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell37.setBorder(PdfPCell.NO_BORDER);
+					table1.addCell(cell37);
+					PdfPCell cell1 = new PdfPCell(new Paragraph(ipoInspection.getServiceFuse(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					cell1.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell1.setBackgroundColor(new GrayColor(0.93f));
+					cell1.setBorder(PdfPCell.NO_BORDER);
+					table1.addCell(cell1);
 
-						PdfPCell cell2 = new PdfPCell(new Paragraph(ipoInspection.getMeterDistributor(),
-								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						table1.addCell(new Phrase("Meter tails – Distributor:",
-								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					PdfPCell cell2 = new PdfPCell(new Paragraph(ipoInspection.getMeterDistributor(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					table1.addCell(
+							new Phrase("Energy Meters for Mains Incoming:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //					cell2.setFixedHeight(30f);
-						cell2.setHorizontalAlignment(Element.ALIGN_LEFT);
-						cell2.setBorder(PdfPCell.NO_BORDER);
-						table1.addCell(cell2);
+					cell2.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell2.setBorder(PdfPCell.NO_BORDER);
+					table1.addCell(cell2);
 
-						PdfPCell cell38 = new PdfPCell(new Paragraph("Meter tails – Consumer:",
-								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						cell38.setBackgroundColor(new GrayColor(0.93f));
-						cell38.setHorizontalAlignment(Element.ALIGN_LEFT);
-						cell38.setBorder(PdfPCell.NO_BORDER);
-						table1.addCell(cell38);
-						PdfPCell cell3 = new PdfPCell(new Paragraph(ipoInspection.getMeterConsumer(),
-								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						cell3.setHorizontalAlignment(Element.ALIGN_LEFT);
-						cell3.setBackgroundColor(new GrayColor(0.93f));
-						cell3.setBorder(PdfPCell.NO_BORDER);
-						table1.addCell(cell3);
+					PdfPCell cell38 = new PdfPCell(
+							new Paragraph("Energy Meters for Outgoings:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					cell38.setBackgroundColor(new GrayColor(0.93f));
+					cell38.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell38.setBorder(PdfPCell.NO_BORDER);
+					table1.addCell(cell38);
+					PdfPCell cell3 = new PdfPCell(new Paragraph(ipoInspection.getMeterConsumer(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					cell3.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell3.setBackgroundColor(new GrayColor(0.93f));
+					cell3.setBorder(PdfPCell.NO_BORDER);
+					table1.addCell(cell3);
 
-						PdfPCell cell4 = new PdfPCell(new Paragraph(ipoInspection.getMeterEqu(),
-								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						table1.addCell(
-								new Phrase("Metering Equipment:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					PdfPCell cell4 = new PdfPCell(new Paragraph(ipoInspection.getMeterEqu(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					table1.addCell(new Phrase("Over Voltage Protection:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+
 //					cell4.setFixedHeight(30f);
 						cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
 						cell4.setBorder(PdfPCell.NO_BORDER);

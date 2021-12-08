@@ -135,6 +135,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			SupplyCharacteristics supplyCharacteristicsRepo = supplyCharacteristicsRepository
 					.findByUserNameAndSiteId(userName, siteId);
 			if (supplyCharacteristicsRepo != null) {
+
 				supplyCharacteristicsRepo
 						.setInstalLocationReport(findNonRemovedObject.findNonRemovedInstallLocation(supplyCharacteristicsRepo));
 				supplyCharacteristicsRepo
@@ -144,6 +145,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				supplyCharacteristicsRepo.setCircuitBreaker(findNonRemovedObject.findNonRemovedCircuitBreaker(supplyCharacteristicsRepo.getCircuitBreaker()));
 				supplyCharacteristicsRepo.setSupplyParameters(findNonRemovedObject.findNonRemovedSupplyParameters(supplyCharacteristicsRepo.getSupplyParameters()));
 				sortingDateTime(supplyCharacteristicsRepo.getSupplyCharacteristicComment());
+
 				return supplyCharacteristicsRepo;
 			} else {
 				throw new SupplyCharacteristicsException("Given UserName & Site doesn't exist Inspection");
@@ -429,5 +431,5 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			}
 		}
 	}
-	
- }
+
+}

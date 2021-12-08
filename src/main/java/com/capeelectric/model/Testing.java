@@ -42,6 +42,12 @@ public class Testing implements Serializable {
 
 	@Column(name = "TEST_ENGINEER_NAME")
 	private String testEngineerName;
+	
+	@Column(name = "DESIGNATION")
+	private String designation;
+	
+	@Column(name = "COMPANY_NAME")
+	private String companyName;
 
 	@Column(name = "DATE")
 	private String date;
@@ -141,6 +147,7 @@ public class Testing implements Serializable {
 		this.testingEquipment = testingEquipment;
 	}
 
+
 	public String getTestingStatus() {
 		return testingStatus;
 	}
@@ -155,6 +162,21 @@ public class Testing implements Serializable {
 
 	public void setLocationCount(Integer locationCount) {
 		this.locationCount = locationCount;
+  }
+	public String getDesignation() {
+		return designation;
+	}
+
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 	
 }
