@@ -102,73 +102,72 @@ public class FinalReportServiceImpl implements FinalReportService {
 			logger.debug("fetching process started for InstallReport_Information");
 			Optional<ReportDetails> reportDetails = instalReportDetailsRepository.findBySiteId(siteId);
 			logger.debug("InstallReport_Information fetching ended");
-
-			logger.debug("fetching process started for SupplyCharacteristic");
-			Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository
-					.findBySiteId(siteId);
-			logger.debug("SupplyCharacteristic_fetching ended");
-
-			logger.debug("fetching process started for PriodicInspection");
-			Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(siteId);
-			logger.debug("PriodicInspection_fetching ended");
-
-			logger.debug("fetching process started for PriodicTesting");
-			Optional<TestingReport> testingReport = testingReportRepository.findBySiteId(siteId);
-			logger.debug("PriodicTesting_fetching ended");
-
-			logger.debug("fetching process started for Summary");
-			Optional<Summary> summary = summaryRepository.findBySiteId(siteId);
-			logger.debug("Summary_fetching ended");
-
 			if (reportDetails.isPresent() && reportDetails != null) {
 				reportDetails.get().setSignatorDetails(
 						findNonRemovedObject.findNonRemovedReport(reportDetails.get().getSignatorDetails()));
 				finalReport.setReportDetails(reportDetails.get());
-			}
 
-			if (supplyCharacteristics.isPresent() && supplyCharacteristics != null) {
+				logger.debug("fetching process started for SupplyCharacteristic");
+				Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository
+						.findBySiteId(siteId);
+				logger.debug("SupplyCharacteristic_fetching ended");
+				if (supplyCharacteristics.isPresent() && supplyCharacteristics != null) {
 
-				supplyCharacteristics.get().setInstalLocationReport(
-						findNonRemovedObject.findNonRemovedInstallLocation(supplyCharacteristics.get()));
-				supplyCharacteristics.get().setBoundingLocationReport(
-						findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristics.get()));
-				supplyCharacteristics.get().setEarthingLocationReport(
-						findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristics.get()));
-				supplyCharacteristics.get().setCircuitBreaker(findNonRemovedObject
-						.findNonRemovedCircuitBreaker(supplyCharacteristics.get().getCircuitBreaker()));
-				supplyCharacteristics.get().setSupplyParameters(findNonRemovedObject
-						.findNonRemovedSupplyParameters(supplyCharacteristics.get().getSupplyParameters()));
+					supplyCharacteristics.get().setInstalLocationReport(
+							findNonRemovedObject.findNonRemovedInstallLocation(supplyCharacteristics.get()));
+					supplyCharacteristics.get().setBoundingLocationReport(
+							findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristics.get()));
+					supplyCharacteristics.get().setEarthingLocationReport(
+							findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristics.get()));
+					supplyCharacteristics.get().setCircuitBreaker(
+							findNonRemovedObject.findNonRemovedCircuitBreaker(supplyCharacteristics.get().getCircuitBreaker()));
+					supplyCharacteristics.get().setSupplyParameters(
+							findNonRemovedObject.findNonRemovedSupplyParameters(supplyCharacteristics.get().getSupplyParameters()));
+					
+					finalReport.setSupplyCharacteristics(supplyCharacteristics.get());
 
-				finalReport.setSupplyCharacteristics(supplyCharacteristics.get());
+					logger.debug("fetching process started for PriodicInspection");
+					Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(siteId);
+					logger.debug("PriodicInspection_fetching ended");
 
-			}
+					if (periodicInspection.isPresent() && periodicInspection != null) {
 
-			if (periodicInspection.isPresent() && periodicInspection != null) {
+						periodicInspection.get().setIpaoInspection(
+								findNonRemovedObject.findNonRemovedInspectionLocation(periodicInspection.get()));
+						finalReport.setPeriodicInspection(periodicInspection.get());
 
-				periodicInspection.get().setIpaoInspection(
-						findNonRemovedObject.findNonRemovedInspectionLocation(periodicInspection.get()));
-				finalReport.setPeriodicInspection(periodicInspection.get());
+						logger.debug("fetching process started for PriodicTesting");
+						Optional<TestingReport> testingReport = testingReportRepository.findBySiteId(siteId);
+						logger.debug("PriodicTesting_fetching ended");
 
-				if (testingReport.isPresent() && testingReport != null) {
-					testingReport.get()
-							.setTesting(findNonRemovedObject.findNonRemoveTesting(testingReport.get().getTesting()));
-					finalReport.setTestingReport(testingReport.get());
+						if (testingReport.isPresent() && testingReport != null) {
+							testingReport.get().setTesting(
+									findNonRemovedObject.findNonRemoveTesting(testingReport.get().getTesting()));
+							finalReport.setTestingReport(testingReport.get());
 
-					if (summary.isPresent() && summary != null) {
-						summary.get().setSummaryObervation(
-								findNonRemovedObject.findNonRemoveObservation(summary.get().getSummaryObervation()));
-						finalReport.setSummary(summary.get());
+							logger.debug("fetching process started for Summary");
+							Optional<Summary> summary = summaryRepository.findBySiteId(siteId);
+							logger.debug("Summary_fetching ended");
 
-						logger.debug("Successfully Five_Steps fetching Operation done");
-						return Optional.of(finalReport);
+							if (summary.isPresent() && summary != null) {
+								summary.get().setSummaryObervation(findNonRemovedObject
+										.findNonRemoveObservation(summary.get().getSummaryObervation()));
+								finalReport.setSummary(summary.get());
 
+								logger.debug("Successfully Five_Steps fetching Operation done");
+								return Optional.of(finalReport);
+
+							}
+						}
 					}
 				}
 			}
+
+			return Optional.of(finalReport);
+
 		} else {
 			throw new FinalReportException("Invalid Input");
 		}
-		return Optional.of(finalReport);
 	}
 
 	@Override
