@@ -405,18 +405,20 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				site68.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(site68);
 
-				PdfPCell estimated = new PdfPCell(
-						new Paragraph("If yes estimated age year:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				estimated.setBackgroundColor(new GrayColor(0.93f));
-				estimated.setHorizontalAlignment(Element.ALIGN_LEFT);
-				estimated.setBorder(PdfPCell.NO_BORDER);
-				table1.addCell(estimated);
-				PdfPCell cell6 = new PdfPCell(
-						new Paragraph(report.getEvidanceWireAge(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-				cell6.setHorizontalAlignment(Element.ALIGN_LEFT);
-				cell6.setBackgroundColor(new GrayColor(0.93f));
-				cell6.setBorder(PdfPCell.NO_BORDER);
-				table1.addCell(cell6);
+				if (report.getEvidanceAddition().equalsIgnoreCase("Yes")) {
+					PdfPCell estimated = new PdfPCell(new Paragraph("If yes estimated age year:",
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					estimated.setBackgroundColor(new GrayColor(0.93f));
+					estimated.setHorizontalAlignment(Element.ALIGN_LEFT);
+					estimated.setBorder(PdfPCell.NO_BORDER);
+					table1.addCell(estimated);
+					PdfPCell cell6 = new PdfPCell(new Paragraph(report.getEvidanceWireAge(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					cell6.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell6.setBackgroundColor(new GrayColor(0.93f));
+					cell6.setBorder(PdfPCell.NO_BORDER);
+					table1.addCell(cell6);
+				}
 
 				PdfPCell site69 = new PdfPCell(
 						new Paragraph(report.getPreviousRecords(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
@@ -760,24 +762,23 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				for (SignatorDetails arr : convertion) {
 					if (arr.getSignatorStatus() != null && !arr.getSignatorStatus().equalsIgnoreCase("R")) {
-
-						PdfPTable designer2 = new PdfPTable(pointColumnWidths10);
-						designer2.setWidthPercentage(100); // Width 100%
-						designer2.setSpacingBefore(5f); // Space before table
-						designer2.setSpacingAfter(5f); // Space after table
-						designer2.getDefaultCell().setBorder(0);
-
-						PdfPCell ddesigner = new PdfPCell(new Paragraph("Designer - 2",
-								new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
-						ddesigner.setBackgroundColor(new GrayColor(0.82f));
-//			    	    ddesigner.setFixedHeight(30f);
-						ddesigner.setHorizontalAlignment(Element.ALIGN_LEFT);
-						ddesigner.setBorder(PdfPCell.NO_BORDER);
-						designer2.addCell(ddesigner);
-						document.add(designer2);
-
 						if (arr.getSignatorRole().equals("designer2") | arr.getSignatorRole().equals("designer2")
 								| arr.getSignatorRole().equals("designer2")) {
+
+							PdfPTable designer2 = new PdfPTable(pointColumnWidths10);
+							designer2.setWidthPercentage(100); // Width 100%
+							designer2.setSpacingBefore(5f); // Space before table
+							designer2.setSpacingAfter(5f); // Space after table
+							designer2.getDefaultCell().setBorder(0);
+
+							PdfPCell ddesigner = new PdfPCell(new Paragraph("Designer - 2",
+									new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+							ddesigner.setBackgroundColor(new GrayColor(0.82f));
+//			    	        ddesigner.setFixedHeight(30f);
+							ddesigner.setHorizontalAlignment(Element.ALIGN_LEFT);
+							ddesigner.setBorder(PdfPCell.NO_BORDER);
+							designer2.addCell(ddesigner);
+							document.add(designer2);
 
 							designer2(document, arr);
 
