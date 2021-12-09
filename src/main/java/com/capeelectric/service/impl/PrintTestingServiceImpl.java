@@ -180,9 +180,54 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 		Font font7 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
 		Font font2 = new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
+
+		float[] pointColumnWidths2 = { 100F, 100F };
+		PdfPTable table100 = new PdfPTable(pointColumnWidths2);
+
+		table100.setWidthPercentage(100); // Width 100%
+		table100.setSpacingBefore(5f); // Space before table
+//		table100.setSpacingAfter(5f); // Space after table
+		table100.setWidthPercentage(100);
+		table100.getDefaultCell().setBorder(0);
+
+		PdfPCell cell80 = new PdfPCell(
+				new Paragraph("Location number:", new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD)));
+		cell80.setBackgroundColor(new BaseColor(203, 183, 162));
+		cell80.setHorizontalAlignment(Element.ALIGN_LEFT);
+		cell80.setBorder(PdfPCell.NO_BORDER);
+		table100.addCell(cell80);
+		PdfPCell cell81 = new PdfPCell(new Paragraph(testing1.getLocationNumber().toString(),
+				new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+		cell81.setHorizontalAlignment(Element.ALIGN_LEFT);
+		cell81.setBackgroundColor(new BaseColor(203, 183, 162));
+		cell81.setBorder(PdfPCell.NO_BORDER);
+		table100.addCell(cell81);
+		document.add(table100);
+
+		PdfPTable table1001 = new PdfPTable(pointColumnWidths2);
+
+		table1001.setWidthPercentage(100); // Width 100%
+		table1001.setSpacingBefore(5f); // Space before table
+//		table1001.setSpacingAfter(5f); // Space after table
+		table1001.setWidthPercentage(100);
+		table1001.getDefaultCell().setBorder(0);
+		PdfPCell cell36 = new PdfPCell(
+				new Paragraph("Location name:", new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD)));
+		cell36.setBackgroundColor(new BaseColor(203, 183, 162));
+		cell36.setHorizontalAlignment(Element.ALIGN_LEFT);
+		cell36.setBorder(PdfPCell.NO_BORDER);
+		table1001.addCell(cell36);
+		PdfPCell cell811 = new PdfPCell(new Paragraph(testing1.getLocationName(),
+				new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+		cell811.setHorizontalAlignment(Element.ALIGN_LEFT);
+		cell811.setBackgroundColor(new BaseColor(203, 183, 162));
+		cell811.setBorder(PdfPCell.NO_BORDER);
+		table1001.addCell(cell811);
+		document.add(table1001);
+
 		PdfPTable table13 = new PdfPTable(1);
 		table13.setWidthPercentage(100); // Width 100%
-		table13.setSpacingBefore(10f); // Space before table
+		table13.setSpacingBefore(5f); // Space before table
 		table13.setWidthPercentage(100);
 		table13.getDefaultCell().setBorder(0);
 
@@ -191,20 +236,6 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell30.setBackgroundColor(BaseColor.LIGHT_GRAY);
 		table13.addCell(cell30);
 		document.add(table13);
-
-		PdfPCell cell = new PdfPCell(new Paragraph(testing1.getLocationNumber().toString(), font7));
-		table.addCell(new Phrase("Location Number :", font7));
-		cell.setBorder(PdfPCell.NO_BORDER);
-		table.addCell(cell);
-
-		PdfPCell cell1 = new PdfPCell(new Paragraph("Location Name :", font7));
-		cell1.setBorder(PdfPCell.NO_BORDER);
-		cell1.setGrayFill(0.92f);
-		table.addCell(cell1);
-		PdfPCell cell22 = new PdfPCell(new Paragraph(testing1.getLocationName(), font7));
-		cell22.setGrayFill(0.92f);
-		cell22.setBorder(PdfPCell.NO_BORDER);
-		table.addCell(cell22);
 
 		PdfPCell cell3 = new PdfPCell(new Paragraph(testing1.getTestEngineerName(), font7));
 		table.addCell(new Phrase("Test Engineer Name: ", font7));
@@ -231,10 +262,10 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 		PdfPCell cell41 = new PdfPCell(new Paragraph("Company Name:", font7));
 		cell41.setBorder(PdfPCell.NO_BORDER);
-		cell4.setGrayFill(0.92f);
+		cell41.setGrayFill(0.92f);
 		table.addCell(cell41);
 		PdfPCell cell231 = new PdfPCell(new Paragraph(testing1.getCompanyName(), font7));
-		cell23.setGrayFill(0.92f);
+		cell231.setGrayFill(0.92f);
 		cell231.setBorder(PdfPCell.NO_BORDER);
 		table.addCell(cell231);
 		document.add(table);
@@ -316,19 +347,19 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			cell17.setBorder(PdfPCell.NO_BORDER);
 			table1.addCell(cell17);
 
-			PdfPCell cell19 = new PdfPCell(new Paragraph(distribution.getNumOutputCircuitsUse(), font5));
-			table1.addCell(new Phrase("Number Of Output Circuits In Use:", font5));
+			PdfPCell cell19 = new PdfPCell(new Paragraph("Number Of Output Circuits In Use:", font7));
 			cell19.setBorder(PdfPCell.NO_BORDER);
+			cell19.setGrayFill(0.92f);
 			table1.addCell(cell19);
-
-			PdfPCell cell18 = new PdfPCell(new Paragraph("Installed Equipment Vulnarable To Testing:", font7));
-			cell18.setBorder(PdfPCell.NO_BORDER);
-			cell18.setGrayFill(0.92f);
-			table1.addCell(cell18);
-			PdfPCell cell32 = new PdfPCell(new Paragraph(distribution.getInstalledEquipmentVulnarable(), font5));
+			PdfPCell cell32 = new PdfPCell(new Paragraph(distribution.getNumOutputCircuitsUse(), font5));
 			cell32.setGrayFill(0.92f);
 			cell32.setBorder(PdfPCell.NO_BORDER);
 			table1.addCell(cell32);
+
+			PdfPCell cell18 = new PdfPCell(new Paragraph(distribution.getInstalledEquipmentVulnarable(), font5));
+			table1.addCell(new Phrase("Installed Equipment Vulnarable To Testing:", font5));
+			cell18.setBorder(PdfPCell.NO_BORDER);
+			table1.addCell(cell18);
 
 			document.add(table1);
 			String ratingsInAmpsvalue = distribution.getRatingsAmps();
