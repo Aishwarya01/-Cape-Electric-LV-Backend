@@ -27,6 +27,10 @@ public class Constants {
 
 	public static final String supplyLoopImpedance = "0.000";
 	
+	public static final String supplyEarthResistance = "0.00";
+	
+	public static final String supplyGridResistance = "0.000";
+	
 	public static final String supply_MainNominal_Current = "Supply_MainNominalCurrent";
 	
 	public static final String supply_MainNominal_Frequency = "Supply_MainNominalFrequency";
@@ -43,6 +47,10 @@ public class Constants {
 	
 	public static final String supply_LoopImpedance = "Supply_LoopImpedance";
 	
+	public static final String supply_Earth_Resistance = "supply_EarthResistance";
+	
+	public static final String supply_Grid_Resistance = "supply_GridResistance";
+	
 
 	//Testing
 	public static final String testIncomingLoopimpedance = "0.000";
@@ -55,7 +63,7 @@ public class Constants {
 
 	public static final String testVoltage = "0.00";
 
-	public static final String loopImpedance = "0.00";
+	public static final String loopImpedance = "0.000";
 
 	public static final String faultCurrent = "0.00";
 	
