@@ -269,6 +269,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 //						table34.setSpacingBefore(10f); // Space before table
 					table34.setWidthPercentage(100); // Width 100%
 					table34.getDefaultCell().setBorder(0);
+				
 					tableHead(table34);
 
 					float[] pointColumnWidths43 = { 45F, 90F, 90F, 135F, 90F };
@@ -357,7 +358,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				cell47.setBorder(PdfPCell.NO_BORDER);
 				table2.addCell(cell47);
 
-				PdfPCell cell88 = new PdfPCell(new Paragraph(supply.getMainRatedCurrent(), font6));
+				PdfPCell cell88 = new PdfPCell(new Paragraph(supply.getMainCurrentDisconnection(), font6));
 				table2.addCell(new Phrase("Current for disconnection with in 0.2 seconds (A):", font9));
 				cell88.setBorder(PdfPCell.NO_BORDER);
 				table2.addCell(cell88);
@@ -1134,39 +1135,39 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		cell.setPhrase(new Phrase("Nature of supply parameters", font1));
 		cell.setGrayFill(0.92f);
 		table34.addCell(cell);
-		cell.setPhrase(new Phrase("R-Y", font));
+		cell.setPhrase(new Phrase("\r\nL1-L2", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table34.addCell(cell);
-		cell.setPhrase(new Phrase("R-B", font));
+		cell.setPhrase(new Phrase("\r\nL2-L3", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table34.addCell(cell);
-		cell.setPhrase(new Phrase("Y-B", font));
+		cell.setPhrase(new Phrase("\r\nL1-L3", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table34.addCell(cell);
-		cell.setPhrase(new Phrase("R-N", font));
+		cell.setPhrase(new Phrase("\r\nL1-N", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table34.addCell(cell);
-		cell.setPhrase(new Phrase("Y-N", font));
+		cell.setPhrase(new Phrase("\r\nL2-N", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table34.addCell(cell);
-		cell.setPhrase(new Phrase("B-N", font));
+		cell.setPhrase(new Phrase("\r\nL3-N", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table34.addCell(cell);
-		cell.setPhrase(new Phrase("R-PE", font));
+		cell.setPhrase(new Phrase("\r\nL1-PE", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table34.addCell(cell);
-		cell.setPhrase(new Phrase("Y-PE", font));
+		cell.setPhrase(new Phrase("\r\nL2-PE", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table34.addCell(cell);
-		cell.setPhrase(new Phrase("B-PE", font));
+		cell.setPhrase(new Phrase("\r\nL3-PE", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table34.addCell(cell);
@@ -1240,11 +1241,11 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		document.add(table9);
 	}
 
-	private void tableData(PdfPTable table8, List<InstalLocationReport> instalLocationReport) {
+	private void tableData(PdfPTable table8, List<InstalLocationReport> instalLocationReport) throws DocumentException, IOException {
 		for (InstalLocationReport arr : instalLocationReport) {
 			if (!arr.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
 				PdfPCell cell = new PdfPCell();
-				Font font = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
+				Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				cell.setPhrase(new Phrase(arr.getLocationNo(), font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table8.addCell(cell);
@@ -1273,11 +1274,11 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		}
 	}
 
-	private void tableData1(PdfPTable table11, List<BoundingLocationReport> boundingLocationReport) {
+	private void tableData1(PdfPTable table11, List<BoundingLocationReport> boundingLocationReport) throws DocumentException, IOException {
 		for (BoundingLocationReport arr : boundingLocationReport) {
 			if (!arr.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
 				PdfPCell cell = new PdfPCell();
-				Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
+				Font font6 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				cell.setPhrase(new Phrase(arr.getLocation(), font6));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table11.addCell(cell);
@@ -1294,11 +1295,11 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		}
 	}
 
-	private void TableData2(PdfPTable table13, List<EarthingLocationReport> earthingLocationReport) {
+	private void TableData2(PdfPTable table13, List<EarthingLocationReport> earthingLocationReport) throws DocumentException, IOException {
 		for (EarthingLocationReport arr : earthingLocationReport) {
 			if (!arr.getInstalLocationReportStatus().equalsIgnoreCase("R")) {
 				PdfPCell cell = new PdfPCell();
-				Font font6 = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC, BaseColor.BLACK);
+				Font font6 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				cell.setPhrase(new Phrase(arr.getLocation(), font6));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table13.addCell(cell);
