@@ -9,6 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.capeelectric.exception.DecimalConversionException;
+import com.capeelectric.util.Constants;
+import com.capeelectric.util.DecimalConversion;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
@@ -97,8 +101,13 @@ public class InstalLocationReport implements Serializable {
 		return electrodeResistanceEarth;
 	}
 
-	public void setElectrodeResistanceEarth(String electrodeResistanceEarth) {
-		this.electrodeResistanceEarth = electrodeResistanceEarth;
+	public void setElectrodeResistanceEarth(String electrodeResistanceEarth) throws DecimalConversionException {
+		if (electrodeResistanceEarth != null) {
+			this.electrodeResistanceEarth = DecimalConversion.convertToDecimal(electrodeResistanceEarth,
+					Constants.supply_Earth_Resistance);
+		} else {
+			this.electrodeResistanceEarth = electrodeResistanceEarth;
+		}
 	}
 
 	public String getElectrodeEarthType() {
@@ -130,15 +139,20 @@ public class InstalLocationReport implements Serializable {
 	}
 
 	public void setElectrodeEarthSize(String electrodeEarthSize) {
-		this.electrodeEarthSize = electrodeEarthSize;
+			this.electrodeEarthSize = electrodeEarthSize;
 	}
 
 	public String getElectrodeResistanceGird() {
 		return electrodeResistanceGird;
 	}
 
-	public void setElectrodeResistanceGird(String electrodeResistanceGird) {
-		this.electrodeResistanceGird = electrodeResistanceGird;
+	public void setElectrodeResistanceGird(String electrodeResistanceGird) throws DecimalConversionException {
+		if (electrodeResistanceGird != null) {
+			this.electrodeResistanceGird = DecimalConversion.convertToDecimal(electrodeResistanceGird,
+					Constants.supply_Grid_Resistance);
+		} else {
+			this.electrodeResistanceGird = electrodeResistanceGird;
+		}
 	}
 
 	public SupplyCharacteristics getSupplyCharacteristics() {

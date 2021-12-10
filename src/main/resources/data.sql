@@ -911,3 +911,19 @@ CREATE TABLE register_table (
  				CONSTRAINT PK_REGISTER_ID PRIMARY KEY(REGISTER_ID)
                 
 );
+
+-----------> Observation_Table <----------
+
+    CREATE TABLE observation_component_table(    
+				OBSERVATION_ID INTEGER NOT NULL, 
+				USER_NAME VARCHAR(225),
+	            SITE_ID  INT,
+	            OBSERVATION_COMPONENT  VARCHAR(225),
+	            OBSERVATIONS VARCHAR(2000),
+	            CREATED_BY VARCHAR(255),
+				CREATED_DATE datetime,
+			    UPDATED_BY VARCHAR(255),
+				UPDATED_DATE datetime,
+				CONSTRAINT PK_OBSERVATION_ID PRIMARY KEY(OBSERVATION_ID)
+				
+	);

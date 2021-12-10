@@ -183,7 +183,7 @@ public class PrintServiceImpl implements PrintService {
 					document.add(table16);
 
 					Paragraph paragraphThree22 = new Paragraph(
-							"The overall assessment of the suitability of installation for continuous use is stated as unsatisfactory, I/We recommend that any observations that are classified as “danger present” (Code C1) or “potentially dangerous” (Code C2) should be acted upon as a matter of urgency.\r\n"
+							"I/We recommend that any observations that are classified as “danger present” (Code C1) or “potentially dangerous” (Code C2) should be acted upon as a matter of urgency.\r\n"
 									+ "Investigation without delay is recommended for observations which are identified as “Required further investigation”. Observations classified as “Improvement recommended” (Code C3) should be given due consideration. Subject to necessary remedial action being taken, I/We recommended that the installations should be further inspected and tested.	\r\n",
 							font9);
 					document.add(paragraphThree22);
@@ -493,7 +493,7 @@ public class PrintServiceImpl implements PrintService {
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table6.addCell(cell);
-		cell.setPhrase(new Phrase("Comment", font));
+		cell.setPhrase(new Phrase("Remedial action", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table6.addCell(cell);
