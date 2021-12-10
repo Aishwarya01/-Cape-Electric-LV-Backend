@@ -34,10 +34,14 @@ public class DecimalConversion {
 			String nominalValues = "";
 			DecimalFormat decimalSize;
 			decimalSize = conversion.findDecimalSize(type);
+			//for one value
 			if (type.equalsIgnoreCase(Constants.supply_MainNominal_Frequency)
-					|| type.equalsIgnoreCase(Constants.supply_Nominal_Frequency)) {
+					|| type.equalsIgnoreCase(Constants.supply_Nominal_Frequency)
+					|| type.equalsIgnoreCase(Constants.supply_Earth_Resistance)
+					|| type.equalsIgnoreCase(Constants.supply_Grid_Resistance)) {
 				return (value.equalsIgnoreCase("NA") ? value : decimalSize.format(Double.parseDouble(value)));
 			} else {
+				//for multiple value
 				String decimalValue = "NA";
 				if (value != null && !value.isEmpty()) {
 					StringTokenizer stringTokenizer = new StringTokenizer(value, ",");
@@ -94,6 +98,10 @@ public class DecimalConversion {
 				return new DecimalFormat(Constants.supplyFaultCurrent);
 			} else if (type != null && type.equalsIgnoreCase(Constants.supply_LoopImpedance)) {
 				return new DecimalFormat(Constants.supplyLoopImpedance);
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Earth_Resistance)) {
+				return new DecimalFormat(Constants.supplyEarthResistance);
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Grid_Resistance)) {
+				return new DecimalFormat(Constants.supplyGridResistance);
 			} else if (type != null && type.equalsIgnoreCase(Constants.test_Incoming_LoopImpedance)) {
 				return new DecimalFormat(Constants.testIncomingLoopimpedance);
 			} else if (type != null && type.equalsIgnoreCase(Constants.test_Short_CircuitSetting)) {
