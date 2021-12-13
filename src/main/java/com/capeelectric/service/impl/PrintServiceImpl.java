@@ -183,9 +183,9 @@ public class PrintServiceImpl implements PrintService {
 					document.add(table16);
 
 					Paragraph paragraphThree22 = new Paragraph(
-							"I/We recommend that any observations that are classified as “danger present” (Code C1) or “potentially dangerous” (Code C2) should be acted upon as a matter of urgency.\r\n"
-									+ "Investigation without delay is recommended for observations which are identified as “Required further investigation”. Observations classified as “Improvement recommended” (Code C3) should be given due consideration. Subject to necessary remedial action being taken, I/We recommended that the installations should be further inspected and tested.	\r\n",
+							"Observations classified as:- \r\nCode C1 “dangers present” or Code C2 “potentially dangerous” are acted upon the matter of urgency and remedial action to be taken immediately, \r\nCode C3 “Improvement recommended” should be given due consideration, \r\nCode R1 “required further investigation” should start investigation without any delay. \r\nSubject to necessary remedial action being taken, I/We recommended that the installation is further inspected and tested by :",
 							font9);
+
 					document.add(paragraphThree22);
 					PdfPTable table11 = new PdfPTable(2);
 					table11.setWidthPercentage(100); // Width 100%
@@ -195,7 +195,7 @@ public class PrintServiceImpl implements PrintService {
 					table11.getDefaultCell().setBorder(0);
 
 					PdfPCell cell23 = new PdfPCell(new Paragraph(summary1.getRecommendationsDate(), font9));
-					table11.addCell(new Phrase(" Date:", font8));
+					table11.addCell(new Phrase("Date:", font8));
 
 					cell23.setBorder(PdfPCell.NO_BORDER);
 					table11.addCell(cell23);
@@ -493,7 +493,7 @@ public class PrintServiceImpl implements PrintService {
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table6.addCell(cell);
-		cell.setPhrase(new Phrase("Remedial action", font));
+		cell.setPhrase(new Phrase("Remedial action to be taken", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table6.addCell(cell);

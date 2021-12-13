@@ -31,6 +31,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.log.SysoCounter;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -527,7 +528,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				cell.setPhrase(new Phrase(arr.getEquipmentSerialNo(), font6));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table11.addCell(cell);
-				cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString(), font6));
+				cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString().toString().split(" ")[0]));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 //				split(" ")[0]
 				table11.addCell(cell);
