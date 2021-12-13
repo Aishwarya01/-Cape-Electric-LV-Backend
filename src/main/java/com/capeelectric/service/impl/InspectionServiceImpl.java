@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
+import com.capeelectric.model.ConsumerUnit;
 import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.PeriodicInspectionComment;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Testing;
+import com.capeelectric.repository.InspectionConsumerUnitRepository;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.TestInfoRepository;
@@ -59,6 +61,9 @@ public class InspectionServiceImpl implements InspectionService {
 	
 	@Autowired
 	private FindNonRemovedObject findNonRemovedObject;
+	
+	@Autowired
+	private InspectionConsumerUnitRepository inspectionConsumerUnitRepository;
 
 	/**
 	 * @param IpaoInspection object 
@@ -84,6 +89,7 @@ public class InspectionServiceImpl implements InspectionService {
 								&& ipaoInspectionItr.getConsumerUnit().size() > 0
 								&& ipaoInspectionItr.getCircuit().size() > 0
 								&& ipaoInspectionItr.getIsolationCurrent().size() > 0) {
+							findConsumerUnitLocation(ipaoInspectionItr.getConsumerUnit());
 							i++;
 							if (i == ipaoInspection.size()) {
 								periodicInspectionComment = new PeriodicInspectionComment();
@@ -134,6 +140,7 @@ public class InspectionServiceImpl implements InspectionService {
 		if (userName != null && !userName.isEmpty() && siteId != null) {
 			PeriodicInspection inspectionRepo = inspectionRepository.findByUserNameAndSiteId(userName, siteId);
 			if (inspectionRepo != null) {
+				inspectionRepo.setIpaoInspection(isNullLocationCount(inspectionRepo.getIpaoInspection()));
 				inspectionRepo.setIpaoInspection(findNonRemovedObject.findNonRemovedInspectionLocation(inspectionRepo));
 				sortingDateTime(inspectionRepo.getPeriodicInspectorComment());
 				return inspectionRepo;
@@ -146,6 +153,7 @@ public class InspectionServiceImpl implements InspectionService {
 		}
 	}
 	
+
 	/**
 	 * @reportId,siteId must required
 	 * @param PeriodicInspection Object
@@ -389,5 +397,37 @@ public class InspectionServiceImpl implements InspectionService {
 				}
 			}
 		}
+	}
+
+
+	private List<IpaoInspection> isNullLocationCount(List<IpaoInspection> ipaoInspection) {
+		List<IpaoInspection> ipaoInspectionList = new ArrayList<IpaoInspection>();
+		 for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
+			if (ipaoInspectionItr !=null && ipaoInspectionItr.getLocationCount() == null) {
+				ipaoInspectionItr.setLocationCount(++locationCount);
+				ipaoInspectionList.add(ipaoInspectionItr);
+			}
+			ipaoInspectionList.add(ipaoInspectionItr);
+		}
+		return ipaoInspectionList;
+	}
+
+	private void findConsumerUnitLocation(List<ConsumerUnit> consumerUnitList) throws InspectionException {
+		for (ConsumerUnit consumerUnit : consumerUnitList) {
+			if (consumerUnit != null && consumerUnit.getLocation() != null) {
+				ConsumerUnit findByLocation = inspectionConsumerUnitRepository
+						.findByLocation(consumerUnit.getLocation());
+				if (findByLocation == null) {
+
+				} else {
+					throw new InspectionException(
+							"Given LocationName already present in ConsumerUnit,please try new LocationName");
+				}
+
+			} else {
+				throw new InspectionException("Please check Location Information in ConsumerUnit");
+			}
+		}
+
 	}
 }

@@ -148,6 +148,9 @@ public class IpaoInspection implements Serializable {
 
 	@Column(name = "O_SUPPLEMENTARY_BONDING")
 	private String supplementaryBonding;
+	
+	@Column(name = "O_SPECIFIC_INSPECTION_RE")
+	private String specificInspectionRe;
 
 	@Column(name = "INSPECTION_FLAG")
 	private String inspectionFlag;
@@ -519,6 +522,14 @@ public class IpaoInspection implements Serializable {
 
 	public void setLocationCount(Integer locationCount) {
 		this.locationCount = locationCount;
+	}
+
+	public String getSpecificInspectionRe() {
+		return specificInspectionRe;
+	}
+
+	public void setSpecificInspectionRe(String specificInspectionRe) {
+		this.specificInspectionRe = specificInspectionRe;
 	}
 
 }
