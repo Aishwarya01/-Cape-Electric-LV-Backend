@@ -32,7 +32,8 @@ public class ObservationServiceImpl implements ObservationService {
 	public void addObservation(ObservationComponent observationComponent) throws ObservationException {
 		if (observationComponent != null && observationComponent.getUserName() != null) {
 			Optional<ObservationComponent> observationRepo = observationRepository
-					.findByUserNameAndSiteIdAndObservationComponent(observationComponent.getUserName(), observationComponent.getSiteId(),observationComponent.getObservationComponent());
+					.findByUserNameAndSiteIdAndObservationComponent(observationComponent.getUserName(),
+							observationComponent.getSiteId(), observationComponent.getObservationComponent());
 			if (!observationRepo.isPresent()) {
 				observationComponent.setCreatedDate(LocalDateTime.now());
 				observationComponent.setCreatedBy(userFullName.findByUserName(observationComponent.getUserName()));
@@ -41,7 +42,7 @@ public class ObservationServiceImpl implements ObservationService {
 
 			else {
 
-				throw new ObservationException("User name already exists");
+				throw new ObservationException("UserName&SiteId&ObservationComponent already exists");
 			}
 
 		} else {
@@ -55,7 +56,8 @@ public class ObservationServiceImpl implements ObservationService {
 				&& observationComponent.getObservationId() != 0 && observationComponent.getSiteId() != null
 				&& observationComponent.getSiteId() != 0) {
 			Optional<ObservationComponent> observationRepo = observationRepository
-					.findByUserNameAndSiteIdAndObservationComponent(observationComponent.getUserName(), observationComponent.getSiteId(),observationComponent.getObservationComponent());
+					.findByUserNameAndSiteIdAndObservationComponent(observationComponent.getUserName(),
+							observationComponent.getSiteId(), observationComponent.getObservationComponent());
 			if (observationRepo.isPresent()
 					&& observationRepo.get().getSiteId().equals(observationComponent.getSiteId())) {
 				observationComponent.setUpdatedDate(LocalDateTime.now());
@@ -77,11 +79,28 @@ public class ObservationServiceImpl implements ObservationService {
 			throws ObservationException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Optional<ObservationComponent> observationRepo = observationRepository
-					.findByUserNameAndSiteIdAndObservationComponent(userName, siteId,observationComponent);
+					.findByUserNameAndSiteIdAndObservationComponent(userName, siteId, observationComponent);
 			if (observationRepo.isPresent() && observationRepo.get() != null) {
 				return observationRepo.get();
 			} else {
 				throw new ObservationException("Given UserName & SiteId doesn't exist Observation");
+			}
+		} else {
+			throw new ObservationException("Invalid Inputs");
+
+		}
+	}
+
+	@Override
+	public List<ObservationComponent> retrieveObservationsInSummary(String userName, Integer siteId)
+			throws ObservationException {
+		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
+			List<ObservationComponent> observationRepo = observationRepository.findByUserNameAndSiteId(userName,
+					siteId);
+			if (observationRepo != null) {
+				return observationRepo;
+			} else {
+				throw new ObservationException("Given UserName & SiteId doesn't exist In Observation");
 			}
 		} else {
 			throw new ObservationException("Invalid Inputs");

@@ -17,7 +17,7 @@ import org.hibernate.annotations.NamedQuery;
 @Table(name = "observation_component_table")
 @NamedQueries(value = {
 		@NamedQuery(name = "ObservationRepository.findByUserNameAndSiteIdAndObservationComponent", query = "select s from ObservationComponent s where s.userName=:userName and s.siteId=:siteId and s.observationComponent=:observationComponent"),
-		@NamedQuery(name = "ObservationRepositary.findBySiteId", query = "select s from ObservationComponent s where s.siteId=:siteId") })
+		@NamedQuery(name = "ObservationRepositary.findByUserNameAndSiteId", query = "select s from ObservationComponent s where s.siteId=:siteId and s.userName=:userName") })
 
 public class ObservationComponent implements Serializable {
 

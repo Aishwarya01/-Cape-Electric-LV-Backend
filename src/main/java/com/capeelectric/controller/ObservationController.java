@@ -48,12 +48,20 @@ public class ObservationController {
 		return new ResponseEntity<String>("Observation Successfully Updated", HttpStatus.OK);
 	}
 
-	@GetMapping("/userName/{userName}/{siteId}/{observationComponent}")
+	@GetMapping("/retrieveObservation/{userName}/{siteId}/{observationComponent}")
 	public ResponseEntity<ObservationComponent> retrieveObservation(@PathVariable String userName,
 			@PathVariable Integer siteId, @PathVariable String observationComponent) throws ObservationException {
-		logger.info("called retrieveObservation function" );
-		return new ResponseEntity<ObservationComponent>(observationService.retrieveObservation(userName, siteId,observationComponent),
-				HttpStatus.OK);
+		logger.info("called retrieveObservation function");
+		return new ResponseEntity<ObservationComponent>(
+				observationService.retrieveObservation(userName, siteId, observationComponent), HttpStatus.OK);
+	}
+
+	@GetMapping("/retrieveObservationsInSummary/{userName}/{siteId}")
+	public ResponseEntity<List<ObservationComponent>> retrieveObservationsInSummary(@PathVariable String userName,
+			@PathVariable Integer siteId) throws ObservationException {
+		logger.info("called retrieveObservation function");
+		return new ResponseEntity<List<ObservationComponent>>(
+				observationService.retrieveObservationsInSummary(userName, siteId), HttpStatus.OK);
 	}
 
 }

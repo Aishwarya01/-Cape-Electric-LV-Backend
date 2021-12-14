@@ -16,4 +16,6 @@ public interface ObservationRepository extends CrudRepository<ObservationCompone
 	Optional<ObservationComponent> findByUserNameAndSiteIdAndObservationComponent(String userName, Integer siteId,
 			String observationComponent);
 
+	List<ObservationComponent> findByUserNameAndSiteId(String userName, Integer siteId);
+
 }
