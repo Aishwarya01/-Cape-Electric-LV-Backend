@@ -166,7 +166,7 @@ public class PrintServiceImpl implements PrintService {
 						table6.setWidthPercentage(100);
 
 						tableHeader(table6);
-						tableData(table6, observation1);
+						//tableData(table6, observation1);
 						document.add(table6);
 					}
 
@@ -460,7 +460,7 @@ public class PrintServiceImpl implements PrintService {
 			if (!arr.getObervationStatus().equalsIgnoreCase("R")) {
 				Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				PdfPCell cell = new PdfPCell();
-				cell.setPhrase(new Phrase(arr.getObservations(), font));
+				cell.setPhrase(new Phrase("", font));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table6.addCell(cell);
 				cell.setPhrase(new Phrase(arr.getFurtherActions(), font));
