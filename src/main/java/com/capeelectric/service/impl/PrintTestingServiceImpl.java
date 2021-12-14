@@ -2,9 +2,13 @@ package com.capeelectric.service.impl;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,7 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.log.SysoCounter;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -181,7 +186,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		Font font7 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
 		Font font2 = new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
 
-		float[] pointColumnWidths2 = { 100F, 100F };
+		float[] pointColumnWidths2 = { 60F, 80F };
 		PdfPTable table100 = new PdfPTable(pointColumnWidths2);
 
 		table100.setWidthPercentage(100); // Width 100%
@@ -523,8 +528,9 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				cell.setPhrase(new Phrase(arr.getEquipmentSerialNo(), font6));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table11.addCell(cell);
-				cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString(), font6));
+				cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString().toString().split(" ")[0]));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//				split(" ")[0]
 				table11.addCell(cell);
 			}
 		}
@@ -682,7 +688,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 
-		cell1 = new PdfPCell(new Phrase("	OCPD", font23));
+		cell1 = new PdfPCell(new Phrase("\r\n\r\n\r\n\r\n\r\n\r\nOCPD", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setRowspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -778,7 +784,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 
-		cell1 = new PdfPCell(new Phrase("	Conductor details", font23));
+		cell1 = new PdfPCell(new Phrase("\r\n\r\nConductor details", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setRowspan(4);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1213,39 +1219,39 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell.setPhrase(new Phrase("Nature of supply parameters", font1));
 		cell.setGrayFill(0.92f);
 		table2.addCell(cell);
-		cell.setPhrase(new Phrase("L1-L2", font));
+		cell.setPhrase(new Phrase("\r\nL1-L2", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table2.addCell(cell);
-		cell.setPhrase(new Phrase("L2-L3", font));
+		cell.setPhrase(new Phrase("\r\nL2-L3", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table2.addCell(cell);
-		cell.setPhrase(new Phrase("L1-L3", font));
+		cell.setPhrase(new Phrase("\r\nL1-L3", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table2.addCell(cell);
-		cell.setPhrase(new Phrase("L1-N", font));
+		cell.setPhrase(new Phrase("\r\nL1-N", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table2.addCell(cell);
-		cell.setPhrase(new Phrase("L1-N", font));
+		cell.setPhrase(new Phrase("\r\nL1-N", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table2.addCell(cell);
-		cell.setPhrase(new Phrase("L3-N", font));
+		cell.setPhrase(new Phrase("\r\nL3-N", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table2.addCell(cell);
-		cell.setPhrase(new Phrase("L1-PE", font));
+		cell.setPhrase(new Phrase("\r\nL1-PE", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table2.addCell(cell);
-		cell.setPhrase(new Phrase("L2-PE", font));
+		cell.setPhrase(new Phrase("\r\nL2-PE", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table2.addCell(cell);
-		cell.setPhrase(new Phrase("L3-PE", font));
+		cell.setPhrase(new Phrase("\r\nL3-PE", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table2.addCell(cell);

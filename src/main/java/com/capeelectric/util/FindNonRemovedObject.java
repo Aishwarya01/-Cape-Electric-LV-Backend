@@ -8,7 +8,9 @@ import java.util.Set;
 import org.springframework.context.annotation.Configuration;
 
 import com.capeelectric.model.BoundingLocationReport;
+import com.capeelectric.model.Circuit;
 import com.capeelectric.model.CircuitBreaker;
+import com.capeelectric.model.ConsumerUnit;
 import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.IpaoInspection;
@@ -39,10 +41,41 @@ public class FindNonRemovedObject {
 				if(inspectionLocationReport.getInspectionFlag()==null) {
 					inspectionLocationReport.setInspectionFlag("N");
 				}
+				inspectionLocationReport.setCircuit(findNonRemovedInspectionCircuit(inspectionLocationReport.getCircuit()));
+				inspectionLocationReport.setConsumerUnit(findNonRemovedInspectionConsumerUnit(inspectionLocationReport.getConsumerUnit()));
 				inspectionReport.add(inspectionLocationReport);
+				 
 			}
 		}
 		return inspectionReport;
+	}
+	
+	public List<Circuit> findNonRemovedInspectionCircuit(List<Circuit> listOfCircuit) {
+
+		ArrayList<Circuit> unRemovedCircuit = new ArrayList<Circuit>();
+		for (Circuit circuit : listOfCircuit) {
+			if (circuit.getCircuitStatus() == null || !circuit.getCircuitStatus().equalsIgnoreCase("R")) {
+				if (circuit.getCircuitStatus() == null) {
+					circuit.setCircuitStatus("N");
+				}
+				unRemovedCircuit.add(circuit);
+			}
+		}
+		return unRemovedCircuit;
+	}
+	
+	public List<ConsumerUnit> findNonRemovedInspectionConsumerUnit(List<ConsumerUnit> ConsumerUnit) {
+
+		ArrayList<ConsumerUnit> unRemovedConsumer = new ArrayList<ConsumerUnit>();
+		for (ConsumerUnit consumerUnit : ConsumerUnit) {
+			if (consumerUnit.getConsumerStatus() == null || !consumerUnit.getConsumerStatus().equalsIgnoreCase("R")) {
+				if (consumerUnit.getConsumerStatus() == null) {
+					consumerUnit.setConsumerStatus("N");
+				}
+				unRemovedConsumer.add(consumerUnit);
+			}
+		}
+		return unRemovedConsumer;
 	}
 
 	public List<InstalLocationReport> findNonRemovedInstallLocation(SupplyCharacteristics supplyCharacteristicsRepo) {

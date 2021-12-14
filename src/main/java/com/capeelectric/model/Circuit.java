@@ -31,6 +31,15 @@ public class Circuit implements Serializable {
 	@Column(name = "CIRCUIT_ID")
 	private Integer circuitId;
 
+	@Column(name = "DISTRIBUTIONBOARD_DETAILS")
+	private String distributionBoardDetails;
+	
+	@Column(name = "REFERANCE")
+	private String referance;
+	
+	@Column(name = "LOCATION")
+	private String location;
+	
 	@Column(name = "IDENTIFICATION_CONDUCTORS")
 	private String identificationConductors;
 
@@ -124,6 +133,9 @@ public class Circuit implements Serializable {
 	@Column(name = "ISOLATION_AND_SWITCHING")
 	private String isolationSwitching;
 	
+	@Column(name = "CIRCUIT_STATUS")
+	private String circuitStatus;
+	
 	@JsonBackReference
 	@ManyToOne
     @JoinColumn(name = "IPAO_INSPECTION_ID")
@@ -135,6 +147,30 @@ public class Circuit implements Serializable {
 
 	public void setCircuitId(Integer circuitId) {
 		this.circuitId = circuitId;
+	}
+
+	public String getDistributionBoardDetails() {
+		return distributionBoardDetails;
+	}
+
+	public void setDistributionBoardDetails(String distributionBoardDetails) {
+		this.distributionBoardDetails = distributionBoardDetails;
+	}
+
+	public String getReferance() {
+		return referance;
+	}
+
+	public void setReferance(String referance) {
+		this.referance = referance;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public String getIdentificationConductors() {
@@ -391,6 +427,14 @@ public class Circuit implements Serializable {
 
 	public void setIpaoInspection(IpaoInspection ipaoInspection) {
 		this.ipaoInspection = ipaoInspection;
+	}
+
+	public String getCircuitStatus() {
+		return circuitStatus;
+	}
+
+	public void setCircuitStatus(String circuitStatus) {
+		this.circuitStatus = circuitStatus;
 	}
 
 }

@@ -28,6 +28,7 @@ import com.capeelectric.model.PeriodicInspectionComment;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
+import com.capeelectric.repository.InspectionConsumerUnitRepository;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.impl.InspectionServiceImpl;
@@ -63,6 +64,9 @@ public class InspectionServiceImplTest {
 	
 	@MockBean
 	private FindNonRemovedObject findNonRemovedObject;
+	
+	@MockBean
+	private InspectionConsumerUnitRepository inspectionConsumerUnitRepository;
 	
 	private ArrayList<PeriodicInspectionComment> listOfComments;
 
@@ -110,9 +114,11 @@ public class InspectionServiceImplTest {
 	    
 	    IpaoInspection ipaoInspection = new IpaoInspection();
 		ipaoInspection.setInspectionFlag("a");
+		//ipaoInspection.setConsumerUnit(consumerUnitList);
 		List<IpaoInspection> arrayList = new ArrayList<IpaoInspection>();
 		arrayList.add(ipaoInspection);
 		periodicInspection.setIpaoInspection(arrayList);
+		
 		
 	}
 
@@ -120,20 +126,24 @@ public class InspectionServiceImplTest {
 	public void testAddInspectionDetails_Success_Flow() throws InspectionException, CompanyDetailsException {
 		List<IpaoInspection> listofIpaoInspection = new ArrayList<IpaoInspection>();
 		listofIpaoInspection.add(new IpaoInspection());
-		List<ConsumerUnit> listofConsumerUnit = new ArrayList<ConsumerUnit>();
-		listofConsumerUnit.add(new ConsumerUnit());
+		ArrayList<ConsumerUnit> consumerUnitList = new ArrayList<ConsumerUnit>();
+		ConsumerUnit consumerUnit = new ConsumerUnit();
+		consumerUnit.setLocation("BuildingOne");
+		consumerUnitList.add(consumerUnit);
 		List<Circuit> listofCircuit = new ArrayList<Circuit>();
 		listofCircuit.add(new Circuit());
 		List<IsolationCurrent> listofIsolationCurrent = new ArrayList<IsolationCurrent>();
 		listofIsolationCurrent.add(new IsolationCurrent());
-
+		
 		IpaoInspection ipaoInspection = listofIpaoInspection.get(0);
-		ipaoInspection.setConsumerUnit(listofConsumerUnit);
+		ipaoInspection.setConsumerUnit(consumerUnitList);
 		ipaoInspection.setCircuit(listofCircuit);
 		ipaoInspection.setIsolationCurrent(listofIsolationCurrent);
 		periodicInspection.setIpaoInspection(listofIpaoInspection);
 		Optional<PeriodicInspection> ipaolist = Optional.of(periodicInspection);
 
+		when(inspectionConsumerUnitRepository.findByLocation("BuildingTwo")).thenReturn(consumerUnit);
+		
 		inspectionServiceImpl.addInspectionDetails(periodicInspection);
 		
 		ipaoInspection.setConsumerUnit(null);

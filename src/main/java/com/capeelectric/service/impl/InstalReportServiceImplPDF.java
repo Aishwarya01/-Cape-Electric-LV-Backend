@@ -287,23 +287,23 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 					site7.setBorder(PdfPCell.NO_BORDER);
 					table0.addCell(site7);
 
-					PdfPCell site63 = new PdfPCell(
-							new Paragraph("Site Address line2:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-					site63.setBackgroundColor(new GrayColor(0.93f));
-					site63.setHorizontalAlignment(Element.ALIGN_LEFT);
-					site63.setBorder(PdfPCell.NO_BORDER);
-					table0.addCell(site63);
-					PdfPCell site8 = new PdfPCell(new Paragraph(siteInformation.getAddressLine_2(),
-							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-					site8.setHorizontalAlignment(Element.ALIGN_LEFT);
-					site8.setBackgroundColor(new GrayColor(0.93f));
-					site8.setBorder(PdfPCell.NO_BORDER);
-					table0.addCell(site8);
+						PdfPCell site63 = new PdfPCell(
+								new Paragraph("Site Address line2:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+						site63.setBackgroundColor(new GrayColor(0.93f));
+						site63.setHorizontalAlignment(Element.ALIGN_LEFT);
+						site63.setBorder(PdfPCell.NO_BORDER);
+						table0.addCell(site63);
+						PdfPCell site8 = new PdfPCell(new Paragraph(siteInformation.getAddressLine_2(),
+								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+						site8.setHorizontalAlignment(Element.ALIGN_LEFT);
+						site8.setBackgroundColor(new GrayColor(0.93f));
+						site8.setBorder(PdfPCell.NO_BORDER);
+						table0.addCell(site8);
 
 					PdfPCell site64 = new PdfPCell(new Paragraph(siteInformation.getState(),
 							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 					table0.addCell(new Phrase("State:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//				site64.setFixedHeight(30f);
+//				    site64.setFixedHeight(30f);
 					site64.setHorizontalAlignment(Element.ALIGN_LEFT);
 					site64.setBorder(PdfPCell.NO_BORDER);
 					table0.addCell(site64);
@@ -383,14 +383,14 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				site67.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(site67);
 
-				PdfPCell age = new PdfPCell(new Paragraph("Estimated age of the wiring system:",
+				PdfPCell age = new PdfPCell(new Paragraph("Estimated age of the wiring system years:",
 						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				age.setBackgroundColor(new GrayColor(0.93f));
 				age.setHorizontalAlignment(Element.ALIGN_LEFT);
 				age.setBorder(PdfPCell.NO_BORDER);
 				table1.addCell(age);
-				PdfPCell cell4 = new PdfPCell(new Paragraph(report.getEstimatedWireAge() + " In years",
-						new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+				PdfPCell cell4 = new PdfPCell(
+						new Paragraph(report.getEstimatedWireAge(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 				cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell4.setBackgroundColor(new GrayColor(0.93f));
 				cell4.setBorder(PdfPCell.NO_BORDER);
@@ -406,7 +406,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				table1.addCell(site68);
 
 				if (report.getEvidanceAddition().equalsIgnoreCase("Yes")) {
-					PdfPCell estimated = new PdfPCell(new Paragraph("If yes estimated age year:",
+					PdfPCell estimated = new PdfPCell(new Paragraph("If yes estimated age years:",
 							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 					estimated.setBackgroundColor(new GrayColor(0.93f));
 					estimated.setHorizontalAlignment(Element.ALIGN_LEFT);
