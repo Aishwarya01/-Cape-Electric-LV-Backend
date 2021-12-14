@@ -20,18 +20,17 @@ import com.capeelectric.service.PrintTestingService;
 @RequestMapping("/api/v1")
 public class PrintTestingController {
 	private static final Logger logger = LoggerFactory.getLogger(PrintTestingController.class);
-	
-	
+
 	@Autowired
-	private PrintTestingService printTestingService ;
-	
+	private PrintTestingService printTestingService;
+
 	@GetMapping("/printTesting/{userName}/{siteId}")
-	public ResponseEntity<List<TestingReport>> printTesting(@PathVariable String userName,
-			@PathVariable Integer siteId) throws PeriodicTestingException {
+	public ResponseEntity<List<TestingReport>> printTesting(@PathVariable String userName, @PathVariable Integer siteId)
+			throws PeriodicTestingException {
 		logger.info("Started printTesting function userName: {},siteId : {}", userName, siteId);
 		printTestingService.printTesting(userName, siteId);
 		logger.info("ended printTesting function");
-         return new ResponseEntity<List<TestingReport>>( HttpStatus.OK);
+		return new ResponseEntity<List<TestingReport>>(HttpStatus.OK);
 	}
 
 }

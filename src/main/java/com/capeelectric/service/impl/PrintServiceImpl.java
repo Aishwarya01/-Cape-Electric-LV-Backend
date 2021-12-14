@@ -206,14 +206,6 @@ public class PrintServiceImpl implements PrintService {
 					table22.setWidthPercentage(100);
 					table22.getDefaultCell().setBorder(0);
 
-					float[] pointColumnWidths1 = { 160F, 90F };
-
-					PdfPTable table7 = new PdfPTable(pointColumnWidths1); // 3 columns.
-					table7.setWidthPercentage(100); // Width 100%
-					table7.setSpacingBefore(10f); // Space before table
-//					table7.setSpacingAfter(10f); // Space after table
-					table7.getDefaultCell().setBorder(0);
-
 					PdfPTable table17 = new PdfPTable(1);
 					table17.setWidthPercentage(100); // Width 100%
 					table17.setSpacingBefore(5f); // Space before table
@@ -225,6 +217,14 @@ public class PrintServiceImpl implements PrintService {
 					cell27.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					table17.addCell(cell27);
 					document.add(table17);
+					
+					float[] pointColumnWidths1 = { 90F, 90F };
+
+					PdfPTable table7 = new PdfPTable(pointColumnWidths1); // 3 columns.
+					table7.setWidthPercentage(100); // Width 100%
+					table7.setSpacingBefore(10f); // Space before table
+//					table7.setSpacingAfter(10f); // Space after table
+					table7.getDefaultCell().setBorder(0);
 
 					PdfPCell cell132 = new PdfPCell(new Paragraph(
 							"General condition of the installation in terms of electrical safety:", font9));

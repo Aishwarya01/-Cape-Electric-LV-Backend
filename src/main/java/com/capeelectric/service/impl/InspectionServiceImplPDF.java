@@ -717,7 +717,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 						table6.addCell(new Phrase("Non-Conducting location – earth free local equipotential bonding:",
 								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//					cell32.setFixedHeight(35f);
+//					    cell32.setFixedHeight(35f);
 						cell32.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell32.setBorder(PdfPCell.NO_BORDER);
 						table6.addCell(cell32);
@@ -770,21 +770,70 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 
 						PdfPCell cell53 = new PdfPCell(new Paragraph("Supplementary bonding:",
 								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						cell53.setBackgroundColor(new GrayColor(0.93f));
+//						cell53.setBackgroundColor(new GrayColor(0.93f));
 						cell53.setHorizontalAlignment(Element.ALIGN_LEFT);
 						cell53.setBorder(PdfPCell.NO_BORDER);
 						table7.addCell(cell53);
 						PdfPCell cell35 = new PdfPCell(new Paragraph(ipoInspection.getSupplementaryBonding(),
 								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 						cell35.setHorizontalAlignment(Element.ALIGN_CENTER);
-						cell35.setBackgroundColor(new GrayColor(0.93f));
+//						cell35.setBackgroundColor(new GrayColor(0.93f));
 						cell35.setBorder(PdfPCell.NO_BORDER);
 						table7.addCell(cell35);
 						document.add(table7);
 
-						Font font10N = new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.NORMAL, BaseColor.BLACK);
-						Paragraph paragraph18 = new Paragraph("Specific examples of section 4:", font10N);
-						document.add(paragraph18);
+//						Font font10N = new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.NORMAL, BaseColor.BLACK);
+//						Paragraph paragraph18 = new Paragraph(
+//								"SPECIFIC INSPECTION EXAMPLES to be included in the report as appropriate to the installation",
+//								font10N);
+//						document.add(paragraph18);
+
+						PdfPTable specificInsp = new PdfPTable(pointColumnWidths5);
+						specificInsp.setWidthPercentage(100); // Width 100%
+						specificInsp.setSpacingBefore(10f); // Space before table
+						specificInsp.setSpacingAfter(3f); // Space after table
+						specificInsp.getDefaultCell().setBorder(0);
+
+						PdfPCell inspection = new PdfPCell(new Paragraph(
+								"SPECIFIC INSPECTION EXAMPLES to be included in the report as appropriate to the installation",
+								new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+						inspection.setBackgroundColor(new GrayColor(0.82f));
+						inspection.setHorizontalAlignment(Element.ALIGN_LEFT);
+						inspection.setBorder(PdfPCell.NO_BORDER);
+						specificInsp.addCell(inspection);
+						document.add(specificInsp);
+
+						PdfPTable SpecificInspection = new PdfPTable(pointColumnWidths5);
+						SpecificInspection.setWidthPercentage(100); // Width 100%
+						SpecificInspection.setSpacingBefore(5f); // Space before table
+						SpecificInspection.setSpacingAfter(3f); // Space after table
+						SpecificInspection.getDefaultCell().setBorder(10);
+
+						if (ipoInspection.getSpecificInspectionRe() != null) {
+							PdfPCell cell502 = new PdfPCell(
+									new Paragraph("", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+//							cell502.setBackgroundColor(new GrayColor(0.93f));
+							cell502.setHorizontalAlignment(Element.ALIGN_LEFT);
+							cell502.setBorder(PdfPCell.NO_BORDER);
+							SpecificInspection.addCell(cell502);
+							PdfPCell cell5020 = new PdfPCell(new Paragraph(ipoInspection.getSpecificInspectionRe(),
+									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+							cell5020.setHorizontalAlignment(Element.ALIGN_JUSTIFIED);
+//							cell5020.setBackgroundColor(new GrayColor(0.93f));
+							cell5020.setBorder(PdfPCell.NO_BORDER);
+							SpecificInspection.addCell(cell5020);
+							document.add(SpecificInspection);
+						} else {
+
+							PdfPCell noData = new PdfPCell(new Paragraph("No data Available",
+									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+//							noData.setBackgroundColor(new GrayColor(0.82f));
+							noData.setHorizontalAlignment(Element.ALIGN_LEFT);
+							noData.setBorder(PdfPCell.NO_BORDER);
+							SpecificInspection.addCell(noData);
+							document.add(SpecificInspection);
+
+						}
 
 						for (ConsumerUnit consumerUnit : consumer1) {
 
