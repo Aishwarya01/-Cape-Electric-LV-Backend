@@ -11,6 +11,6 @@ public interface ObservationService {
 
 	public void updateObservation(ObservationComponent observationComponent) throws ObservationException;
 
-	public ObservationComponent retrieveObservation(String userName, Integer siteId) throws ObservationException;
+	public ObservationComponent retrieveObservation(String userName, Integer siteId, String observationComponent) throws ObservationException;
 
 }

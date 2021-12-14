@@ -22,7 +22,7 @@ import com.capeelectric.model.ObservationComponent;
 import com.capeelectric.service.ObservationService;
 
 @RestController
-@RequestMapping("api/v2")
+@RequestMapping("api/v1")
 public class ObservationController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ObservationController.class);
@@ -48,11 +48,11 @@ public class ObservationController {
 		return new ResponseEntity<String>("Observation Successfully Updated", HttpStatus.OK);
 	}
 
-	@GetMapping("/retrieveObservation/{userName}/{siteId}")
-	public ResponseEntity<ObservationComponent> retrieveSummary(@PathVariable String userName,
-			@PathVariable Integer siteId) throws ObservationException {
+	@GetMapping("/userName/{userName}/{siteId}/{observationComponent}")
+	public ResponseEntity<ObservationComponent> retrieveObservation(@PathVariable String userName,
+			@PathVariable Integer siteId, @PathVariable String observationComponent) throws ObservationException {
 		logger.info("called retrieveObservation function" );
-		return new ResponseEntity<ObservationComponent>(observationService.retrieveObservation(userName, siteId),
+		return new ResponseEntity<ObservationComponent>(observationService.retrieveObservation(userName, siteId,observationComponent),
 				HttpStatus.OK);
 	}
 

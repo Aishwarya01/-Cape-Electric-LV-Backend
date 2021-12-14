@@ -32,7 +32,7 @@ public class ObservationServiceImpl implements ObservationService {
 	public void addObservation(ObservationComponent observationComponent) throws ObservationException {
 		if (observationComponent != null && observationComponent.getUserName() != null) {
 			Optional<ObservationComponent> observationRepo = observationRepository
-					.findBySiteId(observationComponent.getSiteId());
+					.findByUserNameAndSiteIdAndObservationComponent(observationComponent.getUserName(), observationComponent.getSiteId(),observationComponent.getObservationComponent());
 			if (!observationRepo.isPresent()) {
 				observationComponent.setCreatedDate(LocalDateTime.now());
 				observationComponent.setCreatedBy(userFullName.findByUserName(observationComponent.getUserName()));
@@ -55,7 +55,7 @@ public class ObservationServiceImpl implements ObservationService {
 				&& observationComponent.getObservationId() != 0 && observationComponent.getSiteId() != null
 				&& observationComponent.getSiteId() != 0) {
 			Optional<ObservationComponent> observationRepo = observationRepository
-					.findByUserNameAndSiteId(observationComponent.getUserName(), observationComponent.getSiteId());
+					.findByUserNameAndSiteIdAndObservationComponent(observationComponent.getUserName(), observationComponent.getSiteId(),observationComponent.getObservationComponent());
 			if (observationRepo.isPresent()
 					&& observationRepo.get().getSiteId().equals(observationComponent.getSiteId())) {
 				observationComponent.setUpdatedDate(LocalDateTime.now());
@@ -73,10 +73,11 @@ public class ObservationServiceImpl implements ObservationService {
 	}
 
 	@Override
-	public ObservationComponent retrieveObservation(String userName, Integer siteId) throws ObservationException {
+	public ObservationComponent retrieveObservation(String userName, Integer siteId, String observationComponent)
+			throws ObservationException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
-			Optional<ObservationComponent> observationRepo = observationRepository.findByUserNameAndSiteId(userName,
-					siteId);
+			Optional<ObservationComponent> observationRepo = observationRepository
+					.findByUserNameAndSiteIdAndObservationComponent(userName, siteId,observationComponent);
 			if (observationRepo.isPresent() && observationRepo.get() != null) {
 				return observationRepo.get();
 			} else {

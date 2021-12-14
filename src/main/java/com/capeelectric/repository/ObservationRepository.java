@@ -11,8 +11,9 @@ import com.capeelectric.model.ObservationComponent;
 @Repository
 public interface ObservationRepository extends CrudRepository<ObservationComponent, Integer> {
 
-	Optional<ObservationComponent> findByUserNameAndSiteId(String userName, Integer siteId);
-
 	Optional<ObservationComponent> findBySiteId(Integer siteId);
+
+	Optional<ObservationComponent> findByUserNameAndSiteIdAndObservationComponent(String userName, Integer siteId,
+			String observationComponent);
 
 }

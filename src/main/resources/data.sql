@@ -915,7 +915,7 @@ CREATE TABLE register_table (
 -----------> Observation_Table <----------
 
     CREATE TABLE observation_component_table(    
-				OBSERVATION_ID INTEGER NOT NULL, 
+				OBSERVATION_ID INT AUTO_INCREMENT , 
 				USER_NAME VARCHAR(225),
 	            SITE_ID  INT,
 	            OBSERVATION_COMPONENT  VARCHAR(225),
