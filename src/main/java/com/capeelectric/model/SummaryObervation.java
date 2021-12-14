@@ -29,8 +29,14 @@ public class SummaryObervation implements Serializable {
 	@Column(name = "OBSERVATIONS_ID")
 	private Integer observationsId;
 
-	@Column(name = "OBSERVATIONS")
-	private String observations;
+	@Column(name = "OBSERVATIONS_SUPPLY")
+	private String observationsSupply;
+	
+	@Column(name = "OBSERVATIONS_INSPECTION")
+	private String observationsInspection;
+	
+	@Column(name = "OBSERVATIONS_TESTING")
+	private String observationsTesting;
 
 	@Column(name = "REFERANCE_NUMBER_REPORT")
 	private String referanceNumberReport;
@@ -57,12 +63,28 @@ public class SummaryObervation implements Serializable {
 		this.observationsId = observationsId;
 	}
 
-	public String getObservations() {
-		return observations;
+    public String getObservationsSupply() {
+		return observationsSupply;
 	}
 
-	public void setObservations(String observations) {
-		this.observations = observations;
+	public void setObservationsSupply(String observationsSupply) {
+		this.observationsSupply = observationsSupply;
+	}
+
+	public String getObservationsInspection() {
+		return observationsInspection;
+	}
+
+	public void setObservationsInspection(String observationsInspection) {
+		this.observationsInspection = observationsInspection;
+	}
+
+	public String getObservationsTesting() {
+		return observationsTesting;
+	}
+
+	public void setObservationsTesting(String observationsTesting) {
+		this.observationsTesting = observationsTesting;
 	}
 
 	public String getReferanceNumberReport() {
