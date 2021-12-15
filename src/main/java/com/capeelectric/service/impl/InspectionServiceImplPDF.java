@@ -155,7 +155,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 
 						part31.setWidthPercentage(100); // Width 100%
 						part31.setSpacingBefore(5f); // Space before table
-						part31.setSpacingAfter(5f); // Space after table
+//						part31.setSpacingAfter(5f); // Space after table
 						part31.setWidthPercentage(100);
 						part31.getDefaultCell().setBorder(0);
 
@@ -404,7 +404,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 
 						table3.setWidthPercentage(100); // Width 100%
 //					table3.setSpacingBefore(10f); // Space before table
-						table3.setSpacingAfter(10f); // Space after table
+						table3.setSpacingAfter(5f); // Space after table
 						table3.setWidthPercentage(100);
 						table3.getDefaultCell().setBorder(0);
 
@@ -640,7 +640,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						PdfPTable table5 = new PdfPTable(pointColumnWidths3);
 
 						table5.setWidthPercentage(100); // Width 100%
-						table5.setSpacingBefore(5f); // Space before table
+//						table5.setSpacingBefore(5f); // Space before table
 						table5.setSpacingAfter(5f); // Space after table
 						table5.setWidthPercentage(100);
 						table5.getDefaultCell().setBorder(0);
@@ -708,8 +708,8 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						PdfPTable table6 = new PdfPTable(pointColumnWidths3);
 
 						table6.setWidthPercentage(100); // Width 100%
-						table6.setSpacingBefore(5f); // Space before table
-//					table6.setSpacingAfter(10f); // Space after table
+//						table6.setSpacingBefore(5f); // Space before table
+//					    table6.setSpacingAfter(10f); // Space after table
 						table6.setWidthPercentage(100);
 						table6.getDefaultCell().setBorder(0);
 
@@ -739,7 +739,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						PdfPTable Additional = new PdfPTable(pointColumnWidths5);
 						Additional.setWidthPercentage(100); // Width 100%
 						Additional.setSpacingBefore(10f); // Space before table
-						Additional.setSpacingAfter(3f); // Space after table
+						Additional.setSpacingAfter(5f); // Space after table
 						Additional.setWidthPercentage(100);
 						Additional.getDefaultCell().setBorder(0);
 
@@ -754,8 +754,8 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						PdfPTable table7 = new PdfPTable(pointColumnWidths3);
 
 						table7.setWidthPercentage(100); // Width 100%
-						table7.setSpacingBefore(5f); // Space before table
-						table7.setSpacingAfter(5f); // Space after table
+//						table7.setSpacingBefore(5f); // Space before table
+//						table7.setSpacingAfter(5f); // Space after table
 						table7.setWidthPercentage(100);
 						table7.getDefaultCell().setBorder(0);
 
@@ -791,7 +791,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						PdfPTable specificInsp = new PdfPTable(pointColumnWidths5);
 						specificInsp.setWidthPercentage(100); // Width 100%
 						specificInsp.setSpacingBefore(10f); // Space before table
-						specificInsp.setSpacingAfter(3f); // Space after table
+//						specificInsp.setSpacingAfter(3f); // Space after table
 						specificInsp.getDefaultCell().setBorder(0);
 
 						PdfPCell inspection = new PdfPCell(new Paragraph(
