@@ -825,8 +825,9 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 							document.add(SpecificInspection);
 						} else {
 
-							PdfPCell noData = new PdfPCell(new Paragraph("Specific Inspection Examples Data Not Available",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+							PdfPCell noData = new PdfPCell(
+									new Paragraph("Specific Inspection Examples Data Not Available",
+											new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //							noData.setBackgroundColor(new GrayColor(0.82f));
 							noData.setHorizontalAlignment(Element.ALIGN_LEFT);
 							noData.setBorder(PdfPCell.NO_BORDER);
@@ -856,204 +857,203 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 							consumer11.setBorder(PdfPCell.NO_BORDER);
 							Section5.addCell(consumer11);
 							document.add(Section5);
-							
-							
-							
-							float[] pointColumnWidths140 = { 80F, 100F };
-							PdfPTable table120 = new PdfPTable(pointColumnWidths140);
 
-							table120.setWidthPercentage(100); // Width 100%
-							table120.setSpacingBefore(10f); // Space before table
+							if (!consumerUnit.getConsumerStatus().equalsIgnoreCase("R")) {
+
+								float[] pointColumnWidths140 = { 80F, 100F };
+								PdfPTable table120 = new PdfPTable(pointColumnWidths140);
+
+								table120.setWidthPercentage(100); // Width 100%
+								table120.setSpacingBefore(10f); // Space before table
 //							table120.setSpacingAfter(5f); // Space after table
-							table120.setWidthPercentage(100);
-							table120.getDefaultCell().setBorder(0);
-							
-							PdfPCell cell140 = new PdfPCell(new Paragraph("Distribution board details :",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-							cell140.setBackgroundColor(new GrayColor(0.93f));
-							cell140.setHorizontalAlignment(Element.ALIGN_LEFT);
-							cell140.setBorder(PdfPCell.NO_BORDER);
-							table120.addCell(cell140);
-							PdfPCell cell141 = new PdfPCell(new Paragraph(consumerUnit.getDistributionBoardDetails(),
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-							cell141.setHorizontalAlignment(Element.ALIGN_LEFT);
-							cell141.setBackgroundColor(new GrayColor(0.93f));
-							cell141.setBorder(PdfPCell.NO_BORDER);
-							table120.addCell(cell141);
-							
-							PdfPCell cell142 = new PdfPCell(new Paragraph("Distribution board name :",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								table120.setWidthPercentage(100);
+								table120.getDefaultCell().setBorder(0);
+
+								PdfPCell cell140 = new PdfPCell(new Paragraph("Distribution board details :",
+										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								cell140.setBackgroundColor(new GrayColor(0.93f));
+								cell140.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell140.setBorder(PdfPCell.NO_BORDER);
+								table120.addCell(cell140);
+								PdfPCell cell141 = new PdfPCell(
+										new Paragraph(consumerUnit.getDistributionBoardDetails(),
+												new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								cell141.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell141.setBackgroundColor(new GrayColor(0.93f));
+								cell141.setBorder(PdfPCell.NO_BORDER);
+								table120.addCell(cell141);
+
+								PdfPCell cell142 = new PdfPCell(new Paragraph("Distribution board name :",
+										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //							cell142.setBackgroundColor(new GrayColor(0.93f));
-							cell142.setHorizontalAlignment(Element.ALIGN_LEFT);
-							cell142.setBorder(PdfPCell.NO_BORDER);
-							table120.addCell(cell142);
-							PdfPCell cell143 = new PdfPCell(new Paragraph(consumerUnit.getReferance(),
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-							cell143.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell142.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell142.setBorder(PdfPCell.NO_BORDER);
+								table120.addCell(cell142);
+								PdfPCell cell143 = new PdfPCell(new Paragraph(consumerUnit.getReferance(),
+										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								cell143.setHorizontalAlignment(Element.ALIGN_LEFT);
 //							cell143.setBackgroundColor(new GrayColor(0.93f));
-							cell143.setBorder(PdfPCell.NO_BORDER);
-							table120.addCell(cell143);
-							
-							PdfPCell cell144 = new PdfPCell(new Paragraph("Location :",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-							cell144.setBackgroundColor(new GrayColor(0.93f));
-							cell144.setHorizontalAlignment(Element.ALIGN_LEFT);
-							cell144.setBorder(PdfPCell.NO_BORDER);
-							table120.addCell(cell144);
-							PdfPCell cell145 = new PdfPCell(new Paragraph(consumerUnit.getLocation(),
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-							cell145.setHorizontalAlignment(Element.ALIGN_LEFT);
-							cell145.setBackgroundColor(new GrayColor(0.93f));
-							cell145.setBorder(PdfPCell.NO_BORDER);
-							table120.addCell(cell145);
-							
-							document.add(table120);
-							
-							PdfPTable Section5a = new PdfPTable(pointColumnWidths51);
-							Section5a.setWidthPercentage(100); // Width 100%
-							Section5a.setSpacingBefore(8f); // Space before table
-							Section5a.setSpacingAfter(5f); // Space after table
-							Section5a.getDefaultCell().setBorder(0);
+								cell143.setBorder(PdfPCell.NO_BORDER);
+								table120.addCell(cell143);
 
-							PdfPCell consumerunit = new PdfPCell(new Paragraph(
-									"5.1: Consumer unit(s) / distribution board's",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
-							consumerunit.setBackgroundColor(new GrayColor(0.82f));
-							consumerunit.setHorizontalAlignment(Element.ALIGN_LEFT);
-							consumerunit.setBorder(PdfPCell.NO_BORDER);
-							Section5a.addCell(consumerunit);
-							document.add(Section5a);
+								PdfPCell cell144 = new PdfPCell(
+										new Paragraph("Location :", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								cell144.setBackgroundColor(new GrayColor(0.93f));
+								cell144.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell144.setBorder(PdfPCell.NO_BORDER);
+								table120.addCell(cell144);
+								PdfPCell cell145 = new PdfPCell(new Paragraph(consumerUnit.getLocation(),
+										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								cell145.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell145.setBackgroundColor(new GrayColor(0.93f));
+								cell145.setBorder(PdfPCell.NO_BORDER);
+								table120.addCell(cell145);
 
-							float[] pointColumnWidths2 = { 30F, 255F, 65F };
+								document.add(table120);
 
-							PdfPTable table8 = new PdfPTable(pointColumnWidths2); // 3 columns.
-							table8.setWidthPercentage(100); // Width 100%
-							table8.setSpacingBefore(5f); // Space before table
-							table8.setSpacingAfter(5f); // Space after table
-							table8.setWidthPercentage(100);
+								PdfPTable Section5a = new PdfPTable(pointColumnWidths51);
+								Section5a.setWidthPercentage(100); // Width 100%
+								Section5a.setSpacingBefore(8f); // Space before table
+								Section5a.setSpacingAfter(5f); // Space after table
+								Section5a.getDefaultCell().setBorder(0);
 
-							addRow(table8, "1",
-									"Adequacy of access and working space for items of electrical equipment including switchgear",
-									consumerUnit.getAccessWorking());
-							addRow(table8, "2", "Security of fixing ", consumerUnit.getSecurityFixing());
-							addRow(table8, "3", "Insulation of live parts not damaged during erection",
-									consumerUnit.getLivePartsDamage());
-							addRow(table8, "4", "Adequacy / security of barriers", consumerUnit.getSecurityBarriers());
-							addRow(table8, "5", "Suitability of enclosure(s) for IP and fire ratings",
-									consumerUnit.getSuitabilityEnclosure());
-							addRow(table8, "6", "Enclosure not damaged during installation",
-									consumerUnit.getEnclosureDamaged());
-							addRow(table8, "7", "Presence and effectiveness of obstacles",
-									consumerUnit.getPresenceObstacles());
-							addRow(table8, "8", "Placing out of reach", consumerUnit.getPlacingOutOfConsumer());
-							addRow(table8, "9", "Protection against mechanical damage where cables enter equipment",
-									consumerUnit.getMechanicalDamage());
-							addRow(table8, "10",
-									"Protection against electromagnetic/heating effects where cables enter ferromagnetic enclosures",
-									consumerUnit.getElectromagnetic());
-							addRow(table8, "11",
-									"Confirmation that all conductor connections including connections to busbars are correctly located in terminals and are tight and secure",
-									consumerUnit.getAllConductorCon());
-							
-							document.add(table8);
-				
-							
-							PdfPTable Section5b = new PdfPTable(pointColumnWidths51);
-							Section5b.setWidthPercentage(100); // Width 100%
-							Section5b.setSpacingBefore(5f); // Space before table
-							Section5b.setSpacingAfter(5f); // Space after table
-							Section5b.getDefaultCell().setBorder(0);
+								PdfPCell consumerunit = new PdfPCell(
+										new Paragraph("5.1: Consumer unit(s) / distribution board's",
+												new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+								consumerunit.setBackgroundColor(new GrayColor(0.82f));
+								consumerunit.setHorizontalAlignment(Element.ALIGN_LEFT);
+								consumerunit.setBorder(PdfPCell.NO_BORDER);
+								Section5a.addCell(consumerunit);
+								document.add(Section5a);
 
-							PdfPCell distributionEqui = new PdfPCell(new Paragraph(
-									"5.2: Distribution equipment's",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
-							distributionEqui.setBackgroundColor(new GrayColor(0.82f));
-							distributionEqui.setHorizontalAlignment(Element.ALIGN_LEFT);
-							distributionEqui.setBorder(PdfPCell.NO_BORDER);
-							Section5b.addCell(distributionEqui);
-							document.add(Section5b);
-							
-							PdfPTable table80 = new PdfPTable(pointColumnWidths2); // 3 columns.
-							table80.setWidthPercentage(100); // Width 100%
-							table80.setSpacingBefore(5f); // Space before table
-							table80.setSpacingAfter(5f); // Space after table
-							table80.setWidthPercentage(100);
-							
-							addRow(table80, "12",
-									"Selection of protective devices and bases correct type and rating (no signs of unacceptable thermal damage, arcing or overheating)",
-									consumerUnit.getBasesCorrectType());
-							addRow(table80, "13", "Presence of main switches linked where required",
-									consumerUnit.getPresenceMainSwitches());
-							addRow(table80, "14", "Operation of main switches (functional checks)",
-									consumerUnit.getOperationMainSwitches());
-							addRow(table80, "15", "Manual operation of circuit breakers and RCD’s to prove functionally",
-									consumerUnit.getManualCircuitBreakers());
-							addRow(table80, "16",
-									"Confirmation that integral test button / switch causes RCD’s to trip when operated (functional check)",
-									consumerUnit.getSwitchCausesRcd());
-							addRow(table80, "17", "RCD’s provided for fault protection, where specified",
-									consumerUnit.getRcdFaultProtection());
-							addRow(table80, "18", "RCD’s provided for additional protection, where specified",
-									consumerUnit.getRcdAdditionalProtection());
-							addRow(table80, "19",
-									"Confirmation of over voltage protection (SPD’s) provided where specified",
-									consumerUnit.getOverVoltageProtection());
-							addRow(table80, "20", "Confirmation of indication that SPD is functional",
-									consumerUnit.getIndicationOfSpd());
-							addRow(table80, "21", "Single pole protective devices in line conductor only",
-									consumerUnit.getSinglePole());
-						
-							document.add(table80);
-							
-							PdfPTable Section5c = new PdfPTable(pointColumnWidths51);
-							Section5c.setWidthPercentage(100); // Width 100%
-							Section5c.setSpacingBefore(5f); // Space before table
-							Section5c.setSpacingAfter(5f); // Space after table
-							Section5c.getDefaultCell().setBorder(0);
+								float[] pointColumnWidths2 = { 30F, 255F, 65F };
 
-							PdfPCell warningNote = new PdfPCell(new Paragraph(
-									"5.3: Warning notices",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
-							warningNote.setBackgroundColor(new GrayColor(0.82f));
-							warningNote.setHorizontalAlignment(Element.ALIGN_LEFT);
-							warningNote.setBorder(PdfPCell.NO_BORDER);
-							Section5c.addCell(warningNote);
-							document.add(Section5c);
-							
-							PdfPTable table81 = new PdfPTable(pointColumnWidths2); // 3 columns.
-							table81.setWidthPercentage(100); // Width 100%
-							table81.setSpacingBefore(5f); // Space before table
-							table81.setSpacingAfter(5f); // Space after table
-							table81.setWidthPercentage(100);
-							
-							
-							addRow(table81, "22", "Presence of RCD quarterly test notice at or near origin",
-									consumerUnit.getRcdQuarterlyTest());
-							addRow(table81, "23",
-									"Presence of diagrams charts or schedules at or near each distribution board where required",
-									consumerUnit.getDiagramsCharts());
-							addRow(table81, "24",
-									"presence of nonstandard (mixed) cable colour warning notice near appropriate distribution board, as required",
-									consumerUnit.getNonstandardCableColour());
-							addRow(table81, "25",
-									"Presence of alternative supply - warning notice at or near the origin",
-									consumerUnit.getAlSupplyOfOrign());
-							addRow(table81, "26",
-									"Presence of alternative supply - warning notice at or near the meter position, if remote from origin",
-									consumerUnit.getAlSupplyOfMeter());
-							addRow(table81, "27",
-									"Presence of alternative supply - warning notice at or near the distribution board to which alternative sources are connected",
-									consumerUnit.getAlSupplyDistribution());
-							addRow(table81, "28",
-									"Presence of alternative supply - warning notice at or near all points of isolation of ALL sources of supply",
-									consumerUnit.getAllPointsIsolation());
-							addRow(table81, "29", "Presence of next inspection recommendation label",
-									consumerUnit.getNextInspection());
-							addRow(table81, "30", "Presence of other required labelling",
-									consumerUnit.getOtherRequiredLabelling());
+								PdfPTable table8 = new PdfPTable(pointColumnWidths2); // 3 columns.
+								table8.setWidthPercentage(100); // Width 100%
+								table8.setSpacingBefore(5f); // Space before table
+								table8.setSpacingAfter(5f); // Space after table
+								table8.setWidthPercentage(100);
 
-							document.add(table81);
+								addRow(table8, "1",
+										"Adequacy of access and working space for items of electrical equipment including switchgear",
+										consumerUnit.getAccessWorking());
+								addRow(table8, "2", "Security of fixing ", consumerUnit.getSecurityFixing());
+								addRow(table8, "3", "Insulation of live parts not damaged during erection",
+										consumerUnit.getLivePartsDamage());
+								addRow(table8, "4", "Adequacy / security of barriers",
+										consumerUnit.getSecurityBarriers());
+								addRow(table8, "5", "Suitability of enclosure(s) for IP and fire ratings",
+										consumerUnit.getSuitabilityEnclosure());
+								addRow(table8, "6", "Enclosure not damaged during installation",
+										consumerUnit.getEnclosureDamaged());
+								addRow(table8, "7", "Presence and effectiveness of obstacles",
+										consumerUnit.getPresenceObstacles());
+								addRow(table8, "8", "Placing out of reach", consumerUnit.getPlacingOutOfConsumer());
+								addRow(table8, "9", "Protection against mechanical damage where cables enter equipment",
+										consumerUnit.getMechanicalDamage());
+								addRow(table8, "10",
+										"Protection against electromagnetic/heating effects where cables enter ferromagnetic enclosures",
+										consumerUnit.getElectromagnetic());
+								addRow(table8, "11",
+										"Confirmation that all conductor connections including connections to busbars are correctly located in terminals and are tight and secure",
+										consumerUnit.getAllConductorCon());
 
+								document.add(table8);
+
+								PdfPTable Section5b = new PdfPTable(pointColumnWidths51);
+								Section5b.setWidthPercentage(100); // Width 100%
+								Section5b.setSpacingBefore(5f); // Space before table
+								Section5b.setSpacingAfter(5f); // Space after table
+								Section5b.getDefaultCell().setBorder(0);
+
+								PdfPCell distributionEqui = new PdfPCell(new Paragraph("5.2: Distribution equipment's",
+										new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+								distributionEqui.setBackgroundColor(new GrayColor(0.82f));
+								distributionEqui.setHorizontalAlignment(Element.ALIGN_LEFT);
+								distributionEqui.setBorder(PdfPCell.NO_BORDER);
+								Section5b.addCell(distributionEqui);
+								document.add(Section5b);
+
+								PdfPTable table80 = new PdfPTable(pointColumnWidths2); // 3 columns.
+								table80.setWidthPercentage(100); // Width 100%
+								table80.setSpacingBefore(5f); // Space before table
+								table80.setSpacingAfter(5f); // Space after table
+								table80.setWidthPercentage(100);
+
+								addRow(table80, "12",
+										"Selection of protective devices and bases correct type and rating (no signs of unacceptable thermal damage, arcing or overheating)",
+										consumerUnit.getBasesCorrectType());
+								addRow(table80, "13", "Presence of main switches linked where required",
+										consumerUnit.getPresenceMainSwitches());
+								addRow(table80, "14", "Operation of main switches (functional checks)",
+										consumerUnit.getOperationMainSwitches());
+								addRow(table80, "15",
+										"Manual operation of circuit breakers and RCD’s to prove functionally",
+										consumerUnit.getManualCircuitBreakers());
+								addRow(table80, "16",
+										"Confirmation that integral test button / switch causes RCD’s to trip when operated (functional check)",
+										consumerUnit.getSwitchCausesRcd());
+								addRow(table80, "17", "RCD’s provided for fault protection, where specified",
+										consumerUnit.getRcdFaultProtection());
+								addRow(table80, "18", "RCD’s provided for additional protection, where specified",
+										consumerUnit.getRcdAdditionalProtection());
+								addRow(table80, "19",
+										"Confirmation of over voltage protection (SPD’s) provided where specified",
+										consumerUnit.getOverVoltageProtection());
+								addRow(table80, "20", "Confirmation of indication that SPD is functional",
+										consumerUnit.getIndicationOfSpd());
+								addRow(table80, "21", "Single pole protective devices in line conductor only",
+										consumerUnit.getSinglePole());
+
+								document.add(table80);
+
+								PdfPTable Section5c = new PdfPTable(pointColumnWidths51);
+								Section5c.setWidthPercentage(100); // Width 100%
+								Section5c.setSpacingBefore(5f); // Space before table
+								Section5c.setSpacingAfter(5f); // Space after table
+								Section5c.getDefaultCell().setBorder(0);
+
+								PdfPCell warningNote = new PdfPCell(new Paragraph("5.3: Warning notices",
+										new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+								warningNote.setBackgroundColor(new GrayColor(0.82f));
+								warningNote.setHorizontalAlignment(Element.ALIGN_LEFT);
+								warningNote.setBorder(PdfPCell.NO_BORDER);
+								Section5c.addCell(warningNote);
+								document.add(Section5c);
+
+								PdfPTable table81 = new PdfPTable(pointColumnWidths2); // 3 columns.
+								table81.setWidthPercentage(100); // Width 100%
+								table81.setSpacingBefore(5f); // Space before table
+								table81.setSpacingAfter(5f); // Space after table
+								table81.setWidthPercentage(100);
+
+								addRow(table81, "22", "Presence of RCD quarterly test notice at or near origin",
+										consumerUnit.getRcdQuarterlyTest());
+								addRow(table81, "23",
+										"Presence of diagrams charts or schedules at or near each distribution board where required",
+										consumerUnit.getDiagramsCharts());
+								addRow(table81, "24",
+										"presence of nonstandard (mixed) cable colour warning notice near appropriate distribution board, as required",
+										consumerUnit.getNonstandardCableColour());
+								addRow(table81, "25",
+										"Presence of alternative supply - warning notice at or near the origin",
+										consumerUnit.getAlSupplyOfOrign());
+								addRow(table81, "26",
+										"Presence of alternative supply - warning notice at or near the meter position, if remote from origin",
+										consumerUnit.getAlSupplyOfMeter());
+								addRow(table81, "27",
+										"Presence of alternative supply - warning notice at or near the distribution board to which alternative sources are connected",
+										consumerUnit.getAlSupplyDistribution());
+								addRow(table81, "28",
+										"Presence of alternative supply - warning notice at or near all points of isolation of ALL sources of supply",
+										consumerUnit.getAllPointsIsolation());
+								addRow(table81, "29", "Presence of next inspection recommendation label",
+										consumerUnit.getNextInspection());
+								addRow(table81, "30", "Presence of other required labelling",
+										consumerUnit.getOtherRequiredLabelling());
+
+								document.add(table81);
+							}
 						}
 
 						for (Circuit circuit : circuitDetails) {
@@ -1074,213 +1074,214 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 							circuit11.setBorder(PdfPCell.NO_BORDER);
 							Section6.addCell(circuit11);
 							document.add(Section6);
-							
-							
-							float[] pointColumnWidths140 = { 80F, 100F };
-							PdfPTable table120 = new PdfPTable(pointColumnWidths140);
 
-							table120.setWidthPercentage(100); // Width 100%
-							table120.setSpacingBefore(10f); // Space before table
-							table120.setSpacingAfter(5f); // Space after table
-							table120.getDefaultCell().setBorder(0);
-							
-							PdfPCell cell140 = new PdfPCell(new Paragraph("Distribution board details :",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-							cell140.setBackgroundColor(new GrayColor(0.93f));
-							cell140.setHorizontalAlignment(Element.ALIGN_LEFT);
-							cell140.setBorder(PdfPCell.NO_BORDER);
-							table120.addCell(cell140);
-							PdfPCell cell141 = new PdfPCell(new Paragraph(circuit.getDistributionBoardDetails(),
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-							cell141.setHorizontalAlignment(Element.ALIGN_LEFT);
-							cell141.setBackgroundColor(new GrayColor(0.93f));
-							cell141.setBorder(PdfPCell.NO_BORDER);
-							table120.addCell(cell141);
-							
-							PdfPCell cell142 = new PdfPCell(new Paragraph("Distribution board name :",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+							if (!circuit.getCircuitStatus().equalsIgnoreCase("R")) {
+
+								float[] pointColumnWidths140 = { 80F, 100F };
+								PdfPTable table120 = new PdfPTable(pointColumnWidths140);
+
+								table120.setWidthPercentage(100); // Width 100%
+								table120.setSpacingBefore(10f); // Space before table
+								table120.setSpacingAfter(5f); // Space after table
+								table120.getDefaultCell().setBorder(0);
+
+								PdfPCell cell140 = new PdfPCell(new Paragraph("Distribution board details :",
+										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								cell140.setBackgroundColor(new GrayColor(0.93f));
+								cell140.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell140.setBorder(PdfPCell.NO_BORDER);
+								table120.addCell(cell140);
+								PdfPCell cell141 = new PdfPCell(new Paragraph(circuit.getDistributionBoardDetails(),
+										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								cell141.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell141.setBackgroundColor(new GrayColor(0.93f));
+								cell141.setBorder(PdfPCell.NO_BORDER);
+								table120.addCell(cell141);
+
+								PdfPCell cell142 = new PdfPCell(new Paragraph("Distribution board name :",
+										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //							cell142.setBackgroundColor(new GrayColor(0.93f));
-							cell142.setHorizontalAlignment(Element.ALIGN_LEFT);
-							cell142.setBorder(PdfPCell.NO_BORDER);
-							table120.addCell(cell142);
-							PdfPCell cell143 = new PdfPCell(new Paragraph(circuit.getReferance(),
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-							cell143.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell142.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell142.setBorder(PdfPCell.NO_BORDER);
+								table120.addCell(cell142);
+								PdfPCell cell143 = new PdfPCell(new Paragraph(circuit.getReferance(),
+										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								cell143.setHorizontalAlignment(Element.ALIGN_LEFT);
 //							cell143.setBackgroundColor(new GrayColor(0.93f));
-							cell143.setBorder(PdfPCell.NO_BORDER);
-							table120.addCell(cell143);
-							
-							PdfPCell cell144 = new PdfPCell(new Paragraph("Location :",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-							cell144.setBackgroundColor(new GrayColor(0.93f));
-							cell144.setHorizontalAlignment(Element.ALIGN_LEFT);
-							cell144.setBorder(PdfPCell.NO_BORDER);
-							table120.addCell(cell144);
-							PdfPCell cell145 = new PdfPCell(new Paragraph(circuit.getLocation(),
-									new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-							cell145.setHorizontalAlignment(Element.ALIGN_LEFT);
-							cell145.setBackgroundColor(new GrayColor(0.93f));
-							cell145.setBorder(PdfPCell.NO_BORDER);
-							table120.addCell(cell145);
-							
-							document.add(table120);
-							
-							PdfPTable Section6a = new PdfPTable(pointColumnWidths5);
-							Section6a.setWidthPercentage(100); // Width 100%
-							Section6a.setSpacingBefore(5f); // Space before table
-							Section6a.setSpacingAfter(5f); // Space after table
-							Section6a.getDefaultCell().setBorder(0);
+								cell143.setBorder(PdfPCell.NO_BORDER);
+								table120.addCell(cell143);
 
-							PdfPCell insulation = new PdfPCell(new Paragraph(
-									"6.1: Circuit conductors and its insulation",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
-							insulation.setBackgroundColor(new GrayColor(0.82f));
-							insulation.setHorizontalAlignment(Element.ALIGN_LEFT);
-							insulation.setBorder(PdfPCell.NO_BORDER);
-							Section6a.addCell(insulation);
-							document.add(Section6a);
-							
-							float[] pointColumnWidths2 = { 30F, 255F, 65F };
-							
-							PdfPTable table9 = new PdfPTable(pointColumnWidths2);
-							table9.setWidthPercentage(100); // Width 100%
-							table9.setSpacingBefore(5f); // Space before table
+								PdfPCell cell144 = new PdfPCell(
+										new Paragraph("Location :", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								cell144.setBackgroundColor(new GrayColor(0.93f));
+								cell144.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell144.setBorder(PdfPCell.NO_BORDER);
+								table120.addCell(cell144);
+								PdfPCell cell145 = new PdfPCell(new Paragraph(circuit.getLocation(),
+										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								cell145.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell145.setBackgroundColor(new GrayColor(0.93f));
+								cell145.setBorder(PdfPCell.NO_BORDER);
+								table120.addCell(cell145);
+
+								document.add(table120);
+
+								PdfPTable Section6a = new PdfPTable(pointColumnWidths5);
+								Section6a.setWidthPercentage(100); // Width 100%
+								Section6a.setSpacingBefore(5f); // Space before table
+								Section6a.setSpacingAfter(5f); // Space after table
+								Section6a.getDefaultCell().setBorder(0);
+
+								PdfPCell insulation = new PdfPCell(
+										new Paragraph("6.1: Circuit conductors and its insulation",
+												new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+								insulation.setBackgroundColor(new GrayColor(0.82f));
+								insulation.setHorizontalAlignment(Element.ALIGN_LEFT);
+								insulation.setBorder(PdfPCell.NO_BORDER);
+								Section6a.addCell(insulation);
+								document.add(Section6a);
+
+								float[] pointColumnWidths2 = { 30F, 255F, 65F };
+
+								PdfPTable table9 = new PdfPTable(pointColumnWidths2);
+								table9.setWidthPercentage(100); // Width 100%
+								table9.setSpacingBefore(5f); // Space before table
 //							table9.setSpacingAfter(5f); // Space after table
-							table9.getDefaultCell().setBorder(0);
+								table9.getDefaultCell().setBorder(0);
 
-							addRow1(table9, "1",
-									"Identification of conductors including main earthing / bonding arrangements",
-									circuit.getIdentificationConductors());
-							addRow1(table9, "2", "Examination of insulation of live parts not damaged during erection",
-									circuit.getExaminationInsulation());
-							addRow1(table9, "3",
-									"Adequacy of conductors for current-carrying capacity with respect to type and nature of the installation",
-									circuit.getCurrentCarryCapacity());
-							addRow1(table9, "4",
-									"Presence, adequacy, and correct termination of protective conductors",
-									circuit.getPresenceProtectConductors());
-							addRow1(table9, "5",
-									"Provision of fire barriers, sealing arrangements so as to minimize the spread of fire",
-									circuit.getProvisionFireBarriers());
-							addRow1(table9, "6", "Segregation/separation of Band I (ELV) and Band II (LV) circuits",
-									circuit.getSeparationBand());
-							addRow1(table9, "7", "Segregation/separation of electrical and non-electrical services",
-									circuit.getSeparationElectrical());
-							addRow1(table9, "8", "No basic insulation of a conductor visible outside enclosure",
-									circuit.getConductorVisibleOutside());
-							addRow1(table9, "9", "Connections of live conductors adequately enclosed",
-									circuit.getConnLiveConductors());
-							addRow1(table9, "10",
-									"Adequately connected at the point of entry to enclosure (glands, bushes etc.)",
-									circuit.getAdequatelyConnectedEnclosure());
-							addRow1(table9, "11",
-									"Adequacy of connections, including protective conductors, within accessories and fixed and stationary equipment",
-									circuit.getAdequacyConnections());
-							
-							document.add(table9);
-							
-							PdfPTable Section6b = new PdfPTable(pointColumnWidths5);
-							Section6b.setWidthPercentage(100); // Width 100%
-							Section6b.setSpacingBefore(10f); // Space before table
-							Section6b.setSpacingAfter(5f); // Space after table
-							Section6b.getDefaultCell().setBorder(0);
+								addRow1(table9, "1",
+										"Identification of conductors including main earthing / bonding arrangements",
+										circuit.getIdentificationConductors());
+								addRow1(table9, "2",
+										"Examination of insulation of live parts not damaged during erection",
+										circuit.getExaminationInsulation());
+								addRow1(table9, "3",
+										"Adequacy of conductors for current-carrying capacity with respect to type and nature of the installation",
+										circuit.getCurrentCarryCapacity());
+								addRow1(table9, "4",
+										"Presence, adequacy, and correct termination of protective conductors",
+										circuit.getPresenceProtectConductors());
+								addRow1(table9, "5",
+										"Provision of fire barriers, sealing arrangements so as to minimize the spread of fire",
+										circuit.getProvisionFireBarriers());
+								addRow1(table9, "6", "Segregation/separation of Band I (ELV) and Band II (LV) circuits",
+										circuit.getSeparationBand());
+								addRow1(table9, "7", "Segregation/separation of electrical and non-electrical services",
+										circuit.getSeparationElectrical());
+								addRow1(table9, "8", "No basic insulation of a conductor visible outside enclosure",
+										circuit.getConductorVisibleOutside());
+								addRow1(table9, "9", "Connections of live conductors adequately enclosed",
+										circuit.getConnLiveConductors());
+								addRow1(table9, "10",
+										"Adequately connected at the point of entry to enclosure (glands, bushes etc.)",
+										circuit.getAdequatelyConnectedEnclosure());
+								addRow1(table9, "11",
+										"Adequacy of connections, including protective conductors, within accessories and fixed and stationary equipment",
+										circuit.getAdequacyConnections());
 
-							PdfPCell equipment = new PdfPCell(new Paragraph(
-									"6.2: Circuit equipements",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
-							equipment.setBackgroundColor(new GrayColor(0.82f));
-							equipment.setHorizontalAlignment(Element.ALIGN_LEFT);
-							equipment.setBorder(PdfPCell.NO_BORDER);
-							Section6b.addCell(equipment);
-							document.add(Section6b);
-							
-							PdfPTable table90 = new PdfPTable(pointColumnWidths2);
-							table90.setWidthPercentage(100); // Width 100%
-							table90.setSpacingBefore(5f); // Space before table
-							table90.setSpacingAfter(5f); // Space after table
-							table90.getDefaultCell().setBorder(0);
-							
-							addRow1(table90, "12",
-									"Adequacy of protective devices, type and fault current rating for fault protection",
-									circuit.getAdequacyProtectDevices());
-							addRow1(table90, "13", "Co-ordination between conductors and overload protective devices",
-									circuit.getCoOrdination());
-							addRow1(table90, "14",
-									"Additional protection by RCD’s having residual operating current (I∆n) not exceeding 30mA for circuits used to supply mobile equipment not exceeding 32A rating for use outdoors in all cases",
-									circuit.getOperatingCurrentCircuits());
-							addRow1(table90, "15",
-									"Additional protection by RCD’s having residual operating current (I∆n) not exceeding 30mA for all socket outlets of rating 20A or less provided for use by ordinary persons unless exempt",
-									circuit.getOperatingCurrentSocket());
-							addRow1(table90, "16",
-									"Additional protection by RCD’s having residual operating current (I∆n) not exceeding 30mA for cables concealed in walls at a depth of less than 50mm",
-									circuit.getCablesConcDepth());
-							addRow1(table90, "17",
-									"Additional protection by RCD’s having residual operating current (I∆n) not exceeding 30mA for Cables concealed in walls / sections containing metal sections regardless of depth",
-									circuit.getSectionsRegardlessDepth());
-							addRow1(table90, "18", "Condition of circuit accessories",
-									circuit.getConditionCircuitAccessories());
-							addRow1(table90, "19", "Suitability of circuit accessories for external influences",
-									circuit.getSuitabilityCircuitAccessories());
-							addRow1(table90, "20",
-									"Condition of accessories including socket-outlets, switches and joint boxes (Circuit accessories not damaged, securely fixed, correctly connected, suitable for external influences)",
-									circuit.getConditionAccessories());
-							addRow1(table90, "21",
-									"Single-pole devices for switching or protection in line conductors only",
-									circuit.getSinglePoleDevices());
-							addRow1(table90, "22",
-									"Presence, operation, and correct location of appropriate devices for isolation and switching",
-									circuit.getIsolationSwitching());
-							
-							document.add(table90);
-							
-							PdfPTable Section6c = new PdfPTable(pointColumnWidths5);
-							Section6c.setWidthPercentage(100); // Width 100%
-							Section6c.setSpacingBefore(5f); // Space before table
+								document.add(table9);
+
+								PdfPTable Section6b = new PdfPTable(pointColumnWidths5);
+								Section6b.setWidthPercentage(100); // Width 100%
+								Section6b.setSpacingBefore(10f); // Space before table
+								Section6b.setSpacingAfter(5f); // Space after table
+								Section6b.getDefaultCell().setBorder(0);
+
+								PdfPCell equipment = new PdfPCell(new Paragraph("6.2: Circuit equipements",
+										new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+								equipment.setBackgroundColor(new GrayColor(0.82f));
+								equipment.setHorizontalAlignment(Element.ALIGN_LEFT);
+								equipment.setBorder(PdfPCell.NO_BORDER);
+								Section6b.addCell(equipment);
+								document.add(Section6b);
+
+								PdfPTable table90 = new PdfPTable(pointColumnWidths2);
+								table90.setWidthPercentage(100); // Width 100%
+								table90.setSpacingBefore(5f); // Space before table
+								table90.setSpacingAfter(5f); // Space after table
+								table90.getDefaultCell().setBorder(0);
+
+								addRow1(table90, "12",
+										"Adequacy of protective devices, type and fault current rating for fault protection",
+										circuit.getAdequacyProtectDevices());
+								addRow1(table90, "13",
+										"Co-ordination between conductors and overload protective devices",
+										circuit.getCoOrdination());
+								addRow1(table90, "14",
+										"Additional protection by RCD’s having residual operating current (I∆n) not exceeding 30mA for circuits used to supply mobile equipment not exceeding 32A rating for use outdoors in all cases",
+										circuit.getOperatingCurrentCircuits());
+								addRow1(table90, "15",
+										"Additional protection by RCD’s having residual operating current (I∆n) not exceeding 30mA for all socket outlets of rating 20A or less provided for use by ordinary persons unless exempt",
+										circuit.getOperatingCurrentSocket());
+								addRow1(table90, "16",
+										"Additional protection by RCD’s having residual operating current (I∆n) not exceeding 30mA for cables concealed in walls at a depth of less than 50mm",
+										circuit.getCablesConcDepth());
+								addRow1(table90, "17",
+										"Additional protection by RCD’s having residual operating current (I∆n) not exceeding 30mA for Cables concealed in walls / sections containing metal sections regardless of depth",
+										circuit.getSectionsRegardlessDepth());
+								addRow1(table90, "18", "Condition of circuit accessories",
+										circuit.getConditionCircuitAccessories());
+								addRow1(table90, "19", "Suitability of circuit accessories for external influences",
+										circuit.getSuitabilityCircuitAccessories());
+								addRow1(table90, "20",
+										"Condition of accessories including socket-outlets, switches and joint boxes (Circuit accessories not damaged, securely fixed, correctly connected, suitable for external influences)",
+										circuit.getConditionAccessories());
+								addRow1(table90, "21",
+										"Single-pole devices for switching or protection in line conductors only",
+										circuit.getSinglePoleDevices());
+								addRow1(table90, "22",
+										"Presence, operation, and correct location of appropriate devices for isolation and switching",
+										circuit.getIsolationSwitching());
+
+								document.add(table90);
+
+								PdfPTable Section6c = new PdfPTable(pointColumnWidths5);
+								Section6c.setWidthPercentage(100); // Width 100%
+								Section6c.setSpacingBefore(5f); // Space before table
 //							Section6c.setSpacingAfter(5f); // Space after table
-							Section6c.getDefaultCell().setBorder(0);
+								Section6c.getDefaultCell().setBorder(0);
 
-							PdfPCell CircuitCables = new PdfPCell(new Paragraph(
-									"6.3: Circuit cables",
-									new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
-							CircuitCables.setBackgroundColor(new GrayColor(0.82f));
-							CircuitCables.setHorizontalAlignment(Element.ALIGN_LEFT);
-							CircuitCables.setBorder(PdfPCell.NO_BORDER);
-							Section6c.addCell(CircuitCables);
-							document.add(Section6c);
-							
-							PdfPTable table91 = new PdfPTable(pointColumnWidths2);
-							table91.setWidthPercentage(100); // Width 100%
-							table91.setSpacingBefore(10f); // Space before table
-							table91.setSpacingAfter(5f); // Space after table
-							table91.getDefaultCell().setBorder(0);
-							
-							addRow1(table91, "23",
-									"Cable installation methods (including support) suitable for the location(s) and external influences (Cables correctly supported throughout)",
-									circuit.getCableInstallation());
-							addRow1(table91, "24",
-									"Examination of cables for signs of mechanical damage during installation",
-									circuit.getExaminationCables());
-							addRow1(table91, "25",
-									"Non-Sheathed cables protected by enclosure in conduit, ducting or trucking",
-									circuit.getNonSheathedCables());
-							addRow1(table91, "26", "Suitability of containment systems including flexible conduit",
-									circuit.getContainmentSystems());
-							addRow1(table91, "27", "Correct temperature rating of cable insulation",
-									circuit.getTemperatureRating());
-							addRow1(table91, "28", "Cables correctly terminated in enclosures",
-									circuit.getCablesTerminated());
-							addRow1(table91, "29",
-									"Wiring systems and cable installation methods/ practices with regard to the type and nature of installation and external influences",
-									circuit.getWiringSystems());
-							addRow1(table91, "30",
-									"Cables concealed under floors above ceilings, in wall adequately protected against damage by contact with fixings",
-									circuit.getCablesConcealUnderFloors());
-							addRow1(table91, "31",
-									"Cables and conductors correctly terminated, enclosed and with no undue mechanical strain",
-									circuit.getConductorCorrectTerminated());
+								PdfPCell CircuitCables = new PdfPCell(new Paragraph("6.3: Circuit cables",
+										new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
+								CircuitCables.setBackgroundColor(new GrayColor(0.82f));
+								CircuitCables.setHorizontalAlignment(Element.ALIGN_LEFT);
+								CircuitCables.setBorder(PdfPCell.NO_BORDER);
+								Section6c.addCell(CircuitCables);
+								document.add(Section6c);
 
-							document.add(table91);
+								PdfPTable table91 = new PdfPTable(pointColumnWidths2);
+								table91.setWidthPercentage(100); // Width 100%
+								table91.setSpacingBefore(10f); // Space before table
+								table91.setSpacingAfter(5f); // Space after table
+								table91.getDefaultCell().setBorder(0);
 
+								addRow1(table91, "23",
+										"Cable installation methods (including support) suitable for the location(s) and external influences (Cables correctly supported throughout)",
+										circuit.getCableInstallation());
+								addRow1(table91, "24",
+										"Examination of cables for signs of mechanical damage during installation",
+										circuit.getExaminationCables());
+								addRow1(table91, "25",
+										"Non-Sheathed cables protected by enclosure in conduit, ducting or trucking",
+										circuit.getNonSheathedCables());
+								addRow1(table91, "26", "Suitability of containment systems including flexible conduit",
+										circuit.getContainmentSystems());
+								addRow1(table91, "27", "Correct temperature rating of cable insulation",
+										circuit.getTemperatureRating());
+								addRow1(table91, "28", "Cables correctly terminated in enclosures",
+										circuit.getCablesTerminated());
+								addRow1(table91, "29",
+										"Wiring systems and cable installation methods/ practices with regard to the type and nature of installation and external influences",
+										circuit.getWiringSystems());
+								addRow1(table91, "30",
+										"Cables concealed under floors above ceilings, in wall adequately protected against damage by contact with fixings",
+										circuit.getCablesConcealUnderFloors());
+								addRow1(table91, "31",
+										"Cables and conductors correctly terminated, enclosed and with no undue mechanical strain",
+										circuit.getConductorCorrectTerminated());
+
+								document.add(table91);
+							}
 						}
 
 						for (IsolationCurrent isolationCurrent : isolationCurrentDetails) {
@@ -1308,17 +1309,16 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 							Section7a.setSpacingAfter(5f); // Space after table
 							Section7a.getDefaultCell().setBorder(0);
 
-							PdfPCell Isolator = new PdfPCell(new Paragraph(
-									"7.1: Isolator",
+							PdfPCell Isolator = new PdfPCell(new Paragraph("7.1: Isolator",
 									new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
 							Isolator.setBackgroundColor(new GrayColor(0.82f));
 							Isolator.setHorizontalAlignment(Element.ALIGN_LEFT);
 							Isolator.setBorder(PdfPCell.NO_BORDER);
 							Section7a.addCell(Isolator);
 							document.add(Section7a);
-							
+
 							float[] pointColumnWidths2 = { 30F, 255F, 65F };
-							
+
 							PdfPTable table10 = new PdfPTable(pointColumnWidths2);
 							table10.setWidthPercentage(100); // Width 100%
 							table10.setSpacingBefore(5f); // Space before table
@@ -1342,30 +1342,29 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 							addRow2(table10, "7",
 									"Isolators - Warning label posted in the situation where live Sections cannot be isolated by the operation of single device",
 									isolationCurrent.getWarningLabel());
-							
+
 							document.add(table10);
-							
+
 							PdfPTable Section7b = new PdfPTable(pointColumnWidths5);
 							Section7b.setWidthPercentage(100); // Width 100%
 							Section7b.setSpacingBefore(5f); // Space before table
 							Section7b.setSpacingAfter(5f); // Space after table
 							Section7b.getDefaultCell().setBorder(0);
 
-							PdfPCell switching = new PdfPCell(new Paragraph(
-									"7.2: Switching",
+							PdfPCell switching = new PdfPCell(new Paragraph("7.2: Switching",
 									new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD)));
 							switching.setBackgroundColor(new GrayColor(0.82f));
 							switching.setHorizontalAlignment(Element.ALIGN_LEFT);
 							switching.setBorder(PdfPCell.NO_BORDER);
 							Section7b.addCell(switching);
 							document.add(Section7b);
-							
+
 							PdfPTable table111 = new PdfPTable(pointColumnWidths2);
 							table111.setWidthPercentage(100); // Width 100%
 							table111.setSpacingBefore(5f); // Space before table
 							table111.setSpacingAfter(5f); // Space after table
 							table111.getDefaultCell().setBorder(0);
-							
+
 							addRow2(table111, "8",
 									"Switching off for mechanical maintenance - Presence of appropriate devices",
 									isolationCurrent.getSwPresenceDevices());
