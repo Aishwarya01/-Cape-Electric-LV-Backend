@@ -125,7 +125,8 @@ public class FindNonRemovedObject {
 
 	public List<Testing> findNonRemoveTesting(List<Testing> listOfTesting) {
 		for (Testing testing : listOfTesting) {
-			if (testing != null && testing.getTestingStatus() !=null && testing.getTestingStatus().equalsIgnoreCase("R")) {
+			if (testing != null && testing.getTestingStatus() != null
+					&& testing.getTestingStatus().equalsIgnoreCase("R")) {
 				listOfTesting.remove(testing);
 			} else {
 				if (testing.getTestingStatus() == null) {
@@ -135,10 +136,15 @@ public class FindNonRemovedObject {
 				List<TestDistRecords> NonRemoveTestingRecords = new ArrayList<TestDistRecords>();
 				List<TestDistRecords> testDistRecords = testing.getTestDistRecords();
 				for (TestDistRecords testDistRecord : testDistRecords) {
+
+					if (testDistRecord.getTestDistRecordStatus() == null) {
+						testDistRecord.setTestDistRecordStatus("N");
+					}
 					testDistRecord.setTestingRecords(findNonRemoveTestingRecord(testDistRecord.getTestingRecords()));
 					NonRemoveTestingRecords.add(testDistRecord);
 				}
 				testing.setTestDistRecords(NonRemoveTestingRecords);
+
 			}
 		}
 		return listOfTesting;
