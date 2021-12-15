@@ -14,6 +14,7 @@ import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
+import com.capeelectric.model.TestDistRecords;
 import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.model.TestingReportComment;
@@ -59,20 +60,17 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	*/
 	@Override
 	public void addTestingReport(TestingReport testingReport) throws PeriodicTestingException, CompanyDetailsException {
-		int i=0;
+		int i = 0;
 		List<TestingReportComment> listOfComments = new ArrayList<TestingReportComment>();
 		if (testingReport.getUserName() != null && testingReport.getSiteId() != null) {
-			Optional<TestingReport> testingRepo = testingReportRepository
-					.findBySiteId(testingReport.getSiteId());
-			if (!testingRepo.isPresent() 
-					|| !testingRepo.get().getSiteId().equals(testingReport.getSiteId())) {
+			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(testingReport.getSiteId());
+			if (!testingRepo.isPresent() || !testingRepo.get().getSiteId().equals(testingReport.getSiteId())) {
 				List<Testing> testing = testingReport.getTesting();
 				if (testing != null && testing.size() > 0) {
 					for (Testing testingItr : testing) {
-						if (testingItr != null && testingItr.getTestDistribution() != null
-								&& testingItr.getTestingRecords() != null
+
+						if (testingItr != null && checkAllObject(testingItr.getTestDistRecords())
 								&& testingReport.getTestIncomingDistribution() != null
-								&& testingItr.getTestDistribution().size() > 0 && testingItr.getTestingRecords().size() > 0
 								&& testingReport.getTestIncomingDistribution().size() > 0) {
 							i++;
 							if (i == testing.size()) {
@@ -91,9 +89,10 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 								testingReportRepository.save(testingReport);
 								siteDetails.updateSite(testingReport.getSiteId(), testingReport.getUserName());
 							}
-								
+
 						} else {
-							throw new PeriodicTestingException("Please fill all the fields before clicking next button");
+							throw new PeriodicTestingException(
+									"Please fill all the fields before clicking next button");
 						}
 
 					}
@@ -336,6 +335,22 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 			}
 		}
 		return flag;
+	}
+	
+
+	private Boolean checkAllObject(List<TestDistRecords> testDistRecords) {
+
+		Boolean flag = false;
+
+		for (TestDistRecords testDistRecord : testDistRecords) {
+			if (testDistRecord != null && testDistRecord.getTestDistribution() != null
+					&& testDistRecord.getTestingRecords() != null && testDistRecord.getTestDistribution().size() > 0
+					&& testDistRecord.getTestingRecords().size() > 0) {
+				flag = true;
+			}
+		}
+		return flag;
+
 	}
  
 }

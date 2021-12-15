@@ -19,6 +19,7 @@ import com.capeelectric.model.SignatorDetails;
 import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.SupplyParameters;
+import com.capeelectric.model.TestDistRecords;
 import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingEquipment;
 import com.capeelectric.model.TestingRecords;
@@ -130,8 +131,14 @@ public class FindNonRemovedObject {
 				if (testing.getTestingStatus() == null) {
 					testing.setTestingStatus("N");
 				}
-				testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
 				testing.setTestingEquipment(findNonRemoveTestingEquipment(testing.getTestingEquipment()));
+				List<TestDistRecords> NonRemoveTestingRecords = new ArrayList<TestDistRecords>();
+				List<TestDistRecords> testDistRecords = testing.getTestDistRecords();
+				for (TestDistRecords testDistRecord : testDistRecords) {
+					testDistRecord.setTestingRecords(findNonRemoveTestingRecord(testDistRecord.getTestingRecords()));
+					NonRemoveTestingRecords.add(testDistRecord);
+				}
+				testing.setTestDistRecords(NonRemoveTestingRecords);
 			}
 		}
 		return listOfTesting;
