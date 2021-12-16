@@ -37,6 +37,9 @@ public class TestDistRecords implements Serializable {
 	@Column(name = "TEST_DIST_RECORDS_STATUS")
 	private String testDistRecordStatus;
 	
+	@Column(name = "LOCATION_COUNT")
+	private Integer locationCount;
+	
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "TESTING_ID")
@@ -88,6 +91,14 @@ public class TestDistRecords implements Serializable {
 
 	public void setTestDistRecordStatus(String testDistRecordStatus) {
 		this.testDistRecordStatus = testDistRecordStatus;
+	}
+
+	public Integer getLocationCount() {
+		return locationCount;
+	}
+
+	public void setLocationCount(Integer locationCount) {
+		this.locationCount = locationCount;
 	}
 
 }

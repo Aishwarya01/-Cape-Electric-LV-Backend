@@ -133,6 +133,9 @@ public class ConsumerUnit implements Serializable {
 	@Column(name = "CONSUMER_STATUS")
 	private String consumerStatus;
 	
+	@Column(name = "LOCATION_COUNT")
+	private Integer locationCount;
+	
 	@JsonBackReference
 	@ManyToOne
     @JoinColumn(name = "IPAO_INSPECTION_ID")
@@ -426,4 +429,11 @@ public class ConsumerUnit implements Serializable {
 		this.consumerStatus = consumerStatus;
 	}
 
+	public Integer getLocationCount() {
+		return locationCount;
+	}
+
+	public void setLocationCount(Integer locationCount) {
+		this.locationCount = locationCount;
+	}
 }

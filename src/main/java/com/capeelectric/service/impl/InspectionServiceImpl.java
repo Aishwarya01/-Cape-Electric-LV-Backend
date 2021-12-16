@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,12 @@ import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.PeriodicInspectionComment;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
+import com.capeelectric.model.TestDistRecords;
 import com.capeelectric.model.Testing;
 import com.capeelectric.repository.InspectionConsumerUnitRepository;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.SiteRepository;
+import com.capeelectric.repository.TestDistRecordsRepository;
 import com.capeelectric.repository.TestInfoRepository;
 import com.capeelectric.service.InspectionService;
 import com.capeelectric.util.Constants;
@@ -64,6 +67,9 @@ public class InspectionServiceImpl implements InspectionService {
 	
 	@Autowired
 	private InspectionConsumerUnitRepository inspectionConsumerUnitRepository;
+	
+	@Autowired
+	private TestDistRecordsRepository testDistRecordsRepository;
 
 	/**
 	 * @param IpaoInspection object 
@@ -89,6 +95,7 @@ public class InspectionServiceImpl implements InspectionService {
 								&& ipaoInspectionItr.getConsumerUnit().size() > 0
 								&& ipaoInspectionItr.getCircuit().size() > 0
 								&& ipaoInspectionItr.getIsolationCurrent().size() > 0) {
+							ipaoInspectionItr.setConsumerUnit(addLocationCountInConsumerUnit(ipaoInspectionItr.getConsumerUnit()));
 							findConsumerUnitLocation(ipaoInspectionItr.getConsumerUnit());
 							i++;
 							if (i == ipaoInspection.size()) {
@@ -163,7 +170,8 @@ public class InspectionServiceImpl implements InspectionService {
 	 * 
 	*/
 	@Override
-	public void updateInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException, CompanyDetailsException {
+	public void updateInspectionDetails(PeriodicInspection periodicInspection)
+			throws InspectionException, CompanyDetailsException {
 		if (periodicInspection != null && periodicInspection.getPeriodicInspectionId() != null
 				&& periodicInspection.getPeriodicInspectionId() != 0 && periodicInspection.getSiteId() != null
 				&& periodicInspection.getSiteId() != 0) {
@@ -172,17 +180,28 @@ public class InspectionServiceImpl implements InspectionService {
 			if (periodicInspectionRepo.isPresent()
 					&& periodicInspectionRepo.get().getSiteId().equals(periodicInspection.getSiteId())) {
 				addRemoveStatusInTesting(periodicInspection.getIpaoInspection());
+				addRemoveStatusInTestDistRecords(periodicInspection.getIpaoInspection());
 				List<IpaoInspection> ipaoInspection = periodicInspection.getIpaoInspection();
-				 //locationcount value adding for new location
+				
 				for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
-					if (ipaoInspectionItr !=null && ipaoInspectionItr.getLocationCount() == null) {
+					// locationcount value adding for new location
+					if (ipaoInspectionItr != null && ipaoInspectionItr.getLocationCount() == null) {
 						ipaoInspectionItr.setLocationCount(++locationCount);
+						ipaoInspectionItr
+								.setConsumerUnit(addLocationCountInConsumerUnit(ipaoInspectionItr.getConsumerUnit()));
+					} else {
+						for (ConsumerUnit consumerUnit : ipaoInspectionItr.getConsumerUnit()) {
+							// locationcount value adding for new consumerUnit
+							if (consumerUnit != null && consumerUnit.getConsumerId() == null) {
+								consumerUnit.setLocationCount(new Random().nextInt(999999999));
+							}
+						}
 					}
 				}
 				periodicInspection.setUpdatedDate(LocalDateTime.now());
 				periodicInspection.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 				inspectionRepository.save(periodicInspection);
-				siteDetails.updateSite(periodicInspection.getSiteId(), periodicInspection.getUserName());							
+				siteDetails.updateSite(periodicInspection.getSiteId(), periodicInspection.getUserName());
 			} else {
 				throw new InspectionException("Given SiteId and ReportId is Invalid");
 			}
@@ -382,8 +401,8 @@ public class InspectionServiceImpl implements InspectionService {
 			throws InspectionException {
 
 		for (IpaoInspection ipaoInspectionItr : listIpaoInspection) {
-			if (ipaoInspectionItr != null && ipaoInspectionItr.getLocationCount() != null && ipaoInspectionItr.getInspectionFlag().equalsIgnoreCase("R")
-					) {
+			if (ipaoInspectionItr != null && ipaoInspectionItr.getLocationCount() != null
+					&& ipaoInspectionItr.getInspectionFlag().equalsIgnoreCase("R")) {
 				try {
 					Testing testingRepo = testInfoRepository.findByLocationCount(ipaoInspectionItr.getLocationCount());
 					if (testingRepo != null
@@ -429,5 +448,49 @@ public class InspectionServiceImpl implements InspectionService {
 			}
 		}
 
+	}
+
+	/**
+	 * addRemoveStatusInTestDistRecords function first finding consumer R status then search corresponding 
+	 *  testdistrecords it will set R status
+	 * @throws InspectionException 
+	 * */
+	private void addRemoveStatusInTestDistRecords(List<IpaoInspection> ipaoInspectionList) throws InspectionException {
+
+		for (IpaoInspection ipaoInspection : ipaoInspectionList) {
+			List<ConsumerUnit> consumerUnitList = ipaoInspection.getConsumerUnit();
+			for (ConsumerUnit consumerUnit : consumerUnitList) {
+				if (consumerUnit != null && consumerUnit.getConsumerStatus() != null
+						&& consumerUnit.getConsumerStatus().equalsIgnoreCase("R")
+						&& consumerUnit.getLocationCount() != null) {
+					TestDistRecords testDistRecords = testDistRecordsRepository
+							.findByLocationCount(consumerUnit.getLocationCount());
+					if (testDistRecords != null) {
+						testDistRecords.setTestDistRecordStatus("R");
+						testDistRecordsRepository.save(testDistRecords);
+					} else {
+						throw new InspectionException(
+								"Please verify Removed consumerUnit records,Removed data not available in TestingDistrubtionRecords");
+					}
+
+				}
+			}
+
+		}
+
+	}
+	
+	
+	/**
+	 * addLocationCountInConsumerUnit function  finding cosumerunit then randomly added some digts number in locationcount
+	 * @throws InspectionException 
+	 * */	
+	private List<ConsumerUnit> addLocationCountInConsumerUnit(List<ConsumerUnit> consumerUnitList) {
+		List<ConsumerUnit> locationCountList = new ArrayList<ConsumerUnit>();
+		 for (ConsumerUnit consumerUnit : consumerUnitList) {
+			 consumerUnit.setLocationCount(new Random().nextInt(999999999));
+			 locationCountList.add(consumerUnit);
+		}
+		return locationCountList;
 	}
 }

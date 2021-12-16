@@ -112,13 +112,16 @@ public class InspectionServiceImplTest {
 	    listOfComments.add(periodicInspectionComment);
 	    periodicInspection.setPeriodicInspectorComment(listOfComments);
 	    
+	    ConsumerUnit consumerUnit = new ConsumerUnit();
+		consumerUnit.setConsumerStatus("R");
+		ArrayList<ConsumerUnit> consumerUnitList = new ArrayList<ConsumerUnit>();
+		consumerUnitList.add(consumerUnit);
 	    IpaoInspection ipaoInspection = new IpaoInspection();
 		ipaoInspection.setInspectionFlag("a");
-		//ipaoInspection.setConsumerUnit(consumerUnitList);
+		ipaoInspection.setConsumerUnit(consumerUnitList);
 		List<IpaoInspection> arrayList = new ArrayList<IpaoInspection>();
 		arrayList.add(ipaoInspection);
 		periodicInspection.setIpaoInspection(arrayList);
-		
 		
 	}
 
