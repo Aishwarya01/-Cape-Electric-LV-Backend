@@ -243,25 +243,11 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 						table1.addCell(new Phrase("Over Voltage Protection:",
 								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-
-//					cell4.setFixedHeight(30f);
+//					    cell4.setFixedHeight(30f);
 						cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
 						cell4.setBorder(PdfPCell.NO_BORDER);
 						table1.addCell(cell4);
 
-						PdfPCell cell39 = new PdfPCell(
-								new Paragraph("Isolator (Means to isolate the public supply system):",
-										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						cell39.setBackgroundColor(new GrayColor(0.93f));
-						cell39.setHorizontalAlignment(Element.ALIGN_LEFT);
-						cell39.setBorder(PdfPCell.NO_BORDER);
-						table1.addCell(cell39);
-						PdfPCell cell5 = new PdfPCell(new Paragraph(ipoInspection.getIsolator(),
-								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						cell5.setHorizontalAlignment(Element.ALIGN_LEFT);
-						cell5.setBackgroundColor(new GrayColor(0.93f));
-						cell5.setBorder(PdfPCell.NO_BORDER);
-						table1.addCell(cell5);
 						document.add(table1);
 
 						Font noteFont1 = new Font(BaseFont.createFont(), 8, Font.NORMAL | Font.NORMAL, BaseColor.BLACK);

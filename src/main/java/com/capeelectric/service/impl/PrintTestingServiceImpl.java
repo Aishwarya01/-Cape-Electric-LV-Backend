@@ -319,7 +319,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		table1.setWidthPercentage(100); // Width 100%
 		table1.setSpacingBefore(5f); // Space after table
 		table1.getDefaultCell().setBorder(0);
-		
+
 		for (TestDistribution distribution : testDistribution) {
 			PdfPCell cell13 = new PdfPCell(new Paragraph(distribution.getDistributionBoardDetails(), font5));
 			table1.addCell(new Phrase("Distribution Board Details:", font5));
@@ -464,8 +464,10 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				addRow(table2, "Prospective fault current Ipfc (kA)", IPF1, IPF2, IPF3, IPF4, IPF5, IPF6, IPF7, IPF8,
 						IPF9);
 
-				addRow1(table22, "Actual load current connected to this source (A)", " " + loadCurrent,
-						" " + loadCurrent2, " " + loadCurrent3, " " + loadCurrent4);
+				addRow1(table22, "Actual load current connected to this source (A)",
+						"                             " + loadCurrent, "                             " + loadCurrent2,
+						"                                              " + loadCurrent3,
+						"                             " + loadCurrent4);
 
 				document.add(table250);
 				document.add(table2);
