@@ -204,7 +204,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				PdfPTable table0 = new PdfPTable(pointColumnWidths);
 
 				table0.setWidthPercentage(100); // Width 100%
-				table0.setSpacingBefore(5f); // Space before table
+//				table0.setSpacingBefore(5f); // Space before table
 				table0.setWidthPercentage(100);
 				table0.getDefaultCell().setBorder(0);
 
@@ -287,18 +287,18 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 					site7.setBorder(PdfPCell.NO_BORDER);
 					table0.addCell(site7);
 
-						PdfPCell site63 = new PdfPCell(
-								new Paragraph("Site Address line2:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						site63.setBackgroundColor(new GrayColor(0.93f));
-						site63.setHorizontalAlignment(Element.ALIGN_LEFT);
-						site63.setBorder(PdfPCell.NO_BORDER);
-						table0.addCell(site63);
-						PdfPCell site8 = new PdfPCell(new Paragraph(siteInformation.getAddressLine_2(),
-								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						site8.setHorizontalAlignment(Element.ALIGN_LEFT);
-						site8.setBackgroundColor(new GrayColor(0.93f));
-						site8.setBorder(PdfPCell.NO_BORDER);
-						table0.addCell(site8);
+					PdfPCell site63 = new PdfPCell(
+							new Paragraph("Site Address line2:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site63.setBackgroundColor(new GrayColor(0.93f));
+					site63.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site63.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site63);
+					PdfPCell site8 = new PdfPCell(new Paragraph(siteInformation.getAddressLine_2(),
+							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+					site8.setHorizontalAlignment(Element.ALIGN_LEFT);
+					site8.setBackgroundColor(new GrayColor(0.93f));
+					site8.setBorder(PdfPCell.NO_BORDER);
+					table0.addCell(site8);
 
 					PdfPCell site64 = new PdfPCell(new Paragraph(siteInformation.getState(),
 							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
@@ -1195,13 +1195,15 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 		cell21.setBorder(PdfPCell.NO_BORDER);
 		table5.addCell(cell21);
 
-		PdfPCell cell22 = new PdfPCell(
-				new Paragraph(observation.getManagerContactNo(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-		table5.addCell(new Phrase("Contact no:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell22.setFixedHeight(30f);
-		cell22.setHorizontalAlignment(Element.ALIGN_LEFT);
-		cell22.setBorder(PdfPCell.NO_BORDER);
-		table5.addCell(cell22);
+		if (observation.getManagerContactNo() != null && !observation.getManagerContactNo().isEmpty()) {
+			PdfPCell cell22 = new PdfPCell(
+					new Paragraph(observation.getManagerContactNo(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			table5.addCell(new Phrase("Contact no:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+//	     	cell22.setFixedHeight(30f);
+			cell22.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell22.setBorder(PdfPCell.NO_BORDER);
+			table5.addCell(cell22);
+		}
 
 		PdfPCell cell23 = new PdfPCell(
 				new Paragraph(observation.getManagerMailID(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
@@ -1222,26 +1224,27 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 		PdfPCell cell25 = new PdfPCell(
 				new Paragraph(observation.getAddressLine1(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 		table5.addCell(new Phrase("Address line1:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell25.setFixedHeight(30f);
 		cell25.setHorizontalAlignment(Element.ALIGN_LEFT);
 		cell25.setBorder(PdfPCell.NO_BORDER);
 		table5.addCell(cell25);
 
-		PdfPCell cell26 = new PdfPCell(
-				new Paragraph(observation.getAddressLine2(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-		table5.addCell(new Phrase("Address line2:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell26.setFixedHeight(30f);
-		cell26.setHorizontalAlignment(Element.ALIGN_LEFT);
-		cell26.setBorder(PdfPCell.NO_BORDER);
-		table5.addCell(cell26);
+		if (observation.getAddressLine2() != null && !observation.getAddressLine2().isEmpty()) {
+			PdfPCell cell26 = new PdfPCell(
+					new Paragraph(observation.getAddressLine2(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			table5.addCell(new Phrase("Address line2:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			cell26.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell26.setBorder(PdfPCell.NO_BORDER);
+			table5.addCell(cell26);
+		}
 
-		PdfPCell cell27 = new PdfPCell(
-				new Paragraph(observation.getLandMark(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-		table5.addCell(new Phrase("Landmark:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell27.setFixedHeight(30f);
-		cell27.setHorizontalAlignment(Element.ALIGN_LEFT);
-		cell27.setBorder(PdfPCell.NO_BORDER);
-		table5.addCell(cell27);
+		if (observation.getLandMark() != null && !observation.getLandMark().isEmpty()) {
+			PdfPCell cell27 = new PdfPCell(
+					new Paragraph(observation.getLandMark(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			table5.addCell(new Phrase("Landmark:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			cell27.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell27.setBorder(PdfPCell.NO_BORDER);
+			table5.addCell(cell27);
+		}
 
 		PdfPCell cell28 = new PdfPCell(
 				new Paragraph(observation.getState(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
@@ -1306,23 +1309,22 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 		PdfPCell cell37 = new PdfPCell(
 				new Paragraph(observation2.getManagerName(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 		table7.addCell(new Phrase("Manager name:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell37.setFixedHeight(30f);
 		cell37.setHorizontalAlignment(Element.ALIGN_LEFT);
 		cell37.setBorder(PdfPCell.NO_BORDER);
 		table7.addCell(cell37);
 
-		PdfPCell cell38 = new PdfPCell(
-				new Paragraph(observation2.getManagerContactNo(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-		table7.addCell(new Phrase("Contact no:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell38.setFixedHeight(30f);
-		cell38.setHorizontalAlignment(Element.ALIGN_LEFT);
-		cell38.setBorder(PdfPCell.NO_BORDER);
-		table7.addCell(cell38);
+		if (observation2.getManagerContactNo() != null && !observation2.getManagerContactNo().isEmpty()) {
+			PdfPCell cell38 = new PdfPCell(new Paragraph(observation2.getManagerContactNo(),
+					new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			table7.addCell(new Phrase("Contact no:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			cell38.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell38.setBorder(PdfPCell.NO_BORDER);
+			table7.addCell(cell38);
+		}
 
 		PdfPCell cell39 = new PdfPCell(
 				new Paragraph(observation2.getManagerMailID(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 		table7.addCell(new Phrase("Mail ID:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell39.setFixedHeight(30f);
 		cell39.setHorizontalAlignment(Element.ALIGN_LEFT);
 		cell39.setBorder(PdfPCell.NO_BORDER);
 		table7.addCell(cell39);
@@ -1338,26 +1340,27 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 		PdfPCell cell41 = new PdfPCell(
 				new Paragraph(observation2.getAddressLine1(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 		table7.addCell(new Phrase("Address line1:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell41.setFixedHeight(30f);
 		cell41.setHorizontalAlignment(Element.ALIGN_LEFT);
 		cell41.setBorder(PdfPCell.NO_BORDER);
 		table7.addCell(cell41);
 
-		PdfPCell cell42 = new PdfPCell(
-				new Paragraph(observation2.getAddressLine2(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-		table7.addCell(new Phrase("Address line2:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell42.setFixedHeight(30f);
-		cell42.setHorizontalAlignment(Element.ALIGN_LEFT);
-		cell42.setBorder(PdfPCell.NO_BORDER);
-		table7.addCell(cell42);
+		if (observation2.getAddressLine2() != null && !observation2.getAddressLine2().isEmpty()) {
+			PdfPCell cell42 = new PdfPCell(
+					new Paragraph(observation2.getAddressLine2(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			table7.addCell(new Phrase("Address line2:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			cell42.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell42.setBorder(PdfPCell.NO_BORDER);
+			table7.addCell(cell42);
+		}
 
-		PdfPCell cell43 = new PdfPCell(
-				new Paragraph(observation2.getLandMark(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-		table7.addCell(new Phrase("Landmark:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell43.setFixedHeight(30f);
-		cell43.setHorizontalAlignment(Element.ALIGN_LEFT);
-		cell43.setBorder(PdfPCell.NO_BORDER);
-		table7.addCell(cell43);
+		if (observation2.getLandMark() != null && !observation2.getLandMark().isEmpty()) {
+			PdfPCell cell43 = new PdfPCell(
+					new Paragraph(observation2.getLandMark(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			table7.addCell(new Phrase("Landmark:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			cell43.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell43.setBorder(PdfPCell.NO_BORDER);
+			table7.addCell(cell43);
+		}
 
 		PdfPCell cell44 = new PdfPCell(
 				new Paragraph(observation2.getState(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
@@ -1427,13 +1430,14 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 		cell50.setBorder(PdfPCell.NO_BORDER);
 		table8.addCell(cell50);
 
-		PdfPCell cell51 = new PdfPCell(
-				new Paragraph(observation3.getManagerContactNo(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-		table8.addCell(new Phrase("Contact no:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell51.setFixedHeight(30f);
-		cell51.setHorizontalAlignment(Element.ALIGN_LEFT);
-		cell51.setBorder(PdfPCell.NO_BORDER);
-		table8.addCell(cell51);
+		if (observation3.getManagerContactNo() != null && !observation3.getManagerContactNo().isEmpty()) {
+			PdfPCell cell51 = new PdfPCell(new Paragraph(observation3.getManagerContactNo(),
+					new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			table8.addCell(new Phrase("Contact no:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			cell51.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell51.setBorder(PdfPCell.NO_BORDER);
+			table8.addCell(cell51);
+		}
 
 		PdfPCell cell52 = new PdfPCell(
 				new Paragraph(observation3.getManagerMailID(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
@@ -1459,21 +1463,23 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 		cell54.setBorder(PdfPCell.NO_BORDER);
 		table8.addCell(cell54);
 
-		PdfPCell cell55 = new PdfPCell(
-				new Paragraph(observation3.getAddressLine2(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-		table8.addCell(new Phrase("Address line2:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell55.setFixedHeight(30f);
-		cell55.setHorizontalAlignment(Element.ALIGN_LEFT);
-		cell55.setBorder(PdfPCell.NO_BORDER);
-		table8.addCell(cell55);
+		if (observation3.getAddressLine2() != null && !observation3.getAddressLine2().isEmpty()) {
+			PdfPCell cell55 = new PdfPCell(
+					new Paragraph(observation3.getAddressLine2(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			table8.addCell(new Phrase("Address line2:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			cell55.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell55.setBorder(PdfPCell.NO_BORDER);
+			table8.addCell(cell55);
+		}
 
-		PdfPCell cell56 = new PdfPCell(
-				new Paragraph(observation3.getLandMark(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-		table8.addCell(new Phrase("Landmark:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//		cell56.setFixedHeight(30f);
-		cell56.setHorizontalAlignment(Element.ALIGN_LEFT);
-		cell56.setBorder(PdfPCell.NO_BORDER);
-		table8.addCell(cell56);
+		if (observation3.getLandMark() != null && !observation3.getLandMark().isEmpty()) {
+			PdfPCell cell56 = new PdfPCell(
+					new Paragraph(observation3.getLandMark(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			table8.addCell(new Phrase("Landmark:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+			cell56.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell56.setBorder(PdfPCell.NO_BORDER);
+			table8.addCell(cell56);
+		}
 
 		PdfPCell cell57 = new PdfPCell(
 				new Paragraph(observation3.getState(), new Font(BaseFont.createFont(), 10, Font.NORMAL)));

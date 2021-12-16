@@ -313,7 +313,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 				PdfPTable table09 = new PdfPTable(pointColumnWidths);
 				table09.setWidthPercentage(100); // Width 100%
-				table09.setSpacingBefore(5f); // Space before table
+				table09.setSpacingBefore(10f); // Space before table
 //				table09.setSpacingAfter(5f);
 				table09.getDefaultCell().setBorder(0);
 
@@ -329,7 +329,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 				PdfPTable table17 = new PdfPTable(1);
 				table17.setWidthPercentage(100); // Width 100%
-				table17.setSpacingBefore(5f); // Space before table
+				table17.setSpacingBefore(8f); // Space before table
 				table17.getDefaultCell().setBorder(0);
 				PdfPCell cell46 = new PdfPCell(
 						new Paragraph("1.1:Incoming (supply) protective device characteristics	", font10));
@@ -451,7 +451,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 				PdfPTable table7 = new PdfPTable(pointColumnWidths);
 				table7.setWidthPercentage(100); // Width 100%
-				table7.setSpacingBefore(10f); // Space before table
+				table7.setSpacingBefore(5f); // Space before table
 //				table7.setSpacingAfter(10f); // Space after table
 				table7.setWidthPercentage(100);
 				table7.getDefaultCell().setBorder(0);
@@ -530,7 +530,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 				PdfPTable table10 = new PdfPTable(pointColumnWidths);
 				table10.setWidthPercentage(100); // Width 100%
-				table10.setSpacingBefore(10f); // Space before table
+				table10.setSpacingBefore(5f); // Space before table
 				table10.setSpacingAfter(10f); // Space after table
 				table10.setWidthPercentage(100);
 				table10.getDefaultCell().setBorder(0);
@@ -653,12 +653,13 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				tableHeader1(table13);
 				TableData2(table13, earthingLocationReport);
 				document.add(table13);
+				
 				document.newPage();
 
 				if (supply.getAlternativeSupply().equals("Yes")) {
 					PdfPTable table20 = new PdfPTable(1);
 					table20.setWidthPercentage(100); // Width 100%
-					table20.setSpacingBefore(10f); // Space before table
+					table20.setSpacingBefore(5f); // Space before table
 					table20.setWidthPercentage(100);
 					table20.getDefaultCell().setBorder(0);
 
@@ -993,7 +994,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 			PdfPTable table9 = new PdfPTable(pointColumnWidths);
 			table9.setWidthPercentage(100); // Width 100%
-			table9.setSpacingBefore(5f); // Space before table
+			table9.setSpacingBefore(10f); // Space before table
 			table9.getDefaultCell().setBorder(0);
 
 			PdfPCell cell50 = new PdfPCell(new Paragraph("InstalledCapacity (kVA):", font6));
@@ -1025,7 +1026,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 		PdfPTable table20 = new PdfPTable(1);
 		table20.setWidthPercentage(100); // Width 100%
-		table20.setSpacingBefore(5f); // Space before table
+		table20.setSpacingBefore(8f); // Space before table
 		table20.getDefaultCell().setBorder(0);
 
 		PdfPCell cell51 = new PdfPCell(new Paragraph("2.1:Incoming (supply) protective device characteristics",
@@ -1178,7 +1179,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		float[] pointColumnWidths = { 90F, 90F };
 		PdfPTable table9 = new PdfPTable(pointColumnWidths);
 		table9.setWidthPercentage(100); // Width 100%
-		table9.setSpacingBefore(10f); // Space before table
+		table9.setSpacingBefore(5f); // Space before table
 		table9.setSpacingAfter(10f); // Space after table
 		table9.setWidthPercentage(100);
 		table9.getDefaultCell().setBorder(0);

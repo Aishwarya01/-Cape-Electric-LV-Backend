@@ -166,14 +166,13 @@ public class PrintServiceImpl implements PrintService {
 						table6.setWidthPercentage(100);
 
 						tableHeader(table6);
-						//tableData(table6, observation1);
+//						tableData(table6, observation1);
 						document.add(table6);
 					}
 
 					PdfPTable table16 = new PdfPTable(1);
 					table16.setWidthPercentage(100); // Width 100%
-					table16.setSpacingBefore(10f); // Space before table
-					table16.setWidthPercentage(100);
+//					table16.setSpacingBefore(5f); // Space before table
 					table16.getDefaultCell().setBorder(0);
 
 					PdfPCell cell26 = new PdfPCell(new Paragraph(15, "Section - 3:Recommendations", font5));

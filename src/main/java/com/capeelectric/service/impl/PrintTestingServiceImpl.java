@@ -87,8 +87,8 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				for (Testing testing1 : testing) {
 					if (!testing1.getTestingStatus().equalsIgnoreCase("R")) {
 						List<TestDistRecords> testDistRecords = testing1.getTestDistRecords();
-						for(TestDistRecords testDistRecord : testDistRecords)
-						testingIteration(document,testing1, testDistRecord, testEquipment);
+						for (TestDistRecords testDistRecord : testDistRecords)
+							testingIteration(document, testing1, testDistRecord, testEquipment);
 					}
 				}
 
@@ -169,8 +169,8 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 	}
 
-	private void testingIteration(Document document, Testing testing1,TestDistRecords testDistRecord, List<TestingEquipment> testEquipment)
-			throws DocumentException, IOException {
+	private void testingIteration(Document document, Testing testing1, TestDistRecords testDistRecord,
+			List<TestingEquipment> testEquipment) throws DocumentException, IOException {
 
 		Font font4 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 		new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
@@ -317,13 +317,9 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 		PdfPTable table1 = new PdfPTable(pointColumnWidths);
 		table1.setWidthPercentage(100); // Width 100%
-		table1.setSpacingBefore(10f); // Space after table
-
+		table1.setSpacingBefore(5f); // Space after table
 		table1.getDefaultCell().setBorder(0);
-		PdfPTable table34 = new PdfPTable(10);
-		table34.setSpacingBefore(10f); // Space before table
-		table34.setWidthPercentage(100); // Width 100%
-		table34.getDefaultCell().setBorder(0);
+		
 		for (TestDistribution distribution : testDistribution) {
 			PdfPCell cell13 = new PdfPCell(new Paragraph(distribution.getDistributionBoardDetails(), font5));
 			table1.addCell(new Phrase("Distribution Board Details:", font5));
@@ -433,10 +429,10 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 				Font font9 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 
-				PdfPTable table250 = new PdfPTable(2);
+				PdfPTable table250 = new PdfPTable(pointColumnWidths);
 				table250.setWidthPercentage(100); // Width 100%
-				table250.setSpacingBefore(5);
-				table250.setSpacingAfter(5);
+				table250.setSpacingBefore(5f);
+				table250.setSpacingAfter(5f);
 				table250.getDefaultCell().setBorder(0);
 
 				PdfPCell celllabel = new PdfPCell(new Paragraph("Source Of Incoming:", font9));
@@ -451,7 +447,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 				PdfPTable table2 = new PdfPTable(10);
 				table2.setWidthPercentage(100); // Width 100%
-				table2.setSpacingBefore(10);
+				table2.setSpacingBefore(5f);
 				// table2.setSpacingAfter(5);
 				table2.getDefaultCell().setBorder(0);
 
