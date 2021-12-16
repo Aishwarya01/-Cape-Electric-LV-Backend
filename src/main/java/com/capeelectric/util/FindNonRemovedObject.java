@@ -139,9 +139,12 @@ public class FindNonRemovedObject {
 
 					if (testDistRecord.getTestDistRecordStatus() == null) {
 						testDistRecord.setTestDistRecordStatus("N");
+					} else if (testDistRecord.getTestDistRecordStatus() != null
+							&& !testDistRecord.getTestDistRecordStatus().equalsIgnoreCase("R")) {
+						testDistRecord
+								.setTestingRecords(findNonRemoveTestingRecord(testDistRecord.getTestingRecords()));
+						NonRemoveTestingRecords.add(testDistRecord);
 					}
-					testDistRecord.setTestingRecords(findNonRemoveTestingRecord(testDistRecord.getTestingRecords()));
-					NonRemoveTestingRecords.add(testDistRecord);
 				}
 				testing.setTestDistRecords(NonRemoveTestingRecords);
 
