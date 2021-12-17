@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.origin.SystemEnvironmentOrigin;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.InstalReportException;
@@ -30,7 +29,6 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.log.SysoCounter;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.GrayColor;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -785,6 +783,8 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 						}
 					}
 				}
+				
+				document.newPage();
 
 				PdfPTable contractor = new PdfPTable(pointColumnWidths10);
 				contractor.setWidthPercentage(100); // Width 100%

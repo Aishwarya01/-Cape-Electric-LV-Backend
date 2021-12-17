@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.capeelectric.model.Site;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.PrintFinalPDFService;
 import com.capeelectric.util.HeaderFooterPageEvent;
@@ -98,6 +96,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 			} catch (Exception e) {
 				System.out.println(e);  
 			}
+			document.close();
 		} else {
 			throw new Exception("Invalid Inputs");
 		}
