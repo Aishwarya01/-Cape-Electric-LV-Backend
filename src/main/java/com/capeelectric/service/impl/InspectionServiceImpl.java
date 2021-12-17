@@ -89,7 +89,7 @@ public class InspectionServiceImpl implements InspectionService {
 			if (!siteId.isPresent() || !siteId.get().getSiteId().equals(periodicInspection.getSiteId())) {
 				if (ipaoInspection != null && ipaoInspection.size() > 0) {
 					for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
-						ipaoInspectionItr.setLocationCount(++locationCount);
+						ipaoInspectionItr.setLocationCount(new Random().nextInt(999999999));
 						if (ipaoInspectionItr !=null && ipaoInspectionItr.getConsumerUnit() != null && ipaoInspectionItr.getCircuit() != null
 								&& ipaoInspectionItr.getIsolationCurrent() != null
 								&& ipaoInspectionItr.getConsumerUnit().size() > 0
@@ -147,7 +147,7 @@ public class InspectionServiceImpl implements InspectionService {
 		if (userName != null && !userName.isEmpty() && siteId != null) {
 			PeriodicInspection inspectionRepo = inspectionRepository.findByUserNameAndSiteId(userName, siteId);
 			if (inspectionRepo != null) {
-				inspectionRepo.setIpaoInspection(isNullLocationCount(inspectionRepo.getIpaoInspection()));
+//				inspectionRepo.setIpaoInspection(isNullLocationCount(inspectionRepo.getIpaoInspection()));
 				inspectionRepo.setIpaoInspection(findNonRemovedObject.findNonRemovedInspectionLocation(inspectionRepo));
 				sortingDateTime(inspectionRepo.getPeriodicInspectorComment());
 				return inspectionRepo;
@@ -186,7 +186,7 @@ public class InspectionServiceImpl implements InspectionService {
 				for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
 					// locationcount value adding for new location
 					if (ipaoInspectionItr != null && ipaoInspectionItr.getLocationCount() == null) {
-						ipaoInspectionItr.setLocationCount(++locationCount);
+						ipaoInspectionItr.setLocationCount(new Random().nextInt(999999999));
 						ipaoInspectionItr
 								.setConsumerUnit(addLocationCountInConsumerUnit(ipaoInspectionItr.getConsumerUnit()));
 					} else {
@@ -419,17 +419,17 @@ public class InspectionServiceImpl implements InspectionService {
 	}
 
 
-	private List<IpaoInspection> isNullLocationCount(List<IpaoInspection> ipaoInspection) {
-		List<IpaoInspection> ipaoInspectionList = new ArrayList<IpaoInspection>();
-		 for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
-			if (ipaoInspectionItr !=null && ipaoInspectionItr.getLocationCount() == null) {
-				ipaoInspectionItr.setLocationCount(++locationCount);
-				ipaoInspectionList.add(ipaoInspectionItr);
-			}
-			ipaoInspectionList.add(ipaoInspectionItr);
-		}
-		return ipaoInspectionList;
-	}
+//	private List<IpaoInspection> isNullLocationCount(List<IpaoInspection> ipaoInspection) {
+//		List<IpaoInspection> ipaoInspectionList = new ArrayList<IpaoInspection>();
+//		 for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
+//			if (ipaoInspectionItr !=null && ipaoInspectionItr.getLocationCount() == null) {
+//				ipaoInspectionItr.setLocationCount(new Random().nextInt(999999999));
+//				ipaoInspectionList.add(ipaoInspectionItr);
+//			}
+//			ipaoInspectionList.add(ipaoInspectionItr);
+//		}
+//		return ipaoInspectionList;
+//	}
 
 	private void findConsumerUnitLocation(List<ConsumerUnit> consumerUnitList) throws InspectionException {
 		for (ConsumerUnit consumerUnit : consumerUnitList) {
