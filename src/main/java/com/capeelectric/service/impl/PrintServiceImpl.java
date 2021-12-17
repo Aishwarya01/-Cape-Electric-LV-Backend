@@ -140,8 +140,6 @@ public class PrintServiceImpl implements PrintService {
 //					document.add(table4);
 //					document.add(paragraphOne5);
 
-					Font font3 = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.ITALIC, BaseColor.BLACK);
-
 					PdfPTable table15 = new PdfPTable(1);
 					table15.setWidthPercentage(100); // Width 100%
 					table15.setSpacingBefore(10f); // Space before table
@@ -340,9 +338,9 @@ public class PrintServiceImpl implements PrintService {
 				table9.getDefaultCell().setBorder(0);
 
 				addRow(table9, "Inspected and Tested  By ", "Authorized By");
-				
+
 				float[] pointColumnWidthsSec5 = { 40F, 90F, 40F, 90F };
-				
+
 				PdfPTable table = new PdfPTable(pointColumnWidthsSec5); // 3 columns.
 				table.setWidthPercentage(100); // Width 100%
 				addRow(table, "Name", declaration.getName(), "Name", declaration11.getName());
@@ -500,7 +498,7 @@ public class PrintServiceImpl implements PrintService {
 	}
 
 	private void addRow(PdfPTable table9, String string, String string2) throws DocumentException, IOException {
-		Font font8 = new Font(BaseFont.createFont(), 10, Font.BOLD, BaseColor.BLACK );
+		Font font8 = new Font(BaseFont.createFont(), 10, Font.BOLD, BaseColor.BLACK);
 		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font8));
 		PdfPCell nameCell1 = new PdfPCell(new Paragraph(string2, font8));
 		nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -575,18 +573,6 @@ public class PrintServiceImpl implements PrintService {
 		table6.addCell(valueCell2);
 		table6.addCell(valueCell3);
 
-	}
-
-	private void addRow(PdfPTable table, String string, String value, String value1) {
-		PdfPCell nameCell = new PdfPCell(new Paragraph(string));
-		PdfPCell valueCell1 = new PdfPCell(new Paragraph(value1));
-		PdfPCell valueCell = new PdfPCell(new Paragraph(value));
-		nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table.addCell(nameCell);
-		valueCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table.addCell(valueCell);
-		table.addCell(valueCell1);
 	}
 
 }

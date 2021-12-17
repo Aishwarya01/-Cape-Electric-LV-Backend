@@ -2,8 +2,6 @@ package com.capeelectric.service.impl;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -62,8 +60,6 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 				Font font = new Font(BaseFont.createFont(), 12, Font.BOLD, BaseColor.BLACK);
 				Font font7 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD);
-				Font font1 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
-				Font font4 = new Font(BaseFont.createFont(), 11, Font.NORMAL, BaseColor.BLACK);
 				Font font5 = new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
 				Font font6 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 				Font font9 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
@@ -713,7 +709,6 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 					cell65.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					table191.addCell(cell65);
 					document.add(table191);
-					Font font61 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 					Font font91 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 					float[] pointColumnWidths4 = { 90F, 90F, 90F, 90F };
 
@@ -764,10 +759,10 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 				}
 				document.close();
+				writer.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 		} else {
 			throw new SupplyCharacteristicsException("Invalid Inputs");
 		}
@@ -1116,37 +1111,37 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 	}
 
-	private void addNominalRow(PdfPTable table2, String string, String pFN1) throws DocumentException, IOException {
-
-		PdfPCell nameCell = new PdfPCell(
-				new Paragraph(string, new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK)));
-
-		PdfPCell valueCell1 = new PdfPCell(new Paragraph(pFN1));
-
-		nameCell.setGrayFill(0.92f);
-		nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-		table2.addCell(nameCell);
-		table2.addCell(valueCell1);
-
-	}
-
-	private void addNominalRow2(PdfPTable table6, String string, String pFN1) throws DocumentException, IOException {
-
-		PdfPCell nameCell = new PdfPCell(
-				new Paragraph(string, new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK)));
-
-		PdfPCell valueCell1 = new PdfPCell(new Paragraph(pFN1));
-
-		nameCell.setGrayFill(0.92f);
-		nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-		table6.addCell(nameCell);
-		table6.addCell(valueCell1);
-
-	}
+//	private void addNominalRow(PdfPTable table2, String string, String pFN1) throws DocumentException, IOException {
+//
+//		PdfPCell nameCell = new PdfPCell(
+//				new Paragraph(string, new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK)));
+//
+//		PdfPCell valueCell1 = new PdfPCell(new Paragraph(pFN1));
+//
+//		nameCell.setGrayFill(0.92f);
+//		nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//		valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//
+//		table2.addCell(nameCell);
+//		table2.addCell(valueCell1);
+//
+//	}
+//
+//	private void addNominalRow2(PdfPTable table6, String string, String pFN1) throws DocumentException, IOException {
+//
+//		PdfPCell nameCell = new PdfPCell(
+//				new Paragraph(string, new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK)));
+//
+//		PdfPCell valueCell1 = new PdfPCell(new Paragraph(pFN1));
+//
+//		nameCell.setGrayFill(0.92f);
+//		nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//		valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+//
+//		table6.addCell(nameCell);
+//		table6.addCell(valueCell1);
+//
+//	}
 
 	private void tableHead(PdfPTable table34) throws DocumentException, IOException {
 		PdfPCell cell = new PdfPCell();
@@ -1458,37 +1453,37 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		table8.addCell(cell);
 	}
 
-	private void addHeaderRow(PdfPTable table8, String string, String string2, String string3, String string4) {
-		PdfPCell nameCell = new PdfPCell(new Paragraph(string));
-		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2));
-		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3));
-		PdfPCell valueCell3 = new PdfPCell(new Paragraph(string4));
-		table8.addCell(nameCell);
-		table8.addCell(valueCell1);
-		table8.addCell(valueCell2);
-		table8.addCell(valueCell3);
+//	private void addHeaderRow(PdfPTable table8, String string, String string2, String string3, String string4) {
+//		PdfPCell nameCell = new PdfPCell(new Paragraph(string));
+//		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2));
+//		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3));
+//		PdfPCell valueCell3 = new PdfPCell(new Paragraph(string4));
+//		table8.addCell(nameCell);
+//		table8.addCell(valueCell1);
+//		table8.addCell(valueCell2);
+//		table8.addCell(valueCell3);
+//
+//	}
 
-	}
-
-	private void addRow(PdfPTable table11, String string, String string2, String string3) {
-		PdfPCell nameCell = new PdfPCell(new Paragraph(string));
-		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2));
-		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3));
-		table11.addCell(nameCell);
-		table11.addCell(valueCell1);
-		table11.addCell(valueCell2);
-	}
-
-	private void addRow(PdfPTable table8, String string, String string2, String string3, String string4) {
-		PdfPCell nameCell = new PdfPCell(new Paragraph(string));
-		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2));
-		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3));
-		PdfPCell valueCell3 = new PdfPCell(new Paragraph(string4));
-		table8.addCell(nameCell);
-		table8.addCell(valueCell1);
-		table8.addCell(valueCell2);
-		table8.addCell(valueCell3);
-	}
+//	private void addRow(PdfPTable table11, String string, String string2, String string3) {
+//		PdfPCell nameCell = new PdfPCell(new Paragraph(string));
+//		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2));
+//		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3));
+//		table11.addCell(nameCell);
+//		table11.addCell(valueCell1);
+//		table11.addCell(valueCell2);
+//	}
+//
+//	private void addRow(PdfPTable table8, String string, String string2, String string3, String string4) {
+//		PdfPCell nameCell = new PdfPCell(new Paragraph(string));
+//		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2));
+//		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3));
+//		PdfPCell valueCell3 = new PdfPCell(new Paragraph(string4));
+//		table8.addCell(nameCell);
+//		table8.addCell(valueCell1);
+//		table8.addCell(valueCell2);
+//		table8.addCell(valueCell3);
+//	}
 
 	private void addRow(PdfPTable table1, String string, String string2, String string3, String string4, String string5,
 			String string6, String string7, String string8, String string9, String string10)

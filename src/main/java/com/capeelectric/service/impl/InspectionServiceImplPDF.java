@@ -175,26 +175,6 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						table1.setWidthPercentage(100);
 						table1.getDefaultCell().setBorder(0);
 
-//					PdfPCell cell80 = new PdfPCell(new Paragraph(ipoInspection.getLocationNumber().toString()));
-//					table1.addCell(new Phrase("Location number:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-////					cell80.setFixedHeight(30f);
-//					cell80.setHorizontalAlignment(Element.ALIGN_LEFT);
-//					cell80.setBorder(PdfPCell.NO_BORDER);
-//					table1.addCell(cell80);
-//
-//					PdfPCell cell36 = new PdfPCell(
-//							new Paragraph("Location name:", new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//					cell36.setBackgroundColor(new GrayColor(0.93f));
-//					cell36.setHorizontalAlignment(Element.ALIGN_LEFT);
-//					cell36.setBorder(PdfPCell.NO_BORDER);
-//					table1.addCell(cell36);
-//					PdfPCell cell81 = new PdfPCell(new Paragraph(ipoInspection.getLocationName(),
-//							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-//					cell81.setHorizontalAlignment(Element.ALIGN_LEFT);
-//					cell81.setBackgroundColor(new GrayColor(0.93f));
-//					cell81.setBorder(PdfPCell.NO_BORDER);
-//					table1.addCell(cell81);
-
 						PdfPCell cell = new PdfPCell(new Paragraph(ipoInspection.getServiceCable(),
 								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 						table1.addCell(
@@ -1467,7 +1447,6 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						cell65.setBackgroundColor(BaseColor.LIGHT_GRAY);
 						table199.addCell(cell65);
 						document.add(table199);
-						Font font61 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 						Font font91 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 						float[] pointColumnWidths4 = { 90F, 90F, 90F, 90F };
 

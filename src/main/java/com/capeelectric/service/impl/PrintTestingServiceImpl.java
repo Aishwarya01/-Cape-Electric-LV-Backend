@@ -2,13 +2,9 @@ package com.capeelectric.service.impl;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,13 +28,10 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
-import com.itextpdf.text.log.SysoCounter;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
-import net.bytebuddy.dynamic.scaffold.MethodRegistry.Handler.ForAbstractMethod;
 
 @Service
 public class PrintTestingServiceImpl implements PrintTestingService {
@@ -159,6 +152,8 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 				}
 				document.close();
+				writer.close();
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -172,7 +167,6 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 	private void testingIteration(Document document, Testing testing1, TestDistRecords testDistRecord,
 			List<TestingEquipment> testEquipment) throws DocumentException, IOException {
 
-		Font font4 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 		new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
 		Font font5 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
 
@@ -529,7 +523,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				cell.setPhrase(new Phrase(arr.getEquipmentSerialNo(), font6));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table11.addCell(cell);
-				cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString().toString().split(" ")[0]));
+				cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString().split(" ")[0]));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 //				split(" ")[0]
 				table11.addCell(cell);
