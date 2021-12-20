@@ -208,7 +208,7 @@ public class SupplyCharacteristics implements Serializable {
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<SupplyObservation> supplyObservation;
+	private List<SupplyOuterObservation> SupplyOuterObservation;
 
 	public Integer getSupplyCharacteristicsId() {
 		return supplyCharacteristicsId;
@@ -634,11 +634,12 @@ public class SupplyCharacteristics implements Serializable {
 		this.earthingNoOfJointsOb = earthingNoOfJointsOb;
 	}
 
-	public List<SupplyObservation> getSupplyObservation() {
-		return supplyObservation;
+	public List<SupplyOuterObservation> getSupplyOuterObservation() {
+		return SupplyOuterObservation;
 	}
 
-	public void setSupplyObservation(List<SupplyObservation> supplyObservation) {
-		this.supplyObservation = supplyObservation;
+	public void setSupplyOuterObservation(List<SupplyOuterObservation> supplyOuterObservation) {
+		SupplyOuterObservation = supplyOuterObservation;
 	}
+	
 }

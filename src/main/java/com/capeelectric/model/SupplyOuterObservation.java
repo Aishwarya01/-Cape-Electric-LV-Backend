@@ -19,18 +19,21 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "supply_observation_table")
-public class SupplyObservation implements Serializable {
+@Table(name = "supply_outer_observation_table")
+public class SupplyOuterObservation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "SUPPLY_OBSERVATION_ID")
-	private Integer supplyObservationId;
+	@Column(name = "SUPPLY_OUTER_OBSERVATION_ID")
+	private Integer supplyOuterObservationId;
 
 	@Column(name = "OBSERVATION_COMPONENT_DETAILS")
 	private String observationComponentDetails;
+
+	@Column(name = "OBSERVATION_DESCRIPTION")
+	private String observationDescription;
 
 	@JsonBackReference
 	@ManyToOne
@@ -38,15 +41,15 @@ public class SupplyObservation implements Serializable {
 	private SupplyCharacteristics supplyCharacteristics;
 
 	@JsonManagedReference
-	@OneToMany(mappedBy = "supplyObservation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<SupplyObervations> supplyObervations;
+	@OneToMany(mappedBy = "supplyOuterObservation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<AlternativeInnerObservation> alternativeInnerObservation;
 
-	public Integer getSupplyObservationId() {
-		return supplyObservationId;
+	public Integer getSupplyOuterObservationId() {
+		return supplyOuterObservationId;
 	}
 
-	public void setSupplyObservationId(Integer supplyObservationId) {
-		this.supplyObservationId = supplyObservationId;
+	public void setSupplyOuterObservationId(Integer supplyOuterObservationId) {
+		this.supplyOuterObservationId = supplyOuterObservationId;
 	}
 
 	public String getObservationComponentDetails() {
@@ -57,6 +60,14 @@ public class SupplyObservation implements Serializable {
 		this.observationComponentDetails = observationComponentDetails;
 	}
 
+	public String getObservationDescription() {
+		return observationDescription;
+	}
+
+	public void setObservationDescription(String observationDescription) {
+		this.observationDescription = observationDescription;
+	}
+
 	public SupplyCharacteristics getSupplyCharacteristics() {
 		return supplyCharacteristics;
 	}
@@ -65,12 +76,11 @@ public class SupplyObservation implements Serializable {
 		this.supplyCharacteristics = supplyCharacteristics;
 	}
 
-	public List<SupplyObervations> getSupplyObervations() {
-		return supplyObervations;
+	public List<AlternativeInnerObservation> getAlternativeInnerObservation() {
+		return alternativeInnerObservation;
 	}
 
-	public void setSupplyObervations(List<SupplyObervations> supplyObervations) {
-		this.supplyObervations = supplyObervations;
+	public void setAlternativeInnerObservation(List<AlternativeInnerObservation> alternativeInnerObservation) {
+		this.alternativeInnerObservation = alternativeInnerObservation;
 	}
-
 }
