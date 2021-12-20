@@ -71,10 +71,6 @@ public class TestingReport implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "testingReport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<TestIncomingDistribution> testIncomingDistribution;
-	
-	@JsonManagedReference
-	@OneToMany(mappedBy = "testingReport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<TestingObervation> testingObervation;
 
 	public Integer getTestingReportId() {
 		return testingReportId;
@@ -154,13 +150,5 @@ public class TestingReport implements Serializable {
 
 	public void setTestIncomingDistribution(List<TestIncomingDistribution> testIncomingDistribution) {
 		this.testIncomingDistribution = testIncomingDistribution;
-	}
-
-	public List<TestingObervation> getTestingObervation() {
-		return testingObervation;
-	}
-
-	public void setTestingObervation(List<TestingObervation> testingObervation) {
-		this.testingObervation = testingObervation;
 	}
 }
