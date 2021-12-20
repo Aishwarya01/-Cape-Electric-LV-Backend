@@ -1,8 +1,7 @@
 package com.capeelectric.service;
 
-import java.util.List;
-
 import com.capeelectric.exception.ObservationException;
+import com.capeelectric.model.ObservationAllComponent;
 import com.capeelectric.model.ObservationComponent;
 
 public interface ObservationService {
@@ -14,7 +13,7 @@ public interface ObservationService {
 	public ObservationComponent retrieveObservation(String userName, Integer siteId, String observationComponent)
 			throws ObservationException;
 
-	public List<ObservationComponent> retrieveObservationsInSummary(String userName, Integer siteId)
+	public ObservationAllComponent retrieveObservationsInSummary(String userName, Integer siteId)
 			throws ObservationException;
 
 }
