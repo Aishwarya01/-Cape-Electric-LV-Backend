@@ -21,6 +21,8 @@ import org.hibernate.annotations.NamedQuery;
 
 public class ObservationComponent implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "OBSERVATION_ID")
@@ -34,6 +36,9 @@ public class ObservationComponent implements Serializable {
 
 	@Column(name = "OBSERVATION_COMPONENT")
 	private String observationComponent;
+	
+	@Column(name = "OBSERVATION_DETAILS")
+	private String observationDetails;
 
 	@Column(name = "OBSERVATIONS")
 	private String observations;
@@ -120,6 +125,14 @@ public class ObservationComponent implements Serializable {
 
 	public void setUpdatedDate(LocalDateTime updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+
+	public String getObservationDetails() {
+		return observationDetails;
+	}
+
+	public void setObservationDetails(String observationDetails) {
+		this.observationDetails = observationDetails;
 	}
 
 }
