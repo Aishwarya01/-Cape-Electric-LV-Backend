@@ -121,6 +121,9 @@ public class SupplyCharacteristics implements Serializable {
 
 	@Column(name = "NUM_LOCATION")
 	private Integer noOfLocation;
+	
+	@Column(name = "INSTALLOCATION_REPORT_OB")
+	private Integer instalLocationReportOb;
 
 	@Column(name = "CONDUCTOR_SIZE")
 	private String conductorSize;
@@ -145,6 +148,9 @@ public class SupplyCharacteristics implements Serializable {
 
 	@Column(name = "BONDING_NO_OF_JOINTS")
 	private Integer bondingNoOfJoints;
+	
+	@Column(name = "BONDING_NO_OF_JOINTS_OB")
+	private Integer bondingNoOfJointsOb;
 
 	@Column(name = "EARTHING_CONDUCTOR_SIZE")
 	private String earthingConductorSize;
@@ -160,6 +166,9 @@ public class SupplyCharacteristics implements Serializable {
 
 	@Column(name = "EARTHING_NO_OF_JOINTS")
 	private Integer earthingNoOfJoints;
+	
+	@Column(name = "EARTHING_NO_OF_JOINTS_OB")
+	private Integer earthingNoOfJointsOb;
 
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
@@ -595,6 +604,30 @@ public class SupplyCharacteristics implements Serializable {
 
 	public void setSupplyCharacteristicComment(List<SupplyCharacteristicComment> supplyCharacteristicComment) {
 		this.supplyCharacteristicComment = supplyCharacteristicComment;
+	}
+
+	public Integer getInstalLocationReportOb() {
+		return instalLocationReportOb;
+	}
+
+	public void setInstalLocationReportOb(Integer instalLocationReportOb) {
+		this.instalLocationReportOb = instalLocationReportOb;
+	}
+
+	public Integer getBondingNoOfJointsOb() {
+		return bondingNoOfJointsOb;
+	}
+
+	public void setBondingNoOfJointsOb(Integer bondingNoOfJointsOb) {
+		this.bondingNoOfJointsOb = bondingNoOfJointsOb;
+	}
+
+	public Integer getEarthingNoOfJointsOb() {
+		return earthingNoOfJointsOb;
+	}
+
+	public void setEarthingNoOfJointsOb(Integer earthingNoOfJointsOb) {
+		this.earthingNoOfJointsOb = earthingNoOfJointsOb;
 	}
 
 }
