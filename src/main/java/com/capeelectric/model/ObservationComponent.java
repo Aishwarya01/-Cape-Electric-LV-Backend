@@ -37,8 +37,8 @@ public class ObservationComponent implements Serializable {
 	@Column(name = "OBSERVATION_COMPONENT")
 	private String observationComponent;
 	
-	@Column(name = "OBSERVATION_DETAILS")
-	private String observationDetails;
+	@Column(name = "OBSERVATION_COMPONENT_DETAILS")
+	private String observationComponentDetails;
 
 	@Column(name = "OBSERVATIONS")
 	private String observations;
@@ -127,12 +127,12 @@ public class ObservationComponent implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
-	public String getObservationDetails() {
-		return observationDetails;
+	public String getObservationComponentDetails() {
+		return observationComponentDetails;
 	}
 
-	public void setObservationDetails(String observationDetails) {
-		this.observationDetails = observationDetails;
+	public void setObservationComponentDetails(String observationComponentDetails) {
+		this.observationComponentDetails = observationComponentDetails;
 	}
 
 }
