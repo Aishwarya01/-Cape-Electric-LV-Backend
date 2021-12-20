@@ -7,7 +7,7 @@ import java.util.List;
  * @author capeelectricsoftware
  *
  */
-public class ObservationAllComponent {
+public class AllComponentObservation {
 
 	private List<SupplyOuterObservation> supplyOuterObservation;
 

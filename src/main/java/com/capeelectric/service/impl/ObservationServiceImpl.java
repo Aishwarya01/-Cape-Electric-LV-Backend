@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.ObservationException;
-import com.capeelectric.model.ObservationAllComponent;
+import com.capeelectric.model.AllComponentObservation;
 import com.capeelectric.model.ObservationComponent;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.SupplyCharacteristics;
@@ -106,9 +106,9 @@ public class ObservationServiceImpl implements ObservationService {
 	}
 
 	@Override
-	public ObservationAllComponent retrieveObservationsInSummary(String userName, Integer siteId)
+	public AllComponentObservation retrieveObservationsInSummary(String userName, Integer siteId)
 			throws ObservationException {
-		ObservationAllComponent observation = new ObservationAllComponent();
+		AllComponentObservation observation = new AllComponentObservation();
 
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 
