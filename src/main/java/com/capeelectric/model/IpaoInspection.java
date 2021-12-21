@@ -536,4 +536,12 @@ public class IpaoInspection implements Serializable {
 		this.specificInspectionRe = specificInspectionRe;
 	}
 
+	public List<InspectionOuterObservation> getInspectionOuterObervation() {
+		return inspectionOuterObervation;
+	}
+
+	public void setInspectionOuterObervation(List<InspectionOuterObservation> inspectionOuterObervation) {
+		this.inspectionOuterObervation = inspectionOuterObervation;
+	}
+
 }
