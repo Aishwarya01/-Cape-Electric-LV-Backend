@@ -63,11 +63,7 @@ public class PeriodicInspection implements Serializable {
 	@OneToMany(mappedBy = "periodicInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<PeriodicInspectionComment> periodicInspectorComment;
 	
-	@JsonManagedReference
-	@OneToMany(mappedBy = "periodicInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<InspectionOuterObservation> inspectionOuterObervation;
-
-	public Integer getPeriodicInspectionId() {
+	public Integer getPeriodicInspectionId() { 
 		return periodicInspectionId;
 	}
 
@@ -138,13 +134,4 @@ public class PeriodicInspection implements Serializable {
 	public void setPeriodicInspectorComment(List<PeriodicInspectionComment> periodicInspectorComment) {
 		this.periodicInspectorComment = periodicInspectorComment;
 	}
-
-	public List<InspectionOuterObservation> getInspectionOuterObervation() {
-		return inspectionOuterObervation;
-	}
-
-	public void setInspectionOuterObervation(List<InspectionOuterObservation> inspectionOuterObervation) {
-		this.inspectionOuterObervation = inspectionOuterObervation;
-	}
- 
 }

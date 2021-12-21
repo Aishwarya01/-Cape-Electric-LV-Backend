@@ -171,6 +171,10 @@ public class IpaoInspection implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "PERIODIC_INSPECTION_ID")
 	private PeriodicInspection periodicInspection;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<InspectionOuterObservation> inspectionOuterObervation;
 
 	public Integer getIpaoInspectionId() {
 		return ipaoInspectionId;

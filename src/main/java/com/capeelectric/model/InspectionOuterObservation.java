@@ -37,8 +37,8 @@ public class InspectionOuterObservation implements Serializable {
 
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "PERIODIC_INSPECTION_ID")
-	private PeriodicInspection periodicInspection;
+    @JoinColumn(name = "IPAO_INSPECTION_ID")
+	private IpaoInspection ipaoInspection;
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "inspectionOuterObservation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -60,14 +60,6 @@ public class InspectionOuterObservation implements Serializable {
 		this.observationComponentDetails = observationComponentDetails;
 	}
 
-	public PeriodicInspection getPeriodicInspection() {
-		return periodicInspection;
-	}
-
-	public void setPeriodicInspection(PeriodicInspection periodicInspection) {
-		this.periodicInspection = periodicInspection;
-	}
-
 	public String getObservationDescription() {
 		return observationDescription;
 	}
@@ -82,6 +74,14 @@ public class InspectionOuterObservation implements Serializable {
 
 	public void setInspectionInnerObervations(List<InspectionInnerObervations> inspectionInnerObervations) {
 		this.inspectionInnerObervations = inspectionInnerObervations;
+	}
+
+	public IpaoInspection getIpaoInspection() {
+		return ipaoInspection;
+	}
+
+	public void setIpaoInspection(IpaoInspection ipaoInspection) {
+		this.ipaoInspection = ipaoInspection;
 	}
 
 }
