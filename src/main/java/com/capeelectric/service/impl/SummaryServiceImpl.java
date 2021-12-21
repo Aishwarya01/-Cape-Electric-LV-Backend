@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.SummaryException;
+import com.capeelectric.model.AllComponentObservation;
+import com.capeelectric.model.InspectionOuterObservation;
+import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
@@ -161,6 +164,7 @@ public class SummaryServiceImpl implements SummaryService {
 			if (summaryRepo != null) {
 				for (Summary summary : summaryRepo) {
 					summary.setSummaryObervation(findNonRemovedObject.findNonRemoveObservation(summary.getSummaryObervation()));
+					summary.setAllComponentObservation(allComponentObservation(siteId));
 					sortingDateTime(summary.getSummaryComment());
 				}
 				return summaryRepo;
@@ -378,4 +382,31 @@ public class SummaryServiceImpl implements SummaryService {
 		return flag;
 	}
 	
+	private AllComponentObservation allComponentObservation(Integer siteId) {
+		AllComponentObservation allComponentObservation = new AllComponentObservation();
+		Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository.findBySiteId(siteId);
+		Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(siteId);
+		Optional<TestingReport> testingReport = testingReportRepository.findBySiteId(siteId);
+
+		if (supplyCharacteristics.isPresent() && supplyCharacteristics.get().getSupplyOuterObservation() != null) {
+			allComponentObservation.setSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation());
+		} else if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
+			allComponentObservation
+					.setInspectionOuterObservation(inspectionObservation(periodicInspection.get().getIpaoInspection()));
+		} else if (testingReport.isPresent() && testingReport.get().getTestingOuterObservation() != null) {
+			allComponentObservation.setTestingOuterObservation(testingReport.get().getTestingOuterObservation());
+		}
+		return allComponentObservation;
+	}
+
+	private List<InspectionOuterObservation> inspectionObservation(List<IpaoInspection> ipaoInspection) {
+		List<InspectionOuterObservation> inspectionObservation = new ArrayList<InspectionOuterObservation>();
+		for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
+			for (InspectionOuterObservation inspectionOuterObservationItr : ipaoInspectionItr
+					.getInspectionOuterObervation()) {
+				inspectionObservation.add(inspectionOuterObservationItr);
+			}
+		}
+		return inspectionObservation;
+	}
 }

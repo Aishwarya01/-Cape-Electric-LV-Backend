@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
@@ -97,6 +98,9 @@ public class Summary implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<SummaryComment> summaryComment;
+	
+	@Transient
+	private AllComponentObservation allComponentObservation;
 
 	public Integer getSummaryId() {
 		return summaryId;
@@ -256,6 +260,14 @@ public class Summary implements Serializable {
 
 	public void setSummaryComment(List<SummaryComment> summaryComment) {
 		this.summaryComment = summaryComment;
+	}
+
+	public AllComponentObservation getAllComponentObservation() {
+		return allComponentObservation;
+	}
+
+	public void setAllComponentObservation(AllComponentObservation allComponentObservation) {
+		this.allComponentObservation = allComponentObservation;
 	}
  
 }

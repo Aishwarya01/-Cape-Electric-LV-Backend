@@ -1,21 +1,15 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.ObservationException;
-import com.capeelectric.model.AllComponentObservation;
 import com.capeelectric.model.ObservationComponent;
-import com.capeelectric.model.PeriodicInspection;
-import com.capeelectric.model.SupplyCharacteristics;
-import com.capeelectric.model.TestingReport;
-import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.ObservationRepository;
-import com.capeelectric.repository.SupplyCharacteristicsRepository;
-import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.ObservationService;
 import com.capeelectric.util.UserFullName;
 
@@ -33,15 +27,6 @@ public class ObservationServiceImpl implements ObservationService {
 	@Autowired
 	private UserFullName userFullName;
 	
-	@Autowired
-	private SupplyCharacteristicsRepository supplyCharacteristicsRepository;
-
-	@Autowired
-	private InspectionRepository inspectionRepository;
-
-	@Autowired
-	private TestingReportRepository testingReportRepository;
-
 	@Override
 	public void addObservation(ObservationComponent observationComponent) throws ObservationException {
 		if (observationComponent != null && observationComponent.getUserName() != null) {
@@ -106,31 +91,22 @@ public class ObservationServiceImpl implements ObservationService {
 	}
 
 	@Override
-	public AllComponentObservation retrieveObservationsInSummary(String userName, Integer siteId)
+	public List<ObservationComponent> retrieveObservationsInSummary(String userName, Integer siteId)
 			throws ObservationException {
-		AllComponentObservation observation = new AllComponentObservation();
 
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 
-			Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository
-					.findBySiteId(siteId);
-			Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(siteId);
-			Optional<TestingReport> testingReport = testingReportRepository.findBySiteId(siteId);
+			List<ObservationComponent> observationRepo = observationRepository.findByUserNameAndSiteId(userName,
+					siteId);
+			if (observationRepo != null) {
+				return observationRepo;
+			} else {
+				throw new ObservationException("Given UserName & SiteId doesn't exist In Observation");
 
-			if (supplyCharacteristics.isPresent() && supplyCharacteristics.get().getSupplyOuterObservation() != null) {
-				observation.setSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation());
-			} else if (periodicInspection.isPresent()
-					&& periodicInspection.get().getInspectionOuterObervation() != null) {
-				observation.setInspectionOuterObservation(periodicInspection.get().getInspectionOuterObervation());
-			} else if (testingReport.isPresent() && testingReport.get().getTestingOuterObservation() != null) {
-				observation.setTestingOuterObservation(testingReport.get().getTestingOuterObservation());
 			}
-
 		} else {
 			throw new ObservationException("Invalid Inputs");
 
 		}
-		return observation;
 	}
-
 }
