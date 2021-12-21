@@ -1,6 +1,7 @@
 
 package com.capeelectric.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.FinalReportException;
+import com.capeelectric.model.AllComponentObservation;
 import com.capeelectric.model.FinalReport;
+import com.capeelectric.model.InspectionOuterObservation;
+import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
@@ -137,7 +141,8 @@ public class FinalReportServiceImpl implements FinalReportService {
 						.findNonRemovedCircuitBreaker(supplyCharacteristics.get().getCircuitBreaker()));
 				supplyCharacteristics.get().setSupplyParameters(findNonRemovedObject
 						.findNonRemovedSupplyParameters(supplyCharacteristics.get().getSupplyParameters()));
-
+				supplyCharacteristics.get().setSupplyOuterObservation(findNonRemovedObject
+						.findNonRemovedSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation()));
 				finalReport.setSupplyCharacteristics(supplyCharacteristics.get());
 				if (periodicInspection.isPresent() && periodicInspection != null) {
 
@@ -148,13 +153,17 @@ public class FinalReportServiceImpl implements FinalReportService {
 					if (testingReport.isPresent() && testingReport != null) {
 						testingReport.get().setTesting(
 								findNonRemovedObject.findNonRemoveTesting(testingReport.get().getTesting()));
+						testingReport.get()
+								.setTestingOuterObservation(findNonRemovedObject.findNonRemoveTestingOuterObservation(
+										testingReport.get().getTestingOuterObservation()));
 						finalReport.setTestingReport(testingReport.get());
 
 						if (summary.isPresent() && summary != null) {
 							summary.get().setSummaryObervation(findNonRemovedObject
 									.findNonRemoveObservation(summary.get().getSummaryObervation()));
+							summary.get().setAllComponentObservation(allComponentObservation(siteId));
 							finalReport.setSummary(summary.get());
-
+ 
 							logger.debug("Successfully Five_Steps fetching Operation done");
 							return Optional.of(finalReport);
 
@@ -172,6 +181,34 @@ public class FinalReportServiceImpl implements FinalReportService {
 	@Override
 	public List<Site> retrieveAllSites() throws FinalReportException {
 		return (List<Site>) siteRepository.findAll();
+	}
+	
+	private AllComponentObservation allComponentObservation(Integer siteId) {
+		AllComponentObservation allComponentObservation = new AllComponentObservation();
+		Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository.findBySiteId(siteId);
+		Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(siteId);
+		Optional<TestingReport> testingReport = testingReportRepository.findBySiteId(siteId);
+
+		if (supplyCharacteristics.isPresent() && supplyCharacteristics.get().getSupplyOuterObservation() != null) {
+			allComponentObservation.setSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation());
+		} else if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
+			allComponentObservation
+					.setInspectionOuterObservation(inspectionObservation(periodicInspection.get().getIpaoInspection()));
+		} else if (testingReport.isPresent() && testingReport.get().getTestingOuterObservation() != null) {
+			allComponentObservation.setTestingOuterObservation(testingReport.get().getTestingOuterObservation());
+		}
+		return allComponentObservation;
+	}
+
+	private List<InspectionOuterObservation> inspectionObservation(List<IpaoInspection> ipaoInspection) {
+		List<InspectionOuterObservation> inspectionObservation = new ArrayList<InspectionOuterObservation>();
+		for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
+			for (InspectionOuterObservation inspectionOuterObservationItr : ipaoInspectionItr
+					.getInspectionOuterObervation()) {
+				inspectionObservation.add(inspectionOuterObservationItr);
+			}
+		}
+		return inspectionObservation;
 	}
 
 }

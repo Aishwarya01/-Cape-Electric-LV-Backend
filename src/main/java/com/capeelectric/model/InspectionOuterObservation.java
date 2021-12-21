@@ -34,6 +34,9 @@ public class InspectionOuterObservation implements Serializable {
 
 	@Column(name = "OBSERVATION_DESCRIPTION")
 	private String observationDescription;
+	
+	@Column(name = "INSPECTION_OUTER_OBSERVATION_STATUS")
+	private String inspectionOuterObservationStatus;
 
 	@JsonBackReference
 	@ManyToOne
@@ -82,6 +85,14 @@ public class InspectionOuterObservation implements Serializable {
 
 	public void setIpaoInspection(IpaoInspection ipaoInspection) {
 		this.ipaoInspection = ipaoInspection;
+	}
+
+	public String getInspectionOuterObservationStatus() {
+		return inspectionOuterObservationStatus;
+	}
+
+	public void setInspectionOuterObservationStatus(String inspectionOuterObservationStatus) {
+		this.inspectionOuterObservationStatus = inspectionOuterObservationStatus;
 	}
 
 }

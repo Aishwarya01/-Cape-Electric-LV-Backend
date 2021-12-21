@@ -29,6 +29,9 @@ public class InspectionInnerObervations implements Serializable {
 
 	@Column(name = "OBSERVATION_DESCRIPTION")
 	private String observationDescription;
+	
+	@Column(name = "INSPECTION_INNER_OBERVATION_STATUS")
+	private String inspectionInnerObervationStatus;
 
 	@JsonBackReference
 	@ManyToOne
@@ -65,6 +68,14 @@ public class InspectionInnerObervations implements Serializable {
 
 	public void setInspectionOuterObservation(InspectionOuterObservation inspectionOuterObservation) {
 		this.inspectionOuterObservation = inspectionOuterObservation;
+	}
+
+	public String getInspectionInnerObervationStatus() {
+		return inspectionInnerObervationStatus;
+	}
+
+	public void setInspectionInnerObervationStatus(String inspectionInnerObervationStatus) {
+		this.inspectionInnerObervationStatus = inspectionInnerObervationStatus;
 	}
 
 }

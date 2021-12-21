@@ -57,8 +57,6 @@ public class InspectionServiceImpl implements InspectionService {
 	@Autowired
 	private SiteDetails siteDetails;
 	
-	private static Integer locationCount=0;
-	
 	@Autowired
 	private TestInfoRepository testInfoRepository;
 	

@@ -118,6 +118,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 			TestingReport testingReportRepo = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
 			if (testingReportRepo != null) {
 				testingReportRepo.setTesting(findNonRemovedObject.findNonRemoveTesting(testingReportRepo.getTesting()));
+				testingReportRepo.setTestingOuterObservation(findNonRemovedObject.findNonRemoveTestingOuterObservation(testingReportRepo.getTestingOuterObservation()));
 				sortingDateTime(testingReportRepo.getTestingComment());
 				return testingReportRepo;
 			} else {

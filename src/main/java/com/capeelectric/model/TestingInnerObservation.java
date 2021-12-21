@@ -29,6 +29,9 @@ public class TestingInnerObservation implements Serializable {
 
 	@Column(name = "OBSERVATION_DESCRIPTION")
 	private String observationDescription;
+	
+	@Column(name = "TESTING_INNER_OBSERVATION_STATUS")
+	private String testingInnerObservationStatus;  
 
 	@JsonBackReference
 	@ManyToOne
@@ -65,6 +68,14 @@ public class TestingInnerObservation implements Serializable {
 
 	public void setTestingOuterObservation(TestingOuterObservation testingOuterObservation) {
 		this.testingOuterObservation = testingOuterObservation;
+	}
+
+	public String getTestingInnerObservationStatus() {
+		return testingInnerObservationStatus;
+	}
+
+	public void setTestingInnerObservationStatus(String testingInnerObservationStatus) {
+		this.testingInnerObservationStatus = testingInnerObservationStatus;
 	}
 
 }

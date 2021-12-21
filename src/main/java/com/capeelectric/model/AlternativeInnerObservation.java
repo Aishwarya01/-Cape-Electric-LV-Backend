@@ -29,6 +29,9 @@ public class AlternativeInnerObservation implements Serializable {
 
 	@Column(name = "OBSERVATION_DESCRIPTION")
 	private String observationDescription;
+	
+	@Column(name = "ALTERNATIVE_INNER_OBSERVATION_STATUS")
+	private String alternativeInnerObservationStatus;
 
 	@JsonBackReference
 	@ManyToOne
@@ -65,6 +68,14 @@ public class AlternativeInnerObservation implements Serializable {
 
 	public void setSupplyOuterObservation(SupplyOuterObservation supplyOuterObservation) {
 		this.supplyOuterObservation = supplyOuterObservation;
+	}
+
+	public String getAlternativeInnerObservationStatus() {
+		return alternativeInnerObservationStatus;
+	}
+
+	public void setAlternativeInnerObservationStatus(String alternativeInnerObservationStatus) {
+		this.alternativeInnerObservationStatus = alternativeInnerObservationStatus;
 	}
 
 }
