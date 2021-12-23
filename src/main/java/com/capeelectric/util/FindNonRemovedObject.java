@@ -19,7 +19,6 @@ import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.SignatorDetails;
-import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.SupplyOuterObservation;
 import com.capeelectric.model.SupplyParameters;
@@ -200,19 +199,19 @@ public class FindNonRemovedObject {
 		return signatorDetail;
 	}
 
-	public List<SummaryObervation> findNonRemoveObservation(List<SummaryObervation> summaryObervation) {
-		List<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
-		for (SummaryObervation obervation : summaryObervation) {
-			if (obervation.getObervationStatus() == null
-					|| !obervation.getObervationStatus().equalsIgnoreCase("R")) {
-				if(obervation.getObervationStatus() == null) {
-					obervation.setObervationStatus("N");
-				}
-				obervationList.add(obervation);
-			}
-		}
-		return obervationList;
-	}
+//	public List<SummaryObervation> findNonRemoveObservation(List<SummaryObervation> summaryObervation) {
+//		List<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
+//		for (SummaryObervation obervation : summaryObervation) {
+//			if (obervation.getObervationStatus() == null
+//					|| !obervation.getObervationStatus().equalsIgnoreCase("R")) {
+//				if(obervation.getObervationStatus() == null) {
+//					obervation.setObervationStatus("N");
+//				}
+//				obervationList.add(obervation);
+//			}
+//		}
+//		return obervationList;
+//	}
 
 	public List<CircuitBreaker> findNonRemovedCircuitBreaker(List<CircuitBreaker> circuitBreaker) {
 		List<CircuitBreaker> circuitBreakerList = new ArrayList<CircuitBreaker>();

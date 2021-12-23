@@ -31,7 +31,6 @@ import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.SignatorDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.Summary;
-import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.TestDistRecords;
 import com.capeelectric.model.Testing;
@@ -229,11 +228,11 @@ public class FinalReportServiceTest {
 	private Summary retrieveSummary() {
 		Summary summary = new Summary();
 		
-		SummaryObervation obervation = new SummaryObervation();
-		obervation.setObervationStatus("a");
-		List<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
-		obervationList.add(obervation);
-		summary.setSummaryObervation(obervationList);
+//		SummaryObervation obervation = new SummaryObervation();
+//		obervation.setObervationStatus("a");
+//		List<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
+//		obervationList.add(obervation);
+//		summary.setSummaryObervation(obervationList);
 		summary.setUserName("LVsystem@gmail.com");
 		summary.setSiteId(1);
 		return summary;

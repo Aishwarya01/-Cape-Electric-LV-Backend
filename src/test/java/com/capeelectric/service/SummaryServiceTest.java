@@ -31,7 +31,6 @@ import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
 import com.capeelectric.model.SummaryDeclaration;
-import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
@@ -104,12 +103,12 @@ public class SummaryServiceTest {
 		listComment.add(summaryComment);
 		summary.setSummaryComment(listComment);
 		
-		ArrayList<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
-		SummaryObervation obervation = new SummaryObervation();
-		obervation.setObervationStatus("a");
-		obervationList.add(obervation);
+//		ArrayList<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
+//		SummaryObervation obervation = new SummaryObervation();
+//		obervation.setObervationStatus("a");
+//		obervationList.add(obervation);
 		
-		summary.setSummaryObervation(obervationList);
+		//summary.setSummaryObervation(obervationList);
 	}
 	
 	{
@@ -165,10 +164,10 @@ public class SummaryServiceTest {
 		
 		List<SummaryDeclaration> listofSummaryDeclaration= new ArrayList<SummaryDeclaration>();
 		listofSummaryDeclaration.add(new SummaryDeclaration());
-		List<SummaryObervation> listofSummaryObervation= new ArrayList<SummaryObervation>();
-		listofSummaryObervation.add(new SummaryObervation());
+//		List<SummaryObervation> listofSummaryObervation= new ArrayList<SummaryObervation>();
+//		listofSummaryObervation.add(new SummaryObervation());
 		summary.setSummaryDeclaration(listofSummaryDeclaration);
-		summary.setSummaryObervation(listofSummaryObervation);
+//		summary.setSummaryObervation(listofSummaryObervation);
 		
 		summaryServiceImpl.addSummary(summary);
 		

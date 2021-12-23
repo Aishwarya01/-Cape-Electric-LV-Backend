@@ -111,8 +111,7 @@ public class SummaryServiceImpl implements SummaryService {
 			} else if (!testingRepo.isPresent()) {
 				throw new SummaryException("Please enter Testing step to proceed further");
 			} else {
-				if (summary.getSummaryDeclaration() != null && summary.getSummaryObervation() != null
-						&& summary.getSummaryDeclaration().size() > 0 && summary.getSummaryObervation().size() > 0) {
+				if (summary.getSummaryDeclaration() != null && summary.getSummaryDeclaration().size() > 0) {
 
 					if (!summaryRepo.isPresent() || !summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
 						summaryComment = new SummaryComment();
@@ -163,7 +162,6 @@ public class SummaryServiceImpl implements SummaryService {
 			List<Summary> summaryRepo = summaryRepository.findByUserNameAndSiteId(userName, siteId);
 			if (summaryRepo != null) {
 				for (Summary summary : summaryRepo) {
-					summary.setSummaryObervation(findNonRemovedObject.findNonRemoveObservation(summary.getSummaryObervation()));
 					summary.setAllComponentObservation(allComponentObservation(siteId));
 					sortingDateTime(summary.getSummaryComment());
 				}
@@ -387,14 +385,13 @@ public class SummaryServiceImpl implements SummaryService {
 		Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository.findBySiteId(siteId);
 		Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(siteId);
 		Optional<TestingReport> testingReport = testingReportRepository.findBySiteId(siteId);
-
 		if (supplyCharacteristics.isPresent() && supplyCharacteristics.get().getSupplyOuterObservation() != null) {
-			allComponentObservation.setSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation());
+			allComponentObservation.setSupplyOuterObservation(findNonRemovedObject.findNonRemovedSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation()));
 		} else if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
 			allComponentObservation
 					.setInspectionOuterObservation(inspectionObservation(periodicInspection.get().getIpaoInspection()));
 		} else if (testingReport.isPresent() && testingReport.get().getTestingOuterObservation() != null) {
-			allComponentObservation.setTestingOuterObservation(testingReport.get().getTestingOuterObservation());
+			allComponentObservation.setTestingOuterObservation(findNonRemovedObject.findNonRemoveTestingOuterObservation(testingReport.get().getTestingOuterObservation()));
 		}
 		return allComponentObservation;
 	}
@@ -404,7 +401,10 @@ public class SummaryServiceImpl implements SummaryService {
 		for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
 			for (InspectionOuterObservation inspectionOuterObservationItr : ipaoInspectionItr
 					.getInspectionOuterObervation()) {
-				inspectionObservation.add(inspectionOuterObservationItr);
+				if (inspectionOuterObservationItr.getInspectionOuterObservationStatus()!=null &&
+						!inspectionOuterObservationItr.getInspectionOuterObservationStatus().equalsIgnoreCase("R")) {
+					inspectionObservation.add(inspectionOuterObservationItr);
+				}
 			}
 		}
 		return inspectionObservation;
