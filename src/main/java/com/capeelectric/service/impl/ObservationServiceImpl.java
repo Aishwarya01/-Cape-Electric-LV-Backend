@@ -126,7 +126,8 @@ public class ObservationServiceImpl implements ObservationService {
 
 			if (supplyCharacteristics.isPresent() && supplyCharacteristics.get().getSupplyOuterObservation() != null) {
 				allComponentObservation
-						.setSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation());
+						.setSupplyOuterObservation(findNonRemovedObject.findNonRemovedSupplyOuterObservation(
+								supplyCharacteristics.get().getSupplyOuterObservation()));
 			} else if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
 				allComponentObservation.setInspectionOuterObservation(
 						inspectionObservation(periodicInspection.get().getIpaoInspection()));
