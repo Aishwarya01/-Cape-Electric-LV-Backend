@@ -282,9 +282,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 							NFC8, NFC9);
 
 					addRow1(table22, "Actual load current connected to this source (A)",
-							"                       " + loadCurrent, "                       " + loadCurrent2,
-							"                                      " + loadCurrent3,
-							"                       " + loadCurrent4);
+							"                           " + loadCurrent, "                           " + loadCurrent2,
+							"                                             " + loadCurrent3,
+							"                            " + loadCurrent4);
 
 					document.add(table34);
 					document.add(table1);
