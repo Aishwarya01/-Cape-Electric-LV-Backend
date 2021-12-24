@@ -128,10 +128,10 @@ public class ObservationServiceImpl implements ObservationService {
 				allComponentObservation
 						.setSupplyOuterObservation(findNonRemovedObject.findNonRemovedSupplyOuterObservation(
 								supplyCharacteristics.get().getSupplyOuterObservation()));
-			} else if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
+			} if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
 				allComponentObservation.setInspectionOuterObservation(
 						inspectionObservation(periodicInspection.get().getIpaoInspection()));
-			} else if (testingReport.isPresent()) {
+			}  if (testingReport.isPresent()) {
 				allComponentObservation.setTestingInnerObservation(findNonRemovedObject.findNonRemoveTestingInnerObservationByReport(testingReport));
 			}
 		} else {
@@ -146,7 +146,11 @@ public class ObservationServiceImpl implements ObservationService {
 		for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
 			for (InspectionOuterObservation inspectionOuterObservationItr : ipaoInspectionItr
 					.getInspectionOuterObervation()) {
-				inspectionObservation.add(inspectionOuterObservationItr);
+				if (inspectionOuterObservationItr.getInspectionOuterObservationStatus()!=null &&
+						!inspectionOuterObservationItr.getInspectionOuterObservationStatus().equalsIgnoreCase("R")) {
+					inspectionObservation.add(inspectionOuterObservationItr);
+				}
+				
 			}
 		}
 		return inspectionObservation;
