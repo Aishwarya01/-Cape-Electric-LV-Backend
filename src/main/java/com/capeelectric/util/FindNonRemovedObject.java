@@ -251,7 +251,8 @@ public class FindNonRemovedObject {
 			if (supplyOuterObservationItr.getSupplyOuterObservationStatus() != null
 					&& !supplyOuterObservationItr.getSupplyOuterObservationStatus().equalsIgnoreCase("R")) {
 				List<AlternativeInnerObservation> alternativeInnerObservationList = new ArrayList<AlternativeInnerObservation>();
-				if (supplyOuterObservationItr.getAlternativeInnerObservation() != null) {
+				if (supplyOuterObservationItr.getAlternativeInnerObservation() != null 
+						&& supplyOuterObservationItr.getObservationComponentDetails().equalsIgnoreCase("alternate")) {
 					for (AlternativeInnerObservation alternativeInnerObservation : supplyOuterObservationItr
 							.getAlternativeInnerObservation()) {
 						if (alternativeInnerObservation.getAlternativeInnerObservationStatus() != null
