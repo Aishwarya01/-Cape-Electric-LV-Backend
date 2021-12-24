@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
+import com.capeelectric.exception.ObservationException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
@@ -58,7 +59,7 @@ public class FinalPDFController {
 	@ResponseBody
 	public ResponseEntity<byte[]> printFinalPDF(@PathVariable String userName, @PathVariable Integer siteId)
 			throws InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException,
-			SummaryException, Exception {
+			SummaryException, Exception, ObservationException {
 		instalReportPDFService.printBasicInfromation(userName, siteId);
 		printSupplyService.printSupply(userName, siteId);
 		inspectionServicePDF.printInspectionDetails(userName, siteId);

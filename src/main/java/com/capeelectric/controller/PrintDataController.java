@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capeelectric.exception.ObservationException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.Summary;
 import com.capeelectric.service.PrintService;
@@ -26,7 +27,7 @@ public class PrintDataController {
 	private PrintService printService ;
 	
 	@GetMapping("/printSummary/{userName}/{siteId}")
-	public ResponseEntity<List<Summary>> retrieveSummary(@PathVariable String userName,@PathVariable Integer siteId) throws SummaryException {
+	public ResponseEntity<List<Summary>> retrieveSummary(@PathVariable String userName,@PathVariable Integer siteId) throws SummaryException, ObservationException {
 		logger.info("called printSummary function userName: {},siteId : {}", userName,siteId);
 		printService.printSummary(userName,siteId);
 		return new ResponseEntity<List<Summary>>( HttpStatus.OK);
