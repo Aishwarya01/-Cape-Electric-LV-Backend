@@ -17,12 +17,6 @@ import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
-import com.capeelectric.service.InspectionServicePDF;
-import com.capeelectric.service.InstalReportPDFService;
-import com.capeelectric.service.PrintFinalPDFService;
-import com.capeelectric.service.PrintService;
-import com.capeelectric.service.PrintSupplyService;
-import com.capeelectric.service.PrintTestingService;
 import com.capeelectric.service.ReturnPDFService;
 
 @RestController
@@ -36,38 +30,14 @@ public class FinalPDFController {
 		this.returnPDFService = returnPDFService;
 	}
 
-	@Autowired
-	private PrintService printService;
-
-	@Autowired
-	private PrintTestingService printTestingService;
-
-	@Autowired
-	private PrintSupplyService printSupplyService;
-
-	@Autowired
-	private PrintFinalPDFService printFinalPDFService;
-
-	@Autowired
-	private InstalReportPDFService instalReportPDFService;
-
-	@Autowired
-	private InspectionServicePDF inspectionServicePDF;
-
 	@GetMapping("/printFinalPDF/{userName}/{siteId}")
 	@ResponseBody
 	public ResponseEntity<byte[]> printFinalPDF(@PathVariable String userName, @PathVariable Integer siteId)
 			throws InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException,
 			SummaryException, Exception {
-		instalReportPDFService.printBasicInfromation(userName, siteId);
-		printSupplyService.printSupply(userName, siteId);
-		inspectionServicePDF.printInspectionDetails(userName, siteId);
-		printTestingService.printTesting(userName, siteId);
-		printService.printSummary(userName, siteId);
-		printFinalPDFService.printFinalPDF(userName, siteId);
 
 		String keyname = "finalreport.pdf";
-		ByteArrayOutputStream downloadInputStream = returnPDFService.printFinalPDF(userName, siteId);
+		ByteArrayOutputStream downloadInputStream = returnPDFService.printFinalPDF(userName, siteId, keyname);
 
 		return ResponseEntity.ok().contentType(contentType(keyname))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + keyname + "\"")

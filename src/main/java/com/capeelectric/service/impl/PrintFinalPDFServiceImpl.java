@@ -42,16 +42,16 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 
 	@Value("${s3.bucket.name}")
 	private String s3BucketName;
-	
+
 	@Value("${access.key.id}")
 	private String accessKeyId;
 
 	@Value("${access.key.secret}")
 	private String accessKeySecret;
-	
+
 	@Autowired
 	private SiteRepository siteRepository;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(PrintFinalPDFServiceImpl.class);
 
 	@Override
@@ -60,7 +60,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 			try {
 				List<InputStream> inputPdfList = new ArrayList<InputStream>();
-				
+
 				inputPdfList.add(new FileInputStream("PrintInstalReportData.pdf"));
 				inputPdfList.add(new FileInputStream("SupplyCharacteristic.pdf"));
 				inputPdfList.add(new FileInputStream("PrintInspectionDetailsData.pdf"));
@@ -71,30 +71,36 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 				mergePdfFiles(inputPdfList, outputStream, awsS3ServiceImpl);
 
 				try {
-//					Create a S3 client with in-program credential
+                    //Create a S3 client with in-program credential
 					BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, accessKeySecret);
 					AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.AP_SOUTH_1)
 							.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
-//					Uploading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
-					String folderName = ((siteRepository.findById(siteId).isPresent() && siteRepository.findById(siteId).get() != null) ? siteRepository.findById(siteId).get().getSite() : "");
+
+					//Uploading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
+					String folderName = ((siteRepository.findById(siteId).isPresent()
+							&& siteRepository.findById(siteId).get() != null)
+									? siteRepository.findById(siteId).get().getSite()
+									: "");
+					
 					String fileNameInS3 = "finalreport.pdf";
 					String fileNameInLocalPC = "finalreport.pdf";
-					if(folderName.length() > 0) {
-					PutObjectRequest request = new PutObjectRequest(s3BucketName, "LV_Site Name_".concat(folderName) + "/" + fileNameInS3,
-							new File(fileNameInLocalPC));
-					s3Client.putObject(request);
-					logger.info("Uploading file done in AWS s3 ");
+					
+					if (folderName.length() > 0) {
+						PutObjectRequest request = new PutObjectRequest(s3BucketName,
+								"LV_Site Name_".concat(folderName) + "/" + fileNameInS3, new File(fileNameInLocalPC));
+						s3Client.putObject(request);
+						logger.info("Uploading file done in AWS s3");
 					} else {
 						logger.error("There is no site available");
 						throw new Exception("There is no site available");
 					}
-					
+
 				} catch (AmazonS3Exception e) {
 					e.printStackTrace();
 				}
 
 			} catch (Exception e) {
-				System.out.println(e);  
+				System.out.println(e);
 			}
 			document.close();
 		} else {
@@ -118,7 +124,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 		Image image = Image.getInstance(awss3ServiceImpl.findByName("rush-logo.png"));
 		image.scaleToFit(185, 185);
 		image.setAbsolutePosition(-3, -9);
-		
+
 		HeaderFooterPageEvent event = new HeaderFooterPageEvent();
 		writer.setPageEvent((PdfPageEvent) event);
 		document.open();
