@@ -14,15 +14,15 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "inspection_inner_obervations_table")
-public class InspectionInnerObervations implements Serializable {
+@Table(name = "inspection_inner_observation_table")
+public class InspectionInnerObservations implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "INSPECTION_INNER_OBSERVATIONS_ID")
-	private Integer inspectionInnerObervationsId;
+	private Integer inspectionInnerObservationsId;
 
 	@Column(name = "OBSERVATION_COMPONENT_DETAILS")
 	private String observationComponentDetails;
@@ -30,21 +30,13 @@ public class InspectionInnerObervations implements Serializable {
 	@Column(name = "OBSERVATION_DESCRIPTION")
 	private String observationDescription;
 	
-	@Column(name = "INSPECTION_INNER_OBERVATION_STATUS")
-	private String inspectionInnerObervationStatus;
+	@Column(name = "INSPECTION_INNER_OBSERVATION_STATUS")
+	private String inspectionInnerObservationStatus;
 
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "INSPECTION_OUTER_OBSERVATION_ID")
 	private InspectionOuterObservation inspectionOuterObservation;
-
-	public Integer getInspectionInnerObervationsId() {
-		return inspectionInnerObervationsId;
-	}
-
-	public void setInspectionInnerObervationsId(Integer inspectionInnerObervationsId) {
-		this.inspectionInnerObervationsId = inspectionInnerObervationsId;
-	}
 
 	public String getObservationComponentDetails() {
 		return observationComponentDetails;
@@ -70,12 +62,19 @@ public class InspectionInnerObervations implements Serializable {
 		this.inspectionOuterObservation = inspectionOuterObservation;
 	}
 
-	public String getInspectionInnerObervationStatus() {
-		return inspectionInnerObervationStatus;
+	public Integer getInspectionInnerObservationsId() {
+		return inspectionInnerObservationsId;
 	}
 
-	public void setInspectionInnerObervationStatus(String inspectionInnerObervationStatus) {
-		this.inspectionInnerObervationStatus = inspectionInnerObervationStatus;
+	public void setInspectionInnerObservationsId(Integer inspectionInnerObservationsId) {
+		this.inspectionInnerObservationsId = inspectionInnerObservationsId;
 	}
 
+	public String getInspectionInnerObservationStatus() {
+		return inspectionInnerObservationStatus;
+	}
+
+	public void setInspectionInnerObservationStatus(String inspectionInnerObservationStatus) {
+		this.inspectionInnerObservationStatus = inspectionInnerObservationStatus;
+	}
 }

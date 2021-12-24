@@ -14,7 +14,7 @@ import com.capeelectric.model.Circuit;
 import com.capeelectric.model.CircuitBreaker;
 import com.capeelectric.model.ConsumerUnit;
 import com.capeelectric.model.EarthingLocationReport;
-import com.capeelectric.model.InspectionInnerObervations;
+import com.capeelectric.model.InspectionInnerObservations;
 import com.capeelectric.model.InspectionOuterObservation;
 import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.IpaoInspection;
@@ -277,17 +277,17 @@ public class FindNonRemovedObject {
 		for (InspectionOuterObservation outerObservation : inspectionOuterObervation) {
 			if (outerObservation.getInspectionOuterObservationStatus() != null
 					&& !outerObservation.getInspectionOuterObservationStatus().equalsIgnoreCase("R")) {
-				List<InspectionInnerObervations> innerObervationsList = new ArrayList<InspectionInnerObervations>();
-				if (outerObservation.getInspectionInnerObervations() != null) {
-					for (InspectionInnerObervations innerObervations : outerObservation
-							.getInspectionInnerObervations()) {
-						if (innerObervations.getInspectionInnerObervationStatus() != null
-								&& !innerObervations.getInspectionInnerObervationStatus().equalsIgnoreCase("R")) {
-							innerObervationsList.add(innerObervations);
+				List<InspectionInnerObservations> innerObservationsList = new ArrayList<InspectionInnerObservations>();
+				if (outerObservation.getInspectionInnerObservations() != null) {
+					for (InspectionInnerObservations innerObservations : outerObservation
+							.getInspectionInnerObservations()) {
+						if (innerObservations.getInspectionInnerObservationStatus() != null
+								&& !innerObservations.getInspectionInnerObservationStatus().equalsIgnoreCase("R")) {
+							innerObservationsList.add(innerObservations);
 						}
 					}
 				}
-				outerObservation.setInspectionInnerObervations(innerObervationsList);
+				outerObservation.setInspectionInnerObservations(innerObservationsList);
 				outerObservationList.add(outerObservation);
 			}
 		}
