@@ -21,6 +21,7 @@ import com.capeelectric.repository.ObservationRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.ObservationService;
+import com.capeelectric.util.FindNonRemovedObject;
 import com.capeelectric.util.UserFullName;
 
 /**
@@ -45,6 +46,9 @@ public class ObservationServiceImpl implements ObservationService {
 
 	@Autowired
 	private TestingReportRepository testingReportRepository;
+	
+	@Autowired
+	private FindNonRemovedObject findNonRemovedObject;
 	
 	@Override
 	public void addObservation(ObservationComponent observationComponent) throws ObservationException {
@@ -126,8 +130,8 @@ public class ObservationServiceImpl implements ObservationService {
 			} else if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
 				allComponentObservation.setInspectionOuterObservation(
 						inspectionObservation(periodicInspection.get().getIpaoInspection()));
-			} else if (testingReport.isPresent() && testingReport.get().getTestingOuterObservation() != null) {
-				allComponentObservation.setTestingOuterObservation(testingReport.get().getTestingOuterObservation());
+			} else if (testingReport.isPresent()) {
+				allComponentObservation.setTestingInnerObservation(findNonRemovedObject.findNonRemoveTestingInnerObservationByReport(testingReport));
 			}
 		} else {
 			throw new ObservationException("Invalid Inputs");

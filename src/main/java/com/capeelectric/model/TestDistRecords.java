@@ -52,6 +52,10 @@ public class TestDistRecords implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "testDistRecords", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<TestingRecords> testingRecords;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "testDistRecords", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<TestingInnerObservation> testingInnerObservation;
 
 	public Integer getTestDistRecordId() {
 		return testDistRecordId;
@@ -99,6 +103,14 @@ public class TestDistRecords implements Serializable {
 
 	public void setLocationCount(Integer locationCount) {
 		this.locationCount = locationCount;
+	}
+
+	public List<TestingInnerObservation> getTestingInnerObservation() {
+		return testingInnerObservation;
+	}
+
+	public void setTestingInnerObservation(List<TestingInnerObservation> testingInnerObservation) {
+		this.testingInnerObservation = testingInnerObservation;
 	}
 
 }

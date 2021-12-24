@@ -390,8 +390,8 @@ public class SummaryServiceImpl implements SummaryService {
 		} else if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
 			allComponentObservation
 					.setInspectionOuterObservation(inspectionObservation(periodicInspection.get().getIpaoInspection()));
-		} else if (testingReport.isPresent() && testingReport.get().getTestingOuterObservation() != null) {
-			allComponentObservation.setTestingOuterObservation(findNonRemovedObject.findNonRemoveTestingOuterObservation(testingReport.get().getTestingOuterObservation()));
+		} else if (testingReport.isPresent()) {
+			allComponentObservation.setTestingInnerObservation(findNonRemovedObject.findNonRemoveTestingInnerObservationByReport(testingReport));
 		}
 		return allComponentObservation;
 	}

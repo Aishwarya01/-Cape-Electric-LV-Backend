@@ -153,9 +153,6 @@ public class FinalReportServiceImpl implements FinalReportService {
 					if (testingReport.isPresent() && testingReport != null) {
 						testingReport.get().setTesting(
 								findNonRemovedObject.findNonRemoveTesting(testingReport.get().getTesting()));
-						testingReport.get()
-								.setTestingOuterObservation(findNonRemovedObject.findNonRemoveTestingOuterObservation(
-										testingReport.get().getTestingOuterObservation()));
 						finalReport.setTestingReport(testingReport.get());
 
 						if (summary.isPresent() && summary != null) {
@@ -186,13 +183,14 @@ public class FinalReportServiceImpl implements FinalReportService {
 		Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository.findBySiteId(siteId);
 		Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(siteId);
 		Optional<TestingReport> testingReport = testingReportRepository.findBySiteId(siteId);
+		
 		if (supplyCharacteristics.isPresent() && supplyCharacteristics.get().getSupplyOuterObservation() != null) {
 			allComponentObservation.setSupplyOuterObservation(findNonRemovedObject.findNonRemovedSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation()));
 		} else if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
 			allComponentObservation
 					.setInspectionOuterObservation(inspectionObservation(periodicInspection.get().getIpaoInspection()));
-		} else if (testingReport.isPresent() && testingReport.get().getTestingOuterObservation() != null) {
-			allComponentObservation.setTestingOuterObservation(findNonRemovedObject.findNonRemoveTestingOuterObservation(testingReport.get().getTestingOuterObservation()));
+		} else if (testingReport.isPresent()) {
+			allComponentObservation.setTestingInnerObservation(findNonRemovedObject.findNonRemoveTestingInnerObservationByReport(testingReport));
 		}
 		return allComponentObservation;
 	}
