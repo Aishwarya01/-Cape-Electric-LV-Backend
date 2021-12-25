@@ -1,6 +1,7 @@
 
 package com.capeelectric.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.FinalReportException;
+import com.capeelectric.model.AllComponentObservation;
 import com.capeelectric.model.FinalReport;
+import com.capeelectric.model.InspectionOuterObservation;
+import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.Site;
@@ -93,7 +97,6 @@ public class FinalReportServiceImpl implements FinalReportService {
 
 	@Override
 	public Optional<FinalReport> retrieveFinalReport(String userName, Integer siteId) throws FinalReportException {
-
 		if (userName != null && siteId != null) {
 			finalReport = new FinalReport();
 			finalReport.setUserName(userName);
@@ -102,77 +105,109 @@ public class FinalReportServiceImpl implements FinalReportService {
 			logger.debug("fetching process started for InstallReport_Information");
 			Optional<ReportDetails> reportDetails = instalReportDetailsRepository.findBySiteId(siteId);
 			logger.debug("InstallReport_Information fetching ended");
+
+			logger.debug("fetching process started for SupplyCharacteristic");
+			Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository
+					.findBySiteId(siteId);
+			logger.debug("SupplyCharacteristic_fetching ended");
+
+			logger.debug("fetching process started for PriodicInspection");
+			Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(siteId);
+			logger.debug("PriodicInspection_fetching ended");
+
+			logger.debug("fetching process started for PriodicTesting");
+			Optional<TestingReport> testingReport = testingReportRepository.findBySiteId(siteId);
+			logger.debug("PriodicTesting_fetching ended");
+
+			logger.debug("fetching process started for Summary");
+			Optional<Summary> summary = summaryRepository.findBySiteId(siteId);
+			logger.debug("Summary_fetching ended");
+
 			if (reportDetails.isPresent() && reportDetails != null) {
 				reportDetails.get().setSignatorDetails(
 						findNonRemovedObject.findNonRemovedReport(reportDetails.get().getSignatorDetails()));
 				finalReport.setReportDetails(reportDetails.get());
+			}
 
-				logger.debug("fetching process started for SupplyCharacteristic");
-				Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository
-						.findBySiteId(siteId);
-				logger.debug("SupplyCharacteristic_fetching ended");
-				if (supplyCharacteristics.isPresent() && supplyCharacteristics != null) {
+			if (supplyCharacteristics.isPresent() && supplyCharacteristics != null) {
 
-					supplyCharacteristics.get().setInstalLocationReport(
-							findNonRemovedObject.findNonRemovedInstallLocation(supplyCharacteristics.get()));
-					supplyCharacteristics.get().setBoundingLocationReport(
-							findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristics.get()));
-					supplyCharacteristics.get().setEarthingLocationReport(
-							findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristics.get()));
-					supplyCharacteristics.get().setCircuitBreaker(
-							findNonRemovedObject.findNonRemovedCircuitBreaker(supplyCharacteristics.get().getCircuitBreaker()));
-					supplyCharacteristics.get().setSupplyParameters(
-							findNonRemovedObject.findNonRemovedSupplyParameters(supplyCharacteristics.get().getSupplyParameters()));
-					
-					finalReport.setSupplyCharacteristics(supplyCharacteristics.get());
+				supplyCharacteristics.get().setInstalLocationReport(
+						findNonRemovedObject.findNonRemovedInstallLocation(supplyCharacteristics.get()));
+				supplyCharacteristics.get().setBoundingLocationReport(
+						findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristics.get()));
+				supplyCharacteristics.get().setEarthingLocationReport(
+						findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristics.get()));
+				supplyCharacteristics.get().setCircuitBreaker(findNonRemovedObject
+						.findNonRemovedCircuitBreaker(supplyCharacteristics.get().getCircuitBreaker()));
+				supplyCharacteristics.get().setSupplyParameters(findNonRemovedObject
+						.findNonRemovedSupplyParameters(supplyCharacteristics.get().getSupplyParameters()));
+				supplyCharacteristics.get().setSupplyOuterObservation(findNonRemovedObject
+						.findNonRemovedSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation()));
+				finalReport.setSupplyCharacteristics(supplyCharacteristics.get());
+				
+			} 
+			if (periodicInspection.isPresent() && periodicInspection != null) {
 
-					logger.debug("fetching process started for PriodicInspection");
-					Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(siteId);
-					logger.debug("PriodicInspection_fetching ended");
+				periodicInspection.get().setIpaoInspection(
+						findNonRemovedObject.findNonRemovedInspectionLocation(periodicInspection.get()));
+				finalReport.setPeriodicInspection(periodicInspection.get());
 
-					if (periodicInspection.isPresent() && periodicInspection != null) {
+				if (testingReport.isPresent() && testingReport != null) {
+					testingReport.get().setTesting(
+							findNonRemovedObject.findNonRemoveTesting(testingReport.get().getTesting()));
+					finalReport.setTestingReport(testingReport.get());
 
-						periodicInspection.get().setIpaoInspection(
-								findNonRemovedObject.findNonRemovedInspectionLocation(periodicInspection.get()));
-						finalReport.setPeriodicInspection(periodicInspection.get());
+					if (summary.isPresent() && summary != null) {
+						summary.get().setAllComponentObservation(allComponentObservation(siteId));
+						finalReport.setSummary(summary.get());
 
-						logger.debug("fetching process started for PriodicTesting");
-						Optional<TestingReport> testingReport = testingReportRepository.findBySiteId(siteId);
-						logger.debug("PriodicTesting_fetching ended");
+						logger.debug("Successfully Five_Steps fetching Operation done");
+						return Optional.of(finalReport);
 
-						if (testingReport.isPresent() && testingReport != null) {
-							testingReport.get().setTesting(
-									findNonRemovedObject.findNonRemoveTesting(testingReport.get().getTesting()));
-							finalReport.setTestingReport(testingReport.get());
-
-							logger.debug("fetching process started for Summary");
-							Optional<Summary> summary = summaryRepository.findBySiteId(siteId);
-							logger.debug("Summary_fetching ended");
-
-							if (summary.isPresent() && summary != null) {
-								summary.get().setSummaryObervation(findNonRemovedObject
-										.findNonRemoveObservation(summary.get().getSummaryObervation()));
-								finalReport.setSummary(summary.get());
-
-								logger.debug("Successfully Five_Steps fetching Operation done");
-								return Optional.of(finalReport);
-
-							}
-						}
 					}
 				}
 			}
-
-			return Optional.of(finalReport);
-
 		} else {
 			throw new FinalReportException("Invalid Input");
 		}
+		return Optional.of(finalReport);
+
 	}
 
 	@Override
 	public List<Site> retrieveAllSites() throws FinalReportException {
 		return (List<Site>) siteRepository.findAll();
+	}
+	
+	private AllComponentObservation allComponentObservation(Integer siteId) {
+		AllComponentObservation allComponentObservation = new AllComponentObservation();
+		Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository.findBySiteId(siteId);
+		Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(siteId);
+		Optional<TestingReport> testingReport = testingReportRepository.findBySiteId(siteId);
+		
+		if (supplyCharacteristics.isPresent() && supplyCharacteristics.get().getSupplyOuterObservation() != null) {
+			allComponentObservation.setSupplyOuterObservation(findNonRemovedObject.findNonRemovedSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation()));
+		} else if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
+			allComponentObservation
+					.setInspectionOuterObservation(inspectionObservation(periodicInspection.get().getIpaoInspection()));
+		} else if (testingReport.isPresent()) {
+			allComponentObservation.setTestingInnerObservation(findNonRemovedObject.findNonRemoveTestingInnerObservationByReport(testingReport));
+		}
+		return allComponentObservation;
+	}
+
+	private List<InspectionOuterObservation> inspectionObservation(List<IpaoInspection> ipaoInspection) {
+		List<InspectionOuterObservation> inspectionObservation = new ArrayList<InspectionOuterObservation>();
+		for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
+			for (InspectionOuterObservation inspectionOuterObservationItr : ipaoInspectionItr
+					.getInspectionOuterObervation()) {
+				if (inspectionOuterObservationItr.getInspectionOuterObservationStatus()!=null &&
+						!inspectionOuterObservationItr.getInspectionOuterObservationStatus().equalsIgnoreCase("R")) {
+					inspectionObservation.add(inspectionOuterObservationItr);
+				}
+			}
+		}
+		return inspectionObservation;
 	}
 
 }

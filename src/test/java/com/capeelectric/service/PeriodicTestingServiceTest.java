@@ -25,6 +25,7 @@ import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
+import com.capeelectric.model.TestDistRecords;
 import com.capeelectric.model.TestDistribution;
 import com.capeelectric.model.TestIncomingDistribution;
 import com.capeelectric.model.Testing;
@@ -119,10 +120,14 @@ public class PeriodicTestingServiceTest {
 		List<TestingRecords> testingRecordsList = new ArrayList<TestingRecords>();
         Testing testing = new Testing();
         testing.setTestingStatus("a");
-        TestingRecords testingRecords = new TestingRecords();
-        testingRecords.setTestingRecordStatus("a");
-        testingRecordsList.add(testingRecords);
-        testing.setTestingRecords(testingRecordsList);
+        TestDistRecords testDistRecords = new TestDistRecords();
+		TestingRecords testingRecords = new TestingRecords();
+		testingRecords.setTestingRecordStatus("a");
+		testingRecordsList.add(testingRecords);
+		testDistRecords.setTestingRecords(testingRecordsList);
+		List<TestDistRecords> testDistRecordsList = new ArrayList<TestDistRecords>();
+		testDistRecordsList.add(testDistRecords);
+		testing.setTestDistRecords(testDistRecordsList);
         testingList.add(testing);
         testingReport.setTesting(testingList);
 	}
@@ -144,9 +149,12 @@ public class PeriodicTestingServiceTest {
 		listofTestingRecords.add(new TestingRecords());
 		
 		Testing testing = listofTesting.get(0);
-		testing.setTestDistribution(listofTestDistribution);
-		testing.setTestingRecords(listofTestingRecords);
-		
+		TestDistRecords testDistRecords = new TestDistRecords();
+		testDistRecords.setTestDistribution(listofTestDistribution);
+		testDistRecords.setTestingRecords(listofTestingRecords);
+		List<TestDistRecords> testDistRecordsList = new ArrayList<TestDistRecords>();
+		testDistRecordsList.add(testDistRecords);
+		testing.setTestDistRecords(testDistRecordsList);
 		testingReport.setTesting(listofTesting);
 		
 		
@@ -203,8 +211,18 @@ public class PeriodicTestingServiceTest {
 
 		testingList.add(utill_withDemcimal_Records());
 		Testing testing = testingList.get(0);
-		testing.setTestDistribution(listofTestDistribution);
+		
+		TestDistRecords testDistRecords = new TestDistRecords();
+		testDistRecords.setTestDistribution(listofTestDistribution);
+		
+		List<TestingRecords> testingRecordsList = new ArrayList<TestingRecords>();
+		testingRecordsList.add(new TestingRecords());
+		testDistRecords.setTestingRecords(testingRecordsList);
+		ArrayList<TestDistRecords> testDistRecordsList = new ArrayList<TestDistRecords>();
+		testDistRecordsList.add(testDistRecords);
+		testing.setTestDistRecords(testDistRecordsList);
 		testingReport.setTestIncomingDistribution(listofTestIncomingDistribution);
+		testingList.add(testing);
 		testingReport.setTesting(testingList);
 
 		when(testingReportRepository.findBySiteId(1)).thenReturn(Optional.of(testingReport));
@@ -228,7 +246,8 @@ public class PeriodicTestingServiceTest {
 		records.setTestFaultCurrent("312,122,na,234");
 
 		testingRecordsList.add(records);
-		testing.setTestingRecords(testingRecordsList);
+		TestDistRecords testDistRecords = new TestDistRecords();
+		testDistRecords.setTestingRecords(testingRecordsList);
 
 		return testing;
 	}

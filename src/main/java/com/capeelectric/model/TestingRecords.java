@@ -123,17 +123,17 @@ public class TestingRecords implements Serializable {
 
 	@Column(name = "RCD_REMARKS")
 	private String rcdRemarks;
-	
 
 	@Column(name = "TESTING_RECORD_STATUS")
 	private String testingRecordStatus;
+	
 	@Column(name = "RCD_TYPE")
 	private String rcdType;
 
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "TESTING_ID")
-	private Testing testing;
+	@JoinColumn(name = "TEST_DIST_RECORD_ID")
+	private TestDistRecords testDistRecords;
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "testingRecords", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -387,14 +387,13 @@ public class TestingRecords implements Serializable {
 		this.rcdRemarks = rcdRemarks;
 	}
 
-	public Testing getTesting() {
-		return testing;
+	public TestDistRecords getTestDistRecords() {
+		return testDistRecords;
 	}
 
-	public void setTesting(Testing testing) {
-		this.testing = testing;
+	public void setTestDistRecords(TestDistRecords testDistRecords) {
+		this.testDistRecords = testDistRecords;
 	}
-
 
 	public String getTestingRecordStatus() {
 		return testingRecordStatus;

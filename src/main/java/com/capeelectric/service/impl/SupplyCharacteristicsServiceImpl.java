@@ -144,6 +144,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 						.setEarthingLocationReport(findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristicsRepo));
 				supplyCharacteristicsRepo.setCircuitBreaker(findNonRemovedObject.findNonRemovedCircuitBreaker(supplyCharacteristicsRepo.getCircuitBreaker()));
 				supplyCharacteristicsRepo.setSupplyParameters(findNonRemovedObject.findNonRemovedSupplyParameters(supplyCharacteristicsRepo.getSupplyParameters()));
+				supplyCharacteristicsRepo.setSupplyOuterObservation(findNonRemovedObject.findNonRemovedSupplyOuterObservation(supplyCharacteristicsRepo.getSupplyOuterObservation()));
 				sortingDateTime(supplyCharacteristicsRepo.getSupplyCharacteristicComment());
 
 				return supplyCharacteristicsRepo;

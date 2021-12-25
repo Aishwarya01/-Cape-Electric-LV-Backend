@@ -3,23 +3,32 @@ package com.capeelectric.util;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.context.annotation.Configuration;
 
+import com.capeelectric.model.AlternativeInnerObservation;
 import com.capeelectric.model.BoundingLocationReport;
+import com.capeelectric.model.Circuit;
 import com.capeelectric.model.CircuitBreaker;
+import com.capeelectric.model.ConsumerUnit;
 import com.capeelectric.model.EarthingLocationReport;
+import com.capeelectric.model.InspectionInnerObservations;
+import com.capeelectric.model.InspectionOuterObservation;
 import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.SignatorDetails;
-import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
+import com.capeelectric.model.SupplyOuterObservation;
 import com.capeelectric.model.SupplyParameters;
+import com.capeelectric.model.TestDistRecords;
 import com.capeelectric.model.Testing;
 import com.capeelectric.model.TestingEquipment;
+import com.capeelectric.model.TestingInnerObservation;
 import com.capeelectric.model.TestingRecords;
+import com.capeelectric.model.TestingReport;
 
 /**
  * This FindNonRemovedObject Util class finding non Removed object for all_steps
@@ -39,10 +48,42 @@ public class FindNonRemovedObject {
 				if(inspectionLocationReport.getInspectionFlag()==null) {
 					inspectionLocationReport.setInspectionFlag("N");
 				}
+				inspectionLocationReport.setCircuit(findNonRemovedInspectionCircuit(inspectionLocationReport.getCircuit()));
+				inspectionLocationReport.setConsumerUnit(findNonRemovedInspectionConsumerUnit(inspectionLocationReport.getConsumerUnit()));
+				inspectionLocationReport.setInspectionOuterObervation(findNonRemovedInspectionOuterObervation(inspectionLocationReport.getInspectionOuterObervation()));
 				inspectionReport.add(inspectionLocationReport);
+				 
 			}
 		}
 		return inspectionReport;
+	}
+	
+	public List<Circuit> findNonRemovedInspectionCircuit(List<Circuit> listOfCircuit) {
+
+		ArrayList<Circuit> unRemovedCircuit = new ArrayList<Circuit>();
+		for (Circuit circuit : listOfCircuit) {
+			if (circuit.getCircuitStatus() == null || !circuit.getCircuitStatus().equalsIgnoreCase("R")) {
+				if (circuit.getCircuitStatus() == null) {
+					circuit.setCircuitStatus("N");
+				}
+				unRemovedCircuit.add(circuit);
+			}
+		}
+		return unRemovedCircuit;
+	}
+	
+	public List<ConsumerUnit> findNonRemovedInspectionConsumerUnit(List<ConsumerUnit> ConsumerUnit) {
+
+		ArrayList<ConsumerUnit> unRemovedConsumer = new ArrayList<ConsumerUnit>();
+		for (ConsumerUnit consumerUnit : ConsumerUnit) {
+			if (consumerUnit.getConsumerStatus() == null || !consumerUnit.getConsumerStatus().equalsIgnoreCase("R")) {
+				if (consumerUnit.getConsumerStatus() == null) {
+					consumerUnit.setConsumerStatus("N");
+				}
+				unRemovedConsumer.add(consumerUnit);
+			}
+		}
+		return unRemovedConsumer;
 	}
 
 	public List<InstalLocationReport> findNonRemovedInstallLocation(SupplyCharacteristics supplyCharacteristicsRepo) {
@@ -91,14 +132,31 @@ public class FindNonRemovedObject {
 
 	public List<Testing> findNonRemoveTesting(List<Testing> listOfTesting) {
 		for (Testing testing : listOfTesting) {
-			if (testing != null && testing.getTestingStatus() !=null && testing.getTestingStatus().equalsIgnoreCase("R")) {
+			if (testing != null && testing.getTestingStatus() != null
+					&& testing.getTestingStatus().equalsIgnoreCase("R")) {
 				listOfTesting.remove(testing);
 			} else {
 				if (testing.getTestingStatus() == null) {
 					testing.setTestingStatus("N");
 				}
-				testing.setTestingRecords(findNonRemoveTestingRecord(testing.getTestingRecords()));
 				testing.setTestingEquipment(findNonRemoveTestingEquipment(testing.getTestingEquipment()));
+				List<TestDistRecords> NonRemoveTestingRecords = new ArrayList<TestDistRecords>();
+				List<TestDistRecords> testDistRecords = testing.getTestDistRecords();
+				for (TestDistRecords testDistRecord : testDistRecords) {
+
+					if (testDistRecord.getTestDistRecordStatus() == null) {
+						testDistRecord.setTestDistRecordStatus("N");
+					} else if (testDistRecord.getTestDistRecordStatus() != null
+							&& !testDistRecord.getTestDistRecordStatus().equalsIgnoreCase("R")) {
+						testDistRecord
+								.setTestingRecords(findNonRemoveTestingRecord(testDistRecord.getTestingRecords()));
+						testDistRecord
+						.setTestingInnerObservation(findNonRemoveTestingInnerObservation(testDistRecord.getTestingInnerObservation()));
+						NonRemoveTestingRecords.add(testDistRecord);
+					}
+				}
+				testing.setTestDistRecords(NonRemoveTestingRecords);
+
 			}
 		}
 		return listOfTesting;
@@ -144,19 +202,19 @@ public class FindNonRemovedObject {
 		return signatorDetail;
 	}
 
-	public List<SummaryObervation> findNonRemoveObservation(List<SummaryObervation> summaryObervation) {
-		List<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
-		for (SummaryObervation obervation : summaryObervation) {
-			if (obervation.getObervationStatus() == null
-					|| !obervation.getObervationStatus().equalsIgnoreCase("R")) {
-				if(obervation.getObervationStatus() == null) {
-					obervation.setObervationStatus("N");
-				}
-				obervationList.add(obervation);
-			}
-		}
-		return obervationList;
-	}
+//	public List<SummaryObervation> findNonRemoveObservation(List<SummaryObervation> summaryObervation) {
+//		List<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
+//		for (SummaryObervation obervation : summaryObervation) {
+//			if (obervation.getObervationStatus() == null
+//					|| !obervation.getObervationStatus().equalsIgnoreCase("R")) {
+//				if(obervation.getObervationStatus() == null) {
+//					obervation.setObervationStatus("N");
+//				}
+//				obervationList.add(obervation);
+//			}
+//		}
+//		return obervationList;
+//	}
 
 	public List<CircuitBreaker> findNonRemovedCircuitBreaker(List<CircuitBreaker> circuitBreaker) {
 		List<CircuitBreaker> circuitBreakerList = new ArrayList<CircuitBreaker>();
@@ -186,4 +244,92 @@ public class FindNonRemovedObject {
 		return supplyParametersList;
 	}
 
+	public List<SupplyOuterObservation> findNonRemovedSupplyOuterObservation(
+			List<SupplyOuterObservation> supplyOuterObservation) {
+		List<SupplyOuterObservation> supplyOuterObservationList = new ArrayList<SupplyOuterObservation>();
+		for (SupplyOuterObservation supplyOuterObservationItr : supplyOuterObservation) {
+			if (supplyOuterObservationItr.getSupplyOuterObservationStatus() != null
+					&& !supplyOuterObservationItr.getSupplyOuterObservationStatus().equalsIgnoreCase("R")) {
+				List<AlternativeInnerObservation> alternativeInnerObservationList = new ArrayList<AlternativeInnerObservation>();
+				if (supplyOuterObservationItr.getAlternativeInnerObservation() != null 
+						&& supplyOuterObservationItr.getObservationComponentDetails().equalsIgnoreCase("alternate")) {
+					for (AlternativeInnerObservation alternativeInnerObservation : supplyOuterObservationItr
+							.getAlternativeInnerObservation()) {
+						if (alternativeInnerObservation.getAlternativeInnerObservationStatus() != null
+								&& !alternativeInnerObservation.getAlternativeInnerObservationStatus()
+										.equalsIgnoreCase("R")) {
+							alternativeInnerObservationList.add(alternativeInnerObservation);
+						}
+					}
+					
+				}
+				supplyOuterObservationItr.setAlternativeInnerObservation(alternativeInnerObservationList);
+				supplyOuterObservationList.add(supplyOuterObservationItr);
+			}
+		}
+		return supplyOuterObservationList;
+	}
+
+
+	private List<InspectionOuterObservation> findNonRemovedInspectionOuterObervation(
+			List<InspectionOuterObservation> inspectionOuterObervation) {
+
+		List<InspectionOuterObservation> outerObservationList = new ArrayList<InspectionOuterObservation>();
+		for (InspectionOuterObservation outerObservation : inspectionOuterObervation) {
+			if (outerObservation.getInspectionOuterObservationStatus() != null
+					&& !outerObservation.getInspectionOuterObservationStatus().equalsIgnoreCase("R")) {
+				List<InspectionInnerObservations> innerObservationsList = new ArrayList<InspectionInnerObservations>();
+				if (outerObservation.getInspectionInnerObservations() != null) {
+					for (InspectionInnerObservations innerObservations : outerObservation
+							.getInspectionInnerObservations()) {
+						if (innerObservations.getInspectionInnerObservationStatus() != null
+								&& !innerObservations.getInspectionInnerObservationStatus().equalsIgnoreCase("R")) {
+							innerObservationsList.add(innerObservations);
+						}
+					}
+				}
+				outerObservation.setInspectionInnerObservations(innerObservationsList);
+				outerObservationList.add(outerObservation);
+			}
+		}
+		return outerObservationList;
+	}
+
+	public List<TestingInnerObservation> findNonRemoveTestingInnerObservationByReport(
+			Optional<TestingReport> testingReport) {
+
+		List<TestingInnerObservation> innerObservationList = new ArrayList<TestingInnerObservation>();
+		List<Testing> testingList = testingReport.get().getTesting();
+
+		for (Testing testing : testingList) {
+			if (testing.getTestingStatus() != null && !testing.getTestingStatus().equalsIgnoreCase("R")) {
+				List<TestDistRecords> testDistRecords = testing.getTestDistRecords();
+				for (TestDistRecords testDistRecordItr : testDistRecords) {
+					if (testDistRecordItr.getTestDistRecordStatus() != null
+							&& !testDistRecordItr.getTestDistRecordStatus().equalsIgnoreCase("R")) {
+						innerObservationList.addAll(
+								findNonRemoveTestingInnerObservation(testDistRecordItr.getTestingInnerObservation()));
+
+					}
+				}
+			}
+
+		}
+		return innerObservationList;
+
+	}
+	
+	
+	public List<TestingInnerObservation> findNonRemoveTestingInnerObservation(
+			List<TestingInnerObservation> testingInnerObservation) {
+		List<TestingInnerObservation> innerObservationList = new ArrayList<TestingInnerObservation>();
+
+		for (TestingInnerObservation innerObservation : testingInnerObservation) {
+			if (innerObservation.getTestingInnerObservationStatus() != null
+					&& !innerObservation.getTestingInnerObservationStatus().equalsIgnoreCase("R")) {
+				innerObservationList.add(innerObservation);
+			}
+		}
+		return innerObservationList;
+	}
 }

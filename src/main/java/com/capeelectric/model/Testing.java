@@ -59,12 +59,8 @@ public class Testing implements Serializable {
 	private Integer locationCount;
 
 	@JsonManagedReference
-	@OneToMany(mappedBy = "testing", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<TestDistribution> testDistribution;
-
-	@JsonManagedReference
 	@OneToMany(mappedBy = "testing", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<TestingRecords> testingRecords;
+	private List<TestDistRecords> testDistRecords;
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "testingReport", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -115,20 +111,12 @@ public class Testing implements Serializable {
 		this.date = date;
 	}
 
-	public List<TestDistribution> getTestDistribution() {
-		return testDistribution;
+	public List<TestDistRecords> getTestDistRecords() {
+		return testDistRecords;
 	}
 
-	public void setTestDistribution(List<TestDistribution> testDistribution) {
-		this.testDistribution = testDistribution;
-	}
-
-	public List<TestingRecords> getTestingRecords() {
-		return testingRecords;
-	}
-
-	public void setTestingRecords(List<TestingRecords> testingRecords) {
-		this.testingRecords = testingRecords;
+	public void setTestDistRecords(List<TestDistRecords> testDistRecords) {
+		this.testDistRecords = testDistRecords;
 	}
 
 	public TestingReport getTestingReport() {

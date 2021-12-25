@@ -31,6 +31,15 @@ public class ConsumerUnit implements Serializable {
 	@Column(name = "CONSUMER_ID")
 	private Integer consumerId;
 	
+	@Column(name = "DISTRIBUTIONBOARD_DETAILS")
+	private String distributionBoardDetails;
+	
+	@Column(name = "REFERANCE")
+	private String referance;
+	
+	@Column(name = "LOCATION")
+	private String location;
+	
 	@Column(name = "ACCESS_AND_WORKING")
 	private String accessWorking;
 	
@@ -120,6 +129,12 @@ public class ConsumerUnit implements Serializable {
 	
 	@Column(name = "ALL_CONDUCTOR_CON")
 	private String allConductorCon;
+	
+	@Column(name = "CONSUMER_STATUS")
+	private String consumerStatus;
+	
+	@Column(name = "LOCATION_COUNT")
+	private Integer locationCount;
 	
 	@JsonBackReference
 	@ManyToOne
@@ -382,4 +397,43 @@ public class ConsumerUnit implements Serializable {
 		this.ipaoInspection = ipaoInspection;
 	}
 
+	public String getDistributionBoardDetails() {
+		return distributionBoardDetails;
+	}
+
+	public void setDistributionBoardDetails(String distributionBoardDetails) {
+		this.distributionBoardDetails = distributionBoardDetails;
+	}
+
+	public String getReferance() {
+		return referance;
+	}
+
+	public void setReferance(String referance) {
+		this.referance = referance;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getConsumerStatus() {
+		return consumerStatus;
+	}
+
+	public void setConsumerStatus(String consumerStatus) {
+		this.consumerStatus = consumerStatus;
+	}
+
+	public Integer getLocationCount() {
+		return locationCount;
+	}
+
+	public void setLocationCount(Integer locationCount) {
+		this.locationCount = locationCount;
+	}
 }

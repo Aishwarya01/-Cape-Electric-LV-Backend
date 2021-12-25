@@ -9,13 +9,21 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.ObservationException;
 import com.capeelectric.exception.SummaryException;
+import com.capeelectric.model.AllComponentObservation;
+import com.capeelectric.model.AlternativeInnerObservation;
+import com.capeelectric.model.InspectionInnerObservations;
+import com.capeelectric.model.InspectionOuterObservation;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
 import com.capeelectric.model.SummaryDeclaration;
-import com.capeelectric.model.SummaryObervation;
+import com.capeelectric.model.SupplyOuterObservation;
+import com.capeelectric.model.TestingInnerObservation;
 import com.capeelectric.repository.SummaryRepository;
+import com.capeelectric.service.ObservationService;
 import com.capeelectric.service.PrintService;
+import com.capeelectric.service.SummaryService;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -35,8 +43,14 @@ public class PrintServiceImpl implements PrintService {
 	@Autowired
 	private SummaryRepository summaryRepository;
 
+	@Autowired
+	private ObservationService observationService;
+
+	@Autowired
+	private SummaryService summaryService;
+
 	@Override
-	public void printSummary(String userName, Integer siteId) throws SummaryException {
+	public void printSummary(String userName, Integer siteId) throws SummaryException, ObservationException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 
@@ -46,8 +60,6 @@ public class PrintServiceImpl implements PrintService {
 
 				List<Summary> summary = summaryRepository.findByUserNameAndSiteId(userName, siteId);
 				Summary summary11 = summary.get(0);
-
-				List<SummaryObervation> observation1 = summary11.getSummaryObervation();
 
 				List<SummaryDeclaration> declaration1 = summary11.getSummaryDeclaration();
 				SummaryDeclaration declaration = declaration1.get(0);
@@ -85,7 +97,6 @@ public class PrintServiceImpl implements PrintService {
 				table13.addCell(cell8);
 
 				Font font5 = new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
-				Font font7 = new Font(BaseFont.createFont(), 12, Font.NORMAL, BaseColor.BLACK);
 				document.add(paragraphOne);
 				document.add(table10);
 				document.add(table13);
@@ -95,15 +106,15 @@ public class PrintServiceImpl implements PrintService {
 				for (Summary summary1 : summary) {
 
 					PdfPTable table4 = new PdfPTable(pointColumnWidths);
-					table4.setSpacingBefore(10f); // Space before table
+					table4.setSpacingBefore(5f); // Space before table
 					table4.setWidthPercentage(100);
 					table4.getDefaultCell().setBorder(0);
+
 					Font font8 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
 					Font font9 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 					PdfPCell cell = new PdfPCell(new Paragraph(summary1.getExtentInstallation(),
 							new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 					table4.addCell(new Phrase("Extent of installation covered by this Report:", font8));
-
 					cell.setBorder(PdfPCell.NO_BORDER);
 					table4.addCell(cell);
 
@@ -132,13 +143,14 @@ public class PrintServiceImpl implements PrintService {
 					cell24.setBorder(PdfPCell.NO_BORDER);
 					table4.addCell(cell24);
 
-					Paragraph paragraphOne5 = new Paragraph(
-							"The inspection and testing detailed in this report have been carried out in accordance with IEC60364. It should be note that cables concealed within trunk/trench and conduits, under floors which are generally within the fabric of the building or underground, have not been inspected unless it is specifically agreed between the client and inspector prior to the inspection :"
-									+ summary1.getInspectionTestingDetailed(),
-							font8);
 					document.add(table4);
-					document.add(paragraphOne5);
-					Font font3 = new Font(Font.FontFamily.TIMES_ROMAN, 9, Font.ITALIC, BaseColor.BLACK);
+
+//					Paragraph paragraphOne5 = new Paragraph(
+//							"The inspection and testing detailed in this report have been carried out in accordance with IEC60364. It should be note that cables concealed within trunk/trench and conduits, under floors which are generally within the fabric of the building or underground, have not been inspected unless it is specifically agreed between the client and inspector prior to the inspection :  "
+//									+ summary1.getInspectionTestingDetailed(),
+//							font8);
+//					document.add(table4);
+//					document.add(paragraphOne5);
 
 					PdfPTable table15 = new PdfPTable(1);
 					table15.setWidthPercentage(100); // Width 100%
@@ -152,67 +164,273 @@ public class PrintServiceImpl implements PrintService {
 					document.add(table15);
 
 					Paragraph paragraphOne6 = new Paragraph(
-							"Referring to attached inspection report and test results and subject to the limitations specified at the extent and limitations of inspection and testing:"
+							"Referring to attached inspection report and test results and subject to the limitations specified at the extent and limitations of inspection and testing :  "
 									+ summary1.getLimitationsInspection(),
 							font8);
 					document.add(paragraphOne6);
 
 					if (summary1.getLimitationsInspection().equals("The following observations are made")) {
 
-						PdfPTable table6 = new PdfPTable(4);
+//						Inspection Observation Start from here
+
+						PdfPTable obs1 = new PdfPTable(1);
+						obs1.setWidthPercentage(100); // Width 100%
+						obs1.setSpacingBefore(10f); // Space before table
+						obs1.getDefaultCell().setBorder(0);
+
+						PdfPCell ObservationCell1 = new PdfPCell(
+								new Paragraph("Supply characteristics observations :", font5));
+						ObservationCell1.setBorder(PdfPCell.NO_BORDER);
+						ObservationCell1.setBackgroundColor(BaseColor.LIGHT_GRAY);
+						obs1.addCell(ObservationCell1);
+						document.add(obs1);
+
+						PdfPTable Obsevation = new PdfPTable(pointColumnWidths);
+						Obsevation.setWidthPercentage(100); // Width 100%
+						Obsevation.setSpacingBefore(10f); // Space before table
+						Obsevation.getDefaultCell().setBorder(0);
+
+						PdfPTable InnAlterOBS = new PdfPTable(pointColumnWidths);
+						InnAlterOBS.setWidthPercentage(100); // Width 100%
+//						InnAlterOBS.setSpacingBefore(5f); // Space before table
+						InnAlterOBS.getDefaultCell().setBorder(0);
+
+						PdfPTable Obsevation2 = new PdfPTable(pointColumnWidths);
+						Obsevation2.setWidthPercentage(100); // Width 100%
+//						Obsevation2.setSpacingBefore(5f); // Space before table
+						Obsevation2.getDefaultCell().setBorder(0);
+
+						AllComponentObservation allComponentObservation = observationService
+								.retrieveObservationsInSummary(userName, siteId);
+
+						for (SupplyOuterObservation supplyObs : allComponentObservation.getSupplyOuterObservation()) {
+
+							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("mains")) {
+
+								PdfPCell MainsOBS = new PdfPCell(new Paragraph("Mains observation :", font9));
+								MainsOBS.setBorder(PdfPCell.NO_BORDER);
+								MainsOBS.setGrayFill(0.92f);
+								Obsevation.addCell(MainsOBS);
+								PdfPCell MainsOBS2 = new PdfPCell(
+										new Paragraph(supplyObs.getObservationDescription(), font9));
+								MainsOBS2.setGrayFill(0.92f);
+								MainsOBS2.setBorder(PdfPCell.NO_BORDER);
+								Obsevation.addCell(MainsOBS2);
+							}
+
+							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("alternate")) {
+
+								for (AlternativeInnerObservation summaryInnerObservation : supplyObs
+										.getAlternativeInnerObservation()) {
+
+									PdfPCell alObs = new PdfPCell(new Paragraph("Alternate Observations", font9));
+									alObs.setBorder(PdfPCell.NO_BORDER);
+//									alObs.setGrayFill(0.92f);
+									InnAlterOBS.addCell(alObs);
+									PdfPCell alObs2 = new PdfPCell(
+											new Paragraph(summaryInnerObservation.getObservationDescription(), font9));
+//									alObs2.setGrayFill(0.92f);
+									alObs2.setBorder(PdfPCell.NO_BORDER);
+									InnAlterOBS.addCell(alObs2);
+								}
+							}
+
+							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("earthingNoOfJointsOb")) {
+
+								PdfPCell EarthConOBS = new PdfPCell(
+										new Paragraph("Earthing Conductor Observation :", font9));
+								EarthConOBS.setBorder(PdfPCell.NO_BORDER);
+								EarthConOBS.setGrayFill(0.92f);
+								Obsevation2.addCell(EarthConOBS);
+								PdfPCell EarthConOBS2 = new PdfPCell(
+										new Paragraph(supplyObs.getObservationDescription(), font9));
+								EarthConOBS2.setGrayFill(0.92f);
+								EarthConOBS2.setBorder(PdfPCell.NO_BORDER);
+								Obsevation2.addCell(EarthConOBS2);
+							}
+
+							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("bondingNoOfJointsOb")) {
+
+								PdfPCell BonOBS = new PdfPCell(new Paragraph("Bonding Conductor Observation :", font9));
+								BonOBS.setBorder(PdfPCell.NO_BORDER);
+//									BonOBS.setGrayFill(0.92f);
+								Obsevation2.addCell(BonOBS);
+								PdfPCell BonOBS2 = new PdfPCell(
+										new Paragraph(supplyObs.getObservationDescription(), font9));
+//									BonOBS2.setGrayFill(0.92f);
+								BonOBS2.setBorder(PdfPCell.NO_BORDER);
+								Obsevation2.addCell(BonOBS2);
+							}
+
+							if (supplyObs.getObservationComponentDetails().equals("instalLocationReportOb")) {
+
+								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Earth electrode observation :", font9));
+								EarthOBS.setBorder(PdfPCell.NO_BORDER);
+								EarthOBS.setGrayFill(0.92f);
+								Obsevation2.addCell(EarthOBS);
+								PdfPCell EarthOBS2 = new PdfPCell(
+										new Paragraph(supplyObs.getObservationDescription(), font9));
+								EarthOBS2.setGrayFill(0.92f);
+								EarthOBS2.setBorder(PdfPCell.NO_BORDER);
+								Obsevation2.addCell(EarthOBS2);
+							}
+						}
+
+						document.add(Obsevation);
+						document.add(InnAlterOBS);
+						document.add(Obsevation2);
+
+//						Inspection Observation Start from here
+
+						PdfPTable obs2 = new PdfPTable(1);
+						obs2.setWidthPercentage(100); // Width 100%
+						obs2.setSpacingBefore(10f); // Space before table
+						obs2.getDefaultCell().setBorder(0);
+
+						PdfPCell InspectionOBS = new PdfPCell(new Paragraph("Inspection observations :", font5));
+						InspectionOBS.setBorder(PdfPCell.NO_BORDER);
+						InspectionOBS.setBackgroundColor(BaseColor.LIGHT_GRAY);
+						obs2.addCell(InspectionOBS);
+						document.add(obs2);
+
+						PdfPTable Obsevation1 = new PdfPTable(pointColumnWidths);
+						Obsevation1.setWidthPercentage(100); // Width 100%
+						Obsevation1.setSpacingBefore(10f); // Space before table
+						Obsevation1.getDefaultCell().setBorder(0);
+
+						PdfPTable InnInspOBS = new PdfPTable(pointColumnWidths);
+						InnInspOBS.setWidthPercentage(100); // Width 100%
+//						InnInspOBS.setSpacingBefore(5f); // Space before table
+						InnInspOBS.getDefaultCell().setBorder(0);
+
+						for (InspectionOuterObservation inspectionObs : allComponentObservation
+								.getInspectionOuterObservation()) {
+
+							if (inspectionObs.getObservationComponentDetails()
+									.equalsIgnoreCase("inspectionComponent")) {
+
+								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Location observation :", font9));
+								EarthOBS.setBorder(PdfPCell.NO_BORDER);
+								EarthOBS.setGrayFill(0.92f);
+								Obsevation1.addCell(EarthOBS);
+								PdfPCell EarthOBS2 = new PdfPCell(
+										new Paragraph(inspectionObs.getObservationDescription(), font9));
+								EarthOBS2.setGrayFill(0.92f);
+								EarthOBS2.setBorder(PdfPCell.NO_BORDER);
+								Obsevation1.addCell(EarthOBS2);
+
+							}
+
+//							if (inspectionObs.getObservationComponentDetails().equalsIgnoreCase("consumer-UnitIter")) {
+
+								for (InspectionInnerObservations inspectionInnerObservation : inspectionObs
+										.getInspectionInnerObservations()) {
+
+									PdfPCell insInnerObs = new PdfPCell(new Paragraph("Consumer observation", font9));
+									insInnerObs.setBorder(PdfPCell.NO_BORDER);
+//									insInnerObs.setGrayFill(0.92f);
+									InnInspOBS.addCell(insInnerObs);
+									PdfPCell insInnerObs2 = new PdfPCell(new Paragraph(
+											inspectionInnerObservation.getObservationDescription(), font9));
+//									insInnerObs2.setGrayFill(0.92f);
+									insInnerObs2.setBorder(PdfPCell.NO_BORDER);
+									InnInspOBS.addCell(insInnerObs2);
+//								}
+							}
+						}
+
+						document.add(Obsevation1);
+						document.add(InnInspOBS);
+						
+//						Testing Observation Start from here
+
+						PdfPTable obs3 = new PdfPTable(1);
+						obs3.setWidthPercentage(100); // Width 100%
+						obs3.setSpacingBefore(10f); // Space before table
+						obs3.getDefaultCell().setBorder(0);
+
+						PdfPCell TestingOBS = new PdfPCell(new Paragraph("Testing observations :", font5));
+						TestingOBS.setBorder(PdfPCell.NO_BORDER);
+						TestingOBS.setBackgroundColor(BaseColor.LIGHT_GRAY);
+						obs3.addCell(TestingOBS);
+						document.add(obs3);
+
+						PdfPTable InnTestingOBS = new PdfPTable(pointColumnWidths);
+						InnTestingOBS.setWidthPercentage(100); // Width 100%
+						InnTestingOBS.setSpacingBefore(10f); // Space before table
+						InnTestingOBS.getDefaultCell().setBorder(0);
+
+						for (TestingInnerObservation testingObs : allComponentObservation
+								.getTestingInnerObservation()) {
+
+							if (testingObs.getObservationComponentDetails()
+									.equalsIgnoreCase("circuit")) {
+
+								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Circuit details observation :", font9));
+								EarthOBS.setBorder(PdfPCell.NO_BORDER);
+								EarthOBS.setGrayFill(0.92f);
+								InnTestingOBS.addCell(EarthOBS);
+								PdfPCell EarthOBS2 = new PdfPCell(
+										new Paragraph(testingObs.getObservationDescription(), font9));
+								EarthOBS2.setGrayFill(0.92f);
+								EarthOBS2.setBorder(PdfPCell.NO_BORDER);
+								InnTestingOBS.addCell(EarthOBS2);
+
+							}
+						}
+						document.add(InnTestingOBS);
+						
+						
+						
+						float[] pointColumnWidths3 = { 30F, 40F, 90F };
+
+						PdfPTable table6 = new PdfPTable(pointColumnWidths3);
 						table6.setWidthPercentage(100); // Width 100%
 						table6.setSpacingBefore(10f); // Space before table
-						table6.setSpacingAfter(10f); // Space after table
+						table6.setSpacingAfter(5f); // Space after table
 						table6.setWidthPercentage(100);
 
 						tableHeader(table6);
-						tableData(table6, observation1);
+						tableData(table6, summary1);
 						document.add(table6);
 					}
 
 					PdfPTable table16 = new PdfPTable(1);
 					table16.setWidthPercentage(100); // Width 100%
-					table16.setSpacingBefore(10f); // Space before table
-					table16.setWidthPercentage(100);
+					table16.setSpacingBefore(5f); // Space before table
 					table16.getDefaultCell().setBorder(0);
-
-					PdfPCell cell26 = new PdfPCell(new Paragraph(15, "Section - 3:Recommendations", font5));
+//
+					PdfPCell cell26 = new PdfPCell(new Paragraph("2.2: Observations classified as:-", font5));
 					cell26.setBorder(PdfPCell.NO_BORDER);
 					cell26.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					table16.addCell(cell26);
 					document.add(table16);
 
 					Paragraph paragraphThree22 = new Paragraph(
-							"I/We recommend that any observations that are classified as “danger present” (Code C1) or “potentially dangerous” (Code C2) should be acted upon as a matter of urgency.\r\n"
-									+ "Investigation without delay is recommended for observations which are identified as “Required further investigation”. Observations classified as “Improvement recommended” (Code C3) should be given due consideration. Subject to necessary remedial action being taken, I/We recommended that the installations should be further inspected and tested.	\r\n",
+							"Code C1 “dangers present” or Code C2 “potentially dangerous” are acted upon the matter of urgency and remedial action to be taken immediately, \r\nCode C3 “Improvement recommended” should be given due consideration, \r\nCode R1 “required further investigation” should start investigation without any delay. \r\nSubject to necessary remedial action being taken, I/We recommended that the installation is further inspected and tested by :",
 							font9);
+
 					document.add(paragraphThree22);
-					PdfPTable table11 = new PdfPTable(2);
+
+					float[] pointColumnWidthsDate = { 14F, 190F };
+
+					PdfPTable table11 = new PdfPTable(pointColumnWidthsDate);
 					table11.setWidthPercentage(100); // Width 100%
 					table11.setSpacingBefore(10f); // Space before table
-					table11.setSpacingAfter(10f); // Space after table
-					table11.setWidthPercentage(100);
+					table11.setSpacingAfter(5f); // Space after table
 					table11.getDefaultCell().setBorder(0);
 
 					PdfPCell cell23 = new PdfPCell(new Paragraph(summary1.getRecommendationsDate(), font9));
-					table11.addCell(new Phrase(" Date:", font8));
-
+					table11.addCell(new Phrase("Date:", font8));
 					cell23.setBorder(PdfPCell.NO_BORDER);
 					table11.addCell(cell23);
 					document.add(table11);
+
 					PdfPTable table22 = new PdfPTable(pointColumnWidths);
 					table22.setSpacingBefore(10f); // Space before table
 					table22.setSpacingAfter(10f); // Space after table
 					table22.setWidthPercentage(100);
 					table22.getDefaultCell().setBorder(0);
-
-					float[] pointColumnWidths1 = { 160F, 90F };
-
-					PdfPTable table7 = new PdfPTable(pointColumnWidths1); // 3 columns.
-					table7.setWidthPercentage(100); // Width 100%
-					table7.setSpacingBefore(10f); // Space before table
-//					table7.setSpacingAfter(10f); // Space after table
-					table7.getDefaultCell().setBorder(0);
 
 					PdfPTable table17 = new PdfPTable(1);
 					table17.setWidthPercentage(100); // Width 100%
@@ -220,11 +438,19 @@ public class PrintServiceImpl implements PrintService {
 					table17.getDefaultCell().setBorder(0);
 
 					PdfPCell cell27 = new PdfPCell(
-							new Paragraph(15, "Section - 4:Summary And Conditions Of The Installation ", font5));
+							new Paragraph(15, "Section - 3:Summary And Conditions Of The Installation ", font5));
 					cell27.setBorder(PdfPCell.NO_BORDER);
 					cell27.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					table17.addCell(cell27);
 					document.add(table17);
+
+					float[] pointColumnWidths1 = { 90F, 90F };
+
+					PdfPTable table7 = new PdfPTable(pointColumnWidths1); // 3 columns.
+					table7.setWidthPercentage(100); // Width 100%
+					table7.setSpacingBefore(10f); // Space before table
+//					table7.setSpacingAfter(10f); // Space after table
+					table7.getDefaultCell().setBorder(0);
 
 					PdfPCell cell132 = new PdfPCell(new Paragraph(
 							"General condition of the installation in terms of electrical safety:", font9));
@@ -263,7 +489,7 @@ public class PrintServiceImpl implements PrintService {
 				table18.setSpacingBefore(10f); // Space before table
 				table18.getDefaultCell().setBorder(0);
 
-				PdfPCell cell28 = new PdfPCell(new Paragraph(15, "Section - 5:Declaration", font5));
+				PdfPCell cell28 = new PdfPCell(new Paragraph(15, "Section - 4:Declaration", font5));
 				cell28.setBorder(PdfPCell.NO_BORDER);
 				cell28.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table18.addCell(cell28);
@@ -285,7 +511,10 @@ public class PrintServiceImpl implements PrintService {
 				table9.getDefaultCell().setBorder(0);
 
 				addRow(table9, "Inspected and Tested  By ", "Authorized By");
-				PdfPTable table = new PdfPTable(4); // 3 columns.
+
+				float[] pointColumnWidthsSec5 = { 40F, 90F, 40F, 90F };
+
+				PdfPTable table = new PdfPTable(pointColumnWidthsSec5); // 3 columns.
 				table.setWidthPercentage(100); // Width 100%
 				addRow(table, "Name", declaration.getName(), "Name", declaration11.getName());
 				addRow(table, "Company", declaration.getCompany(), "Company", declaration11.getCompany());
@@ -362,11 +591,15 @@ public class PrintServiceImpl implements PrintService {
 				}
 				document.close();
 				writer.close();
-			} catch (Exception e) {
+			} catch (
+
+			Exception e) {
 				e.printStackTrace();
 			}
 
-		} else {
+		} else
+
+		{
 			throw new SummaryException("Invalid Inputs");
 		}
 	}
@@ -442,9 +675,8 @@ public class PrintServiceImpl implements PrintService {
 	}
 
 	private void addRow(PdfPTable table9, String string, String string2) throws DocumentException, IOException {
-		Font font8 = new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK);
+		Font font8 = new Font(BaseFont.createFont(), 10, Font.BOLD, BaseColor.BLACK);
 		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font8));
-
 		PdfPCell nameCell1 = new PdfPCell(new Paragraph(string2, font8));
 		nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		nameCell.setGrayFill(0.92f);
@@ -454,34 +686,37 @@ public class PrintServiceImpl implements PrintService {
 		table9.addCell(nameCell1);
 	}
 
-	private void tableData(PdfPTable table6, List<SummaryObervation> observation1)
-			throws DocumentException, IOException {
-		for (SummaryObervation arr : observation1) {
-			if (!arr.getObervationStatus().equalsIgnoreCase("R")) {
-				Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-				PdfPCell cell = new PdfPCell();
-				cell.setPhrase(new Phrase(arr.getObservations(), font));
-				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table6.addCell(cell);
-				cell.setPhrase(new Phrase(arr.getFurtherActions(), font));
-				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table6.addCell(cell);
-				cell.setPhrase(new Phrase(arr.getReferanceNumberReport(), font));
-				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table6.addCell(cell);
-				cell.setPhrase(new Phrase(arr.getComment(), font));
-				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				table6.addCell(cell);
-			}
-		}
-
+	private void tableData(PdfPTable table6, Summary summary1) throws DocumentException, IOException {
+//		for (Summary arr : summary1) {
+//			if (!arr.getObervationStatus().equalsIgnoreCase("R")) {
+		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+		PdfPCell cell = new PdfPCell();
+//				cell.setPhrase(new Phrase("", font));
+//				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//				table6.addCell(cell);
+		cell.setPhrase(new Phrase("\r\n" + summary1.getReferanceNumberReport(), font));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table6.addCell(cell);
+		cell.setPhrase(new Phrase(summary1.getFurtherActions(), font));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table6.addCell(cell);
+		cell.setPhrase(new Phrase(summary1.getComment(), font));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table6.addCell(cell);
+//			}
 	}
+
+	// }
 
 	private void tableHeader(PdfPTable table6) throws DocumentException, IOException {
 		PdfPCell cell = new PdfPCell();
-		cell.setPadding(4);
-		Font font = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
-		cell.setPhrase(new Phrase("Observations", font));
+		cell.setPadding(3);
+		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+//		cell.setPhrase(new Phrase("Observations", font));
+//		cell.setGrayFill(0.92f);
+//		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//		table6.addCell(cell);
+		cell.setPhrase(new Phrase("Reference in Report", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table6.addCell(cell);
@@ -489,11 +724,7 @@ public class PrintServiceImpl implements PrintService {
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table6.addCell(cell);
-		cell.setPhrase(new Phrase("Reference number in report", font));
-		cell.setGrayFill(0.92f);
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table6.addCell(cell);
-		cell.setPhrase(new Phrase("Remedial action", font));
+		cell.setPhrase(new Phrase("Remedial action to be taken", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table6.addCell(cell);
@@ -502,14 +733,11 @@ public class PrintServiceImpl implements PrintService {
 
 	private void addRow(PdfPTable table6, String string, String string2, String string3, String string4)
 			throws DocumentException, IOException {
-		Font font = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
-		;
+		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font));
-		PdfPCell valueCell1 = new PdfPCell(
-				new Paragraph(string2, new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC)));
+		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2, new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3, font));
-		PdfPCell valueCell3 = new PdfPCell(
-				new Paragraph(string4, new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC)));
+		PdfPCell valueCell3 = new PdfPCell(new Paragraph(string4, new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 		nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -521,18 +749,6 @@ public class PrintServiceImpl implements PrintService {
 		table6.addCell(valueCell2);
 		table6.addCell(valueCell3);
 
-	}
-
-	private void addRow(PdfPTable table, String string, String value, String value1) {
-		PdfPCell nameCell = new PdfPCell(new Paragraph(string));
-		PdfPCell valueCell1 = new PdfPCell(new Paragraph(value1));
-		PdfPCell valueCell = new PdfPCell(new Paragraph(value));
-		nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table.addCell(nameCell);
-		valueCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table.addCell(valueCell);
-		table.addCell(valueCell1);
 	}
 
 }

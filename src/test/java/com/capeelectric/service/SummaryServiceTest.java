@@ -17,12 +17,18 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.DecimalConversionException;
+import com.capeelectric.exception.InspectionException;
+import com.capeelectric.exception.InstalReportException;
+import com.capeelectric.exception.ObservationException;
+import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.SummaryException;
+import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.ReportDetails;
@@ -31,7 +37,6 @@ import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
 import com.capeelectric.model.SummaryDeclaration;
-import com.capeelectric.model.SummaryObervation;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
@@ -52,6 +57,24 @@ public class SummaryServiceTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(SummaryServiceTest.class);
 
+	@MockBean
+	private InstalReportPDFService instalReportService;
+	
+	@MockBean
+	private PrintSupplyService printSupplyService ;
+	
+	@MockBean
+	private InspectionServicePDF inspectionServicePDF;
+	
+	@MockBean
+	private PrintTestingService printTestingService;
+	
+	@MockBean
+	private PrintService printService ;
+	
+	@MockBean
+	private PrintFinalPDFService printFinalPDFService;
+	
 	@MockBean
 	private SummaryRepository summaryRepository;
 	
@@ -104,12 +127,12 @@ public class SummaryServiceTest {
 		listComment.add(summaryComment);
 		summary.setSummaryComment(listComment);
 		
-		ArrayList<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
-		SummaryObervation obervation = new SummaryObervation();
-		obervation.setObervationStatus("a");
-		obervationList.add(obervation);
+//		ArrayList<SummaryObervation> obervationList = new ArrayList<SummaryObervation>();
+//		SummaryObervation obervation = new SummaryObervation();
+//		obervation.setObervationStatus("a");
+//		obervationList.add(obervation);
 		
-		summary.setSummaryObervation(obervationList);
+		//summary.setSummaryObervation(obervationList);
 	}
 	
 	{
@@ -134,7 +157,7 @@ public class SummaryServiceTest {
 	}
 
 	@Test
-	public void testAddSummary() throws SummaryException, CompanyDetailsException {
+	public void testAddSummary() throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException {
 
 		SupplyCharacteristics supplyCharacteristics = new SupplyCharacteristics();
 		supplyCharacteristics.setSiteId(6);
@@ -165,10 +188,24 @@ public class SummaryServiceTest {
 		
 		List<SummaryDeclaration> listofSummaryDeclaration= new ArrayList<SummaryDeclaration>();
 		listofSummaryDeclaration.add(new SummaryDeclaration());
-		List<SummaryObervation> listofSummaryObervation= new ArrayList<SummaryObervation>();
-		listofSummaryObervation.add(new SummaryObervation());
+//		List<SummaryObervation> listofSummaryObervation= new ArrayList<SummaryObervation>();
+//		listofSummaryObervation.add(new SummaryObervation());
 		summary.setSummaryDeclaration(listofSummaryDeclaration);
-		summary.setSummaryObervation(listofSummaryObervation);
+//		summary.setSummaryObervation(listofSummaryObervation);
+		
+		instalReportService.printBasicInfromation(summary.getUserName(),summary.getSiteId(),reportdet);
+		
+		printSupplyService.printSupply(summary.getUserName(),summary.getSiteId(),supply);
+		
+		inspectionServicePDF.printInspectionDetails(summary.getUserName(),summary.getSiteId(), periodicreport);
+		
+		printTestingService.printTesting(summary.getUserName(),summary.getSiteId(),testreport);
+		
+		printService.printSummary(summary.getUserName(),summary.getSiteId());
+		
+		printFinalPDFService.printFinalPDF(summary.getUserName(),summary.getSiteId());
+		
+		
 		
 		summaryServiceImpl.addSummary(summary);
 		

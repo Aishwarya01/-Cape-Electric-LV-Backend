@@ -2,18 +2,15 @@ package com.capeelectric.service.impl;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.PeriodicTestingException;
+import com.capeelectric.model.TestDistRecords;
 import com.capeelectric.model.TestDistribution;
 import com.capeelectric.model.TestIncomingDistribution;
 import com.capeelectric.model.Testing;
@@ -21,7 +18,6 @@ import com.capeelectric.model.TestingEquipment;
 import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.model.TestingReportComment;
-import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.PrintTestingService;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -39,17 +35,20 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class PrintTestingServiceImpl implements PrintTestingService {
 
-	@Autowired
-	private TestingReportRepository testingReportRepository;
+//	@Autowired
+//	private TestingReportRepository testingReportRepository;
 
 	@Override
-	public void printTesting(String userName, Integer siteId) throws PeriodicTestingException {
+	public void printTesting(String userName, Integer siteId, Optional<TestingReport> testingRepo) throws PeriodicTestingException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 			try {
 				PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("Testing.pdf"));
 
-				TestingReport testingReference = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
+//				TestingReport testingReference = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
+				
+				TestingReport testingReference = testingRepo.get();
+				
 				List<Testing> testing = testingReference.getTesting();
 
 				Testing testRecords = testing.get(0);
@@ -82,7 +81,9 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 				for (Testing testing1 : testing) {
 					if (!testing1.getTestingStatus().equalsIgnoreCase("R")) {
-						testingIteration(document, testing1, testEquipment);
+						List<TestDistRecords> testDistRecords = testing1.getTestDistRecords();
+						for (TestDistRecords testDistRecord : testDistRecords)
+							testingIteration(document, testing1, testDistRecord, testEquipment);
 					}
 				}
 
@@ -153,6 +154,8 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 				}
 				document.close();
+				writer.close();
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -163,14 +166,14 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 	}
 
-	private void testingIteration(Document document, Testing testing1, List<TestingEquipment> testEquipment)
-			throws DocumentException, IOException {
-		Font font4 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+	private void testingIteration(Document document, Testing testing1, TestDistRecords testDistRecord,
+			List<TestingEquipment> testEquipment) throws DocumentException, IOException {
+
 		new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
 		Font font5 = new Font(BaseFont.createFont(), 9, Font.NORMAL, BaseColor.BLACK);
 
-		List<TestDistribution> testDistribution = testing1.getTestDistribution();
-		List<TestingRecords> testRecords = testing1.getTestingRecords();
+		List<TestDistribution> testDistribution = testDistRecord.getTestDistribution();
+		List<TestingRecords> testRecords = testDistRecord.getTestingRecords();
 
 		TestingReport testreport = testing1.getTestingReport();
 		List<TestIncomingDistribution> testIncomingDistribution = testreport.getTestIncomingDistribution();
@@ -190,7 +193,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 		table100.setWidthPercentage(100); // Width 100%
 		table100.setSpacingBefore(5f); // Space before table
-//		table100.setSpacingAfter(5f); // Space after table
+		// table100.setSpacingAfter(5f); // Space after table
 		table100.setWidthPercentage(100);
 		table100.getDefaultCell().setBorder(0);
 
@@ -212,7 +215,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 		table1001.setWidthPercentage(100); // Width 100%
 		table1001.setSpacingBefore(5f); // Space before table
-//		table1001.setSpacingAfter(5f); // Space after table
+		// table1001.setSpacingAfter(5f); // Space after table
 		table1001.setWidthPercentage(100);
 		table1001.getDefaultCell().setBorder(0);
 		PdfPCell cell36 = new PdfPCell(
@@ -257,10 +260,10 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 		PdfPCell cell4 = new PdfPCell(new Paragraph("Date:", font7));
 		cell4.setBorder(PdfPCell.NO_BORDER);
-//		cell4.setGrayFill(0.92f);
+		// cell4.setGrayFill(0.92f);
 		table.addCell(cell4);
 		PdfPCell cell23 = new PdfPCell(new Paragraph(testing1.getDate(), font7));
-//		cell23.setGrayFill(0.92f);
+		// cell23.setGrayFill(0.92f);
 		cell23.setBorder(PdfPCell.NO_BORDER);
 		table.addCell(cell23);
 
@@ -289,7 +292,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		PdfPTable table11 = new PdfPTable(5);
 		table11.setWidthPercentage(100); // Width 100%
 		table11.setSpacingBefore(10f); // Space before table
-//		table11.setSpacingAfter(5f); // Space after table
+		// table11.setSpacingAfter(5f); // Space after table
 
 		tableHeader1(table11);
 		tableData1(table11, testEquipment);
@@ -310,13 +313,9 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 		PdfPTable table1 = new PdfPTable(pointColumnWidths);
 		table1.setWidthPercentage(100); // Width 100%
-		table1.setSpacingBefore(10f); // Space after table
-
+		table1.setSpacingBefore(5f); // Space after table
 		table1.getDefaultCell().setBorder(0);
-		PdfPTable table34 = new PdfPTable(10);
-		table34.setSpacingBefore(10f); // Space before table
-		table34.setWidthPercentage(100); // Width 100%
-		table34.getDefaultCell().setBorder(0);
+
 		for (TestDistribution distribution : testDistribution) {
 			PdfPCell cell13 = new PdfPCell(new Paragraph(distribution.getDistributionBoardDetails(), font5));
 			table1.addCell(new Phrase("Distribution Board Details:", font5));
@@ -376,7 +375,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		}
 
 		for (TestIncomingDistribution testincomingDist : testIncomingDistribution) {
-			List<TestDistribution> testDistribution22 = testing1.getTestDistribution();
+			List<TestDistribution> testDistribution22 = testDistRecord.getTestDistribution();
 			TestDistribution distribution = testDistribution22.get(0);
 
 			if (testincomingDist.getSourceFromSupply().equals(distribution.getSourceFromSupply())) {
@@ -426,10 +425,10 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 				Font font9 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 
-				PdfPTable table250 = new PdfPTable(2);
+				PdfPTable table250 = new PdfPTable(pointColumnWidths);
 				table250.setWidthPercentage(100); // Width 100%
-				table250.setSpacingBefore(5);
-				table250.setSpacingAfter(5);
+				table250.setSpacingBefore(5f);
+				table250.setSpacingAfter(5f);
 				table250.getDefaultCell().setBorder(0);
 
 				PdfPCell celllabel = new PdfPCell(new Paragraph("Source Of Incoming:", font9));
@@ -444,7 +443,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 				PdfPTable table2 = new PdfPTable(10);
 				table2.setWidthPercentage(100); // Width 100%
-				table2.setSpacingBefore(10);
+				table2.setSpacingBefore(5f);
 				// table2.setSpacingAfter(5);
 				table2.getDefaultCell().setBorder(0);
 
@@ -462,10 +461,9 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 						IPF9);
 
 				addRow1(table22, "Actual load current connected to this source (A)",
-						"                               " + loadCurrent,
-						"                               " + loadCurrent2,
-						"                                                    " + loadCurrent3,
-						"                               " + loadCurrent4);
+						"                             " + loadCurrent, "                             " + loadCurrent2,
+						"                                              " + loadCurrent3,
+						"                             " + loadCurrent4);
 
 				document.add(table250);
 				document.add(table2);
@@ -527,7 +525,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				cell.setPhrase(new Phrase(arr.getEquipmentSerialNo(), font6));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table11.addCell(cell);
-				cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString(), font6));
+				cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString().split(" ")[0]));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 //				split(" ")[0]
 				table11.addCell(cell);

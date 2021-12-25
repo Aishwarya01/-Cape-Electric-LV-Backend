@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
@@ -73,6 +74,15 @@ public class Summary implements Serializable {
 
 	@Column(name = "OVERALL_ASSESSMENT_INSTALLATION")
 	private String overallAssessmentInstallation;
+	
+	@Column(name = "REFERANCE_NUMBER_REPORT")
+	private String referanceNumberReport;
+
+	@Column(name = "FURTHER_ACTIONS")
+	private String furtherActions;
+
+	@Column(name = "COMMENT")
+	private String comment;
 
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
@@ -88,15 +98,14 @@ public class Summary implements Serializable {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<SummaryObervation> summaryObervation;
-
-	@JsonManagedReference
-	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<SummaryDeclaration> summaryDeclaration;
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<SummaryComment> summaryComment;
+	
+	@Transient
+	private AllComponentObservation allComponentObservation;
 
 	public Integer getSummaryId() {
 		return summaryId;
@@ -234,14 +243,6 @@ public class Summary implements Serializable {
 		this.updatedDate = updatedDate;
 	}
 
-	public List<SummaryObervation> getSummaryObervation() {
-		return summaryObervation;
-	}
-
-	public void setSummaryObervation(List<SummaryObervation> summaryObervation) {
-		this.summaryObervation = summaryObervation;
-	}
-
 	public List<SummaryDeclaration> getSummaryDeclaration() {
 		return summaryDeclaration;
 	}
@@ -256,6 +257,38 @@ public class Summary implements Serializable {
 
 	public void setSummaryComment(List<SummaryComment> summaryComment) {
 		this.summaryComment = summaryComment;
+	}
+
+	public AllComponentObservation getAllComponentObservation() {
+		return allComponentObservation;
+	}
+
+	public void setAllComponentObservation(AllComponentObservation allComponentObservation) {
+		this.allComponentObservation = allComponentObservation;
+	}
+
+	public String getReferanceNumberReport() {
+		return referanceNumberReport;
+	}
+
+	public void setReferanceNumberReport(String referanceNumberReport) {
+		this.referanceNumberReport = referanceNumberReport;
+	}
+
+	public String getFurtherActions() {
+		return furtherActions;
+	}
+
+	public void setFurtherActions(String furtherActions) {
+		this.furtherActions = furtherActions;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
  
 }

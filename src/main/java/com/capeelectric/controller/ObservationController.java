@@ -1,7 +1,5 @@
 package com.capeelectric.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capeelectric.exception.ObservationException;
-
+import com.capeelectric.model.AllComponentObservation;
 import com.capeelectric.model.ObservationComponent;
-
 import com.capeelectric.service.ObservationService;
 
 @RestController
-@RequestMapping("api/v2")
+@RequestMapping("api/v1")
 public class ObservationController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ObservationController.class);
@@ -48,12 +45,20 @@ public class ObservationController {
 		return new ResponseEntity<String>("Observation Successfully Updated", HttpStatus.OK);
 	}
 
-	@GetMapping("/retrieveObservation/{userName}/{siteId}")
-	public ResponseEntity<ObservationComponent> retrieveSummary(@PathVariable String userName,
+	@GetMapping("/retrieveObservation/{userName}/{siteId}/{observationComponent}")
+	public ResponseEntity<ObservationComponent> retrieveObservation(@PathVariable String userName,
+			@PathVariable Integer siteId, @PathVariable String observationComponent) throws ObservationException {
+		logger.info("called retrieveObservation function");
+		return new ResponseEntity<ObservationComponent>(
+				observationService.retrieveObservation(userName, siteId, observationComponent), HttpStatus.OK);
+	}
+
+	@GetMapping("/retrieveObservationsInSummary/{userName}/{siteId}")
+	public ResponseEntity<AllComponentObservation> retrieveObservationsInSummary(@PathVariable String userName,
 			@PathVariable Integer siteId) throws ObservationException {
-		logger.info("called retrieveObservation function" );
-		return new ResponseEntity<ObservationComponent>(observationService.retrieveObservation(userName, siteId),
-				HttpStatus.OK);
+		logger.info("called retrieveObservation function");
+		return new ResponseEntity<AllComponentObservation>(
+				observationService.retrieveObservationsInSummary(userName, siteId), HttpStatus.OK);
 	}
 
 }

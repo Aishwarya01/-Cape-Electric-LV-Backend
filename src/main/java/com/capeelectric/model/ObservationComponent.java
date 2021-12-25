@@ -16,10 +16,12 @@ import org.hibernate.annotations.NamedQuery;
 @Entity
 @Table(name = "observation_component_table")
 @NamedQueries(value = {
-		@NamedQuery(name = "ObservationRepository.findByUserNameAndSiteId", query = "select s from ObservationComponent s where s.userName=:userName and s.siteId=:siteId"),
-		@NamedQuery(name = "ObservationRepositary.findBySiteId", query = "select s from ObservationComponent s where s.siteId=:siteId") })
+		@NamedQuery(name = "ObservationRepository.findByUserNameAndSiteIdAndObservationComponent", query = "select s from ObservationComponent s where s.userName=:userName and s.siteId=:siteId and s.observationComponent=:observationComponent"),
+		@NamedQuery(name = "ObservationRepositary.findByUserNameAndSiteId", query = "select s from ObservationComponent s where s.siteId=:siteId and s.userName=:userName") })
 
 public class ObservationComponent implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,6 +36,9 @@ public class ObservationComponent implements Serializable {
 
 	@Column(name = "OBSERVATION_COMPONENT")
 	private String observationComponent;
+	
+	@Column(name = "OBSERVATION_COMPONENT_DETAILS")
+	private String observationComponentDetails;
 
 	@Column(name = "OBSERVATIONS")
 	private String observations;
@@ -120,6 +125,14 @@ public class ObservationComponent implements Serializable {
 
 	public void setUpdatedDate(LocalDateTime updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+
+	public String getObservationComponentDetails() {
+		return observationComponentDetails;
+	}
+
+	public void setObservationComponentDetails(String observationComponentDetails) {
+		this.observationComponentDetails = observationComponentDetails;
 	}
 
 }

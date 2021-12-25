@@ -82,4 +82,10 @@ public class GlobalExceptionHandler {
     		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
     		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
+    
+    @ExceptionHandler({ObservationException.class})
+    public ResponseEntity<ErrorMessage> handleObservationException(ObservationException e){
+    		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
+    		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
 }

@@ -59,6 +59,9 @@ public class IpaoInspection implements Serializable {
 	@Column(name = "I_METER_EQU")
 	private String meterEqu;
 
+	@Column(name = "I_TOV_MEASURES_LV_HV")
+	private String tovMeasuresLVHV;
+
 	@Column(name = "I_ISOLATOR")
 	private String isolator;
 
@@ -148,12 +151,15 @@ public class IpaoInspection implements Serializable {
 
 	@Column(name = "O_SUPPLEMENTARY_BONDING")
 	private String supplementaryBonding;
+	
+	@Column(name = "O_SPECIFIC_INSPECTION_RE")
+	private String specificInspectionRe;
 
 	@Column(name = "INSPECTION_FLAG")
 	private String inspectionFlag;
 
 	@JsonManagedReference
-	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ConsumerUnit> consumerUnit;
 
 	@JsonManagedReference
@@ -168,6 +174,10 @@ public class IpaoInspection implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "PERIODIC_INSPECTION_ID")
 	private PeriodicInspection periodicInspection;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<InspectionOuterObservation> inspectionOuterObervation;
 
 	public Integer getIpaoInspectionId() {
 		return ipaoInspectionId;
@@ -179,6 +189,14 @@ public class IpaoInspection implements Serializable {
 
 	public void setInspectionFlag(String inspectionFlag) {
 		this.inspectionFlag = inspectionFlag;
+	}
+	
+	public String getTovMeasuresLVHV() {
+		return tovMeasuresLVHV;
+	}
+
+	public void setTovMeasuresLVHV(String tovMeasuresLVHV) {
+		this.tovMeasuresLVHV = tovMeasuresLVHV;
 	}
 
 	public void setIpaoInspectionId(Integer ipaoInspectionId) {
@@ -519,6 +537,22 @@ public class IpaoInspection implements Serializable {
 
 	public void setLocationCount(Integer locationCount) {
 		this.locationCount = locationCount;
+	}
+
+	public String getSpecificInspectionRe() {
+		return specificInspectionRe;
+	}
+
+	public void setSpecificInspectionRe(String specificInspectionRe) {
+		this.specificInspectionRe = specificInspectionRe;
+	}
+
+	public List<InspectionOuterObservation> getInspectionOuterObervation() {
+		return inspectionOuterObervation;
+	}
+
+	public void setInspectionOuterObervation(List<InspectionOuterObservation> inspectionOuterObervation) {
+		this.inspectionOuterObervation = inspectionOuterObervation;
 	}
 
 }

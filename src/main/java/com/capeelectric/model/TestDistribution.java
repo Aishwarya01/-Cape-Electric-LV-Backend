@@ -61,8 +61,8 @@ public class TestDistribution implements Serializable {
 	
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "TESTING_ID")
-	private Testing testing;
+	@JoinColumn(name = "TEST_DIST_RECORD_ID")
+	private TestDistRecords testDistRecords;
 	
 	public String getSourceFromSupply() {
 		return sourceFromSupply;
@@ -144,12 +144,12 @@ public class TestDistribution implements Serializable {
 		this.installedEquipmentVulnarable = installedEquipmentVulnarable;
 	}
 
-	public Testing getTesting() {
-		return testing;
+	public TestDistRecords getTestDistRecords() {
+		return testDistRecords;
 	}
 
-	public void setTesting(Testing testing) {
-		this.testing = testing;
+	public void setTestDistRecords(TestDistRecords testDistRecords) {
+		this.testDistRecords = testDistRecords;
 	}
 
 }
