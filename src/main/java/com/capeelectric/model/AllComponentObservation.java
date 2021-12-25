@@ -13,7 +13,7 @@ public class AllComponentObservation {
 
 	private List<InspectionOuterObservation> InspectionOuterObservation;
 
-	private List<TestingOuterObservation> testingOuterObservation;
+	private List<TestingInnerObservation> testingInnerObservation;
 
 	public List<SupplyOuterObservation> getSupplyOuterObservation() {
 		return supplyOuterObservation;
@@ -31,12 +31,12 @@ public class AllComponentObservation {
 		InspectionOuterObservation = inspectionOuterObservation;
 	}
 
-	public List<TestingOuterObservation> getTestingOuterObservation() {
-		return testingOuterObservation;
+	public List<TestingInnerObservation> getTestingInnerObservation() {
+		return testingInnerObservation;
 	}
 
-	public void setTestingOuterObservation(List<TestingOuterObservation> testingOuterObservation) {
-		this.testingOuterObservation = testingOuterObservation;
+	public void setTestingInnerObservation(List<TestingInnerObservation> testingInnerObservation) {
+		this.testingInnerObservation = testingInnerObservation;
 	}
 
 }

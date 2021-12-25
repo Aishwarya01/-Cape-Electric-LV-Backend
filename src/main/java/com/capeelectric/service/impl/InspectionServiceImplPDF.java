@@ -104,7 +104,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 //						inspectionIteration(document, arr, consumerUnit, circuit, isolationCurrent);
 						Font font10B = new Font(BaseFont.createFont(), 10, Font.NORMAL | Font.BOLD, BaseColor.BLACK);
 
-						float[] pointColumnWidths = { 100F, 100F };
+						float[] pointColumnWidths = { 120F, 80F };
 						PdfPTable table100 = new PdfPTable(pointColumnWidths);
 
 						table100.setWidthPercentage(100); // Width 100%
@@ -219,12 +219,38 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 
 						PdfPCell cell4 = new PdfPCell(new Paragraph(ipoInspection.getMeterEqu(),
 								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						table1.addCell(new Phrase("Over Voltage Protection:",
+						table1.addCell(new Phrase("Over Voltage Protection (overvoltage category maintained):",
 								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //					    cell4.setFixedHeight(30f);
 						cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
 						cell4.setBorder(PdfPCell.NO_BORDER);
 						table1.addCell(cell4);
+						
+						PdfPCell Tov = new PdfPCell(new Paragraph("TOV Control measures on LV side due to HV fault :",
+								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+						Tov.setBackgroundColor(new GrayColor(0.93f));
+						Tov.setHorizontalAlignment(Element.ALIGN_LEFT);
+						Tov.setBorder(PdfPCell.NO_BORDER);
+						table1.addCell(Tov);
+						PdfPCell Tov1 = new PdfPCell(new Paragraph(ipoInspection.getTovMeasuresLVHV(),
+								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+						Tov1.setHorizontalAlignment(Element.ALIGN_LEFT);
+						Tov1.setBackgroundColor(new GrayColor(0.93f));
+						Tov1.setBorder(PdfPCell.NO_BORDER);
+						table1.addCell(Tov1);
+						
+						PdfPCell Iso = new PdfPCell(new Paragraph("Isolator (means to isolate the incoming supply system) :",
+								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+//						Iso.setBackgroundColor(new GrayColor(0.93f));
+						Iso.setHorizontalAlignment(Element.ALIGN_LEFT);
+						Iso.setBorder(PdfPCell.NO_BORDER);
+						table1.addCell(Iso);
+						PdfPCell Iso2 = new PdfPCell(new Paragraph(ipoInspection.getIsolator(),
+								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+						Iso2.setHorizontalAlignment(Element.ALIGN_LEFT);
+//						Iso2.setBackgroundColor(new GrayColor(0.93f));
+						Iso2.setBorder(PdfPCell.NO_BORDER);
+						table1.addCell(Iso2);
 
 						document.add(table1);
 

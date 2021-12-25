@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "inspection_outer_obervation_table")
+@Table(name = "inspection_outer_observation_table")
 public class InspectionOuterObservation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -45,7 +45,7 @@ public class InspectionOuterObservation implements Serializable {
 
 	@JsonManagedReference
 	@OneToMany(mappedBy = "inspectionOuterObservation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<InspectionInnerObervations> inspectionInnerObervations;
+	private List<InspectionInnerObservations> inspectionInnerObservations;
 
 	public Integer getInspectionOuterObservationId() {
 		return inspectionOuterObservationId;
@@ -71,14 +71,6 @@ public class InspectionOuterObservation implements Serializable {
 		this.observationDescription = observationDescription;
 	}
 
-	public List<InspectionInnerObervations> getInspectionInnerObervations() {
-		return inspectionInnerObervations;
-	}
-
-	public void setInspectionInnerObervations(List<InspectionInnerObervations> inspectionInnerObervations) {
-		this.inspectionInnerObervations = inspectionInnerObervations;
-	}
-
 	public IpaoInspection getIpaoInspection() {
 		return ipaoInspection;
 	}
@@ -93,6 +85,14 @@ public class InspectionOuterObservation implements Serializable {
 
 	public void setInspectionOuterObservationStatus(String inspectionOuterObservationStatus) {
 		this.inspectionOuterObservationStatus = inspectionOuterObservationStatus;
+	}
+
+	public List<InspectionInnerObservations> getInspectionInnerObservations() {
+		return inspectionInnerObservations;
+	}
+
+	public void setInspectionInnerObservations(List<InspectionInnerObservations> inspectionInnerObservations) {
+		this.inspectionInnerObservations = inspectionInnerObservations;
 	}
 
 }

@@ -144,30 +144,26 @@ public class FinalReportServiceImpl implements FinalReportService {
 				supplyCharacteristics.get().setSupplyOuterObservation(findNonRemovedObject
 						.findNonRemovedSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation()));
 				finalReport.setSupplyCharacteristics(supplyCharacteristics.get());
-				if (periodicInspection.isPresent() && periodicInspection != null) {
+				
+			} 
+			if (periodicInspection.isPresent() && periodicInspection != null) {
 
-					periodicInspection.get().setIpaoInspection(
-							findNonRemovedObject.findNonRemovedInspectionLocation(periodicInspection.get()));
-					finalReport.setPeriodicInspection(periodicInspection.get());
+				periodicInspection.get().setIpaoInspection(
+						findNonRemovedObject.findNonRemovedInspectionLocation(periodicInspection.get()));
+				finalReport.setPeriodicInspection(periodicInspection.get());
 
-					if (testingReport.isPresent() && testingReport != null) {
-						testingReport.get().setTesting(
-								findNonRemovedObject.findNonRemoveTesting(testingReport.get().getTesting()));
-						testingReport.get()
-								.setTestingOuterObservation(findNonRemovedObject.findNonRemoveTestingOuterObservation(
-										testingReport.get().getTestingOuterObservation()));
-						finalReport.setTestingReport(testingReport.get());
+				if (testingReport.isPresent() && testingReport != null) {
+					testingReport.get().setTesting(
+							findNonRemovedObject.findNonRemoveTesting(testingReport.get().getTesting()));
+					finalReport.setTestingReport(testingReport.get());
 
-						if (summary.isPresent() && summary != null) {
-							summary.get().setSummaryObervation(findNonRemovedObject
-									.findNonRemoveObservation(summary.get().getSummaryObervation()));
-							summary.get().setAllComponentObservation(allComponentObservation(siteId));
-							finalReport.setSummary(summary.get());
- 
-							logger.debug("Successfully Five_Steps fetching Operation done");
-							return Optional.of(finalReport);
+					if (summary.isPresent() && summary != null) {
+						summary.get().setAllComponentObservation(allComponentObservation(siteId));
+						finalReport.setSummary(summary.get());
 
-						}
+						logger.debug("Successfully Five_Steps fetching Operation done");
+						return Optional.of(finalReport);
+
 					}
 				}
 			}
@@ -188,14 +184,14 @@ public class FinalReportServiceImpl implements FinalReportService {
 		Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository.findBySiteId(siteId);
 		Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(siteId);
 		Optional<TestingReport> testingReport = testingReportRepository.findBySiteId(siteId);
-
+		
 		if (supplyCharacteristics.isPresent() && supplyCharacteristics.get().getSupplyOuterObservation() != null) {
-			allComponentObservation.setSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation());
+			allComponentObservation.setSupplyOuterObservation(findNonRemovedObject.findNonRemovedSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation()));
 		} else if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
 			allComponentObservation
 					.setInspectionOuterObservation(inspectionObservation(periodicInspection.get().getIpaoInspection()));
-		} else if (testingReport.isPresent() && testingReport.get().getTestingOuterObservation() != null) {
-			allComponentObservation.setTestingOuterObservation(testingReport.get().getTestingOuterObservation());
+		} else if (testingReport.isPresent()) {
+			allComponentObservation.setTestingInnerObservation(findNonRemovedObject.findNonRemoveTestingInnerObservationByReport(testingReport));
 		}
 		return allComponentObservation;
 	}
@@ -205,7 +201,10 @@ public class FinalReportServiceImpl implements FinalReportService {
 		for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
 			for (InspectionOuterObservation inspectionOuterObservationItr : ipaoInspectionItr
 					.getInspectionOuterObervation()) {
-				inspectionObservation.add(inspectionOuterObservationItr);
+				if (inspectionOuterObservationItr.getInspectionOuterObservationStatus()!=null &&
+						!inspectionOuterObservationItr.getInspectionOuterObservationStatus().equalsIgnoreCase("R")) {
+					inspectionObservation.add(inspectionOuterObservationItr);
+				}
 			}
 		}
 		return inspectionObservation;

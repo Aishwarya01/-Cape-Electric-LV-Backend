@@ -1,7 +1,5 @@
 package com.capeelectric.controller;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capeelectric.exception.ObservationException;
+import com.capeelectric.model.AllComponentObservation;
 import com.capeelectric.model.ObservationComponent;
 import com.capeelectric.service.ObservationService;
 
@@ -55,10 +54,10 @@ public class ObservationController {
 	}
 
 	@GetMapping("/retrieveObservationsInSummary/{userName}/{siteId}")
-	public ResponseEntity<List<ObservationComponent>> retrieveObservationsInSummary(@PathVariable String userName,
+	public ResponseEntity<AllComponentObservation> retrieveObservationsInSummary(@PathVariable String userName,
 			@PathVariable Integer siteId) throws ObservationException {
 		logger.info("called retrieveObservation function");
-		return new ResponseEntity<List<ObservationComponent>>(
+		return new ResponseEntity<AllComponentObservation>(
 				observationService.retrieveObservationsInSummary(userName, siteId), HttpStatus.OK);
 	}
 

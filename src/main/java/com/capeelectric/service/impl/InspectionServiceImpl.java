@@ -410,7 +410,7 @@ public class InspectionServiceImpl implements InspectionService {
 					}
 				} catch (Exception e) {
 					throw new InspectionException(
-							"Please check removed Inspection Location data not available in PeriodicTesting");
+							"Please check removed Inspection Location data not available in PeriodicTesting"+e.getMessage());
 				}
 			}
 		}
@@ -432,9 +432,8 @@ public class InspectionServiceImpl implements InspectionService {
 	private void findConsumerUnitLocation(List<ConsumerUnit> consumerUnitList) throws InspectionException {
 		for (ConsumerUnit consumerUnit : consumerUnitList) {
 			if (consumerUnit != null && consumerUnit.getLocation() != null) {
-				ConsumerUnit findByLocation = inspectionConsumerUnitRepository
-						.findByLocation(consumerUnit.getLocation());
-				if (findByLocation == null) {
+				ConsumerUnit consumerLocation = inspectionConsumerUnitRepository.findByLocation(consumerUnit.getLocation());
+				if (consumerLocation == null) {
 
 				} else {
 					throw new InspectionException(
@@ -461,14 +460,17 @@ public class InspectionServiceImpl implements InspectionService {
 				if (consumerUnit != null && consumerUnit.getConsumerStatus() != null
 						&& consumerUnit.getConsumerStatus().equalsIgnoreCase("R")
 						&& consumerUnit.getLocationCount() != null) {
-					TestDistRecords testDistRecords = testDistRecordsRepository
-							.findByLocationCount(consumerUnit.getLocationCount());
-					if (testDistRecords != null) {
-						testDistRecords.setTestDistRecordStatus("R");
-						testDistRecordsRepository.save(testDistRecords);
-					} else {
+					try {
+
+						TestDistRecords testDistRecords = testDistRecordsRepository
+								.findByLocationCount(consumerUnit.getLocationCount());
+						if (testDistRecords != null) {
+							testDistRecords.setTestDistRecordStatus("R");
+							testDistRecordsRepository.save(testDistRecords);
+						}
+					} catch(Exception e) {
 						throw new InspectionException(
-								"Please verify Removed consumerUnit records,Removed data not available in TestingDistrubtionRecords");
+								"Please verify Removed consumerUnit records,Removed data not available in TestingDistrubtionRecords"+e.getMessage());
 					}
 
 				}

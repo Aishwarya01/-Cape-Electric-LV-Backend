@@ -285,9 +285,9 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 							NFC8, NFC9);
 
 					addRow1(table22, "Actual load current connected to this source (A)",
-							"                       " + loadCurrent, "                       " + loadCurrent2,
-							"                                      " + loadCurrent3,
-							"                       " + loadCurrent4);
+							"                           " + loadCurrent, "                           " + loadCurrent2,
+							"                                             " + loadCurrent3,
+							"                            " + loadCurrent4);
 
 					document.add(table34);
 					document.add(table1);
@@ -364,7 +364,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 //				if (!supply.getMainSystemEarthing().equals("Others")) {
 
-				PdfPCell cell2911 = new PdfPCell(new Paragraph("Remarks :", font9));
+				PdfPCell cell2911 = new PdfPCell(new Paragraph("Remarks/Observation :", font9));
 				cell2911.setBorder(PdfPCell.NO_BORDER);
 				cell2911.setGrayFill(0.92f);
 				table2.addCell(cell2911);
@@ -1079,7 +1079,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 		cell21.setBorder(PdfPCell.NO_BORDER);
 		table6.addCell(cell21);
 
-		PdfPCell cell55 = new PdfPCell(new Paragraph("Remarks :", font6));
+		PdfPCell cell55 = new PdfPCell(new Paragraph("Remarks/Observation :", font6));
 		cell55.setBorder(PdfPCell.NO_BORDER);
 		cell55.setGrayFill(0.92f);
 		table6.addCell(cell55);

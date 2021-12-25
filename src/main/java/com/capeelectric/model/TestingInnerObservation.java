@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "testing_inner_obervations_table")
+@Table(name = "testing_inner_observations_table")
 public class TestingInnerObservation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -35,8 +35,8 @@ public class TestingInnerObservation implements Serializable {
 
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "TESTING_OUTER_OBSERVATION_ID")
-	private TestingOuterObservation testingOuterObservation;
+	@JoinColumn(name = "TEST_DIST_RECORD_ID")
+	private TestDistRecords testDistRecords;
 
 	public Integer getTestingInnerObervationsId() {
 		return testingInnerObervationsId;
@@ -62,16 +62,16 @@ public class TestingInnerObservation implements Serializable {
 		this.observationDescription = observationDescription;
 	}
 
-	public TestingOuterObservation getTestingOuterObservation() {
-		return testingOuterObservation;
-	}
-
-	public void setTestingOuterObservation(TestingOuterObservation testingOuterObservation) {
-		this.testingOuterObservation = testingOuterObservation;
-	}
-
 	public String getTestingInnerObservationStatus() {
 		return testingInnerObservationStatus;
+	}
+
+	public TestDistRecords getTestDistRecords() {
+		return testDistRecords;
+	}
+
+	public void setTestDistRecords(TestDistRecords testDistRecords) {
+		this.testDistRecords = testDistRecords;
 	}
 
 	public void setTestingInnerObservationStatus(String testingInnerObservationStatus) {
