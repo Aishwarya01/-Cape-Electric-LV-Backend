@@ -221,7 +221,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 
 						PdfPCell cell4 = new PdfPCell(new Paragraph(ipoInspection.getMeterEqu(),
 								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						table1.addCell(new Phrase("Over Voltage Protection:",
+						table1.addCell(new Phrase("Over Voltage Protection (overvoltage category maintained):",
 								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 //					    cell4.setFixedHeight(30f);
 						cell4.setHorizontalAlignment(Element.ALIGN_LEFT);
