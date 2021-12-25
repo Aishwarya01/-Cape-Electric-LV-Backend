@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
+import com.capeelectric.exception.ObservationException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
@@ -119,10 +120,11 @@ public class SummaryServiceImpl implements SummaryService {
 	 * @throws InspectionException 
 	 * @throws PeriodicTestingException 
 	 * @throws Exception 
+	 * @throws ObservationException 
 	 * 
 	*/
 	@Override
-	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception {
+	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException {
 		listOfComments = new ArrayList<SummaryComment>();
 		if (summary != null && summary.getUserName() != null && !summary.getUserName().isEmpty()
 				&& summary.getSiteId() != null && summary.getSiteId() != 0) {
