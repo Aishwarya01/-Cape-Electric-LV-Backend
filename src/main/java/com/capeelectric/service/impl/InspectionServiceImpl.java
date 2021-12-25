@@ -432,9 +432,8 @@ public class InspectionServiceImpl implements InspectionService {
 	private void findConsumerUnitLocation(List<ConsumerUnit> consumerUnitList) throws InspectionException {
 		for (ConsumerUnit consumerUnit : consumerUnitList) {
 			if (consumerUnit != null && consumerUnit.getLocation() != null) {
-				ConsumerUnit findByLocation = inspectionConsumerUnitRepository
-						.findByLocation(consumerUnit.getLocation());
-				if (findByLocation == null) {
+				ConsumerUnit consumerLocation = inspectionConsumerUnitRepository.findByLocation(consumerUnit.getLocation());
+				if (consumerLocation == null) {
 
 				} else {
 					throw new InspectionException(

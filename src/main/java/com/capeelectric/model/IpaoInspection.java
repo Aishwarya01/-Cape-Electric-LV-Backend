@@ -156,7 +156,7 @@ public class IpaoInspection implements Serializable {
 	private String inspectionFlag;
 
 	@JsonManagedReference
-	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "ipaoInspection", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ConsumerUnit> consumerUnit;
 
 	@JsonManagedReference

@@ -144,25 +144,26 @@ public class FinalReportServiceImpl implements FinalReportService {
 				supplyCharacteristics.get().setSupplyOuterObservation(findNonRemovedObject
 						.findNonRemovedSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation()));
 				finalReport.setSupplyCharacteristics(supplyCharacteristics.get());
-				if (periodicInspection.isPresent() && periodicInspection != null) {
+				
+			} 
+			if (periodicInspection.isPresent() && periodicInspection != null) {
 
-					periodicInspection.get().setIpaoInspection(
-							findNonRemovedObject.findNonRemovedInspectionLocation(periodicInspection.get()));
-					finalReport.setPeriodicInspection(periodicInspection.get());
+				periodicInspection.get().setIpaoInspection(
+						findNonRemovedObject.findNonRemovedInspectionLocation(periodicInspection.get()));
+				finalReport.setPeriodicInspection(periodicInspection.get());
 
-					if (testingReport.isPresent() && testingReport != null) {
-						testingReport.get().setTesting(
-								findNonRemovedObject.findNonRemoveTesting(testingReport.get().getTesting()));
-						finalReport.setTestingReport(testingReport.get());
+				if (testingReport.isPresent() && testingReport != null) {
+					testingReport.get().setTesting(
+							findNonRemovedObject.findNonRemoveTesting(testingReport.get().getTesting()));
+					finalReport.setTestingReport(testingReport.get());
 
-						if (summary.isPresent() && summary != null) {
-							summary.get().setAllComponentObservation(allComponentObservation(siteId));
-							finalReport.setSummary(summary.get());
- 
-							logger.debug("Successfully Five_Steps fetching Operation done");
-							return Optional.of(finalReport);
+					if (summary.isPresent() && summary != null) {
+						summary.get().setAllComponentObservation(allComponentObservation(siteId));
+						finalReport.setSummary(summary.get());
 
-						}
+						logger.debug("Successfully Five_Steps fetching Operation done");
+						return Optional.of(finalReport);
+
 					}
 				}
 			}
