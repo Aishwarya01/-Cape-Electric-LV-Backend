@@ -686,7 +686,7 @@ CREATE TABLE inspection_outer_observation_table(
 
 );
 
-CREATE TABLE inspection_inner_observations_table(
+CREATE TABLE inspection_inner_observation_table(
 
 		   INSPECTION_INNER_OBSERVATIONS_ID INT AUTO_INCREMENT,
 		   INSPECTION_OUTER_OBSERVATION_ID INT,

@@ -94,7 +94,7 @@ public class InspectionServiceImpl implements InspectionService {
 								&& ipaoInspectionItr.getCircuit().size() > 0
 								&& ipaoInspectionItr.getIsolationCurrent().size() > 0) {
 							ipaoInspectionItr.setConsumerUnit(addLocationCountInConsumerUnit(ipaoInspectionItr.getConsumerUnit()));
-							findConsumerUnitLocation(ipaoInspectionItr.getConsumerUnit());
+							//findConsumerUnitLocation(ipaoInspectionItr.getConsumerUnit());
 							i++;
 							if (i == ipaoInspection.size()) {
 								periodicInspectionComment = new PeriodicInspectionComment();
@@ -111,8 +111,12 @@ public class InspectionServiceImpl implements InspectionService {
 										.setCreatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 								periodicInspection
 										.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
-
-								inspectionRepository.save(periodicInspection);
+								try {
+									inspectionRepository.save(periodicInspection);
+								}catch(Exception e) {
+									throw new InspectionException("Not able to save Inspection data "+e.getMessage());
+								}
+								
 								siteDetails.updateSite(periodicInspection.getSiteId(),
 										periodicInspection.getUserName());
 							}
