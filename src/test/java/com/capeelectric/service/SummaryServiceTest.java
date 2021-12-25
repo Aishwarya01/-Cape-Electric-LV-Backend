@@ -22,7 +22,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.DecimalConversionException;
+import com.capeelectric.exception.InspectionException;
+import com.capeelectric.exception.InstalReportException;
+import com.capeelectric.exception.ObservationException;
+import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.SummaryException;
+import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.ReportDetails;
@@ -133,7 +138,7 @@ public class SummaryServiceTest {
 	}
 
 	@Test
-	public void testAddSummary() throws SummaryException, CompanyDetailsException {
+	public void testAddSummary() throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException {
 
 		SupplyCharacteristics supplyCharacteristics = new SupplyCharacteristics();
 		supplyCharacteristics.setSiteId(6);

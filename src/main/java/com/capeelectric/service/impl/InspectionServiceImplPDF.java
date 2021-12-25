@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.InspectionException;
@@ -17,7 +16,6 @@ import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.IsolationCurrent;
 import com.capeelectric.model.PeriodicInspection;
 import com.capeelectric.model.PeriodicInspectionComment;
-import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.service.InspectionServicePDF;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -36,11 +34,11 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class InspectionServiceImplPDF implements InspectionServicePDF {
 
-	@Autowired
-	private InspectionRepository inspectionRepository;
+//	@Autowired
+//	private InspectionRepository inspectionRepository;
 
 	@Override
-	public List<PeriodicInspection> printInspectionDetails(String userName, Integer siteId) throws InspectionException {
+	public List<PeriodicInspection> printInspectionDetails(String userName, Integer siteId,Optional<PeriodicInspection> periodicInspection) throws InspectionException {
 
 		if (userName != null && !userName.isEmpty() && siteId != null) {
 
@@ -51,8 +49,8 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				PdfWriter writer = PdfWriter.getInstance(document,
 						new FileOutputStream("PrintInspectionDetailsData.pdf"));
 
-				Optional<PeriodicInspection> inspectionDetails = inspectionRepository.findBySiteId(siteId);
-				PeriodicInspection inspection1 = inspectionDetails.get();
+//				Optional<PeriodicInspection> inspectionDetails = inspectionRepository.findBySiteId(siteId);
+				PeriodicInspection inspection1 = periodicInspection.get();
 
 				List<IpaoInspection> ipo = inspection1.getIpaoInspection();
 				IpaoInspection ipoInspection1 = ipo.get(0);

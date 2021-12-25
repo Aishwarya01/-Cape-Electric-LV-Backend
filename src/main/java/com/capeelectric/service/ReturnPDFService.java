@@ -31,25 +31,33 @@ public class ReturnPDFService {
 	private String accessKeyId;
 	@Value("${access.key.secret}")
 	private String accessKeySecret;
-	
+
 	@Autowired
 	private SiteRepository siteRepository;
 
-	public ByteArrayOutputStream printFinalPDF(String userName, Integer siteId) throws Exception {
+	public ByteArrayOutputStream printFinalPDF(String userName, Integer siteId, String keyName) throws Exception {
+		
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
-			String folderName = ((siteRepository.findById(siteId).isPresent() && siteRepository.findById(siteId).get() != null) ? siteRepository.findById(siteId).get().getSite() : "");
-			String fileNameInS3 = "finalreport.pdf";
+			
+			String folderName = ((siteRepository.findById(siteId).isPresent()
+					&& siteRepository.findById(siteId).get() != null) ? siteRepository.findById(siteId).get().getSite()
+							: "");
+			
+//			String fileNameInS3 = "finalreport.pdf";
 			try {
 				BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, accessKeySecret);
 				AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.AP_SOUTH_1)
 						.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
 
-				//			    5 seconds of time for executing between FileUpload And FileDownload in AWS s3 bucket
-				Thread.sleep(5000);
+				// 5 seconds of time for executing between FileUpload And FileDownload in AWS s3
+				// bucket
+                //Thread.sleep(5000);
 
-				//			    Downloading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
+				// Downloading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
 				S3Object fullObject;
-				fullObject = s3Client.getObject(new GetObjectRequest(s3BucketName, "LV_Site Name_".concat(folderName) + "/" + fileNameInS3));
+				fullObject = s3Client.getObject(
+						new GetObjectRequest(s3BucketName, "LV_Site Name_".concat(folderName) + "/" + keyName));
+				
 				logger.info("Downloading file done from AWS s3");
 				InputStream is = fullObject.getObjectContent();
 				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

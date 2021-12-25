@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.PeriodicTestingException;
@@ -18,7 +18,6 @@ import com.capeelectric.model.TestingEquipment;
 import com.capeelectric.model.TestingRecords;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.model.TestingReportComment;
-import com.capeelectric.repository.TestingReportRepository;
 import com.capeelectric.service.PrintTestingService;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -36,17 +35,20 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class PrintTestingServiceImpl implements PrintTestingService {
 
-	@Autowired
-	private TestingReportRepository testingReportRepository;
+//	@Autowired
+//	private TestingReportRepository testingReportRepository;
 
 	@Override
-	public void printTesting(String userName, Integer siteId) throws PeriodicTestingException {
+	public void printTesting(String userName, Integer siteId, Optional<TestingReport> testingRepo) throws PeriodicTestingException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 			try {
 				PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("Testing.pdf"));
 
-				TestingReport testingReference = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
+//				TestingReport testingReference = testingReportRepository.findByUserNameAndSiteId(userName, siteId);
+				
+				TestingReport testingReference = testingRepo.get();
+				
 				List<Testing> testing = testingReference.getTesting();
 
 				Testing testRecords = testing.get(0);

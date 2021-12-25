@@ -1,9 +1,11 @@
 package com.capeelectric.service;
 
-import com.capeelectric.exception.SummaryException;
+import java.util.Optional;
+
 import com.capeelectric.exception.SupplyCharacteristicsException;
+import com.capeelectric.model.SupplyCharacteristics;
 
 public interface PrintSupplyService {
-	public void printSupply(String userName, Integer siteId) throws SupplyCharacteristicsException;
+	public void printSupply(String userName, Integer siteId, Optional<SupplyCharacteristics> supplyCharacteristics)
+			throws SupplyCharacteristicsException;
 }
-

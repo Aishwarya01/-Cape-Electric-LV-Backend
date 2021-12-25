@@ -44,7 +44,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 	@Autowired
 	private SiteRepository siteRepository;
 
-	public List<ReportDetails> printBasicInfromation(String userName, Integer siteId) throws InstalReportException {
+	public List<ReportDetails> printBasicInfromation(String userName, Integer siteId, Optional<ReportDetails> reportDetailsRepo) throws InstalReportException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 
 			Document document = new Document(PageSize.A4, 36, 36, 50, 36);
@@ -132,8 +132,8 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				List<SitePersons> convertion1 = new ArrayList<>(sitePersonDetails);
 //				SitePersons sitepersons = convertion1.get(0);
 
-				Optional<ReportDetails> reportDetails = installationReportRepository.findBySiteId(siteId);
-				ReportDetails report = reportDetails.get();
+//				Optional<ReportDetails> reportDetails = installationReportRepository.findBySiteId(siteId);
+				ReportDetails report = reportDetailsRepo.get();
 
 				Set<SignatorDetails> signatureDetails = report.getSignatorDetails();
 				List<SignatorDetails> convertion = new ArrayList<>(signatureDetails);
@@ -783,8 +783,6 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 						}
 					}
 				}
-				
-				document.newPage();
 
 				PdfPTable contractor = new PdfPTable(pointColumnWidths10);
 				contractor.setWidthPercentage(100); // Width 100%

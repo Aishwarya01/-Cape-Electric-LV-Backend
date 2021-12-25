@@ -11,7 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CompanyDetailsException;
+import com.capeelectric.exception.InspectionException;
+import com.capeelectric.exception.InstalReportException;
+import com.capeelectric.exception.ObservationException;
+import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.SummaryException;
+import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.AllComponentObservation;
 import com.capeelectric.model.InspectionOuterObservation;
 import com.capeelectric.model.IpaoInspection;
@@ -29,6 +34,12 @@ import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
+import com.capeelectric.service.InspectionServicePDF;
+import com.capeelectric.service.InstalReportPDFService;
+import com.capeelectric.service.PrintFinalPDFService;
+import com.capeelectric.service.PrintService;
+import com.capeelectric.service.PrintSupplyService;
+import com.capeelectric.service.PrintTestingService;
 import com.capeelectric.service.SummaryService;
 import com.capeelectric.util.Constants;
 import com.capeelectric.util.FindNonRemovedObject;
@@ -43,6 +54,24 @@ import com.capeelectric.util.UserFullName;
 @Service
 public class SummaryServiceImpl implements SummaryService {
 
+	@Autowired
+	private InstalReportPDFService instalReportService;
+	
+	@Autowired
+	private PrintSupplyService printSupplyService ;
+	
+	@Autowired
+	private InspectionServicePDF inspectionServicePDF;
+	
+	@Autowired
+	private PrintTestingService printTestingService;
+	
+	@Autowired
+	private PrintService printService ;
+	
+	@Autowired
+	private PrintFinalPDFService printFinalPDFService;
+	
 	@Autowired
 	private SummaryRepository summaryRepository;
 	
@@ -86,10 +115,16 @@ public class SummaryServiceImpl implements SummaryService {
 	 * addSummary method to find summary object based on input summary_siteId
 	 * if not available summary object will be saved
 	 * @throws CompanyDetailsException 
+	 * @throws InstalReportException 
+	 * @throws SupplyCharacteristicsException 
+	 * @throws InspectionException 
+	 * @throws PeriodicTestingException 
+	 * @throws Exception 
+	 * @throws ObservationException 
 	 * 
 	*/
 	@Override
-	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException {
+	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException {
 		listOfComments = new ArrayList<SummaryComment>();
 		if (summary != null && summary.getUserName() != null && !summary.getUserName().isEmpty()
 				&& summary.getSiteId() != null && summary.getSiteId() != 0) {
@@ -141,6 +176,18 @@ public class SummaryServiceImpl implements SummaryService {
 						throw new SummaryException("Site-Id Already Available");
 					}
 
+					instalReportService.printBasicInfromation(summary.getUserName(),summary.getSiteId(),reportDetailsRepo);
+					
+					printSupplyService.printSupply(summary.getUserName(),summary.getSiteId(),supplyCharacteristics);
+					
+					inspectionServicePDF.printInspectionDetails(summary.getUserName(),summary.getSiteId(), periodicInspection);
+					
+					printTestingService.printTesting(summary.getUserName(),summary.getSiteId(),testingRepo);
+					
+					printService.printSummary(summary.getUserName(),summary.getSiteId());
+					
+					printFinalPDFService.printFinalPDF(summary.getUserName(),summary.getSiteId());
+					
 				} else {
 					throw new SummaryException("Please fill all the fields before clicking next button");
 				}

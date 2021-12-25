@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.SupplyCharacteristicsException;
@@ -17,7 +17,6 @@ import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.SupplyCharacteristicComment;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.SupplyParameters;
-import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.service.PrintSupplyService;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -34,19 +33,23 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 @Service
 public class PrintSupplyServiceImpl implements PrintSupplyService {
-	@Autowired
-	private SupplyCharacteristicsRepository supplyCharacteristicsRepository;
+	
+//	@Autowired
+//	private SupplyCharacteristicsRepository supplyCharacteristicsRepository;
 
 	@Override
-	public void printSupply(String userName, Integer siteId) throws SupplyCharacteristicsException {
+	public void printSupply(String userName, Integer siteId, Optional<SupplyCharacteristics> supplyCharacteristics)
+			throws SupplyCharacteristicsException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 
 			try {
 
 				PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("SupplyCharacteristic.pdf"));
-				SupplyCharacteristics supply = supplyCharacteristicsRepository.findByUserNameAndSiteId(userName,
-						siteId);
+//				SupplyCharacteristics supply = supplyCharacteristicsRepository.findByUserNameAndSiteId(userName,
+//						siteId);
+				
+				SupplyCharacteristics supply = supplyCharacteristics.get();
 
 				List<InstalLocationReport> instalLocationReport = supply.getInstalLocationReport();
 

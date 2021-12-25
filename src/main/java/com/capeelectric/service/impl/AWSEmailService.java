@@ -1,6 +1,10 @@
 package com.capeelectric.service.impl;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.Properties;
 
@@ -24,8 +28,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.util.AWSEmailConfig;
 import com.capeelectric.util.Constants;
+import com.itextpdf.text.DocumentException;
 
 /**
  * 
@@ -36,24 +49,37 @@ import com.capeelectric.util.Constants;
 public class AWSEmailService {
 
 	private String FROM = Constants.FROM_EMAIL;
-	
+
 	@Value("${app.email.disable}")
 	private String emailDisable;
-	
+
+	@Value("${s3.bucket.name}")
+	private String s3BucketName;
+
+	@Value("${access.key.id}")
+	private String accessKeyId;
+
+	@Value("${access.key.secret}")
+	private String accessKeySecret;
+
+	@Autowired
+	private SiteRepository siteRepository;
+
 	private static final Logger logger = LoggerFactory.getLogger(AWSEmailService.class);
 
 	@Autowired
 	private AWSEmailConfig emailConfig;
-	
+
 	/**
-	 * Send Email 
+	 * Send Email
+	 * 
 	 * @param email
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public  void sendEmail(String email, String content) throws MessagingException {
-		
-		if(!emailDisable.equalsIgnoreCase("Y")) {
+	public void sendEmail(String email, String content) throws MessagingException {
+
+		if (!emailDisable.equalsIgnoreCase("Y")) {
 			logger.debug("Inside AWS Email");
 			final String TO = email; // {YOUR_RECIPIENT_EMAIL_ADDRESS}
 
@@ -75,20 +101,20 @@ public class AWSEmailService {
 			message.setSentDate(new Date());
 			message.setFrom(new InternetAddress(FROM));
 			message.setRecipient(Message.RecipientType.TO, new InternetAddress(TO));
-			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
+			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT),
+					emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
 			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 			transport.close();
 		}
-		
-
 
 	}
-	
-	public  void sendEmailToAdmin(String content) throws MessagingException {
 
-		if(!emailDisable.equalsIgnoreCase("Y")) {
+	public void sendEmailToAdmin(String content) throws MessagingException {
+
+		if (!emailDisable.equalsIgnoreCase("Y")) {
 			logger.debug("Inside AWS Email");
-			final String TO = Constants.FIRST_PERSON_EMAIL+","+Constants.SECOND_PERSON_EMAIL+","+Constants.THIRD_PERSON_EMAIL; // {YOUR_RECIPIENT_EMAIL_ADDRESS}
+			final String TO = Constants.FIRST_PERSON_EMAIL + "," + Constants.SECOND_PERSON_EMAIL + ","
+					+ Constants.THIRD_PERSON_EMAIL; // {YOUR_RECIPIENT_EMAIL_ADDRESS}
 
 			Properties props = new Properties();
 			props.put("mail.transport.protocol", "smtp");
@@ -107,94 +133,129 @@ public class AWSEmailService {
 			message.setContent(content, "text/plain");
 			message.setSentDate(new Date());
 			message.setFrom(new InternetAddress(FROM));
-			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(TO) );
-			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(TO));
+			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT),
+					emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
 			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 			transport.close();
 		}
-		
-
 
 	}
-	
+
 	/**
-	 * Send Email 
+	 * Send Email
+	 * 
 	 * @param email
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public  void sendEmail(String toEmail,String ccEmail, String content) throws MessagingException {
-		
-		if(!emailDisable.equalsIgnoreCase("Y")) {
-		logger.debug("Inside AWS Email");
-		Properties props = new Properties();
-		props.put("mail.transport.protocol", "smtp");
-		props.put("mail.smtp.host", emailConfig.getSMTP_HOST_NAME());
-		props.put("mail.smtp.auth", "false");
-		props.put("mail.smtp.starttls.enable", "true");
+	public void sendEmail(String toEmail, String ccEmail, String content) throws MessagingException {
 
-		Session mailSession = Session.getDefaultInstance(props);
-		mailSession.setDebug(true);
-
-		Transport transport = mailSession.getTransport("smtp");
-
-		MimeMessage message = new MimeMessage(mailSession);
-
-		message.setSubject(Constants.EMAIL_SUBJECT);
-		message.setContent(content, "text/plain");
-		message.setSentDate(new Date());
-		message.setFrom(new InternetAddress(FROM));
-		message.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
-		message.addRecipient(Message.RecipientType.CC, new InternetAddress(ccEmail));
-		transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
-		transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
-	    transport.sendMessage(message, message.getRecipients(Message.RecipientType.CC));
-		transport.close();
-
-		}
-	}
-	/**
-	 * Download and Send the email to the user
-	 * @param userName
-	 * @throws MessagingException
-	 */
-	public void sendEmailPDF(String userName) throws MessagingException {
-		
-		if(!emailDisable.equalsIgnoreCase("Y")) {
-			String to = userName;
-			String from = FROM;
+		if (!emailDisable.equalsIgnoreCase("Y")) {
+			logger.debug("Inside AWS Email");
 			Properties props = new Properties();
 			props.put("mail.transport.protocol", "smtp");
 			props.put("mail.smtp.host", emailConfig.getSMTP_HOST_NAME());
-			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.auth", "false");
 			props.put("mail.smtp.starttls.enable", "true");
+
 			Session mailSession = Session.getDefaultInstance(props);
+			mailSession.setDebug(true);
 
-			try {
+			Transport transport = mailSession.getTransport("smtp");
 
-				Message message = new MimeMessage(mailSession);
-				Transport transport = mailSession.getTransport("smtp");
-				message.setFrom(new InternetAddress(from));
-				message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-				message.setSubject(Constants.EMAIL_SUBJECT);
-				BodyPart messageBodyPart = new MimeBodyPart();
-				messageBodyPart.setText("Attached is the final report PDF for your kind reference");
-				Multipart multipart = new MimeMultipart();
-				multipart.addBodyPart(messageBodyPart);
-				messageBodyPart = new MimeBodyPart();
-				String filename = ("finalreport.pdf");
+			MimeMessage message = new MimeMessage(mailSession);
 
-				DataSource source = new FileDataSource(filename);
-				messageBodyPart.setDataHandler(new DataHandler(source));
-				messageBodyPart.setFileName(filename);
-				multipart.addBodyPart(messageBodyPart);
-				message.setContent(multipart);
-				transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT), emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
-				transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
-				transport.close();
-			} catch (MessagingException e) {
-				throw new RuntimeException(e);
-			}
+			message.setSubject(Constants.EMAIL_SUBJECT);
+			message.setContent(content, "text/plain");
+			message.setSentDate(new Date());
+			message.setFrom(new InternetAddress(FROM));
+			message.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+			message.addRecipient(Message.RecipientType.CC, new InternetAddress(ccEmail));
+			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT),
+					emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
+			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
+			transport.sendMessage(message, message.getRecipients(Message.RecipientType.CC));
+			transport.close();
+
 		}
 	}
+
+	/**
+	 * Download and Send the email to the user
+	 * 
+	 * @param userName
+	 * @throws MessagingException
+	 * @throws InterruptedException
+	 * @throws IOException
+	 */
+	public void sendEmailPDF(String userName, Integer siteId, int count, String keyname)
+			throws MessagingException, DocumentException, IOException, InterruptedException {
+
+//		if(!emailDisable.equalsIgnoreCase("Y")) {
+
+		String to = userName;
+		String from = FROM;
+		Properties props = new Properties();
+		props.put("mail.transport.protocol", "smtp");
+		props.put("mail.smtp.host", emailConfig.getSMTP_HOST_NAME());
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		Session mailSession = Session.getDefaultInstance(props);
+		
+		
+
+		try {
+
+			Message message = new MimeMessage(mailSession);
+			Transport transport = mailSession.getTransport("smtp");
+			message.setFrom(new InternetAddress(from));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+			message.setSubject(Constants.EMAIL_SUBJECT);
+			BodyPart messageBodyPart = new MimeBodyPart();
+			messageBodyPart.setText("Please find the attached final pdf submitted");
+			Multipart multipart = new MimeMultipart();
+			multipart.addBodyPart(messageBodyPart);
+			messageBodyPart = new MimeBodyPart();
+
+			BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, accessKeySecret);
+			AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.AP_SOUTH_1)
+					.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
+
+			String folderName = ((siteRepository.findById(siteId).isPresent()
+					&& siteRepository.findById(siteId).get() != null) ? siteRepository.findById(siteId).get().getSite()
+							: "");
+
+			S3Object fullObject;
+			fullObject = s3Client
+					.getObject(new GetObjectRequest(s3BucketName, "LV_Site Name_".concat(folderName) + "/" + keyname));
+
+			InputStream in = fullObject.getObjectContent();
+			byte[] buf = new byte[1024];
+			OutputStream out = new FileOutputStream("finalreport.pdf");
+			while ((count = in.read(buf)) != -1) {
+				if (Thread.interrupted()) {
+					throw new InterruptedException();
+				}
+				out.write(buf, 0, count);
+			}
+			out.close();
+			in.close();
+
+			String filename = ("finalreport.pdf");
+
+			DataSource source = new FileDataSource(filename);
+			messageBodyPart.setDataHandler(new DataHandler(source));
+			messageBodyPart.setFileName(filename);
+			multipart.addBodyPart(messageBodyPart);
+			message.setContent(multipart);
+			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT),
+					emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
+			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
+			transport.close();
+		} catch (MessagingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+//	}
 }
