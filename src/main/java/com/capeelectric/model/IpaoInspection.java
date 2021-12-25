@@ -59,6 +59,9 @@ public class IpaoInspection implements Serializable {
 	@Column(name = "I_METER_EQU")
 	private String meterEqu;
 
+	@Column(name = "I_TOV_MEASURES_LV_HV")
+	private String tovMeasuresLVHV;
+
 	@Column(name = "I_ISOLATOR")
 	private String isolator;
 
@@ -186,6 +189,14 @@ public class IpaoInspection implements Serializable {
 
 	public void setInspectionFlag(String inspectionFlag) {
 		this.inspectionFlag = inspectionFlag;
+	}
+	
+	public String getTovMeasuresLVHV() {
+		return tovMeasuresLVHV;
+	}
+
+	public void setTovMeasuresLVHV(String tovMeasuresLVHV) {
+		this.tovMeasuresLVHV = tovMeasuresLVHV;
 	}
 
 	public void setIpaoInspectionId(Integer ipaoInspectionId) {
