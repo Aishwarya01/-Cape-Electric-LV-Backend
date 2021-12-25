@@ -13,10 +13,13 @@ import com.capeelectric.exception.ObservationException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.model.AllComponentObservation;
 import com.capeelectric.model.AlternativeInnerObservation;
+import com.capeelectric.model.InspectionInnerObservations;
+import com.capeelectric.model.InspectionOuterObservation;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
 import com.capeelectric.model.SummaryDeclaration;
 import com.capeelectric.model.SupplyOuterObservation;
+import com.capeelectric.model.TestingInnerObservation;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.service.ObservationService;
 import com.capeelectric.service.PrintService;
@@ -168,16 +171,7 @@ public class PrintServiceImpl implements PrintService {
 
 					if (summary1.getLimitationsInspection().equals("The following observations are made")) {
 
-//						PdfPTable obs = new PdfPTable(1);
-//						obs.setWidthPercentage(100); // Width 100%
-//						obs.setSpacingBefore(10f); // Space before table
-//						obs.getDefaultCell().setBorder(0);
-//
-//						PdfPCell ObservationCell = new PdfPCell(new Paragraph("Observations :", font5));
-//						ObservationCell.setBorder(PdfPCell.NO_BORDER);
-//						ObservationCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
-//						obs.addCell(ObservationCell);
-//						document.add(obs);
+//						Inspection Observation Start from here
 
 						PdfPTable obs1 = new PdfPTable(1);
 						obs1.setWidthPercentage(100); // Width 100%
@@ -200,7 +194,7 @@ public class PrintServiceImpl implements PrintService {
 						InnAlterOBS.setWidthPercentage(100); // Width 100%
 //						InnAlterOBS.setSpacingBefore(5f); // Space before table
 						InnAlterOBS.getDefaultCell().setBorder(0);
-						
+
 						PdfPTable Obsevation2 = new PdfPTable(pointColumnWidths);
 						Obsevation2.setWidthPercentage(100); // Width 100%
 //						Obsevation2.setSpacingBefore(5f); // Space before table
@@ -209,41 +203,39 @@ public class PrintServiceImpl implements PrintService {
 						AllComponentObservation allComponentObservation = observationService
 								.retrieveObservationsInSummary(userName, siteId);
 
-						for (SupplyOuterObservation summaryObs : allComponentObservation.getSupplyOuterObservation()) {
+						for (SupplyOuterObservation supplyObs : allComponentObservation.getSupplyOuterObservation()) {
 
-							if (summaryObs.getObservationComponentDetails().equalsIgnoreCase("mains")) {
+							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("mains")) {
 
 								PdfPCell MainsOBS = new PdfPCell(new Paragraph("Mains observation :", font9));
 								MainsOBS.setBorder(PdfPCell.NO_BORDER);
-									MainsOBS.setGrayFill(0.92f);
+								MainsOBS.setGrayFill(0.92f);
 								Obsevation.addCell(MainsOBS);
 								PdfPCell MainsOBS2 = new PdfPCell(
-										new Paragraph(summaryObs.getObservationDescription(), font9));
-									MainsOBS2.setGrayFill(0.92f);
+										new Paragraph(supplyObs.getObservationDescription(), font9));
+								MainsOBS2.setGrayFill(0.92f);
 								MainsOBS2.setBorder(PdfPCell.NO_BORDER);
 								Obsevation.addCell(MainsOBS2);
-							} 
-							
-							if(summaryObs.getObservationComponentDetails().equalsIgnoreCase("alternate")) {
-								
-								for(AlternativeInnerObservation summaryInnerObservation: summaryObs.getAlternativeInnerObservation()) {
-									
-									
-									PdfPCell alObs = new PdfPCell(
-											new Paragraph("Alternate Observations" , font9));
+							}
+
+							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("alternate")) {
+
+								for (AlternativeInnerObservation summaryInnerObservation : supplyObs
+										.getAlternativeInnerObservation()) {
+
+									PdfPCell alObs = new PdfPCell(new Paragraph("Alternate Observations", font9));
 									alObs.setBorder(PdfPCell.NO_BORDER);
 //									alObs.setGrayFill(0.92f);
 									InnAlterOBS.addCell(alObs);
 									PdfPCell alObs2 = new PdfPCell(
-											new Paragraph(summaryInnerObservation.getObservationDescription() , font9));
+											new Paragraph(summaryInnerObservation.getObservationDescription(), font9));
 //									alObs2.setGrayFill(0.92f);
 									alObs2.setBorder(PdfPCell.NO_BORDER);
 									InnAlterOBS.addCell(alObs2);
 								}
 							}
-							
-							
-							if (summaryObs.getObservationComponentDetails().equalsIgnoreCase("earthingNoOfJointsOb")) {
+
+							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("earthingNoOfJointsOb")) {
 
 								PdfPCell EarthConOBS = new PdfPCell(
 										new Paragraph("Earthing Conductor Observation :", font9));
@@ -251,47 +243,145 @@ public class PrintServiceImpl implements PrintService {
 								EarthConOBS.setGrayFill(0.92f);
 								Obsevation2.addCell(EarthConOBS);
 								PdfPCell EarthConOBS2 = new PdfPCell(
-										new Paragraph(summaryObs.getObservationDescription(), font9));
+										new Paragraph(supplyObs.getObservationDescription(), font9));
 								EarthConOBS2.setGrayFill(0.92f);
 								EarthConOBS2.setBorder(PdfPCell.NO_BORDER);
 								Obsevation2.addCell(EarthConOBS2);
 							}
 
-							if (summaryObs.getObservationComponentDetails().equalsIgnoreCase("bondingNoOfJointsOb")) {
+							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("bondingNoOfJointsOb")) {
 
 								PdfPCell BonOBS = new PdfPCell(new Paragraph("Bonding Conductor Observation :", font9));
 								BonOBS.setBorder(PdfPCell.NO_BORDER);
 //									BonOBS.setGrayFill(0.92f);
 								Obsevation2.addCell(BonOBS);
 								PdfPCell BonOBS2 = new PdfPCell(
-										new Paragraph(summaryObs.getObservationDescription(), font9));
+										new Paragraph(supplyObs.getObservationDescription(), font9));
 //									BonOBS2.setGrayFill(0.92f);
 								BonOBS2.setBorder(PdfPCell.NO_BORDER);
 								Obsevation2.addCell(BonOBS2);
-
 							}
 
-							if (summaryObs.getObservationComponentDetails().equals("instalLocationReportOb")) {
+							if (supplyObs.getObservationComponentDetails().equals("instalLocationReportOb")) {
 
 								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Earth electrode observation :", font9));
 								EarthOBS.setBorder(PdfPCell.NO_BORDER);
 								EarthOBS.setGrayFill(0.92f);
 								Obsevation2.addCell(EarthOBS);
 								PdfPCell EarthOBS2 = new PdfPCell(
-										new Paragraph(summaryObs.getObservationDescription(), font9));
+										new Paragraph(supplyObs.getObservationDescription(), font9));
 								EarthOBS2.setGrayFill(0.92f);
 								EarthOBS2.setBorder(PdfPCell.NO_BORDER);
 								Obsevation2.addCell(EarthOBS2);
 							}
-
 						}
 
 						document.add(Obsevation);
-						
 						document.add(InnAlterOBS);
-
 						document.add(Obsevation2);
 
+//						Inspection Observation Start from here
+
+						PdfPTable obs2 = new PdfPTable(1);
+						obs2.setWidthPercentage(100); // Width 100%
+						obs2.setSpacingBefore(10f); // Space before table
+						obs2.getDefaultCell().setBorder(0);
+
+						PdfPCell InspectionOBS = new PdfPCell(new Paragraph("Inspection observations :", font5));
+						InspectionOBS.setBorder(PdfPCell.NO_BORDER);
+						InspectionOBS.setBackgroundColor(BaseColor.LIGHT_GRAY);
+						obs2.addCell(InspectionOBS);
+						document.add(obs2);
+
+						PdfPTable Obsevation1 = new PdfPTable(pointColumnWidths);
+						Obsevation1.setWidthPercentage(100); // Width 100%
+						Obsevation1.setSpacingBefore(10f); // Space before table
+						Obsevation1.getDefaultCell().setBorder(0);
+
+						PdfPTable InnInspOBS = new PdfPTable(pointColumnWidths);
+						InnInspOBS.setWidthPercentage(100); // Width 100%
+//						InnInspOBS.setSpacingBefore(5f); // Space before table
+						InnInspOBS.getDefaultCell().setBorder(0);
+
+						for (InspectionOuterObservation inspectionObs : allComponentObservation
+								.getInspectionOuterObservation()) {
+
+							if (inspectionObs.getObservationComponentDetails()
+									.equalsIgnoreCase("inspectionComponent")) {
+
+								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Mains observation :", font9));
+								EarthOBS.setBorder(PdfPCell.NO_BORDER);
+								EarthOBS.setGrayFill(0.92f);
+								Obsevation1.addCell(EarthOBS);
+								PdfPCell EarthOBS2 = new PdfPCell(
+										new Paragraph(inspectionObs.getObservationDescription(), font9));
+								EarthOBS2.setGrayFill(0.92f);
+								EarthOBS2.setBorder(PdfPCell.NO_BORDER);
+								Obsevation1.addCell(EarthOBS2);
+
+							}
+
+//							if (inspectionObs.getObservationComponentDetails().equalsIgnoreCase("consumer-UnitIter")) {
+
+								for (InspectionInnerObservations inspectionInnerObservation : inspectionObs
+										.getInspectionInnerObservations()) {
+
+									PdfPCell insInnerObs = new PdfPCell(new Paragraph("consumer-observation", font9));
+									insInnerObs.setBorder(PdfPCell.NO_BORDER);
+//									insInnerObs.setGrayFill(0.92f);
+									InnInspOBS.addCell(insInnerObs);
+									PdfPCell insInnerObs2 = new PdfPCell(new Paragraph(
+											inspectionInnerObservation.getObservationDescription(), font9));
+//									insInnerObs2.setGrayFill(0.92f);
+									insInnerObs2.setBorder(PdfPCell.NO_BORDER);
+									InnInspOBS.addCell(insInnerObs2);
+//								}
+							}
+						}
+
+						document.add(Obsevation1);
+						document.add(InnInspOBS);
+						
+//						Testing Observation Start from here
+
+						PdfPTable obs3 = new PdfPTable(1);
+						obs3.setWidthPercentage(100); // Width 100%
+						obs3.setSpacingBefore(10f); // Space before table
+						obs3.getDefaultCell().setBorder(0);
+
+						PdfPCell TestingOBS = new PdfPCell(new Paragraph("Testing observations :", font5));
+						TestingOBS.setBorder(PdfPCell.NO_BORDER);
+						TestingOBS.setBackgroundColor(BaseColor.LIGHT_GRAY);
+						obs3.addCell(TestingOBS);
+						document.add(obs3);
+
+						PdfPTable InnTestingOBS = new PdfPTable(pointColumnWidths);
+						InnTestingOBS.setWidthPercentage(100); // Width 100%
+						InnTestingOBS.setSpacingBefore(10f); // Space before table
+						InnTestingOBS.getDefaultCell().setBorder(0);
+
+						for (TestingInnerObservation testingObs : allComponentObservation
+								.getTestingInnerObservation()) {
+
+							if (testingObs.getObservationComponentDetails()
+									.equalsIgnoreCase("circuit")) {
+
+								PdfPCell EarthOBS = new PdfPCell(new Paragraph("testing circuit observation :", font9));
+								EarthOBS.setBorder(PdfPCell.NO_BORDER);
+								EarthOBS.setGrayFill(0.92f);
+								InnTestingOBS.addCell(EarthOBS);
+								PdfPCell EarthOBS2 = new PdfPCell(
+										new Paragraph(testingObs.getObservationDescription(), font9));
+								EarthOBS2.setGrayFill(0.92f);
+								EarthOBS2.setBorder(PdfPCell.NO_BORDER);
+								InnTestingOBS.addCell(EarthOBS2);
+
+							}
+						}
+						document.add(InnTestingOBS);
+						
+						
+						
 						float[] pointColumnWidths3 = { 30F, 40F, 90F };
 
 						PdfPTable table6 = new PdfPTable(pointColumnWidths3);
