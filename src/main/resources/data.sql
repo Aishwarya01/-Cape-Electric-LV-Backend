@@ -451,7 +451,7 @@ CREATE TABLE supply_outer_observation_table(
 
 );
 
-CREATE TABLE supply_alternativeInner_observations_table(
+CREATE TABLE supply_alternative_inner_observations_table(
 
 		   SUPPLY_INNER_OBSERVATIONS_ID INT AUTO_INCREMENT,
 		   SUPPLY_OUTER_OBSERVATION_ID INT,

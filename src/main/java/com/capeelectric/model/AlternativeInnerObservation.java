@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "supply_alternativeInner_observations_table")
+@Table(name = "supply_alternative_inner_observations_table")
 public class AlternativeInnerObservation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
