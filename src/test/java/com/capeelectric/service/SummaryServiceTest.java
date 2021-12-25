@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -56,6 +57,24 @@ public class SummaryServiceTest {
 
 	private static final Logger logger = LoggerFactory.getLogger(SummaryServiceTest.class);
 
+	@MockBean
+	private InstalReportPDFService instalReportService;
+	
+	@MockBean
+	private PrintSupplyService printSupplyService ;
+	
+	@MockBean
+	private InspectionServicePDF inspectionServicePDF;
+	
+	@MockBean
+	private PrintTestingService printTestingService;
+	
+	@MockBean
+	private PrintService printService ;
+	
+	@MockBean
+	private PrintFinalPDFService printFinalPDFService;
+	
 	@MockBean
 	private SummaryRepository summaryRepository;
 	
@@ -173,6 +192,20 @@ public class SummaryServiceTest {
 //		listofSummaryObervation.add(new SummaryObervation());
 		summary.setSummaryDeclaration(listofSummaryDeclaration);
 //		summary.setSummaryObervation(listofSummaryObervation);
+		
+		instalReportService.printBasicInfromation(summary.getUserName(),summary.getSiteId(),reportdet);
+		
+		printSupplyService.printSupply(summary.getUserName(),summary.getSiteId(),supply);
+		
+		inspectionServicePDF.printInspectionDetails(summary.getUserName(),summary.getSiteId(), periodicreport);
+		
+		printTestingService.printTesting(summary.getUserName(),summary.getSiteId(),testreport);
+		
+		printService.printSummary(summary.getUserName(),summary.getSiteId());
+		
+		printFinalPDFService.printFinalPDF(summary.getUserName(),summary.getSiteId());
+		
+		
 		
 		summaryServiceImpl.addSummary(summary);
 		
