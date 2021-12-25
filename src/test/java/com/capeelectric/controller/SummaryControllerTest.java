@@ -23,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
+import com.capeelectric.exception.ObservationException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SummaryException;
@@ -70,7 +71,7 @@ public class SummaryControllerTest {
 	}
 
 	@Test
-	public void testAddSummary() throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception {
+	public void testAddSummary() throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException {
 		logger.info("testAddSummary Function Started");
 
 		doNothing().when(summaryServiceImpl).addSummary(summary);

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
+import com.capeelectric.exception.ObservationException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SummaryException;
@@ -45,7 +46,7 @@ public class SummaryController {
 	private SendReplyComments sendReplyComments;
 
 	@PostMapping("/addSummary")
-	public ResponseEntity<String> addSummary(@RequestBody Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception {
+	public ResponseEntity<String> addSummary(@RequestBody Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException {
 		logger.info("started addSummary function userName: {},siteId : {}", summary.getUserName(),summary.getSiteId());
 		summaryService.addSummary(summary);
 		logger.info("ended addSummary function");
