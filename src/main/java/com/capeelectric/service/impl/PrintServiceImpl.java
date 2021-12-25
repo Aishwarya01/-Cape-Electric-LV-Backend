@@ -309,7 +309,7 @@ public class PrintServiceImpl implements PrintService {
 							if (inspectionObs.getObservationComponentDetails()
 									.equalsIgnoreCase("inspectionComponent")) {
 
-								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Mains observation :", font9));
+								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Location observation :", font9));
 								EarthOBS.setBorder(PdfPCell.NO_BORDER);
 								EarthOBS.setGrayFill(0.92f);
 								Obsevation1.addCell(EarthOBS);
@@ -326,7 +326,7 @@ public class PrintServiceImpl implements PrintService {
 								for (InspectionInnerObservations inspectionInnerObservation : inspectionObs
 										.getInspectionInnerObservations()) {
 
-									PdfPCell insInnerObs = new PdfPCell(new Paragraph("consumer-observation", font9));
+									PdfPCell insInnerObs = new PdfPCell(new Paragraph("Consumer observation", font9));
 									insInnerObs.setBorder(PdfPCell.NO_BORDER);
 //									insInnerObs.setGrayFill(0.92f);
 									InnInspOBS.addCell(insInnerObs);
@@ -366,7 +366,7 @@ public class PrintServiceImpl implements PrintService {
 							if (testingObs.getObservationComponentDetails()
 									.equalsIgnoreCase("circuit")) {
 
-								PdfPCell EarthOBS = new PdfPCell(new Paragraph("testing circuit observation :", font9));
+								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Circuit details observation :", font9));
 								EarthOBS.setBorder(PdfPCell.NO_BORDER);
 								EarthOBS.setGrayFill(0.92f);
 								InnTestingOBS.addCell(EarthOBS);
