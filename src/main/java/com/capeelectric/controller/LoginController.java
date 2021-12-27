@@ -85,7 +85,9 @@ public class LoginController {
 			throws ForgotPasswordException, IOException, MessagingException {
 		logger.debug("forgotPassword started");
 		Register registerUser = loginService.findByUserName(email);
+		logger.debug("AwsEmailService call Started");
 		awsEmailService.sendEmail(email, "You have initiated an change in password." + "\n" + email);
+		logger.debug("AwsEmailService call Successfully Ended");
 		return new ResponseEntity<String>(registerUser.getUsername(), HttpStatus.OK);
 		
 	}
@@ -96,6 +98,7 @@ public class LoginController {
 
 		logger.debug("CreatePassword starts");
 		Register updatedUser = loginService.createPassword(request);
+		logger.debug("AwsEmailService call Started");
 		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully created your password");
 		logger.debug("CreatePassword ends");
 		return new ResponseEntity<String>("You have Successfully Created Your Password", HttpStatus.OK);
@@ -108,6 +111,7 @@ public class LoginController {
 		
 		logger.debug("Save Contact Number starts");
 		Register updatedUser = loginService.saveContactNumber(request);
+		logger.debug("AwsEmailService call Started");
 		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully updated your contact number");
 		logger.debug("Save Contact Number ends");
 		return new ResponseEntity<String>("You have successfully updated your contact number", HttpStatus.OK);
@@ -121,6 +125,7 @@ public class LoginController {
 		logger.debug("Update Password starts");
 
 		Register updatedUser = loginService.updatePassword(request.getEmail(), request.getPassword());
+		logger.debug("AwsEmailService call Started");
 		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully updated your password");
 		logger.debug("Update Password ends");
 		return new ResponseEntity<String>("You have Successfully Updated Your Password", HttpStatus.OK);
@@ -134,8 +139,10 @@ public class LoginController {
 		logger.debug("Change Password Starts");
 		Register changePasswordUser = loginService.changePassword(request.getEmail(), request.getOldPassword(),
 				request.getPassword());
-		awsEmailService.sendEmail(changePasswordUser.getUsername(), "You have successfully changed your password");
 		logger.debug("Change Password Ends");
+		logger.debug("AwsEmailService call Started");
+		awsEmailService.sendEmail(changePasswordUser.getUsername(), "You have successfully changed your password");
+		logger.debug("AwsEmailService call Started");
 		return new ResponseEntity<String>("You have successfully changed your password", HttpStatus.OK);
 		
 	}
@@ -145,6 +152,7 @@ public class LoginController {
 			throws RegistrationException, IOException, MessagingException, ForgotPasswordException {
 		logger.debug("retrieveInformation_function started");
 		Register registerUser = registrationDetailsServiceImpl.loadUserByUsername(email);
+		logger.debug("retrieveInformation_function ended");
 		return new ResponseEntity<Register>(registerUser, HttpStatus.OK);
 		
 	}
@@ -157,16 +165,20 @@ public class LoginController {
 					&& registerRepo.get().getPermission().equalsIgnoreCase("YES")) {
 				try {
 					authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-
+					logger.debug("Authentication done sucessfully");
 				} catch (DisabledException e) {
+					logger.error("Authentication failed : "+e.getMessage());
 					throw new DisabledException("USER_DISABLED", e);
 				} catch (BadCredentialsException e) {
+					logger.error("Authentication failed : "+e.getMessage());
 					throw new BadCredentialsException("INVALID_CREDENTIALS", e);
 				}
 			} else {
+				logger.error("Admin not approved for Your registration");
 				throw new AuthenticationException("Admin not approved for Your registration");
 			}
 		} else {
+			logger.error("There is no registered user available for this email");
 			throw new RegistrationException("There is no registered user available for this email");
 		}
 	}

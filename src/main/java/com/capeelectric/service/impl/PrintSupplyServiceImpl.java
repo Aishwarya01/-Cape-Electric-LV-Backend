@@ -474,6 +474,18 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				cell24.setBorder(PdfPCell.NO_BORDER);
 				table7.addCell(cell24);
 
+				if (supply.getMeansEarthing().equalsIgnoreCase("Others")) {
+
+					PdfPCell cell2040 = new PdfPCell(new Paragraph("Others :", font9));
+					cell2040.setBorder(PdfPCell.NO_BORDER);
+//					cell2040.setGrayFill(0.92f);
+					table7.addCell(cell2040);
+					PdfPCell cell5700 = new PdfPCell(new Paragraph(supply.getMeansEarthingRemark(), font6));
+//					cell5700.setGrayFill(0.92f);
+					cell5700.setBorder(PdfPCell.NO_BORDER);
+					table7.addCell(cell5700);
+				}
+
 				PdfPCell cell25 = new PdfPCell(new Paragraph("Type of earth electrode :", font9));
 				cell25.setBorder(PdfPCell.NO_BORDER);
 				cell25.setGrayFill(0.92f);
