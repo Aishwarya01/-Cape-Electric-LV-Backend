@@ -113,6 +113,9 @@ public class SupplyCharacteristics implements Serializable {
 	@Column(name = "MEANS_EARTHING")
 	private String meansEarthing;
 
+	@Column(name = "EARTHING_REMARKS")
+	private String meansEarthingRemark;
+
 	@Column(name = "ELECTORDE_TYPE")
 	private String electrodeType;
 
@@ -121,7 +124,7 @@ public class SupplyCharacteristics implements Serializable {
 
 	@Column(name = "NUM_LOCATION")
 	private Integer noOfLocation;
-	
+
 	@Column(name = "INSTALLOCATION_REPORT_OB")
 	private Integer instalLocationReportOb;
 
@@ -148,7 +151,7 @@ public class SupplyCharacteristics implements Serializable {
 
 	@Column(name = "BONDING_NO_OF_JOINTS")
 	private Integer bondingNoOfJoints;
-	
+
 	@Column(name = "BONDING_NO_OF_JOINTS_OB")
 	private Integer bondingNoOfJointsOb;
 
@@ -166,7 +169,7 @@ public class SupplyCharacteristics implements Serializable {
 
 	@Column(name = "EARTHING_NO_OF_JOINTS")
 	private Integer earthingNoOfJoints;
-	
+
 	@Column(name = "EARTHING_NO_OF_JOINTS_OB")
 	private Integer earthingNoOfJointsOb;
 
@@ -205,7 +208,7 @@ public class SupplyCharacteristics implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<SupplyCharacteristicComment> supplyCharacteristicComment;
-	
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "supplyCharacteristics", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<SupplyOuterObservation> supplyOuterObservation;
@@ -641,5 +644,13 @@ public class SupplyCharacteristics implements Serializable {
 	public void setSupplyOuterObservation(List<SupplyOuterObservation> supplyOuterObservation) {
 		this.supplyOuterObservation = supplyOuterObservation;
 	}
-	
+
+	public String getMeansEarthingRemark() {
+		return meansEarthingRemark;
+	}
+
+	public void setMeansEarthingRemark(String meansEarthingRemark) {
+		this.meansEarthingRemark = meansEarthingRemark;
+	}
+
 }

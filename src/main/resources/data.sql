@@ -294,6 +294,7 @@ CREATE TABLE supply_characteristics_table (
             MAXIMUM_DEMAND VARCHAR(255),
             MAXIMUM_LOAD VARCHAR(255),
             MEANS_EARTHING VARCHAR(255),
+            EARTHING_REMARKS VARCHAR(255),
             ELECTORDE_TYPE VARCHAR(255),
             ELECTORDE_MATERIAL VARCHAR(255),
             NUM_LOCATION INT,
