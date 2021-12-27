@@ -482,7 +482,7 @@ public class PrintServiceImpl implements PrintService {
 
 				}
 
-				document.newPage();
+//				document.newPage();
 
 				PdfPTable table18 = new PdfPTable(1);
 				table18.setWidthPercentage(100); // Width 100%
@@ -694,7 +694,7 @@ public class PrintServiceImpl implements PrintService {
 //				cell.setPhrase(new Phrase("", font));
 //				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 //				table6.addCell(cell);
-		cell.setPhrase(new Phrase("\r\n" + summary1.getReferanceNumberReport(), font));
+		cell.setPhrase(new Phrase(summary1.getReferanceNumberReport(), font));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table6.addCell(cell);
 		cell.setPhrase(new Phrase(summary1.getFurtherActions(), font));
