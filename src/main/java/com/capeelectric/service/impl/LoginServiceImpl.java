@@ -56,11 +56,11 @@ public class LoginServiceImpl implements LoginService {
 				logger.debug("Find By User Name Ends");
 				return registerRepo.get();
 			} else {
-				logger.debug("Find By User Name Ends");
+				logger.error("Find By User Name Ends");
 				throw new ForgotPasswordException("Email is not available with us");
 			}
 		} else {
-			logger.debug("Find By User Name Ends");
+			logger.error("Find By User Name Ends");
 			throw new ForgotPasswordException("Email is required");
 		}
 	}
@@ -77,7 +77,8 @@ public class LoginServiceImpl implements LoginService {
 			Register register = registrationRepository.findByUsername(request.getEmail()).get();
 			if (register != null && register.getUsername().equalsIgnoreCase(request.getEmail())) {
 				boolean value = verifyOtp(request);
-				if(value) {
+				logger.debug("verifyOtp() function response is:{}", value);
+				if (value) {
 					register.setOtpSessionKey(request.getOtpSession());
 					logger.debug("Successfully Otp Verified");
 					register.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -85,16 +86,15 @@ public class LoginServiceImpl implements LoginService {
 					register.setUpdatedBy(request.getEmail());
 					logger.debug("createPassword Ends");
 					return registrationRepository.save(register);
-				}
-				else {
-					logger.debug("Otp Verification Failed");
+				} else {
+					logger.error("Otp Verification Failed");
 				}
 			} else {
-				logger.debug("createPassword Ends");
+				logger.error("createPassword Ends");
 				throw new UpdatePasswordException("User Not available");
 			}
 		} else {
-			logger.debug("createPassword Ends");
+			logger.error("createPassword Ends");
 			throw new UsernameNotFoundException("Username not valid");
 		}
 		return null;
@@ -107,7 +107,6 @@ public class LoginServiceImpl implements LoginService {
 	 */
 	@Override
 	public Register updatePassword(String email, String password) throws UpdatePasswordException {
-		// TODO: Email triggering
 		logger.debug("UpdatePassword Starts");
 		if (email != null && password != null) {
 			Register register = registrationRepository.findByUsername(email).get();
@@ -118,11 +117,11 @@ public class LoginServiceImpl implements LoginService {
 				logger.debug("UpdatePassword Ends");
 				return registrationRepository.save(register);
 			} else {
-				logger.debug("UpdatePassword Ends");
+				logger.error("UpdatePassword Ends");
 				throw new UpdatePasswordException("User Not available");
 			}
 		} else {
-			logger.debug("UpdatePassword Ends");
+			logger.error("UpdatePassword Ends");
 			throw new UsernameNotFoundException("Username not valid");
 		}
 	}
@@ -135,10 +134,10 @@ public class LoginServiceImpl implements LoginService {
 		logger.debug("Change Password Starts");
 		Register registerRepo = registrationRepository.findByUsername(email).get();
 		if (!passwordEncoder.matches(oldPassword, registerRepo.getPassword())) {
-			logger.debug("Change Password Ends");
+			logger.error("Old password is not matching with encoded password");
 			throw new ChangePasswordException("Old password is not matching with encoded password");
 		} else if (oldPassword.equalsIgnoreCase(password)) {
-			logger.debug("Change Password Ends");
+			logger.error("Old password cannot be entered as new password");
 			throw new ChangePasswordException("Old password cannot be entered as new password");
 		} else {
 			if (registerRepo != null && registerRepo.getUsername().equalsIgnoreCase(email)) {
@@ -160,7 +159,8 @@ public class LoginServiceImpl implements LoginService {
 			Register register = registrationRepository.findByUsername(request.getEmail()).get();
 			if (register != null && register.getUsername().equalsIgnoreCase(request.getEmail())) {
 				boolean value = verifyOtpForSavingContactNumber(request);
-				if(value) {
+				logger.debug("verifyOtpForSavingContactNumber() function response " + value);
+				if (value) {
 					register.setOtpSessionKey(request.getOtpSession());
 					register.setContactNumber(request.getMobileNumber());
 					logger.debug("Successfully Otp Verified");
@@ -168,21 +168,19 @@ public class LoginServiceImpl implements LoginService {
 					register.setUpdatedBy(request.getEmail());
 					logger.debug("saveContactNumber Ends");
 					return registrationRepository.save(register);
-				}
-				else {
-					logger.debug("Otp Verification Failed");
+				} else {
+					logger.error("Otp Verification Failed");
 				}
 			} else {
-				logger.debug("saveContactNumber Ends");
+				logger.error("User Not available");
 				throw new UpdatePasswordException("User Not available");
 			}
 		} else {
-			logger.debug("saveContactNumber Ends");
+			logger.error("Username not valid");
 			throw new UsernameNotFoundException("Username not valid");
 		}
 		return null;
-	
-		
+
 	}
 	
 	private boolean verifyOtp(AuthenticationRequest request) throws UpdatePasswordException {
@@ -196,20 +194,27 @@ public class LoginServiceImpl implements LoginService {
 
 			if (registerRepo.isPresent() && registerRepo.get().getPermission() != null
 					&& registerRepo.get().getPermission().equalsIgnoreCase("YES")) {
+
+				logger.debug("RegistrationService otpSend() function called =[{}]", "Cape-Electric-SMS-Api");
 				ResponseEntity<String> otpVerifyResponse = restTemplate.exchange(
-						otpConfig.getVerifyOtp() + request.getOtpSession() + "/" + request.getOtp(), HttpMethod.GET, null,
-						String.class);
+						otpConfig.getVerifyOtp() + request.getOtpSession() + "/" + request.getOtp(), HttpMethod.GET,
+						null, String.class);
+				logger.debug("Cape-Electric-SMS-Api service OTP_verify Response=[{}]", otpVerifyResponse);
 
 				if (!otpVerifyResponse.getBody().matches("(.*)Success(.*)")) {
+					logger.error("Given OTP Mismatched:{}", request.getOtp());
 					throw new UpdatePasswordException("OTP Mismatched");
 				} else {
 					success = true;
+					logger.debug("Given OTP matched:{}", request.getOtp());
 				}
 			} else {
+				logger.error("You may need to wait for getting approved from Admin");
 				throw new UpdatePasswordException("You may need to wait for getting approved from Admin");
 			}
 
 		} else {
+			logger.error("Invalid Inputs");
 			throw new UpdatePasswordException("Invalid Inputs");
 		}
 
@@ -220,27 +225,33 @@ public class LoginServiceImpl implements LoginService {
 
 		boolean success = false;
 
-		if (request.getEmail() != null && request.getOtp() != null && request.getOtpSession() != null
-				) {
+		if (request.getEmail() != null && request.getOtp() != null && request.getOtpSession() != null) {
 
 			Optional<Register> registerRepo = registrationRepository.findByUsername(request.getEmail());
 
 			if (registerRepo.isPresent() && registerRepo.get().getPermission() != null
 					&& registerRepo.get().getPermission().equalsIgnoreCase("YES")) {
+
+				logger.debug("RegistrationService otpSend() function called =[{}]", "Cape-Electric-SMS-Api");
 				ResponseEntity<String> otpVerifyResponse = restTemplate.exchange(
-						otpConfig.getVerifyOtp() + request.getOtpSession() + "/" + request.getOtp(), HttpMethod.GET, null,
-						String.class);
+						otpConfig.getVerifyOtp() + request.getOtpSession() + "/" + request.getOtp(), HttpMethod.GET,
+						null, String.class);
+				logger.debug("Cape-Electric-SMS-Api service OTP_verify Response=[{}]", otpVerifyResponse);
 
 				if (!otpVerifyResponse.getBody().matches("(.*)Success(.*)")) {
+					logger.error("Cape-Electric-SMS-Api service call faild=[{}]" + otpVerifyResponse.getBody());
 					throw new UpdatePasswordException("OTP Mismatched");
 				} else {
 					success = true;
+					logger.debug("Given OTP matched:{}", request.getOtp());
 				}
 			} else {
+				logger.error("You may need to wait for getting approved from Admin");
 				throw new UpdatePasswordException("You may need to wait for getting approved from Admin");
 			}
 
 		} else {
+			logger.error("Invalid Inputs");
 			throw new UpdatePasswordException("Invalid Inputs");
 		}
 

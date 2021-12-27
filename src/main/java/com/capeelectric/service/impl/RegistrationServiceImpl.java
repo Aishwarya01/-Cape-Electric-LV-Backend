@@ -75,18 +75,17 @@ public class RegistrationServiceImpl implements RegistrationService {
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
 				} else {
-					logger.debug(
-							isValidMobileNumber(register.getContactNumber()) + "  Given MobileNumber is Invalid");
+					logger.error(isValidMobileNumber(register.getContactNumber()) + "  Given MobileNumber is Invalid");
 					throw new RegistrationException("Invalid MobileNumber");
 				}
 
 			} else {
-				logger.debug("Given UserName Already Present");
+				logger.error("Given UserName Already Present");
 				throw new RegistrationException("Given UserName Already Present");
 			}
 
 		} else {
-			logger.debug("AddingRegistration is Faild , Because Invalid Inputs");
+			logger.error("AddingRegistration is Faild , Because Invalid Inputs");
 			throw new RegistrationException("Invalid Inputs");
 		}
 	}
@@ -107,24 +106,21 @@ public class RegistrationServiceImpl implements RegistrationService {
 					viewer.setUpdatedDate(LocalDateTime.now());
 					viewer.setCreatedBy(viewer.getName());
 					viewer.setUpdatedBy(viewer.getName());
-					//reduceLicence(viewer.getAssignedBy(),viewer.getSiteName());
 					Register createdRegister = registerRepository.save(viewer);
-					// saveSiteInfo(createdRegister);
 					logger.debug("Sucessfully Registration Information Saved");
 					return createdRegister;
 				} else {
-					logger.debug(
-							isValidMobileNumber(viewer.getContactNumber()) + "  Given MobileNumber is Invalid");
+					logger.error(isValidMobileNumber(viewer.getContactNumber()) + "  Given MobileNumber is Invalid");
 					throw new RegistrationException("Invalid MobileNumber");
 				}
 
 			} else {
-				logger.debug("Given UserName Already Present");
+				logger.error("Given UserName Already Present");
 				throw new RegistrationException("Given UserName Already Present");
 			}
 
 		} else {
-			logger.debug("AddingRegistration is Faild , Because Invalid Inputs");
+			logger.error("AddingRegistration is Faild , Because Invalid Inputs");
 			throw new RegistrationException("Invalid Inputs");
 		}
 	}
@@ -137,10 +133,11 @@ public class RegistrationServiceImpl implements RegistrationService {
 			if (registerRepo.isPresent()) {
 				return registerRepository.findByUsername(userName);
 			} else {
+				logger.error("Email Id doesn't exist!");
 				throw new RegistrationException("Email Id doesn't exist!");
 			}
 		} else {
-			logger.debug("RetrieveRegistration is Faild , Because Invalid Inputs");
+			logger.error("RetrieveRegistration is Faild , Because Invalid Inputs");
 			throw new RegistrationException("Invalid Inputs");
 		}
 
@@ -148,42 +145,39 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	@Transactional
-	public void updateRegistration(Register register,Boolean isLicenseUpdate) throws RegistrationException, CompanyDetailsException {
+	public void updateRegistration(Register register, Boolean isLicenseUpdate)
+			throws RegistrationException, CompanyDetailsException {
 
 		if (register.getRegisterId() != null && register.getRegisterId() != 0 && register.getUsername() != null
 				&& register.getCompanyName() != null && register.getAddress() != null
 				&& register.getContactNumber() != null && register.getDepartment() != null
 				&& register.getDesignation() != null && register.getCountry() != null && register.getName() != null
-				&& register.getState() != null&& isLicenseUpdate != null) {
+				&& register.getState() != null && isLicenseUpdate != null) {
 
 			Optional<Register> registerRepo = registerRepository.findById(register.getRegisterId());
 
 			if (registerRepo.isPresent() && registerRepo.get().getRegisterId().equals(register.getRegisterId())
 					&& registerRepo.get().getUsername().equalsIgnoreCase(register.getUsername())) {
 				logger.debug("UpdatingRegistration Started");
-				
+
 				register.setUpdatedDate(LocalDateTime.now());
 				if (register.getRole().equalsIgnoreCase("INSPECTOR")) {
 					register.setUpdatedBy(userFullName.findByUserName(register.getUsername()));
 					registerRepository.save(register);
+					logger.debug("Inspector registration sucessfully updated");
 				} else {
-					//if (isLicenseUpdate) {
-						//reduceLicence(register.getAssignedBy(), register.getSiteName());
-						//saveSiteInfo(register);
-					//	registerRepository.save(register);
-					//} else {
-					//}
 					register.setUpdatedBy(userFullName.findByUserName(register.getAssignedBy()));
 					registerRepository.save(register);
+					logger.debug("Viewer registration sucessfully updated");
 				}
 
 			} else {
-				logger.debug("UpdatingRegistration is Failed , Because Given User not present");
+				logger.error("UpdatingRegistration is Failed , Because Given User not present");
 				throw new RegistrationException("Given User not present");
 			}
 
 		} else {
-			logger.debug("UpdatingRegistration is Failed , Because Invalid Inputs");
+			logger.error("UpdatingRegistration is Failed , Because Invalid Inputs");
 			throw new RegistrationException("Invalid Inputs");
 		}
 	}
@@ -197,42 +191,55 @@ public class RegistrationServiceImpl implements RegistrationService {
 			if (registerRepo.isPresent() && registerRepo.get() != null) {
 				if (registerRepo.get().getPermission().equalsIgnoreCase("Yes")) {
 					if (registerRepo.get().getContactNumber().contains(mobileNumber)) {
-						if (isValidMobileNumber(mobileNumber)) {
+						boolean isValidMobileNumber = isValidMobileNumber(mobileNumber);
+						if (isValidMobileNumber) {
+							logger.debug("Given mobileNumber: {}", isValidMobileNumber);
 							String sessionKey = otpSend(mobileNumber);
 							Register register = registerRepo.get();
 							register.setOtpSessionKey(sessionKey);
 							register.setUpdatedDate(LocalDateTime.now());
 							register.setUpdatedBy(userFullName.findByUserName(userName));
 							registerRepository.save(register);
+							logger.debug("OtpSessionKey sucessfully saved In Database");
 						} else {
+							logger.error("UpdatingRegistration is Failed , Because Invalid Inputs");
 							throw new RegistrationException("Invalid MobileNumber");
 						}
 					} else {
+						logger.error("UpdatingRegistration is Failed , Because Entered registered MobileNumber");
 						throw new RegistrationException("Enter registered MobileNumber");
 					}
 				} else {
+					logger.error("UpdatingRegistration is Failed , Because Admin not approved for Your registration");
 					throw new RegistrationException("Admin not approved for Your registration");
 				}
 			} else {
+				logger.error("UpdatingRegistration is Failed , Because Invalid Email");
 				throw new RegistrationException("Invalid Email");
 			}
 		} else {
+			logger.error("UpdatingRegistration is Failed , Because Invalid Input");
 			throw new RegistrationException("Invalid Input");
 		}
 	}
 	
 	private boolean isValidMobileNumber(String mobileNumber) {
-		Pattern p = Pattern.compile("^(\\+\\d{1,3}( )?)?(\\s*[\\-]\\s*)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$");
+		Pattern p = Pattern
+				.compile("^(\\+\\d{1,3}( )?)?(\\s*[\\-]\\s*)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$");
 		Matcher m = p.matcher(mobileNumber);
 		return (m.find() && m.group().equals(mobileNumber));
 	}
 	
 	private String otpSend(String mobileNumber) throws RegistrationException {
 
-		ResponseEntity<String> sendOtpResponse = restTemplate.exchange(otpConfig.getSendOtp() + mobileNumber, HttpMethod.GET, null,
-				String.class);
+		logger.debug("RegistrationService otpSend() function called =[{}]", "Cape-Electric-SMS-Api");
+		ResponseEntity<String> sendOtpResponse = restTemplate.exchange(otpConfig.getSendOtp() + mobileNumber,
+				HttpMethod.GET, null, String.class);
+
+		logger.debug("Cape-Electric-SMS-Api service Response=[{}]", sendOtpResponse);
 
 		if (!sendOtpResponse.getBody().matches("(.*)Success(.*)")) {
+			logger.error("Cape-Electric-SMS-Api service call faild=[{}]" + sendOtpResponse.getBody());
 			throw new RegistrationException(sendOtpResponse.getBody());
 		}
 
@@ -243,7 +250,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public void updateLicence(String userName, String numoflicence) throws RegistrationException {
 
 		if (userName != null && numoflicence != null) {
-
+			logger.debug("RegistrationServiceImpl updateLicence() function Started");
 			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
 			if (registerRepo.isPresent() && registerRepo.get().getUsername() != null
 					&& registerRepo.get().getUsername().equalsIgnoreCase(userName)) {
@@ -252,17 +259,21 @@ public class RegistrationServiceImpl implements RegistrationService {
 				register.setUpdatedDate(LocalDateTime.now());
 				register.setUpdatedBy(userName);
 				registerRepository.save(register);
+				logger.debug("Sucessfully licence updated for this user @{}" + userName);
 			} else {
+				logger.error("Given UserName does not Exist");
 				throw new RegistrationException("Given UserName does not Exist");
 			}
 
 		} else {
+			logger.error("Given UserName does not Exist");
 			throw new RegistrationException("Invalid Input");
 		}
 	}
 
 	@Override
 	public String sendNewOtp(String mobileNumber) throws RegistrationException {
+		logger.debug("RegistrationserviceImpl sendNewOtp() function calling otpSend() function");
 		return otpSend(mobileNumber);
 	}
 	
@@ -277,10 +288,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 				&& registerPermissionRequest.getRegisterId() != 0) {
 
 			Optional<Register> registerRepo = registerRepository.findById(registerPermissionRequest.getRegisterId());
-			
+
 			if (registerRepo.isPresent()) {
 				Register register = registerRepo.get();
-				
+
 				if (registerPermissionRequest.getPermission().equalsIgnoreCase("YES")) {
 
 					logger.debug("Admin accepted Registration Permission");
@@ -294,7 +305,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					return register;
 				} else {
 					logger.debug("Admin Not-acepted Registration Permission");
-					
+
 					register.setApplicationType(registerPermissionRequest.getApplicationType());
 					register.setComment(registerPermissionRequest.getComment());
 					register.setPermission(registerPermissionRequest.getPermission());
@@ -319,10 +330,11 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Override
 	public List<Register> retrieveAllRegistration() throws RegistrationException {
 		try {
-			logger.debug("Started retrieveAllRegistration");
+			logger.debug("Started retrieveAllRegistration()");
 			return (List<Register>) registerRepository.findAll();
 
 		} catch (Exception exception) {
+			logger.error("Retrieve function failed ExceptionMessage is [{}] ", exception.getMessage());
 			throw new RegistrationException("Retrieve function failed ExceptionMessage is : " + exception.getMessage());
 		}
 	}
