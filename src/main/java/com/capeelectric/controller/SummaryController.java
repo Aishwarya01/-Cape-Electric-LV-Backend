@@ -47,25 +47,26 @@ public class SummaryController {
 
 	@PostMapping("/addSummary")
 	public ResponseEntity<String> addSummary(@RequestBody Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException {
-		logger.info("started addSummary function userName: {},siteId : {}", summary.getUserName(),summary.getSiteId());
+		logger.debug("Started addSummary function userName: {},siteId : {}", summary.getUserName(),summary.getSiteId());
 		summaryService.addSummary(summary);
-		logger.info("ended addSummary function");
+		logger.debug("Ended addSummary function");
 		return new ResponseEntity<String>("Summary Details Successfully Saved", HttpStatus.CREATED);
 
 	}
 	
 	@GetMapping("/retrieveSummary/{userName}/{siteId}")
 	public ResponseEntity<List<Summary>> retrieveSummary(@PathVariable String userName,@PathVariable Integer siteId) throws SummaryException {
-		logger.info("called retrieveSummary function userName: {},siteId : {}", userName,siteId);
+		logger.debug("called retrieveSummary function userName: {},siteId : {}", userName,siteId);
 		return new ResponseEntity<List<Summary>>(summaryService.retrieveSummary(userName,siteId), HttpStatus.OK);
 	}
 	
 	@PutMapping("/updateSummary")
 	public ResponseEntity<String> updateSummary(@RequestBody Summary summary)
 			throws SummaryException, CompanyDetailsException {
-		logger.info("called updateSummary function UserName : {},SiteId : {},SummaryId : {}", summary.getUserName(),
+		logger.debug("called updateSummary function UserName : {},SiteId : {},SummaryId : {}", summary.getUserName(),
 				summary.getSiteId(), summary.getSummaryId());
 		summaryService.updateSummary(summary);
+		logger.debug("Ended updateSummary function");
 		return new ResponseEntity<String>("Summary successfully Updated", HttpStatus.OK);
 	}
 
@@ -73,8 +74,9 @@ public class SummaryController {
 	@PostMapping("/sendSummaryComments/{userName}/{siteId}")
 	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody SummaryComment summaryComment) throws SummaryException, RegistrationException, Exception {
-		logger.info("called sendComments function UserName : {},SiteId : {}", userName, siteId);
+		logger.debug("called sendComments function UserName : {},SiteId : {}", userName, siteId);
 		summaryService.sendComments(userName, siteId, summaryComment);
+		logger.debug("Ended sendComments function");
 		sendReplyComments.sendComments(userName);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
@@ -82,11 +84,14 @@ public class SummaryController {
 	@PostMapping("/replySummaryComments/{inspectorUserName}{siteId}")
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
 			@RequestBody SummaryComment summaryComment) throws SummaryException, RegistrationException, Exception {
-		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
+		logger.debug("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
 		String viewerUserName = summaryService.replyComments(inspectorUserName, siteId, summaryComment);
+		logger.debug("Ended replyComments function");
 		if (viewerUserName != null) {
-			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
+			sendReplyComments.replyComments(inspectorUserName, viewerUserName);	
+			logger.debug("Ended sendReplyComments function");
 		} else {
+			logger.error("No viewer userName avilable");
 			throw new SummaryException("No viewer userName avilable");
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
@@ -95,8 +100,9 @@ public class SummaryController {
 	@PostMapping("/approveSummaryComments/{userName}/{siteId}")
 	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody SummaryComment summaryComment) throws SummaryException, RegistrationException, Exception {
-		logger.info("called approveComments function UserName : {},SiteId : {}", userName, siteId);
+		logger.debug("called approveComments function UserName : {},SiteId : {}", userName, siteId);
 		summaryService.approveComments(userName, siteId, summaryComment);
+		logger.debug("Ended approveComments function");
 		sendReplyComments.approveComments(userName, summaryComment.getApproveOrReject());
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}

@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.SupplyCharacteristicsException;
@@ -34,12 +36,17 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class PrintSupplyServiceImpl implements PrintSupplyService {
 	
+	private static final Logger logger = LoggerFactory.getLogger(PrintSupplyServiceImpl.class);
+	
 //	@Autowired
 //	private SupplyCharacteristicsRepository supplyCharacteristicsRepository;
 
 	@Override
 	public void printSupply(String userName, Integer siteId, Optional<SupplyCharacteristics> supplyCharacteristics)
 			throws SupplyCharacteristicsException {
+		
+		logger.debug("called printSupply function userName: {},siteId : {}", userName,siteId);
+		
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 
@@ -284,10 +291,8 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 					addRow(table3, "Prospective fault current Ipfc (kA) ", NFC1, NFC2, NFC3, NFC4, NFC5, NFC6, NFC7,
 							NFC8, NFC9);
 
-					addRow1(table22, "Actual load current connected to this source (A)",
-							"                           " + loadCurrent, "                           " + loadCurrent2,
-							"                                             " + loadCurrent3,
-							"                            " + loadCurrent4);
+					addRow1(table22, "Actual load current connected to this source (A)", "\r\n" + loadCurrent,
+							"\r\n" + loadCurrent2, "\r\n" + loadCurrent3, "\r\n" + loadCurrent4);
 
 					document.add(table34);
 					document.add(table1);
@@ -320,7 +325,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				cell500.setBorder(PdfPCell.NO_BORDER);
 				cell500.setGrayFill(0.92f);
 				table09.addCell(cell500);
-				PdfPCell cell072 = new PdfPCell(new Paragraph(supply.getMainNominalFrequency(), font6));
+				PdfPCell cell072 = new PdfPCell(new Paragraph(supply.getMainNominalCapacity(), font6));
 				cell072.setGrayFill(0.92f);
 				cell072.setBorder(PdfPCell.NO_BORDER);
 				table09.addCell(cell072);
@@ -1011,11 +1016,8 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 //			addNominalRow2(table6, "Nominal Frequency f (HZ)", supplyParameters.getNominalFrequency());
 			addRow(table7, "External Loop Impedance Ze (ohms)", PI1, PI2, PI3, PI4, PI5, PI6, PI7, PI8, PI9);
 			addRow(table7, "Prospective fault current Ipfc (kA) ", PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9);
-			addRow1(table22, "Actual load current connected to this source (A)",
-					"                                " + loadCurrent,
-					"                                  " + loadCurrent2,
-					"                                           " + loadCurrent3,
-					"                              " + loadCurrent4);
+			addRow1(table22, "Actual load current connected to this source (A)", "\r\n" + loadCurrent,
+					"\r\n" + loadCurrent2, "\r\n" + loadCurrent3, "\r\n" + loadCurrent4);
 			document.add(table34);
 			document.add(table5);
 			document.add(table6);
@@ -1105,13 +1107,16 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 	private void addRow1(PdfPTable table22, String string, String loadCurrent, String loadCurrent2, String loadCurrent3,
 			String loadCurrent4) throws DocumentException, IOException {
+		
+		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+		
 		PdfPCell nameCell = new PdfPCell(
 				new Paragraph(string, new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK)));
 		nameCell.setGrayFill(0.92f);
-		PdfPCell valueCell2 = new PdfPCell(new Paragraph(loadCurrent));
-		PdfPCell valueCell3 = new PdfPCell(new Paragraph(loadCurrent2));
-		PdfPCell valueCell4 = new PdfPCell(new Paragraph(loadCurrent3));
-		PdfPCell valueCell5 = new PdfPCell(new Paragraph(loadCurrent4));
+		PdfPCell valueCell2 = new PdfPCell(new Paragraph(loadCurrent, font));
+		PdfPCell valueCell3 = new PdfPCell(new Paragraph(loadCurrent2, font));
+		PdfPCell valueCell4 = new PdfPCell(new Paragraph(loadCurrent3, font));
+		PdfPCell valueCell5 = new PdfPCell(new Paragraph(loadCurrent4, font));
 
 		valueCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell3.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1504,17 +1509,19 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 			String string6, String string7, String string8, String string9, String string10)
 			throws DocumentException, IOException {
 
+		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+
 		PdfPCell nameCell = new PdfPCell(
 				new Paragraph(string, new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK)));
-		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2));
-		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3));
-		PdfPCell valueCell3 = new PdfPCell(new Paragraph(string4));
-		PdfPCell valueCell4 = new PdfPCell(new Paragraph(string5));
-		PdfPCell valueCell5 = new PdfPCell(new Paragraph(string6));
-		PdfPCell valueCell6 = new PdfPCell(new Paragraph(string7));
-		PdfPCell valueCell7 = new PdfPCell(new Paragraph(string8));
-		PdfPCell valueCell8 = new PdfPCell(new Paragraph(string9));
-		PdfPCell valueCell9 = new PdfPCell(new Paragraph(string10));
+		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2, font));
+		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3, font));
+		PdfPCell valueCell3 = new PdfPCell(new Paragraph(string4, font));
+		PdfPCell valueCell4 = new PdfPCell(new Paragraph(string5, font));
+		PdfPCell valueCell5 = new PdfPCell(new Paragraph(string6, font));
+		PdfPCell valueCell6 = new PdfPCell(new Paragraph(string7, font));
+		PdfPCell valueCell7 = new PdfPCell(new Paragraph(string8, font));
+		PdfPCell valueCell8 = new PdfPCell(new Paragraph(string9, font));
+		PdfPCell valueCell9 = new PdfPCell(new Paragraph(string10, font));
 		nameCell.setGrayFill(0.92f);
 		nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);

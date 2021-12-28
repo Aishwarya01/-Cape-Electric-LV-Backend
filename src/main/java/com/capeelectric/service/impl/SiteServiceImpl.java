@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,8 @@ import com.capeelectric.util.UserFullName;
 @Service
 public class SiteServiceImpl implements SiteService {
 
+	private static final Logger logger = LoggerFactory.getLogger(SiteServiceImpl.class);
+	
 	@Autowired
 	private SiteRepository siteRepository;
 
@@ -39,6 +45,7 @@ public class SiteServiceImpl implements SiteService {
 	 * @param Site addSite method to c comparing department client_name, comparing
 	 * department_name,checking site_name
 	 */
+	@Transactional
 	@Override
 	public void addSite(Site site) throws CompanyDetailsException {
 		int count = 0;
@@ -53,17 +60,22 @@ public class SiteServiceImpl implements SiteService {
 				site.setCreatedBy(userName.findByUserName(site.getUserName()));
 				site.setUpdatedBy(userName.findByUserName(site.getUserName()));
 				boolean email = checkSitePersonEmail(site.getSite(), site.getSitePersons());
+				logger.debug("Finding siteperson Email already available or not in DB --> " + email);
 				if (email) {
 					reduceLicence(site.getUserName());
 					siteRepository.save(site);
+					logger.debug("Site Successfully Saved in DB");
 				} else {
+					logger.error("PersonInchargEmail already present");
 					throw new CompanyDetailsException("PersonInchargEmail already present");
 				}
 			} else {
+				logger.error(site.getSite() + ": site already present");
 				throw new CompanyDetailsException(site.getSite() + ": site already present");
 			}
 
 		} else {
+			logger.error("Invalid Inputs");
 			throw new CompanyDetailsException("Invalid Inputs");
 		}
 	}
@@ -81,6 +93,7 @@ public class SiteServiceImpl implements SiteService {
 			Set<SitePersons> sitePersons = deleteSitePersonDetails(site.getSitePersons());
 			if (!sitePersons.isEmpty()) {
 				site.getSitePersons().removeAll(sitePersons);
+				logger.debug("Removed InActive SitePersons [{}]", sitePersons);
 			}
 			if (siteRepo.isPresent() && siteRepo.get().getSite().equalsIgnoreCase(site.getSite())
 					&& siteRepo.get().getSiteId().equals(site.getSiteId())) {
@@ -88,15 +101,20 @@ public class SiteServiceImpl implements SiteService {
 				site.setUpdatedDate(LocalDateTime.now());
 				site.setUpdatedBy(userName.findByUserName(site.getUserName()));
 				boolean email = checkSitePersonEmail(site.getSite(), site.getSitePersons());
+				logger.debug("Finding siteperson Email already available or not in DB --> " + email);
 				if (email) {
 					siteRepository.save(site);
+					logger.debug("Site Successfully Updated in DB");
 				} else {
+					logger.error("PersonInchargEmail already present");
 					throw new CompanyDetailsException("PersonInchargEmail already present");
 				}
 			} else {
+				logger.error(site.getSite() + " site not present");
 				throw new CompanyDetailsException(site.getSite() + " site not present");
 			}
 		} else {
+			logger.error("Invalid Inputs");
 			throw new CompanyDetailsException("Invalid Inputs");
 		}
 	}
@@ -111,13 +129,15 @@ public class SiteServiceImpl implements SiteService {
 			Optional<Site> site = siteRepository.findById(siteId);
 
 			if (site.isPresent() && site != null && site.get().getSiteId().equals(siteId)) {
-
 				siteRepository.deleteById(siteId);
+				logger.debug("Site Successfully deleted in DB");
 			} else {
+				logger.error(siteId + " : this siteId not present");
 				throw new CompanyDetailsException(siteId + " : this siteId not present");
 			}
 
 		} else {
+			logger.error("Invalid Inputs");
 			throw new CompanyDetailsException("Invalid Inputs");
 		}
 
@@ -132,6 +152,7 @@ public class SiteServiceImpl implements SiteService {
 		if (userName != null) {
 			return siteRepository.findByUserName(userName);
 		} else {
+			logger.error("Invalid Inputs");
 			throw new CompanyDetailsException("Invalid Inputs");
 		}
 	}
@@ -167,6 +188,7 @@ public class SiteServiceImpl implements SiteService {
 		Set<SitePersons> sitePersonSet = new HashSet<SitePersons>();
 		for (SitePersons sitePersonsItr : sitePersons) {
 			if (sitePersonsItr != null && !sitePersonsItr.getInActive()) {
+				logger.debug("InActive sitePerson deleted based on Id [{}]", sitePersonsItr.getInActive());
 				sitePersonsRepository.deleteById(sitePersonsItr.getPersonId());
 				sitePersonSet.add(sitePersonsItr);
 			}
@@ -182,12 +204,13 @@ public class SiteServiceImpl implements SiteService {
 	@Override
 	public Site retrieveSiteByName(String companyName, String departmentName, String siteName)
 			throws CompanyDetailsException {
-		if(null != companyName && null != departmentName && null != siteName) {
+		if (null != companyName && null != departmentName && null != siteName) {
 			return siteRepository.findByCompanyNameAndDepartmentNameAndSite(companyName, departmentName, siteName);
 		} else {
-			throw new CompanyDetailsException("Company Name "
-					+ companyName +", " +"Department Name "+ departmentName + ", "
+			logger.error("Company Name " + companyName + ", " + "Department Name " + departmentName + ", "
 					+ " Site Name " + siteName + " is not available");
+			throw new CompanyDetailsException("Company Name " + companyName + ", " + "Department Name " + departmentName
+					+ ", " + " Site Name " + siteName + " is not available");
 		}
 	}
 
@@ -206,14 +229,18 @@ public class SiteServiceImpl implements SiteService {
 					inspector.setUpdatedBy(userName.findByUserName(inspectorUserName));
 					inspector.setUpdatedDate(LocalDateTime.now());
 					registrationRepository.save(inspector);
+					logger.debug(inspectorUserName + " Licence reduced [{}]", inspector.getNoOfLicence());
 				} else {
+					logger.error(inspectorUserName + " Given Inspector doesn't have Licence");
 					throw new CompanyDetailsException(inspectorUserName + " Given Inspector doesn't have Licence");
 				}
 			} else {
+				logger.error(inspectorUserName + " Given Inspector doesn't exist");
 				throw new CompanyDetailsException(inspectorUserName + " Given Inspector doesn't exist");
 			}
 
 		} else {
+			logger.error("Invalid Inspector Name");
 			throw new CompanyDetailsException("Invalid Inspector Name");
 		}
 

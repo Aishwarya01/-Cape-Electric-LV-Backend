@@ -5,7 +5,10 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +26,6 @@ import com.capeelectric.model.TestingInnerObservation;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.service.ObservationService;
 import com.capeelectric.service.PrintService;
-import com.capeelectric.service.SummaryService;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -40,17 +42,19 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class PrintServiceImpl implements PrintService {
 
+	private static final Logger logger = LoggerFactory.getLogger(PrintServiceImpl.class);
+	
 	@Autowired
 	private SummaryRepository summaryRepository;
 
 	@Autowired
 	private ObservationService observationService;
 
-	@Autowired
-	private SummaryService summaryService;
-
 	@Override
 	public void printSummary(String userName, Integer siteId) throws SummaryException, ObservationException {
+
+		logger.debug("called printSummary function userName: {},siteId : {}", userName,siteId);
+		
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 
@@ -218,12 +222,14 @@ public class PrintServiceImpl implements PrintService {
 								Obsevation.addCell(MainsOBS2);
 							}
 
-							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("alternate")) {
+							int i = 1;
+							for (AlternativeInnerObservation summaryInnerObservation : supplyObs
+									.getAlternativeInnerObservation()) {
 
-								for (AlternativeInnerObservation summaryInnerObservation : supplyObs
-										.getAlternativeInnerObservation()) {
+								if (summaryInnerObservation.getObservationComponentDetails().equalsIgnoreCase("alternate")) {
 
-									PdfPCell alObs = new PdfPCell(new Paragraph("Alternate Observations", font9));
+									PdfPCell alObs = new PdfPCell(
+											new Paragraph("Alternate Observations - " + i+" :", font9));
 									alObs.setBorder(PdfPCell.NO_BORDER);
 //									alObs.setGrayFill(0.92f);
 									InnAlterOBS.addCell(alObs);
@@ -232,6 +238,7 @@ public class PrintServiceImpl implements PrintService {
 //									alObs2.setGrayFill(0.92f);
 									alObs2.setBorder(PdfPCell.NO_BORDER);
 									InnAlterOBS.addCell(alObs2);
+									++i;
 								}
 							}
 
@@ -323,25 +330,28 @@ public class PrintServiceImpl implements PrintService {
 
 //							if (inspectionObs.getObservationComponentDetails().equalsIgnoreCase("consumer-UnitIter")) {
 
-								for (InspectionInnerObservations inspectionInnerObservation : inspectionObs
-										.getInspectionInnerObservations()) {
+							int i = 1;
+							for (InspectionInnerObservations inspectionInnerObservation : inspectionObs
+									.getInspectionInnerObservations()) {
 
-									PdfPCell insInnerObs = new PdfPCell(new Paragraph("Consumer observation", font9));
-									insInnerObs.setBorder(PdfPCell.NO_BORDER);
+								PdfPCell insInnerObs = new PdfPCell(
+										new Paragraph("Consumer observation - " + i+" :", font9));
+								insInnerObs.setBorder(PdfPCell.NO_BORDER);
 //									insInnerObs.setGrayFill(0.92f);
-									InnInspOBS.addCell(insInnerObs);
-									PdfPCell insInnerObs2 = new PdfPCell(new Paragraph(
-											inspectionInnerObservation.getObservationDescription(), font9));
+								InnInspOBS.addCell(insInnerObs);
+								PdfPCell insInnerObs2 = new PdfPCell(
+										new Paragraph(inspectionInnerObservation.getObservationDescription(), font9));
 //									insInnerObs2.setGrayFill(0.92f);
-									insInnerObs2.setBorder(PdfPCell.NO_BORDER);
-									InnInspOBS.addCell(insInnerObs2);
+								insInnerObs2.setBorder(PdfPCell.NO_BORDER);
+								InnInspOBS.addCell(insInnerObs2);
+								++i;
 //								}
 							}
 						}
 
 						document.add(Obsevation1);
 						document.add(InnInspOBS);
-						
+
 //						Testing Observation Start from here
 
 						PdfPTable obs3 = new PdfPTable(1);
@@ -360,29 +370,29 @@ public class PrintServiceImpl implements PrintService {
 						InnTestingOBS.setSpacingBefore(10f); // Space before table
 						InnTestingOBS.getDefaultCell().setBorder(0);
 
+						int i = 1;
 						for (TestingInnerObservation testingObs : allComponentObservation
 								.getTestingInnerObservation()) {
 
-							if (testingObs.getObservationComponentDetails()
-									.equalsIgnoreCase("circuit")) {
+							if (testingObs.getObservationComponentDetails().equalsIgnoreCase("circuit")) {
 
-								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Circuit details observation :", font9));
+								PdfPCell EarthOBS = new PdfPCell(
+										new Paragraph("Circuit details observation - " + i+" :", font9));
 								EarthOBS.setBorder(PdfPCell.NO_BORDER);
 								EarthOBS.setGrayFill(0.92f);
 								InnTestingOBS.addCell(EarthOBS);
+
 								PdfPCell EarthOBS2 = new PdfPCell(
 										new Paragraph(testingObs.getObservationDescription(), font9));
 								EarthOBS2.setGrayFill(0.92f);
 								EarthOBS2.setBorder(PdfPCell.NO_BORDER);
 								InnTestingOBS.addCell(EarthOBS2);
-
+								++i;
 							}
 						}
 						document.add(InnTestingOBS);
-						
-						
-						
-						float[] pointColumnWidths3 = { 30F, 40F, 90F };
+
+						float[] pointColumnWidths3 = { 20F, 80F };
 
 						PdfPTable table6 = new PdfPTable(pointColumnWidths3);
 						table6.setWidthPercentage(100); // Width 100%
@@ -694,9 +704,9 @@ public class PrintServiceImpl implements PrintService {
 //				cell.setPhrase(new Phrase("", font));
 //				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 //				table6.addCell(cell);
-		cell.setPhrase(new Phrase(summary1.getReferanceNumberReport(), font));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table6.addCell(cell);
+//		cell.setPhrase(new Phrase("\r\n" + summary1.getReferanceNumberReport(), font));
+//		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//		table6.addCell(cell);
 		cell.setPhrase(new Phrase(summary1.getFurtherActions(), font));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table6.addCell(cell);
@@ -710,16 +720,16 @@ public class PrintServiceImpl implements PrintService {
 
 	private void tableHeader(PdfPTable table6) throws DocumentException, IOException {
 		PdfPCell cell = new PdfPCell();
-		cell.setPadding(3);
+		cell.setPadding(2);
 		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 //		cell.setPhrase(new Phrase("Observations", font));
 //		cell.setGrayFill(0.92f);
 //		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 //		table6.addCell(cell);
-		cell.setPhrase(new Phrase("Reference in Report", font));
-		cell.setGrayFill(0.92f);
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table6.addCell(cell);
+//		cell.setPhrase(new Phrase("Reference number in report", font));
+//		cell.setGrayFill(0.92f);
+//		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//		table6.addCell(cell);
 		cell.setPhrase(new Phrase("Further actions", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);

@@ -130,8 +130,13 @@ public class InstalLocationReport implements Serializable {
 		return electrodeEarthDepth;
 	}
 
-	public void setElectrodeEarthDepth(String electrodeEarthDepth) {
-		this.electrodeEarthDepth = electrodeEarthDepth;
+	public void setElectrodeEarthDepth(String electrodeEarthDepth) throws DecimalConversionException {
+		if (electrodeEarthDepth != null) {
+			this.electrodeEarthDepth = DecimalConversion.convertToDecimal(electrodeEarthDepth,
+					Constants.supply_Earth_Depth);
+		} else {
+			this.electrodeEarthDepth = electrodeEarthDepth;
+		}
 	}
 
 	public String getElectrodeEarthSize() {

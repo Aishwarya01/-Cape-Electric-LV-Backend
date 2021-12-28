@@ -8,6 +8,10 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +42,8 @@ import com.capeelectric.util.UserFullName;
  */
 @Service
 public class InspectionServiceImpl implements InspectionService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(InspectionServiceImpl.class);
 
 	@Autowired
 	private InspectionRepository inspectionRepository;
@@ -75,6 +81,7 @@ public class InspectionServiceImpl implements InspectionService {
 	 * @throws CompanyDetailsException 
 	 * 
 	*/
+	@Transactional
 	@Override
 	public void addInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException, CompanyDetailsException {
 		listOfComments = new ArrayList<PeriodicInspectionComment>();
@@ -113,27 +120,34 @@ public class InspectionServiceImpl implements InspectionService {
 										.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 								try {
 									inspectionRepository.save(periodicInspection);
+									logger.debug("InspectionDetails Successfully Saved in DB");
 								}catch(Exception e) {
+									logger.error("Not able to save Inspection data "+e.getMessage());
 									throw new InspectionException("Not able to save Inspection data "+e.getMessage());
 								}
 								
 								siteDetails.updateSite(periodicInspection.getSiteId(),
 										periodicInspection.getUserName());
+								logger.debug("Site Successfully Saved in DB");
 							}
 
 						} else {
+							logger.error("Please fill all the fields before clicking next button");
 							throw new InspectionException("Please fill all the fields before clicking next button");
 						}
 					}
 				} else {
+					logger.error("SiteId already present");
 					throw new InspectionException("SiteId already present");
 				}
 
 			} else {
+				logger.error("Inspection data contains duplicate Object");
 				throw new InspectionException("Inspection data contains duplicate Object");
 			}
 
 		} else {
+			logger.error("Invalid input");
 			throw new InspectionException("Invalid input");
 		}
 	}
@@ -154,10 +168,12 @@ public class InspectionServiceImpl implements InspectionService {
 				sortingDateTime(inspectionRepo.getPeriodicInspectorComment());
 				return inspectionRepo;
 			} else {
+				logger.error("Given UserName & Site doesn't exist Inspection");
 				throw new InspectionException("Given UserName & Site doesn't exist Inspection");
 			}
 
 		} else {
+			logger.error("Invalid Inputs");
 			throw new InspectionException("Invalid Inputs");
 		}
 	}
@@ -171,6 +187,7 @@ public class InspectionServiceImpl implements InspectionService {
 	 * @throws CompanyDetailsException 
 	 * 
 	*/
+	@Transactional
 	@Override
 	public void updateInspectionDetails(PeriodicInspection periodicInspection)
 			throws InspectionException, CompanyDetailsException {
@@ -186,6 +203,7 @@ public class InspectionServiceImpl implements InspectionService {
 				List<IpaoInspection> ipaoInspection = periodicInspection.getIpaoInspection();
 				
 				for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
+					logger.debug("locationcount value adding for new location");
 					// locationcount value adding for new location
 					if (ipaoInspectionItr != null && ipaoInspectionItr.getLocationCount() == null) {
 						ipaoInspectionItr.setLocationCount(new Random().nextInt(999999999));
@@ -196,6 +214,7 @@ public class InspectionServiceImpl implements InspectionService {
 							// locationcount value adding for new consumerUnit
 							if (consumerUnit != null && consumerUnit.getConsumerId() == null) {
 								consumerUnit.setLocationCount(new Random().nextInt(999999999));
+								logger.debug("locationcount value adding for new consumerUnit");
 							}
 						}
 					}
@@ -203,12 +222,16 @@ public class InspectionServiceImpl implements InspectionService {
 				periodicInspection.setUpdatedDate(LocalDateTime.now());
 				periodicInspection.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 				inspectionRepository.save(periodicInspection);
+				logger.debug("Inspection successfully updated into DB");
 				siteDetails.updateSite(periodicInspection.getSiteId(), periodicInspection.getUserName());
+				logger.debug("Updated successfully site updatedUsername",periodicInspection.getUserName());
 			} else {
+				logger.error("Given SiteId and ReportId is Invalid");
 				throw new InspectionException("Given SiteId and ReportId is Invalid");
 			}
 
 		} else {
+			logger.error("Invalid Inputs");
 			throw new InspectionException("Invalid inputs");
 		}
 
@@ -220,7 +243,9 @@ public class InspectionServiceImpl implements InspectionService {
 		PeriodicInspection periodicInspection = verifyCommentsInfo(userName, siteId, periodicInspectionComment, Constants.SEND_COMMENT);
 		if (periodicInspection != null) {
 			inspectionRepository.save(periodicInspection);
+			logger.debug("sendComments successfully into DB");
 		} else {
+			logger.error("Invalid Inputs");
 			throw new InspectionException("Periodic-Inspection information doesn't exist for given Site-Id");
 		}
 	}
@@ -232,8 +257,10 @@ public class InspectionServiceImpl implements InspectionService {
 				Constants.REPLY_COMMENT);
 		if (periodicInspection != null) {
 			inspectionRepository.save(periodicInspection);
+			logger.debug("ReplyComments successfully into DB");
 			return viewerName;
 		} else {
+			logger.error("Periodic-Inspection information doesn't exist for given Site-Id");
 			throw new InspectionException("Periodic-Inspection information doesn't exist for given Site-Id");
 		}
 	}
@@ -245,7 +272,9 @@ public class InspectionServiceImpl implements InspectionService {
 				Constants.APPROVE_REJECT_COMMENT);
 		if (periodicInspection != null) {
 			inspectionRepository.save(periodicInspection);
+			logger.debug("ReplyComments successfully into DB");
 		} else {
+			logger.error("Periodic-Inspection information doesn't exist for given Site-Id");
 			throw new InspectionException("Periodic-Inspection information doesn't exist for given Site-Id");
 		}
 	}
@@ -327,18 +356,22 @@ public class InspectionServiceImpl implements InspectionService {
 							periodicInspection.setPeriodicInspectorComment(periodicInspectorCommentRepo);
 							return periodicInspection;
 						} else {
+							logger.error("Sending viewer comments faild");
 							throw new InspectionException("Sending viewer comments faild");
 						}
 					}
 				} else {
+					logger.error("Given username not have access for comments");
 					throw new InspectionException("Given username not have access for comments");
 				}
 
 			} else {
+				logger.error("Siteinformation doesn't exist, try with different Site-Id");
 				throw new InspectionException("Siteinformation doesn't exist, try with different Site-Id");
 			}
 
 		} else {
+			logger.error("Invalid Inputs");
 			throw new InspectionException("Invalid Inputs");
 		}
 		return null;
@@ -381,6 +414,7 @@ public class InspectionServiceImpl implements InspectionService {
 					}
 				}
 			} else {
+				logger.error("Given userName not allowing for " + process + " comment");
 				throw new InspectionException("Given userName not allowing for " + process + " comment");
 			}
 
@@ -392,6 +426,7 @@ public class InspectionServiceImpl implements InspectionService {
 						&& sitePersonsItr.getPersonInchargeEmail().equalsIgnoreCase(userName)) {
 					return flag = true;
 				} else {
+					logger.debug("Given userName not allowing for " + process + " comment");
 					throw new InspectionException("Given userName not allowing for " + process + " comment");
 				}
 			}
@@ -413,8 +448,11 @@ public class InspectionServiceImpl implements InspectionService {
 						testInfoRepository.save(testingRepo);
 					}
 				} catch (Exception e) {
+					logger.debug("Please check removed Inspection Location data not available in PeriodicTesting"
+							+ e.getMessage());
 					throw new InspectionException(
-							"Please check removed Inspection Location data not available in PeriodicTesting"+e.getMessage());
+							"Please check removed Inspection Location data not available in PeriodicTesting"
+									+ e.getMessage());
 				}
 			}
 		}
@@ -436,15 +474,18 @@ public class InspectionServiceImpl implements InspectionService {
 	private void findConsumerUnitLocation(List<ConsumerUnit> consumerUnitList) throws InspectionException {
 		for (ConsumerUnit consumerUnit : consumerUnitList) {
 			if (consumerUnit != null && consumerUnit.getLocation() != null) {
-				ConsumerUnit consumerLocation = inspectionConsumerUnitRepository.findByLocation(consumerUnit.getLocation());
+				ConsumerUnit consumerLocation = inspectionConsumerUnitRepository
+						.findByLocation(consumerUnit.getLocation());
 				if (consumerLocation == null) {
 
 				} else {
+					logger.error("Given LocationName already present in ConsumerUnit,please try new LocationName");
 					throw new InspectionException(
 							"Given LocationName already present in ConsumerUnit,please try new LocationName");
 				}
 
 			} else {
+				logger.error("Please check Location Information in ConsumerUnit");
 				throw new InspectionException("Please check Location Information in ConsumerUnit");
 			}
 		}
@@ -472,9 +513,13 @@ public class InspectionServiceImpl implements InspectionService {
 							testDistRecords.setTestDistRecordStatus("R");
 							testDistRecordsRepository.save(testDistRecords);
 						}
-					} catch(Exception e) {
+					} catch (Exception e) {
+						logger.error(
+								"Please verify Removed consumerUnit records,Removed data not available in TestingDistrubtionRecords"
+										+ e.getMessage());
 						throw new InspectionException(
-								"Please verify Removed consumerUnit records,Removed data not available in TestingDistrubtionRecords"+e.getMessage());
+								"Please verify Removed consumerUnit records,Removed data not available in TestingDistrubtionRecords"
+										+ e.getMessage());
 					}
 
 				}

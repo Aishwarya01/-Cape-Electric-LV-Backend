@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	 * @throws DecimalConversionException 
 	 * @throws CompanyDetailsException 
 	*/	
+	@Transactional
 	@Override
 	public void addCharacteristics(SupplyCharacteristics supplyCharacteristics)
 			throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
@@ -75,20 +78,24 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 		if (supplyCharacteristics != null && supplyCharacteristics.getUserName() != null
 				&& !supplyCharacteristics.getUserName().isEmpty() && supplyCharacteristics.getSiteId() != null
 				&& supplyCharacteristics.getSiteId() != 0 && supplyCharacteristics.getAlternativeSupply() != null) {
-			if(supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("No")) {
+			if (supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("No")) {
+				logger.debug(
+						"supplyCharacteristics AlternativeSupply --> " + supplyCharacteristics.getAlternativeSupply());
 				saveSupplyCharacteristics(supplyCharacteristics);
-			}
-			else if (supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("Yes")
+			} else if (supplyCharacteristics.getAlternativeSupply().equalsIgnoreCase("Yes")
 					&& supplyCharacteristics.getSupplyParameters() != null
 					&& supplyCharacteristics.getCircuitBreaker() != null
 					&& supplyCharacteristics.getSupplyParameters().size() > 0
 					&& supplyCharacteristics.getCircuitBreaker().size() > 0) {
+				logger.debug(
+						"supplyCharacteristics AlternativeSupply --> " + supplyCharacteristics.getAlternativeSupply());
 				saveSupplyCharacteristics(supplyCharacteristics);
 			} else {
+				logger.debug("Please fill all the fields before clicking next button");
 				throw new SupplyCharacteristicsException("Please fill all the fields before clicking next button");
 			}
-		}
-		else {
+		} else {
+			logger.debug("Invalid Inputs");
 			throw new SupplyCharacteristicsException("Invalid Inputs");
 		}
 	}
@@ -109,14 +116,15 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			supplyCharacteristics.setSupplyCharacteristicComment(listOfComments);
 			supplyCharacteristics.setCreatedDate(LocalDateTime.now());
 			supplyCharacteristics.setUpdatedDate(LocalDateTime.now());
-			supplyCharacteristics
-					.setCreatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
-			supplyCharacteristics
-					.setUpdatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
+			supplyCharacteristics.setCreatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
+			supplyCharacteristics.setUpdatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
 
 			supplyCharacteristicsRepository.save(supplyCharacteristics);
+			logger.debug("supplyCharacteristics Details Successfully Saved in DB");
 			siteDetails.updateSite(supplyCharacteristics.getSiteId(), supplyCharacteristics.getUserName());
+			logger.debug("Updated successfully site updatedUsername", supplyCharacteristics.getUserName());
 		} else {
+			logger.error("Site-Id Already Available");
 			throw new SupplyCharacteristicsException("Site-Id Already Available");
 		}
 	}
@@ -136,22 +144,27 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 					.findByUserNameAndSiteId(userName, siteId);
 			if (supplyCharacteristicsRepo != null) {
 
-				supplyCharacteristicsRepo
-						.setInstalLocationReport(findNonRemovedObject.findNonRemovedInstallLocation(supplyCharacteristicsRepo));
-				supplyCharacteristicsRepo
-						.setBoundingLocationReport(findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristicsRepo));
-				supplyCharacteristicsRepo
-						.setEarthingLocationReport(findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristicsRepo));
-				supplyCharacteristicsRepo.setCircuitBreaker(findNonRemovedObject.findNonRemovedCircuitBreaker(supplyCharacteristicsRepo.getCircuitBreaker()));
-				supplyCharacteristicsRepo.setSupplyParameters(findNonRemovedObject.findNonRemovedSupplyParameters(supplyCharacteristicsRepo.getSupplyParameters()));
-				supplyCharacteristicsRepo.setSupplyOuterObservation(findNonRemovedObject.findNonRemovedSupplyOuterObservation(supplyCharacteristicsRepo.getSupplyOuterObservation()));
+				supplyCharacteristicsRepo.setInstalLocationReport(
+						findNonRemovedObject.findNonRemovedInstallLocation(supplyCharacteristicsRepo));
+				supplyCharacteristicsRepo.setBoundingLocationReport(
+						findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristicsRepo));
+				supplyCharacteristicsRepo.setEarthingLocationReport(
+						findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristicsRepo));
+				supplyCharacteristicsRepo.setCircuitBreaker(findNonRemovedObject
+						.findNonRemovedCircuitBreaker(supplyCharacteristicsRepo.getCircuitBreaker()));
+				supplyCharacteristicsRepo.setSupplyParameters(findNonRemovedObject
+						.findNonRemovedSupplyParameters(supplyCharacteristicsRepo.getSupplyParameters()));
+				supplyCharacteristicsRepo.setSupplyOuterObservation(findNonRemovedObject
+						.findNonRemovedSupplyOuterObservation(supplyCharacteristicsRepo.getSupplyOuterObservation()));
 				sortingDateTime(supplyCharacteristicsRepo.getSupplyCharacteristicComment());
 
 				return supplyCharacteristicsRepo;
 			} else {
+				logger.error("Given UserName & Site doesn't exist Inspection");
 				throw new SupplyCharacteristicsException("Given UserName & Site doesn't exist Inspection");
 			}
 		} else {
+			logger.error("Invalid Inputs");
 			throw new SupplyCharacteristicsException("Invalid Inputs");
 		}
 	}
@@ -167,10 +180,13 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	 * @throws CompanyDetailsException 
 	 * 
 	*/
+	@Transactional
 	@Override
-	public void updateCharacteristics(SupplyCharacteristics supplyCharacteristics) throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
-		if (supplyCharacteristics != null && supplyCharacteristics.getSupplyCharacteristicsId() != null && supplyCharacteristics.getSupplyCharacteristicsId() != 0
-				&& supplyCharacteristics.getSiteId() != null && supplyCharacteristics.getSiteId() != 0) {
+	public void updateCharacteristics(SupplyCharacteristics supplyCharacteristics)
+			throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
+		if (supplyCharacteristics != null && supplyCharacteristics.getSupplyCharacteristicsId() != null
+				&& supplyCharacteristics.getSupplyCharacteristicsId() != 0 && supplyCharacteristics.getSiteId() != null
+				&& supplyCharacteristics.getSiteId() != 0) {
 			Optional<SupplyCharacteristics> supplyCharacteristicsRepo = supplyCharacteristicsRepository
 					.findById(supplyCharacteristics.getSupplyCharacteristicsId());
 			if (supplyCharacteristicsRepo.isPresent()
@@ -179,27 +195,31 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				supplyCharacteristics.setUpdatedBy(userFullName.findByUserName(supplyCharacteristics.getUserName()));
 				decimalConversion(supplyCharacteristics);
 				supplyCharacteristicsRepository.save(supplyCharacteristics);
+				logger.debug("supplyCharacteristics Details Successfully Updated in DB");
 				siteDetails.updateSite(supplyCharacteristics.getSiteId(), supplyCharacteristics.getUserName());
-				
+				logger.debug("Updated successfully site updatedUsername", supplyCharacteristics.getUserName());
 			} else {
+				logger.error("Given SiteId and ReportId is Invalid");
 				throw new SupplyCharacteristicsException("Given SiteId and ReportId is Invalid");
 			}
 
 		} else {
+			logger.error("Invalid Inputs");
 			throw new SupplyCharacteristicsException("Invalid inputs");
 		}
-		
+
 	}
 	
 	@Override
 	public void sendComments(String userName, Integer siteId,
 			SupplyCharacteristicComment supplyCharacteristicComment) throws SupplyCharacteristicsException {
 
-		SupplyCharacteristics supplyCharacteristics = verifyCommentsInfo(userName, siteId,
-				supplyCharacteristicComment, Constants.SEND_COMMENT);
+		SupplyCharacteristics supplyCharacteristics = verifyCommentsInfo(userName, siteId, supplyCharacteristicComment,
+				Constants.SEND_COMMENT);
 		if (supplyCharacteristics != null) {
 			supplyCharacteristicsRepository.save(supplyCharacteristics);
 		} else {
+			logger.error("SupplyCharacteristics-Information doesn't exist for given Site-Id");
 			throw new SupplyCharacteristicsException(
 					"SupplyCharacteristics-Information doesn't exist for given Site-Id");
 		}
@@ -213,8 +233,10 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				supplyCharacteristicComment, Constants.REPLY_COMMENT);
 		if (supplyCharacteristics != null) {
 			supplyCharacteristicsRepository.save(supplyCharacteristics);
+			logger.debug("ReplyComments successfully into DB");
 			return viewerName;
 		} else {
+			logger.error("SupplyCharacteristics-Information doesn't exist for given Site-Id");
 			throw new SupplyCharacteristicsException(
 					"SupplyCharacteristics-Information doesn't exist for given Site-Id");
 		}
@@ -228,7 +250,9 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				Constants.APPROVE_REJECT_COMMENT);
 		if (supplyCharacteristics != null) {
 			supplyCharacteristicsRepository.save(supplyCharacteristics);
+			logger.error("ApproveComments successfully into DB");
 		} else {
+			logger.error("SupplyCharacteristics-Information doesn't exist for given Site-Id");
 			throw new SupplyCharacteristicsException(
 					"SupplyCharacteristics-Information doesn't exist for given Site-Id");
 		}
@@ -317,14 +341,17 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 						}
 					}
 				} else {
+					logger.error("Given username not have access for comments");
 					throw new SupplyCharacteristicsException("Given username not have access for comments");
 				}
 
 			} else {
+				logger.error("Siteinformation doesn't exist, try with different Site-Id");
 				throw new SupplyCharacteristicsException("Siteinformation doesn't exist, try with different Site-Id");
 			}
 
 		} else {
+			logger.error("Invalid inputs");
 			throw new SupplyCharacteristicsException("Invalid inputs");
 		}
 		return null;
@@ -369,6 +396,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 					}
 				}
 			} else {
+				logger.error("Given userName not allowing for " + process + " comment");
 				throw new SupplyCharacteristicsException("Given userName not allowing for " + process + " comment");
 			}
 
@@ -380,6 +408,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 						&& sitePersonsItr.getPersonInchargeEmail().equalsIgnoreCase(userName)) {
 					return flag = true;
 				} else {
+					logger.error("Given userName not allowing for " + process + " comment");
 					throw new SupplyCharacteristicsException("Given userName not allowing for " + process + " comment");
 				}
 			}

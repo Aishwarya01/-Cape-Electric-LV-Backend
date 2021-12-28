@@ -43,6 +43,7 @@ public class InspectionController {
 		logger.info("called addInspectionDetails function UserName : {},SiteId : {}", periodicInspection.getUserName(),
 				periodicInspection.getSiteId());
 		inspectionService.addInspectionDetails(periodicInspection);
+		logger.debug("Ended addInspectionDetails function");
 		return new ResponseEntity<String>("Inspection Details Are Successfully Saved",HttpStatus.CREATED);
 	}
 	
@@ -61,6 +62,7 @@ public class InspectionController {
 				periodicInspection.getUserName(), periodicInspection.getSiteId(),
 				periodicInspection.getPeriodicInspectionId());
 		inspectionService.updateInspectionDetails(periodicInspection);
+		logger.debug("Ended updateInspectionDetails function");
 		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.OK);
 	}
 	
@@ -70,6 +72,7 @@ public class InspectionController {
 			throws InspectionException, RegistrationException, Exception {
 		logger.info("called sendComments function UserName : {},SiteId : {}", userName, siteId);
 		inspectionService.sendComments(userName, siteId, periodicInspectionComment);
+		logger.debug("Ended sendComments function");
 		sendReplyComments.sendComments(userName);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
@@ -84,6 +87,7 @@ public class InspectionController {
 		if (viewerUserName != null) {
 			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
 		} else {
+			logger.error("No viewer userName avilable");
 			throw new InspectionException("No viewer userName avilable");
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
@@ -95,6 +99,7 @@ public class InspectionController {
 			throws InspectionException, RegistrationException, Exception {
 		logger.info("called approveComments function UserName : {},SiteId : {}", userName, siteId);
 		inspectionService.approveComments(userName, siteId, periodicInspectionComment);
+		logger.debug("Ended sendComments function");
 		sendReplyComments.approveComments(userName,periodicInspectionComment.getApproveOrReject());
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
