@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  */
 @Entity
 @Table(name = "summary_observations_table")
-public class SummaryObervation implements Serializable {
+public class SummaryObservation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

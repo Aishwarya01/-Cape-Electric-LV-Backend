@@ -97,7 +97,7 @@ public class Summary implements Serializable {
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<SummaryObervation> summaryObervation;
+	private List<SummaryObservation> summaryObservation;
 	
 	@Transient
 	private AllComponentObservation allComponentObservation;
@@ -262,12 +262,12 @@ public class Summary implements Serializable {
 		this.allComponentObservation = allComponentObservation;
 	}
 
-	public List<SummaryObervation> getSummaryObervation() {
-		return summaryObervation;
+	public List<SummaryObservation> getSummaryObservation() {
+		return summaryObservation;
 	}
 
-	public void setSummaryObervation(List<SummaryObervation> summaryObervation) {
-		this.summaryObervation = summaryObervation;
+	public void setSummaryObservation(List<SummaryObservation> summaryObservation) {
+		this.summaryObservation = summaryObservation;
 	}
- 
+	
 }
