@@ -325,7 +325,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 		for (TestDistribution distribution : testDistribution) {
 			PdfPCell cell13 = new PdfPCell(new Paragraph(distribution.getDistributionBoardDetails(), font5));
-			table1.addCell(new Phrase("Distribution Board Details:", font5));
+			table1.addCell(new Phrase("Distribution board details:", font5));
 			cell13.setBorder(PdfPCell.NO_BORDER);
 			table1.addCell(cell13);
 
@@ -343,7 +343,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			cell15.setBorder(PdfPCell.NO_BORDER);
 			table1.addCell(cell15);
 
-			PdfPCell cell16 = new PdfPCell(new Paragraph("Correct Supply Polarity:", font7));
+			PdfPCell cell16 = new PdfPCell(new Paragraph("Correct supply polarity:", font7));
 			cell16.setBorder(PdfPCell.NO_BORDER);
 			cell16.setGrayFill(0.92f);
 			table1.addCell(cell16);
@@ -357,7 +357,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			cell17.setBorder(PdfPCell.NO_BORDER);
 			table1.addCell(cell17);
 
-			PdfPCell cell19 = new PdfPCell(new Paragraph("Number Of Output Circuits In Use:", font7));
+			PdfPCell cell19 = new PdfPCell(new Paragraph("Number of output circuits tested:", font7));
 			cell19.setBorder(PdfPCell.NO_BORDER);
 			cell19.setGrayFill(0.92f);
 			table1.addCell(cell19);
@@ -367,7 +367,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 			table1.addCell(cell32);
 
 			PdfPCell cell18 = new PdfPCell(new Paragraph(distribution.getInstalledEquipmentVulnarable(), font5));
-			table1.addCell(new Phrase("Installed Equipment Vulnarable To Testing:", font5));
+			table1.addCell(new Phrase("Installed equipment vulnarable to testing:", font5));
 			cell18.setBorder(PdfPCell.NO_BORDER);
 			table1.addCell(cell18);
 
@@ -438,7 +438,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				table250.setSpacingAfter(5f);
 				table250.getDefaultCell().setBorder(0);
 
-				PdfPCell celllabel = new PdfPCell(new Paragraph("Source Of Incoming:", font9));
+				PdfPCell celllabel = new PdfPCell(new Paragraph("Source of incoming:", font9));
 				celllabel.setBorder(PdfPCell.NO_BORDER);
 				celllabel.setBackgroundColor(BaseColor.LIGHT_GRAY);
 				table250.addCell(celllabel);
