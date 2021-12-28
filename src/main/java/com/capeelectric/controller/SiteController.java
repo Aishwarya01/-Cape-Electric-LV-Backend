@@ -30,40 +30,43 @@ public class SiteController {
 
 	@PostMapping("/addSite")
 	public ResponseEntity<String> addSite(@RequestBody Site site) throws CompanyDetailsException {
-		logger.info("called addSite function UserName : {}, Site : {}",
-				 site.getSite());
- 
+		logger.debug("called addSite function UserName : {}, Site : {}", site.getSite());
 		siteService.addSite(site);
+		logger.debug("Ended addSite function");
 		return new ResponseEntity<String>("Site Successfully Saved", HttpStatus.CREATED);
 
 	}
 
 	@PutMapping("/updateSite")
 	public ResponseEntity<String> updateSite(@RequestBody Site site) throws CompanyDetailsException {
-		logger.info("called updateSite function UserName: {},Site : {}", site.getUserName(), site.getSite());
+		logger.debug("called updateSite function UserName: {},Site : {}", site.getUserName(), site.getSite());
 		siteService.updateSite(site);
+		logger.debug("Ended updateSite function");
 		return new ResponseEntity<String>("Site Successfully Updated", HttpStatus.OK);
 	}
 
 	@DeleteMapping("/deleteSite/{siteId}")
 	public ResponseEntity<String> deleteSite(@PathVariable Integer siteId) throws CompanyDetailsException {
-		logger.info("called deleteSite function siteId: {}", siteId);
+		logger.debug("called deleteSite function siteId: {}", siteId);
 		siteService.deleteSite(siteId);
-		return new ResponseEntity<String>("Site Succesfully Deleted",HttpStatus.OK);
+		logger.debug("Ended deleteSite function");
+		return new ResponseEntity<String>("Site Succesfully Deleted", HttpStatus.OK);
 	}
 
 	
 	@GetMapping("/retriveSite/{userName}")
 	public ResponseEntity<List<Site>> retriveSite(@PathVariable String userName) throws CompanyDetailsException {
-		logger.info("called retriveSite function UserName: {}", userName);
+		logger.debug("called retriveSite function UserName: {}", userName);
 		return new ResponseEntity<List<Site>>(siteService.retriveSite(userName), HttpStatus.OK);
 	}
 	
 	@GetMapping("/retrieveSiteByName/{companyName}/{department}/{siteName}")
 	public ResponseEntity<Site> retrieveSiteByName(@PathVariable String companyName, 
-			@PathVariable String department, @PathVariable String siteName) throws CompanyDetailsException{
-		logger.info("called retriveSiteByName function Company Name: {}, Department: {}, Site Name: {}", companyName, department, siteName);
-		return new ResponseEntity<Site>(siteService.retrieveSiteByName(companyName, department, siteName), HttpStatus.OK);
+			@PathVariable String department, @PathVariable String siteName) throws CompanyDetailsException {
+		logger.debug("called retriveSiteByName function Company Name: {}, Department: {}, Site Name: {}", companyName,
+				department, siteName);
+		return new ResponseEntity<Site>(siteService.retrieveSiteByName(companyName, department, siteName),
+				HttpStatus.OK);
 	}
 
 }

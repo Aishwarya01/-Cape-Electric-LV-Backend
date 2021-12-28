@@ -42,9 +42,10 @@ public class SupplyCharacteristicsController {
 	@PostMapping("/addCharacteristics")
 	public ResponseEntity<String> addCharacteristics(@RequestBody SupplyCharacteristics supplyCharacteristics)
 			throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
-		logger.info("called addCharacteristics function UserName : {}, SiteId : {}",
+		logger.debug("called addCharacteristics function UserName : {}, SiteId : {}",
 				supplyCharacteristics.getUserName(), supplyCharacteristics.getSiteId());
 		supplyCharacteristicsService.addCharacteristics(supplyCharacteristics);
+		logger.debug("Ended addCharacteristics function");
 		return new ResponseEntity<String>("SupplyCharacteristics and Earthing Properties Sucessfully Saved",
 				HttpStatus.CREATED);
 	}
@@ -52,7 +53,7 @@ public class SupplyCharacteristicsController {
 	@GetMapping("/retrieveCharacteristics/{userName}/{siteId}")
 	public ResponseEntity<SupplyCharacteristics> retrieveCharacteristics(@PathVariable String userName,
 			@PathVariable Integer siteId) throws SupplyCharacteristicsException {
-		logger.info("started retrieveCharacteristics function UserName : {}, SiteId : {}", userName, siteId);
+		logger.debug("started retrieveCharacteristics function UserName : {}, SiteId : {}", userName, siteId);
 		return new ResponseEntity<SupplyCharacteristics>(
 				supplyCharacteristicsService.retrieveCharacteristics(userName, siteId), HttpStatus.OK);
 	}
@@ -60,10 +61,11 @@ public class SupplyCharacteristicsController {
 	@PutMapping("/updateCharacteristics")
 	public ResponseEntity<String> updateCharacteristics(@RequestBody SupplyCharacteristics supplyCharacteristics)
 			throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
-		logger.info("called updateCharacteristics function UserName : {},SiteId : {},SupplyCharacteristicsId : {}",
+		logger.debug("called updateCharacteristics function UserName : {},SiteId : {},SupplyCharacteristicsId : {}",
 				supplyCharacteristics.getUserName(), supplyCharacteristics.getSiteId(),
 				supplyCharacteristics.getSupplyCharacteristicsId());
 		supplyCharacteristicsService.updateCharacteristics(supplyCharacteristics);
+		logger.debug("Ended addCharacteristics function");
 		return new ResponseEntity<String>("SupplyCharacteristics Data successfully Updated", HttpStatus.OK);
 	}
 
@@ -71,8 +73,9 @@ public class SupplyCharacteristicsController {
 	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
 			throws SupplyCharacteristicsException, RegistrationException, Exception {
-		logger.info("called sendcomments function UserName : {},SiteId : {}", userName, siteId);
+		logger.debug("called sendcomments function UserName : {},SiteId : {}", userName, siteId);
 		supplyCharacteristicsService.sendComments(userName, siteId, supplyCharacteristicComment);
+		logger.debug("Ended sendcomments function");
 		sendReplyComments.sendComments(userName);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
@@ -81,12 +84,15 @@ public class SupplyCharacteristicsController {
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
 			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
 			throws SupplyCharacteristicsException, RegistrationException, Exception {
-		logger.info("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
+		logger.debug("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
 		String viewerUserName = supplyCharacteristicsService.replyComments(inspectorUserName, siteId,
 				supplyCharacteristicComment);
+		logger.debug("Ended replyComments function");
 		if (viewerUserName != null) {
 			sendReplyComments.replyComments(inspectorUserName, viewerUserName);
+			logger.debug("Ended sendReplyComments function");
 		} else {
+			logger.error("No viewer userName avilable");
 			throw new SupplyCharacteristicsException("No viewer userName avilable");
 		}
 		return new ResponseEntity<Void>(HttpStatus.OK);
@@ -96,8 +102,9 @@ public class SupplyCharacteristicsController {
 	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
 			throws SupplyCharacteristicsException, RegistrationException, Exception {
-		logger.info("called approveComments function UserName : {},SiteId : {}", userName, siteId);
+		logger.debug("called approveComments function UserName : {},SiteId : {}", userName, siteId);
 		supplyCharacteristicsService.approveComments(userName, siteId, supplyCharacteristicComment);
+		logger.debug("Ended approveComments function");
 		sendReplyComments.approveComments(userName, supplyCharacteristicComment.getApproveOrReject());
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}

@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +38,8 @@ import com.capeelectric.util.UserFullName;
 @Service
 public class InstalReportServiceImpl implements InstalReportService {
 
+	private static final Logger logger = LoggerFactory.getLogger(InstalReportServiceImpl.class);
+	
 	@Autowired
 	private InstalReportDetailsRepository installationReportRepository;
 
@@ -59,6 +65,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 	 * @throws CompanyDetailsException 
 	 * 
 	*/
+	@Transactional
 	@Override
 	public void addInstallationReport(ReportDetails reportDetails) throws InstalReportException, CompanyDetailsException {
 		List<ReportDetailsComment> listOfComments = new ArrayList<ReportDetailsComment>();
@@ -82,15 +89,20 @@ public class InstalReportServiceImpl implements InstalReportService {
 					reportDetails.setCreatedBy(userFullName.findByUserName(reportDetails.getUserName()));
 					reportDetails.setUpdatedBy(userFullName.findByUserName(reportDetails.getUserName()));
 					installationReportRepository.save(reportDetails);
+					logger.debug("BasicInformation successfully Saved in DB");
 					siteDetails.updateSite(reportDetails.getSiteId(), reportDetails.getUserName());
+					logger.debug("Updated successfully site updatedUsername",reportDetails.getUserName());
 				} else {
+					logger.error("Site-Id Details Already Available,Create New Site-Id");
 					throw new InstalReportException("Site-Id Details Already Available,Create New Site-Id");
 				}
 			} else {
+				logger.error("Please fill all the fields before clicking next button");
 				throw new InstalReportException("Please fill all the fields before clicking next button");
 			}
 
 		} else {
+			logger.error("Invalid Inputs");
 			throw new InstalReportException("Invalid Inputs");
 		}
 	}
@@ -108,12 +120,16 @@ public class InstalReportServiceImpl implements InstalReportService {
 			ReportDetails reportDetailsRepo = installationReportRepository.findByUserNameAndSiteId(userName, siteId);
 			if (reportDetailsRepo != null) {
 				reportDetailsRepo.setSignatorDetails(findNonRemovedObject.findNonRemovedReport(reportDetailsRepo.getSignatorDetails()));
+				logger.debug("Successfully done findNonRemovedReport() call");
 				sortingDateTime(reportDetailsRepo.getReportDetailsComment());
+				logger.debug("Done comments ascending order based on DateTime");
 				return reportDetailsRepo;
 			} else {
+				logger.error("Given UserName & Site doesn't exist Basic-information");
 				throw new InstalReportException("Given UserName & Site doesn't exist Basic-information");
 			}
 		} else {
+			logger.error("Invalid Inputs");
 			throw new InstalReportException("Invalid Inputs");
 		}
 	}
@@ -127,6 +143,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 	 * @throws CompanyDetailsException 
 	 * 
 	*/
+	@Transactional
 	@Override
 	public void updateInstallationReport(ReportDetails reportDetails) throws InstalReportException, CompanyDetailsException {
 
@@ -139,12 +156,16 @@ public class InstalReportServiceImpl implements InstalReportService {
 				reportDetails.setUpdatedDate(LocalDateTime.now());
 				reportDetails.setUpdatedBy(userFullName.findByUserName(reportDetails.getUserName()));
 				installationReportRepository.save(reportDetails);
+				logger.debug("BasicInformation successfully Updated in DB");
 				siteDetails.updateSite(reportDetails.getSiteId(), reportDetails.getUserName());
+				logger.debug("Updated successfully site updatedUsername",reportDetails.getUserName());
 			} else {
+				logger.error("Given SiteId and ReportId is Invalid");
 				throw new InstalReportException("Given SiteId and ReportId is Invalid");
 			}
 
 		} else {
+			logger.error("Invalid inputs");
 			throw new InstalReportException("Invalid inputs");
 		}
 	}
@@ -154,7 +175,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 		ReportDetails reportDetails = verifyCommentsInfo(userName, siteId, reportDetailsComment, Constants.SEND_COMMENT);
 		if (reportDetails != null) {
 			installationReportRepository.save(reportDetails);
+			logger.debug("BasicInformation comments successfully Saved in DB");
 		} else {
+			logger.error("Basic-Information information doesn't exist for given Site-Id [{}]",siteId);
 			throw new InstalReportException("Basic-Information information doesn't exist for given Site-Id");
 		}
 	}
@@ -165,8 +188,10 @@ public class InstalReportServiceImpl implements InstalReportService {
 		ReportDetails reportDetails = verifyCommentsInfo(inspectorUserName, siteId, reportDetailsComment, Constants.REPLY_COMMENT);
 		if (reportDetails != null && viewerName != null) {
 			installationReportRepository.save(reportDetails);
+			logger.debug("BasicInformation replyComments successfully Saved in DB");
 			return viewerName;
 		} else {
+			logger.error("Basic-Information information doesn't exist for given Site-Id");
 			throw new InstalReportException("Basic-Information information doesn't exist for given Site-Id");
 		}
 
@@ -178,7 +203,9 @@ public class InstalReportServiceImpl implements InstalReportService {
 		ReportDetails reportDetails = verifyCommentsInfo(userName, siteId, reportDetailsComment, Constants.APPROVE_REJECT_COMMENT);
 		if (reportDetails != null) {
 			installationReportRepository.save(reportDetails);
+			logger.debug("BasicInformation approveComments successfully Saved in DB");
 		} else {
+			logger.error("Basic-Information doesn't exist for given Site-Id");
 			throw new InstalReportException("Basic-Information doesn't exist for given Site-Id");
 		}
 	}
@@ -257,19 +284,23 @@ public class InstalReportServiceImpl implements InstalReportService {
 							reportDetails.setReportDetailsComment(reportDetailsCommentRepo);
 							return reportDetails;
 						} else {
+							logger.error("Sending viewer comments faild");
 							throw new InstalReportException("Sending viewer comments faild");
 						}
 					}
 				}
 				else {
+					logger.error("Given username not have access for comments");
 					throw new InstalReportException("Given username not have access for comments");
 				}
 
 			} else {
+				logger.error("Siteinformation doesn't exist, try with different Site-Id");
 				throw new InstalReportException("Siteinformation doesn't exist, try with different Site-Id");
 			}
 
 		} else {
+			logger.error("Invalid Inputs");
 			throw new InstalReportException("Invalid Inputs");
 		}
 		return null;
@@ -313,6 +344,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 					}
 				}
 			} else {
+				logger.error("Given userName not allowing for " + process + " comment");
 				throw new InstalReportException("Given userName not allowing for " + process + " comment");
 			}
 
@@ -324,6 +356,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 						&& sitePersonsItr.getPersonInchargeEmail().equalsIgnoreCase(userName)) {
 					return flag = true;
 				} else {
+					logger.error("Given userName not allowing for " + process + " comment");
 					throw new InstalReportException("Given userName not allowing for " + process + " comment");
 				}
 			}

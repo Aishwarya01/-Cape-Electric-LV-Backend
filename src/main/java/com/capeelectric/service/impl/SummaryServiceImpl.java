@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +57,8 @@ import com.capeelectric.util.UserFullName;
  */
 @Service
 public class SummaryServiceImpl implements SummaryService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(SummaryServiceImpl.class);
 
 	@Autowired
 	private InstalReportPDFService instalReportService;
@@ -123,6 +129,7 @@ public class SummaryServiceImpl implements SummaryService {
 	 * @throws ObservationException 
 	 * 
 	*/
+	@Transactional
 	@Override
 	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException {
 		listOfComments = new ArrayList<SummaryComment>();
@@ -136,14 +143,19 @@ public class SummaryServiceImpl implements SummaryService {
 			Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(summary.getSiteId());
 			if (!reportDetailsRepo.isPresent() && !supplyCharacteristics.isPresent() && !periodicInspection.isPresent()
 					&& !testingRepo.isPresent()) {
+				logger.error("Please enter details for all previous steps to proceed further");
 				throw new SummaryException("Please enter details for all previous steps to proceed further");
 			} else if (!reportDetailsRepo.isPresent()) {
+				logger.error("Please enter Basic Information step to proceed further");
 				throw new SummaryException("Please enter Basic Information step to proceed further");
 			} else if (!supplyCharacteristics.isPresent()) {
+				logger.error("Please enter Supply Characteristics step to proceed further");
 				throw new SummaryException("Please enter Supply Characteristics step to proceed further");
 			} else if (!periodicInspection.isPresent()) {
+				logger.error("Please enter Inspection step to proceed further");
 				throw new SummaryException("Please enter Inspection step to proceed further");
 			} else if (!testingRepo.isPresent()) {
+				logger.error("Please enter Testing step to proceed further");
 				throw new SummaryException("Please enter Testing step to proceed further");
 			} else {
 				if (summary.getSummaryDeclaration() != null && summary.getSummaryDeclaration().size() > 0) {
@@ -162,37 +174,50 @@ public class SummaryServiceImpl implements SummaryService {
 						summary.setCreatedBy(userFullName.findByUserName(summary.getUserName()));
 						summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
 						summaryRepository.save(summary);
+						logger.debug("Summary Details Successfully Saved in DB");
 						siteRepo = siteRepository.findById(summary.getSiteId());
 						if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
 							site = siteRepo.get();
 							site.setAllStepsCompleted("AllStepCompleted");
 							siteRepository.save(site);
+							logger.debug("AllStepCompleted information saved site table in DB");
 							siteDetails.updateSite(summary.getSiteId(), summary.getUserName());
+							logger.debug("Updated successfully site updatedUsername",summary.getUserName());
 						} else {
+							logger.error("Site-Id Information not Available in site_Table");
 							throw new SummaryException("Site-Id Information not Available in site_Table");
 						}
 
 					} else {
+						logger.error("Site-Id Already Available");
 						throw new SummaryException("Site-Id Already Available");
 					}
 
 					instalReportService.printBasicInfromation(summary.getUserName(),summary.getSiteId(),reportDetailsRepo);
+					logger.debug("PDF printBasicInfromation() function called successfully");
 					
 					printSupplyService.printSupply(summary.getUserName(),summary.getSiteId(),supplyCharacteristics);
+					logger.debug("PDF printSupply() function called successfully");
 					
 					inspectionServicePDF.printInspectionDetails(summary.getUserName(),summary.getSiteId(), periodicInspection);
+					logger.debug("PDF printInspectionDetails() function called successfully");
 					
 					printTestingService.printTesting(summary.getUserName(),summary.getSiteId(),testingRepo);
+					logger.debug("PDF printTesting() function called successfully");
 					
 					printService.printSummary(summary.getUserName(),summary.getSiteId());
+					logger.debug("PDF printSummary() function called successfully");
 					
 					printFinalPDFService.printFinalPDF(summary.getUserName(),summary.getSiteId());
+					logger.debug("PDF printFinalPDF() function called successfully");
 					
 				} else {
+					logger.error("Please fill all the fields before clicking next button");
 					throw new SummaryException("Please fill all the fields before clicking next button");
 				}
 			}
 		} else {
+			logger.error("Invalid Inputs");
 			throw new SummaryException("Invalid Inputs");
 		}
 
@@ -210,13 +235,16 @@ public class SummaryServiceImpl implements SummaryService {
 			if (summaryRepo != null) {
 				for (Summary summary : summaryRepo) {
 					summary.setAllComponentObservation(allComponentObservation(siteId));
+					logger.debug("AllComponentObservation details added in summary model");
 					sortingDateTime(summary.getSummaryComment());
 				}
 				return summaryRepo;
 			} else {
+				logger.error("Given UserName & Site doesn't exist Inspection");
 				throw new SummaryException("Given UserName & Site doesn't exist Inspection");
 			}
 		} else {
+			logger.error("Invalid Inputs");
 			throw new SummaryException("Invalid Inputs");
 
 		}
@@ -230,6 +258,7 @@ public class SummaryServiceImpl implements SummaryService {
 	 * @throws CompanyDetailsException 
 	 * 
 	*/
+	@Transactional
 	@Override
 	public void updateSummary(Summary summary) throws SummaryException, CompanyDetailsException {
 
@@ -240,12 +269,16 @@ public class SummaryServiceImpl implements SummaryService {
 				summary.setUpdatedDate(LocalDateTime.now());
 				summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
 				summaryRepository.save(summary);
+				logger.debug("Summary Details Successfully updated in DB");
 				siteDetails.updateSite(summary.getSiteId(), summary.getUserName());
+				logger.debug("Updated successfully site updatedUsername",summary.getUserName());
 			} else {
+				logger.error("Given SiteId and ReportId is Invalid");
 				throw new SummaryException("Given SiteId and ReportId is Invalid");
 			}
 
 		} else {
+			logger.error("Invalid Inputs");
 			throw new SummaryException("Invalid inputs");
 		}
 	}
@@ -255,7 +288,9 @@ public class SummaryServiceImpl implements SummaryService {
 		Summary summary = verifyCommentsInfo(userName, siteId, summaryComment, Constants.SEND_COMMENT);
 		if (summary != null) {
 			summaryRepository.save(summary);
+			logger.debug("sendComments successfully into DB");
 		} else {
+			logger.error("Testing-Information doesn't exist for given Site-Id");
 			throw new SummaryException("Testing-Information doesn't exist for given Site-Id");
 		}
 	}
@@ -266,8 +301,10 @@ public class SummaryServiceImpl implements SummaryService {
 		Summary summary = verifyCommentsInfo(inspectorUserName, siteId, summaryComment, Constants.REPLY_COMMENT);
 		if (summary != null) {
 			summaryRepository.save(summary);
+			logger.debug("ReplyComments successfully into DB");
 			return viewerName;
 		} else {
+			logger.error("Testing-Information doesn't exist for given Site-Id");
 			throw new SummaryException("Testing-Information doesn't exist for given Site-Id");
 		}
 	}
@@ -278,7 +315,9 @@ public class SummaryServiceImpl implements SummaryService {
 		Summary summary = verifyCommentsInfo(userName, siteId, summaryComment, Constants.APPROVE_REJECT_COMMENT);
 		if (summary != null) {
 			summaryRepository.save(summary);
+			logger.error("ApproveComments successfully into DB");
 		} else {
+			logger.error("Testing-Information doesn't exist for given Site-Id");
 			throw new SummaryException("Testing-Information doesn't exist for given Site-Id");
 		}
 	}
@@ -409,6 +448,7 @@ public class SummaryServiceImpl implements SummaryService {
 					}
 				}
 			} else {
+				logger.error("Given userName not allowing for " + process + " comment");
 				throw new SummaryException("Given userName not allowing for " + process + " comment");
 			}
 
@@ -420,6 +460,7 @@ public class SummaryServiceImpl implements SummaryService {
 						&& sitePersonsItr.getPersonInchargeEmail().equalsIgnoreCase(userName)) {
 					return flag = true;
 				} else {
+					logger.error("Given userName not allowing for " + process + " comment");
 					throw new SummaryException("Given userName not allowing for " + process + " comment");
 				}
 			}
@@ -454,6 +495,7 @@ public class SummaryServiceImpl implements SummaryService {
 				}
 			}
 		}
+		logger.debug("filtered non remove InspectionObservation[{}]",inspectionObservation);
 		return inspectionObservation;
 	}
 }

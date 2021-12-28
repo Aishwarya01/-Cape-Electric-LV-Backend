@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +38,8 @@ import com.capeelectric.util.UserFullName;
 @Service
 public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 
+	private static final Logger logger = LoggerFactory.getLogger(PeriodicTestingServiceImpl.class);
+	
 	@Autowired
 	private TestingReportRepository testingReportRepository;
 	
@@ -58,6 +64,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	 * addTestingReport method to Testing object will be storing corresponding tables
 	 * @throws CompanyDetailsException 
 	*/
+	@Transactional
 	@Override
 	public void addTestingReport(TestingReport testingReport) throws PeriodicTestingException, CompanyDetailsException {
 		int i = 0;
@@ -87,22 +94,28 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 								testingReport.setUpdatedDate(LocalDateTime.now());
 								testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
 								testingReportRepository.save(testingReport);
+								logger.debug("Testing Details Successfully Saved in DB");
 								siteDetails.updateSite(testingReport.getSiteId(), testingReport.getUserName());
+								logger.debug("Updated successfully site updatedUsername",testingReport.getUserName());
 							}
 
 						} else {
+							logger.error("Please fill all the fields before clicking next button");
 							throw new PeriodicTestingException(
 									"Please fill all the fields before clicking next button");
 						}
 
 					}
 				} else {
+					logger.error("Testing data contains duplicate Object");
 					throw new PeriodicTestingException("Testing data contains duplicate Object");
 				}
 			} else {
+				logger.error("Site-Id Already Present");
 				throw new PeriodicTestingException("Site-Id Already Present");
 			}
 		} else {
+			logger.error("Invalid Inputs");
 			throw new PeriodicTestingException("Invalid Inputs");
 		}
 	}
@@ -122,9 +135,11 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 				sortingDateTime(testingReportRepo.getTestingComment());
 				return testingReportRepo;
 			} else {
+				logger.error("Given UserName & Site doesn't exist Testing");
 				throw new PeriodicTestingException("Given UserName & Site doesn't exist Testing");
 			}
 		} else {
+			logger.error("Invalid Inputs");
 			throw new PeriodicTestingException("Invalid Inputs");
 		}
 	}
@@ -137,6 +152,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 	 * @throws CompanyDetailsException 
 	 * 
 	*/
+	@Transactional
 	@Override
 	public void updatePeriodicTesting(TestingReport testingReport) throws PeriodicTestingException, CompanyDetailsException {
 		if (testingReport != null && testingReport.getTestingReportId() != null
@@ -151,10 +167,12 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 				testingReportRepository.save(testingReport);
 				siteDetails.updateSite(testingReport.getSiteId(), testingReport.getUserName());
 			} else {
+				logger.error("Given SiteId and ReportId is Invalid");
 				throw new PeriodicTestingException("Given SiteId and ReportId is Invalid");
 			}
 
 		} else {
+			logger.error("Invalid inputs");
 			throw new PeriodicTestingException("Invalid inputs");
 		}
 	}
@@ -167,6 +185,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		if (testingReport != null) {
 			testingReportRepository.save(testingReport);
 		} else {
+			logger.error("Testing-Information doesn't exist for given Site-Id");
 			throw new PeriodicTestingException("Testing-Information doesn't exist for given Site-Id");
 		}
 	}
@@ -179,6 +198,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 			testingReportRepository.save(testingReport);
 			return viewerName;
 		} else {
+			logger.error("Testing-Information doesn't exist for given Site-Id");
 			throw new PeriodicTestingException("Testing-Information doesn't exist for given Site-Id");
 		}
 	}
@@ -190,6 +210,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		if (testingReport != null) {
 			testingReportRepository.save(testingReport);
 		} else {
+			logger.error("Testing-Information doesn't exist for given Site-Id");
 			throw new PeriodicTestingException("Testing-Information doesn't exist for given Site-Id");
 		}
 	}
@@ -265,18 +286,22 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 							testingReport.setTestingComment(testingReportCommentRepo);
 							return testingReport;
 						} else {
+							logger.error("Sending viewer comments faild");
 							throw new PeriodicTestingException("Sending viewer comments faild");
 						}
 					}
 				} else {
+					logger.error("Given username not have access for comments");
 					throw new PeriodicTestingException("Given username not have access for comments");
 				}
 
 			} else {
+				logger.error("Siteinformation doesn't exist, try with different Site-Id");
 				throw new PeriodicTestingException("Siteinformation doesn't exist, try with different Site-Id");
 			}
 
 		} else {
+			logger.error("Invalid Inputs");
 			throw new PeriodicTestingException("Invalid Inputs");
 		}
 		return null;
@@ -320,6 +345,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 					}
 				}
 			} else {
+				logger.error("Given userName not allowing for " + process + " comment");
 				throw new PeriodicTestingException("Given userName not allowing for " + process + " comment");
 			}
 
@@ -331,6 +357,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 						&& sitePersonsItr.getPersonInchargeEmail().equalsIgnoreCase(userName)) {
 					return flag = true;
 				} else {
+					logger.error("Given userName not allowing for " + process + " comment");
 					throw new PeriodicTestingException("Given userName not allowing for " + process + " comment");
 				}
 			}
