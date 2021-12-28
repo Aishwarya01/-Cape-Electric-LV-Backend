@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -218,12 +219,14 @@ public class PrintServiceImpl implements PrintService {
 								Obsevation.addCell(MainsOBS2);
 							}
 
-							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("alternate")) {
+							int i = 1;
+							for (AlternativeInnerObservation summaryInnerObservation : supplyObs
+									.getAlternativeInnerObservation()) {
 
-								for (AlternativeInnerObservation summaryInnerObservation : supplyObs
-										.getAlternativeInnerObservation()) {
+								if (summaryInnerObservation.getObservationComponentDetails().equalsIgnoreCase("alternate")) {
 
-									PdfPCell alObs = new PdfPCell(new Paragraph("Alternate Observations", font9));
+									PdfPCell alObs = new PdfPCell(
+											new Paragraph("Alternate Observations - " + i+" :", font9));
 									alObs.setBorder(PdfPCell.NO_BORDER);
 //									alObs.setGrayFill(0.92f);
 									InnAlterOBS.addCell(alObs);
@@ -232,6 +235,7 @@ public class PrintServiceImpl implements PrintService {
 //									alObs2.setGrayFill(0.92f);
 									alObs2.setBorder(PdfPCell.NO_BORDER);
 									InnAlterOBS.addCell(alObs2);
+									++i;
 								}
 							}
 
@@ -323,25 +327,28 @@ public class PrintServiceImpl implements PrintService {
 
 //							if (inspectionObs.getObservationComponentDetails().equalsIgnoreCase("consumer-UnitIter")) {
 
-								for (InspectionInnerObservations inspectionInnerObservation : inspectionObs
-										.getInspectionInnerObservations()) {
+							int i = 1;
+							for (InspectionInnerObservations inspectionInnerObservation : inspectionObs
+									.getInspectionInnerObservations()) {
 
-									PdfPCell insInnerObs = new PdfPCell(new Paragraph("Consumer observation", font9));
-									insInnerObs.setBorder(PdfPCell.NO_BORDER);
+								PdfPCell insInnerObs = new PdfPCell(
+										new Paragraph("Consumer observation - " + i+" :", font9));
+								insInnerObs.setBorder(PdfPCell.NO_BORDER);
 //									insInnerObs.setGrayFill(0.92f);
-									InnInspOBS.addCell(insInnerObs);
-									PdfPCell insInnerObs2 = new PdfPCell(new Paragraph(
-											inspectionInnerObservation.getObservationDescription(), font9));
+								InnInspOBS.addCell(insInnerObs);
+								PdfPCell insInnerObs2 = new PdfPCell(
+										new Paragraph(inspectionInnerObservation.getObservationDescription(), font9));
 //									insInnerObs2.setGrayFill(0.92f);
-									insInnerObs2.setBorder(PdfPCell.NO_BORDER);
-									InnInspOBS.addCell(insInnerObs2);
+								insInnerObs2.setBorder(PdfPCell.NO_BORDER);
+								InnInspOBS.addCell(insInnerObs2);
+								++i;
 //								}
 							}
 						}
 
 						document.add(Obsevation1);
 						document.add(InnInspOBS);
-						
+
 //						Testing Observation Start from here
 
 						PdfPTable obs3 = new PdfPTable(1);
@@ -360,28 +367,28 @@ public class PrintServiceImpl implements PrintService {
 						InnTestingOBS.setSpacingBefore(10f); // Space before table
 						InnTestingOBS.getDefaultCell().setBorder(0);
 
+						int i = 1;
 						for (TestingInnerObservation testingObs : allComponentObservation
 								.getTestingInnerObservation()) {
 
-							if (testingObs.getObservationComponentDetails()
-									.equalsIgnoreCase("circuit")) {
+							if (testingObs.getObservationComponentDetails().equalsIgnoreCase("circuit")) {
 
-								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Circuit details observation :", font9));
+								PdfPCell EarthOBS = new PdfPCell(
+										new Paragraph("Circuit details observation - " + i+" :", font9));
 								EarthOBS.setBorder(PdfPCell.NO_BORDER);
 								EarthOBS.setGrayFill(0.92f);
 								InnTestingOBS.addCell(EarthOBS);
+
 								PdfPCell EarthOBS2 = new PdfPCell(
 										new Paragraph(testingObs.getObservationDescription(), font9));
 								EarthOBS2.setGrayFill(0.92f);
 								EarthOBS2.setBorder(PdfPCell.NO_BORDER);
 								InnTestingOBS.addCell(EarthOBS2);
-
+								++i;
 							}
 						}
 						document.add(InnTestingOBS);
-						
-						
-						
+
 						float[] pointColumnWidths3 = { 20F, 80F };
 
 						PdfPTable table6 = new PdfPTable(pointColumnWidths3);
