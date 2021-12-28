@@ -382,7 +382,7 @@ public class PrintServiceImpl implements PrintService {
 						
 						
 						
-						float[] pointColumnWidths3 = { 30F, 40F, 90F };
+						float[] pointColumnWidths3 = { 20F, 80F };
 
 						PdfPTable table6 = new PdfPTable(pointColumnWidths3);
 						table6.setWidthPercentage(100); // Width 100%
@@ -694,9 +694,9 @@ public class PrintServiceImpl implements PrintService {
 //				cell.setPhrase(new Phrase("", font));
 //				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 //				table6.addCell(cell);
-		cell.setPhrase(new Phrase("\r\n" + summary1.getReferanceNumberReport(), font));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table6.addCell(cell);
+//		cell.setPhrase(new Phrase("\r\n" + summary1.getReferanceNumberReport(), font));
+//		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//		table6.addCell(cell);
 		cell.setPhrase(new Phrase(summary1.getFurtherActions(), font));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table6.addCell(cell);
@@ -710,16 +710,16 @@ public class PrintServiceImpl implements PrintService {
 
 	private void tableHeader(PdfPTable table6) throws DocumentException, IOException {
 		PdfPCell cell = new PdfPCell();
-		cell.setPadding(3);
+		cell.setPadding(2);
 		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 //		cell.setPhrase(new Phrase("Observations", font));
 //		cell.setGrayFill(0.92f);
 //		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 //		table6.addCell(cell);
-		cell.setPhrase(new Phrase("Reference number in report", font));
-		cell.setGrayFill(0.92f);
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table6.addCell(cell);
+//		cell.setPhrase(new Phrase("Reference number in report", font));
+//		cell.setGrayFill(0.92f);
+//		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//		table6.addCell(cell);
 		cell.setPhrase(new Phrase("Further actions", font));
 		cell.setGrayFill(0.92f);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
