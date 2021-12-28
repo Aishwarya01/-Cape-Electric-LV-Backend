@@ -162,7 +162,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				}
 				document.close();
 				writer.close();
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -467,10 +467,8 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				addRow(table2, "Prospective fault current Ipfc (kA)", IPF1, IPF2, IPF3, IPF4, IPF5, IPF6, IPF7, IPF8,
 						IPF9);
 
-				addRow1(table22, "Actual load current connected to this source (A)",
-						"                             " + loadCurrent, "                             " + loadCurrent2,
-						"                                              " + loadCurrent3,
-						"                             " + loadCurrent4);
+				addRow1(table22, "Actual load current connected to this source (A)", "\r\n" + loadCurrent,
+						"\r\n" + loadCurrent2, "\r\n" + loadCurrent3, "\r\n" + loadCurrent4);
 
 				document.add(table250);
 				document.add(table2);
@@ -864,11 +862,11 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 
-		cell1 = new PdfPCell(new Phrase("R2", font23));
+		cell1 = new PdfPCell(new Phrase("\r\nR2", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(testingRecords1.getContinutiyR(), font27));
+		cell1 = new PdfPCell(new Phrase("\r\n"+testingRecords1.getContinutiyR(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -1264,8 +1262,10 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 	private void addRow(PdfPTable table2, String string, String string2, String string3, String string4, String string5,
 			String string6, String string7, String string8, String string9, String string10)
 			throws DocumentException, IOException {
+	
 		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 		Font font1 = new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK);
+		
 		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font1));
 		nameCell.setGrayFill(0.92f);
 		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2, font));
