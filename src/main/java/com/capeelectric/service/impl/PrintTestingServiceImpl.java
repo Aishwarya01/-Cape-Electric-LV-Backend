@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.PeriodicTestingException;
@@ -35,11 +37,16 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class PrintTestingServiceImpl implements PrintTestingService {
 
+	private static final Logger logger = LoggerFactory.getLogger(PrintTestingServiceImpl.class);
+
 //	@Autowired
 //	private TestingReportRepository testingReportRepository;
 
 	@Override
 	public void printTesting(String userName, Integer siteId, Optional<TestingReport> testingRepo) throws PeriodicTestingException {
+		
+		logger.debug("called printTesting function userName: {},siteId : {}", userName,siteId);
+		
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 			try {
@@ -525,7 +532,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				cell.setPhrase(new Phrase(arr.getEquipmentSerialNo(), font6));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table11.addCell(cell);
-				cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString().split(" ")[0]));
+				cell.setPhrase(new Phrase(arr.getEquipmentCalibrationDueDate().toString().split(" ")[0], font6));
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 //				split(" ")[0]
 				table11.addCell(cell);

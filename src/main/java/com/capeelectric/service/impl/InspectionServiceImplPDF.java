@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.InspectionException;
@@ -34,12 +36,16 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class InspectionServiceImplPDF implements InspectionServicePDF {
 
+	private static final Logger logger = LoggerFactory.getLogger(InspectionServiceImplPDF.class);
+
 //	@Autowired
 //	private InspectionRepository inspectionRepository;
 
 	@Override
 	public List<PeriodicInspection> printInspectionDetails(String userName, Integer siteId,Optional<PeriodicInspection> periodicInspection) throws InspectionException {
 
+		logger.debug("called printInspectionDetails function userName: {},siteId : {}", userName,siteId);
+		
 		if (userName != null && !userName.isEmpty() && siteId != null) {
 
 			Document document = new Document(PageSize.A4, 36, 36, 50, 36);

@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,6 @@ import com.capeelectric.model.TestingInnerObservation;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.service.ObservationService;
 import com.capeelectric.service.PrintService;
-import com.capeelectric.service.SummaryService;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -40,17 +41,19 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class PrintServiceImpl implements PrintService {
 
+	private static final Logger logger = LoggerFactory.getLogger(PrintServiceImpl.class);
+	
 	@Autowired
 	private SummaryRepository summaryRepository;
 
 	@Autowired
 	private ObservationService observationService;
 
-	@Autowired
-	private SummaryService summaryService;
-
 	@Override
 	public void printSummary(String userName, Integer siteId) throws SummaryException, ObservationException {
+
+		logger.debug("called printSummary function userName: {},siteId : {}", userName,siteId);
+		
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 
@@ -323,25 +326,25 @@ public class PrintServiceImpl implements PrintService {
 
 //							if (inspectionObs.getObservationComponentDetails().equalsIgnoreCase("consumer-UnitIter")) {
 
-								for (InspectionInnerObservations inspectionInnerObservation : inspectionObs
-										.getInspectionInnerObservations()) {
+							for (InspectionInnerObservations inspectionInnerObservation : inspectionObs
+									.getInspectionInnerObservations()) {
 
-									PdfPCell insInnerObs = new PdfPCell(new Paragraph("Consumer observation", font9));
-									insInnerObs.setBorder(PdfPCell.NO_BORDER);
+								PdfPCell insInnerObs = new PdfPCell(new Paragraph("Consumer observation", font9));
+								insInnerObs.setBorder(PdfPCell.NO_BORDER);
 //									insInnerObs.setGrayFill(0.92f);
-									InnInspOBS.addCell(insInnerObs);
-									PdfPCell insInnerObs2 = new PdfPCell(new Paragraph(
-											inspectionInnerObservation.getObservationDescription(), font9));
+								InnInspOBS.addCell(insInnerObs);
+								PdfPCell insInnerObs2 = new PdfPCell(
+										new Paragraph(inspectionInnerObservation.getObservationDescription(), font9));
 //									insInnerObs2.setGrayFill(0.92f);
-									insInnerObs2.setBorder(PdfPCell.NO_BORDER);
-									InnInspOBS.addCell(insInnerObs2);
+								insInnerObs2.setBorder(PdfPCell.NO_BORDER);
+								InnInspOBS.addCell(insInnerObs2);
 //								}
 							}
 						}
 
 						document.add(Obsevation1);
 						document.add(InnInspOBS);
-						
+
 //						Testing Observation Start from here
 
 						PdfPTable obs3 = new PdfPTable(1);
@@ -363,8 +366,7 @@ public class PrintServiceImpl implements PrintService {
 						for (TestingInnerObservation testingObs : allComponentObservation
 								.getTestingInnerObservation()) {
 
-							if (testingObs.getObservationComponentDetails()
-									.equalsIgnoreCase("circuit")) {
+							if (testingObs.getObservationComponentDetails().equalsIgnoreCase("circuit")) {
 
 								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Circuit details observation :", font9));
 								EarthOBS.setBorder(PdfPCell.NO_BORDER);
@@ -379,9 +381,7 @@ public class PrintServiceImpl implements PrintService {
 							}
 						}
 						document.add(InnTestingOBS);
-						
-						
-						
+
 						float[] pointColumnWidths3 = { 30F, 40F, 90F };
 
 						PdfPTable table6 = new PdfPTable(pointColumnWidths3);

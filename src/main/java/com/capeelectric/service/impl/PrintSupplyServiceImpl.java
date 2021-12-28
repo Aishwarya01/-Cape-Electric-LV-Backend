@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.SupplyCharacteristicsException;
@@ -34,12 +36,17 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class PrintSupplyServiceImpl implements PrintSupplyService {
 	
+	private static final Logger logger = LoggerFactory.getLogger(PrintSupplyServiceImpl.class);
+	
 //	@Autowired
 //	private SupplyCharacteristicsRepository supplyCharacteristicsRepository;
 
 	@Override
 	public void printSupply(String userName, Integer siteId, Optional<SupplyCharacteristics> supplyCharacteristics)
 			throws SupplyCharacteristicsException {
+		
+		logger.debug("called printSupply function userName: {},siteId : {}", userName,siteId);
+		
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 

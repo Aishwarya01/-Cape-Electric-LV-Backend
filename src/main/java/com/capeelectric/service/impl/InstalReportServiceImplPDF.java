@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,6 @@ import com.capeelectric.model.ReportDetailsComment;
 import com.capeelectric.model.SignatorDetails;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
-import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.InstalReportPDFService;
 import com.itextpdf.text.BaseColor;
@@ -38,13 +39,15 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Service
 public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
-	@Autowired
-	private InstalReportDetailsRepository installationReportRepository;
+	private static final Logger logger = LoggerFactory.getLogger(InstalReportServiceImplPDF.class);
 
 	@Autowired
 	private SiteRepository siteRepository;
 
 	public List<ReportDetails> printBasicInfromation(String userName, Integer siteId, Optional<ReportDetails> reportDetailsRepo) throws InstalReportException {
+	
+		logger.debug("called printBasicInfromation function userName: {},siteId : {}", userName,siteId);
+		
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 
 			Document document = new Document(PageSize.A4, 36, 36, 50, 36);
