@@ -38,7 +38,11 @@ public class DecimalConversion {
 			if (type.equalsIgnoreCase(Constants.supply_MainNominal_Frequency)
 					|| type.equalsIgnoreCase(Constants.supply_Nominal_Frequency)
 					|| type.equalsIgnoreCase(Constants.supply_Earth_Resistance)
-					|| type.equalsIgnoreCase(Constants.supply_Grid_Resistance)) {
+					|| type.equalsIgnoreCase(Constants.supply_Grid_Resistance)
+					|| type.equalsIgnoreCase(Constants.supply_Earth_Depth)
+					|| type.equalsIgnoreCase(Constants.supply_Earth_JointResistance)
+					|| type.equalsIgnoreCase(Constants.supply_Bounding_JointResistance)
+					|| type.equalsIgnoreCase(Constants.supply_ResidualTime)) {
 				return (value.equalsIgnoreCase("NA") ? value : decimalSize.format(Double.parseDouble(value)));
 			} else {
 				//for multiple value
@@ -102,7 +106,18 @@ public class DecimalConversion {
 				return new DecimalFormat(Constants.supplyEarthResistance);
 			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Grid_Resistance)) {
 				return new DecimalFormat(Constants.supplyGridResistance);
-			} else if (type != null && type.equalsIgnoreCase(Constants.test_Incoming_LoopImpedance)) {
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Earth_Depth)) {
+				return new DecimalFormat(Constants.supplyEarthDepth);
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Earth_JointResistance)) {
+				return new DecimalFormat(Constants.supplyEarthJointResistance);
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Bounding_JointResistance)) {
+				return new DecimalFormat(Constants.supplyBoundingJointResistance);
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_ResidualTime)) {
+				return new DecimalFormat(Constants.supplyResidualTime);
+			}
+
+			// Testing
+			else if (type != null && type.equalsIgnoreCase(Constants.test_Incoming_LoopImpedance)) {
 				return new DecimalFormat(Constants.testIncomingLoopimpedance);
 			} else if (type != null && type.equalsIgnoreCase(Constants.test_Short_CircuitSetting)) {
 				return new DecimalFormat(Constants.testShortCircuit);
@@ -116,6 +131,8 @@ public class DecimalConversion {
 				return new DecimalFormat(Constants.loopImpedance);
 			} else if (type != null && type.equalsIgnoreCase(Constants.test_Faultcurrent)) {
 				return new DecimalFormat(Constants.faultCurrent);
+			} else if (type != null && type.equalsIgnoreCase(Constants.test_DisConnection)) {
+				return new DecimalFormat(Constants.testDisConnection);
 			}
 		} else {
 			throw new DecimalConversionException("Finding DecimalConversion variable type failed");
@@ -143,5 +160,17 @@ public class DecimalConversion {
 			}
 		}
 		return flag;
+	}
+	
+	public static String oneDigitConvertion(String decimalString) {
+		DecimalFormat deciFormat = new DecimalFormat();
+		deciFormat.setMaximumFractionDigits(1);
+		return deciFormat.format(Double.parseDouble(decimalString));
+	}
+
+	public static String threeDigitConvertion(String decimalString) {
+		DecimalFormat deciFormat = new DecimalFormat();
+		deciFormat.setMaximumFractionDigits(3);
+		return deciFormat.format(Double.parseDouble(decimalString));
 	}
 }

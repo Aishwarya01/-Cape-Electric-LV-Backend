@@ -11,6 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.capeelectric.exception.DecimalConversionException;
+import com.capeelectric.util.Constants;
+import com.capeelectric.util.DecimalConversion;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
@@ -173,8 +176,12 @@ public class CircuitBreaker implements Serializable {
 		return residualTime;
 	}
 
-	public void setResidualTime(String residualTime) {
-		this.residualTime = residualTime;
+	public void setResidualTime(String residualTime) throws DecimalConversionException {
+		if (residualTime != null) {
+			this.residualTime = DecimalConversion.convertToDecimal(residualTime, Constants.supply_ResidualTime);
+		} else {
+			this.residualTime = residualTime;
+		}
 	}
 
 	public SupplyCharacteristics getSupplyCharacteristics() {
