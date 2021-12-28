@@ -75,15 +75,6 @@ public class Summary implements Serializable {
 	@Column(name = "OVERALL_ASSESSMENT_INSTALLATION")
 	private String overallAssessmentInstallation;
 	
-	@Column(name = "REFERANCE_NUMBER_REPORT")
-	private String referanceNumberReport;
-
-	@Column(name = "FURTHER_ACTIONS")
-	private String furtherActions;
-
-	@Column(name = "COMMENT")
-	private String comment;
-
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 	
@@ -103,6 +94,10 @@ public class Summary implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<SummaryComment> summaryComment;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy = "summary", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<SummaryObervation> summaryObervation;
 	
 	@Transient
 	private AllComponentObservation allComponentObservation;
@@ -267,28 +262,12 @@ public class Summary implements Serializable {
 		this.allComponentObservation = allComponentObservation;
 	}
 
-	public String getReferanceNumberReport() {
-		return referanceNumberReport;
+	public List<SummaryObervation> getSummaryObervation() {
+		return summaryObervation;
 	}
 
-	public void setReferanceNumberReport(String referanceNumberReport) {
-		this.referanceNumberReport = referanceNumberReport;
-	}
-
-	public String getFurtherActions() {
-		return furtherActions;
-	}
-
-	public void setFurtherActions(String furtherActions) {
-		this.furtherActions = furtherActions;
-	}
-
-	public String getComment() {
-		return comment;
-	}
-
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setSummaryObervation(List<SummaryObervation> summaryObervation) {
+		this.summaryObervation = summaryObervation;
 	}
  
 }
