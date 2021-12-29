@@ -37,6 +37,9 @@ public class SummaryObservation implements Serializable {
 
 	@Column(name = "OBERVATION_STATUS")
 	private String obervationStatus;
+	
+	@Column(name = "OBSERVATION_COMPONENT_DETAILS")
+	private String observationComponentDetails;
 
 	@JsonBackReference
 	@ManyToOne
@@ -82,4 +85,13 @@ public class SummaryObservation implements Serializable {
 	public void setSummary(Summary summary) {
 		this.summary = summary;
 	}
+
+	public String getObservationComponentDetails() {
+		return observationComponentDetails;
+	}
+
+	public void setObservationComponentDetails(String observationComponentDetails) {
+		this.observationComponentDetails = observationComponentDetails;
+	}
+	
 }
