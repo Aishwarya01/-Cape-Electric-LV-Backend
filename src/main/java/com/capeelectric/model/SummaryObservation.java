@@ -40,9 +40,6 @@ public class SummaryObservation implements Serializable {
 	
 	@Column(name = "OBSERVATION_COMPONENT_DETAILS")
 	private String observationComponentDetails;
-	
-	@Column(name = "OBSERVATIONS")
-	private String observations;
 
 	@JsonBackReference
 	@ManyToOne
