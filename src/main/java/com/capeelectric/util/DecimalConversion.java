@@ -162,15 +162,31 @@ public class DecimalConversion {
 		return flag;
 	}
 	
-	public static String oneDigitConvertion(String decimalString) {
-		DecimalFormat deciFormat = new DecimalFormat();
-		deciFormat.setMaximumFractionDigits(1);
-		return deciFormat.format(Double.parseDouble(decimalString));
+	public static String oneDigitConvertion(String decimalString) throws DecimalConversionException {
+
+		DecimalFormat decimalSize = new DecimalConversion().findDecimalSize("1");
+		if (decimalString.matches("[0-9]+")) {
+			if (isDecimalNum(decimalString, decimalSize)) {
+				return decimalValues;
+			} else {
+				return decimalSize.format(Double.parseDouble(decimalString));
+			}
+		} else {
+			return decimalString;
+		}
+
 	}
 
-	public static String threeDigitConvertion(String decimalString) {
-		DecimalFormat deciFormat = new DecimalFormat();
-		deciFormat.setMaximumFractionDigits(3);
-		return deciFormat.format(Double.parseDouble(decimalString));
+	public static String threeDigitConvertion(String decimalString) throws DecimalConversionException {
+		DecimalFormat decimalSize = new DecimalConversion().findDecimalSize("3");
+		if (decimalString.matches("[0-9]+")) {
+			if (isDecimalNum(decimalString, decimalSize)) {
+				return decimalValues;
+			} else {
+				return decimalSize.format(Double.parseDouble(decimalString));
+			}
+		} else {
+			return decimalString;
+		}
 	}
 }

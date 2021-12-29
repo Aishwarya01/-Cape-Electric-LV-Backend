@@ -254,7 +254,7 @@ public class TestingRecords implements Serializable {
 		return conductorPhase;
 	}
 
-	public void setConductorPhase(String conductorPhase) {
+	public void setConductorPhase(String conductorPhase) throws DecimalConversionException {
 		if (conductorPhase != null) {
 			this.conductorPhase = DecimalConversion.oneDigitConvertion(conductorPhase);
 		} else {
@@ -266,7 +266,7 @@ public class TestingRecords implements Serializable {
 		return conductorNeutral;
 	}
 
-	public void setConductorNeutral(String conductorNeutral) {
+	public void setConductorNeutral(String conductorNeutral) throws DecimalConversionException {
 		if (conductorNeutral != null) {
 			this.conductorNeutral = DecimalConversion.oneDigitConvertion(conductorNeutral);
 		} else {
@@ -278,7 +278,7 @@ public class TestingRecords implements Serializable {
 		return conductorPecpc;
 	}
 
-	public void setConductorPecpc(String conductorPecpc) {
+	public void setConductorPecpc(String conductorPecpc) throws DecimalConversionException {
 		if (conductorPecpc != null) {
 			this.conductorPecpc = DecimalConversion.oneDigitConvertion(conductorPecpc);
 		} else {
@@ -290,7 +290,7 @@ public class TestingRecords implements Serializable {
 		return continutiyApproximateLength;
 	}
 
-	public void setContinutiyApproximateLength(String continutiyApproximateLength) {
+	public void setContinutiyApproximateLength(String continutiyApproximateLength) throws DecimalConversionException {
 		if (continutiyApproximateLength != null) {
 			this.continutiyApproximateLength = DecimalConversion.oneDigitConvertion(continutiyApproximateLength);
 		} else {
@@ -302,7 +302,7 @@ public class TestingRecords implements Serializable {
 		return continutiyRR;
 	}
 
-	public void setContinutiyRR(String continutiyRR) {
+	public void setContinutiyRR(String continutiyRR) throws DecimalConversionException {
 		if (continutiyRR != null) {
 			this.continutiyRR = DecimalConversion.threeDigitConvertion(continutiyRR);
 		} else {
@@ -314,7 +314,7 @@ public class TestingRecords implements Serializable {
 		return continutiyR;
 	}
 
-	public void setContinutiyR(String continutiyR) {
+	public void setContinutiyR(String continutiyR) throws DecimalConversionException {
 		if (continutiyR != null) {
 			this.continutiyR = DecimalConversion.threeDigitConvertion(continutiyR);
 		} else {
