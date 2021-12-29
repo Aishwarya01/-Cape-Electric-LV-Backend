@@ -1140,7 +1140,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 		valueCell4.setBorder(0);
 //		valueCell4.setBackgroundColor(new GrayColor(0.85f));
 
-		valueCell5.setHorizontalAlignment(Element.ALIGN_JUSTIFIED);
+		valueCell5.setHorizontalAlignment(Element.ALIGN_LEFT);
 		valueCell5.setBorder(0);
 //		valueCell5.setBackgroundColor(new GrayColor(0.85f));
 

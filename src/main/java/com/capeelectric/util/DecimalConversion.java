@@ -34,41 +34,30 @@ public class DecimalConversion {
 			String nominalValues = "";
 			DecimalFormat decimalSize;
 			decimalSize = conversion.findDecimalSize(type);
-			//for one value
-			if (type.equalsIgnoreCase(Constants.supply_MainNominal_Frequency)
-					|| type.equalsIgnoreCase(Constants.supply_Nominal_Frequency)
-					|| type.equalsIgnoreCase(Constants.supply_Earth_Resistance)
-					|| type.equalsIgnoreCase(Constants.supply_Grid_Resistance)
-					|| type.equalsIgnoreCase(Constants.supply_Earth_Depth)
-					|| type.equalsIgnoreCase(Constants.supply_Earth_JointResistance)
-					|| type.equalsIgnoreCase(Constants.supply_Bounding_JointResistance)
-					|| type.equalsIgnoreCase(Constants.supply_ResidualTime)) {
-				return (value.equalsIgnoreCase("NA") ? value : decimalSize.format(Double.parseDouble(value)));
-			} else {
-				//for multiple value
-				String decimalValue = "NA";
-				if (value != null && !value.isEmpty()) {
-					StringTokenizer stringTokenizer = new StringTokenizer(value, ",");
+			// for multiple value
+			String decimalValue = "NA";
+			if (value != null && !value.isEmpty()) {
+				StringTokenizer stringTokenizer = new StringTokenizer(value, ",");
 
-					logger.info("started DecimalConversion process");
-					while (stringTokenizer.hasMoreElements()) {
-						String token = stringTokenizer.nextToken();
-						if (token.equalsIgnoreCase("NA") || !Pattern.compile("-?\\d+(\\.\\d+)?").matcher(token).matches()) {
-							nominalValues = nominalValues.concat(token).concat(",");
+				logger.info("started DecimalConversion process");
+				while (stringTokenizer.hasMoreElements()) {
+					String token = stringTokenizer.nextToken();
+					// String contain "NA" or
+					if (token.equalsIgnoreCase("NA") || !Pattern.compile("-?\\d+(\\.\\d+)?").matcher(token).matches()) {
+						nominalValues = nominalValues.concat(token).concat(",");
+					} else {
+						if (isDecimalNum(token, decimalSize)) {
+							nominalValues = nominalValues.concat(decimalValues).concat(",");
 						} else {
-							if (isDecimalNum(token, decimalSize)) {
-								nominalValues = nominalValues.concat(decimalValues).concat(",");
-							} else {
-								decimalValue = decimalSize.format(Double.parseDouble(token));
-								nominalValues = nominalValues.concat(decimalValue).concat(",");
-							}
+							decimalValue = decimalSize.format(Double.parseDouble(token));
+							nominalValues = nominalValues.concat(decimalValue).concat(",");
 						}
-
 					}
-				} else {
-					logger.info("failed DecimalConversion process");
-					throw new DecimalConversionException("invalid input of value for DecimalConversion");
+
 				}
+			} else {
+				logger.info("failed DecimalConversion process");
+				throw new DecimalConversionException("invalid input of value for DecimalConversion");
 			}
 			logger.info("ended DecimalConversion process");
 			return nominalValues.substring(0, nominalValues.length() - 1);
@@ -133,6 +122,18 @@ public class DecimalConversion {
 				return new DecimalFormat(Constants.faultCurrent);
 			} else if (type != null && type.equalsIgnoreCase(Constants.test_DisConnection)) {
 				return new DecimalFormat(Constants.testDisConnection);
+			} else if (type != null && type.equalsIgnoreCase(Constants.conductor_Phase)) {
+				return new DecimalFormat(Constants.conductorPhase);
+			} else if (type != null && type.equalsIgnoreCase(Constants.conductor_Neutral)) {
+				return new DecimalFormat(Constants.conductorNeutral);
+			} else if (type != null && type.equalsIgnoreCase(Constants.conductor_Pecpc)) {
+				return new DecimalFormat(Constants.conductorPecpc);
+			} else if (type != null && type.equalsIgnoreCase(Constants.continutiy_Approximate_Length)) {
+				return new DecimalFormat(Constants.continutiyApproximateLength);
+			} else if (type != null && type.equalsIgnoreCase(Constants.continutiy_RR)) {
+				return new DecimalFormat(Constants.continutiyRR);
+			} else if (type != null && type.equalsIgnoreCase(Constants.continutiy_R)) {
+				return new DecimalFormat(Constants.continutiyR);
 			}
 		} else {
 			throw new DecimalConversionException("Finding DecimalConversion variable type failed");
@@ -162,15 +163,32 @@ public class DecimalConversion {
 		return flag;
 	}
 	
-	public static String oneDigitConvertion(String decimalString) {
-		DecimalFormat deciFormat = new DecimalFormat();
-		deciFormat.setMaximumFractionDigits(1);
-		return deciFormat.format(Double.parseDouble(decimalString));
-	}
+//	public static String oneDigitConvertion(String decimalString) throws DecimalConversionException {
+//
+//		DecimalFormat decimalSize=new DecimalFormat("0.0");
+//
+//		if (isDecimalNum(decimalString, decimalSize)) {
+//			if (!decimalString.matches("[0-9]+")) {
+//				return decimalValues;
+//			} else {
+//				return decimalSize.format(Double.parseDouble(decimalString));
+//			}
+//		} else {
+//			return decimalString;
+//		}
+//
+//	}
 
-	public static String threeDigitConvertion(String decimalString) {
-		DecimalFormat deciFormat = new DecimalFormat();
-		deciFormat.setMaximumFractionDigits(3);
-		return deciFormat.format(Double.parseDouble(decimalString));
-	}
+//	public static String threeDigitConvertion(String decimalString) throws DecimalConversionException {
+//		DecimalFormat decimalSize=new DecimalFormat("0.000");
+//		if (isDecimalNum(decimalString, decimalSize)) {
+//			if (!decimalString.matches("[0-9]+")) {
+//				return decimalValues;
+//			} else {
+//				return decimalSize.format(Double.parseDouble(decimalString));
+//			}
+//		} else {
+//			return decimalString;
+//		}
+//	}
 }

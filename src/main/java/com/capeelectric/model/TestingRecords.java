@@ -254,9 +254,9 @@ public class TestingRecords implements Serializable {
 		return conductorPhase;
 	}
 
-	public void setConductorPhase(String conductorPhase) {
+	public void setConductorPhase(String conductorPhase) throws DecimalConversionException {
 		if (conductorPhase != null) {
-			this.conductorPhase = DecimalConversion.oneDigitConvertion(conductorPhase);
+			this.conductorPhase = DecimalConversion.convertToDecimal(eFSetting, Constants.conductor_Phase);
 		} else {
 			this.conductorPhase = conductorPhase;
 		}
@@ -266,9 +266,9 @@ public class TestingRecords implements Serializable {
 		return conductorNeutral;
 	}
 
-	public void setConductorNeutral(String conductorNeutral) {
+	public void setConductorNeutral(String conductorNeutral) throws DecimalConversionException {
 		if (conductorNeutral != null) {
-			this.conductorNeutral = DecimalConversion.oneDigitConvertion(conductorNeutral);
+			this.conductorNeutral = DecimalConversion.convertToDecimal(conductorNeutral, Constants.conductor_Neutral);
 		} else {
 			this.conductorNeutral = conductorNeutral;
 		}
@@ -278,9 +278,9 @@ public class TestingRecords implements Serializable {
 		return conductorPecpc;
 	}
 
-	public void setConductorPecpc(String conductorPecpc) {
+	public void setConductorPecpc(String conductorPecpc) throws DecimalConversionException {
 		if (conductorPecpc != null) {
-			this.conductorPecpc = DecimalConversion.oneDigitConvertion(conductorPecpc);
+			this.conductorPecpc = DecimalConversion.convertToDecimal(conductorPecpc, Constants.conductor_Pecpc);
 		} else {
 			this.conductorPecpc = conductorPecpc;
 		}
@@ -290,9 +290,9 @@ public class TestingRecords implements Serializable {
 		return continutiyApproximateLength;
 	}
 
-	public void setContinutiyApproximateLength(String continutiyApproximateLength) {
+	public void setContinutiyApproximateLength(String continutiyApproximateLength) throws DecimalConversionException {
 		if (continutiyApproximateLength != null) {
-			this.continutiyApproximateLength = DecimalConversion.oneDigitConvertion(continutiyApproximateLength);
+			this.continutiyApproximateLength = DecimalConversion.convertToDecimal(continutiyApproximateLength, Constants.continutiy_Approximate_Length);
 		} else {
 			this.continutiyApproximateLength = continutiyApproximateLength;
 		}
@@ -302,9 +302,9 @@ public class TestingRecords implements Serializable {
 		return continutiyRR;
 	}
 
-	public void setContinutiyRR(String continutiyRR) {
+	public void setContinutiyRR(String continutiyRR) throws DecimalConversionException {
 		if (continutiyRR != null) {
-			this.continutiyRR = DecimalConversion.threeDigitConvertion(continutiyRR);
+			this.continutiyRR = DecimalConversion.convertToDecimal(continutiyRR, Constants.continutiy_RR);
 		} else {
 			this.continutiyRR = continutiyRR;
 		}
@@ -314,9 +314,9 @@ public class TestingRecords implements Serializable {
 		return continutiyR;
 	}
 
-	public void setContinutiyR(String continutiyR) {
+	public void setContinutiyR(String continutiyR) throws DecimalConversionException {
 		if (continutiyR != null) {
-			this.continutiyR = DecimalConversion.threeDigitConvertion(continutiyR);
+			this.continutiyR = DecimalConversion.convertToDecimal(continutiyR, Constants.continutiy_R);
 		} else {
 			this.continutiyR = continutiyR;
 		}
@@ -368,7 +368,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setDisconnectionTime(String disconnectionTime) throws DecimalConversionException {
-		this.testVoltage = DecimalConversion.convertToDecimal(testVoltage, Constants.test_DisConnection);
+		this.disconnectionTime = DecimalConversion.convertToDecimal(disconnectionTime, Constants.test_DisConnection);
 	}
 
 	public String getRcdCurrent() {

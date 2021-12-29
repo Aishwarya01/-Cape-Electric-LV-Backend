@@ -85,6 +85,18 @@ public class Constants {
 	
 	public static final String testDisConnection = "0.000";
 	
+	public static final String conductorPhase = "0.0";
+	
+	public static final String conductorNeutral = "0.0";
+	
+	public static final String conductorPecpc = "0.0";
+	
+	public static final String continutiyApproximateLength = "0.0";
+	
+	public static final String continutiyRR = "0.000";
+	
+	public static final String continutiyR = "0.000";
+	
 	
 	public static final String test_Incoming_LoopImpedance = "IncomingLoopImpedance";
 	
@@ -101,6 +113,18 @@ public class Constants {
 	public static final String test_Faultcurrent = "Faultcurrent";
 	
 	public static final String test_DisConnection = "Test_DisConnection";
+	
+	public static final String conductor_Phase = "conductor_Phase";
+	
+	public static final String conductor_Neutral = "conductor_Neutral";
+	
+	public static final String conductor_Pecpc = "conductor_Pecpc";
+	
+	public static final String continutiy_Approximate_Length = "continutiy_Approximate_Length";
+	
+	public static final String continutiy_RR = "continutiy_RR";
+	
+	public static final String continutiy_R = "continutiy_R";
 
 	
 	//Comments
