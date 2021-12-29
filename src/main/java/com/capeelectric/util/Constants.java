@@ -31,6 +31,14 @@ public class Constants {
 	
 	public static final String supplyGridResistance = "0.000";
 	
+	public static final String supplyEarthDepth = "0.0";
+	
+	public static final String supplyEarthJointResistance = "0.000";
+	
+	public static final String supplyBoundingJointResistance = "0.000";
+	
+	public static final String supplyResidualTime = "0.00";
+	
 	public static final String supply_MainNominal_Current = "Supply_MainNominalCurrent";
 	
 	public static final String supply_MainNominal_Frequency = "Supply_MainNominalFrequency";
@@ -51,6 +59,14 @@ public class Constants {
 	
 	public static final String supply_Grid_Resistance = "supply_GridResistance";
 	
+	public static final String supply_Earth_Depth = "supply_GridResistance";
+	
+	public static final String supply_Earth_JointResistance = "supply_EarthJointResistance";
+	
+	public static final String supply_Bounding_JointResistance = "supply_BoundingJointResistance";
+	
+	public static final String supply_ResidualTime = "supply_ResidualTime";
+	
 
 	//Testing
 	public static final String testIncomingLoopimpedance = "0.000";
@@ -67,6 +83,8 @@ public class Constants {
 
 	public static final String faultCurrent = "0.00";
 	
+	public static final String testDisConnection = "0.000";
+	
 	
 	public static final String test_Incoming_LoopImpedance = "IncomingLoopImpedance";
 	
@@ -81,6 +99,8 @@ public class Constants {
 	public static final String test_Loopimpedance = "Loopimpedance";
 	
 	public static final String test_Faultcurrent = "Faultcurrent";
+	
+	public static final String test_DisConnection = "Test_DisConnection";
 
 	
 	//Comments

@@ -172,7 +172,7 @@ public class SupplyCharacteristics implements Serializable {
 
 	@Column(name = "EARTHING_NO_OF_JOINTS_OB")
 	private Integer earthingNoOfJointsOb;
-
+	
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 
@@ -220,7 +220,7 @@ public class SupplyCharacteristics implements Serializable {
 	public void setSupplyCharacteristicsId(Integer supplyCharacteristicsId) {
 		this.supplyCharacteristicsId = supplyCharacteristicsId;
 	}
-
+	
 	public String getUserName() {
 		return userName;
 	}

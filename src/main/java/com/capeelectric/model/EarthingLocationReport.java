@@ -9,6 +9,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.capeelectric.exception.DecimalConversionException;
+import com.capeelectric.util.Constants;
+import com.capeelectric.util.DecimalConversion;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
@@ -74,8 +78,14 @@ public class EarthingLocationReport implements Serializable {
 		return jointResistance;
 	}
 
-	public void setJointResistance(String jointResistance) {
-		this.jointResistance = jointResistance;
+	public void setJointResistance(String jointResistance) throws DecimalConversionException {
+		if (jointResistance != null) {
+			this.jointResistance = DecimalConversion.convertToDecimal(jointResistance,
+					Constants.supply_Earth_JointResistance);
+		}
+		else {
+			this.jointResistance = jointResistance;
+		}
 	}
 
 	public String getJointReference() {
