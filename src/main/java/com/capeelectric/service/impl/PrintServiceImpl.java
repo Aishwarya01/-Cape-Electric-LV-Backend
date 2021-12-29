@@ -43,7 +43,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 public class PrintServiceImpl implements PrintService {
 
 	private static final Logger logger = LoggerFactory.getLogger(PrintServiceImpl.class);
-	
+
 	@Autowired
 	private SummaryRepository summaryRepository;
 
@@ -53,8 +53,8 @@ public class PrintServiceImpl implements PrintService {
 	@Override
 	public void printSummary(String userName, Integer siteId) throws SummaryException, ObservationException {
 
-		logger.debug("called printSummary function userName: {},siteId : {}", userName,siteId);
-		
+		logger.debug("called printSummary function userName: {},siteId : {}", userName, siteId);
+
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 
@@ -226,10 +226,10 @@ public class PrintServiceImpl implements PrintService {
 							for (AlternativeInnerObservation summaryInnerObservation : supplyObs
 									.getAlternativeInnerObservation()) {
 
-								if (summaryInnerObservation.getObservationComponentDetails().equalsIgnoreCase("alternate")) {
+								if (!summaryInnerObservation.getObservationComponentDetails().equals(null)) {
 
 									PdfPCell alObs = new PdfPCell(
-											new Paragraph("Alternate Observations - " + i+" :", font9));
+											new Paragraph("Alternate Observations - " + i + " :", font9));
 									alObs.setBorder(PdfPCell.NO_BORDER);
 //									alObs.setGrayFill(0.92f);
 									InnAlterOBS.addCell(alObs);
@@ -240,6 +240,32 @@ public class PrintServiceImpl implements PrintService {
 									InnAlterOBS.addCell(alObs2);
 									++i;
 								}
+							}
+
+							if (supplyObs.getObservationComponentDetails().equals("instalLocationReportOb")) {
+
+								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Earth electrode observation :", font9));
+								EarthOBS.setBorder(PdfPCell.NO_BORDER);
+								EarthOBS.setGrayFill(0.92f);
+								Obsevation2.addCell(EarthOBS);
+								PdfPCell EarthOBS2 = new PdfPCell(
+										new Paragraph(supplyObs.getObservationDescription(), font9));
+								EarthOBS2.setGrayFill(0.92f);
+								EarthOBS2.setBorder(PdfPCell.NO_BORDER);
+								Obsevation2.addCell(EarthOBS2);
+							}
+
+							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("bondingNoOfJointsOb")) {
+
+								PdfPCell BonOBS = new PdfPCell(new Paragraph("Bonding Conductor Observation :", font9));
+								BonOBS.setBorder(PdfPCell.NO_BORDER);
+//									BonOBS.setGrayFill(0.92f);
+								Obsevation2.addCell(BonOBS);
+								PdfPCell BonOBS2 = new PdfPCell(
+										new Paragraph(supplyObs.getObservationDescription(), font9));
+//									BonOBS2.setGrayFill(0.92f);
+								BonOBS2.setBorder(PdfPCell.NO_BORDER);
+								Obsevation2.addCell(BonOBS2);
 							}
 
 							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("earthingNoOfJointsOb")) {
@@ -256,31 +282,6 @@ public class PrintServiceImpl implements PrintService {
 								Obsevation2.addCell(EarthConOBS2);
 							}
 
-							if (supplyObs.getObservationComponentDetails().equalsIgnoreCase("bondingNoOfJointsOb")) {
-
-								PdfPCell BonOBS = new PdfPCell(new Paragraph("Bonding Conductor Observation :", font9));
-								BonOBS.setBorder(PdfPCell.NO_BORDER);
-//									BonOBS.setGrayFill(0.92f);
-								Obsevation2.addCell(BonOBS);
-								PdfPCell BonOBS2 = new PdfPCell(
-										new Paragraph(supplyObs.getObservationDescription(), font9));
-//									BonOBS2.setGrayFill(0.92f);
-								BonOBS2.setBorder(PdfPCell.NO_BORDER);
-								Obsevation2.addCell(BonOBS2);
-							}
-
-							if (supplyObs.getObservationComponentDetails().equals("instalLocationReportOb")) {
-
-								PdfPCell EarthOBS = new PdfPCell(new Paragraph("Earth electrode observation :", font9));
-								EarthOBS.setBorder(PdfPCell.NO_BORDER);
-								EarthOBS.setGrayFill(0.92f);
-								Obsevation2.addCell(EarthOBS);
-								PdfPCell EarthOBS2 = new PdfPCell(
-										new Paragraph(supplyObs.getObservationDescription(), font9));
-								EarthOBS2.setGrayFill(0.92f);
-								EarthOBS2.setBorder(PdfPCell.NO_BORDER);
-								Obsevation2.addCell(EarthOBS2);
-							}
 						}
 
 						document.add(Obsevation);
@@ -335,7 +336,7 @@ public class PrintServiceImpl implements PrintService {
 									.getInspectionInnerObservations()) {
 
 								PdfPCell insInnerObs = new PdfPCell(
-										new Paragraph("Consumer observation - " + i+" :", font9));
+										new Paragraph("Consumer observation - " + i + " :", font9));
 								insInnerObs.setBorder(PdfPCell.NO_BORDER);
 //									insInnerObs.setGrayFill(0.92f);
 								InnInspOBS.addCell(insInnerObs);
@@ -377,7 +378,7 @@ public class PrintServiceImpl implements PrintService {
 							if (testingObs.getObservationComponentDetails().equalsIgnoreCase("circuit")) {
 
 								PdfPCell EarthOBS = new PdfPCell(
-										new Paragraph("Circuit details observation - " + i+" :", font9));
+										new Paragraph("Circuit details observation - " + i + " :", font9));
 								EarthOBS.setBorder(PdfPCell.NO_BORDER);
 								EarthOBS.setGrayFill(0.92f);
 								InnTestingOBS.addCell(EarthOBS);

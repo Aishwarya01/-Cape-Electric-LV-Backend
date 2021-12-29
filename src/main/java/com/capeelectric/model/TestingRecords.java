@@ -368,7 +368,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setDisconnectionTime(String disconnectionTime) throws DecimalConversionException {
-		this.testVoltage = DecimalConversion.convertToDecimal(testVoltage, Constants.test_DisConnection);
+		this.disconnectionTime = DecimalConversion.convertToDecimal(disconnectionTime, Constants.test_DisConnection);
 	}
 
 	public String getRcdCurrent() {
