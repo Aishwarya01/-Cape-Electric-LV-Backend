@@ -187,10 +187,12 @@ public class FinalReportServiceImpl implements FinalReportService {
 		
 		if (supplyCharacteristics.isPresent() && supplyCharacteristics.get().getSupplyOuterObservation() != null) {
 			allComponentObservation.setSupplyOuterObservation(findNonRemovedObject.findNonRemovedSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation()));
-		} else if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
+		} 
+		if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
 			allComponentObservation
 					.setInspectionOuterObservation(inspectionObservation(periodicInspection.get().getIpaoInspection()));
-		} else if (testingReport.isPresent()) {
+		} 
+		if (testingReport.isPresent()) {
 			allComponentObservation.setTestingInnerObservation(findNonRemovedObject.findNonRemoveTestingInnerObservationByReport(testingReport));
 		}
 		return allComponentObservation;
