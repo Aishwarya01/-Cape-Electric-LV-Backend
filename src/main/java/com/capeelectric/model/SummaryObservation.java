@@ -96,13 +96,5 @@ public class SummaryObservation implements Serializable {
 	public void setObservationComponentDetails(String observationComponentDetails) {
 		this.observationComponentDetails = observationComponentDetails;
 	}
-
-	public String getObservations() {
-		return observations;
-	}
-
-	public void setObservations(String observations) {
-		this.observations = observations;
-	}
 	
 }
