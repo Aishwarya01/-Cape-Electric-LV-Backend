@@ -59,7 +59,7 @@ public class Constants {
 	
 	public static final String supply_Grid_Resistance = "supply_GridResistance";
 	
-	public static final String supply_Earth_Depth = "supply_GridResistance";
+	public static final String supply_Earth_Depth = "supply_EarthDepth";
 	
 	public static final String supply_Earth_JointResistance = "supply_EarthJointResistance";
 	
