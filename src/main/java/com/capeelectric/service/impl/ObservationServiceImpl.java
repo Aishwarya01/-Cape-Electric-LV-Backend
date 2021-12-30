@@ -125,34 +125,32 @@ public class ObservationServiceImpl implements ObservationService {
 			Optional<TestingReport> testingReport = testingReportRepository.findBySiteId(siteId);
 
 			if (supplyCharacteristics.isPresent() && supplyCharacteristics.get().getSupplyOuterObservation() != null) {
-				allComponentObservation
-						.setSupplyOuterObservation(findNonRemovedObject.findNonRemovedSupplyOuterObservation(
-								supplyCharacteristics.get().getSupplyOuterObservation()));
-			} if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
-				allComponentObservation.setInspectionOuterObservation(
-						inspectionObservation(periodicInspection.get().getIpaoInspection()));
-			}  if (testingReport.isPresent()) {
-				allComponentObservation.setTestingInnerObservation(findNonRemovedObject.findNonRemoveTestingInnerObservationByReport(testingReport));
+				allComponentObservation.setSupplyOuterObservation(findNonRemovedObject
+						.findNonRemovedSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation()));
+			}
+			if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
+
+				List<IpaoInspection> nonRemovedInspectionLocation = findNonRemovedObject
+						.findNonRemovedInspectionLocation(periodicInspection.get());
+				ArrayList<InspectionOuterObservation> outerObservationyList = new ArrayList<InspectionOuterObservation>();
+				for (IpaoInspection ipaoInspection : nonRemovedInspectionLocation) {
+					if (ipaoInspection.getInspectionOuterObervation() != null) {
+						for (InspectionOuterObservation inspectionOuterObservation : outerObservationyList) {
+							outerObservationyList.add(inspectionOuterObservation);
+						}
+					}
+				}
+
+				allComponentObservation.setInspectionOuterObservation(outerObservationyList);
+			}
+			if (testingReport.isPresent()) {
+				allComponentObservation.setTestingInnerObservation(
+						findNonRemovedObject.findNonRemoveTestingInnerObservationByReport(testingReport));
 			}
 		} else {
 			throw new ObservationException("Invalid Inputs");
 
 		}
 		return allComponentObservation;
-	}
-	
-	private List<InspectionOuterObservation> inspectionObservation(List<IpaoInspection> ipaoInspection) {
-		List<InspectionOuterObservation> inspectionObservation = new ArrayList<InspectionOuterObservation>();
-		for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
-			for (InspectionOuterObservation inspectionOuterObservationItr : ipaoInspectionItr
-					.getInspectionOuterObervation()) {
-				if (inspectionOuterObservationItr.getInspectionOuterObservationStatus()!=null &&
-						!inspectionOuterObservationItr.getInspectionOuterObservationStatus().equalsIgnoreCase("R")) {
-					inspectionObservation.add(inspectionOuterObservationItr);
-				}
-				
-			}
-		}
-		return inspectionObservation;
 	}
 }

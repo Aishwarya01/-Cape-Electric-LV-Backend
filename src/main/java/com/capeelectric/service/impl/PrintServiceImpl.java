@@ -708,11 +708,11 @@ public class PrintServiceImpl implements PrintService {
 //		cell.setPhrase(new Phrase("\r\n" + summary1.getReferanceNumberReport(), font));
 //		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 //		table6.addCell(cell);
-		cell.setPhrase(new Phrase(summary1.getFurtherActions(), font));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		table6.addCell(cell);
-		cell.setPhrase(new Phrase(summary1.getComment(), font));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//		cell.setPhrase(new Phrase(summary1.getFurtherActions(), font));
+//		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+//		table6.addCell(cell);
+//		cell.setPhrase(new Phrase(summary1.getComment(), font));
+//		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table6.addCell(cell);
 //			}
 	}
