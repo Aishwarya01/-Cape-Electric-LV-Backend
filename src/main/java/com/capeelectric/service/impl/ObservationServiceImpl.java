@@ -135,7 +135,7 @@ public class ObservationServiceImpl implements ObservationService {
 				ArrayList<InspectionOuterObservation> outerObservationyList = new ArrayList<InspectionOuterObservation>();
 				for (IpaoInspection ipaoInspection : nonRemovedInspectionLocation) {
 					if (ipaoInspection.getInspectionOuterObervation() != null) {
-						for (InspectionOuterObservation inspectionOuterObservation : outerObservationyList) {
+						for (InspectionOuterObservation inspectionOuterObservation : ipaoInspection.getInspectionOuterObervation()) {
 							outerObservationyList.add(inspectionOuterObservation);
 						}
 					}
