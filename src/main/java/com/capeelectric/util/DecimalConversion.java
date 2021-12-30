@@ -76,7 +76,7 @@ public class DecimalConversion {
 	}
 
 	private static String isStartWithDot(String value) {
-		if (value.charAt(0) == '.') {
+		if (!value.isEmpty() && value.charAt(0) == '.') {
 			return "0" + value;
 		} else {
 			return value;
