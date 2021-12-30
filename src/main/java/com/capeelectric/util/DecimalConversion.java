@@ -37,12 +37,14 @@ public class DecimalConversion {
 			// for multiple value
 			String decimalValue = "NA";
 			if (value != null && !value.isEmpty()) {
+				
 				StringTokenizer stringTokenizer = new StringTokenizer(value, ",");
 
 				logger.info("started DecimalConversion process");
 				while (stringTokenizer.hasMoreElements()) {
 					String token = stringTokenizer.nextToken();
-					// String contain "NA" or
+					// String contain "NA"  
+					token = isStartWithDot(value);
 					if (token.equalsIgnoreCase("NA") || !Pattern.compile("-?\\d+(\\.\\d+)?").matcher(token).matches()) {
 						nominalValues = nominalValues.concat(token).concat(",");
 					} else {
@@ -70,6 +72,14 @@ public class DecimalConversion {
 			logger.error(e.getMessage() + "" + type);
 			throw new DecimalConversionException(type);
 
+		}
+	}
+
+	private static String isStartWithDot(String value) {
+		if (value.charAt(0) == '.') {
+			return "0" + value;
+		} else {
+			return value;
 		}
 	}
 
