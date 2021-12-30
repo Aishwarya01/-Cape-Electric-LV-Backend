@@ -1,22 +1,17 @@
 package com.capeelectric.model;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * 
@@ -24,15 +19,15 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  *
  */
 @Entity
-@Table(name = "summary_observations_table")
-public class SummaryObservation implements Serializable {
+@Table(name = "summary_inner_observations_table")
+public class SummaryInnerObservation implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "OBSERVATIONS_ID")
-	private Integer observationsId;
+	@Column(name = "INNER_OBSERVATIONS_ID")
+	private Integer innerObservationsId;
 
 	@Column(name = "FURTHER_ACTIONS")
 	private String furtherActions;
@@ -51,19 +46,15 @@ public class SummaryObservation implements Serializable {
 	
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "SUMMARY_ID")
-	private Summary summary;
-	
-	@JsonManagedReference
-	@OneToMany(mappedBy = "summaryObservation", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<SummaryInnerObservation> summaryInnerObservation;
-	
-	public Integer getObservationsId() {
-		return observationsId;
+	@JoinColumn(name = "OBSERVATIONS_ID")
+	private SummaryObservation summaryObservation;
+
+	public Integer getInnerObservationsId() {
+		return innerObservationsId;
 	}
 
-	public void setObservationsId(Integer observationsId) {
-		this.observationsId = observationsId;
+	public void setInnerObservationsId(Integer innerObservationsId) {
+		this.innerObservationsId = innerObservationsId;
 	}
 
 	public String getFurtherActions() {
@@ -90,14 +81,6 @@ public class SummaryObservation implements Serializable {
 		this.obervationStatus = obervationStatus;
 	}
 
-	public Summary getSummary() {
-		return summary;
-	}
-
-	public void setSummary(Summary summary) {
-		this.summary = summary;
-	}
-
 	public String getObservationComponentDetails() {
 		return observationComponentDetails;
 	}
@@ -105,7 +88,7 @@ public class SummaryObservation implements Serializable {
 	public void setObservationComponentDetails(String observationComponentDetails) {
 		this.observationComponentDetails = observationComponentDetails;
 	}
-	
+
 	public String getObservations() {
 		return observations;
 	}
@@ -114,12 +97,11 @@ public class SummaryObservation implements Serializable {
 		this.observations = observations;
 	}
 
-	public List<SummaryInnerObservation> getSummaryInnerObservation() {
-		return summaryInnerObservation;
+	public SummaryObservation getSummaryObservation() {
+		return summaryObservation;
 	}
 
-	public void setSummaryInnerObservation(List<SummaryInnerObservation> summaryInnerObservation) {
-		this.summaryInnerObservation = summaryInnerObservation;
+	public void setSummaryObservation(SummaryObservation summaryObservation) {
+		this.summaryObservation = summaryObservation;
 	}
-
 }
