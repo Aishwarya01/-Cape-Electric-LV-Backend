@@ -189,28 +189,24 @@ public class FinalReportServiceImpl implements FinalReportService {
 			allComponentObservation.setSupplyOuterObservation(findNonRemovedObject.findNonRemovedSupplyOuterObservation(supplyCharacteristics.get().getSupplyOuterObservation()));
 		} 
 		if (periodicInspection.isPresent() && periodicInspection.get().getIpaoInspection() != null) {
-			allComponentObservation
-					.setInspectionOuterObservation(inspectionObservation(periodicInspection.get().getIpaoInspection()));
+
+			List<IpaoInspection> nonRemovedInspectionLocation = findNonRemovedObject
+					.findNonRemovedInspectionLocation(periodicInspection.get());
+			ArrayList<InspectionOuterObservation> outerObservationyList = new ArrayList<InspectionOuterObservation>();
+			for (IpaoInspection ipaoInspection : nonRemovedInspectionLocation) {
+				if (ipaoInspection.getInspectionOuterObervation() != null) {
+					for (InspectionOuterObservation inspectionOuterObservation : ipaoInspection.getInspectionOuterObervation()) {
+						outerObservationyList.add(inspectionOuterObservation);
+					}
+				}
+			}
+
+			allComponentObservation.setInspectionOuterObservation(outerObservationyList);
 		} 
 		if (testingReport.isPresent()) {
 			allComponentObservation.setTestingInnerObservation(findNonRemovedObject.findNonRemoveTestingInnerObservationByReport(testingReport));
 		}
 		return allComponentObservation;
 	}
-
-	private List<InspectionOuterObservation> inspectionObservation(List<IpaoInspection> ipaoInspection) {
-		List<InspectionOuterObservation> inspectionObservation = new ArrayList<InspectionOuterObservation>();
-		for (IpaoInspection ipaoInspectionItr : ipaoInspection) {
-			for (InspectionOuterObservation inspectionOuterObservationItr : ipaoInspectionItr
-					.getInspectionOuterObervation()) {
-				if (inspectionOuterObservationItr.getInspectionOuterObservationStatus()!=null &&
-						!inspectionOuterObservationItr.getInspectionOuterObservationStatus().equalsIgnoreCase("R")) {
-					inspectionObservation.add(inspectionOuterObservationItr);
-				}
-			}
-		}
-		return inspectionObservation;
-	}
-
 }
 
