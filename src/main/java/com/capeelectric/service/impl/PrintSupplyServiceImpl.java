@@ -691,7 +691,6 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 				document.newPage();
 
-				if (supply.getAlternativeSupply().equals("Yes")) {
 					PdfPTable table20 = new PdfPTable(1);
 					table20.setWidthPercentage(100); // Width 100%
 					table20.setSpacingBefore(5f); // Space before table
@@ -704,8 +703,6 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 					cell49.setBackgroundColor(BaseColor.LIGHT_GRAY);
 					table20.addCell(cell49);
 					document.add(table20);
-
-				}
 
 				List<CircuitBreaker> circuitBreaker = supply.getCircuitBreaker();
 
