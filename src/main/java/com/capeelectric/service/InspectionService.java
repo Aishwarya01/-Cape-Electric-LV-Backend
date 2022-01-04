@@ -27,5 +27,7 @@ public interface InspectionService {
 
 	public void approveComments(String userName, Integer siteId, PeriodicInspectionComment periodicInspectionComment)
 			throws InspectionException;
+	
+	public String retrieveLocation(String distributionDetails, String reference);
 
 }

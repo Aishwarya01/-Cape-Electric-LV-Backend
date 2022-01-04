@@ -11,5 +11,7 @@ import com.capeelectric.model.ConsumerUnit;
 public interface InspectionConsumerUnitRepository extends CrudRepository<ConsumerUnit, Integer> {
 
 	public ConsumerUnit findByLocation(String location);
+	
+	public String findByDistributionBoardDetailsAndReferance(String distributionDetails, String referance);
 
 }
