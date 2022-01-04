@@ -245,4 +245,10 @@ public class SiteServiceImpl implements SiteService {
 		}
 
 	}
+
+	@Override
+	public String retrieveBySiteNameUserName(String username, String siteName) {
+		// TODO Auto-generated method stub
+		return siteRepository.findByUserNameAndSite(username, siteName).isPresent() ? siteRepository.findByUserNameAndSite(username, siteName).get().getSite(): "";
+	}
 }

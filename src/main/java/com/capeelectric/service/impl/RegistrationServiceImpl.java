@@ -338,4 +338,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 			throw new RegistrationException("Retrieve function failed ExceptionMessage is : " + exception.getMessage());
 		}
 	}
+
+	@Override
+	public String retrieveUserNameFromRegister(String userName) throws RegistrationException {
+		// TODO Auto-generated method stub
+		return registerRepository.findByUsername(userName).isPresent() ? registerRepository.findByUsername(userName).get().getUsername(): "";
+	}
 }

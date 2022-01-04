@@ -37,5 +37,7 @@ public interface RegistrationService {
 	public Register updatePermission(RegisterPermissionRequest registerPermissionRequest) throws RegisterPermissionRequestException;
 	
 	public List<Register> retrieveAllRegistration() throws RegistrationException;
+	
+	public String retrieveUserNameFromRegister(String userName) throws RegistrationException;
 
 }

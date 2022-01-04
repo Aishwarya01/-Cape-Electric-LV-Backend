@@ -135,4 +135,10 @@ public class RegistrationController {
 		registrationService.updateLicence(userName, numoflicence);
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
+	
+	@GetMapping("/retrieveUserNameFromRegister/{userName}")
+	public String retrieveUserNameFromRegister(@PathVariable String userName) throws RegistrationException {
+		logger.debug("called retrieveUserName function UserName : {}", userName);
+		return registrationService.retrieveUserNameFromRegister(userName);
+	}
 }
