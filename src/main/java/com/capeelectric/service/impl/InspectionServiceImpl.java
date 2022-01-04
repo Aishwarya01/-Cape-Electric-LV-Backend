@@ -529,6 +529,11 @@ public class InspectionServiceImpl implements InspectionService {
 
 	}
 	
+	@Override
+	public String retrieveLocation(String distributionDetails, String reference) {
+		// TODO Auto-generated method stub
+		return inspectionConsumerUnitRepository.findByDistributionBoardDetailsAndReferance(distributionDetails, reference);
+	}
 	
 	/**
 	 * addLocationCountInConsumerUnit function  finding cosumerunit then randomly added some digts number in locationcount
@@ -543,9 +548,5 @@ public class InspectionServiceImpl implements InspectionService {
 		return locationCountList;
 	}
 
-	@Override
-	public String retrieveLocation(String distributionDetails, String reference) {
-		// TODO Auto-generated method stub
-		return inspectionConsumerUnitRepository.findByDistributionBoardDetailsAndReferance(distributionDetails, reference);
-	}
+	
 }
