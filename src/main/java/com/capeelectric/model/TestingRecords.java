@@ -256,7 +256,7 @@ public class TestingRecords implements Serializable {
 
 	public void setConductorPhase(String conductorPhase) throws DecimalConversionException {
 		if (conductorPhase != null) {
-			this.conductorPhase = DecimalConversion.convertToDecimal(eFSetting, Constants.conductor_Phase);
+			this.conductorPhase = DecimalConversion.convertToDecimal(conductorPhase, Constants.conductor_Phase);
 		} else {
 			this.conductorPhase = conductorPhase;
 		}
