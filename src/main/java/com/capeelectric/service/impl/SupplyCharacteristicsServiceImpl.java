@@ -422,20 +422,27 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 	 * @throws DecimalConversionException
 	 */
 	private void decimalConversion(SupplyCharacteristics supplyCharacteristics) throws DecimalConversionException {
-		if (supplyCharacteristics.getLiveConductorAC() != null
-				&& supplyCharacteristics.getMainNominalCurrent() != null
-				&& supplyCharacteristics.getMainNominalFrequency() != null
+		if (supplyCharacteristics.getLiveConductorAC() != null && supplyCharacteristics.getMainNominalCurrent() != null
+		// && supplyCharacteristics.getMainNominalFrequency() != null
 				&& supplyCharacteristics.getMainNominalVoltage() != null
 				&& supplyCharacteristics.getMainLoopImpedance() != null) {
 			logger.info("decimal formating corrections started for Main supply");
-			supplyCharacteristics.setMainNominalCurrent(DecimalConversion.convertToDecimal(
-					supplyCharacteristics.getMainNominalCurrent(), Constants.supply_MainNominal_Current));
-		//	supplyCharacteristics.setMainNominalFrequency(DecimalConversion.convertToDecimal(
+
+			if (!supplyCharacteristics.getMainNominalCurrent().isEmpty()) {
+				supplyCharacteristics.setMainNominalCurrent(DecimalConversion.convertToDecimal(
+						supplyCharacteristics.getMainNominalCurrent(), Constants.supply_MainNominal_Current));
+			}
+
+			// supplyCharacteristics.setMainNominalFrequency(DecimalConversion.convertToDecimal(
 //					supplyCharacteristics.getMainNominalFrequency(), Constants.supply_MainNominal_Frequency));
-			supplyCharacteristics.setMainNominalVoltage(DecimalConversion.convertToDecimal(
-					supplyCharacteristics.getMainNominalVoltage(), Constants.supply_MainNominal_Voltage));
-			supplyCharacteristics.setMainLoopImpedance(DecimalConversion.convertToDecimal(
-					supplyCharacteristics.getMainLoopImpedance(), Constants.supply_MainLoop_Impedance));
+			if (!supplyCharacteristics.getMainNominalVoltage().isEmpty()) {
+				supplyCharacteristics.setMainNominalVoltage(DecimalConversion.convertToDecimal(
+						supplyCharacteristics.getMainNominalVoltage(), Constants.supply_MainNominal_Voltage));
+			}
+			if (!supplyCharacteristics.getMainLoopImpedance().isEmpty()) {
+				supplyCharacteristics.setMainLoopImpedance(DecimalConversion.convertToDecimal(
+						supplyCharacteristics.getMainLoopImpedance(), Constants.supply_MainLoop_Impedance));
+			}
 			logger.info("decimal formating corrections ended for Main supply");
 		}
 		if (supplyCharacteristics.getSupplyParameters() != null) {
@@ -443,19 +450,25 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			for (SupplyParameters supplyParametersItr : supplyParameters) {
 				if (supplyParametersItr.getaLLiveConductorAC() != null
 						&& !supplyParametersItr.getaLLiveConductorAC().isEmpty()
-						&& supplyParametersItr.getNominalFrequency() != null
+						// && supplyParametersItr.getNominalFrequency() != null
 						&& supplyParametersItr.getNominalVoltage() != null
 						&& supplyParametersItr.getFaultCurrent() != null
 						&& supplyParametersItr.getLoopImpedance() != null) {
 					logger.info("decimal formating corrections started for alternative supply");
 //					supplyParametersItr.setNominalFrequency(DecimalConversion.convertToDecimal(
 //							supplyParametersItr.getNominalFrequency(), Constants.supply_Nominal_Frequency));
-					supplyParametersItr.setNominalVoltage(DecimalConversion.convertToDecimal(
-							supplyParametersItr.getNominalVoltage(), Constants.supply_Nominal_Voltage));
-					supplyParametersItr.setFaultCurrent(DecimalConversion.convertToDecimal(
-							supplyParametersItr.getFaultCurrent(), Constants.supply_Fault_Current));
-					supplyParametersItr.setLoopImpedance(DecimalConversion.convertToDecimal(
-							supplyParametersItr.getLoopImpedance(), Constants.supply_LoopImpedance));
+					if (!supplyParametersItr.getNominalVoltage().isEmpty()) {
+						supplyParametersItr.setNominalVoltage(DecimalConversion.convertToDecimal(
+								supplyParametersItr.getNominalVoltage(), Constants.supply_Nominal_Voltage));
+					}
+					if (!supplyParametersItr.getFaultCurrent().isEmpty()) {
+						supplyParametersItr.setFaultCurrent(DecimalConversion.convertToDecimal(
+								supplyParametersItr.getFaultCurrent(), Constants.supply_Fault_Current));
+					}
+					if (!supplyParametersItr.getLoopImpedance().isEmpty()) {
+						supplyParametersItr.setLoopImpedance(DecimalConversion.convertToDecimal(
+								supplyParametersItr.getLoopImpedance(), Constants.supply_LoopImpedance));
+					}
 					logger.info("decimal formating corrections ended for alternative supply");
 				}
 			}

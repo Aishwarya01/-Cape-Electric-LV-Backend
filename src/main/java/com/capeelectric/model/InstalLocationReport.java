@@ -102,7 +102,7 @@ public class InstalLocationReport implements Serializable {
 	}
 
 	public void setElectrodeResistanceEarth(String electrodeResistanceEarth) throws DecimalConversionException {
-		if (electrodeResistanceEarth != null) {
+		if (electrodeResistanceEarth != null && !electrodeResistanceEarth.isEmpty()) {
 			this.electrodeResistanceEarth = DecimalConversion.convertToDecimal(electrodeResistanceEarth,
 					Constants.supply_Earth_Resistance);
 		} else {
@@ -131,7 +131,7 @@ public class InstalLocationReport implements Serializable {
 	}
 
 	public void setElectrodeEarthDepth(String electrodeEarthDepth) throws DecimalConversionException {
-		if (electrodeEarthDepth != null) {
+		if (electrodeEarthDepth != null && !electrodeEarthDepth.isEmpty()) {
 			this.electrodeEarthDepth = DecimalConversion.convertToDecimal(electrodeEarthDepth,
 					Constants.supply_Earth_Depth);
 		} else {
@@ -152,7 +152,7 @@ public class InstalLocationReport implements Serializable {
 	}
 
 	public void setElectrodeResistanceGird(String electrodeResistanceGird) throws DecimalConversionException {
-		if (electrodeResistanceGird != null) {
+		if (electrodeResistanceGird != null && !electrodeResistanceGird.isEmpty()) {
 			this.electrodeResistanceGird = DecimalConversion.convertToDecimal(electrodeResistanceGird,
 					Constants.supply_Grid_Resistance);
 		} else {

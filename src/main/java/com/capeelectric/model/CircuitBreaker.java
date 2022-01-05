@@ -177,7 +177,7 @@ public class CircuitBreaker implements Serializable {
 	}
 
 	public void setResidualTime(String residualTime) throws DecimalConversionException {
-		if (residualTime != null) {
+		if (residualTime != null && !residualTime.isEmpty()) {
 			this.residualTime = DecimalConversion.convertToDecimal(residualTime, Constants.supply_ResidualTime);
 		} else {
 			this.residualTime = residualTime;

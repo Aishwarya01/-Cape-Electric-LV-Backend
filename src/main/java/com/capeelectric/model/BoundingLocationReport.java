@@ -87,7 +87,7 @@ public class BoundingLocationReport implements Serializable {
 	}
 
 	public void setJointResistance(String jointResistance) throws DecimalConversionException {
-		if (jointResistance != null) {
+		if (jointResistance != null && !jointResistance.isEmpty()) {
 			this.jointResistance = DecimalConversion.convertToDecimal(jointResistance,
 					Constants.supply_Bounding_JointResistance);
 		} else {

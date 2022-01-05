@@ -54,7 +54,11 @@ public class TestingRecordsSourceSupply implements Serializable {
 	}
 
 	public void setTestVoltage(String testVoltage) throws DecimalConversionException {
-		this.testVoltage = DecimalConversion.convertToDecimal(testVoltage, Constants.test_Voltage);
+		if (testVoltage != null && !testVoltage.isEmpty()) {
+			this.testVoltage = DecimalConversion.convertToDecimal(testVoltage, Constants.test_Voltage);
+		} else {
+			this.testVoltage = testVoltage;
+		}
 	}
 
 	public String getTestLoopImpedance() {
@@ -62,7 +66,12 @@ public class TestingRecordsSourceSupply implements Serializable {
 	}
 
 	public void setTestLoopImpedance(String testLoopImpedance) throws DecimalConversionException {
-		this.testLoopImpedance = DecimalConversion.convertToDecimal(testLoopImpedance, Constants.test_Loopimpedance);
+		if (testLoopImpedance != null && !testLoopImpedance.isEmpty()) {
+			this.testLoopImpedance = DecimalConversion.convertToDecimal(testLoopImpedance,
+					Constants.test_Loopimpedance);
+		} else {
+			this.testLoopImpedance = testLoopImpedance;
+		}
 	}
 
 	public String getTestFaultCurrent() {
@@ -70,7 +79,11 @@ public class TestingRecordsSourceSupply implements Serializable {
 	}
 
 	public void setTestFaultCurrent(String testFaultCurrent) throws DecimalConversionException {
-		this.testFaultCurrent = DecimalConversion.convertToDecimal(testFaultCurrent, Constants.test_Faultcurrent);
+		if (testFaultCurrent != null && !testFaultCurrent.isEmpty()) {
+			this.testFaultCurrent = DecimalConversion.convertToDecimal(testFaultCurrent, Constants.test_Faultcurrent);
+		} else {
+			this.testFaultCurrent = testFaultCurrent;
+		}
 	}
 
 	public Integer getSourceSupplyId() {
