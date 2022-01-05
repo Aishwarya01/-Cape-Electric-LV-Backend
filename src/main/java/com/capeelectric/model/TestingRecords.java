@@ -224,22 +224,23 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setShortCircuitSetting(String shortCircuitSetting) throws DecimalConversionException {
-		if (shortCircuitSetting != null) {
+		if (shortCircuitSetting != null && !shortCircuitSetting.isEmpty()) {
 			this.shortCircuitSetting = DecimalConversion.convertToDecimal(shortCircuitSetting,
 					Constants.test_Short_CircuitSetting);
+		} else {
+			this.shortCircuitSetting = shortCircuitSetting;
 		}
-		this.shortCircuitSetting = shortCircuitSetting;
 	}
-
 	public String geteFSetting() {
 		return eFSetting;
 	}
 
 	public void seteFSetting(String eFSetting) throws DecimalConversionException {
-		if (eFSetting != null) {
+		if (eFSetting != null && !eFSetting.isEmpty()) {
 			this.eFSetting = DecimalConversion.convertToDecimal(eFSetting, Constants.test_EFSetting);
+		} else {
+			this.eFSetting = eFSetting;
 		}
-		this.eFSetting = eFSetting;
 	}
 
 	public String getConductorInstallation() {
@@ -255,8 +256,8 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setConductorPhase(String conductorPhase) throws DecimalConversionException {
-		if (conductorPhase != null) {
-			this.conductorPhase = DecimalConversion.convertToDecimal(eFSetting, Constants.conductor_Phase);
+		if (conductorPhase != null && !conductorPhase.isEmpty()) {
+			this.conductorPhase = DecimalConversion.convertToDecimal(conductorPhase, Constants.conductor_Phase);
 		} else {
 			this.conductorPhase = conductorPhase;
 		}
@@ -267,7 +268,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setConductorNeutral(String conductorNeutral) throws DecimalConversionException {
-		if (conductorNeutral != null) {
+		if (conductorNeutral != null && !conductorNeutral.isEmpty()) {
 			this.conductorNeutral = DecimalConversion.convertToDecimal(conductorNeutral, Constants.conductor_Neutral);
 		} else {
 			this.conductorNeutral = conductorNeutral;
@@ -279,7 +280,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setConductorPecpc(String conductorPecpc) throws DecimalConversionException {
-		if (conductorPecpc != null) {
+		if (conductorPecpc != null && !conductorPecpc.isEmpty()) {
 			this.conductorPecpc = DecimalConversion.convertToDecimal(conductorPecpc, Constants.conductor_Pecpc);
 		} else {
 			this.conductorPecpc = conductorPecpc;
@@ -291,7 +292,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setContinutiyApproximateLength(String continutiyApproximateLength) throws DecimalConversionException {
-		if (continutiyApproximateLength != null) {
+		if (continutiyApproximateLength != null && !continutiyApproximateLength.isEmpty()) {
 			this.continutiyApproximateLength = DecimalConversion.convertToDecimal(continutiyApproximateLength, Constants.continutiy_Approximate_Length);
 		} else {
 			this.continutiyApproximateLength = continutiyApproximateLength;
@@ -303,7 +304,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setContinutiyRR(String continutiyRR) throws DecimalConversionException {
-		if (continutiyRR != null) {
+		if (continutiyRR != null && !continutiyRR.isEmpty()) {
 			this.continutiyRR = DecimalConversion.convertToDecimal(continutiyRR, Constants.continutiy_RR);
 		} else {
 			this.continutiyRR = continutiyRR;
@@ -315,7 +316,7 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setContinutiyR(String continutiyR) throws DecimalConversionException {
-		if (continutiyR != null) {
+		if (continutiyR != null && !continutiyR.isEmpty()) {
 			this.continutiyR = DecimalConversion.convertToDecimal(continutiyR, Constants.continutiy_R);
 		} else {
 			this.continutiyR = continutiyR;
@@ -335,8 +336,13 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setInsulationResistance(String insulationResistance) throws DecimalConversionException {
-		this.insulationResistance = DecimalConversion.convertToDecimal(insulationResistance,
-				Constants.test_Insulation_Resistance);
+		if (insulationResistance !=null && !insulationResistance.isEmpty()) {
+			this.insulationResistance = DecimalConversion.convertToDecimal(insulationResistance,
+					Constants.test_Insulation_Resistance);
+		} else {
+			this.insulationResistance = insulationResistance;
+		}
+		
 	}
 
 	public String getTestVoltage() {
@@ -344,7 +350,11 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setTestVoltage(String testVoltage) throws DecimalConversionException {
-		this.testVoltage = DecimalConversion.convertToDecimal(testVoltage, Constants.test_Voltage);
+		if (testVoltage != null && !testVoltage.isEmpty()) {
+			this.testVoltage = DecimalConversion.convertToDecimal(testVoltage, Constants.test_Voltage);
+		} else {
+			this.testVoltage = testVoltage;
+		}
 	}
 
 	public String getTestLoopImpedance() {
@@ -352,7 +362,12 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setTestLoopImpedance(String testLoopImpedance) throws DecimalConversionException {
-		this.testLoopImpedance = DecimalConversion.convertToDecimal(testLoopImpedance, Constants.test_Loopimpedance);
+		if (testLoopImpedance != null && !testLoopImpedance.isEmpty()) {
+			this.testLoopImpedance = DecimalConversion.convertToDecimal(testLoopImpedance,
+					Constants.test_Loopimpedance);
+		} else {
+			this.testLoopImpedance = testLoopImpedance;
+		}
 	}
 
 	public String getTestFaultCurrent() {
@@ -360,7 +375,11 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setTestFaultCurrent(String testFaultCurrent) throws DecimalConversionException {
-		this.testFaultCurrent = DecimalConversion.convertToDecimal(testFaultCurrent, Constants.test_Faultcurrent);
+		if (testFaultCurrent != null && !testFaultCurrent.isEmpty()) {
+			this.testFaultCurrent = DecimalConversion.convertToDecimal(testFaultCurrent, Constants.test_Faultcurrent);
+		} else {
+			this.testFaultCurrent = testFaultCurrent;
+		}
 	}
 
 	public String getDisconnectionTime() {
@@ -368,7 +387,13 @@ public class TestingRecords implements Serializable {
 	}
 
 	public void setDisconnectionTime(String disconnectionTime) throws DecimalConversionException {
-		this.disconnectionTime = DecimalConversion.convertToDecimal(disconnectionTime, Constants.test_DisConnection);
+		if (disconnectionTime != null && !disconnectionTime.isEmpty()) {
+			this.disconnectionTime = DecimalConversion.convertToDecimal(disconnectionTime,
+					Constants.test_DisConnection);
+		} else {
+			this.disconnectionTime = disconnectionTime;
+		}
+
 	}
 
 	public String getRcdCurrent() {

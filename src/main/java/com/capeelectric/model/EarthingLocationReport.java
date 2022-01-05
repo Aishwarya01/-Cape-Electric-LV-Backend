@@ -79,7 +79,7 @@ public class EarthingLocationReport implements Serializable {
 	}
 
 	public void setJointResistance(String jointResistance) throws DecimalConversionException {
-		if (jointResistance != null) {
+		if (jointResistance != null && !jointResistance.isEmpty()) {
 			this.jointResistance = DecimalConversion.convertToDecimal(jointResistance,
 					Constants.supply_Earth_JointResistance);
 		}

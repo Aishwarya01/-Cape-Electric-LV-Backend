@@ -230,7 +230,7 @@ public class PeriodicTestingServiceTest {
 		testingReport.setSiteId(2);
 		periodicTestingServiceImpl.addTestingReport(testingReport);
 
-		utill_withOutDemcimal_Records();
+		//utill_withOutDemcimal_Records();
 
 		logger.info("'NA'value checking processes started");
 

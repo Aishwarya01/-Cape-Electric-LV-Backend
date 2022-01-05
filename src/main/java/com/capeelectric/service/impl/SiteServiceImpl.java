@@ -243,6 +243,14 @@ public class SiteServiceImpl implements SiteService {
 			logger.error("Invalid Inspector Name");
 			throw new CompanyDetailsException("Invalid Inspector Name");
 		}
-
 	}
+
+	@Override
+	public String retrieveByCompanyNameDepartmentSiteName(String companyName, String department, String siteName) {
+		Site siteDetails = siteRepository.findByCompanyNameAndDepartmentNameAndSite(companyName, department, siteName);
+		return siteDetails != null  
+				? siteDetails.getSite() : "";
+	}
+	
+	
 }
