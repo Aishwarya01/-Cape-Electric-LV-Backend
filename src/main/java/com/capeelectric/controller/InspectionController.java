@@ -104,11 +104,11 @@ public class InspectionController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@GetMapping("/retrieveLocationDetails/{distributionDetails}/{referance}")
+	@GetMapping("/retrieveLocationDetails/{distributionDetails}/{referance}/{location}")
 	public String retrieveLocationDetails(@PathVariable String distributionDetails,
-			@PathVariable String referance) throws InspectionException {
-		logger.info("called retrieveLocationDetails function Distribution Details : {},Reference : {}", distributionDetails, referance);
-		return inspectionService.retrieveLocation(distributionDetails, referance);
+			@PathVariable String referance, @PathVariable String location) throws InspectionException {
+		logger.info("called retrieveLocationDetails function Distribution Details : {},Reference : {},Location: {}", distributionDetails, referance, location);
+		return inspectionService.retrieveLocation(distributionDetails, referance, location);
 	}
 	
 }

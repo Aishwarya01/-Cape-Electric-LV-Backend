@@ -12,6 +12,6 @@ public interface InspectionConsumerUnitRepository extends CrudRepository<Consume
 
 	public ConsumerUnit findByLocation(String location);
 	
-	public ConsumerUnit findByDistributionBoardDetailsAndReferance(String distributionDetails, String referance);
+	public ConsumerUnit findByDistributionBoardDetailsAndReferanceAndLocation(String distributionDetails, String referance, String location);
 
 }
