@@ -342,6 +342,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Override
 	public String retrieveUserNameFromRegister(String userName) throws RegistrationException {
 		// TODO Auto-generated method stub
-		return registerRepository.findByUsername(userName).isPresent() ? registerRepository.findByUsername(userName).get().getUsername(): "";
+		Optional<Register> registerDetailsFromDB = registerRepository.findByUsername(userName);
+		return registerDetailsFromDB.isPresent() ? registerDetailsFromDB.get().getUsername(): "";
 	}
 }

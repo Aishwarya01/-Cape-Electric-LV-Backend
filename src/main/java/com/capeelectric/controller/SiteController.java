@@ -69,10 +69,11 @@ public class SiteController {
 				HttpStatus.OK);
 	}
 	
-	@GetMapping("/retrieveSiteName/{userName}/{siteName}")
-	public String retrieveSiteName(@PathVariable String userName, @PathVariable String siteName) throws CompanyDetailsException {
-		logger.debug("called retriveSite function UserName: {}", userName);
-		return siteService.retrieveBySiteNameUserName(userName, siteName);
+	@GetMapping("/retrieveSiteName/{companyName}/{department}/{siteName}")
+	public String retrieveSiteName(@PathVariable String companyName, @PathVariable String department, @PathVariable String siteName) throws CompanyDetailsException {
+		logger.debug("called retriveSiteByName function Company Name: {}, Department: {}, Site Name: {}", companyName,
+				department, siteName);
+		return siteService.retrieveByCompanyNameDepartmentSiteName(companyName, department, siteName);
 	}
 
 }

@@ -532,7 +532,8 @@ public class InspectionServiceImpl implements InspectionService {
 	@Override
 	public String retrieveLocation(String distributionDetails, String reference) {
 		// TODO Auto-generated method stub
-		return inspectionConsumerUnitRepository.findByDistributionBoardDetailsAndReferance(distributionDetails, reference);
+		ConsumerUnit fetchLocationDetails = inspectionConsumerUnitRepository.findByDistributionBoardDetailsAndReferance(distributionDetails, reference);
+		return fetchLocationDetails != null ? fetchLocationDetails.getLocation(): "";
 	}
 	
 	/**

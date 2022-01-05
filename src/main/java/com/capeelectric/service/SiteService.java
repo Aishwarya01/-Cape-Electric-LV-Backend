@@ -16,5 +16,5 @@ public interface SiteService {
 	
 	public Site retrieveSiteByName(String companyName, String departmentName, String siteName) throws CompanyDetailsException;
 	
-	public String retrieveBySiteNameUserName(String username, String siteName);
+	public String retrieveByCompanyNameDepartmentSiteName(String companyName, String department, String siteName);
 }
