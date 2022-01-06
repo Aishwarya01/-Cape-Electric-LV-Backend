@@ -98,8 +98,13 @@ public class TestingRecordsSourceSupply implements Serializable {
 		return disconnectionTime;
 	}
 
-	public void setDisconnectionTime(String disconnectionTime) {
-		this.disconnectionTime = disconnectionTime;
+	public void setDisconnectionTime(String disconnectionTime) throws DecimalConversionException {
+		if (disconnectionTime != null && !disconnectionTime.isEmpty()) {
+			this.disconnectionTime = DecimalConversion.convertToDecimal(disconnectionTime, Constants.test_DisConnection);
+		} else {
+			this.disconnectionTime = disconnectionTime;
+		}
+		
 	}
 	
 	public TestingRecords getTestingRecords() {
