@@ -655,6 +655,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 
 	private void testingTableIteration(Document document, TestingRecords testingRecords1)
 			throws DocumentException, IOException {
+
 		PdfPTable table466 = new PdfPTable(12);
 		table466.setSpacingAfter(20f); // Space after table
 		table466.setSpacingBefore(20f); // Space before table
@@ -835,11 +836,11 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 		cell1 = new PdfPCell(new Phrase(
-				"Continuity (ohms)\r\n"
+				"\r\n\r\n\r\nContinuity (ohms)\r\n"
 						+ "Applicable to live conductor in final circuits and protective conductors only\r\n" + "",
 				font23));
 		cell1.setGrayFill(0.92f);
-		cell1.setRowspan(3);
+		cell1.setRowspan(5);
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -862,11 +863,29 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 
-		cell1 = new PdfPCell(new Phrase("\r\nR2", font23));
+		cell1 = new PdfPCell(new Phrase("R2", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase("\r\n"+testingRecords1.getContinutiyR(), font27));
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getContinutiyR(), font27));
+		cell1.setColspan(9);
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table466.addCell(cell1);
+
+		cell1 = new PdfPCell(new Phrase("Maximum\r\nAllowed\r\nvalue", font23));
+		cell1.setGrayFill(0.92f);
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table466.addCell(cell1);
+		cell1 = new PdfPCell(new Phrase("\r\n\r\n" + testingRecords1.getMaximumAllowedValue(), font27));
+		cell1.setColspan(9);
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table466.addCell(cell1);
+
+		cell1 = new PdfPCell(new Phrase("Continuity Remarks", font23));
+		cell1.setGrayFill(0.92f);
+		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		table466.addCell(cell1);
+		cell1 = new PdfPCell(new Phrase(testingRecords1.getContinuityRemarks(), font27));
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -1262,10 +1281,10 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 	private void addRow(PdfPTable table2, String string, String string2, String string3, String string4, String string5,
 			String string6, String string7, String string8, String string9, String string10)
 			throws DocumentException, IOException {
-	
+
 		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
 		Font font1 = new Font(BaseFont.createFont(), 8, Font.NORMAL, BaseColor.BLACK);
-		
+
 		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font1));
 		nameCell.setGrayFill(0.92f);
 		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2, font));
