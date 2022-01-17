@@ -90,7 +90,13 @@ public class TestingRecords implements Serializable {
 
 	@Column(name = "CONTINUTIY_R2")
 	private String continutiyR;
+	
+	@Column(name = "MAXI_NO_ALLOWED")
+	private String maximumNoAllowed;
 
+	@Column(name = "CONTINUITY_REMARKS")
+	private String continuityRemarks;
+	
 	@Column(name = "CONTINUTIY_POLARITY")
 	private String continutiyPolarity;
 
@@ -321,6 +327,24 @@ public class TestingRecords implements Serializable {
 		} else {
 			this.continutiyR = continutiyR;
 		}
+	}
+	
+	
+
+	public String getMaximumNoAllowed() {
+		return maximumNoAllowed;
+	}
+
+	public void setMaximumNoAllowed(String maximumNoAllowed) {
+		this.maximumNoAllowed = maximumNoAllowed;
+	}
+
+	public String getContinuityRemarks() {
+		return continuityRemarks;
+	}
+
+	public void setContinuityRemarks(String continuityRemarks) {
+		this.continuityRemarks = continuityRemarks;
 	}
 
 	public String getContinutiyPolarity() {
