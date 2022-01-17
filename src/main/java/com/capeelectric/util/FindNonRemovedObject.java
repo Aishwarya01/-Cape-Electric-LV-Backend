@@ -131,11 +131,11 @@ public class FindNonRemovedObject {
 	}
 
 	public List<Testing> findNonRemoveTesting(List<Testing> listOfTesting) {
+		ArrayList<Testing> nonRemoveTesting = new ArrayList<Testing>();
 		for (Testing testing : listOfTesting) {
 			if (testing != null && testing.getTestingStatus() != null
-					&& testing.getTestingStatus().equalsIgnoreCase("R")) {
-				listOfTesting.remove(testing);
-			} else {
+					&& !testing.getTestingStatus().equalsIgnoreCase("R")) {
+
 				if (testing.getTestingStatus() == null) {
 					testing.setTestingStatus("N");
 				}
@@ -150,16 +150,17 @@ public class FindNonRemovedObject {
 							&& !testDistRecord.getTestDistRecordStatus().equalsIgnoreCase("R")) {
 						testDistRecord
 								.setTestingRecords(findNonRemoveTestingRecord(testDistRecord.getTestingRecords()));
-						testDistRecord
-						.setTestingInnerObservation(findNonRemoveTestingInnerObservation(testDistRecord.getTestingInnerObservation()));
+						testDistRecord.setTestingInnerObservation(
+								findNonRemoveTestingInnerObservation(testDistRecord.getTestingInnerObservation()));
 						NonRemoveTestingRecords.add(testDistRecord);
 					}
 				}
 				testing.setTestDistRecords(NonRemoveTestingRecords);
-
+				nonRemoveTesting.add(testing);
 			}
+
 		}
-		return listOfTesting;
+		return nonRemoveTesting;
 	}
 
 	private List<TestingEquipment> findNonRemoveTestingEquipment(List<TestingEquipment> testingEquipment) {
