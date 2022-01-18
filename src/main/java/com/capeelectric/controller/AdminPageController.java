@@ -25,6 +25,7 @@ import com.capeelectric.model.Register;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.AWSEmailService;
+import com.capeelectric.util.Constants;
 import com.capeelectric.util.Utility;
 
 @RestController
@@ -58,7 +59,7 @@ public class AdminPageController {
 							+ "\n" + "\n" 
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-											: "https://www.rushforsafety.com")
+											: Constants.EMAIL_SUBJECT_URL_AWS)
 							+ "/generateOtp" + ";email=" + register.getUsername());
 		} else {
 			awsEmailService.sendEmail(register.getUsername(),
