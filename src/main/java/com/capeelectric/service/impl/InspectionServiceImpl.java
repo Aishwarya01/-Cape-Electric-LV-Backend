@@ -127,7 +127,7 @@ public class InspectionServiceImpl implements InspectionService {
 								}
 								
 								siteDetails.updateSite(periodicInspection.getSiteId(),
-										periodicInspection.getUserName());
+										periodicInspection.getUserName(),"Step3 completed");
 								logger.debug("Site Successfully Saved in DB");
 							}
 
@@ -223,7 +223,7 @@ public class InspectionServiceImpl implements InspectionService {
 				periodicInspection.setUpdatedBy(userFullName.findByUserName(periodicInspection.getUserName()));
 				inspectionRepository.save(periodicInspection);
 				logger.debug("Inspection successfully updated into DB");
-				siteDetails.updateSite(periodicInspection.getSiteId(), periodicInspection.getUserName());
+				siteDetails.updateSite(periodicInspection.getSiteId(), periodicInspection.getUserName(),"Step3 completed");
 				logger.debug("Updated successfully site updatedUsername",periodicInspection.getUserName());
 			} else {
 				logger.error("Given SiteId and ReportId is Invalid");

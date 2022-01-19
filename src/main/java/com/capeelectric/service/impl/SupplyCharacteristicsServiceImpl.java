@@ -121,7 +121,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 
 			supplyCharacteristicsRepository.save(supplyCharacteristics);
 			logger.debug("supplyCharacteristics Details Successfully Saved in DB");
-			siteDetails.updateSite(supplyCharacteristics.getSiteId(), supplyCharacteristics.getUserName());
+			siteDetails.updateSite(supplyCharacteristics.getSiteId(), supplyCharacteristics.getUserName(),"Step2 completed");
 			logger.debug("Updated successfully site updatedUsername", supplyCharacteristics.getUserName());
 		} else {
 			logger.error("Site-Id Already Available");
@@ -196,7 +196,7 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 				decimalConversion(supplyCharacteristics);
 				supplyCharacteristicsRepository.save(supplyCharacteristics);
 				logger.debug("supplyCharacteristics Details Successfully Updated in DB");
-				siteDetails.updateSite(supplyCharacteristics.getSiteId(), supplyCharacteristics.getUserName());
+				siteDetails.updateSite(supplyCharacteristics.getSiteId(), supplyCharacteristics.getUserName(),"Step2 completed");
 				logger.debug("Updated successfully site updatedUsername", supplyCharacteristics.getUserName());
 			} else {
 				logger.error("Given SiteId and ReportId is Invalid");
