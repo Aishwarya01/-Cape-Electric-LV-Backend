@@ -101,7 +101,7 @@ public class FinalReportServiceImpl implements FinalReportService {
 			
 			Optional<Site> siteDetails = siteRepository.findById(siteId);
 			if (siteDetails.isPresent() && siteDetails.get() != null
-					&& siteDetails.get().getAllStepsCompleted() != null) {
+					&& siteDetails.get().getAllStepsCompleted() != null && !siteDetails.get().getAllStepsCompleted().isEmpty() ) {
 				finalReport.setAllStepsCompleted(siteDetails.get().getAllStepsCompleted());
 			}
 			finalReport = new FinalReport();
