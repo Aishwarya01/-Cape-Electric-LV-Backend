@@ -11,6 +11,8 @@ public class FinalReport {
 	private String userName;
 
 	private Integer siteId;
+	
+	private String allStepsCompleted;
 
 	private ReportDetails reportDetails;
 
@@ -76,6 +78,14 @@ public class FinalReport {
 
 	public void setSummary(Summary summary) {
 		this.summary = summary;
+	}
+
+	public String getAllStepsCompleted() {
+		return allStepsCompleted;
+	}
+
+	public void setAllStepsCompleted(String allStepsCompleted) {
+		this.allStepsCompleted = allStepsCompleted;
 	}
 
 }
