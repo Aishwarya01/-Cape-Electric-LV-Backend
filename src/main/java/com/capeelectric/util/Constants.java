@@ -139,11 +139,11 @@ public class Constants {
 	public static final String INCREASED_FLAG_VALUE = "1";
 	
 	//EMAIL SUbject and URL
-	public static final String EMAIL_SUBJECT_REGISTRATION = "Your request for accessing the Rush App is approved and you can generate OTP with this link";
+	public static final String EMAIL_SUBJECT_REGISTRATION = "Your request for accessing the SOLVE App is approved and you can generate OTP with this link";
 	
-	public static final String EMAIL_SUBJECT_URL_AWS = "https://www.rushforsafety.com";
+	public static final String EMAIL_SUBJECT_URL_AWS = "https://www.safelv.in";
 	
-	public static final String EMAIL_SUBJECT_ADMIN_URL_AWS = "https://admin.rushforsafety.com";
+	public static final String EMAIL_SUBJECT_ADMIN_URL_AWS = "https://admin.safelv.in";
 	
 	public static final int LIST_ZERO = 0;
 	
@@ -157,7 +157,7 @@ public class Constants {
 
 	public static final String NUMBER_OF_LICENSES = String.valueOf(5);
 
-	public static final String FROM_EMAIL = "info@rushforsafety.com";
+	public static final String FROM_EMAIL = "info@safelv.in";
 	
 	public static final String AWS_EMAIL_PORT = String.valueOf(587);
 	
@@ -167,7 +167,7 @@ public class Constants {
 	
 	public static final String THIRD_PERSON_EMAIL = "deepak@capeindia.net";
 	
-	public static final String EMAIL_SUBJECT = "Rush Electrical Safety Digital TIC Platform";
+	public static final String EMAIL_SUBJECT = "SOLVE Electrical Safety Digital TIC Platform";
 	
 	public static final String EMAIL_ADMIN_SUBJECT = "Approval For Inspector";
 }

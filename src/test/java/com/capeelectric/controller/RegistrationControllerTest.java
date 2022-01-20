@@ -32,6 +32,7 @@ import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.AWSEmailService;
+import com.capeelectric.util.Constants;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -79,11 +80,11 @@ public class RegistrationControllerTest {
 		when(registrationService.addRegistration(register)).thenReturn(register);
 
 		doNothing().when(awsEmailService).sendEmail(register.getUsername(),
-				"You have been successfully Registered with Rush for Safety App. You may need to wait for 2hrs for getting approved from Admin."
+				"You have been successfully Registered with SOLVE for Safety App. You may need to wait for 2hrs for getting approved from Admin."
 						+ "\n" + "\n" + "You can create the password with this link " + "\n"
 						+ (resetUrl.contains("localhost:5000")
 								? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-								: "https://www.rushforsafety.com"));
+								: Constants.EMAIL_SUBJECT_URL_AWS));
 
 		  ResponseEntity<Void> addRegistration = registrationController.addRegistration(register);
 		  
@@ -146,11 +147,11 @@ public class RegistrationControllerTest {
 		when(registrationService.addViewerRegistration(register)).thenReturn(register);
 
 		doNothing().when(awsEmailService).sendEmail(register.getUsername(),
-				"You have been successfully Registered with Rush for Safety App. You may need to wait for 2hrs for getting approved from Admin."
+				"You have been successfully Registered with SOLVE for Safety App. You may need to wait for 2hrs for getting approved from Admin."
 						+ "\n" + "\n" + "You can create the password with this link " + "\n"
 						+ (resetUrl.contains("localhost:5000")
 								? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-								: "https://www.rushforsafety.com"));
+								: Constants.EMAIL_SUBJECT_URL_AWS));
 
 		  ResponseEntity<Void> addRegistration = registrationController.addViewerRegistration(register);
 		  
