@@ -25,6 +25,7 @@ import com.capeelectric.model.Register;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.AWSEmailService;
+import com.capeelectric.util.Constants;
 import com.capeelectric.util.Utility;
 
 @RestController
@@ -54,15 +55,15 @@ public class AdminPageController {
 		String resetUrl = Utility.getSiteURL(uri.toURL());
 		if (register != null && register.getPermission().equalsIgnoreCase("YES")) {
 			awsEmailService.sendEmail(register.getUsername(),
-					"Your request for accessing the Rush App is approved and you can generate OTP with this link"
+					"Your request for accessing the SOLVE App is approved and you can generate OTP with this link"
 							+ "\n" + "\n" 
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-											: "https://www.rushforsafety.com")
+											: Constants.EMAIL_SUBJECT_URL_AWS)
 							+ "/generateOtp" + ";email=" + register.getUsername());
 		} else {
 			awsEmailService.sendEmail(register.getUsername(),
-					"Your Registration has not Approved, So You Can't Access Rush for Safety App");
+					"Your Registration has not Approved, So You Can't Access SOLVE for Safety App");
 		}
 		return new ResponseEntity<String>("Successfully Updated RegisterPermission", HttpStatus.OK);
 	}

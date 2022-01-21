@@ -99,6 +99,12 @@ public class FinalReportServiceImpl implements FinalReportService {
 	public Optional<FinalReport> retrieveFinalReport(String userName, Integer siteId) throws FinalReportException {
 		if (userName != null && siteId != null) {
 			finalReport = new FinalReport();
+			Optional<Site> siteDetails = siteRepository.findById(siteId);
+			if (siteDetails.isPresent() && siteDetails.get() != null
+					&& siteDetails.get().getAllStepsCompleted() != null && !siteDetails.get().getAllStepsCompleted().isEmpty() ) {
+				finalReport.setAllStepsCompleted(siteDetails.get().getAllStepsCompleted());
+			}
+		
 			finalReport.setUserName(userName);
 			finalReport.setSiteId(siteId);
 

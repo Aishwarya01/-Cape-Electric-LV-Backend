@@ -30,7 +30,7 @@ public class SiteDetails {
 	/**
 	 * 	updateSite function to updating site updatetime and username updating
 	*/
-	public void updateSite(Integer siteId, String userName) throws CompanyDetailsException {
+	public void updateSite(Integer siteId, String userName,String stepLV) throws CompanyDetailsException {
 
 		try {
 			logger.debug("SitedID " + siteId);
@@ -39,6 +39,7 @@ public class SiteDetails {
 			Site site = siteRepo.get();
 			site.setUpdatedDate(LocalDateTime.now());
 			site.setUpdatedBy(this.userName.findByUserName(userName));
+			site.setAllStepsCompleted(stepLV);
 			siteRepository.save(site);
 			logger.debug("Sitedetails time updating ended");
 		} catch (Exception e) {

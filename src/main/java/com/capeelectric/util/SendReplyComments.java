@@ -38,7 +38,7 @@ public class SendReplyComments {
 					Constants.EMAIL_SEND_COMMENT_MSG + "\n" + "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-									: "https://www.rushforsafety.com")
+									: Constants.EMAIL_SUBJECT_URL_AWS)
 							+ "/login");
 		} else {
 			logger.debug("Email Id doesn't exist!");
@@ -58,7 +58,7 @@ public class SendReplyComments {
 					Constants.EMAIL_REPLY_COMMENT_MSG + "\n" + "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-									: "https://www.rushforsafety.com")
+									: Constants.EMAIL_SUBJECT_URL_AWS)
 							+ "/login");
 		} else {
 			logger.debug("Given Inspector UserName MisMatched");
@@ -82,7 +82,7 @@ public class SendReplyComments {
 						Constants.EMAIL_REJECT_COMMENT_MSG + "\n"
 								+ (resetUrl.contains("localhost:5000")
 										? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-										: "https://www.rushforsafety.com")
+										: Constants.EMAIL_SUBJECT_URL_AWS)
 								+ "/login");
 			}
 

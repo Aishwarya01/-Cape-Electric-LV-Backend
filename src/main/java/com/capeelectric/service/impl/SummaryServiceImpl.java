@@ -180,9 +180,7 @@ public class SummaryServiceImpl implements SummaryService {
 							site = siteRepo.get();
 							site.setAllStepsCompleted("AllStepCompleted");
 							siteRepository.save(site);
-							logger.debug("AllStepCompleted information saved site table in DB");
-							siteDetails.updateSite(summary.getSiteId(), summary.getUserName());
-							logger.debug("Updated successfully site updatedUsername",summary.getUserName());
+							logger.debug("AllStepCompleted information saved site table in DB"+summary.getUserName());
 						} else {
 							logger.error("Site-Id Information not Available in site_Table");
 							throw new SummaryException("Site-Id Information not Available in site_Table");
@@ -270,7 +268,7 @@ public class SummaryServiceImpl implements SummaryService {
 				summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
 				summaryRepository.save(summary);
 				logger.debug("Summary Details Successfully updated in DB");
-				siteDetails.updateSite(summary.getSiteId(), summary.getUserName());
+				siteDetails.updateSite(summary.getSiteId(), summary.getUserName(),"Step5 completed");
 				logger.debug("Updated successfully site updatedUsername",summary.getUserName());
 			} else {
 				logger.error("Given SiteId and ReportId is Invalid");

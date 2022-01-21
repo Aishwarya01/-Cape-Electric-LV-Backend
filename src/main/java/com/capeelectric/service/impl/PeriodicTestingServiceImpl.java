@@ -95,7 +95,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 								testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
 								testingReportRepository.save(testingReport);
 								logger.debug("Testing Details Successfully Saved in DB");
-								siteDetails.updateSite(testingReport.getSiteId(), testingReport.getUserName());
+								siteDetails.updateSite(testingReport.getSiteId(), testingReport.getUserName(),"Step4 completed");
 								logger.debug("Updated successfully site updatedUsername",testingReport.getUserName());
 							}
 
@@ -165,7 +165,7 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 				testingReport.setUpdatedDate(LocalDateTime.now());
 				testingReport.setUpdatedBy(userFullName.findByUserName(testingReport.getUserName()));
 				testingReportRepository.save(testingReport);
-				siteDetails.updateSite(testingReport.getSiteId(), testingReport.getUserName());
+				siteDetails.updateSite(testingReport.getSiteId(), testingReport.getUserName(),"Step4 completed");
 			} else {
 				logger.error("Given SiteId and ReportId is Invalid");
 				throw new PeriodicTestingException("Given SiteId and ReportId is Invalid");

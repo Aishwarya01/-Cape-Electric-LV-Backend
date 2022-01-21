@@ -90,7 +90,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 					reportDetails.setUpdatedBy(userFullName.findByUserName(reportDetails.getUserName()));
 					installationReportRepository.save(reportDetails);
 					logger.debug("BasicInformation successfully Saved in DB");
-					siteDetails.updateSite(reportDetails.getSiteId(), reportDetails.getUserName());
+					siteDetails.updateSite(reportDetails.getSiteId(), reportDetails.getUserName(),"Step1 completed");
 					logger.debug("Updated successfully site updatedUsername",reportDetails.getUserName());
 				} else {
 					logger.error("Site-Id Details Already Available,Create New Site-Id");
@@ -157,7 +157,7 @@ public class InstalReportServiceImpl implements InstalReportService {
 				reportDetails.setUpdatedBy(userFullName.findByUserName(reportDetails.getUserName()));
 				installationReportRepository.save(reportDetails);
 				logger.debug("BasicInformation successfully Updated in DB");
-				siteDetails.updateSite(reportDetails.getSiteId(), reportDetails.getUserName());
+				siteDetails.updateSite(reportDetails.getSiteId(), reportDetails.getUserName(),"Step1 completed");
 				logger.debug("Updated successfully site updatedUsername",reportDetails.getUserName());
 			} else {
 				logger.error("Given SiteId and ReportId is Invalid");
