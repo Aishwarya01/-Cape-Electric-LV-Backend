@@ -50,7 +50,7 @@ public class SummaryController {
 		logger.debug("Started addSummary function userName: {},siteId : {}", summary.getUserName(),summary.getSiteId());
 		summaryService.addSummary(summary);
 		logger.debug("Ended addSummary function");
-		return new ResponseEntity<String>("Summary Details Successfully Saved", HttpStatus.CREATED);
+		return new ResponseEntity<String>("Summary Details Successfully Submitted", HttpStatus.CREATED);
 
 	}
 	

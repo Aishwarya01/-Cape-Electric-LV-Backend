@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -203,7 +202,7 @@ public class SummaryServiceTest {
 		
 		printService.printSummary(summary.getUserName(),summary.getSiteId());
 		
-		printFinalPDFService.printFinalPDF(summary.getUserName(),summary.getSiteId());
+		printFinalPDFService.printFinalPDF(summary.getUserName(),summary.getSiteId(), site.getSite());
 		
 		
 		

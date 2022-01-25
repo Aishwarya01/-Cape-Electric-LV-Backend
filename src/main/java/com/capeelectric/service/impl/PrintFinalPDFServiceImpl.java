@@ -22,7 +22,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.service.PrintFinalPDFService;
 import com.capeelectric.util.HeaderFooterPageEvent;
 import com.itextpdf.text.Document;
@@ -49,25 +48,21 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 	@Value("${access.key.secret}")
 	private String accessKeySecret;
 
-	@Autowired
-	private SiteRepository siteRepository;
-
 	private static final Logger logger = LoggerFactory.getLogger(PrintFinalPDFServiceImpl.class);
 
 	@Override
-	public void printFinalPDF(String userName, Integer siteId) throws Exception {
+	public void printFinalPDF(String userName, Integer siteId, String siteName) throws Exception {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 			try {
 				List<InputStream> inputPdfList = new ArrayList<InputStream>();
-
 				inputPdfList.add(new FileInputStream("PrintInstalReportData.pdf"));
 				inputPdfList.add(new FileInputStream("SupplyCharacteristic.pdf"));
 				inputPdfList.add(new FileInputStream("PrintInspectionDetailsData.pdf"));
 				inputPdfList.add(new FileInputStream("Testing.pdf"));
 				inputPdfList.add(new FileInputStream("Summary.pdf"));
 
-				OutputStream outputStream = new FileOutputStream("finalreport.pdf");
+				OutputStream outputStream = new FileOutputStream(siteName+".pdf");
 				mergePdfFiles(inputPdfList, outputStream, awsS3ServiceImpl);
 
 				try {
@@ -77,17 +72,13 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 							.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
 
 					//Uploading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
-					String folderName = ((siteRepository.findById(siteId).isPresent()
-							&& siteRepository.findById(siteId).get() != null)
-									? siteRepository.findById(siteId).get().getSite()
-									: "");
 					
 					String fileNameInS3 = "finalreport.pdf";
 					String fileNameInLocalPC = "finalreport.pdf";
 					
-					if (folderName.length() > 0) {
+					if (siteName.length() > 0) {
 						PutObjectRequest request = new PutObjectRequest(s3BucketName,
-								"LV_Site Name_".concat(folderName) + "/" + fileNameInS3, new File(fileNameInLocalPC));
+								"LV_Site Name_".concat(siteName) + "/" + (siteName+".pdf"), new File(siteName+".pdf"));
 						s3Client.putObject(request);
 						logger.info("Uploading file done in AWS s3");
 					} else {

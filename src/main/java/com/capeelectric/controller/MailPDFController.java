@@ -27,14 +27,13 @@ public class MailPDFController {
 	@Autowired
 	private AWSEmailService awsEmailService;
 
-	@GetMapping("/sendPDFinMail/{userName}/{siteId}")
-	public ResponseEntity<byte[]> sendFinalPDF(@PathVariable String userName, @PathVariable Integer siteId)
+	@GetMapping("/sendPDFinMail/{userName}/{siteId}/{siteName}")
+	public ResponseEntity<byte[]> sendFinalPDF(@PathVariable String userName, @PathVariable Integer siteId, @PathVariable String siteName)
 			throws InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException,
 			SummaryException, Exception {
-		logger.info("called sendFinalPDF function userName: {},siteId : {}", userName,siteId);
+		logger.info("called sendFinalPDF function userName: {},siteId : {}, siteName : {}", userName,siteId,siteName);
 
-		String keyname = "finalreport.pdf";
-		awsEmailService.sendEmailPDF(userName, siteId, siteId, keyname);
+		awsEmailService.sendEmailPDF(userName, siteId, siteId, siteName);
 
 		return new ResponseEntity<byte[]>(HttpStatus.OK);
 	}

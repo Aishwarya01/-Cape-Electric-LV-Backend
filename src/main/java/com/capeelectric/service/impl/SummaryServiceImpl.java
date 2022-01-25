@@ -206,7 +206,7 @@ public class SummaryServiceImpl implements SummaryService {
 					printService.printSummary(summary.getUserName(),summary.getSiteId());
 					logger.debug("PDF printSummary() function called successfully");
 					
-					printFinalPDFService.printFinalPDF(summary.getUserName(),summary.getSiteId());
+					printFinalPDFService.printFinalPDF(summary.getUserName(),summary.getSiteId(), site.getSite());
 					logger.debug("PDF printFinalPDF() function called successfully");
 					
 				} else {

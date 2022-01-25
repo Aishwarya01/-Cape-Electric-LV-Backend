@@ -1,6 +1,5 @@
 package com.capeelectric.service.impl;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -221,18 +220,14 @@ public class AWSEmailService {
 			BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, accessKeySecret);
 			AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.AP_SOUTH_1)
 					.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
-
-			String folderName = ((siteRepository.findById(siteId).isPresent()
-					&& siteRepository.findById(siteId).get() != null) ? siteRepository.findById(siteId).get().getSite()
-							: "");
-
+			String filename = keyname+".pdf";
 			S3Object fullObject;
 			fullObject = s3Client
-					.getObject(new GetObjectRequest(s3BucketName, "LV_Site Name_".concat(folderName) + "/" + keyname));
+					.getObject(new GetObjectRequest(s3BucketName, "LV_Site Name_".concat(keyname) + "/" + filename));
 
 			InputStream in = fullObject.getObjectContent();
 			byte[] buf = new byte[1024];
-			OutputStream out = new FileOutputStream("finalreport.pdf");
+			OutputStream out = new FileOutputStream(keyname);
 			while ((count = in.read(buf)) != -1) {
 				if (Thread.interrupted()) {
 					throw new InterruptedException();
@@ -242,7 +237,7 @@ public class AWSEmailService {
 			out.close();
 			in.close();
 
-			String filename = ("finalreport.pdf");
+			
 
 			DataSource source = new FileDataSource(filename);
 			messageBodyPart.setDataHandler(new DataHandler(source));
