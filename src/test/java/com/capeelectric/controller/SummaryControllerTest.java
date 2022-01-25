@@ -76,7 +76,7 @@ public class SummaryControllerTest {
 
 		doNothing().when(summaryServiceImpl).addSummary(summary);
 		ResponseEntity<String> addSummary = summaryController.addSummary(summary);
-		assertEquals(addSummary.getBody(), "Summary Details Successfully Saved");
+		assertEquals(addSummary.getBody(), "Summary Details Successfully Submitted");
 
 		logger.info("testAddSummary Function Ended");
 	}
