@@ -786,6 +786,8 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 						}
 					}
 				}
+				
+				document.newPage();
 
 				PdfPTable contractor = new PdfPTable(pointColumnWidths10);
 				contractor.setWidthPercentage(100); // Width 100%
