@@ -157,7 +157,7 @@ public class Constants {
 
 	public static final String NUMBER_OF_LICENSES = String.valueOf(5);
 
-	public static final String FROM_EMAIL = "info@safelv.in";
+	public static final String FROM_EMAIL = "solve@safelv.in";
 	
 	public static final String AWS_EMAIL_PORT = String.valueOf(587);
 	
