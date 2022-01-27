@@ -607,9 +607,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				document.add(paragraph12);
 
 				for (SignatorDetails arr : convertion) {
-					if (arr.getSignatorRole().equals("designer1") || arr.getSignatorRole().equals("designer1")
-							|| arr.getSignatorRole().equals("designer1")) {
-
+					if (arr.getSignatorRole().equalsIgnoreCase("designer1")) {
 						declarationDesigner(document, arr);
 					}
 				}
@@ -618,9 +616,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				document.add(paragraph13);
 
 				for (SignatorDetails arr : convertion) {
-					if (arr.getSignatorRole().equals("designer2") || arr.getSignatorRole().equals("designer2")
-							|| arr.getSignatorRole().equals("designer2")) {
-
+					if (arr.getSignatorRole().equalsIgnoreCase("designer2")) {
 						declarationDesigner2(document, arr);
 					}
 				}
@@ -653,9 +649,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				document.add(paragraph16);
 
 				for (SignatorDetails arr : convertion) {
-					if (arr.getSignatorRole().equals("contractor") || arr.getSignatorRole().equals("contractor")
-							|| arr.getSignatorRole().equals("contractor")) {
-
+					if (arr.getSignatorRole().equalsIgnoreCase("contractor")) {
 						declarationContractor(document, arr);
 					}
 				}
@@ -688,9 +682,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				document.add(paragraph19);
 
 				for (SignatorDetails arr : convertion) {
-					if (arr.getSignatorRole().equals("inspector") || arr.getSignatorRole().equals("inspector")
-							|| arr.getSignatorRole().equals("inspector")) {
-
+					if (arr.getSignatorRole().equalsIgnoreCase("inspector")) {
 						declarationInspector(document, arr);
 					}
 				}
@@ -751,18 +743,15 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				for (SignatorDetails arr : convertion) {
 
-					if (arr.getSignatorRole().equals("designer1") || arr.getSignatorRole().equals("designer1")
-							|| arr.getSignatorRole().equals("designer1")) {
-
+					if (arr.getSignatorRole().equalsIgnoreCase("designer1")) {
 						designer(document, arr);
 					}
 				}
 
 				for (SignatorDetails arr : convertion) {
 					if (arr.getSignatorStatus() != null && !arr.getSignatorStatus().equalsIgnoreCase("R")) {
-						if (arr.getSignatorRole().equals("designer2") | arr.getSignatorRole().equals("designer2")
-								| arr.getSignatorRole().equals("designer2")) {
-
+						if (arr.getSignatorRole().equalsIgnoreCase("designer2")) {
+//							
 							PdfPTable designer2 = new PdfPTable(pointColumnWidths10);
 							designer2.setWidthPercentage(100); // Width 100%
 							designer2.setSpacingBefore(5f); // Space before table
@@ -783,8 +772,6 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 						}
 					}
 				}
-				
-				document.newPage();
 
 				PdfPTable contractor = new PdfPTable(pointColumnWidths10);
 				contractor.setWidthPercentage(100); // Width 100%
@@ -818,9 +805,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				document.add(contractor0);
 
 				for (SignatorDetails arr : convertion) {
-					if (arr.getSignatorRole().equals("contractor") | arr.getSignatorRole().equals("contractor")
-							| arr.getSignatorRole().equals("contractor")) {
-
+					if (arr.getSignatorRole().equalsIgnoreCase("contractor")) {
 						contractor(document, arr);
 					}
 				}
@@ -858,9 +843,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				document.add(inspector0);
 
 				for (SignatorDetails arr : convertion) {
-					if (arr.getSignatorRole().equals("inspector") || arr.getSignatorRole().equals("inspector")
-							|| arr.getSignatorRole().equals("inspector")) {
-
+					if (arr.getSignatorRole().equalsIgnoreCase("inspector")) {
 						inspector(document, arr);
 					}
 				}
