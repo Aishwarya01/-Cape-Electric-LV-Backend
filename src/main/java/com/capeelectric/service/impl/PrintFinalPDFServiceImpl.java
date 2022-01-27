@@ -110,8 +110,8 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 		}
 		PdfWriter writer = PdfWriter.getInstance(document, outputStream);
 		Image image = Image.getInstance(awss3ServiceImpl.findByName("Original1.png"));
-		image.scaleToFit(105, 135);
-		image.setAbsolutePosition(35,11);
+		image.scaleToFit(145, 155);
+		image.setAbsolutePosition(15, -41);
 
 		HeaderFooterPageEvent event = new HeaderFooterPageEvent();
 		writer.setPageEvent((PdfPageEvent) event);
