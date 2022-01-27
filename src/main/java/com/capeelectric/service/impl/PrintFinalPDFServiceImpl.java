@@ -73,9 +73,6 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 
 					//Uploading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
 					
-					String fileNameInS3 = "finalreport.pdf";
-					String fileNameInLocalPC = "finalreport.pdf";
-					
 					if (siteName.length() > 0) {
 						PutObjectRequest request = new PutObjectRequest(s3BucketName,
 								"LV_Site Name_".concat(siteName) + "/" + (siteName+".pdf"), new File(siteName+".pdf"));
@@ -112,9 +109,9 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 			totalPages = totalPages + pdfReader.getNumberOfPages();
 		}
 		PdfWriter writer = PdfWriter.getInstance(document, outputStream);
-		Image image = Image.getInstance(awss3ServiceImpl.findByName("rush-logo.png"));
-		image.scaleToFit(185, 185);
-		image.setAbsolutePosition(-3, -9);
+		Image image = Image.getInstance(awss3ServiceImpl.findByName("Original1.png"));
+		image.scaleToFit(145, 155);
+		image.setAbsolutePosition(15, -41);
 
 		HeaderFooterPageEvent event = new HeaderFooterPageEvent();
 		writer.setPageEvent((PdfPageEvent) event);
