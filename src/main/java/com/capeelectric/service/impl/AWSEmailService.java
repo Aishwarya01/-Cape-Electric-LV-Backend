@@ -227,7 +227,7 @@ public class AWSEmailService {
 
 			InputStream in = fullObject.getObjectContent();
 			byte[] buf = new byte[1024];
-			OutputStream out = new FileOutputStream(keyname);
+			OutputStream out = new FileOutputStream(filename);
 			while ((count = in.read(buf)) != -1) {
 				if (Thread.interrupted()) {
 					throw new InterruptedException();
