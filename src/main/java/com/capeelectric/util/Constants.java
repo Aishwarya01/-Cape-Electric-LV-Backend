@@ -141,9 +141,9 @@ public class Constants {
 	//EMAIL SUbject and URL
 	public static final String EMAIL_SUBJECT_REGISTRATION = "Your request for accessing the SOLVE App is approved and you can generate OTP with this link";
 	
-	public static final String EMAIL_SUBJECT_URL_AWS = "https://www.safelv.in";
+	public static final String EMAIL_SUBJECT_URL_AWS = "https://www.safelv.net";
 	
-	public static final String EMAIL_SUBJECT_ADMIN_URL_AWS = "https://admin.safelv.in";
+	public static final String EMAIL_SUBJECT_ADMIN_URL_AWS = "https://admin.safelv.net";
 	
 	public static final int LIST_ZERO = 0;
 	
