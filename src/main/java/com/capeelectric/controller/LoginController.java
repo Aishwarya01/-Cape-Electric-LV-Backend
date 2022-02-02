@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.amazonaws.util.StringUtils;
 import com.capeelectric.config.JwtTokenUtil;
 import com.capeelectric.exception.AuthenticationException;
 import com.capeelectric.exception.ChangePasswordException;
@@ -69,15 +70,25 @@ public class LoginController {
 		
 		logger.debug("Create Authenticate Token starts");
 		
-		authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
+//		authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
 
 		final RegisterDetails registerDetails = registrationDetailsServiceImpl
 				.loadUserByUsername(authenticationRequest.getEmail());
+		try {
+			int data = StringUtils.compare(registerDetails.getPassword(), authenticationRequest.getPassword());
 
-		final String token = jwtTokenUtil.generateToken(registerDetails);
-		logger.debug("Create Authenticate Token ends");
-		return ResponseEntity.ok(new AuthenticationResponseRegister(token, registerDetails.getRegister()));
-		
+			if(data == 0) {
+				final String token = jwtTokenUtil.generateToken(registerDetails);
+				logger.debug("Create Authenticate Token ends");
+				return ResponseEntity.ok(new AuthenticationResponseRegister(token, registerDetails.getRegister()));
+			} else {
+				throw new BadCredentialsException("INVALID_CREDENTIALS");
+			}
+		}
+		 catch(BadCredentialsException e) {
+			 logger.error("Authentication failed : "+e.getMessage());
+				throw new BadCredentialsException("INVALID_CREDENTIALS", e);
+		 }
 	}
 
 	@GetMapping("/forgotPassword/{email}")

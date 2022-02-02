@@ -81,7 +81,7 @@ public class LoginServiceImpl implements LoginService {
 				if (value) {
 					register.setOtpSessionKey(request.getOtpSession());
 					logger.debug("Successfully Otp Verified");
-					register.setPassword(passwordEncoder.encode(request.getPassword()));
+					register.setPassword(request.getPassword());
 					register.setUpdatedDate(LocalDateTime.now());
 					register.setUpdatedBy(request.getEmail());
 					logger.debug("createPassword Ends");
@@ -111,7 +111,7 @@ public class LoginServiceImpl implements LoginService {
 		if (email != null && password != null) {
 			Register register = registrationRepository.findByUsername(email).get();
 			if (register != null && register.getUsername().equalsIgnoreCase(email)) {
-				register.setPassword(passwordEncoder.encode(password));
+				register.setPassword(password);
 				register.setUpdatedDate(LocalDateTime.now());
 				register.setUpdatedBy(email);
 				logger.debug("UpdatePassword Ends");
@@ -141,7 +141,7 @@ public class LoginServiceImpl implements LoginService {
 			throw new ChangePasswordException("Old password cannot be entered as new password");
 		} else {
 			if (registerRepo != null && registerRepo.getUsername().equalsIgnoreCase(email)) {
-				registerRepo.setPassword(passwordEncoder.encode(password));
+				registerRepo.setPassword(password);
 				registerRepo.setUpdatedDate(LocalDateTime.now());
 				registerRepo.setUpdatedBy(email);
 				logger.debug("Update User Ends");
