@@ -183,4 +183,13 @@ public class LoginController {
 		}
 	}
 	
+	@GetMapping(value = "/health")
+	public ResponseEntity<?> health() throws Exception {
+	    try {
+	        return ResponseEntity.status(200).body("Ok");
+	    } catch (Exception e) {
+	        return (ResponseEntity<?>) ResponseEntity.internalServerError().body(e.getMessage());
+	    }
+	}
+	
 }
