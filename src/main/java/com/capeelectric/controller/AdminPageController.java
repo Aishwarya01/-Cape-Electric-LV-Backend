@@ -63,7 +63,7 @@ public class AdminPageController {
 							+ "/generateOtp" + ";email=" + register.getUsername());
 		} else {
 			awsEmailService.sendEmail(register.getUsername(),
-					"Your Registration has not Approved, So You Can't Access SOLVE for Safety App");
+					"Your Registration has not Approved since the facility is available only for engineers who completed training with SOLVE");
 		}
 		return new ResponseEntity<String>("Successfully Updated RegisterPermission", HttpStatus.OK);
 	}
