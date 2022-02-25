@@ -26,7 +26,7 @@ import com.capeelectric.service.impl.CountryDetailServiceImpl;
 @ExtendWith(MockitoExtension.class)
 public class CountryDetailsControllerTest {
 	@InjectMocks
-	private CountryDetailsController countrydetailsController;
+	private CountryStateListController countrydetailsController;
 	@MockBean
 	private CountryDetailServiceImpl countrydetailsServiceImpl;
 	@MockBean

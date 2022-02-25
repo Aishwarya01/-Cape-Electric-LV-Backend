@@ -21,7 +21,7 @@ import com.capeelectric.model.Site;
 import com.capeelectric.service.SiteService;
 
 @RestController()
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v2")
 public class SiteController {        
 	private static final Logger logger = LoggerFactory.getLogger(SiteController.class);
 

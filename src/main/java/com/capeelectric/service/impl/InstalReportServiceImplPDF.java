@@ -615,11 +615,10 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 					}
 				}
 
-				Paragraph paragraph13 = new Paragraph("Designer: 2", font10N);
-				document.add(paragraph13);
-
 				for (SignatorDetails arr : convertion) {
 					if (arr.getSignatorRole().equalsIgnoreCase("designer2")) {
+						Paragraph paragraph13 = new Paragraph("Designer: 2", font10N);
+						document.add(paragraph13);
 						declarationDesigner2(document, arr);
 					}
 				}
@@ -719,7 +718,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				signatories.setWidthPercentage(100);
 				signatories.getDefaultCell().setBorder(0);
 
-				PdfPCell section4 = new PdfPCell(new Paragraph("Section - 4: Details of the designers",
+				PdfPCell section4 = new PdfPCell(new Paragraph("Section - 4: Details of the Designers",
 						new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD)));
 				section4.setBackgroundColor(new GrayColor(0.82f));
 //				section4.setFixedHeight(30f);
@@ -783,7 +782,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				contractor.setWidthPercentage(100);
 				contractor.getDefaultCell().setBorder(0);
 
-				PdfPCell section5 = new PdfPCell(new Paragraph("Section - 5: Details of the contactors",
+				PdfPCell section5 = new PdfPCell(new Paragraph("Section - 5: Details of the Contractors",
 						new Font(BaseFont.createFont(), 11, Font.NORMAL | Font.BOLD)));
 				section5.setBackgroundColor(new GrayColor(0.82f));
 //				section5.setFixedHeight(30f);
