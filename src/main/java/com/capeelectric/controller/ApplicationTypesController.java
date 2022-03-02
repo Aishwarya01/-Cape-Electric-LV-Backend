@@ -26,7 +26,7 @@ import com.capeelectric.service.ApplicationTypesService;
  *
  */
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v2")
 public class ApplicationTypesController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(ApplicationTypesController.class);

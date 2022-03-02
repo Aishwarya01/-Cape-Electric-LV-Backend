@@ -19,7 +19,7 @@ import com.capeelectric.model.ObservationComponent;
 import com.capeelectric.service.ObservationService;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api/v2")
 public class ObservationController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ObservationController.class);

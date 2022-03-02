@@ -79,8 +79,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 						"/api/v2/retrieveAllRegistration",
 						"/api/v2/updatePermission/**",
 						"/api/v2/retrieveUserNameFromRegister/**",
-						"/api/v1/retrieveSiteName/**",
-						"/api/v2/retrieveLocationDetails/**")
+						"/api/v2/retrieveSiteName/**",
+						"/api/v2/retrieveLocationDetails/**",
+						"/api/v2/health")
 				.permitAll().antMatchers(HttpMethod.OPTIONS, "/**").permitAll().
 				// all other requests need to be authenticated
 				anyRequest().authenticated().and().

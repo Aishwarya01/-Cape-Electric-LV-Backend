@@ -26,7 +26,7 @@ import com.capeelectric.util.SendReplyComments;
  *
  */
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v2")
 public class InspectionController {
 
 	private static final Logger logger = LoggerFactory.getLogger(InspectionController.class);
