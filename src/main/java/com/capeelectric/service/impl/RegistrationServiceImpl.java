@@ -9,7 +9,10 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +22,11 @@ import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
+import com.capeelectric.model.Customer;
+import com.capeelectric.model.PaymentResponseDetails;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.RegisteredLicense;
+import com.capeelectric.repository.RegisteredLicenseRepository;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
@@ -50,6 +57,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 	
 	@Autowired
 	private UserFullName userFullName;
+	
+	@Autowired
+	private RegisteredLicenseRepository registeredLicenseRepository;
 	
 	@Override
 	public Register addRegistration(Register register) throws RegistrationException {
@@ -344,5 +354,76 @@ public class RegistrationServiceImpl implements RegistrationService {
 		// TODO Auto-generated method stub
 		Optional<Register> registerDetailsFromDB = registerRepository.findByUsername(userName);
 		return registerDetailsFromDB.isPresent() ? registerDetailsFromDB.get().getUsername(): "";
+	}
+
+	@Override
+	public ResponseEntity<String> addPaymentDetails(Customer customer) throws Exception {
+		ResponseEntity<String> sendOtpResponse = null;
+
+		Optional<Register> registerInfo = registerRepository.findByUsername(customer.getEmail());
+		RegisteredLicense registeredDetails = new RegisteredLicense();
+		registeredDetails.setPaymentPhoneNo(customer.getPhoneNumber());
+		registeredDetails.setNoOfLicense(customer.getNoofLicense());
+		registeredDetails.setLicenseCost(customer.getAmount());
+		registeredDetails.setPaymentStatus("oderCreated");
+		registeredDetails.setRegister(registerInfo.get());
+		registeredDetails.setRegister(registerInfo.get());
+		registeredDetails.setRegister(registerInfo.get());
+		registeredDetails.setCreatedDate(LocalDateTime.now());
+		registeredDetails.setUpdatedDate(LocalDateTime.now());
+		customer.setInspectorRegisterId(registeredLicenseRepository.save(registeredDetails).getRegisteredLicenseId());
+		logger.debug("order_details added in DB");
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<Customer> entity = new HttpEntity<Customer>(customer, headers);
+		try {
+			logger.debug("order_details added in DB");
+			sendOtpResponse = restTemplate.exchange("http://localhost:5005/api/v1/createPayment", HttpMethod.POST,
+					entity, String.class);
+		} catch (Exception e) {
+			logger.error("order_details failed in DB" + e.getMessage());
+			throw new Exception("RazoryPay Api service call failed: " + e.getMessage());
+		}
+		return sendOtpResponse;
+	}
+
+	@Override
+	public ResponseEntity<String> getPaymentStauts(PaymentResponseDetails paymentResponseDetails)
+			throws Exception {
+		ResponseEntity<String> sendOtpResponse = null;
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		// set your entity to send
+		HttpEntity<String> entity = new HttpEntity<String>(paymentResponseDetails.getOrderId(), headers);
+
+		try {
+			sendOtpResponse = restTemplate.exchange("http://localhost:5005/api/v1/fetchOrder/" + paymentResponseDetails.getOrderId(),
+					HttpMethod.GET, entity, String.class);
+		} catch (Exception e) {
+			logger.error("order_details failed :" + e.getMessage());
+			throw new Exception("RazoryPay Api service call failed: " + e.getMessage());
+		}
+		Optional<RegisteredLicense> registeredLicenseDetails = registeredLicenseRepository
+				.findById(paymentResponseDetails.getInspectorRegisterdId());
+
+		if (registeredLicenseDetails.isPresent() && !sendOtpResponse.equals(null)) {
+
+			registeredLicenseDetails.get().setPaymentFailedDescription(paymentResponseDetails.getDescriptionOffailedPayment());
+
+			if (sendOtpResponse.getBody().equalsIgnoreCase("attempted")) {
+				registeredLicenseDetails.get().setPaymentStatus(sendOtpResponse.getBody());
+			} else {
+				registeredLicenseDetails.get().setPaymentStatus(sendOtpResponse.getBody());
+				
+			}
+			registeredLicenseDetails.get().setUpdatedDate(LocalDateTime.now());
+			registeredLicenseDetails.get().setOrderId(paymentResponseDetails.getOrderId());
+			registeredLicenseRepository.save(registeredLicenseDetails.get());
+		}
+
+		return sendOtpResponse;
 	}
 }

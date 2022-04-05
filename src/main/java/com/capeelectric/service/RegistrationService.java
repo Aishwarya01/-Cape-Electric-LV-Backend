@@ -4,9 +4,13 @@ package com.capeelectric.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
+
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
+import com.capeelectric.model.Customer;
+import com.capeelectric.model.PaymentResponseDetails;
 import com.capeelectric.model.Register;
 import com.capeelectric.request.RegisterPermissionRequest;
 
@@ -39,5 +43,9 @@ public interface RegistrationService {
 	public List<Register> retrieveAllRegistration() throws RegistrationException;
 	
 	public String retrieveUserNameFromRegister(String userName) throws RegistrationException;
+
+	public ResponseEntity<String> addPaymentDetails(Customer customer) throws Exception;
+
+	public ResponseEntity<String> getPaymentStauts(PaymentResponseDetails paymentResponseDetails)throws Exception;
 
 }

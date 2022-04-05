@@ -10,7 +10,11 @@ import javax.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +23,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegistrationException;
+import com.capeelectric.model.Customer;
+import com.capeelectric.model.PaymentResponseDetails;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.RegisteredLicense;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.AWSEmailService;
 import com.capeelectric.util.Constants;
@@ -45,6 +53,9 @@ public class RegistrationController {
 
 	@Autowired
 	private RegistrationService registrationService;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 
 	@PostMapping("/addRegistration")
 	public ResponseEntity<Void> addRegistration(@RequestBody Register register)
@@ -140,5 +151,19 @@ public class RegistrationController {
 	public String retrieveUserNameFromRegister(@PathVariable String userName) throws RegistrationException {
 		logger.debug("called retrieveUserName function UserName : {}", userName);
 		return registrationService.retrieveUserNameFromRegister(userName);
+	}
+	
+	@PostMapping("/createPayment")
+	public ResponseEntity<String> createPayment(@RequestBody Customer customer)
+			throws RegistrationException, Exception {
+		logger.debug("called createPayment function UserName : {}", customer.getEmail());
+		return registrationService.addPaymentDetails(customer);
+	}
+
+	@PostMapping("/verifyPayment")
+	public ResponseEntity<String> verifyPayment(@RequestBody PaymentResponseDetails paymentResponseDetails) throws RegistrationException, Exception {
+		logger.debug("called verifyPayment function OrderID : {}", paymentResponseDetails.getOrderId());
+		return registrationService.getPaymentStauts(paymentResponseDetails);
+
 	}
 }
