@@ -44,6 +44,14 @@ public class SiteController {
 		logger.debug("Ended updateSite function");
 		return new ResponseEntity<String>("Site Successfully Updated", HttpStatus.OK);
 	}
+	
+	@PutMapping("/updateSite/{siteId}")
+	public ResponseEntity<String> updateSiteStatus(@PathVariable Integer siteId) throws CompanyDetailsException {
+		logger.debug("called updateSiteStatus function Site : {}", siteId);
+		siteService.updateSiteStatus(siteId);
+		logger.debug("Ended updateSiteStatus function");
+		return new ResponseEntity<String>("Site Successfully Updated with InActive status", HttpStatus.OK);
+	}
 
 	@DeleteMapping("/deleteSite/{siteId}")
 	public ResponseEntity<String> deleteSite(@PathVariable Integer siteId) throws CompanyDetailsException {
