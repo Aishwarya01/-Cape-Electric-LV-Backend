@@ -10,7 +10,7 @@ public interface SiteService {
 
 	public void updateSite(Site site) throws CompanyDetailsException;
 	
-	public void updateSiteStatus(Integer siteId) throws CompanyDetailsException;
+	public void updateSiteStatus(Site site) throws CompanyDetailsException;
 
 	public void deleteSite(Integer site) throws CompanyDetailsException;
 

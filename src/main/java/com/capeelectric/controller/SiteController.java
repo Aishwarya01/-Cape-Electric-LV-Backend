@@ -45,10 +45,10 @@ public class SiteController {
 		return new ResponseEntity<String>("Site Successfully Updated", HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateSite/{siteId}")
-	public ResponseEntity<String> updateSiteStatus(@PathVariable Integer siteId) throws CompanyDetailsException {
-		logger.debug("called updateSiteStatus function Site : {}", siteId);
-		siteService.updateSiteStatus(siteId);
+	@PutMapping("/updateSiteStatus")
+	public ResponseEntity<String> updateSiteStatus(@RequestBody Site site) throws CompanyDetailsException {
+		logger.debug("called updateSiteStatus function UserName: {},Site : {}", site.getUserName(), site.getSite());
+		siteService.updateSiteStatus(site);
 		logger.debug("Ended updateSiteStatus function");
 		return new ResponseEntity<String>("Site Successfully Updated with InActive status", HttpStatus.OK);
 	}

@@ -41,7 +41,7 @@ public class SiteServiceImpl implements SiteService {
 	@Autowired
 	private RegistrationRepository registrationRepository;
 	
-	private Site site;
+	private Site siteData;
 
 	/*
 	 * @param Site addSite method to c comparing department client_name, comparing
@@ -123,17 +123,17 @@ public class SiteServiceImpl implements SiteService {
 	}
 	
 	@Override
-	public void updateSiteStatus(Integer siteId) throws CompanyDetailsException {
+	public void updateSiteStatus(Site site) throws CompanyDetailsException {
 		
-		if (siteId != null && siteId != 0) {
-			List<Site> siteRepo = siteRepository.findBysiteId(siteId);
+		if (site.getUserName() != null && site.getSiteId() != null) {
+			List<Site> siteRepo = siteRepository.findBysiteId(site.getSiteId());
 			
 			if (siteRepo != null && !siteRepo.isEmpty()) {
-				site = siteRepo.get(0);
-				site.setStatus("InActive");
-//				site.setUpdatedDate(LocalDateTime.now());
-//				site.setUpdatedBy(userName.findByUserName(site.getUserName()));				
-				siteRepository.save(site);
+				siteData = siteRepo.get(0);
+				siteData.setStatus("InActive");
+				siteData.setUpdatedDate(LocalDateTime.now());
+				siteData.setUpdatedBy(userName.findByUserName(site.getUserName()));				
+				siteRepository.save(siteData);
 				logger.debug("Site Successfully Updated in DB");
 			
 			} else {
