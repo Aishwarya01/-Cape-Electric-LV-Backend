@@ -132,10 +132,30 @@ public class SiteServiceImpl implements SiteService {
 				siteData = siteRepo.get(0);
 				siteData.setStatus("InActive");
 				siteData.setUpdatedDate(LocalDateTime.now());
-				siteData.setUpdatedBy(userName.findByUserName(site.getUserName()));				
-				siteRepository.save(siteData);
-				logger.debug("Site Successfully Updated in DB");
-			
+				siteData.setUpdatedBy(userName.findByUserName(site.getUserName()));	
+				
+				Optional<Register> registerRepo = registrationRepository.findByUsername(siteData.getUserName());
+				if(registerRepo.isPresent()) { 
+					Register registerData = registerRepo.get();
+					if(registerData.getNoOfLicence() != null) {
+						registerData.setNoOfLicence(String.valueOf(Integer.parseInt(registerData.getNoOfLicence()) + 1));
+					}
+					else {
+						registerData.setNoOfLicence(String.valueOf(1));	
+					}
+					registerData.setUpdatedDate(LocalDateTime.now());
+					registerData.setUpdatedBy(siteData.getUpdatedBy());
+					siteRepository.save(siteData);
+					logger.debug("Site Successfully Updated in DB with InActive status");
+					
+					registrationRepository.save(registerData);
+					logger.debug("License successfully updated for "+siteData.getUserName());
+				}
+				else {
+					logger.error("User doesn't exist");
+					throw new CompanyDetailsException("User doesn't exist");
+				}
+							
 			} else {
 				logger.error("Site not present");
 				throw new CompanyDetailsException("Site not present");

@@ -50,7 +50,7 @@ public class SiteController {
 		logger.debug("called updateSiteStatus function UserName: {},Site : {}", site.getUserName(), site.getSite());
 		siteService.updateSiteStatus(site);
 		logger.debug("Ended updateSiteStatus function");
-		return new ResponseEntity<String>("Site Successfully Updated with InActive status", HttpStatus.OK);
+		return new ResponseEntity<String>("Site has been successfully deleted", HttpStatus.OK);
 	}
 
 	@DeleteMapping("/deleteSite/{siteId}")
