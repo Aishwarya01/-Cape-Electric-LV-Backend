@@ -78,6 +78,9 @@ public class Site implements Serializable {
 	
 	@Column(name = "SITE_ASSIGNED_TO")
 	private String assignedTo;
+	
+	@Column(name = "STATUS")
+	private String status;
 
 	@Column(name = "CREATED_BY")
 	private String createdBy;
@@ -254,5 +257,15 @@ public class Site implements Serializable {
 	public void setSitePersons(Set<SitePersons> sitePersons) {
 		this.sitePersons = sitePersons;
 	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	
 	
 }

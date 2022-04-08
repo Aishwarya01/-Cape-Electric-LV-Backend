@@ -40,6 +40,8 @@ public class SiteServiceImpl implements SiteService {
 	
 	@Autowired
 	private RegistrationRepository registrationRepository;
+	
+	private Site siteData;
 
 	/*
 	 * @param Site addSite method to c comparing department client_name, comparing
@@ -54,6 +56,7 @@ public class SiteServiceImpl implements SiteService {
 			Optional<Site> siteRepo = siteRepository.findByUserNameAndSite(site.getUserName(), site.getSite());
 
 			if (!siteRepo.isPresent() || !siteRepo.get().getSite().equalsIgnoreCase(site.getSite())) {
+				site.setStatus("Active");
 				site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
 				site.setCreatedDate(LocalDateTime.now());
 				site.setUpdatedDate(LocalDateTime.now());
@@ -118,6 +121,51 @@ public class SiteServiceImpl implements SiteService {
 			throw new CompanyDetailsException("Invalid Inputs");
 		}
 	}
+	
+	@Override
+	public void updateSiteStatus(Site site) throws CompanyDetailsException {
+		
+		if (site.getUserName() != null && site.getSiteId() != null) {
+			List<Site> siteRepo = siteRepository.findBysiteId(site.getSiteId());
+			
+			if (siteRepo != null && !siteRepo.isEmpty()) {
+				siteData = siteRepo.get(0);
+				siteData.setStatus("InActive");
+				siteData.setUpdatedDate(LocalDateTime.now());
+				siteData.setUpdatedBy(userName.findByUserName(site.getUserName()));	
+				
+				Optional<Register> registerRepo = registrationRepository.findByUsername(siteData.getUserName());
+				if(registerRepo.isPresent()) { 
+					Register registerData = registerRepo.get();
+					if(registerData.getNoOfLicence() != null) {
+						registerData.setNoOfLicence(String.valueOf(Integer.parseInt(registerData.getNoOfLicence()) + 1));
+					}
+					else {
+						registerData.setNoOfLicence(String.valueOf(1));	
+					}
+					registerData.setUpdatedDate(LocalDateTime.now());
+					registerData.setUpdatedBy(siteData.getUpdatedBy());
+					siteRepository.save(siteData);
+					logger.debug("Site Successfully Updated in DB with InActive status");
+					
+					registrationRepository.save(registerData);
+					logger.debug("License successfully updated for "+siteData.getUserName());
+				}
+				else {
+					logger.error("User doesn't exist");
+					throw new CompanyDetailsException("User doesn't exist");
+				}
+							
+			} else {
+				logger.error("Site not present");
+				throw new CompanyDetailsException("Site not present");
+			}
+		} else {
+			logger.error("Invalid Inputs");
+			throw new CompanyDetailsException("Invalid Inputs");
+		}
+	}
+	
 
 	/*
 	 * @param siteId deleteSite method to comparing siteId in site_table and @param
