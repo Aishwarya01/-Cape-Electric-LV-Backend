@@ -611,16 +611,15 @@ public class PrintServiceImpl implements PrintService {
 				byte[] imageByte = decoder.decode(signature);
 				String s = new String(imageByte);
 				String inspectedSignature_list[] = s.split(",");
-				String inspectedSignature = inspectedSignature_list[0];
 				String inspectedSignature1 = inspectedSignature_list[1];
 				byte[] inspetedImageByte = decoder.decode(inspectedSignature1);
-				//conversion code for signature in Autherized
+
+				// conversion code for signature in Autherized
 				String autherizedsignature = declaration11.getSignature();
 				Base64 autherizeddecoder = new Base64();
 				byte[] autherizedimageByte = autherizeddecoder.decode(autherizedsignature);
 				String autherizedString = new String(autherizedimageByte);
 				String autherizedsignature_list[] = autherizedString.split(",");
-				String autherizedSignature = autherizedsignature_list[0];
 				String autherizedSignature1 = autherizedsignature_list[1];
 				byte[] autherizedImageByte = decoder.decode(autherizedSignature1);
 
@@ -630,9 +629,10 @@ public class PrintServiceImpl implements PrintService {
 				document.add(table);
 				addRow1(table1, "Signature	", inspetedImageByte, "Signature	", autherizedImageByte);
 				document.add(table1);
-				addRow2(table2, "Position", declaration.getPosition(), "Position", declaration11.getPosition());
-				addRow2(table2, "Address", declaration.getAddress(), "Address", declaration11.getAddress());
-				addRow2(table2, "Date", declaration.getDate(), "Date", declaration11.getDate());
+
+				addRow(table2, "Position", declaration.getPosition(), "Position", declaration11.getPosition());
+				addRow(table2, "Address", declaration.getAddress(), "Address", declaration11.getAddress());
+				addRow(table2, "Date", declaration.getDate(), "Date", declaration11.getDate());
 				document.add(table2);
 
 				if (comments.getViewerUserName() != null && comments.getInspectorUserName() != null) {
@@ -867,26 +867,6 @@ public class PrintServiceImpl implements PrintService {
 		table1.addCell(valueCell1);
 		table1.addCell(valueCell2);
 		table1.addCell(valueCell3);
-
-	}
-
-	private void addRow2(PdfPTable table2, String string, String position, String string2, String position2)
-			throws DocumentException, IOException {
-		Font font = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
-		PdfPCell nameCell = new PdfPCell(new Paragraph(string, font));
-		PdfPCell valueCell1 = new PdfPCell(new Paragraph(position, new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string2, font));
-		PdfPCell valueCell3 = new PdfPCell(new Paragraph(position2, new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-		nameCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
-		valueCell2.setHorizontalAlignment(Element.ALIGN_CENTER);
-		valueCell3.setHorizontalAlignment(Element.ALIGN_CENTER);
-		nameCell.setGrayFill(0.92f);
-		valueCell2.setGrayFill(0.92f);
-		table2.addCell(nameCell);
-		table2.addCell(valueCell1);
-		table2.addCell(valueCell2);
-		table2.addCell(valueCell3);
 
 	}
 
