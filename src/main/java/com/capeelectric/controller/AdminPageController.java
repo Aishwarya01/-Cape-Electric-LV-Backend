@@ -9,6 +9,7 @@ import javax.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,7 +26,6 @@ import com.capeelectric.model.Register;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.AWSEmailService;
-import com.capeelectric.util.Constants;
 import com.capeelectric.util.Utility;
 
 @RestController
@@ -36,6 +36,9 @@ public class AdminPageController {
 
 	@Autowired
 	private AWSEmailService awsEmailService;
+	
+	@Value("${app.web.domain}")
+	private String webUrl;
 
 	@Autowired
 	private RegistrationService registrationService;
@@ -59,7 +62,7 @@ public class AdminPageController {
 							+ "\n" + "\n" 
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-											: Constants.EMAIL_SUBJECT_URL_AWS)
+											: "https://www."+webUrl)
 							+ "/generateOtp" + ";email=" + register.getUsername());
 		} else {
 			awsEmailService.sendEmail(register.getUsername(),
