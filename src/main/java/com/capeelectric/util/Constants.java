@@ -170,4 +170,6 @@ public class Constants {
 	public static final String EMAIL_SUBJECT = "SOLVE Electrical Safety Digital TIC Platform";
 	
 	public static final String EMAIL_ADMIN_SUBJECT = "Approval For Inspector";
+	
+	public static final String EMAIL_HOST_NAME = "email-smtp.ap-south-1.amazonaws.com";
 }

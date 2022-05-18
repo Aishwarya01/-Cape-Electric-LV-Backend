@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -25,6 +26,9 @@ public class SendReplyComments {
 
 	@Autowired
 	private RegistrationRepository registrationRepo;
+	
+	@Value("${app.web.domain}")
+	private String webUrl;
 
 	public void sendComments(String userName) throws RegistrationException, Exception {
 		Optional<Register> registerRepo = registrationRepo.findByUsername(userName);
@@ -38,7 +42,7 @@ public class SendReplyComments {
 					Constants.EMAIL_SEND_COMMENT_MSG + "\n" + "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-									: Constants.EMAIL_SUBJECT_URL_AWS)
+									: "https://www."+webUrl)
 							+ "/login");
 		} else {
 			logger.debug("Email Id doesn't exist!");
@@ -58,7 +62,7 @@ public class SendReplyComments {
 					Constants.EMAIL_REPLY_COMMENT_MSG + "\n" + "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-									: Constants.EMAIL_SUBJECT_URL_AWS)
+									: "https://www."+webUrl)
 							+ "/login");
 		} else {
 			logger.debug("Given Inspector UserName MisMatched");
@@ -82,7 +86,7 @@ public class SendReplyComments {
 						Constants.EMAIL_REJECT_COMMENT_MSG + "\n"
 								+ (resetUrl.contains("localhost:5000")
 										? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-										: Constants.EMAIL_SUBJECT_URL_AWS)
+										: "https://www."+webUrl)
 								+ "/login");
 			}
 

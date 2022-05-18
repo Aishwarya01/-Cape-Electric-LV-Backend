@@ -10,6 +10,7 @@ import javax.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +46,9 @@ public class RegistrationController {
 
 	@Autowired
 	private RegistrationService registrationService;
+	
+	@Value("${app.web.domain}")
+	private String webUrl;
 
 	@PostMapping("/addRegistration")
 	public ResponseEntity<Void> addRegistration(@RequestBody Register register)
@@ -58,7 +62,7 @@ public class RegistrationController {
 			awsEmailService.sendEmail(register.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
 					+ (resetUrl.contains("localhost:5000")
 							? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-							: Constants.EMAIL_SUBJECT_URL_AWS)
+							: "https://www."+webUrl)
 					+ "/generateOtp" + ";email=" + register.getUsername());
 			logger.debug("AwsEmailService call Successfully Ended");
 		} else {
@@ -68,7 +72,7 @@ public class RegistrationController {
 							+ register.getUsername() + ". You can login to admin Portal with this link " + "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-									: Constants.EMAIL_SUBJECT_ADMIN_URL_AWS)
+									: "https://admin."+webUrl)
 							+ "/admin");
 			logger.debug("AwsEmailService call Successfully Ended");
 		}
@@ -87,7 +91,7 @@ public class RegistrationController {
 		awsEmailService.sendEmail(createdRegister.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
 				+ (resetUrl.contains("localhost:5000")
 						? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-						: Constants.EMAIL_SUBJECT_URL_AWS)
+						: "https://www."+webUrl)
 				+ "/generateOtp" + ";email=" + register.getUsername());
 		logger.debug("AwsEmailService Successfully call Ended");
 		return ResponseEntity.created(uri).build();
@@ -106,7 +110,7 @@ public class RegistrationController {
 				isLicenseUpdate);
 		registrationService.updateRegistration(register, isLicenseUpdate);
 		logger.debug("AwsEmailService call started for Send Email");
-		awsEmailService.sendEmail(register.getUsername(), "You have successfully updated your profile");
+		awsEmailService.sendEmail(register.getUsername(), (isLicenseUpdate ? ("Inspector ("+register.getAssignedBy()+") have modified the Site Details for your profile"): "FYI: You have successfully updated your profile" ));
 		logger.debug("AwsEmailService Successfully call Ended");
 		return new ResponseEntity<String>("Successfully Updated Registration", HttpStatus.OK);
 	}

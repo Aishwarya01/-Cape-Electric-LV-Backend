@@ -84,7 +84,7 @@ public class AWSEmailService {
 
 			Properties props = new Properties();
 			props.put("mail.transport.protocol", "smtp");
-			props.put("mail.smtp.host", emailConfig.getSMTP_HOST_NAME());
+			props.put("mail.smtp.host", Constants.EMAIL_HOST_NAME);
 			props.put("mail.smtp.auth", "false");
 			props.put("mail.smtp.starttls.enable", "true");
 
@@ -100,7 +100,7 @@ public class AWSEmailService {
 			message.setSentDate(new Date());
 			message.setFrom(new InternetAddress(FROM));
 			message.setRecipient(Message.RecipientType.TO, new InternetAddress(TO));
-			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT),
+			transport.connect(Constants.EMAIL_HOST_NAME, Integer.valueOf(Constants.AWS_EMAIL_PORT),
 					emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
 			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 			transport.close();
@@ -117,7 +117,7 @@ public class AWSEmailService {
 
 			Properties props = new Properties();
 			props.put("mail.transport.protocol", "smtp");
-			props.put("mail.smtp.host", emailConfig.getSMTP_HOST_NAME());
+			props.put("mail.smtp.host", Constants.EMAIL_HOST_NAME);
 			props.put("mail.smtp.auth", "false");
 			props.put("mail.smtp.starttls.enable", "true");
 
@@ -133,7 +133,7 @@ public class AWSEmailService {
 			message.setSentDate(new Date());
 			message.setFrom(new InternetAddress(FROM));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(TO));
-			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT),
+			transport.connect(Constants.EMAIL_HOST_NAME, Integer.valueOf(Constants.AWS_EMAIL_PORT),
 					emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
 			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 			transport.close();
@@ -154,7 +154,7 @@ public class AWSEmailService {
 			logger.debug("Inside AWS Email");
 			Properties props = new Properties();
 			props.put("mail.transport.protocol", "smtp");
-			props.put("mail.smtp.host", emailConfig.getSMTP_HOST_NAME());
+			props.put("mail.smtp.host", Constants.EMAIL_HOST_NAME);
 			props.put("mail.smtp.auth", "false");
 			props.put("mail.smtp.starttls.enable", "true");
 
@@ -171,7 +171,7 @@ public class AWSEmailService {
 			message.setFrom(new InternetAddress(FROM));
 			message.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
 			message.addRecipient(Message.RecipientType.CC, new InternetAddress(ccEmail));
-			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT),
+			transport.connect(Constants.EMAIL_HOST_NAME, Integer.valueOf(Constants.AWS_EMAIL_PORT),
 					emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
 			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 			transport.sendMessage(message, message.getRecipients(Message.RecipientType.CC));
@@ -197,7 +197,7 @@ public class AWSEmailService {
 		String from = FROM;
 		Properties props = new Properties();
 		props.put("mail.transport.protocol", "smtp");
-		props.put("mail.smtp.host", emailConfig.getSMTP_HOST_NAME());
+		props.put("mail.smtp.host", Constants.EMAIL_HOST_NAME);
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
 		Session mailSession = Session.getDefaultInstance(props);
@@ -244,7 +244,7 @@ public class AWSEmailService {
 			messageBodyPart.setFileName(filename);
 			multipart.addBodyPart(messageBodyPart);
 			message.setContent(multipart);
-			transport.connect(emailConfig.getSMTP_HOST_NAME(), Integer.valueOf(Constants.AWS_EMAIL_PORT),
+			transport.connect(Constants.EMAIL_HOST_NAME, Integer.valueOf(Constants.AWS_EMAIL_PORT),
 					emailConfig.getSMTP_AUTH_USER(), emailConfig.getSMTP_AUTH_PWD());
 			transport.sendMessage(message, message.getRecipients(Message.RecipientType.TO));
 			transport.close();

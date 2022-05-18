@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
@@ -44,10 +46,11 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 	@Autowired
 	private SiteRepository siteRepository;
 
-	public List<ReportDetails> printBasicInfromation(String userName, Integer siteId, Optional<ReportDetails> reportDetailsRepo) throws InstalReportException {
-	
-		logger.debug("called printBasicInfromation function userName: {},siteId : {}", userName,siteId);
-		
+	public List<ReportDetails> printBasicInfromation(String userName, Integer siteId,
+			Optional<ReportDetails> reportDetailsRepo) throws InstalReportException {
+
+		logger.debug("called printBasicInfromation function userName: {},siteId : {}", userName, siteId);
+
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 
 			Document document = new Document(PageSize.A4, 36, 36, 50, 36);
@@ -1008,8 +1011,17 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 		table2.setWidthPercentage(100);
 		table2.getDefaultCell().setBorder(0);
 
-		addRow1(table2, "Signature:", observation.getDeclarationSignature(), "Date:", observation.getDeclarationDate(),
-				"Name:", observation.getDeclarationName());
+		String signature = observation.getDeclarationSignature();
+		Base64 decoder = new Base64();
+		byte[] imageByte1 = decoder.decode(signature);
+		String s = new String(imageByte1);
+		String signature_list[] = s.split(",");
+		String sL = signature_list[0];
+		String sL1 = signature_list[1];
+		byte[] imageByte = decoder.decode(sL1);
+
+		addRow1(table2, "Signature:", imageByte, "Date:", observation.getDeclarationDate(), "Name:",
+				observation.getDeclarationName());
 		document.add(table2);
 
 	}
@@ -1059,8 +1071,17 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 		table4.setWidthPercentage(100);
 		table4.getDefaultCell().setBorder(0);
 
-		addRow1(table4, "Signature: ", observation6.getDeclarationSignature(), "Date: ",
-				observation6.getDeclarationDate(), "Name: ", observation6.getDeclarationName());
+		String signature = observation6.getDeclarationSignature();
+		Base64 decoder = new Base64();
+		byte[] imageByte1 = decoder.decode(signature);
+		String s = new String(imageByte1);
+		String signature_list[] = s.split(",");
+		String sL = signature_list[0];
+		String sL1 = signature_list[1];
+		byte[] imageByte = decoder.decode(sL1);
+
+		addRow1(table4, "Signature: ", imageByte, "Date: ", observation6.getDeclarationDate(), "Name: ",
+				observation6.getDeclarationName());
 		document.add(table4);
 	}
 
@@ -1073,8 +1094,17 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 		table3.setWidthPercentage(100);
 		table3.getDefaultCell().setBorder(0);
 
-		addRow1(table3, "Signature: ", observation5.getDeclarationSignature(), "Date: ",
-				observation5.getDeclarationDate(), "Name: ", observation5.getDeclarationName());
+		String signature = observation5.getDeclarationSignature();
+		Base64 decoder = new Base64();
+		byte[] imageByte1 = decoder.decode(signature);
+		String s = new String(imageByte1);
+		String signature_list[] = s.split(",");
+		String sL = signature_list[0];
+		String sL1 = signature_list[1];
+		byte[] imageByte = decoder.decode(sL1);
+
+		addRow1(table3, "Signature: ", imageByte, "Date: ", observation5.getDeclarationDate(), "Name: ",
+				observation5.getDeclarationName());
 		document.add(table3);
 	}
 
@@ -1087,18 +1117,31 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 		table.setWidthPercentage(100);
 		table.getDefaultCell().setBorder(0);
 
-		addRow1(table, "Signature: ", observation.getDeclarationSignature(), "Date: ", observation.getDeclarationDate(),
-				"Name: ", observation.getDeclarationName());
+		String signature = observation.getDeclarationSignature();
+		Base64 decoder = new Base64();
+		byte[] imageByte1 = decoder.decode(signature);
+		String s = new String(imageByte1);
+		String signature_list[] = s.split(",");
+		String sL = signature_list[0];
+		String sL1 = signature_list[1];
+		byte[] imageByte = decoder.decode(sL1);
+
+		addRow1(table, "Signature: ", imageByte, "Date: ", observation.getDeclarationDate(), "Name: ",
+				observation.getDeclarationName());
 
 		document.add(table);
 
 	}
 
-	private void addRow1(PdfPTable table, String string1, String string2, String string3, String string4,
+	private void addRow1(PdfPTable table, String string1, byte[] imageByte, String string3, String string4,
 			String string5, String string6) throws DocumentException, IOException {
 
+		Image image = Image.getInstance(imageByte);
+		image.setAbsolutePosition(0, 0);
+		image.scaleToFit(30, 50);
+
 		PdfPCell nameCell = new PdfPCell(new Paragraph(string1, new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-		PdfPCell valueCell1 = new PdfPCell(new Paragraph(string2, new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+		PdfPCell valueCell1 = new PdfPCell(image);
 		PdfPCell valueCell2 = new PdfPCell(new Paragraph(string3, new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 		PdfPCell valueCell3 = new PdfPCell(new Paragraph(string4, new Font(BaseFont.createFont(), 10, Font.NORMAL)));
 		PdfPCell valueCell4 = new PdfPCell(new Paragraph(string5, new Font(BaseFont.createFont(), 10, Font.NORMAL)));
@@ -1108,8 +1151,8 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 		nameCell.setBorder(0);
 //		nameCell.setBackgroundColor(new GrayColor(0.85f));
 
-		valueCell1.setHorizontalAlignment(Element.ALIGN_JUSTIFIED);
-		valueCell1.setBorder(0);
+		valueCell1.setHorizontalAlignment(Element.ALIGN_CENTER);
+		// valueCell1.setBorder(0);
 //		valueCell1.setBackgroundColor(new GrayColor(0.85f));
 
 		valueCell2.setHorizontalAlignment(Element.ALIGN_RIGHT);
