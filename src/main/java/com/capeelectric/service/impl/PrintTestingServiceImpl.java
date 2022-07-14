@@ -757,7 +757,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 
-		cell1 = new PdfPCell(new Phrase("Breaking capacity", font23));
+		cell1 = new PdfPCell(new Phrase("Breaking capacity (KA)", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -767,7 +767,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 
-		cell1 = new PdfPCell(new Phrase("Shot circuit setting", font23));
+		cell1 = new PdfPCell(new Phrase("Short circuit setting  (A)", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -777,7 +777,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 
-		cell1 = new PdfPCell(new Phrase("E and F setting", font23));
+		cell1 = new PdfPCell(new Phrase("E and F setting  (A)", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -803,7 +803,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 
-		cell1 = new PdfPCell(new Phrase("Cross sectional area", font23));
+		cell1 = new PdfPCell(new Phrase("Cross sectional area (sq.mm)", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setRowspan(3);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -845,7 +845,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
 
-		cell1 = new PdfPCell(new Phrase("Length", font23));
+		cell1 = new PdfPCell(new Phrase("Length (meter)", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
@@ -995,7 +995,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1 = new PdfPCell(new Phrase(IR9, font23));
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase(" Voltage", font23));
+		cell1 = new PdfPCell(new Phrase(" Voltage (v)", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(3);
@@ -1038,7 +1038,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1 = new PdfPCell(new Phrase(V9, font23));
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase("Fault loop impedance", font23));
+		cell1 = new PdfPCell(new Phrase("Fault loop impedance (ohms) ", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(3);
@@ -1082,7 +1082,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1 = new PdfPCell(new Phrase(FC9, font27));
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase("Disconnection Time", font23));
+		cell1 = new PdfPCell(new Phrase("Disconnection Time (s)", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(3);
@@ -1125,7 +1125,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1 = new PdfPCell(new Phrase(DT9, font27));
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase("Actual Short circuit / fault current (Amps)", font23));
+		cell1 = new PdfPCell(new Phrase("Actual Short circuit / fault current (KA)", font23));
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(3);
@@ -1192,7 +1192,11 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(9);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase("Operating time IΔn", font23));
+		
+		Phrase operatingTime = new Phrase("Operating time I", font23);
+		operatingTime.add(new Phrase("dn",new Font(BaseFont.createFont(), 6, Font.NORMAL, BaseColor.BLACK)));
+		
+		cell1 = new PdfPCell(operatingTime);
 		cell1.setGrayFill(0.92f);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell1.setColspan(2);
@@ -1201,7 +1205,12 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 		cell1.setColspan(9);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table466.addCell(cell1);
-		cell1 = new PdfPCell(new Phrase("Operating time 5* IΔn", font23));
+		
+		Phrase operatingTimeFive = new Phrase("Operating time 5* I", font23);
+		operatingTimeFive.add(new Phrase("dn",new Font(BaseFont.createFont(), 6, Font.NORMAL, BaseColor.BLACK)));
+ 		 
+ 		
+		cell1 = new PdfPCell(operatingTimeFive);
 		cell1.setGrayFill(0.92f);
 		cell1.setColspan(2);
 		cell1.setHorizontalAlignment(Element.ALIGN_CENTER);
