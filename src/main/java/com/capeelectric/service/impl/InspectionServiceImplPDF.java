@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.model.Circuit;
 import com.capeelectric.model.ConsumerUnit;
+import com.capeelectric.model.InspectionOuterObservation;
 import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.IsolationCurrent;
 import com.capeelectric.model.PeriodicInspection;
@@ -152,6 +153,19 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						cell811.setBackgroundColor(new BaseColor(203, 183, 162));
 						cell811.setBorder(PdfPCell.NO_BORDER);
 						table1001.addCell(cell811);
+						for(InspectionOuterObservation outerObs: ipoInspection.getInspectionOuterObervation()) {
+							Font font6 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+							PdfPCell cell55 = new PdfPCell(new Paragraph("Observations :", font6));
+							cell55.setBorder(PdfPCell.NO_BORDER);
+							cell55.setGrayFill(0.92f);
+							table1001.addCell(cell55);
+							PdfPCell cell73 = new PdfPCell(new Paragraph(outerObs.getObservationDescription(), font6));
+							cell73.setGrayFill(0.92f);
+							cell73.setBorder(PdfPCell.NO_BORDER);
+							table1001.addCell(cell73);
+						}
+						
+						
 						document.add(table1001);
 
 						float[] pointColumnWidths4 = { 100F };
@@ -601,20 +615,6 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						cell26.setBorder(PdfPCell.NO_BORDER);
 						table4.addCell(cell26);
 
-						PdfPCell isolatorCellLabel = new PdfPCell(
-								new Paragraph("Isolator (Means to isolate the public supply system):",
-										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						isolatorCellLabel.setBackgroundColor(new GrayColor(0.93f));
-						isolatorCellLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
-						isolatorCellLabel.setBorder(PdfPCell.NO_BORDER);
-						table4.addCell(isolatorCellLabel);
-						PdfPCell isolatorCell = new PdfPCell(new Paragraph(ipoInspection.getIsolatePublicSupply(),
-								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						isolatorCell.setFixedHeight(10f);
-						isolatorCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						isolatorCell.setBackgroundColor(new GrayColor(0.93f));
-						isolatorCell.setBorder(PdfPCell.NO_BORDER);
-						table4.addCell(isolatorCell);
 						document.add(table4);
 
 						PdfPTable BasicPro = new PdfPTable(pointColumnWidths5);

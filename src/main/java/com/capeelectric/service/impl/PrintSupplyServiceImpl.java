@@ -18,6 +18,7 @@ import com.capeelectric.model.EarthingLocationReport;
 import com.capeelectric.model.InstalLocationReport;
 import com.capeelectric.model.SupplyCharacteristicComment;
 import com.capeelectric.model.SupplyCharacteristics;
+import com.capeelectric.model.SupplyOuterObservation;
 import com.capeelectric.model.SupplyParameters;
 import com.capeelectric.service.PrintSupplyService;
 import com.itextpdf.text.BaseColor;
@@ -527,8 +528,22 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				// need to show
 				// the data as based on installocation status
 				tableData(table8, instalLocationReport);
-
 				document.add(table8);
+				PdfPTable table9 = new PdfPTable(pointColumnWidths);
+				for(SupplyOuterObservation supplyOuterObs: supply.getSupplyOuterObservation()) {
+					if(supplyOuterObs.getObservationComponentDetails().equalsIgnoreCase("instalLocationReportOb")) {
+					PdfPCell cellObs = new PdfPCell(new Paragraph("Remarks/Observation :", font6));
+					cellObs.setBorder(PdfPCell.NO_BORDER);
+					cellObs.setGrayFill(0.92f);
+					table8.addCell(cellObs);
+					PdfPCell cell73 = new PdfPCell(new Paragraph(supplyOuterObs.getObservationDescription(), font6));
+					cell73.setGrayFill(0.92f);
+					cell73.setBorder(PdfPCell.NO_BORDER);
+					table8.addCell(cell73);
+					document.add(table9);
+					}
+				}
+				
 
 				document.newPage();
 
@@ -626,6 +641,20 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				table12.setSpacingAfter(10f); // Space after table
 				table12.setWidthPercentage(100);
 				table12.getDefaultCell().setBorder(0);
+				
+				for(SupplyOuterObservation supplyOuterObs: supply.getSupplyOuterObservation()) {
+					if(supplyOuterObs.getObservationComponentDetails().equalsIgnoreCase("bondingNoOfJointsOb")) {
+					PdfPCell cellObs = new PdfPCell(new Paragraph("Remarks/Observation :", font6));
+					cellObs.setBorder(PdfPCell.NO_BORDER);
+					cellObs.setGrayFill(0.92f);
+					table8.addCell(cellObs);
+					PdfPCell cell73 = new PdfPCell(new Paragraph(supplyOuterObs.getObservationDescription(), font6));
+					cell73.setGrayFill(0.92f);
+					cell73.setBorder(PdfPCell.NO_BORDER);
+					table8.addCell(cell73);
+					document.add(table12);
+					}
+				}
 
 				PdfPCell cell40 = new PdfPCell(
 						new Paragraph("Size of main protective earthing conductor (unit sq.mm):", font9));
@@ -688,6 +717,20 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				tableHeader1(table13);
 				TableData2(table13, earthingLocationReport);
 				document.add(table13);
+				PdfPTable tableObs = new PdfPTable(pointColumnWidths);
+				for(SupplyOuterObservation supplyOuterObs: supply.getSupplyOuterObservation()) {
+					if(supplyOuterObs.getObservationComponentDetails().equalsIgnoreCase("earthingNoOfJointsOb")) {
+					PdfPCell cellObs = new PdfPCell(new Paragraph("Remarks/Observation :", font6));
+					cellObs.setBorder(PdfPCell.NO_BORDER);
+					cellObs.setGrayFill(0.92f);
+					table8.addCell(cellObs);
+					PdfPCell cell73 = new PdfPCell(new Paragraph(supplyOuterObs.getObservationDescription(), font6));
+					cell73.setGrayFill(0.92f);
+					cell73.setBorder(PdfPCell.NO_BORDER);
+					table8.addCell(cell73);
+					document.add(tableObs);
+					}
+				}
 
 				document.newPage();
 
