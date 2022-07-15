@@ -334,8 +334,13 @@ public class TestingRecords implements Serializable {
 		return maximumAllowedValue;
 	}
 
-	public void setMaximumAllowedValue(String maximumAllowedValue) {
-		this.maximumAllowedValue = maximumAllowedValue;
+	public void setMaximumAllowedValue(String maximumAllowedValue) throws DecimalConversionException {
+		if (maximumAllowedValue != null && !maximumAllowedValue.isEmpty()) {
+			this.maximumAllowedValue = DecimalConversion.convertToDecimal(maximumAllowedValue, Constants.maxAllowed_Value);
+		} else {
+			this.maximumAllowedValue = maximumAllowedValue;
+		}
+		
 	}
 
 	public String getContinuityRemarks() {

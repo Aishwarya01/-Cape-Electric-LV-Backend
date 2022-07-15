@@ -532,15 +532,24 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				PdfPTable table9 = new PdfPTable(pointColumnWidths);
 				for(SupplyOuterObservation supplyOuterObs: supply.getSupplyOuterObservation()) {
 					if(supplyOuterObs.getObservationComponentDetails().equalsIgnoreCase("instalLocationReportOb")) {
+					
+						PdfPTable tableInstalLocationReport = new PdfPTable(pointColumnWidths);
+						tableInstalLocationReport.setWidthPercentage(100); // Width 100%
+						tableInstalLocationReport.setSpacingBefore(5f); // Space before table
+//						table7.setSpacingAfter(10f); // Space after table
+						tableInstalLocationReport.setWidthPercentage(100);
+						tableInstalLocationReport.getDefaultCell().setBorder(0);
+						
 					PdfPCell cellObs = new PdfPCell(new Paragraph("Remarks/Observation :", font6));
 					cellObs.setBorder(PdfPCell.NO_BORDER);
 					cellObs.setGrayFill(0.92f);
-					table8.addCell(cellObs);
+					tableInstalLocationReport.addCell(cellObs);
 					PdfPCell cell73 = new PdfPCell(new Paragraph(supplyOuterObs.getObservationDescription(), font6));
 					cell73.setGrayFill(0.92f);
 					cell73.setBorder(PdfPCell.NO_BORDER);
-					table8.addCell(cell73);
-					document.add(table9);
+					tableInstalLocationReport.addCell(cell73);
+					document.add(tableInstalLocationReport);
+			 
 					}
 				}
 				
@@ -644,15 +653,22 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				
 				for(SupplyOuterObservation supplyOuterObs: supply.getSupplyOuterObservation()) {
 					if(supplyOuterObs.getObservationComponentDetails().equalsIgnoreCase("bondingNoOfJointsOb")) {
+						
+					PdfPTable bondingNoOfJointsOb = new PdfPTable(pointColumnWidths);
+					bondingNoOfJointsOb.setWidthPercentage(100); // Width 100%
+					bondingNoOfJointsOb.setSpacingBefore(5f); // Space before table
+					bondingNoOfJointsOb.setWidthPercentage(100);
+					bondingNoOfJointsOb.getDefaultCell().setBorder(0);
+						
 					PdfPCell cellObs = new PdfPCell(new Paragraph("Remarks/Observation :", font6));
 					cellObs.setBorder(PdfPCell.NO_BORDER);
 					cellObs.setGrayFill(0.92f);
-					table8.addCell(cellObs);
+					bondingNoOfJointsOb.addCell(cellObs);
 					PdfPCell cell73 = new PdfPCell(new Paragraph(supplyOuterObs.getObservationDescription(), font6));
 					cell73.setGrayFill(0.92f);
 					cell73.setBorder(PdfPCell.NO_BORDER);
-					table8.addCell(cell73);
-					document.add(table12);
+					bondingNoOfJointsOb.addCell(cell73);
+					document.add(bondingNoOfJointsOb);
 					}
 				}
 
@@ -720,15 +736,21 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				PdfPTable tableObs = new PdfPTable(pointColumnWidths);
 				for(SupplyOuterObservation supplyOuterObs: supply.getSupplyOuterObservation()) {
 					if(supplyOuterObs.getObservationComponentDetails().equalsIgnoreCase("earthingNoOfJointsOb")) {
+					PdfPTable earthingNoOfJointsOb = new PdfPTable(pointColumnWidths);
+					earthingNoOfJointsOb.setWidthPercentage(100); // Width 100%
+					earthingNoOfJointsOb.setSpacingBefore(5f); // Space before table
+					earthingNoOfJointsOb.setWidthPercentage(100);
+					earthingNoOfJointsOb.getDefaultCell().setBorder(0);
+					
 					PdfPCell cellObs = new PdfPCell(new Paragraph("Remarks/Observation :", font6));
 					cellObs.setBorder(PdfPCell.NO_BORDER);
 					cellObs.setGrayFill(0.92f);
-					table8.addCell(cellObs);
+					earthingNoOfJointsOb.addCell(cellObs);
 					PdfPCell cell73 = new PdfPCell(new Paragraph(supplyOuterObs.getObservationDescription(), font6));
 					cell73.setGrayFill(0.92f);
 					cell73.setBorder(PdfPCell.NO_BORDER);
-					table8.addCell(cell73);
-					document.add(tableObs);
+					earthingNoOfJointsOb.addCell(cell73);
+					document.add(earthingNoOfJointsOb);
 					}
 				}
 

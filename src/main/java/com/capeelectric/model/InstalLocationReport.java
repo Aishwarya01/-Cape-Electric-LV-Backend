@@ -144,7 +144,7 @@ public class InstalLocationReport implements Serializable {
 
 	public void setElectrodeEarthSize(String electrodeEarthSize) throws DecimalConversionException {
 			if(electrodeEarthSize != null && !electrodeEarthSize.isEmpty()) {
-				this.electrodeEarthSize = DecimalConversion.convertToDecimal(electrodeEarthSize, Constants.supply_Earth_Depth);
+				this.electrodeEarthSize = DecimalConversion.convertToDecimal(electrodeEarthSize, Constants.supply_Earth_Electrode_Size);
 			}
 			this.electrodeEarthSize = electrodeEarthSize;
 	}
