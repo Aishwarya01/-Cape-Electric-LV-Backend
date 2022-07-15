@@ -33,6 +33,8 @@ public class Constants {
 	
 	public static final String supplyEarthDepth = "0.0";
 	
+	public static final String supplyEarthElectrodeSize = "0.0";
+	
 	public static final String supplyEarthJointResistance = "0.000";
 	
 	public static final String supplyBoundingJointResistance = "0.000";
@@ -60,6 +62,8 @@ public class Constants {
 	public static final String supply_Grid_Resistance = "supply_GridResistance";
 	
 	public static final String supply_Earth_Depth = "supply_EarthDepth";
+	
+	public static final String supply_Earth_Electrode_Size = "supply_Earth_Electrode_Size";
 	
 	public static final String supply_Earth_JointResistance = "supply_EarthJointResistance";
 	
@@ -97,6 +101,8 @@ public class Constants {
 	
 	public static final String continutiyR = "0.000";
 	
+	public static final String maxAllowedValue = "0.000";
+	
 	
 	public static final String test_Incoming_LoopImpedance = "IncomingLoopImpedance";
 	
@@ -125,6 +131,8 @@ public class Constants {
 	public static final String continutiy_RR = "continutiy_RR";
 	
 	public static final String continutiy_R = "continutiy_R";
+	
+	public static final String maxAllowed_Value = "maxAllowedValue";
 
 	
 	//Comments

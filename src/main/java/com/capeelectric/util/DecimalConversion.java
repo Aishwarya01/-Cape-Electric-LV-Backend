@@ -107,6 +107,8 @@ public class DecimalConversion {
 				return new DecimalFormat(Constants.supplyGridResistance);
 			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Earth_Depth)) {
 				return new DecimalFormat(Constants.supplyEarthDepth);
+			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Earth_Electrode_Size)) {
+				return new DecimalFormat(Constants.supplyEarthElectrodeSize);
 			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Earth_JointResistance)) {
 				return new DecimalFormat(Constants.supplyEarthJointResistance);
 			} else if (type != null && type.equalsIgnoreCase(Constants.supply_Bounding_JointResistance)) {
@@ -144,6 +146,8 @@ public class DecimalConversion {
 				return new DecimalFormat(Constants.continutiyRR);
 			} else if (type != null && type.equalsIgnoreCase(Constants.continutiy_R)) {
 				return new DecimalFormat(Constants.continutiyR);
+			} else if (type != null && type.equalsIgnoreCase(Constants.maxAllowed_Value)) {
+				return new DecimalFormat(Constants.maxAllowedValue);
 			}
 		} else {
 			throw new DecimalConversionException("Finding DecimalConversion variable type failed");

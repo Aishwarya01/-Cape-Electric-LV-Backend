@@ -2,6 +2,7 @@ package com.capeelectric.service.impl;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.model.Circuit;
 import com.capeelectric.model.ConsumerUnit;
+import com.capeelectric.model.InspectionInnerObservations;
+import com.capeelectric.model.InspectionOuterObservation;
 import com.capeelectric.model.IpaoInspection;
 import com.capeelectric.model.IsolationCurrent;
 import com.capeelectric.model.PeriodicInspection;
@@ -40,7 +43,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 
 //	@Autowired
 //	private InspectionRepository inspectionRepository;
-
+	
 	@Override
 	public List<PeriodicInspection> printInspectionDetails(String userName, Integer siteId,Optional<PeriodicInspection> periodicInspection) throws InspectionException {
 
@@ -102,9 +105,11 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						"Note: For periodic inspection, a visual inspection should be made to find out the external condition of all electrical equipment which is not concealed. Further detailed inspection, including partial dismantling of equipment (as required), should be carried out as agreed with the customer.",
 						noteFont);
 				document.add(paragraph4);
-
+				int consumerRemarksIndex;
 				for (IpaoInspection ipoInspection : ipo) {
-
+					
+					consumerRemarksIndex = 0;
+					
 					if (!ipoInspection.getInspectionFlag().equalsIgnoreCase("R")) {
 
 //						inspectionIteration(document, arr, consumerUnit, circuit, isolationCurrent);
@@ -152,6 +157,19 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						cell811.setBackgroundColor(new BaseColor(203, 183, 162));
 						cell811.setBorder(PdfPCell.NO_BORDER);
 						table1001.addCell(cell811);
+						for(InspectionOuterObservation outerObs: ipoInspection.getInspectionOuterObervation()) {
+							Font font6 = new Font(BaseFont.createFont(), 10, Font.NORMAL, BaseColor.BLACK);
+							PdfPCell cell55 = new PdfPCell(new Paragraph("Observations :", font6));
+							cell55.setBorder(PdfPCell.NO_BORDER);
+							cell55.setGrayFill(0.92f);
+							table1001.addCell(cell55);
+							PdfPCell cell73 = new PdfPCell(new Paragraph(outerObs.getObservationDescription(), font6));
+							cell73.setGrayFill(0.92f);
+							cell73.setBorder(PdfPCell.NO_BORDER);
+							table1001.addCell(cell73);
+						}
+						
+						
 						document.add(table1001);
 
 						float[] pointColumnWidths4 = { 100F };
@@ -601,20 +619,6 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 						cell26.setBorder(PdfPCell.NO_BORDER);
 						table4.addCell(cell26);
 
-						PdfPCell isolatorCellLabel = new PdfPCell(
-								new Paragraph("Isolator (Means to isolate the public supply system):",
-										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						isolatorCellLabel.setBackgroundColor(new GrayColor(0.93f));
-						isolatorCellLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
-						isolatorCellLabel.setBorder(PdfPCell.NO_BORDER);
-						table4.addCell(isolatorCellLabel);
-						PdfPCell isolatorCell = new PdfPCell(new Paragraph(ipoInspection.getIsolatePublicSupply(),
-								new Font(BaseFont.createFont(), 10, Font.NORMAL)));
-						isolatorCell.setFixedHeight(10f);
-						isolatorCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-						isolatorCell.setBackgroundColor(new GrayColor(0.93f));
-						isolatorCell.setBorder(PdfPCell.NO_BORDER);
-						table4.addCell(isolatorCell);
 						document.add(table4);
 
 						PdfPTable BasicPro = new PdfPTable(pointColumnWidths5);
@@ -1050,6 +1054,34 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 
 								document.add(table81);
 							}
+							 
+							List<InspectionInnerObservations> observationData = getObservationData(ipoInspection1);
+							if(observationData !=null && observationData.size() !=0) {
+								PdfPTable consumerObservation = new PdfPTable(pointColumnWidths);
+								consumerObservation.setWidthPercentage(100); // Width 100%
+								consumerObservation.setSpacingBefore(5f); // Space before table
+								consumerObservation.setWidthPercentage(100);
+								consumerObservation.getDefaultCell().setBorder(0);
+								
+								PdfPCell cell140 = new PdfPCell(new Paragraph("Remarks/Observation :",
+										new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								cell140.setBackgroundColor(new GrayColor(0.93f));
+								cell140.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell140.setBorder(PdfPCell.NO_BORDER);
+								consumerObservation.addCell(cell140);
+								PdfPCell cell141 = new PdfPCell(
+										new Paragraph(observationData.get(consumerRemarksIndex).getObservationDescription(),
+												new Font(BaseFont.createFont(), 10, Font.NORMAL)));
+								cell141.setHorizontalAlignment(Element.ALIGN_LEFT);
+								cell141.setBackgroundColor(new GrayColor(0.93f));
+								cell141.setBorder(PdfPCell.NO_BORDER);
+								consumerObservation.addCell(cell141);
+								
+								document.add(consumerObservation);
+								consumerRemarksIndex++;
+							}
+				 
+							
 						}
 
 						for (Circuit circuit : circuitDetails) {
@@ -1538,6 +1570,17 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 			throw new InspectionException("Invalid Inputs");
 		}
 		return null;
+	}
+
+	private List<InspectionInnerObservations> getObservationData(IpaoInspection ipoInspection) {
+		List<InspectionInnerObservations> inspectionInnerObservation = new ArrayList<InspectionInnerObservations>();
+		List<InspectionInnerObservations> inspectionInnerObservations = ipoInspection.getInspectionOuterObervation().get(0).getInspectionInnerObservations();
+			 for(InspectionInnerObservations inspectionObservation : inspectionInnerObservations) {
+				 inspectionInnerObservation.add(inspectionObservation);
+			 }
+
+		return inspectionInnerObservation;
+
 	}
 
 	private void tableData(PdfPTable table44, List<PeriodicInspectionComment> reportComments)
