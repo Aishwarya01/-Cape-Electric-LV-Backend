@@ -134,8 +134,9 @@ public class InstalLocationReport implements Serializable {
 		if (electrodeEarthDepth != null && !electrodeEarthDepth.isEmpty()) {
 			this.electrodeEarthDepth = DecimalConversion.convertToDecimal(electrodeEarthDepth,
 					Constants.supply_Earth_Depth);
-		} 
-		this.electrodeEarthDepth = electrodeEarthDepth;
+		} else {
+			this.electrodeEarthDepth = electrodeEarthDepth;
+		}
 	}
 
 	public String getElectrodeEarthSize() {
@@ -143,10 +144,12 @@ public class InstalLocationReport implements Serializable {
 	}
 
 	public void setElectrodeEarthSize(String electrodeEarthSize) throws DecimalConversionException {
-			if(electrodeEarthSize != null && !electrodeEarthSize.isEmpty()) {
-				this.electrodeEarthSize = DecimalConversion.convertToDecimal(electrodeEarthSize, Constants.supply_Earth_Electrode_Size);
-			}
+		if (electrodeEarthSize != null && !electrodeEarthSize.isEmpty()) {
+			this.electrodeEarthSize = DecimalConversion.convertToDecimal(electrodeEarthSize,
+					Constants.supply_Earth_Electrode_Size);
+		} else {
 			this.electrodeEarthSize = electrodeEarthSize;
+		}
 	}
 
 	public String getElectrodeResistanceGird() {
