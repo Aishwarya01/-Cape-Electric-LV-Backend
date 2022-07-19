@@ -133,6 +133,28 @@ public class InstalReportServiceImpl implements InstalReportService {
 			throw new InstalReportException("Invalid Inputs");
 		}
 	}
+	
+	@Override
+	public ReportDetails retrieveInstallationReport(Integer siteId)
+			throws InstalReportException {
+		if (siteId != null) {
+			Optional<ReportDetails>reportDetailsRepoData = installationReportRepository.findBySiteId(siteId);
+			ReportDetails reportDetailsRepo = reportDetailsRepoData.get();
+			if (reportDetailsRepo != null) {
+				reportDetailsRepo.setSignatorDetails(findNonRemovedObject.findNonRemovedReport(reportDetailsRepo.getSignatorDetails()));
+				logger.debug("Successfully done findNonRemovedReport() call");
+				sortingDateTime(reportDetailsRepo.getReportDetailsComment());
+				logger.debug("Done comments ascending order based on DateTime");
+				return reportDetailsRepo;
+			} else {
+				logger.error("Given Site doesn't exist Basic-information");
+				throw new InstalReportException("Given Site doesn't exist Basic-information");
+			}
+		} else {
+			logger.error("Invalid Inputs");
+			throw new InstalReportException("Invalid Inputs");
+		}
+	}
 
 	
 	/**

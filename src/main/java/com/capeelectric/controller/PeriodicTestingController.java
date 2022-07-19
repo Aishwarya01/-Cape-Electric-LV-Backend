@@ -61,6 +61,15 @@ public class PeriodicTestingController {
 		return new ResponseEntity<TestingReport>(retrieveTestingReport, HttpStatus.OK);
 	}
 
+	@GetMapping("/retrievePeriodicTesting/{siteId}")
+	public ResponseEntity<TestingReport> retrievePeriodicTestingForSiteId(@PathVariable Integer siteId) throws PeriodicTestingException {
+		logger.debug("Started retrievePeriodicTesting function siteId : {}", siteId);
+		TestingReport retrieveTestingReport = periodicTestingService.retrieveTestingReport(siteId);
+		logger.debug("Ended retrievePeriodicTesting function");
+
+		return new ResponseEntity<TestingReport>(retrieveTestingReport, HttpStatus.OK);
+	}
+
 
 	@PutMapping("/updatePeriodicTesting")
 	public ResponseEntity<String> updatePeriodicTesting(@RequestBody TestingReport testingReport)

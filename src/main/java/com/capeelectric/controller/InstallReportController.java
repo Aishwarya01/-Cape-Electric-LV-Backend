@@ -56,6 +56,14 @@ public class InstallReportController {
 				HttpStatus.OK);
 	}
 	
+	@GetMapping("/retrieveInstalReport/{siteId}")
+	public ResponseEntity<ReportDetails> retrieveInstallationReportForSiteId(@PathVariable Integer siteId)
+			throws InstalReportException, InspectionException {
+		logger.info("called retrieveInstallationReportForSiteId function  SiteId : {}", siteId);
+		return new ResponseEntity<ReportDetails>(instalReportService.retrieveInstallationReport(siteId),
+				HttpStatus.OK);
+	}
+	
 	@PutMapping("/updateInstalReport")
 	public ResponseEntity<String> updateInstallationReport(@RequestBody ReportDetails reportDetails)
 			throws InstalReportException, CompanyDetailsException {

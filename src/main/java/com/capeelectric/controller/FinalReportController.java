@@ -52,6 +52,15 @@ public class FinalReportController {
 
 	}
 	
+	@GetMapping("/retrieveReport/{siteId}")
+	public ResponseEntity<Optional<FinalReport>> retrieveReportsForSiteId(@PathVariable Integer siteId) throws FinalReportException {
+		logger.info("FinalReportAPI_started retrieveFinalReport function siteId : {}", siteId);
+		
+		return new ResponseEntity<Optional<FinalReport>>(finalReportServiceImpl.retrieveFinalReport(siteId),
+				HttpStatus.OK);
+
+	}
+	
 	@GetMapping("/retrieveAllSites")
 	public ResponseEntity<List<Site>> retrieveAllSites() throws FinalReportException{
 		logger.info("FinalReportAPI_started retrieveAllSites");

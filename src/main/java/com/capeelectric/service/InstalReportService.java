@@ -16,6 +16,8 @@ public interface InstalReportService {
 	public void addInstallationReport(ReportDetails reportDetails) throws InstalReportException, CompanyDetailsException;;
 
 	public ReportDetails retrieveInstallationReport(String userName, Integer SiteId) throws InstalReportException, InspectionException;
+	
+	public ReportDetails retrieveInstallationReport(Integer SiteId) throws InstalReportException, InspectionException;
 
 	public void updateInstallationReport(ReportDetails reportDetails) throws InstalReportException, CompanyDetailsException;
 

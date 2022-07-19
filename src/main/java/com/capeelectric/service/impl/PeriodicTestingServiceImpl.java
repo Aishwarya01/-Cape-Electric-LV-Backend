@@ -144,6 +144,27 @@ public class PeriodicTestingServiceImpl implements PeriodicTestingService {
 		}
 	}
 	
+	@Override
+	public TestingReport retrieveTestingReport(Integer siteId) throws PeriodicTestingException {
+		if (siteId != null && siteId != 0) {
+			Optional<TestingReport> testingReportRepoData = testingReportRepository.findBySiteId(siteId);
+			TestingReport testingReportRepo = testingReportRepoData.get();
+
+			if (testingReportRepo != null) {
+				testingReportRepo.setTesting(findNonRemovedObject.findNonRemoveTesting(testingReportRepo.getTesting()));
+				//testingReportRepo.setTestingOuterObservation(findNonRemovedObject.findNonRemoveTestingOuterObservation(testingReportRepo.getTestingOuterObservation()));
+				sortingDateTime(testingReportRepo.getTestingComment());
+				return testingReportRepo;
+			} else {
+				logger.error("Given UserName & Site doesn't exist Testing");
+				throw new PeriodicTestingException("Given UserName & Site doesn't exist Testing");
+			}
+		} else {
+			logger.error("Invalid Inputs");
+			throw new PeriodicTestingException("Invalid Inputs");
+		}
+	}
+	
 	/**
 	 * @reportId,siteId must required
 	 * @param TestingReport Object
