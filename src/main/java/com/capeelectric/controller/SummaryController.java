@@ -60,6 +60,12 @@ public class SummaryController {
 		return new ResponseEntity<List<Summary>>(summaryService.retrieveSummary(userName,siteId), HttpStatus.OK);
 	}
 	
+	@GetMapping("/retrieveSummary/{siteId}")
+	public ResponseEntity<Summary> retrieveSummaryForSiteId(@PathVariable Integer siteId) throws SummaryException {
+		logger.debug("called retrieveSummary function siteId : {}",siteId);
+		return new ResponseEntity<Summary>(summaryService.retrieveSummary(siteId), HttpStatus.OK);
+	}
+	
 	@PutMapping("/updateSummary")
 	public ResponseEntity<String> updateSummary(@RequestBody Summary summary)
 			throws SummaryException, CompanyDetailsException {

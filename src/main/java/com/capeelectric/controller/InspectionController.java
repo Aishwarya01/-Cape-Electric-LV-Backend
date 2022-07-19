@@ -55,6 +55,13 @@ public class InspectionController {
 				HttpStatus.OK);
 	}
 	
+	@GetMapping("/retrieveInspectionDetails/{siteId}")
+	public ResponseEntity<PeriodicInspection> retrieveInspectionDetailsForSiteId(@PathVariable Integer siteId) throws InspectionException {
+		logger.info("called addInspectionDetails function SiteId : {}", siteId);
+		return new ResponseEntity<PeriodicInspection>(inspectionService.retrieveInspectionDetails(siteId),
+				HttpStatus.OK);
+	}
+	
 	@PutMapping("/updateInspectionDetails")
 	public ResponseEntity<String> updateInspectionDetails(@RequestBody PeriodicInspection periodicInspection)
 			throws InspectionException, CompanyDetailsException {

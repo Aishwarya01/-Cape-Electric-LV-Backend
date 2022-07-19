@@ -178,6 +178,29 @@ public class InspectionServiceImpl implements InspectionService {
 		}
 	}
 	
+	@Override
+	public PeriodicInspection retrieveInspectionDetails(Integer siteId)
+			throws InspectionException {
+		if (siteId != null) {
+			Optional<PeriodicInspection> inspectionRepoData = inspectionRepository.findBySiteId(siteId);
+			PeriodicInspection inspectionRepo = inspectionRepoData.get();
+
+			if (inspectionRepo != null) {
+//				inspectionRepo.setIpaoInspection(isNullLocationCount(inspectionRepo.getIpaoInspection()));
+				inspectionRepo.setIpaoInspection(findNonRemovedObject.findNonRemovedInspectionLocation(inspectionRepo));
+				sortingDateTime(inspectionRepo.getPeriodicInspectorComment());
+				return inspectionRepo;
+			} else {
+				logger.error("Given UserName & Site doesn't exist Inspection");
+				throw new InspectionException("Given UserName & Site doesn't exist Inspection");
+			}
+
+		} else {
+			logger.error("Invalid Inputs");
+			throw new InspectionException("Invalid Inputs");
+		}
+	}
+	
 
 	/**
 	 * @reportId,siteId must required

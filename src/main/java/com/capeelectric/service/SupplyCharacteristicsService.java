@@ -17,6 +17,9 @@ public interface SupplyCharacteristicsService {
 
 	public SupplyCharacteristics retrieveCharacteristics(String userName, Integer siteId)
 			throws SupplyCharacteristicsException;
+	
+	public SupplyCharacteristics retrieveCharacteristics(Integer siteId)
+			throws SupplyCharacteristicsException;
 
 	public void updateCharacteristics(SupplyCharacteristics supplyCharacteristics)
 			throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException;

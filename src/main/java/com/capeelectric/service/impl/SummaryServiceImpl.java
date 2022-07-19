@@ -247,6 +247,28 @@ public class SummaryServiceImpl implements SummaryService {
 
 		}
 	}
+	
+	@Override
+	public Summary retrieveSummary(Integer siteId) throws SummaryException {
+		if (siteId != null && siteId != 0) {
+			Optional<Summary> summaryRepoData = summaryRepository.findBySiteId(siteId);
+			Summary summaryRepo = summaryRepoData.get();
+
+			if (summaryRepo != null) {
+				summaryRepo.setAllComponentObservation(allComponentObservation(siteId));
+					logger.debug("AllComponentObservation details added in summary model");
+					sortingDateTime(summaryRepo.getSummaryComment());
+				return summaryRepo;
+			} else {
+				logger.error("Given UserName & Site doesn't exist Inspection");
+				throw new SummaryException("Given UserName & Site doesn't exist Inspection");
+			}
+		} else {
+			logger.error("Invalid Inputs");
+			throw new SummaryException("Invalid Inputs");
+
+		}
+	}
 
 	/**
 	 * @reportId,siteId must required

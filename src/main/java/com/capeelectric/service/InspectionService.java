@@ -16,6 +16,9 @@ public interface InspectionService {
 
 	public PeriodicInspection retrieveInspectionDetails(String userName, Integer siteId)
 			throws InspectionException;
+	
+	public PeriodicInspection retrieveInspectionDetails(Integer siteId)
+			throws InspectionException;
 
 	public void updateInspectionDetails(PeriodicInspection periodicInspection) throws InspectionException, CompanyDetailsException;
 

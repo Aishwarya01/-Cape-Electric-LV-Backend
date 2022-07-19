@@ -168,6 +168,41 @@ public class SupplyCharacteristicsServiceImpl implements SupplyCharacteristicsSe
 			throw new SupplyCharacteristicsException("Invalid Inputs");
 		}
 	}
+	
+	@Override 
+	public SupplyCharacteristics retrieveCharacteristics(Integer siteId)
+			throws SupplyCharacteristicsException {
+
+		if (siteId != null) {
+			Optional<SupplyCharacteristics> supplyCharacteristicsRepoData = supplyCharacteristicsRepository
+					.findBySiteId(siteId);
+			SupplyCharacteristics supplyCharacteristicsRepo = supplyCharacteristicsRepoData.get();
+			if (supplyCharacteristicsRepo != null) {
+
+				supplyCharacteristicsRepo.setInstalLocationReport(
+						findNonRemovedObject.findNonRemovedInstallLocation(supplyCharacteristicsRepo));
+				supplyCharacteristicsRepo.setBoundingLocationReport(
+						findNonRemovedObject.findNonRemovedBondingLocation(supplyCharacteristicsRepo));
+				supplyCharacteristicsRepo.setEarthingLocationReport(
+						findNonRemovedObject.findNonRemovedEarthingLocation(supplyCharacteristicsRepo));
+				supplyCharacteristicsRepo.setCircuitBreaker(findNonRemovedObject
+						.findNonRemovedCircuitBreaker(supplyCharacteristicsRepo.getCircuitBreaker()));
+				supplyCharacteristicsRepo.setSupplyParameters(findNonRemovedObject
+						.findNonRemovedSupplyParameters(supplyCharacteristicsRepo.getSupplyParameters()));
+				supplyCharacteristicsRepo.setSupplyOuterObservation(findNonRemovedObject
+						.findNonRemovedSupplyOuterObservation(supplyCharacteristicsRepo.getSupplyOuterObservation()));
+				sortingDateTime(supplyCharacteristicsRepo.getSupplyCharacteristicComment());
+
+				return supplyCharacteristicsRepo;
+			} else {
+				logger.error("Given UserName & Site doesn't exist Inspection");
+				throw new SupplyCharacteristicsException("Given UserName & Site doesn't exist Inspection");
+			}
+		} else {
+			logger.error("Invalid Inputs");
+			throw new SupplyCharacteristicsException("Invalid Inputs");
+		}
+	}
 
 	
 	

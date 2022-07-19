@@ -22,6 +22,8 @@ public interface SummaryService {
 	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException;
 
 	public List<Summary> retrieveSummary(String userName, Integer siteId) throws SummaryException;
+	
+	public Summary retrieveSummary(Integer siteId) throws SummaryException;
 
 	public void updateSummary(Summary summary) throws SummaryException, CompanyDetailsException;
 

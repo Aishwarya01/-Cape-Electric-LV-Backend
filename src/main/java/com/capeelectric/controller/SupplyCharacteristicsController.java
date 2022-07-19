@@ -57,6 +57,13 @@ public class SupplyCharacteristicsController {
 		return new ResponseEntity<SupplyCharacteristics>(
 				supplyCharacteristicsService.retrieveCharacteristics(userName, siteId), HttpStatus.OK);
 	}
+	
+	@GetMapping("/retrieveCharacteristics/{siteId}")
+	public ResponseEntity<SupplyCharacteristics> retrieveCharacteristicsForSiteId(@PathVariable Integer siteId) throws SupplyCharacteristicsException {
+		logger.debug("started retrieveCharacteristics function SiteId : {}", siteId);
+		return new ResponseEntity<SupplyCharacteristics>(
+				supplyCharacteristicsService.retrieveCharacteristics(siteId), HttpStatus.OK);
+	}
 
 	@PutMapping("/updateCharacteristics")
 	public ResponseEntity<String> updateCharacteristics(@RequestBody SupplyCharacteristics supplyCharacteristics)
