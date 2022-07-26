@@ -6,6 +6,7 @@ import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.exception.ObservationException;
+import com.capeelectric.exception.PdfException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
@@ -19,7 +20,7 @@ import com.capeelectric.model.SummaryComment;
  */
 public interface SummaryService {
 
-	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException;
+	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException,PdfException;
 
 	public List<Summary> retrieveSummary(String userName, Integer siteId) throws SummaryException;
 	

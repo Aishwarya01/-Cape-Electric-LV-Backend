@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.InspectionException;
+import com.capeelectric.exception.PdfException;
 import com.capeelectric.model.Circuit;
 import com.capeelectric.model.ConsumerUnit;
 import com.capeelectric.model.InspectionInnerObservations;
@@ -45,7 +46,7 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 //	private InspectionRepository inspectionRepository;
 	
 	@Override
-	public List<PeriodicInspection> printInspectionDetails(String userName, Integer siteId,Optional<PeriodicInspection> periodicInspection) throws InspectionException {
+	public List<PeriodicInspection> printInspectionDetails(String userName, Integer siteId,Optional<PeriodicInspection> periodicInspection) throws InspectionException, PdfException {
 
 		logger.debug("called printInspectionDetails function userName: {},siteId : {}", userName,siteId);
 		
@@ -1563,7 +1564,8 @@ public class InspectionServiceImplPDF implements InspectionServicePDF {
 				writer.close();
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.debug("Inspection PDF creation Failed for SiteId : {}", siteId);
+				throw new PdfException("Inspection PDF creation Failed"); 
 			}
 
 		} else {
