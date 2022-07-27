@@ -53,9 +53,9 @@ public class SiteServiceImpl implements SiteService {
 		int count = 0;
 
 		if (site.getUserName() != null && site.getSite() != null) {
-			Optional<Site> siteRepo = siteRepository.findByUserNameAndSite(site.getUserName(), site.getSite());
+			Site siteRepo = siteRepository.findByCompanyNameAndDepartmentNameAndSite(site.getCompanyName(), site.getDepartmentName(),site.getSite());
 
-			if (!siteRepo.isPresent() || !siteRepo.get().getSite().equalsIgnoreCase(site.getSite())) {
+            if (siteRepo ==null || !siteRepo.getSite().equalsIgnoreCase(site.getSite())) {
 				site.setStatus("Active");
 				site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
 				site.setCreatedDate(LocalDateTime.now());

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.PdfException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.model.TestDistRecords;
 import com.capeelectric.model.TestDistribution;
@@ -43,7 +44,7 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 //	private TestingReportRepository testingReportRepository;
 
 	@Override
-	public void printTesting(String userName, Integer siteId, Optional<TestingReport> testingRepo) throws PeriodicTestingException {
+	public void printTesting(String userName, Integer siteId, Optional<TestingReport> testingRepo) throws PeriodicTestingException, PdfException {
 		
 		logger.debug("called printTesting function userName: {},siteId : {}", userName,siteId);
 		
@@ -164,7 +165,8 @@ public class PrintTestingServiceImpl implements PrintTestingService {
 				writer.close();
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.debug("Testing PDF creation Failed for SiteId : {}", siteId);
+				throw new PdfException("Testing PDF creation Failed"); 
 			}
 
 		} else {

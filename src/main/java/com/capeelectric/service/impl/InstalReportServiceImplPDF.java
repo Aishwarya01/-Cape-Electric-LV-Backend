@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.InstalReportException;
+import com.capeelectric.exception.PdfException;
 import com.capeelectric.model.ReportDetails;
 import com.capeelectric.model.ReportDetailsComment;
 import com.capeelectric.model.SignatorDetails;
@@ -47,7 +48,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 	private SiteRepository siteRepository;
 
 	public List<ReportDetails> printBasicInfromation(String userName, Integer siteId,
-			Optional<ReportDetails> reportDetailsRepo) throws InstalReportException {
+			Optional<ReportDetails> reportDetailsRepo) throws InstalReportException, PdfException {
 
 		logger.debug("called printBasicInfromation function userName: {},siteId : {}", userName, siteId);
 
@@ -920,8 +921,8 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 
 				document.close();
 				writer.close();
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (Exception e) { 
+				throw new PdfException("BasicInfromation PDF creation failed"); 
 			}
 
 		} else

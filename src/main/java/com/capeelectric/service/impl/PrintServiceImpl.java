@@ -1,36 +1,29 @@
 package com.capeelectric.service.impl;
 
 import java.io.FileOutputStream;
-import org.apache.commons.codec.binary.Base64;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.ObservationException;
+import com.capeelectric.exception.PdfException;
 import com.capeelectric.exception.SummaryException;
-import com.capeelectric.model.AllComponentObservation;
-import com.capeelectric.model.AlternativeInnerObservation;
-import com.capeelectric.model.InspectionInnerObservations;
-import com.capeelectric.model.InspectionOuterObservation;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
 import com.capeelectric.model.SummaryDeclaration;
 import com.capeelectric.model.SummaryInnerObservation;
 import com.capeelectric.model.SummaryObservation;
-import com.capeelectric.model.SupplyOuterObservation;
-import com.capeelectric.model.TestingInnerObservation;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.service.ObservationService;
 import com.capeelectric.service.PrintService;
-import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -57,7 +50,7 @@ public class PrintServiceImpl implements PrintService {
 	private ObservationService observationService;
 
 	@Override
-	public void printSummary(String userName, Integer siteId) throws SummaryException, ObservationException {
+	public void printSummary(String userName, Integer siteId) throws SummaryException, ObservationException, PdfException {
 
 		logger.debug("called printSummary function userName: {},siteId : {}", userName, siteId);
 
@@ -700,10 +693,9 @@ public class PrintServiceImpl implements PrintService {
 				}
 				document.close();
 				writer.close();
-			} catch (
-
-			Exception e) {
-				e.printStackTrace();
+			} catch (Exception e) {
+				logger.debug("Summary PDF creation Failed for SiteId : {}", siteId);
+				throw new PdfException("Summary PDF creation Failed"); 
 			}
 
 		} else

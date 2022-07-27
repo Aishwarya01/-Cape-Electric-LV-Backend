@@ -18,6 +18,7 @@ import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.exception.ObservationException;
+import com.capeelectric.exception.PdfException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
@@ -127,11 +128,12 @@ public class SummaryServiceImpl implements SummaryService {
 	 * @throws PeriodicTestingException 
 	 * @throws Exception 
 	 * @throws ObservationException 
+	 * @throws PdfException 
 	 * 
 	*/
 	@Transactional
 	@Override
-	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException {
+	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException, PdfException {
 		listOfComments = new ArrayList<SummaryComment>();
 		if (summary != null && summary.getUserName() != null && !summary.getUserName().isEmpty()
 				&& summary.getSiteId() != null && summary.getSiteId() != 0) {
@@ -190,24 +192,7 @@ public class SummaryServiceImpl implements SummaryService {
 						logger.error("Site-Id Already Available");
 						throw new SummaryException("Site-Id Already Available");
 					}
-
-					instalReportService.printBasicInfromation(summary.getUserName(),summary.getSiteId(),reportDetailsRepo);
-					logger.debug("PDF printBasicInfromation() function called successfully");
-					
-					printSupplyService.printSupply(summary.getUserName(),summary.getSiteId(),supplyCharacteristics);
-					logger.debug("PDF printSupply() function called successfully");
-					
-					inspectionServicePDF.printInspectionDetails(summary.getUserName(),summary.getSiteId(), periodicInspection);
-					logger.debug("PDF printInspectionDetails() function called successfully");
-					
-					printTestingService.printTesting(summary.getUserName(),summary.getSiteId(),testingRepo);
-					logger.debug("PDF printTesting() function called successfully");
-					
-					printService.printSummary(summary.getUserName(),summary.getSiteId());
-					logger.debug("PDF printSummary() function called successfully");
-					
-					printFinalPDFService.printFinalPDF(summary.getUserName(),summary.getSiteId(), site.getSite());
-					logger.debug("PDF printFinalPDF() function called successfully");
+                    printPDfDatas(summary,reportDetailsRepo,supplyCharacteristics,periodicInspection,testingRepo);
 					
 				} else {
 					logger.error("Please fill all the fields before clicking next button");
@@ -219,6 +204,33 @@ public class SummaryServiceImpl implements SummaryService {
 			throw new SummaryException("Invalid Inputs");
 		}
 
+	}
+
+	
+	private void printPDfDatas(Summary summary, Optional<ReportDetails> reportDetailsRepo, Optional<SupplyCharacteristics> supplyCharacteristics, Optional<PeriodicInspection> periodicInspection, Optional<TestingReport> testingRepo) throws InstalReportException, PdfException, SupplyCharacteristicsException,
+			InspectionException, PeriodicTestingException, SummaryException, ObservationException, Exception {
+
+		try {
+			instalReportService.printBasicInfromation(summary.getUserName(), summary.getSiteId(), reportDetailsRepo);
+			logger.debug("PDF printBasicInfromation() function called successfully");
+
+			printSupplyService.printSupply(summary.getUserName(), summary.getSiteId(), supplyCharacteristics);
+			logger.debug("PDF printSupply() function called successfully");
+
+			inspectionServicePDF.printInspectionDetails(summary.getUserName(), summary.getSiteId(), periodicInspection);
+			logger.debug("PDF printInspectionDetails() function called successfully");
+
+			printTestingService.printTesting(summary.getUserName(), summary.getSiteId(), testingRepo);
+			logger.debug("PDF printTesting() function called successfully");
+
+			printService.printSummary(summary.getUserName(), summary.getSiteId());
+			logger.debug("PDF printSummary() function called successfully");
+
+			printFinalPDFService.printFinalPDF(summary.getUserName(), summary.getSiteId(), site.getSite());
+			logger.debug("PDF printFinalPDF() function called successfully");
+		} catch (Exception e) {
+			throw new PdfException("PDF Creation failed");
+		}
 	}
 
 	/**
@@ -236,28 +248,6 @@ public class SummaryServiceImpl implements SummaryService {
 					logger.debug("AllComponentObservation details added in summary model");
 					sortingDateTime(summary.getSummaryComment());
 				}
-				return summaryRepo;
-			} else {
-				logger.error("Given UserName & Site doesn't exist Inspection");
-				throw new SummaryException("Given UserName & Site doesn't exist Inspection");
-			}
-		} else {
-			logger.error("Invalid Inputs");
-			throw new SummaryException("Invalid Inputs");
-
-		}
-	}
-	
-	@Override
-	public Summary retrieveSummary(Integer siteId) throws SummaryException {
-		if (siteId != null && siteId != 0) {
-			Optional<Summary> summaryRepoData = summaryRepository.findBySiteId(siteId);
-			Summary summaryRepo = summaryRepoData.get();
-
-			if (summaryRepo != null) {
-				summaryRepo.setAllComponentObservation(allComponentObservation(siteId));
-					logger.debug("AllComponentObservation details added in summary model");
-					sortingDateTime(summaryRepo.getSummaryComment());
 				return summaryRepo;
 			} else {
 				logger.error("Given UserName & Site doesn't exist Inspection");
@@ -517,6 +507,27 @@ public class SummaryServiceImpl implements SummaryService {
 					findNonRemovedObject.findNonRemoveTestingInnerObservationByReport(testingReport));
 		}
 		return allComponentObservation;
+	}
+	@Override
+	public Summary retrieveSummary(Integer siteId) throws SummaryException {
+		if (siteId != null && siteId != 0) {
+			Optional<Summary> summaryRepoData = summaryRepository.findBySiteId(siteId);
+			Summary summaryRepo = summaryRepoData.get();
+
+			if (summaryRepo != null) {
+				summaryRepo.setAllComponentObservation(allComponentObservation(siteId));
+					logger.debug("AllComponentObservation details added in summary model");
+					sortingDateTime(summaryRepo.getSummaryComment());
+				return summaryRepo;
+			} else {
+				logger.error("Given UserName & Site doesn't exist Inspection");
+				throw new SummaryException("Given UserName & Site doesn't exist Inspection");
+			}
+		} else {
+			logger.error("Invalid Inputs");
+			throw new SummaryException("Invalid Inputs");
+
+		}
 	}
 
 }

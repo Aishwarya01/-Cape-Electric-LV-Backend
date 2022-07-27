@@ -22,6 +22,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.capeelectric.exception.PdfException;
 import com.capeelectric.service.PrintFinalPDFService;
 import com.capeelectric.util.HeaderFooterPageEvent;
 import com.itextpdf.text.Document;
@@ -51,7 +52,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 	private static final Logger logger = LoggerFactory.getLogger(PrintFinalPDFServiceImpl.class);
 
 	@Override
-	public void printFinalPDF(String userName, Integer siteId, String siteName) throws Exception {
+	public void printFinalPDF(String userName, Integer siteId, String siteName) throws Exception, PdfException {
 		if (userName != null && !userName.isEmpty() && siteId != null && siteId != 0) {
 			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
 			try {
@@ -84,11 +85,11 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 					}
 
 				} catch (AmazonS3Exception e) {
-					e.printStackTrace();
+					throw new PdfException("Falied Uploading the PDF File in AWS S3 Bucket");
 				}
 
 			} catch (Exception e) {
-				System.out.println(e);
+				throw new PdfException("Merging PdfFiles Failed");
 			}
 			document.close();
 		} else {
@@ -97,7 +98,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 	}
 
 	private static void mergePdfFiles(List<InputStream> inputPdfList, OutputStream outputStream,
-			AWSS3ServiceImpl awss3ServiceImpl) throws Exception {
+			AWSS3ServiceImpl awss3ServiceImpl) throws Exception, PdfException {
 		Document document = new Document();
 		List<PdfReader> readers = new ArrayList<PdfReader>();
 		int totalPages = 0;

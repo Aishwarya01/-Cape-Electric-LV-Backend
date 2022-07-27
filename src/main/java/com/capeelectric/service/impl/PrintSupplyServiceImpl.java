@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.capeelectric.exception.PdfException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
 import com.capeelectric.model.BoundingLocationReport;
 import com.capeelectric.model.CircuitBreaker;
@@ -44,7 +45,7 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 
 	@Override
 	public void printSupply(String userName, Integer siteId, Optional<SupplyCharacteristics> supplyCharacteristics)
-			throws SupplyCharacteristicsException {
+			throws SupplyCharacteristicsException, PdfException {
 		
 		logger.debug("called printSupply function userName: {},siteId : {}", userName,siteId);
 		
@@ -843,7 +844,8 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				document.close();
 				writer.close();
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.debug("SupplyCharacteristics PDF creation Failed for SiteId : {}", siteId);
+				throw new PdfException("SupplyCharacteristics PDF creation Failed");
 			}
 		} else {
 			throw new SupplyCharacteristicsException("Invalid Inputs");

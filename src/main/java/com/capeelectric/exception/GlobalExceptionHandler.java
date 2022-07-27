@@ -88,4 +88,10 @@ public class GlobalExceptionHandler {
     		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
     		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
+    
+    @ExceptionHandler({PdfException.class})
+    public ResponseEntity<ErrorMessage> handlePDFException(ObservationException e){
+    	ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+    	return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+    }
 }
