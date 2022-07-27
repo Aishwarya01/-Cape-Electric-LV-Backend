@@ -70,6 +70,8 @@ public class SiteDetailsServiceTest {
 		site.setUserName("hasan");
 		site.setSiteId(1);
 		site.setSite("user");
+		site.setCompanyName("Cape");
+		site.setDepartmentName("electric");
 
 		sitePersons1.setPersonId(1);
 		sitePersons1.setSiteName("user");
@@ -168,8 +170,8 @@ public class SiteDetailsServiceTest {
 		when(siteRepository.findByUserName(site.getUserName())).thenReturn(list);
 		when(sitePersonsRepository.findBySiteNameAndPersonInchargeEmail("user1","Cape@gmail.com"))
 				.thenReturn(Optional.of(sitePersons2));
-		when(siteRepository.findByUserNameAndSite("hasan", "user1")).thenReturn(Optional.of(site));
-
+		when(siteRepository.findByCompanyNameAndDepartmentNameAndSite("Cape", "electric","user")).thenReturn(site);
+	 
 		Site site2 = new Site();
 		site2.setSite("user1");
 		site2.setUserName("hasan");
