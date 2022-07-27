@@ -19,6 +19,7 @@ import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.exception.ObservationException;
+import com.capeelectric.exception.PdfException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.SummaryException;
@@ -46,7 +47,7 @@ public class SummaryController {
 	private SendReplyComments sendReplyComments;
 
 	@PostMapping("/addSummary")
-	public ResponseEntity<String> addSummary(@RequestBody Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException {
+	public ResponseEntity<String> addSummary(@RequestBody Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException, PdfException {
 		logger.debug("Started addSummary function userName: {},siteId : {}", summary.getUserName(),summary.getSiteId());
 		summaryService.addSummary(summary);
 		logger.debug("Ended addSummary function");

@@ -25,6 +25,7 @@ import com.capeelectric.exception.DecimalConversionException;
 import com.capeelectric.exception.InspectionException;
 import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.exception.ObservationException;
+import com.capeelectric.exception.PdfException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
@@ -156,7 +157,7 @@ public class SummaryServiceTest {
 	}
 
 	@Test
-	public void testAddSummary() throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException {
+	public void testAddSummary() throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException, PdfException {
 
 		SupplyCharacteristics supplyCharacteristics = new SupplyCharacteristics();
 		supplyCharacteristics.setSiteId(6);
