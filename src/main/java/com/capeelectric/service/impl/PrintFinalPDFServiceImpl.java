@@ -85,11 +85,11 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 					}
 
 				} catch (AmazonS3Exception e) {
-					e.printStackTrace();
+					throw new PdfException("Falied Uploading the PDF File in AWS S3 Bucket");
 				}
 
 			} catch (Exception e) {
-				System.out.println(e);
+				throw new PdfException("Merging PdfFiles Failed");
 			}
 			document.close();
 		} else {
