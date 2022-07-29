@@ -26,7 +26,7 @@ public interface SummaryService {
 	
 	public Summary retrieveSummary(Integer siteId) throws SummaryException;
 
-	public void updateSummary(Summary summary) throws SummaryException, CompanyDetailsException;
+	public void updateSummary(Summary summary,Boolean superAdminFlag) throws SummaryException, CompanyDetailsException;
 
 	public void sendComments(String userName, Integer siteId, SummaryComment summaryComment) throws SummaryException;
 

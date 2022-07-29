@@ -118,19 +118,19 @@ public class SummaryServiceImpl implements SummaryService {
 	
 	/**
 	 * @ siteId unique for summary object
-	 * @param Summary object
-	 * addSummary method to find summary object based on input summary_siteId
-	 * if not available summary object will be saved
-	 * @throws CompanyDetailsException 
-	 * @throws InstalReportException 
-	 * @throws SupplyCharacteristicsException 
-	 * @throws InspectionException 
-	 * @throws PeriodicTestingException 
-	 * @throws Exception 
-	 * @throws ObservationException 
-	 * @throws PdfException 
 	 * 
-	*/
+	 * @param Summary object addSummary method to find summary object based on input
+	 *                summary_siteId if not available summary object will be saved
+	 * @throws CompanyDetailsException
+	 * @throws InstalReportException
+	 * @throws SupplyCharacteristicsException
+	 * @throws InspectionException
+	 * @throws PeriodicTestingException
+	 * @throws Exception
+	 * @throws ObservationException
+	 * @throws PdfException
+	 * 
+	 */
 	@Transactional
 	@Override
 	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException, PdfException {
@@ -177,16 +177,16 @@ public class SummaryServiceImpl implements SummaryService {
 						summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
 						summaryRepository.save(summary);
 						logger.debug("Summary Details Successfully Saved in DB");
-						siteRepo = siteRepository.findById(summary.getSiteId());
-						if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
-							site = siteRepo.get();
-							site.setAllStepsCompleted("AllStepCompleted");
-							siteRepository.save(site);
-							logger.debug("AllStepCompleted information saved site table in DB"+summary.getUserName());
-						} else {
-							logger.error("Site-Id Information not Available in site_Table");
-							throw new SummaryException("Site-Id Information not Available in site_Table");
-						}
+//						siteRepo = siteRepository.findById(summary.getSiteId());
+//						if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
+//							site = siteRepo.get();
+//							site.setAllStepsCompleted("AllStepCompleted");
+//							siteRepository.save(site);
+//							logger.debug("AllStepCompleted information saved site table in DB"+summary.getUserName());
+//						} else {
+//							logger.error("Site-Id Information not Available in site_Table");
+//							throw new SummaryException("Site-Id Information not Available in site_Table");
+//						}
 
 					} else {
 						logger.error("Site-Id Already Available");
@@ -270,26 +270,39 @@ public class SummaryServiceImpl implements SummaryService {
 	*/
 	@Transactional
 	@Override
-	public void updateSummary(Summary summary) throws SummaryException, CompanyDetailsException {
+	public void updateSummary(Summary summary,Boolean superAdminFlag) throws SummaryException, CompanyDetailsException {
+		if(!superAdminFlag) {
+			if (summary != null && summary.getSummaryId() != null && summary.getSummaryId() != 0
+					&& summary.getSiteId() != null && summary.getSiteId() != 0) {
+				Optional<Summary> summaryRepo = summaryRepository.findById(summary.getSummaryId());
+				if (summaryRepo.isPresent() && summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
+					summary.setUpdatedDate(LocalDateTime.now());
+					summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
+					summaryRepository.save(summary);
+					logger.debug("Summary Details Successfully updated in DB");
+					siteDetails.updateSite(summary.getSiteId(), summary.getUserName(),"Step5 completed");
+					logger.debug("Updated successfully site updatedUsername",summary.getUserName());
+				} else {
+					logger.error("Given SiteId and ReportId is Invalid");
+					throw new SummaryException("Given SiteId and ReportId is Invalid");
+				}
 
-		if (summary != null && summary.getSummaryId() != null && summary.getSummaryId() != 0
-				&& summary.getSiteId() != null && summary.getSiteId() != 0) {
-			Optional<Summary> summaryRepo = summaryRepository.findById(summary.getSummaryId());
-			if (summaryRepo.isPresent() && summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
-				summary.setUpdatedDate(LocalDateTime.now());
-				summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
-				summaryRepository.save(summary);
-				logger.debug("Summary Details Successfully updated in DB");
-				siteDetails.updateSite(summary.getSiteId(), summary.getUserName(),"Step5 completed");
-				logger.debug("Updated successfully site updatedUsername",summary.getUserName());
 			} else {
-				logger.error("Given SiteId and ReportId is Invalid");
-				throw new SummaryException("Given SiteId and ReportId is Invalid");
+				logger.error("Invalid Inputs");
+				throw new SummaryException("Invalid inputs");
 			}
-
-		} else {
-			logger.error("Invalid Inputs");
-			throw new SummaryException("Invalid inputs");
+		}
+		else {
+			siteRepo = siteRepository.findById(summary.getSiteId());
+			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
+				site = siteRepo.get();
+				site.setAllStepsCompleted("AllStepCompleted");
+				siteRepository.save(site);
+				logger.debug("AllStepCompleted information saved site table in DB"+summary.getUserName());
+			} else {
+				logger.error("Site-Id Information not Available in site_Table");
+				throw new SummaryException("Site-Id Information not Available in site_Table");
+			}
 		}
 	}
 	
