@@ -31,11 +31,15 @@ import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
+import com.capeelectric.model.SummaryInnerObservation;
+import com.capeelectric.model.SummaryObservation;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SiteRepository;
+import com.capeelectric.repository.SummaryInnerObservationRepo;
+import com.capeelectric.repository.SummaryObservationRepo;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
@@ -116,6 +120,12 @@ public class SummaryServiceImpl implements SummaryService {
 	@Autowired
 	private FindNonRemovedObject findNonRemovedObject;
 	
+	@Autowired
+	private SummaryObservationRepo summaryObservationRepo;
+	
+	@Autowired
+	private SummaryInnerObservationRepo summaryInnerObservationRepo;
+	
 	/**
 	 * @ siteId unique for summary object
 	 * 
@@ -177,6 +187,9 @@ public class SummaryServiceImpl implements SummaryService {
 						summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
 						summaryRepository.save(summary);
 						logger.debug("Summary Details Successfully Saved in DB");
+						siteDetails.updateSite(summary.getSiteId(),
+								summary.getUserName(),"Step5 completed");
+						logger.debug("Site Successfully updated in DB");
 //						siteRepo = siteRepository.findById(summary.getSiteId());
 //						if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
 //							site = siteRepo.get();
@@ -192,7 +205,7 @@ public class SummaryServiceImpl implements SummaryService {
 						logger.error("Site-Id Already Available");
 						throw new SummaryException("Site-Id Already Available");
 					}
-                    printPDfDatas(summary,reportDetailsRepo,supplyCharacteristics,periodicInspection,testingRepo);
+                    //printPDfDatas(summary,reportDetailsRepo,supplyCharacteristics,periodicInspection,testingRepo);
 					
 				} else {
 					logger.error("Please fill all the fields before clicking next button");
@@ -276,6 +289,17 @@ public class SummaryServiceImpl implements SummaryService {
 					&& summary.getSiteId() != null && summary.getSiteId() != 0) {
 				Optional<Summary> summaryRepo = summaryRepository.findById(summary.getSummaryId());
 				if (summaryRepo.isPresent() && summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
+					List<SummaryObservation> summaryObservationData = summaryRepo.get().getSummaryObservation();
+					if(summaryObservationData != null) {
+						for(SummaryObservation summaryObservationItr : summaryObservationData) {
+							List<SummaryInnerObservation> summaryInnerObservationData = summaryObservationItr.getSummaryInnerObservation();
+							for(SummaryInnerObservation summaryInnerObservationItr : summaryInnerObservationData) {
+								summaryInnerObservationRepo.deleteInnerObservRecordsById(summaryInnerObservationItr.getInnerObservationsId());
+							}
+							summaryObservationRepo.deleteObservRecordsById(summaryObservationItr.getObservationsId());
+						}	
+					}
+					
 					summary.setUpdatedDate(LocalDateTime.now());
 					summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
 					summaryRepository.save(summary);
