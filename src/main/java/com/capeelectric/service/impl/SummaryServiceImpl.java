@@ -205,7 +205,6 @@ public class SummaryServiceImpl implements SummaryService {
 						logger.error("Site-Id Already Available");
 						throw new SummaryException("Site-Id Already Available");
 					}
-                    //printPDfDatas(summary,reportDetailsRepo,supplyCharacteristics,periodicInspection,testingRepo);
 					
 				} else {
 					logger.error("Please fill all the fields before clicking next button");
@@ -283,7 +282,8 @@ public class SummaryServiceImpl implements SummaryService {
 	*/
 	@Transactional
 	@Override
-	public void updateSummary(Summary summary,Boolean superAdminFlag) throws SummaryException, CompanyDetailsException {
+	public void updateSummary(Summary summary,Boolean superAdminFlag) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, 
+	PeriodicTestingException, Exception, ObservationException, PdfException{
 		if(!superAdminFlag) {
 			if (summary != null && summary.getSummaryId() != null && summary.getSummaryId() != 0
 					&& summary.getSiteId() != null && summary.getSiteId() != 0) {
@@ -317,16 +317,32 @@ public class SummaryServiceImpl implements SummaryService {
 			}
 		}
 		else {
-			siteRepo = siteRepository.findById(summary.getSiteId());
-			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
-				site = siteRepo.get();
-				site.setAllStepsCompleted("AllStepCompleted");
-				siteRepository.save(site);
-				logger.debug("AllStepCompleted information saved site table in DB"+summary.getUserName());
-			} else {
-				logger.error("Site-Id Information not Available in site_Table");
-				throw new SummaryException("Site-Id Information not Available in site_Table");
+			Optional<Summary> summaryRepo = summaryRepository.findBySiteId(summary.getSiteId());
+			Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository
+					.findBySiteId(summary.getSiteId());
+			Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(summary.getSiteId());
+			Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(summary.getSiteId());
+			Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(summary.getSiteId());
+			
+			if(reportDetailsRepo.isPresent() && supplyCharacteristics.isPresent() && periodicInspection.isPresent()
+					 && testingRepo.isPresent() && summaryRepo.isPresent()) {
+                printPDfDatas(summaryRepo.get(),reportDetailsRepo,supplyCharacteristics,periodicInspection,testingRepo);
+                siteRepo = siteRepository.findById(summary.getSiteId());
+    			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
+    				site = siteRepo.get();
+    				site.setAllStepsCompleted("AllStepCompleted");
+    				siteRepository.save(site);
+    				logger.debug("AllStepCompleted information saved site table in DB"+summary.getUserName());
+    			} else {
+    				logger.error("Site-Id Information not Available in site_Table");
+    				throw new SummaryException("Site-Id Information not Available in site_Table");
+    			}
 			}
+			else {
+				logger.error("Please fill all the fields before clicking submit button");
+				throw new SummaryException("Please fill all the fields before clicking submit button");
+			}
+			
 		}
 	}
 	

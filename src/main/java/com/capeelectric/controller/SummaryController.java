@@ -68,8 +68,8 @@ public class SummaryController {
 	}
 	
 	@PutMapping("/updateSummary/{superAdminFlag}")
-	public ResponseEntity<String> updateSummary(@RequestBody Summary summary,@PathVariable Boolean superAdminFlag)
-			throws SummaryException, CompanyDetailsException {
+	public ResponseEntity<String> updateSummary(@RequestBody Summary summary,@PathVariable Boolean superAdminFlag) throws SummaryException, CompanyDetailsException, InstalReportException, 
+	      SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException, PdfException {
 		logger.debug("called updateSummary function UserName : {},SiteId : {},SummaryId : {}", summary.getUserName(),
 				summary.getSiteId(), summary.getSummaryId());
 		summaryService.updateSummary(summary,superAdminFlag);
