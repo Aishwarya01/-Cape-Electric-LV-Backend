@@ -53,25 +53,24 @@ public class SiteServiceImpl implements SiteService {
 		int count = 0;
 
 		if (site.getUserName() != null && site.getSite() != null) {
-		Site siteRepo = siteRepository.findByCompanyNameAndDepartmentNameAndSite(site.getCompanyName(), site.getDepartmentName(),site.getSite());
-
-			if (siteRepo ==null || !siteRepo.getSite().equalsIgnoreCase(site.getSite())) {
-				site.setStatus("Active");
-				site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
-				site.setCreatedDate(LocalDateTime.now());
-				site.setUpdatedDate(LocalDateTime.now());
-				site.setCreatedBy(userName.findByUserName(site.getUserName()));
-				site.setUpdatedBy(userName.findByUserName(site.getUserName()));
-				boolean email = checkSitePersonEmail(site.getSite(), site.getSitePersons());
-				logger.debug("Finding siteperson Email already available or not in DB --> " + email);
-				if (email) {
-					reduceLicence(site.getUserName());
-					siteRepository.save(site);
-					logger.debug("Site Successfully Saved in DB");
-				} else {
-					logger.error("PersonInchargEmail already present");
-					throw new CompanyDetailsException("PersonInchargEmail already present");
-				}
+			Site siteRepo = siteRepository.findByCompanyNameAndDepartmentNameAndSite(site.getCompanyName(), site.getDepartmentName(),site.getSite());
+        if (siteRepo ==null || !siteRepo.getSite().equalsIgnoreCase(site.getSite())) {
+          site.setStatus("Active");
+          site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
+          site.setCreatedDate(LocalDateTime.now());
+          site.setUpdatedDate(LocalDateTime.now());
+          site.setCreatedBy(userName.findByUserName(site.getUserName()));
+          site.setUpdatedBy(userName.findByUserName(site.getUserName()));
+          boolean email = checkSitePersonEmail(site.getSite(), site.getSitePersons());
+          logger.debug("Finding siteperson Email already available or not in DB --> " + email);
+          if (email) {
+            reduceLicence(site.getUserName());
+            siteRepository.save(site);
+            logger.debug("Site Successfully Saved in DB");
+          } else {
+            logger.error("PersonInchargEmail already present");
+            throw new CompanyDetailsException("PersonInchargEmail already present");
+          }
 			} else {
 				logger.error(site.getSite() + ": site already present");
 				throw new CompanyDetailsException(site.getSite() + ": site already present");
