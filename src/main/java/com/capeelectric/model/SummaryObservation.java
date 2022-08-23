@@ -45,6 +45,9 @@ public class SummaryObservation implements Serializable {
 	
 	@Column(name = "OBSERVATION_COMPONENT_DETAILS")
 	private String observationComponentDetails;
+	
+	@Column(name = "REFERENCE_ID")
+	private Integer referenceId;
 
 	@Column(name = "OBSERVATIONS")
 	private String observations;
@@ -121,5 +124,15 @@ public class SummaryObservation implements Serializable {
 	public void setSummaryInnerObservation(List<SummaryInnerObservation> summaryInnerObservation) {
 		this.summaryInnerObservation = summaryInnerObservation;
 	}
+
+	public Integer getReferenceId() {
+		return referenceId;
+	}
+
+	public void setReferenceId(Integer referenceId) {
+		this.referenceId = referenceId;
+	}
+	
+	
 
 }
