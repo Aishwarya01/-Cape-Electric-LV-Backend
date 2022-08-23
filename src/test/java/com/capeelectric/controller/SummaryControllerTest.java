@@ -98,12 +98,13 @@ public class SummaryControllerTest {
 	}
 	
 	@Test
-	public void testUpdateSummary() throws SummaryException, CompanyDetailsException{
+	public void testUpdateSummary() throws SummaryException, CompanyDetailsException, InstalReportException, 
+    SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException, PdfException{
 		
 		logger.info("testUpdateSummary Function Started");
 		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
 		ResponseEntity<String> actualResponseEntity = summaryController
-				.updateSummary(summary);
+				.updateSummary(summary,true);
 		assertEquals(actualResponseEntity.getStatusCode(), expectedResponseEntity.getStatusCode());
 		logger.info("testUpdateSummary Function Ended");
 	}

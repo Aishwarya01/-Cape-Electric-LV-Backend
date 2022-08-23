@@ -254,10 +254,11 @@ public class SummaryServiceTest {
 
 	
 	@Test
-	public void testUpdateSummary() throws DecimalConversionException, SummaryException, CompanyDetailsException {
+	public void testUpdateSummary() throws SummaryException, CompanyDetailsException, InstalReportException, 
+    SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException, PdfException {
 		summary.setUserName("LVsystem@gmail.com");
 		when(summaryRepository.findById(10)).thenReturn(Optional.of(summary));
-		summaryServiceImpl.updateSummary(summary);
+		summaryServiceImpl.updateSummary(summary,true);
 		
 		Summary summary_1 = new Summary();
 		summary_1.setSiteId(12);
@@ -266,14 +267,14 @@ public class SummaryServiceTest {
 		
 		when(summaryRepository.findById(4)).thenReturn(Optional.of(summary));
 		SummaryException assertThrows = Assertions.assertThrows(SummaryException.class,
-				() -> summaryServiceImpl.updateSummary(summary_1));
+				() -> summaryServiceImpl.updateSummary(summary_1,true));
 		
 		assertEquals(assertThrows.getMessage(),"Given SiteId and ReportId is Invalid");
 		
 		summary.setSiteId(null);
 		when(summaryRepository.findById(2)).thenReturn(Optional.of(summary));
 		SummaryException assertThrows_1 = Assertions.assertThrows(SummaryException.class,
-				() -> summaryServiceImpl.updateSummary(summary));
+				() -> summaryServiceImpl.updateSummary(summary,false));
 		
 		assertEquals(assertThrows_1.getMessage(),"Invalid inputs");
 	}
