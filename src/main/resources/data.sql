@@ -931,6 +931,7 @@ CREATE TABLE declaration_table (
 CREATE TABLE summary_observations_table (
             OBSERVATIONS_ID INT AUTO_INCREMENT,
 			SUMMARY_ID INT,
+			REFERENCE_ID INT,
             FURTHER_ACTIONS  VARCHAR(255),
             COMMENT VARCHAR(255),
             OBSERVATIONS VARCHAR(500),
@@ -943,6 +944,7 @@ CREATE TABLE summary_observations_table (
 CREATE TABLE summary_inner_observations_table (
             INNER_OBSERVATIONS_ID INT AUTO_INCREMENT,
 			OBSERVATIONS_ID INT,
+			REFERENCE_ID INT,
             FURTHER_ACTIONS  VARCHAR(255),
             COMMENT VARCHAR(255),
             OBSERVATIONS VARCHAR(500),
