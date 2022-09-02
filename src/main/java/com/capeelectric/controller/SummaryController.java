@@ -51,7 +51,7 @@ public class SummaryController {
 		logger.debug("Started addSummary function userName: {},siteId : {}", summary.getUserName(),summary.getSiteId());
 		summaryService.addSummary(summary);
 		logger.debug("Ended addSummary function");
-		return new ResponseEntity<String>("Summary Details Successfully Submitted", HttpStatus.CREATED);
+		return new ResponseEntity<String>("Summary Details Successfully Saved", HttpStatus.CREATED);
 
 	}
 	
@@ -67,14 +67,15 @@ public class SummaryController {
 		return new ResponseEntity<Summary>(summaryService.retrieveSummary(siteId), HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateSummary")
-	public ResponseEntity<String> updateSummary(@RequestBody Summary summary)
-			throws SummaryException, CompanyDetailsException {
+	@PutMapping("/updateSummary/{superAdminFlag}")
+	public ResponseEntity<String> updateSummary(@RequestBody Summary summary,@PathVariable Boolean superAdminFlag) throws SummaryException, CompanyDetailsException, InstalReportException, 
+	      SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException, PdfException {
 		logger.debug("called updateSummary function UserName : {},SiteId : {},SummaryId : {}", summary.getUserName(),
 				summary.getSiteId(), summary.getSummaryId());
-		summaryService.updateSummary(summary);
+		summaryService.updateSummary(summary,superAdminFlag);
 		logger.debug("Ended updateSummary function");
-		return new ResponseEntity<String>("Summary successfully Updated", HttpStatus.OK);
+		return new ResponseEntity<String>("Summary successfully "
+				+ (superAdminFlag?"Submitted":"Updated"), HttpStatus.OK);
 	}
 
 

@@ -254,10 +254,34 @@ public class SummaryServiceTest {
 
 	
 	@Test
-	public void testUpdateSummary() throws DecimalConversionException, SummaryException, CompanyDetailsException {
+	public void testUpdateSummary() throws SummaryException, CompanyDetailsException, InstalReportException, 
+    SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException, PdfException {
+		SupplyCharacteristics supplyCharacteristics = new SupplyCharacteristics();
+		supplyCharacteristics.setSiteId(6);
+		Optional<SupplyCharacteristics> supply = Optional.of(supplyCharacteristics);
+
+		TestingReport testingReport = new TestingReport();
+		testingReport.setSiteId(6);
+		Optional<TestingReport> testreport = Optional.of(testingReport);
+
+		PeriodicInspection periodicInspection = new PeriodicInspection();
+		periodicInspection.setSiteId(6);
+		Optional<PeriodicInspection> periodicreport = Optional.of(periodicInspection);
+
+		ReportDetails reportDetails = new ReportDetails();
+		reportDetails.setSiteId(6);
+		Optional<ReportDetails> reportdet = Optional.of(reportDetails);
+		
+		when(siteRepository.findById(6)).thenReturn(Optional.of(site));
+		when(summaryRepository.findBySiteId(10)).thenReturn(Optional.of(summary));
+		when(installationReportRepository.findBySiteId(6)).thenReturn(reportdet);
+		when(supplyCharacteristicsRepository.findBySiteId(6)).thenReturn(supply);
+		when(inspectionRepository.findBySiteId(6)).thenReturn(periodicreport);
+		when(testingReportRepository.findBySiteId(6)).thenReturn(testreport);
+		
 		summary.setUserName("LVsystem@gmail.com");
 		when(summaryRepository.findById(10)).thenReturn(Optional.of(summary));
-		summaryServiceImpl.updateSummary(summary);
+		summaryServiceImpl.updateSummary(summary,true);
 		
 		Summary summary_1 = new Summary();
 		summary_1.setSiteId(12);
@@ -266,14 +290,14 @@ public class SummaryServiceTest {
 		
 		when(summaryRepository.findById(4)).thenReturn(Optional.of(summary));
 		SummaryException assertThrows = Assertions.assertThrows(SummaryException.class,
-				() -> summaryServiceImpl.updateSummary(summary_1));
+				() -> summaryServiceImpl.updateSummary(summary_1,true));
 		
 		assertEquals(assertThrows.getMessage(),"Given SiteId and ReportId is Invalid");
 		
 		summary.setSiteId(null);
 		when(summaryRepository.findById(2)).thenReturn(Optional.of(summary));
 		SummaryException assertThrows_1 = Assertions.assertThrows(SummaryException.class,
-				() -> summaryServiceImpl.updateSummary(summary));
+				() -> summaryServiceImpl.updateSummary(summary,false));
 		
 		assertEquals(assertThrows_1.getMessage(),"Invalid inputs");
 	}

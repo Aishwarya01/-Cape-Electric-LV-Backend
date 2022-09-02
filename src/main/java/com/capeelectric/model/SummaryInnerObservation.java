@@ -28,6 +28,9 @@ public class SummaryInnerObservation implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "INNER_OBSERVATIONS_ID")
 	private Integer innerObservationsId;
+	
+	@Column(name = "REFERENCE_ID")
+	private Integer referenceId;
 
 	@Column(name = "FURTHER_ACTIONS")
 	private String furtherActions;
@@ -104,4 +107,14 @@ public class SummaryInnerObservation implements Serializable {
 	public void setSummaryObservation(SummaryObservation summaryObservation) {
 		this.summaryObservation = summaryObservation;
 	}
+
+	public Integer getReferenceId() {
+		return referenceId;
+	}
+
+	public void setReferenceId(Integer referenceId) {
+		this.referenceId = referenceId;
+	}
+	
+	
 }

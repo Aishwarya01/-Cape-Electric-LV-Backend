@@ -616,11 +616,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 				for (SignatorDetails arr : convertion) {
 					if (arr.getSignatorRole().equalsIgnoreCase("designer1")) {
 						declarationDesigner(document, arr);
-					}
-				}
-
-				for (SignatorDetails arr : convertion) {
-					if (arr.getSignatorRole().equalsIgnoreCase("designer2")) {
+					} else if (arr.getSignatorRole().equalsIgnoreCase("designer2")) {
 						Paragraph paragraph13 = new Paragraph("Designer: 2", font10N);
 						document.add(paragraph13);
 						declarationDesigner2(document, arr);
@@ -752,12 +748,9 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 					if (arr.getSignatorRole().equalsIgnoreCase("designer1")) {
 						designer(document, arr);
 					}
-				}
-
-				for (SignatorDetails arr : convertion) {
-					if (arr.getSignatorStatus() != null && !arr.getSignatorStatus().equalsIgnoreCase("R")) {
+					else 
 						if (arr.getSignatorRole().equalsIgnoreCase("designer2")) {
-//							
+							if (arr.getSignatorStatus() != null && !arr.getSignatorStatus().equalsIgnoreCase("R")) {
 							PdfPTable designer2 = new PdfPTable(pointColumnWidths10);
 							designer2.setWidthPercentage(100); // Width 100%
 							designer2.setSpacingBefore(5f); // Space before table
@@ -773,7 +766,7 @@ public class InstalReportServiceImplPDF implements InstalReportPDFService {
 							designer2.addCell(ddesigner);
 							document.add(designer2);
 
-							designer2(document, arr);
+							designer(document, arr);
 
 						}
 					}

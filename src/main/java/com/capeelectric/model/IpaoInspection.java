@@ -49,7 +49,31 @@ public class IpaoInspection implements Serializable {
 
 	@Column(name = "I_SERVICE_FUSE")
 	private String serviceFuse;
-
+	
+	@Column(name = "ELECTRIC_SHOCK")
+	private String electricShock;
+	
+	@Column(name = "BASIC_PROTECTION")
+	private String basicProtection;
+	
+	@Column(name = "FAULT_PROTECTION")
+	private String faultProtection;
+	
+	@Column(name = "LIMITED_VALUE")
+	private String limitedValue;
+	
+	@Column(name = "PROTECTIVE_MEASURE")
+	private String protectiveMeasure;
+	
+	@Column(name = "ADDITIONAL_MEASURE")
+	private String additionalMeasure;
+	
+	@Column(name = "ADDITIONAL_PROTECTION")
+	private String additionalProtection;
+	
+	@Column(name = "FAULT_PROTECTION_DESC")
+	private String faultProtectionDesc;
+	
 	@Column(name = "I_METER_DISTRIBUTOR")
 	private String meterDistributor;
 
@@ -233,6 +257,78 @@ public class IpaoInspection implements Serializable {
 
 	public void setServiceFuse(String serviceFuse) {
 		this.serviceFuse = serviceFuse;
+	}
+
+	
+	
+	public String getElectricShock() {
+		return electricShock;
+	}
+
+	public void setElectricShock(String electricShock) {
+		this.electricShock = electricShock;
+	}
+
+	public String getBasicProtection() {
+		return basicProtection;
+	}
+
+	public void setBasicProtection(String basicProtection) {
+		this.basicProtection = basicProtection;
+	}
+
+	public String getFaultProtection() {
+		return faultProtection;
+	}
+
+	public void setFaultProtection(String faultProtection) {
+		this.faultProtection = faultProtection;
+	}
+
+	public String getLimitedValue() {
+		return limitedValue;
+	}
+
+	public void setLimitedValue(String limitedValue) {
+		this.limitedValue = limitedValue;
+	}
+
+	public String getProtectiveMeasure() {
+		return protectiveMeasure;
+	}
+
+	public void setProtectiveMeasure(String protectiveMeasure) {
+		this.protectiveMeasure = protectiveMeasure;
+	}
+
+	
+
+	public String getAdditionalMeasure() {
+		return additionalMeasure;
+	}
+
+	public void setAdditionalMeasure(String additionalMeasure) {
+		this.additionalMeasure = additionalMeasure;
+	}
+
+	public String getAdditionalProtection() {
+		return additionalProtection;
+	}
+
+	public void setAdditionalProtection(String additionalProtection) {
+		this.additionalProtection = additionalProtection;
+	}
+
+	public String getFaultProtectionDesc() {
+		return faultProtectionDesc;
+	}
+
+	public void setFaultProtectionDesc(String faultProtectionDesc) {
+		this.faultProtectionDesc = faultProtectionDesc;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	public String getMeterDistributor() {

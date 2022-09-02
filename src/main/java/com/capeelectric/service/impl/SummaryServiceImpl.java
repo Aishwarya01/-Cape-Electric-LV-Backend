@@ -31,11 +31,15 @@ import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
 import com.capeelectric.model.Summary;
 import com.capeelectric.model.SummaryComment;
+import com.capeelectric.model.SummaryInnerObservation;
+import com.capeelectric.model.SummaryObservation;
 import com.capeelectric.model.SupplyCharacteristics;
 import com.capeelectric.model.TestingReport;
 import com.capeelectric.repository.InspectionRepository;
 import com.capeelectric.repository.InstalReportDetailsRepository;
 import com.capeelectric.repository.SiteRepository;
+import com.capeelectric.repository.SummaryInnerObservationRepo;
+import com.capeelectric.repository.SummaryObservationRepo;
 import com.capeelectric.repository.SummaryRepository;
 import com.capeelectric.repository.SupplyCharacteristicsRepository;
 import com.capeelectric.repository.TestingReportRepository;
@@ -116,21 +120,27 @@ public class SummaryServiceImpl implements SummaryService {
 	@Autowired
 	private FindNonRemovedObject findNonRemovedObject;
 	
+	@Autowired
+	private SummaryObservationRepo summaryObservationRepo;
+	
+	@Autowired
+	private SummaryInnerObservationRepo summaryInnerObservationRepo;
+	
 	/**
 	 * @ siteId unique for summary object
-	 * @param Summary object
-	 * addSummary method to find summary object based on input summary_siteId
-	 * if not available summary object will be saved
-	 * @throws CompanyDetailsException 
-	 * @throws InstalReportException 
-	 * @throws SupplyCharacteristicsException 
-	 * @throws InspectionException 
-	 * @throws PeriodicTestingException 
-	 * @throws Exception 
-	 * @throws ObservationException 
-	 * @throws PdfException 
 	 * 
-	*/
+	 * @param Summary object addSummary method to find summary object based on input
+	 *                summary_siteId if not available summary object will be saved
+	 * @throws CompanyDetailsException
+	 * @throws InstalReportException
+	 * @throws SupplyCharacteristicsException
+	 * @throws InspectionException
+	 * @throws PeriodicTestingException
+	 * @throws Exception
+	 * @throws ObservationException
+	 * @throws PdfException
+	 * 
+	 */
 	@Transactional
 	@Override
 	public void addSummary(Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException, PdfException {
@@ -177,22 +187,24 @@ public class SummaryServiceImpl implements SummaryService {
 						summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
 						summaryRepository.save(summary);
 						logger.debug("Summary Details Successfully Saved in DB");
-						siteRepo = siteRepository.findById(summary.getSiteId());
-						if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
-							site = siteRepo.get();
-							site.setAllStepsCompleted("AllStepCompleted");
-							siteRepository.save(site);
-							logger.debug("AllStepCompleted information saved site table in DB"+summary.getUserName());
-						} else {
-							logger.error("Site-Id Information not Available in site_Table");
-							throw new SummaryException("Site-Id Information not Available in site_Table");
-						}
+						siteDetails.updateSite(summary.getSiteId(),
+								summary.getUserName(),"Step5 completed");
+						logger.debug("Site Successfully updated in DB");
+//						siteRepo = siteRepository.findById(summary.getSiteId());
+//						if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
+//							site = siteRepo.get();
+//							site.setAllStepsCompleted("AllStepCompleted");
+//							siteRepository.save(site);
+//							logger.debug("AllStepCompleted information saved site table in DB"+summary.getUserName());
+//						} else {
+//							logger.error("Site-Id Information not Available in site_Table");
+//							throw new SummaryException("Site-Id Information not Available in site_Table");
+//						}
 
 					} else {
 						logger.error("Site-Id Already Available");
 						throw new SummaryException("Site-Id Already Available");
 					}
-                    printPDfDatas(summary,reportDetailsRepo,supplyCharacteristics,periodicInspection,testingRepo);
 					
 				} else {
 					logger.error("Please fill all the fields before clicking next button");
@@ -270,18 +282,64 @@ public class SummaryServiceImpl implements SummaryService {
 	*/
 	@Transactional
 	@Override
-	public void updateSummary(Summary summary) throws SummaryException, CompanyDetailsException {
-
+	public void updateSummary(Summary summary,Boolean superAdminFlag) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, 
+	PeriodicTestingException, Exception, ObservationException, PdfException{
+		
 		if (summary != null && summary.getSummaryId() != null && summary.getSummaryId() != 0
 				&& summary.getSiteId() != null && summary.getSiteId() != 0) {
 			Optional<Summary> summaryRepo = summaryRepository.findById(summary.getSummaryId());
 			if (summaryRepo.isPresent() && summaryRepo.get().getSiteId().equals(summary.getSiteId())) {
+				List<SummaryObservation> summaryObservationData = summaryRepo.get().getSummaryObservation();
+				if(summaryObservationData != null) {
+					for(SummaryObservation summaryObservationItr : summaryObservationData) {
+						List<SummaryInnerObservation> summaryInnerObservationData = summaryObservationItr.getSummaryInnerObservation();
+						for(SummaryInnerObservation summaryInnerObservationItr : summaryInnerObservationData) {
+							summaryInnerObservationRepo.deleteInnerObservRecordsById(summaryInnerObservationItr.getInnerObservationsId());
+						}
+						summaryObservationRepo.deleteObservRecordsById(summaryObservationItr.getObservationsId());
+					}	
+				}
+				
 				summary.setUpdatedDate(LocalDateTime.now());
 				summary.setUpdatedBy(userFullName.findByUserName(summary.getUserName()));
+				if(summary.getSummaryComment() == null) {
+					summary.setSummaryComment(summaryRepo.get().getSummaryComment());
+				}
 				summaryRepository.save(summary);
 				logger.debug("Summary Details Successfully updated in DB");
-				siteDetails.updateSite(summary.getSiteId(), summary.getUserName(),"Step5 completed");
-				logger.debug("Updated successfully site updatedUsername",summary.getUserName());
+				
+				if(!superAdminFlag) {
+					siteDetails.updateSite(summary.getSiteId(), summary.getUserName(),"Step5 completed");
+					logger.debug("Updated successfully site updatedUsername",summary.getUserName());
+				}
+				else {
+					Optional<SupplyCharacteristics> supplyCharacteristics = supplyCharacteristicsRepository
+							.findBySiteId(summary.getSiteId());
+					Optional<TestingReport> testingRepo = testingReportRepository.findBySiteId(summary.getSiteId());
+					Optional<PeriodicInspection> periodicInspection = inspectionRepository.findBySiteId(summary.getSiteId());
+					Optional<ReportDetails> reportDetailsRepo = installationReportRepository.findBySiteId(summary.getSiteId());
+					siteRepo = siteRepository.findById(summary.getSiteId());
+					if(reportDetailsRepo.isPresent() && supplyCharacteristics.isPresent() && periodicInspection.isPresent()
+							 && testingRepo.isPresent() && summaryRepo.isPresent()) {
+						 
+		    			if (siteRepo.isPresent() && siteRepo.get().getSiteId().equals(summary.getSiteId())) {
+		    				site = siteRepo.get();
+		    				printPDfDatas(summaryRepo.get(),reportDetailsRepo,supplyCharacteristics,periodicInspection,testingRepo);
+		    				site.setAllStepsCompleted("AllStepCompleted");
+		    				siteRepository.save(site);
+		    				logger.debug("AllStepCompleted information saved site table in DB"+summary.getUserName());
+		    			} else {
+		    				logger.error("Site-Id Information not Available in site_Table");
+		    				throw new SummaryException("Site-Id Information not Available in site_Table");
+		    			}
+					}
+					else {
+						logger.error("Please fill all the fields before clicking submit button");
+						throw new SummaryException("Please fill all the fields before clicking submit button");
+					}
+					
+				}
+				
 			} else {
 				logger.error("Given SiteId and ReportId is Invalid");
 				throw new SummaryException("Given SiteId and ReportId is Invalid");
@@ -290,7 +348,7 @@ public class SummaryServiceImpl implements SummaryService {
 		} else {
 			logger.error("Invalid Inputs");
 			throw new SummaryException("Invalid inputs");
-		}
+		}	
 	}
 	
 	@Override

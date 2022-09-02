@@ -235,7 +235,7 @@ public class PrintServiceImpl implements PrintService {
 						int j = 0;
 						for (SummaryObservation supplyObs : summaryObser) {
 
-							if (supplyObs.getObservationComponentDetails().equals("alternate " + j)) {
+							if (supplyObs.getObservationComponentDetails().contains("alternate")) {
 
 								PdfPCell alOb1 = new PdfPCell(new Paragraph("Alternate Observations - " + i, font9));
 								alOb1.setHorizontalAlignment(Element.ALIGN_JUSTIFIED);
