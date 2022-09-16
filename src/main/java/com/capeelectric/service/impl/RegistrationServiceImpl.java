@@ -124,7 +124,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			}
 
 		} else {
-			logger.error("AddingRegistration is Faild , Because Invalid Inputs");
+			logger.error("AddingRegistration is Failed , Because Invalid Inputs");
 			throw new RegistrationException("Invalid Inputs");
 		}
 	}
@@ -250,10 +250,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 		logger.debug("Cape-Electric-SMS-Api service Response=[{}]", sendOtpResponse);
 
 		if (!sendOtpResponse.getBody().matches("(.*)Success(.*)")) {
-			logger.error("Cape-Electric-SMS-Api service call faild=[{}]" + sendOtpResponse.getBody());
+			logger.error("Cape-Electric-SMS-Api service call failed=[{}]" + sendOtpResponse.getBody());
 			throw new RegistrationException(sendOtpResponse.getBody());
 		}
-
 		return sendOtpResponse.getBody().replaceAll(SESSION_TITLE, "$1");
 	}
 
@@ -352,7 +351,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public String retrieveUserNameFromRegister(String userName) throws RegistrationException {
-		// TODO Auto-generated method stub
 		Optional<Register> registerDetailsFromDB = registerRepository.findByUsername(userName);
 		return registerDetailsFromDB.isPresent() ? registerDetailsFromDB.get().getUsername(): "";
 	}
