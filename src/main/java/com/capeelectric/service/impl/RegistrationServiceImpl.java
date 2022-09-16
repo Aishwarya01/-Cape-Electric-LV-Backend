@@ -1,10 +1,14 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +76,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setCreatedBy(register.getName());
 					register.setUpdatedBy(register.getName());
 					Register createdRegister = registerRepository.save(register);
-					logger.debug("Sucessfully Registration Information Saved");
+					logger.debug("Successfully Registration Information Saved");
 					return createdRegister;
 				} else {
 					logger.error(isValidMobileNumber(register.getContactNumber()) + "  Given MobileNumber is Invalid");
@@ -131,13 +135,20 @@ public class RegistrationServiceImpl implements RegistrationService {
 			logger.debug("RetrieveRegistration Started with User : {} ", userName);
 			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
 			if (registerRepo.isPresent()) {
-				return registerRepository.findByUsername(userName);
+				registerRepo.get().setApplicationType(
+						Stream.of(Arrays.asList(registerRepo.get().getApplicationType().split(","))
+								.stream()
+								.sorted(Comparator.naturalOrder())
+								.collect(Collectors.toList()).stream()
+								.toArray(String[]::new))
+								.collect(Collectors.joining(","))); 
+				return registerRepo;
 			} else {
 				logger.error("Email Id doesn't exist!");
 				throw new RegistrationException("Email Id doesn't exist!");
 			}
 		} else {
-			logger.error("RetrieveRegistration is Faild , Because Invalid Inputs");
+			logger.error("RetrieveRegistration is Failed , Because Invalid Inputs");
 			throw new RegistrationException("Invalid Inputs");
 		}
 
@@ -164,11 +175,11 @@ public class RegistrationServiceImpl implements RegistrationService {
 				if (register.getRole().equalsIgnoreCase("INSPECTOR")) {
 					register.setUpdatedBy(userFullName.findByUserName(register.getUsername()));
 					registerRepository.save(register);
-					logger.debug("Inspector registration sucessfully updated");
+					logger.debug("Inspector registration successfully updated");
 				} else {
 					register.setUpdatedBy(userFullName.findByUserName(register.getAssignedBy()));
 					registerRepository.save(register);
-					logger.debug("Viewer registration sucessfully updated");
+					logger.debug("Viewer registration successfully updated");
 				}
 
 			} else {
