@@ -533,24 +533,24 @@ public class PrintSupplyServiceImpl implements PrintSupplyService {
 				PdfPTable table9 = new PdfPTable(pointColumnWidths);
 				for(SupplyOuterObservation supplyOuterObs: supply.getSupplyOuterObservation()) {
 					if(supplyOuterObs.getObservationComponentDetails().equalsIgnoreCase("instalLocationReportOb")) {
-					
+
 						PdfPTable tableInstalLocationReport = new PdfPTable(pointColumnWidths);
 						tableInstalLocationReport.setWidthPercentage(100); // Width 100%
 						tableInstalLocationReport.setSpacingBefore(5f); // Space before table
-//						table7.setSpacingAfter(10f); // Space after table
+						//						table7.setSpacingAfter(10f); // Space after table
 						tableInstalLocationReport.setWidthPercentage(100);
 						tableInstalLocationReport.getDefaultCell().setBorder(0);
-						
-					PdfPCell cellObs = new PdfPCell(new Paragraph("Remarks/Observation :", font6));
-					cellObs.setBorder(PdfPCell.NO_BORDER);
-					cellObs.setGrayFill(0.92f);
-					tableInstalLocationReport.addCell(cellObs);
-					PdfPCell cell73 = new PdfPCell(new Paragraph(supplyOuterObs.getObservationDescription(), font6));
-					cell73.setGrayFill(0.92f);
-					cell73.setBorder(PdfPCell.NO_BORDER);
-					tableInstalLocationReport.addCell(cell73);
-					document.add(tableInstalLocationReport);
-			 
+
+						PdfPCell cellObs = new PdfPCell(new Paragraph("Remarks/Observation :", font6));
+						cellObs.setBorder(PdfPCell.NO_BORDER);
+						cellObs.setGrayFill(0.92f);
+						tableInstalLocationReport.addCell(cellObs);
+						PdfPCell cell73 = new PdfPCell(new Paragraph(supplyOuterObs.getObservationDescription(), font6));
+						cell73.setGrayFill(0.92f);
+						cell73.setBorder(PdfPCell.NO_BORDER);
+						tableInstalLocationReport.addCell(cell73);
+						document.add(tableInstalLocationReport);
+
 					}
 				}
 				
