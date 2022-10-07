@@ -494,26 +494,26 @@ public class InspectionServiceImpl implements InspectionService {
 //		return ipaoInspectionList;
 //	}
 
-	private void findConsumerUnitLocation(List<ConsumerUnit> consumerUnitList) throws InspectionException {
-		for (ConsumerUnit consumerUnit : consumerUnitList) {
-			if (consumerUnit != null && consumerUnit.getLocation() != null) {
-				ConsumerUnit consumerLocation = inspectionConsumerUnitRepository
-						.findByLocation(consumerUnit.getLocation());
-				if (consumerLocation == null) {
-
-				} else {
-					logger.error("Given LocationName already present in ConsumerUnit,please try new LocationName");
-					throw new InspectionException(
-							"Given LocationName already present in ConsumerUnit,please try new LocationName");
-				}
-
-			} else {
-				logger.error("Please check Location Information in ConsumerUnit");
-				throw new InspectionException("Please check Location Information in ConsumerUnit");
-			}
-		}
-
-	}
+//	private void findConsumerUnitLocation(List<ConsumerUnit> consumerUnitList) throws InspectionException {
+//		for (ConsumerUnit consumerUnit : consumerUnitList) {
+//			if (consumerUnit != null && consumerUnit.getLocation() != null) {
+//				ConsumerUnit consumerLocation = inspectionConsumerUnitRepository
+//						.findByLocation(consumerUnit.getLocation());
+//				if (consumerLocation == null) {
+//
+//				} else {
+//					logger.error("Given LocationName already present in ConsumerUnit,please try new LocationName");
+//					throw new InspectionException(
+//							"Given LocationName already present in ConsumerUnit,please try new LocationName");
+//				}
+//
+//			} else {
+//				logger.error("Please check Location Information in ConsumerUnit");
+//				throw new InspectionException("Please check Location Information in ConsumerUnit");
+//			}
+//		}
+//
+//	}
 
 	/**
 	 * addRemoveStatusInTestDistRecords function first finding consumer R status then search corresponding 

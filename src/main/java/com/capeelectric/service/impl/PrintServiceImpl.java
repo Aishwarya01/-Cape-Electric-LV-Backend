@@ -22,7 +22,6 @@ import com.capeelectric.model.SummaryDeclaration;
 import com.capeelectric.model.SummaryInnerObservation;
 import com.capeelectric.model.SummaryObservation;
 import com.capeelectric.repository.SummaryRepository;
-import com.capeelectric.service.ObservationService;
 import com.capeelectric.service.PrintService;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
@@ -45,9 +44,6 @@ public class PrintServiceImpl implements PrintService {
 
 	@Autowired
 	private SummaryRepository summaryRepository;
-
-	@Autowired
-	private ObservationService observationService;
 
 	@Override
 	public void printSummary(String userName, Integer siteId) throws SummaryException, ObservationException, PdfException {

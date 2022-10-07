@@ -22,7 +22,8 @@ public class ApplicationTypesServiceImpl implements ApplicationTypesService {
 	
 	@Override
 	public List<ApplicationTypes> retrieveTypes() {
-		return (List<ApplicationTypes>) repository.findAll();
+		List<ApplicationTypes> applicationTypesDetails = (List<ApplicationTypes>) repository.findAll();
+		return sortApplicationType(applicationTypesDetails);
 	}
 
 	@Override
@@ -49,6 +50,11 @@ public class ApplicationTypesServiceImpl implements ApplicationTypesService {
 	public void deleteApplicationType(Integer id) {
 		// TODO Auto-generated method stub
 		repository.deleteById(id);;
+	}
+	
+	private List<ApplicationTypes> sortApplicationType(List<ApplicationTypes> applicationType) {
+		applicationType.sort((o1, o2) -> o1.getCode().compareTo(o2.getCode()));
+		return applicationType;
 	}
 	
 	

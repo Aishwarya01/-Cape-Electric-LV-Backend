@@ -34,7 +34,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
-import com.capeelectric.repository.SiteRepository;
 import com.capeelectric.util.AWSEmailConfig;
 import com.capeelectric.util.Constants;
 import com.itextpdf.text.DocumentException;
@@ -60,9 +59,6 @@ public class AWSEmailService {
 
 	@Value("${access.key.secret}")
 	private String accessKeySecret;
-
-	@Autowired
-	private SiteRepository siteRepository;
 
 	private static final Logger logger = LoggerFactory.getLogger(AWSEmailService.class);
 
