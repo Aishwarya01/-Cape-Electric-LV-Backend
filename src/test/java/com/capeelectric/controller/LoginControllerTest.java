@@ -33,7 +33,7 @@ import com.capeelectric.model.RegisterDetails;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
-import com.capeelectric.service.impl.AWSEmailService;
+import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.LoginServiceImpl;
 import com.capeelectric.service.impl.RegistrationDetailsServiceImpl;
 
@@ -60,7 +60,7 @@ public class LoginControllerTest {
 	private JwtTokenUtil jwtTokenUtil;
 
 	@MockBean
-	private AWSEmailService emailService;
+	private RegistrationService emailService;
 
 	@MockBean
 	private RegistrationRepository registrationRepository;

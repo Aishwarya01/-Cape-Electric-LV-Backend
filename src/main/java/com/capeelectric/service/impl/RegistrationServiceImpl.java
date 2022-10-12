@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.capeelectric.config.AWSConfig;
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
@@ -54,6 +55,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 	
 	@Autowired
 	private UserFullName userFullName;
+	
+	@Autowired
+	private AWSConfig awsConfiguration;
 	
 	@Override
 	public Register addRegistration(Register register) throws RegistrationException {
@@ -111,7 +115,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					viewer.setCreatedBy(viewer.getName());
 					viewer.setUpdatedBy(viewer.getName());
 					Register createdRegister = registerRepository.save(viewer);
-					logger.debug("Sucessfully Registration Information Saved");
+					logger.debug("Successfully Registration Information Saved");
 					return createdRegister;
 				} else {
 					logger.error(isValidMobileNumber(viewer.getContactNumber()) + "  Given MobileNumber is Invalid");
@@ -353,5 +357,42 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public String retrieveUserNameFromRegister(String userName) throws RegistrationException {
 		Optional<Register> registerDetailsFromDB = registerRepository.findByUsername(userName);
 		return registerDetailsFromDB.isPresent() ? registerDetailsFromDB.get().getUsername(): "";
+	}
+
+	@Override
+	public void sendEmail(String email, String content) {
+		restTemplate.exchange(awsConfiguration.getSendEmail() + email + "/" +content,
+				HttpMethod.GET, null, String.class);
+
+		logger.debug("Cape-Electric-AWS-Email service Response=[{}] was successful");
+		
+	}
+
+	@Override
+	public void sendEmailToAdmin(String content) {
+		restTemplate.exchange(awsConfiguration.getSendEmailToAdmin() + content,
+				HttpMethod.GET, null, String.class);
+
+		logger.debug("Cape-Electric-AWS-Email service Response=[{}] was successful");
+		
+	}
+
+	@Override
+	public void sendEmailForComments(String toEmail, String ccEmail, String content) {
+		restTemplate.exchange(awsConfiguration.getSendEmailForComments() + toEmail + "/"+ ccEmail + "/"+ content,
+				HttpMethod.GET, null, String.class);
+
+		logger.debug("Cape-Electric-AWS-Email service Response=[{}] was successful");
+		
+	}
+
+	@Override
+	public void sendEmailPDF(String userName, Integer id, int count, String keyname) {
+		String type = "LV";
+		restTemplate.exchange(awsConfiguration.getSendEmailWithPDF() + userName + "/"+type+"/"+ id +"/"+ keyname,
+				HttpMethod.GET, null, String.class);
+
+		logger.debug("Cape-Electric-AWS-Email service Response=[{}] was successful");
+		
 	}
 }

@@ -25,7 +25,6 @@ import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
-import com.capeelectric.service.impl.AWSEmailService;
 import com.capeelectric.util.Utility;
 
 @RestController
@@ -34,9 +33,6 @@ import com.capeelectric.util.Utility;
 public class AdminPageController {
 	private static final Logger logger = LoggerFactory.getLogger(AdminPageController.class);
 
-	@Autowired
-	private AWSEmailService awsEmailService;
-	
 	@Value("${app.web.domain}")
 	private String webUrl;
 
@@ -57,7 +53,7 @@ public class AdminPageController {
 				.buildAndExpand(register.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());
 		if (register != null && register.getPermission().equalsIgnoreCase("YES")) {
-			awsEmailService.sendEmail(register.getUsername(),
+			registrationService.sendEmail(register.getUsername(),
 					"Your request for accessing the SOLVE App is approved and you can generate OTP with this link"
 							+ "\n" + "\n" 
 							+ (resetUrl.contains("localhost:5000")
@@ -65,7 +61,7 @@ public class AdminPageController {
 											: "https://www."+webUrl)
 							+ "/generateOtp" + ";email=" + register.getUsername());
 		} else {
-			awsEmailService.sendEmail(register.getUsername(),
+			registrationService.sendEmail(register.getUsername(),
 					register.getComment());
 		}
 		return new ResponseEntity<String>("Successfully Updated RegisterPermission", HttpStatus.OK);

@@ -31,7 +31,6 @@ import com.capeelectric.exception.UserException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.service.RegistrationService;
-import com.capeelectric.service.impl.AWSEmailService;
 import com.capeelectric.util.Constants;
 
 @ExtendWith(SpringExtension.class)
@@ -50,7 +49,7 @@ public class RegistrationControllerTest {
 	private RegistrationException registrationException;
 
 	@MockBean
-	private AWSEmailService awsEmailService;
+	private RegistrationService awsEmailService;
 
 	@MockBean
 	private RegistrationRepository registerRepository;

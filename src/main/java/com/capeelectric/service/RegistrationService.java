@@ -39,5 +39,13 @@ public interface RegistrationService {
 	public List<Register> retrieveAllRegistration() throws RegistrationException;
 	
 	public String retrieveUserNameFromRegister(String userName) throws RegistrationException;
+	
+	public void sendEmail(String email, String content);
+	
+	public void sendEmailToAdmin(String content);
+	
+	public void sendEmailForComments(String toEmail, String ccEmail, String content);
+	
+	public void sendEmailPDF(String userName, Integer siteId, int count, String keyname);
 
 }

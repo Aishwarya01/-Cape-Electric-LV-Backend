@@ -35,7 +35,7 @@ import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
 import com.capeelectric.request.ContactNumberRequest;
 import com.capeelectric.response.AuthenticationResponseRegister;
-import com.capeelectric.service.impl.AWSEmailService;
+import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.LoginServiceImpl;
 import com.capeelectric.service.impl.RegistrationDetailsServiceImpl;
 
@@ -55,7 +55,7 @@ public class LoginController {
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	private AWSEmailService awsEmailService;
+	private RegistrationService awsEmailService;
 	
 	@Autowired
 	private RegistrationRepository registrationRepository;

@@ -31,7 +31,6 @@ import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
-import com.capeelectric.service.impl.AWSEmailService;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +48,7 @@ public class AdminPageControllerTest {
 	private RegistrationException registrationException;
 	
 	@MockBean
-	private AWSEmailService awsEmailService;
+	private RegistrationService awsEmailService;
 	
 	@MockBean
 	private RegistrationRepository registerRepository;
