@@ -1,6 +1,7 @@
 package com.capeelectric.service;
 
 
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,10 +43,12 @@ public interface RegistrationService {
 	
 	public void sendEmail(String email, String content);
 	
-	public void sendEmailToAdmin(String content);
+	public void sendEmailToAdmin(String content) throws URISyntaxException;
 	
-	public void sendEmailForComments(String toEmail, String ccEmail, String content);
+	public void sendEmailForComments(String toEmail, String ccEmail, String content) throws URISyntaxException;
 	
 	public void sendEmailPDF(String userName, Integer siteId, int count, String keyname);
+	
+	public void sendEmailForOTPGeneration(String email, String content) throws URISyntaxException;
 
 }

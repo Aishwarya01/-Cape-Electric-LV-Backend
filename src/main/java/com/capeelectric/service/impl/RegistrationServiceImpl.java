@@ -1,5 +1,8 @@
 package com.capeelectric.service.impl;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -13,8 +16,13 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -24,6 +32,7 @@ import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
+import com.capeelectric.model.EmailContent;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.RegisterPermissionRequest;
@@ -361,29 +370,42 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public void sendEmail(String email, String content) {
+		restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
 		restTemplate.exchange(awsConfiguration.getSendEmail() + email + "/" +content,
 				HttpMethod.GET, null, String.class);
 
-		logger.debug("Cape-Electric-AWS-Email service Response=[{}] was successful");
+		logger.debug("Cape-Electric-AWS-Email service Response was successful");
 		
 	}
 
 	@Override
-	public void sendEmailToAdmin(String content) {
-		restTemplate.exchange(awsConfiguration.getSendEmailToAdmin() + content,
-				HttpMethod.GET, null, String.class);
+	public void sendEmailToAdmin(String content) throws URISyntaxException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		URI uri = new URI(awsConfiguration.getSendEmailToAdmin());
+		EmailContent emailContent = new EmailContent();
+		emailContent.setContentDetails(content);
+		RequestEntity<EmailContent> requestEntity = new RequestEntity<>(emailContent, headers, HttpMethod.PUT, uri);
+		ParameterizedTypeReference<EmailContent> typeRef = new ParameterizedTypeReference<EmailContent>() {};
 
-		logger.debug("Cape-Electric-AWS-Email service Response=[{}] was successful");
+		ResponseEntity<EmailContent> responseEntity = restTemplate.exchange(requestEntity, typeRef);
+		logger.debug("Cape-Electric-AWS-Email service Response was successful"+responseEntity.getStatusCode());
 		
 	}
 
 	@Override
-	public void sendEmailForComments(String toEmail, String ccEmail, String content) {
-		restTemplate.exchange(awsConfiguration.getSendEmailForComments() + toEmail + "/"+ ccEmail + "/"+ content,
-				HttpMethod.GET, null, String.class);
+	public void sendEmailForComments(String toEmail, String ccEmail, String content) throws URISyntaxException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		URI uri = new URI(awsConfiguration.getSendEmailForComments() + toEmail + "/"+ ccEmail);
+		EmailContent emailContent = new EmailContent();
+		emailContent.setContentDetails(content);
+		RequestEntity<EmailContent> requestEntity = new RequestEntity<>(emailContent, headers, HttpMethod.PUT, uri);
+		ParameterizedTypeReference<EmailContent> typeRef = new ParameterizedTypeReference<EmailContent>() {};
 
-		logger.debug("Cape-Electric-AWS-Email service Response=[{}] was successful");
-		
+		ResponseEntity<EmailContent> responseEntity = restTemplate.exchange(requestEntity, typeRef);
+		logger.debug("Cape-Electric-AWS-Email service Response was successful"+responseEntity.getStatusCode());
+
 	}
 
 	@Override
@@ -392,7 +414,21 @@ public class RegistrationServiceImpl implements RegistrationService {
 		restTemplate.exchange(awsConfiguration.getSendEmailWithPDF() + userName + "/"+type+"/"+ id +"/"+ keyname,
 				HttpMethod.GET, null, String.class);
 
-		logger.debug("Cape-Electric-AWS-Email service Response=[{}] was successful");
+		logger.debug("Cape-Electric-AWS-Email service Response was successful");
 		
+	}
+	
+	@Override
+	public void sendEmailForOTPGeneration(String email, String content) throws URISyntaxException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		URI uri = new URI(awsConfiguration.getSendEmailForApproval() + email );
+		EmailContent emailContent = new EmailContent();
+		emailContent.setContentDetails(content);
+		RequestEntity<EmailContent> requestEntity = new RequestEntity<>(emailContent, headers, HttpMethod.PUT, uri);
+		ParameterizedTypeReference<EmailContent> typeRef = new ParameterizedTypeReference<EmailContent>() {};
+
+		ResponseEntity<EmailContent> responseEntity = restTemplate.exchange(requestEntity, typeRef);
+		logger.debug("Cape-Electric-AWS-Email service Response was successful"+responseEntity.getStatusCode());
 	}
 }

@@ -2,6 +2,7 @@ package com.capeelectric.controller;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -46,14 +47,14 @@ public class AdminPageController {
 	
 	@PutMapping("/updatePermission")
 	public ResponseEntity<String> updatePermission(@RequestBody RegisterPermissionRequest registerPermissionRequest)
-			throws RegistrationException, RegisterPermissionRequestException, MessagingException, MalformedURLException {
+			throws RegistrationException, RegisterPermissionRequestException, MessagingException, MalformedURLException, URISyntaxException {
 		logger.info("called updatePermission function AdminUserName : {}", registerPermissionRequest.getAdminUserName());
 		Register register = registrationService.updatePermission(registerPermissionRequest);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(register.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());
 		if (register != null && register.getPermission().equalsIgnoreCase("YES")) {
-			registrationService.sendEmail(register.getUsername(),
+			registrationService.sendEmailForOTPGeneration(register.getUsername(),
 					"Your request for accessing the SOLVE App is approved and you can generate OTP with this link"
 							+ "\n" + "\n" 
 							+ (resetUrl.contains("localhost:5000")

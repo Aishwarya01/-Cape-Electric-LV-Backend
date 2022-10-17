@@ -6,6 +6,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class AdminPageControllerTest {
 	
 	@Test
 	public void testUpdatePermission()
-			throws MessagingException, IOException, RegisterPermissionRequestException, RegistrationException {
+			throws MessagingException, IOException, RegisterPermissionRequestException, RegistrationException, URISyntaxException {
 		logger.info("RegistrationControllerTest testUpdatePermission_funcion Started");
 		
 		MockHttpServletRequest request = new MockHttpServletRequest();

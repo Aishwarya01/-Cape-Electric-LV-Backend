@@ -58,7 +58,7 @@ public class SendReplyComments {
 			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 					.buildAndExpand(registerRepo.get().getRegisterId()).toUri();
 			String resetUrl = Utility.getSiteURL(uri.toURL());
-			awsEmailService.sendEmailForComments(ViewerUserName, ViewerUserName,
+			awsEmailService.sendEmailForComments(ViewerUserName, inspectoUserName,
 					Constants.EMAIL_REPLY_COMMENT_MSG + "\n" + "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")

@@ -86,7 +86,7 @@ public class LoginController {
 		logger.debug("forgotPassword started");
 		Register registerUser = loginService.findByUserName(email);
 		logger.debug("AwsEmailService call Started");
-		awsEmailService.sendEmail(email, "You have initiated an change in password." + "\n" + email);
+		awsEmailService.sendEmail(email, "You have initiated an change in password.");
 		logger.debug("AwsEmailService call Successfully Ended");
 		return new ResponseEntity<String>(registerUser.getUsername(), HttpStatus.OK);
 		
@@ -99,7 +99,7 @@ public class LoginController {
 		logger.debug("CreatePassword starts");
 		Register updatedUser = loginService.createPassword(request);
 		logger.debug("AwsEmailService call Started");
-		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully created your password");
+		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully created your password.");
 		logger.debug("CreatePassword ends");
 		return new ResponseEntity<String>("You have Successfully Created Your Password", HttpStatus.OK);
 
@@ -112,7 +112,7 @@ public class LoginController {
 		logger.debug("Save Contact Number starts");
 		Register updatedUser = loginService.saveContactNumber(request);
 		logger.debug("AwsEmailService call Started");
-		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully updated your contact number");
+		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully updated your contact number.");
 		logger.debug("Save Contact Number ends");
 		return new ResponseEntity<String>("You have successfully updated your contact number", HttpStatus.OK);
 		
@@ -126,7 +126,7 @@ public class LoginController {
 
 		Register updatedUser = loginService.updatePassword(request.getEmail(), request.getPassword());
 		logger.debug("AwsEmailService call Started");
-		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully updated your password");
+		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully updated your password.");
 		logger.debug("Update Password ends");
 		return new ResponseEntity<String>("You have Successfully Updated Your Password", HttpStatus.OK);
 

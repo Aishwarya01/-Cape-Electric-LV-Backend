@@ -22,6 +22,9 @@ public class AWSConfig {
 	
 	@Value("${aws.email.send.admin}")
 	private String sendEmailToAdmin;
+	
+	@Value("${aws.email.send.approval}")
+	private String sendEmailForApproval;
 
 	/**
 	 * @return the sendEmailWithPDF
@@ -77,6 +80,20 @@ public class AWSConfig {
 	 */
 	public void setSendEmailToAdmin(String sendEmailToAdmin) {
 		this.sendEmailToAdmin = sendEmailToAdmin;
+	}
+
+	/**
+	 * @return the sendEmailForApproval
+	 */
+	public String getSendEmailForApproval() {
+		return sendEmailForApproval;
+	}
+
+	/**
+	 * @param sendEmailForApproval the sendEmailForApproval to set
+	 */
+	public void setSendEmailForApproval(String sendEmailForApproval) {
+		this.sendEmailForApproval = sendEmailForApproval;
 	}
 	
 	

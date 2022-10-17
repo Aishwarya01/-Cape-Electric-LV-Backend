@@ -3,6 +3,7 @@ package com.capeelectric.controller;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
@@ -48,14 +49,14 @@ public class RegistrationController {
 
 	@PostMapping("/addRegistration")
 	public ResponseEntity<Void> addRegistration(@RequestBody Register register)
-			throws RegistrationException, MessagingException, MalformedURLException {
+			throws RegistrationException, MessagingException, MalformedURLException, URISyntaxException {
 		logger.debug("Called addRegistration function UserName : {}", register.getUsername());
 		Register createdRegister = registrationService.addRegistration(register);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(createdRegister.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());
 		if (createdRegister.getPermission().equalsIgnoreCase("YES")) {
-			registrationService.sendEmail(register.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
+			registrationService.sendEmailForOTPGeneration(register.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
 					+ (resetUrl.contains("localhost:5000")
 							? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
 							: "https://www."+webUrl)
@@ -78,13 +79,13 @@ public class RegistrationController {
 	 
 	@PostMapping("/addViewerRegistration")
 	public ResponseEntity<Void> addViewerRegistration(@RequestBody Register register)
-			throws RegistrationException, MessagingException, MalformedURLException, CompanyDetailsException {
+			throws RegistrationException, MessagingException, MalformedURLException, CompanyDetailsException, URISyntaxException {
 		logger.debug("called addRegistration function UserName : {}", register.getUsername());
 		Register createdRegister = registrationService.addViewerRegistration(register);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(createdRegister.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());
-		registrationService.sendEmail(createdRegister.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
+		registrationService.sendEmailForOTPGeneration(createdRegister.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
 				+ (resetUrl.contains("localhost:5000")
 						? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
 						: "https://www."+webUrl)
