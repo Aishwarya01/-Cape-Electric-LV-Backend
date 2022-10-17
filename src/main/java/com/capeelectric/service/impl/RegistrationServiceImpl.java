@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import com.capeelectric.config.AWSConfig;
+import com.capeelectric.config.AWSLVConfig;
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
@@ -66,7 +66,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	private UserFullName userFullName;
 	
 	@Autowired
-	private AWSConfig awsConfiguration;
+	private AWSLVConfig awsConfiguration;
 	
 	@Override
 	public Register addRegistration(Register register) throws RegistrationException {
