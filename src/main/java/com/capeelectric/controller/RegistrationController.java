@@ -100,15 +100,13 @@ public class RegistrationController {
 		return registrationService.retrieveRegistration(userName);
 	}
 
-	@PutMapping("/updateRegistration/{islicenseupdate}")
-	public ResponseEntity<String> updateRegistration(@RequestBody Register register,@PathVariable("islicenseupdate") Boolean isLicenseUpdate)
-			throws IOException, MessagingException, RegistrationException, CompanyDetailsException {
+	@PutMapping("/updateRegistration/{adminApproveRequired}")
+	public ResponseEntity<String> updateRegistration(@RequestBody Register register,@PathVariable("adminApproveRequired") Boolean adminApproveRequired)
+			throws IOException, MessagingException, RegistrationException, CompanyDetailsException, URISyntaxException {
 		logger.debug("called updateRegistration function UserName : {}, IsLicenseUpdate : {}", register.getUsername(),
-				isLicenseUpdate);
-		registrationService.updateRegistration(register, isLicenseUpdate);
-		logger.debug("Started Updated Registration Service");
-		registrationService.sendEmail(register.getUsername(), (isLicenseUpdate ? ("Inspector ("+register.getAssignedBy()+") have modified the Site Details for your profile"): "FYI: You have successfully updated your profile" ));
-		logger.debug("Successfully Updated Registration");
+				adminApproveRequired);
+		registrationService.updateRegistration(register, adminApproveRequired);
+ 		logger.debug("updateRegistration function Successfully call Ended");
 		return new ResponseEntity<String>("Successfully Updated Registration", HttpStatus.OK);
 	}
 	

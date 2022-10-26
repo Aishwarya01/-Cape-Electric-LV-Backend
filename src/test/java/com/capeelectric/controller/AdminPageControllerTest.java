@@ -48,8 +48,8 @@ public class AdminPageControllerTest {
 	@MockBean
 	private RegistrationException registrationException;
 	
-	@MockBean
-	private RegistrationService awsEmailService;
+//	@MockBean
+//	private RegistrationService awsEmailService;
 	
 	@MockBean
 	private RegistrationRepository registerRepository;
@@ -95,7 +95,7 @@ public class AdminPageControllerTest {
 
 		when(registrationService.updatePermission(permissionRequest)).thenReturn(register);
 
-		doNothing().when(awsEmailService).sendEmail(register.getUsername(),
+		doNothing().when(registrationService).sendEmail(register.getUsername(),
 				"You have successfully updated your profile");
 		ResponseEntity<String> updatePermission = registrationController.updatePermission(permissionRequest);
 		assertEquals(updatePermission.getStatusCode(), HttpStatus.OK);

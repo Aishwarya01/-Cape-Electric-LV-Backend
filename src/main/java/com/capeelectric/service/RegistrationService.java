@@ -1,9 +1,12 @@
 package com.capeelectric.service;
 
 
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+
+import javax.mail.MessagingException;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
@@ -25,7 +28,7 @@ public interface RegistrationService {
 
 	public Optional<Register> retrieveRegistration(String userName) throws RegistrationException;
 
-	public void updateRegistration(Register inspector, Boolean isLicenseUpdate) throws RegistrationException, CompanyDetailsException;
+	public void updateRegistration(Register inspector, Boolean adminApproveRequired) throws RegistrationException, CompanyDetailsException, MalformedURLException, MessagingException, URISyntaxException;
 
 	public void sendOtp(String userName, String mobileNumber) throws RegistrationException;
 

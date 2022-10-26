@@ -91,7 +91,7 @@ public class LoginControllerTest {
 		ResponseEntity<?> token = loginController.createAuthenticationToken(authenticationRequest);
 		assertNotNull(token);
 
-		register.setPermission("NO");
+		register.setPermission("NOT_AUTHORIZED");
 		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
 		AuthenticationException assertThrows = Assertions.assertThrows(AuthenticationException.class,
 				() -> loginController.createAuthenticationToken(authenticationRequest));

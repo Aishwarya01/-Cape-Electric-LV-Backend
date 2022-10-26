@@ -162,7 +162,7 @@ public class LoginController {
 
 		if (registerRepo.isPresent()) {
 			if( registerRepo.get().getPermission() != null
-					&& registerRepo.get().getPermission().equalsIgnoreCase("YES")) {
+					&& !registerRepo.get().getPermission().equalsIgnoreCase("NOT_AUTHORIZED")) {
 				try {
 					authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 					logger.debug("Authentication done sucessfully");
@@ -173,11 +173,13 @@ public class LoginController {
 					logger.error("Authentication failed : "+e.getMessage());
 					throw new BadCredentialsException("INVALID_CREDENTIALS", e);
 				}
-			} else {
+			} 
+			else {
 				logger.error("Admin not approved for Your registration");
 				throw new AuthenticationException("Admin not approved for Your registration");
 			}
-		} else {
+		} 
+	    else {
 			logger.error("There is no registered user available for this email");
 			throw new RegistrationException("There is no registered user available for this email");
 		}
