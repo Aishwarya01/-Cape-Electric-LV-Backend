@@ -101,7 +101,7 @@ public class LoginControllerTest {
 	}
 
 	@Test
-	public void testForgotPassword() throws ForgotPasswordException, IOException, MessagingException {
+	public void testForgotPassword() throws ForgotPasswordException, IOException, MessagingException, RegistrationException {
 
 		when(loginServiceImpl.findByUserName("lvsystem@capeindia.net")).thenReturn(register);
 		doNothing().when(emailService).sendEmail("lvsystem@capeindia.net",

@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.ForgotPasswordException;
+import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.Register;
@@ -41,6 +42,9 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private RegistrationServiceImpl registerServiceImpl;
 
 	/**
 	 * Method to retrieve the user
@@ -256,6 +260,39 @@ public class LoginServiceImpl implements LoginService {
 		}
 
 		return success;
+	}
+
+	public Register findByUserNameOrContactNumber(String details)
+			throws ForgotPasswordException, IOException, RegistrationException {
+
+		logger.debug("Find By User Name Starts");
+		if (details != null && details.contains("@")) {
+			Optional<Register> registerRepo = registrationRepository.findByUsername(details);
+			return sendingSMS(registerRepo);
+		} else if(details != null){
+			Optional<Register> registerRepo = registrationRepository.findByContactNumber(details);
+			return sendingSMS(registerRepo);
+		} else {
+			logger.error("Email/Contact Number is required");
+			throw new ForgotPasswordException("Email/Contact Number is required");
+		}
+	
+	}
+	
+	private Register sendingSMS(Optional<Register> registerDetails) throws RegistrationException {
+		logger.debug("Sending SMS for Forgot Password Starts");
+		if(registerDetails != null && registerDetails.get()!= null && registerDetails.get().getContactNumber() != null) {
+			String sessionKey = registerServiceImpl.otpSend(registerDetails.get().getContactNumber());
+			Register register = registerDetails.get();
+			register.setOtpSessionKey(sessionKey);
+			register.setUpdatedDate(LocalDateTime.now());
+			register.setUpdatedBy(registerDetails.get().getName());
+			registrationRepository.save(register);
+			return register;
+		}else {
+			logger.error("Email/Contact Number is required");
+			throw new RegistrationException("Email/Contact Number is required");
+		}
 	}
 
 }

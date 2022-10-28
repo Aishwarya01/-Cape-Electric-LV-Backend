@@ -16,5 +16,7 @@ import com.capeelectric.model.Register;
 public interface RegistrationRepository extends CrudRepository<Register, Integer> {
 
 	public Optional<Register> findByUsername(String username);
+	
+	public Optional<Register> findByContactNumber(String number);
 
 }

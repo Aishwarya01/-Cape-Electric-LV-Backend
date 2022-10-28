@@ -48,11 +48,13 @@ public class User {
 	private boolean userexist;
 	@Column(name = "one_time_password")
 	private Integer otp;
+	@Column(name = "mobileNumber")
+	private String mobileNumber;
 	public User() {
     }
 	public User(int id, String password, boolean active, String email, String firstname, String lastname,
 			String username, String usertype, String role, LocalDateTime creationdate, LocalDateTime updateddate,
-			boolean userexist, Integer otp) {
+			boolean userexist, Integer otp, String mobileNumber) {
 		super();
 		this.id = id;
 		this.password = password;
@@ -67,6 +69,7 @@ public class User {
 		this.updateddate = updateddate;
 		this.userexist = userexist;
 		this.otp = otp;
+		this.mobileNumber = mobileNumber;
 	}
 	public int getId() {
 		return id;
@@ -146,5 +149,12 @@ public class User {
 	public void setOtp(Integer otp) {
 		this.otp = otp;
 	}
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+	
 	
 }
