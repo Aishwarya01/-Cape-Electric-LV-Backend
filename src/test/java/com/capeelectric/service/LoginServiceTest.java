@@ -25,11 +25,13 @@ import org.springframework.web.client.RestTemplate;
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.ForgotPasswordException;
+import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.service.impl.LoginServiceImpl;
+import com.capeelectric.service.impl.RegistrationServiceImpl;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -43,6 +45,9 @@ public class LoginServiceTest {
 
 	@InjectMocks
 	private LoginServiceImpl loginServiceImpl;
+	
+	@MockBean
+	private RegistrationServiceImpl registerServiceImpl;
 
 	@MockBean
 	private BCryptPasswordEncoder passwordEncoder;
@@ -62,6 +67,7 @@ public class LoginServiceTest {
 		register = new Register();
 		register.setUsername("lvsystem@capeindia.net");
 		register.setPassword("cape");
+		register.setContactNumber("+91-7358021553");
 
 	}
 	
@@ -80,6 +86,28 @@ public class LoginServiceTest {
 		ForgotPasswordException assertThrows_2 = Assertions.assertThrows(ForgotPasswordException.class,
 				() -> loginServiceImpl.findByUserName(""));
 		assertEquals("Email is not available with us", assertThrows_2.getMessage());
+
+	}
+	
+	@Test
+	public void testFindByUserNameOrContactNumber() throws ForgotPasswordException, IOException, RegistrationException {
+
+		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
+		Register findByUserName = loginServiceImpl.findByUserNameOrContactNumber("lvsystem@capeindia.net");
+		assertEquals("lvsystem@capeindia.net", findByUserName.getUsername());
+		
+		when(registrationRepository.findByContactNumber("+91-7358021553")).thenReturn(Optional.of(register));
+		Register findByContactNumber = loginServiceImpl.findByUserNameOrContactNumber("+91-7358021553");
+		assertEquals("lvsystem@capeindia.net", findByContactNumber.getUsername());
+
+		ForgotPasswordException assertThrows_1 = Assertions.assertThrows(ForgotPasswordException.class,
+				() -> loginServiceImpl.findByUserNameOrContactNumber(null));
+		assertEquals("Email/Contact Number is required", assertThrows_1.getMessage());
+
+		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
+		ForgotPasswordException assertThrows_2 = Assertions.assertThrows(ForgotPasswordException.class,
+				() -> loginServiceImpl.findByUserNameOrContactNumber(""));
+		assertEquals("Email/Contact Number is required", assertThrows_2.getMessage());
 
 	}
 

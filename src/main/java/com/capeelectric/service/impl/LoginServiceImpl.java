@@ -269,7 +269,7 @@ public class LoginServiceImpl implements LoginService {
 		if (details != null && details.contains("@")) {
 			Optional<Register> registerRepo = registrationRepository.findByUsername(details);
 			return sendingSMS(registerRepo);
-		} else if(details != null){
+		} else if(details != null && details.length() > 0){
 			Optional<Register> registerRepo = registrationRepository.findByContactNumber(details);
 			return sendingSMS(registerRepo);
 		} else {

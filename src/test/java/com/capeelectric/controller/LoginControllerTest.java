@@ -73,6 +73,7 @@ public class LoginControllerTest {
 		register.setPassword("cape");
 		register.setRegisterId(1);
 		register.setPermission("YES");
+		register.setContactNumber("+91-7358021553");
 		
 	}
 
@@ -103,7 +104,7 @@ public class LoginControllerTest {
 	@Test
 	public void testForgotPassword() throws ForgotPasswordException, IOException, MessagingException, RegistrationException {
 
-		when(loginServiceImpl.findByUserName("lvsystem@capeindia.net")).thenReturn(register);
+		when(loginServiceImpl.findByUserNameOrContactNumber("lvsystem@capeindia.net")).thenReturn(register);
 		doNothing().when(emailService).sendEmail("lvsystem@capeindia.net",
 				"You have initiated an change in password." + "\n" + "lvsystem@capeindia.net");
 		ResponseEntity<String> forgotPassword = loginController.forgotPassword("lvsystem@capeindia.net");
