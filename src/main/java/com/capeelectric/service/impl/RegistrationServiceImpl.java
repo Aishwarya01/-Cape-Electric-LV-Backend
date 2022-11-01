@@ -1,5 +1,9 @@
 package com.capeelectric.service.impl;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -10,25 +14,37 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.mail.MessagingException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.capeelectric.config.AWSLVConfig;
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
+import com.capeelectric.model.EmailContent;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.util.Constants;
 import com.capeelectric.util.UserFullName;
+import com.capeelectric.util.Utility;
 
 /**
  * 
@@ -54,6 +70,12 @@ public class RegistrationServiceImpl implements RegistrationService {
 	
 	@Autowired
 	private UserFullName userFullName;
+	
+	@Autowired
+	private AWSLVConfig awsConfiguration;
+	
+	@Value("${app.web.domain}")
+	private String webUrl;
 	
 	@Override
 	public Register addRegistration(Register register) throws RegistrationException {
@@ -111,7 +133,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					viewer.setCreatedBy(viewer.getName());
 					viewer.setUpdatedBy(viewer.getName());
 					Register createdRegister = registerRepository.save(viewer);
-					logger.debug("Sucessfully Registration Information Saved");
+					logger.debug("Successfully Registration Information Saved");
 					return createdRegister;
 				} else {
 					logger.error(isValidMobileNumber(viewer.getContactNumber()) + "  Given MobileNumber is Invalid");
@@ -156,14 +178,14 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	@Transactional
-	public void updateRegistration(Register register, Boolean isLicenseUpdate)
-			throws RegistrationException, CompanyDetailsException {
+	public void updateRegistration(Register register, Boolean adminApproveRequired)
+			throws RegistrationException, CompanyDetailsException, MalformedURLException, MessagingException, URISyntaxException {
 
 		if (register.getRegisterId() != null && register.getRegisterId() != 0 && register.getUsername() != null
 				&& register.getCompanyName() != null && register.getAddress() != null
 				&& register.getContactNumber() != null && register.getDepartment() != null
 				&& register.getDesignation() != null && register.getCountry() != null && register.getName() != null
-				&& register.getState() != null && isLicenseUpdate != null) {
+				&& register.getState() != null) {
 
 			Optional<Register> registerRepo = registerRepository.findById(register.getRegisterId());
 
@@ -173,6 +195,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 				register.setUpdatedDate(LocalDateTime.now());
 				if (register.getRole().equalsIgnoreCase("INSPECTOR")) {
+					//permission status changes
+					if (adminApproveRequired) {
+						sendMailToAdmin(register.getUsername(),register.getRegisterId());
+					}
 					register.setUpdatedBy(userFullName.findByUserName(register.getUsername()));
 					registerRepository.save(register);
 					logger.debug("Inspector registration successfully updated");
@@ -241,7 +267,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 		return (m.find() && m.group().equals(mobileNumber));
 	}
 	
-	private String otpSend(String mobileNumber) throws RegistrationException {
+	public String otpSend(String mobileNumber) throws RegistrationException {
 
 		logger.debug("RegistrationService otpSend() function called =[{}]", "Cape-Electric-SMS-Api");
 		ResponseEntity<String> sendOtpResponse = restTemplate.exchange(otpConfig.getSendOtp() + mobileNumber,
@@ -353,5 +379,84 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public String retrieveUserNameFromRegister(String userName) throws RegistrationException {
 		Optional<Register> registerDetailsFromDB = registerRepository.findByUsername(userName);
 		return registerDetailsFromDB.isPresent() ? registerDetailsFromDB.get().getUsername(): "";
+	}
+
+	@Override
+	public void sendEmail(String email, String content) {
+		restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+		restTemplate.exchange(awsConfiguration.getSendEmail() + email + "/" +content,
+				HttpMethod.GET, null, String.class);
+
+		logger.debug("Cape-Electric-AWS-Email service Response was successful");
+		
+	}
+
+	@Override
+	public void sendEmailToAdmin(String content) throws URISyntaxException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		URI uri = new URI(awsConfiguration.getSendEmailToAdmin());
+		EmailContent emailContent = new EmailContent();
+		emailContent.setContentDetails(content);
+		RequestEntity<EmailContent> requestEntity = new RequestEntity<>(emailContent, headers, HttpMethod.PUT, uri);
+		ParameterizedTypeReference<EmailContent> typeRef = new ParameterizedTypeReference<EmailContent>() {};
+
+		restTemplate.exchange(requestEntity, typeRef);
+		logger.debug("Cape-Electric-AWS-Email service Response was successful");
+		
+	}
+
+	@Override
+	public void sendEmailForComments(String toEmail, String ccEmail, String content) throws URISyntaxException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		URI uri = new URI(awsConfiguration.getSendEmailForComments() + toEmail + "/"+ ccEmail);
+		EmailContent emailContent = new EmailContent();
+		emailContent.setContentDetails(content);
+		RequestEntity<EmailContent> requestEntity = new RequestEntity<>(emailContent, headers, HttpMethod.PUT, uri);
+		ParameterizedTypeReference<EmailContent> typeRef = new ParameterizedTypeReference<EmailContent>() {};
+
+		ResponseEntity<EmailContent> responseEntity = restTemplate.exchange(requestEntity, typeRef);
+		logger.debug("Cape-Electric-AWS-Email service Response was successful"+responseEntity.getStatusCode());
+
+	}
+
+	@Override
+	public void sendEmailPDF(String userName, Integer id, int count, String keyname) {
+		String type = "LV";
+		restTemplate.exchange(awsConfiguration.getSendEmailWithPDF() + userName + "/"+type+"/"+ id +"/"+ keyname,
+				HttpMethod.GET, null, String.class);
+
+		logger.debug("Cape-Electric-AWS-Email service Response was successful");
+		
+	}
+	
+	@Override
+	public void sendEmailForOTPGeneration(String email, String content) throws URISyntaxException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		URI uri = new URI(awsConfiguration.getSendEmailForApproval() + email );
+		EmailContent emailContent = new EmailContent();
+		emailContent.setContentDetails(content);
+		RequestEntity<EmailContent> requestEntity = new RequestEntity<>(emailContent, headers, HttpMethod.PUT, uri);
+		ParameterizedTypeReference<EmailContent> typeRef = new ParameterizedTypeReference<EmailContent>() {};
+
+		ResponseEntity<EmailContent> responseEntity = restTemplate.exchange(requestEntity, typeRef);
+		logger.debug("Cape-Electric-AWS-Email service Response was successful"+responseEntity.getStatusCode());
+	}
+	
+	private void sendMailToAdmin(String inspectorName, Integer registerId) throws MessagingException, MalformedURLException, URISyntaxException {
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(registerId).toUri();
+		String resetUrl = Utility.getSiteURL(uri.toURL());
+		sendEmailToAdmin("The " + inspectorName
+				+ " has modified or updated his application type access, please approve or reject by logging to SOLVE admin portal"
+				+ ". You can login to admin Portal with this link " + "\n"
+				+ (resetUrl.contains("localhost:5000")
+						? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
+						: "https://admin."+webUrl)
+				+ "/admin");
+		logger.debug("AwsEmailService call Successfully Ended");
+
 	}
 }

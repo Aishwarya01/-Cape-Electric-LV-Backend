@@ -35,7 +35,7 @@ import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
 import com.capeelectric.request.ContactNumberRequest;
 import com.capeelectric.response.AuthenticationResponseRegister;
-import com.capeelectric.service.impl.AWSEmailService;
+import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.LoginServiceImpl;
 import com.capeelectric.service.impl.RegistrationDetailsServiceImpl;
 
@@ -55,7 +55,7 @@ public class LoginController {
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	private AWSEmailService awsEmailService;
+	private RegistrationService awsEmailService;
 	
 	@Autowired
 	private RegistrationRepository registrationRepository;
@@ -82,11 +82,11 @@ public class LoginController {
 
 	@GetMapping("/forgotPassword/{email}")
 	public ResponseEntity<String> forgotPassword(@PathVariable String email)
-			throws ForgotPasswordException, IOException, MessagingException {
+			throws ForgotPasswordException, IOException, MessagingException, RegistrationException {
 		logger.debug("forgotPassword started");
-		Register registerUser = loginService.findByUserName(email);
+		Register registerUser = loginService.findByUserNameOrContactNumber(email);
 		logger.debug("AwsEmailService call Started");
-		awsEmailService.sendEmail(email, "You have initiated an change in password." + "\n" + email);
+		awsEmailService.sendEmail(email, "You have initiated an change in password.");
 		logger.debug("AwsEmailService call Successfully Ended");
 		return new ResponseEntity<String>(registerUser.getUsername(), HttpStatus.OK);
 		
@@ -99,7 +99,7 @@ public class LoginController {
 		logger.debug("CreatePassword starts");
 		Register updatedUser = loginService.createPassword(request);
 		logger.debug("AwsEmailService call Started");
-		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully created your password");
+		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully created your password.");
 		logger.debug("CreatePassword ends");
 		return new ResponseEntity<String>("You have Successfully Created Your Password", HttpStatus.OK);
 
@@ -112,7 +112,7 @@ public class LoginController {
 		logger.debug("Save Contact Number starts");
 		Register updatedUser = loginService.saveContactNumber(request);
 		logger.debug("AwsEmailService call Started");
-		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully updated your contact number");
+		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully updated your contact number.");
 		logger.debug("Save Contact Number ends");
 		return new ResponseEntity<String>("You have successfully updated your contact number", HttpStatus.OK);
 		
@@ -126,7 +126,7 @@ public class LoginController {
 
 		Register updatedUser = loginService.updatePassword(request.getEmail(), request.getPassword());
 		logger.debug("AwsEmailService call Started");
-		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully updated your password");
+		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully updated your password.");
 		logger.debug("Update Password ends");
 		return new ResponseEntity<String>("You have Successfully Updated Your Password", HttpStatus.OK);
 
@@ -162,7 +162,7 @@ public class LoginController {
 
 		if (registerRepo.isPresent()) {
 			if( registerRepo.get().getPermission() != null
-					&& registerRepo.get().getPermission().equalsIgnoreCase("YES")) {
+					&& !registerRepo.get().getPermission().equalsIgnoreCase("NOT_AUTHORIZED")) {
 				try {
 					authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 					logger.debug("Authentication done sucessfully");
@@ -173,11 +173,13 @@ public class LoginController {
 					logger.error("Authentication failed : "+e.getMessage());
 					throw new BadCredentialsException("INVALID_CREDENTIALS", e);
 				}
-			} else {
+			} 
+			else {
 				logger.error("Admin not approved for Your registration");
 				throw new AuthenticationException("Admin not approved for Your registration");
 			}
-		} else {
+		} 
+	    else {
 			logger.error("There is no registered user available for this email");
 			throw new RegistrationException("There is no registered user available for this email");
 		}

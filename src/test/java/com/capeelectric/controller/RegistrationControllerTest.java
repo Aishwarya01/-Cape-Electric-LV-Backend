@@ -2,6 +2,7 @@
 package com.capeelectric.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -31,7 +32,6 @@ import com.capeelectric.exception.UserException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.service.RegistrationService;
-import com.capeelectric.service.impl.AWSEmailService;
 import com.capeelectric.util.Constants;
 
 @ExtendWith(SpringExtension.class)
@@ -49,8 +49,8 @@ public class RegistrationControllerTest {
 	@MockBean
 	private RegistrationException registrationException;
 
-	@MockBean
-	private AWSEmailService awsEmailService;
+//	@MockBean
+//	private RegistrationService awsEmailService;
 
 	@MockBean
 	private RegistrationRepository registerRepository;
@@ -79,7 +79,7 @@ public class RegistrationControllerTest {
 
 		when(registrationService.addRegistration(register)).thenReturn(register);
 
-		doNothing().when(awsEmailService).sendEmail(register.getUsername(),
+		doNothing().when(registrationService).sendEmail(register.getUsername(),
 				"You have been successfully Registered with SOLVE for Safety App. You may need to wait for 2hrs for getting approved from Admin."
 						+ "\n" + "\n" + "You can create the password with this link " + "\n"
 						+ (resetUrl.contains("localhost:5000")
@@ -110,11 +110,11 @@ public class RegistrationControllerTest {
 	}
 
 	@Test
-	public void testUpdateRegistration() throws RegistrationException, MessagingException, IOException, CompanyDetailsException {
+	public void testUpdateRegistration() throws RegistrationException, MessagingException, IOException, CompanyDetailsException, URISyntaxException {
 		logger.info("RegistrationControllerTest testUpdateRegistration_funcion Started");
 
 		doNothing().when(registrationService).updateRegistration(register,true);
-		doNothing().when(awsEmailService).sendEmail(register.getUsername(),
+		doNothing().when(registrationService).sendEmail(register.getUsername(),
 				"You have successfully updated your profile");
 		ResponseEntity<String> updateRegistration = registrationController.updateRegistration(register,true);
 		assertEquals(updateRegistration.getStatusCode(), HttpStatus.OK);
@@ -146,7 +146,7 @@ public class RegistrationControllerTest {
 
 		when(registrationService.addViewerRegistration(register)).thenReturn(register);
 
-		doNothing().when(awsEmailService).sendEmail(register.getUsername(),
+		doNothing().when(registrationService).sendEmail(register.getUsername(),
 				"You have been successfully Registered with SOLVE for Safety App. You may need to wait for 2hrs for getting approved from Admin."
 						+ "\n" + "\n" + "You can create the password with this link " + "\n"
 						+ (resetUrl.contains("localhost:5000")
@@ -168,5 +168,23 @@ public class RegistrationControllerTest {
 		ResponseEntity<String> updateLicence = registrationController.updateLicence("lvsystem@capeindia.net", "2");
 		assertEquals(updateLicence.getStatusCode(), HttpStatus.OK);
 		logger.info("RegistrationControllerTest testUpdateLicence_funcion Ended");
+	}
+	
+	@Test
+	public void testSendNewOtp() throws IOException, MessagingException, RegistrationException {
+		logger.info("RegistrationControllerTest testSendNewOtp Started");
+		when(registrationController.sendNewOtp("+91-9878789788")).thenReturn("OtpSent Successfully");
+
+		String sendNewOtp = registrationController.sendNewOtp("+91-9878789788");
+		assertEquals(sendNewOtp, "OtpSent Successfully");
+		logger.info("RegistrationControllerTest testSendNewOtp Ended");
+	}
+	
+	@Test
+	public void testRetrieveUserNameFromRegister() throws IOException, MessagingException, RegistrationException {
+		logger.info("RegistrationControllerTest testRetrieveUserNameFromRegister Started");
+		String retrieveUserNameFromRegister = registrationController.retrieveUserNameFromRegister("");
+		assertNull(retrieveUserNameFromRegister);
+		logger.info("RegistrationControllerTest testRetrieveUserNameFromRegister Ended");
 	}
 }

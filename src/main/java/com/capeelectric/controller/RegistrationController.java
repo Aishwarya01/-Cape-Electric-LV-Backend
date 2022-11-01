@@ -3,6 +3,7 @@ package com.capeelectric.controller;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
@@ -26,7 +27,6 @@ import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.service.RegistrationService;
-import com.capeelectric.service.impl.AWSEmailService;
 import com.capeelectric.util.Constants;
 import com.capeelectric.util.Utility;
 
@@ -42,9 +42,6 @@ public class RegistrationController {
 	private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
 	@Autowired
-	private AWSEmailService awsEmailService;
-
-	@Autowired
 	private RegistrationService registrationService;
 	
 	@Value("${app.web.domain}")
@@ -52,21 +49,21 @@ public class RegistrationController {
 
 	@PostMapping("/addRegistration")
 	public ResponseEntity<Void> addRegistration(@RequestBody Register register)
-			throws RegistrationException, MessagingException, MalformedURLException {
+			throws RegistrationException, MessagingException, MalformedURLException, URISyntaxException {
 		logger.debug("Called addRegistration function UserName : {}", register.getUsername());
 		Register createdRegister = registrationService.addRegistration(register);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(createdRegister.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());
 		if (createdRegister.getPermission().equalsIgnoreCase("YES")) {
-			awsEmailService.sendEmail(register.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
+			registrationService.sendEmailForOTPGeneration(register.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
 					+ (resetUrl.contains("localhost:5000")
 							? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
 							: "https://www."+webUrl)
 					+ "/generateOtp" + ";email=" + register.getUsername());
 			logger.debug("AwsEmailService call Successfully Ended");
 		} else {
-			awsEmailService
+			registrationService
 					.sendEmailToAdmin("Please Approve or Reject the inspector by Logging to " + "Admin Portal for User "
 							+ register.getName() + " and Company " + register.getCompanyName() + " with their Email "
 							+ register.getUsername() + ". You can login to admin Portal with this link " + "\n"
@@ -82,13 +79,13 @@ public class RegistrationController {
 	 
 	@PostMapping("/addViewerRegistration")
 	public ResponseEntity<Void> addViewerRegistration(@RequestBody Register register)
-			throws RegistrationException, MessagingException, MalformedURLException, CompanyDetailsException {
+			throws RegistrationException, MessagingException, MalformedURLException, CompanyDetailsException, URISyntaxException {
 		logger.debug("called addRegistration function UserName : {}", register.getUsername());
 		Register createdRegister = registrationService.addViewerRegistration(register);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(createdRegister.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());
-		awsEmailService.sendEmail(createdRegister.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
+		registrationService.sendEmailForOTPGeneration(createdRegister.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
 				+ (resetUrl.contains("localhost:5000")
 						? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
 						: "https://www."+webUrl)
@@ -103,15 +100,13 @@ public class RegistrationController {
 		return registrationService.retrieveRegistration(userName);
 	}
 
-	@PutMapping("/updateRegistration/{islicenseupdate}")
-	public ResponseEntity<String> updateRegistration(@RequestBody Register register,@PathVariable("islicenseupdate") Boolean isLicenseUpdate)
-			throws IOException, MessagingException, RegistrationException, CompanyDetailsException {
+	@PutMapping("/updateRegistration/{adminApproveRequired}")
+	public ResponseEntity<String> updateRegistration(@RequestBody Register register,@PathVariable("adminApproveRequired") Boolean adminApproveRequired)
+			throws IOException, MessagingException, RegistrationException, CompanyDetailsException, URISyntaxException {
 		logger.debug("called updateRegistration function UserName : {}, IsLicenseUpdate : {}", register.getUsername(),
-				isLicenseUpdate);
-		registrationService.updateRegistration(register, isLicenseUpdate);
-		logger.debug("AwsEmailService call started for Send Email");
-		awsEmailService.sendEmail(register.getUsername(), (isLicenseUpdate ? ("Inspector ("+register.getAssignedBy()+") have modified the Site Details for your profile"): "FYI: You have successfully updated your profile" ));
-		logger.debug("AwsEmailService Successfully call Ended");
+				adminApproveRequired);
+		registrationService.updateRegistration(register, adminApproveRequired);
+ 		logger.debug("updateRegistration function Successfully call Ended");
 		return new ResponseEntity<String>("Successfully Updated Registration", HttpStatus.OK);
 	}
 	
@@ -119,9 +114,9 @@ public class RegistrationController {
 	public ResponseEntity<Void> sendOtp(@PathVariable String userName,@PathVariable String mobileNumber)
 			throws IOException, MessagingException, RegistrationException {
 		logger.debug("called sendOtp function UserName : {}, MobileNumber : {}", userName, mobileNumber);
-		logger.debug("AwsEmailService call started for Send Email");
+		logger.debug("Registration Service call started for Send Otp");
 		registrationService.sendOtp(userName, mobileNumber);
-		logger.debug("AwsEmailService call started for successfully updated profile");
+		logger.debug("Registration Service called successfully for Send Otp");
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	

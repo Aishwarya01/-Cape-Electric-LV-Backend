@@ -6,6 +6,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,6 @@ import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
-import com.capeelectric.service.impl.AWSEmailService;
 
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
@@ -48,8 +48,8 @@ public class AdminPageControllerTest {
 	@MockBean
 	private RegistrationException registrationException;
 	
-	@MockBean
-	private AWSEmailService awsEmailService;
+//	@MockBean
+//	private RegistrationService awsEmailService;
 	
 	@MockBean
 	private RegistrationRepository registerRepository;
@@ -81,7 +81,7 @@ public class AdminPageControllerTest {
 	
 	@Test
 	public void testUpdatePermission()
-			throws MessagingException, IOException, RegisterPermissionRequestException, RegistrationException {
+			throws MessagingException, IOException, RegisterPermissionRequestException, RegistrationException, URISyntaxException {
 		logger.info("RegistrationControllerTest testUpdatePermission_funcion Started");
 		
 		MockHttpServletRequest request = new MockHttpServletRequest();
@@ -95,7 +95,7 @@ public class AdminPageControllerTest {
 
 		when(registrationService.updatePermission(permissionRequest)).thenReturn(register);
 
-		doNothing().when(awsEmailService).sendEmail(register.getUsername(),
+		doNothing().when(registrationService).sendEmail(register.getUsername(),
 				"You have successfully updated your profile");
 		ResponseEntity<String> updatePermission = registrationController.updatePermission(permissionRequest);
 		assertEquals(updatePermission.getStatusCode(), HttpStatus.OK);

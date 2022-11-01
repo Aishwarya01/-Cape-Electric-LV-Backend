@@ -155,13 +155,13 @@ public class Constants {
 	
 	public static final int LIST_ZERO = 0;
 	
-	public static final String EMAIL_SEND_COMMENT_MSG = "The Viewer has provided some comments/suggestion. You may need to login to check on the comments.";
+	public static final String EMAIL_SEND_COMMENT_MSG = "The Viewer has provided some comments or suggestion. You may need to login to SOLVE Application and check on the comments.";
 	
-	public static final String EMAIL_REPLY_COMMENT_MSG = "The Inspector has replied Your comments/suggestion. You may need to login to check on the comments.";
+	public static final String EMAIL_REPLY_COMMENT_MSG = "The Inspector has replied Your comments or suggestion. You may need to login to SOLVE Application and check on the comments.";
 	
 	public static final String EMAIL_APPROVE_COMMENT_MSG = "Your response to comments is satisfactory Approved.";
 	
-	public static final String EMAIL_REJECT_COMMENT_MSG = "Your response to comments was not satisfactory. Please provide valid response. \\n \\nYou may need to login to check on the comments.";
+	public static final String EMAIL_REJECT_COMMENT_MSG = "Your response to comments was not satisfactory. Please provide valid response. \\n \\nYou may need to login to SOLVE Application and check on the comments.";
 
 	public static final String NUMBER_OF_LICENSES = String.valueOf(5);
 

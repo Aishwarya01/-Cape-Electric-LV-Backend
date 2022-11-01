@@ -15,7 +15,7 @@ import com.capeelectric.exception.InstalReportException;
 import com.capeelectric.exception.PeriodicTestingException;
 import com.capeelectric.exception.SummaryException;
 import com.capeelectric.exception.SupplyCharacteristicsException;
-import com.capeelectric.service.impl.AWSEmailService;
+import com.capeelectric.service.RegistrationService;
 
 @RestController
 @RequestMapping("api/v2")
@@ -25,7 +25,7 @@ public class MailPDFController {
 	private static final Logger logger = LoggerFactory.getLogger(MailPDFController.class);
 	
 	@Autowired
-	private AWSEmailService awsEmailService;
+	private RegistrationService awsEmailService;
 
 	@GetMapping("/sendPDFinMail/{userName}/{siteId}/{siteName}")
 	public ResponseEntity<byte[]> sendFinalPDF(@PathVariable String userName, @PathVariable Integer siteId, @PathVariable String siteName)

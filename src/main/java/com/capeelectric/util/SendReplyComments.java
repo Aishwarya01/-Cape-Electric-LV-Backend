@@ -14,7 +14,7 @@ import com.capeelectric.controller.SummaryController;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
 import com.capeelectric.repository.RegistrationRepository;
-import com.capeelectric.service.impl.AWSEmailService;
+import com.capeelectric.service.RegistrationService;
 
 @Component
 public class SendReplyComments {
@@ -22,7 +22,7 @@ public class SendReplyComments {
 	private static final Logger logger = LoggerFactory.getLogger(SummaryController.class);
 
 	@Autowired
-	private AWSEmailService awsEmailService;
+	private RegistrationService awsEmailService;
 
 	@Autowired
 	private RegistrationRepository registrationRepo;
@@ -38,7 +38,7 @@ public class SendReplyComments {
 			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 					.buildAndExpand(registerRepo.get().getRegisterId()).toUri();
 			String resetUrl = Utility.getSiteURL(uri.toURL());
-			awsEmailService.sendEmail(registerRepo.get().getAssignedBy(), userName,
+			awsEmailService.sendEmailForComments(registerRepo.get().getAssignedBy(), userName,
 					Constants.EMAIL_SEND_COMMENT_MSG + "\n" + "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
@@ -58,7 +58,7 @@ public class SendReplyComments {
 			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 					.buildAndExpand(registerRepo.get().getRegisterId()).toUri();
 			String resetUrl = Utility.getSiteURL(uri.toURL());
-			awsEmailService.sendEmail(ViewerUserName, ViewerUserName,
+			awsEmailService.sendEmailForComments(ViewerUserName, inspectoUserName,
 					Constants.EMAIL_REPLY_COMMENT_MSG + "\n" + "\n"
 							+ (resetUrl.contains("localhost:5000")
 									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
@@ -76,13 +76,13 @@ public class SendReplyComments {
 		if (registerRepo.isPresent() && registerRepo.get().getAssignedBy() != null) {
 
 			if (approveOrReject.equalsIgnoreCase("APPROVED")) {
-				awsEmailService.sendEmail(registerRepo.get().getAssignedBy(), userName, Constants.EMAIL_APPROVE_COMMENT_MSG);
+				awsEmailService.sendEmailForComments(registerRepo.get().getAssignedBy(), userName, Constants.EMAIL_APPROVE_COMMENT_MSG);
 			} else {
 				logger.debug(Constants.EMAIL_REJECT_COMMENT_MSG + " for this content sending Email service started");
 				URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 						.buildAndExpand(registerRepo.get().getRegisterId()).toUri();
 				String resetUrl = Utility.getSiteURL(uri.toURL());
-				awsEmailService.sendEmail(registerRepo.get().getAssignedBy(), userName,
+				awsEmailService.sendEmailForComments(registerRepo.get().getAssignedBy(), userName,
 						Constants.EMAIL_REJECT_COMMENT_MSG + "\n"
 								+ (resetUrl.contains("localhost:5000")
 										? resetUrl.replace("http://localhost:5000", "http://localhost:4200")

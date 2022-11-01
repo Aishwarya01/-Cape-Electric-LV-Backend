@@ -6,9 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.mail.MessagingException;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,13 +22,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.capeelectric.config.AWSLVConfig;
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
@@ -61,8 +70,18 @@ public class RegistrationServiceTest {
 	@MockBean
 	private UserFullName userFullName;
 
-
+//	private String resetUrl = "http:localhost";
+	
 	private Register register;
+	
+//	@MockBean
+//	private RegistrationService awsEmailService;
+	
+	@MockBean
+	private AWSLVConfig awsConfiguration;
+		
+	@Value("${app.web.domain}")
+	private String webUrl;
 
 	{
 		register = new Register();
@@ -82,7 +101,7 @@ public class RegistrationServiceTest {
 		register.setAssignedBy("lvsystem@capeindia.net");
 		register.setNoOfLicence("5");
 		register.setRole("INSPECTOR");
-	}
+ 	}
 
 	@Test
 	public void testAddRegistration() throws RegistrationException {
@@ -164,16 +183,31 @@ public class RegistrationServiceTest {
 	}
 
 	@Test
-	public void testUpdateRegistration() throws RegistrationException, CompanyDetailsException {
+	public void testUpdateRegistration() throws RegistrationException, CompanyDetailsException, MalformedURLException, MessagingException, URISyntaxException {
 		logger.info("RegistrationServiceTest testUpdateRegistration_funcion Started");
-
+		
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+		
 		Optional<Register> optionalRegister = Optional.of(register);
 
 		when(registrationRepository.findById(register.getRegisterId())).thenReturn(optionalRegister);
 		when(registrationRepository.save(register)).thenReturn(register);
-
-		// Success flow for INSPECTOR
+		
+// 		doNothing().when(registrationServiceImpl).sendEmailToAdmin("The " + register.getUsername()
+//				+ " has modified or updated his application type access, please approve or reject by logging to SOLVE admin portal"
+//				+ ". You can login to admin Portal with this link " + "\n"
+//				+ (resetUrl.contains("localhost:5000")
+//						? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
+//						: "https://admin."+webUrl)
+//				+ "/admin");
+ 		
+ 		
+ 		when(awsConfiguration.getSendEmailToAdmin()).thenReturn("http://localhost:5006/api/email/v1/sendEmailToAdmin/");
+    
+  		// Success flow for INSPECTOR
 		registrationServiceImpl.updateRegistration(register,true);
+		
 		
 		// Success flow for VIEWER
 		register.setRole("Viewer");
@@ -344,6 +378,22 @@ public class RegistrationServiceTest {
 		
 		logger.info("RegistrationServiceTest testUpdatePermission_funcion Started");
 
+	}
+	
+	@Test
+	public void testSendNewOtp() throws RegistrationException {
+ 		when(restTemplate.exchange(otpConfig.getSendOtp() + "9023092802", HttpMethod.GET, null,
+				String.class))
+						.thenReturn(new ResponseEntity<String>(
+								"{\"Status\":\"Success\",\"Details\":\"a2075b4a-25f8-44c1-824a-fd89cc310821\"}",
+								HttpStatus.ACCEPTED));
+		assertNotNull(registrationServiceImpl.sendNewOtp("9023092802"));
+	}
+	
+	@Test
+	public void testRetrieveUserNameFromRegister() throws RegistrationException {
+		when(registrationRepository.findByUsername(register.getUsername())).thenReturn(Optional.of(register));
+		assertNotNull(registrationServiceImpl.retrieveUserNameFromRegister(register.getUsername()));
 	}
 	
 	private RegisterPermissionRequest permissionRequest(String permission) {
