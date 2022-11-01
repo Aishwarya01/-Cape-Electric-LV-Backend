@@ -82,9 +82,9 @@ public class LoginController {
 
 	@GetMapping("/forgotPassword/{email}")
 	public ResponseEntity<String> forgotPassword(@PathVariable String email)
-			throws ForgotPasswordException, IOException, MessagingException {
+			throws ForgotPasswordException, IOException, MessagingException, RegistrationException {
 		logger.debug("forgotPassword started");
-		Register registerUser = loginService.findByUserName(email);
+		Register registerUser = loginService.findByUserNameOrContactNumber(email);
 		logger.debug("AwsEmailService call Started");
 		awsEmailService.sendEmail(email, "You have initiated an change in password.");
 		logger.debug("AwsEmailService call Successfully Ended");

@@ -267,7 +267,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 		return (m.find() && m.group().equals(mobileNumber));
 	}
 	
-	private String otpSend(String mobileNumber) throws RegistrationException {
+	public String otpSend(String mobileNumber) throws RegistrationException {
 
 		logger.debug("RegistrationService otpSend() function called =[{}]", "Cape-Electric-SMS-Api");
 		ResponseEntity<String> sendOtpResponse = restTemplate.exchange(otpConfig.getSendOtp() + mobileNumber,
