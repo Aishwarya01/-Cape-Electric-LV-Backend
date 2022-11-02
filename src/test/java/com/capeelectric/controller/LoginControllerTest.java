@@ -146,7 +146,7 @@ public class LoginControllerTest {
 		when(loginServiceImpl.createPassword(authenticationRequest)).thenReturn(register);
 
 		ResponseEntity<String> createPassword = loginController.createPassword(authenticationRequest);
-		assertEquals(createPassword.getBody(), "You have Successfully Created Your Password");
+		assertEquals(createPassword.getBody(), "You have successfully created/modified your password");
 
 	}
 	
