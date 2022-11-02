@@ -99,7 +99,7 @@ public class LoginController {
 		logger.debug("CreatePassword starts");
 		Register updatedUser = loginService.createPassword(request);
 		logger.debug("AwsEmailService call Started");
-		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully created/modified your password");
+		awsEmailService.sendEmail(updatedUser.getUsername(), "You have successfully created or modified your password");
 		logger.debug("CreatePassword ends");
 		return new ResponseEntity<String>("You have successfully created/modified your password", HttpStatus.OK);
 
