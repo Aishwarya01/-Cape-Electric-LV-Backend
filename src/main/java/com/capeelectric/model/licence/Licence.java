@@ -18,11 +18,8 @@ public class Licence {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "REGISTER_ID")
+	@Column(name = "LICENCE_ID")
 	private Integer licenceId;
-	
-	@Column(name = "REGISTER_ID")
-	private Integer registerId;
 	
 	//LV
 	@Column(name = "NO_OF_LV_LICENCE")
@@ -38,10 +35,10 @@ public class Licence {
 	@Column(name = "NO_OF_LPS_LICENCE")
 	private String noOfLPSLVLicence;
 	
-	@Column(name = "CLIENT_NAME")
-	private String clientName;
+	@Column(name = "LPS_CLIENT_NAME")
+	private String lpsclientName;
 	
-	@Column(name = "CLIENT_NAME")
+	@Column(name = "LPS_PROJECT_NAME")
 	private String lpsProjectName;
 	
 	@Column(name = "LPS_STATUS")
@@ -51,7 +48,7 @@ public class Licence {
 	@Column(name = "NO_OF_EMC_LICENCE")
 	private String noOfEMCLVLicence;
 	
-	@Column(name = "CLIENT_NAME")
+	@Column(name = "EMC_CLIENT_NAME")
 	private String emcClientName;
 	
 	@Column(name = "EMC_STATUS")
@@ -64,10 +61,10 @@ public class Licence {
 	@Column(name = "RISK_STATUS")
 	private String riskStatus;
 	
-	@Column(name = "RISK_STATUS")
+	@Column(name = "RISK_ORGANISATION_NAME")
 	private String organisationName;
 	
-	@Column(name = "RISK_STATUS")
+	@Column(name = "RISK_PROJECT_NAME")
 	private String projectName;
 	
 	//SLD
@@ -85,13 +82,6 @@ public class Licence {
 		this.licenceId = licenceId;
 	}
 
-	public Integer getRegisterId() {
-		return registerId;
-	}
-
-	public void setRegisterId(Integer registerId) {
-		this.registerId = registerId;
-	}
 
 	public String getNoOfLVLicence() {
 		return noOfLVLicence;
@@ -125,12 +115,12 @@ public class Licence {
 		this.noOfLPSLVLicence = noOfLPSLVLicence;
 	}
 
-	public String getClientName() {
-		return clientName;
+	public String getLpsclientName() {
+		return lpsclientName;
 	}
 
-	public void setClientName(String clientName) {
-		this.clientName = clientName;
+	public void setLpsclientName(String lpsclientName) {
+		this.lpsclientName = lpsclientName;
 	}
 
 	public String getLpsProjectName() {
@@ -212,5 +202,7 @@ public class Licence {
 	public void setViewerRegister(ViewerRegister viewerRegister) {
 		this.viewerRegister = viewerRegister;
 	}
+
+	 
 
 }

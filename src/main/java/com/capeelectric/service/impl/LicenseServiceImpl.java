@@ -20,7 +20,7 @@ public class LicenseServiceImpl implements LicenseService {
 	@Override
 	public Optional<LvRegister> retrieveLvRegister(String userName) {
  
-		return lvRepository.findByUserName(userName);
+		return lvRepository.findByUsername(userName);
 	}
 
 }
