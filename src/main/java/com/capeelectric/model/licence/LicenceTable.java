@@ -16,9 +16,6 @@ public class LicenceTable {
 	@Column(name = "LICENCE_ID")
 	private Integer licenceId;
 	
-	@Column(name = "REGISTER_ID")
-	private Integer registerId;
-	
 	@Column(name = "NO_OF_LV_LICENCE")
 	private String noOfLVLicence;
 	
@@ -31,14 +28,6 @@ public class LicenceTable {
 
 	public void setLicenceId(Integer licenceId) {
 		this.licenceId = licenceId;
-	}
-
-	public Integer getRegisterId() {
-		return registerId;
-	}
-
-	public void setRegisterId(Integer registerId) {
-		this.registerId = registerId;
 	}
 
 	public String getNoOfLVLicence() {

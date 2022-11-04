@@ -8,6 +8,6 @@ import com.capeelectric.model.licence.LvRegister;
 
 public interface LvRepository extends CrudRepository<LvRegister, Integer> {
 
-	public Optional<LvRegister> findByUserName(String userName);
+	public Optional<LvRegister> findByUsername(String userName);
 
 }
