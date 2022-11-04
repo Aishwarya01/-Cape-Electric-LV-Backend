@@ -39,7 +39,6 @@ import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.EmailContent;
 import com.capeelectric.model.Register;
-import com.capeelectric.model.ViewerRegister;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.repository.ViewerRegistrationRepository;
 import com.capeelectric.request.RegisterPermissionRequest;
@@ -123,7 +122,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	@Transactional
-	public ViewerRegister addViewerRegistration(ViewerRegister viewer) throws RegistrationException, CompanyDetailsException {
+	public Register addViewerRegistration(Register viewer) throws RegistrationException, CompanyDetailsException {
 		logger.debug("AddingRegistration Starts with User : {} ", viewer.getUsername());
 		if (viewer.getUsername() != null && viewer.getCompanyName() != null && viewer.getAddress() != null
 				&& viewer.getContactNumber() != null && viewer.getDepartment() != null
@@ -137,7 +136,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					viewer.setUpdatedDate(LocalDateTime.now());
 					viewer.setCreatedBy(viewer.getName());
 					viewer.setUpdatedBy(viewer.getName());
-					ViewerRegister createdRegister = viewerRegistrationRepository.save(viewer);
+					Register createdRegister = registerRepository.save(viewer);
 					logger.debug("Successfully Registration Information Saved");
 					return createdRegister;
 				} else {
