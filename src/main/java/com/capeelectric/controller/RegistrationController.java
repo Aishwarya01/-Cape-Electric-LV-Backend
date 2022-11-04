@@ -26,6 +26,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.ViewerRegister;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.util.Constants;
 import com.capeelectric.util.Utility;
@@ -78,10 +79,10 @@ public class RegistrationController {
 	}
 	 
 	@PostMapping("/addViewerRegistration")
-	public ResponseEntity<Void> addViewerRegistration(@RequestBody Register register)
+	public ResponseEntity<Void> addViewerRegistration(@RequestBody ViewerRegister register)
 			throws RegistrationException, MessagingException, MalformedURLException, CompanyDetailsException, URISyntaxException {
 		logger.debug("called addRegistration function UserName : {}", register.getUsername());
-		Register createdRegister = registrationService.addViewerRegistration(register);
+		ViewerRegister createdRegister = registrationService.addViewerRegistration(register);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(createdRegister.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());

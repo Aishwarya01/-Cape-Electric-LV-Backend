@@ -39,7 +39,9 @@ import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.EmailContent;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.ViewerRegister;
 import com.capeelectric.repository.RegistrationRepository;
+import com.capeelectric.repository.ViewerRegistrationRepository;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.util.Constants;
@@ -64,6 +66,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 	
 	@Autowired
 	private RegistrationRepository registerRepository;
+	
+	@Autowired
+	private ViewerRegistrationRepository viewerRegistrationRepository;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -118,7 +123,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	@Transactional
-	public Register addViewerRegistration(Register viewer) throws RegistrationException, CompanyDetailsException {
+	public ViewerRegister addViewerRegistration(ViewerRegister viewer) throws RegistrationException, CompanyDetailsException {
 		logger.debug("AddingRegistration Starts with User : {} ", viewer.getUsername());
 		if (viewer.getUsername() != null && viewer.getCompanyName() != null && viewer.getAddress() != null
 				&& viewer.getContactNumber() != null && viewer.getDepartment() != null
@@ -132,7 +137,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					viewer.setUpdatedDate(LocalDateTime.now());
 					viewer.setCreatedBy(viewer.getName());
 					viewer.setUpdatedBy(viewer.getName());
-					Register createdRegister = registerRepository.save(viewer);
+					ViewerRegister createdRegister = viewerRegistrationRepository.save(viewer);
 					logger.debug("Successfully Registration Information Saved");
 					return createdRegister;
 				} else {
@@ -458,5 +463,11 @@ public class RegistrationServiceImpl implements RegistrationService {
 				+ "/admin");
 		logger.debug("AwsEmailService call Successfully Ended");
 
+	}
+
+	@Override
+	public Optional<Register> retrieveFromRegister(String userName) {
+		Optional<Register> findByUsername = registerRepository.findByUsername(userName);
+ 		return null;
 	}
 }

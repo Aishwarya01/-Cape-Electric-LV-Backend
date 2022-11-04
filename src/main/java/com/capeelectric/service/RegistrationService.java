@@ -12,6 +12,7 @@ import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.ViewerRegister;
 import com.capeelectric.request.RegisterPermissionRequest;
 
 
@@ -32,7 +33,7 @@ public interface RegistrationService {
 
 	public void sendOtp(String userName, String mobileNumber) throws RegistrationException;
 
-	public Register addViewerRegistration(Register register) throws RegistrationException, CompanyDetailsException;
+	public ViewerRegister addViewerRegistration(ViewerRegister register) throws RegistrationException, CompanyDetailsException;
 
 	public void updateLicence(String userName, String numoflicence) throws RegistrationException;
 	
@@ -53,5 +54,7 @@ public interface RegistrationService {
 	public void sendEmailPDF(String userName, Integer siteId, int count, String keyname);
 	
 	public void sendEmailForOTPGeneration(String email, String content) throws URISyntaxException;
+
+	public Optional<Register> retrieveFromRegister(String userName);
 
 }
