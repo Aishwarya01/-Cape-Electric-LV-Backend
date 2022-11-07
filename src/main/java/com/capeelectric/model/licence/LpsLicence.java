@@ -19,4 +19,28 @@ public class LpsLicence extends LicenceTable{
     @JoinColumn(name = "REGISTER_ID")
 	private LpsRegister lpsRegister;
 
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+	public LpsRegister getLpsRegister() {
+		return lpsRegister;
+	}
+
+	public void setLpsRegister(LpsRegister lpsRegister) {
+		this.lpsRegister = lpsRegister;
+	}
+
 }

@@ -50,7 +50,7 @@ public class LicenseController {
 	@Value("${app.web.domain}")
 	private String webUrl;
 	
-	@PostMapping("/addViewerRegistration")
+	@PostMapping("/addViewerRegistrationLicense")
 	public ResponseEntity<Void> addRegistration(@RequestBody ViewerRegister viewerRegister)
 			throws RegistrationException, MessagingException, MalformedURLException, CompanyDetailsException, URISyntaxException {
 		logger.debug("called addRegistration function UserName : {}", viewerRegister.getUsername());

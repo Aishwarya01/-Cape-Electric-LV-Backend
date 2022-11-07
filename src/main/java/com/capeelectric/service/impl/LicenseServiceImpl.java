@@ -19,8 +19,8 @@ public class LicenseServiceImpl implements LicenseService {
 	@Autowired
 	private LvRepository lvRepository;
 
-	@Autowired
-	private LpsRegisterRepository lpsRegisterRepository;
+	//@Autowired
+	//private LpsRegisterRepository lpsRegisterRepository;
 	
 	@Autowired
 	private ViewerRegistrationRepository viewerRegistrationRepository;
@@ -33,7 +33,8 @@ public class LicenseServiceImpl implements LicenseService {
 
 	@Override
 	public Optional<LpsRegister> retrieveLpsRegister(String userName) {
-		return lpsRegisterRepository.findByUsername(userName);
+		//return lpsRegisterRepository.findByUsername(userName);
+		return null;
 	}
 
 	@Override

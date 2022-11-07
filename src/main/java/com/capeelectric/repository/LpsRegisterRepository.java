@@ -6,8 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.capeelectric.model.licence.LpsRegister;
 
-public interface LpsRegisterRepository extends CrudRepository<LpsRegister, Integer> {
+public interface LpsRegisterRepository{
 
-	public Optional<LpsRegister> findByUsername(String userName);
+	//public Optional<LpsRegister> findByUsername(String userName);
 
 }
