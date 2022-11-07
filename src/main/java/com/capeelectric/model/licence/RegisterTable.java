@@ -1,29 +1,17 @@
-package com.capeelectric.model;
+package com.capeelectric.model.licence;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.capeelectric.model.licence.License;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-/**
- * 
- * @author capeelectricsoftware
- *
- */
 @Entity
-@Table(name = "register_table")
-public class ViewerRegister {
+@Table(name="register_table")
+public class RegisterTable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -104,10 +92,6 @@ public class ViewerRegister {
 
 	@Column(name = "SITE_NAME")
 	private String siteName;
-	
-	@JsonManagedReference
-	@OneToMany(mappedBy = "viewerRegister", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<License> license;
 
 	public Integer getRegisterId() {
 		return registerId;
@@ -203,6 +187,14 @@ public class ViewerRegister {
 
 	public void setDistrict(String district) {
 		this.district = district;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 	public String getPinCode() {
@@ -301,27 +293,12 @@ public class ViewerRegister {
 		this.updatedBy = updatedBy;
 	}
 
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
 	public String getSiteName() {
 		return siteName;
 	}
 
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
-	}
-
-	public List<License> getLicense() {
-		return license;
-	}
-
-	public void setLicense(List<License> license) {
-		this.license = license;
 	}
 	
 }

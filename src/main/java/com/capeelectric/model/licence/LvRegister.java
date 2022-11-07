@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.capeelectric.model.IsolationCurrent;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
@@ -107,7 +106,7 @@ public class LvRegister {
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "lvRegister", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
- 	private List<LvLicence> lvLicence;
+ 	private List<LvLicense> lvLicense;
 
 	public Integer getRegisterId() {
 		return registerId;
@@ -314,6 +313,14 @@ public class LvRegister {
 
 	public void setSiteName(String siteName) {
 		this.siteName = siteName;
+	}
+
+	public List<LvLicense> getLvLicense() {
+		return lvLicense;
+	}
+
+	public void setLvLicense(List<LvLicense> lvLicense) {
+		this.lvLicense = lvLicense;
 	}
 	
 }

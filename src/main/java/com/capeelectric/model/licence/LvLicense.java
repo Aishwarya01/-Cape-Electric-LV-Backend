@@ -10,9 +10,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "licence_table")
-public class LvLicence extends LicenceTable{
+public class LvLicense extends LicenseTable{
 
-	
 	@Column(name = "SITE_NAME")
 	private String siteName;
 	

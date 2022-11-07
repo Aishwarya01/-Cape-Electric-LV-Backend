@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "licence_table")
-public class Licence {
+public class License {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -202,7 +202,4 @@ public class Licence {
 	public void setViewerRegister(ViewerRegister viewerRegister) {
 		this.viewerRegister = viewerRegister;
 	}
-
-	 
-
 }

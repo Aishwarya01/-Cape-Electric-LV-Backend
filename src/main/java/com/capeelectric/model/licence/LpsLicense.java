@@ -1,12 +1,14 @@
 package com.capeelectric.model.licence;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
-public class LpsLicence extends LicenceTable{
+@Entity
+public class LpsLicense extends LicenseTable{
 
 	@Column(name = "CLIENT_NAME")
 	private String clientName;
