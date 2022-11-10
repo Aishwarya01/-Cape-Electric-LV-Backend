@@ -15,63 +15,63 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "licence_table")
 public class License {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "LICENCE_ID")
 	private Integer licenceId;
-	
-	//LV
-	@Column(name = "NO_OF_LV_LICENCE")
-	private String noOfLVLicence;
-	
-	@Column(name = "SITE_NAME")
-	private String siteName;
-	
+
+	// LV
+	@Column(name = "LV_NO_OF_LICENCE")
+	private String lvNoOfLicence;
+
+	@Column(name = "LV_SITE_NAME")
+	private String lvSiteName;
+
 	@Column(name = "LV_STATUS")
 	private String lvStatus;
-	
-	//LPS
-	@Column(name = "NO_OF_LPS_LICENCE")
-	private String noOfLPSLVLicence;
-	
+
+	// LPS
+	@Column(name = "LPS_NO_OF_LICENCE")
+	private String lpsNoOfLicence;
+
 	@Column(name = "LPS_CLIENT_NAME")
 	private String lpsclientName;
-	
+
 	@Column(name = "LPS_PROJECT_NAME")
 	private String lpsProjectName;
-	
+
 	@Column(name = "LPS_STATUS")
 	private String lpsStatus;
-	
-	//EMC
-	@Column(name = "NO_OF_EMC_LICENCE")
-	private String noOfEMCLVLicence;
-	
+
+	// EMC
+	@Column(name = "EMC_NO_OF_LICENCE")
+	private String emcNoOfLicence;
+
 	@Column(name = "EMC_CLIENT_NAME")
 	private String emcClientName;
-	
+
 	@Column(name = "EMC_STATUS")
 	private String emcStatus;
-	
-	//RISK
-	@Column(name = "NO_OF_RISK_LICENCE")
-	private String noOfRISKLVLicence;
-	
+
+	// RISK
+	@Column(name = "RISK_NO_OF_LICENCE")
+	private String riskNoOfLicence;
+
 	@Column(name = "RISK_STATUS")
 	private String riskStatus;
-	
+
 	@Column(name = "RISK_ORGANISATION_NAME")
-	private String organisationName;
-	
+	private String riskOrganisationName;
+
 	@Column(name = "RISK_PROJECT_NAME")
-	private String projectName;
-	
-	//SLD
-	
+	private String riskProjectName;
+
+	// SLD
+
 	@JsonBackReference
 	@ManyToOne
-    @JoinColumn(name = "REGISTER_ID")
+	@JoinColumn(name = "REGISTER_ID")
 	private ViewerRegister viewerRegister;
 
 	public Integer getLicenceId() {
@@ -82,21 +82,20 @@ public class License {
 		this.licenceId = licenceId;
 	}
 
-
-	public String getNoOfLVLicence() {
-		return noOfLVLicence;
+	public String getLvNoOfLicence() {
+		return lvNoOfLicence;
 	}
 
-	public void setNoOfLVLicence(String noOfLVLicence) {
-		this.noOfLVLicence = noOfLVLicence;
+	public void setLvNoOfLicence(String lvNoOfLicence) {
+		this.lvNoOfLicence = lvNoOfLicence;
 	}
 
-	public String getSiteName() {
-		return siteName;
+	public String getLvSiteName() {
+		return lvSiteName;
 	}
 
-	public void setSiteName(String siteName) {
-		this.siteName = siteName;
+	public void setLvSiteName(String lvSiteName) {
+		this.lvSiteName = lvSiteName;
 	}
 
 	public String getLvStatus() {
@@ -107,12 +106,12 @@ public class License {
 		this.lvStatus = lvStatus;
 	}
 
-	public String getNoOfLPSLVLicence() {
-		return noOfLPSLVLicence;
+	public String getLpsNoOfLicence() {
+		return lpsNoOfLicence;
 	}
 
-	public void setNoOfLPSLVLicence(String noOfLPSLVLicence) {
-		this.noOfLPSLVLicence = noOfLPSLVLicence;
+	public void setLpsNoOfLicence(String lpsNoOfLicence) {
+		this.lpsNoOfLicence = lpsNoOfLicence;
 	}
 
 	public String getLpsclientName() {
@@ -139,12 +138,12 @@ public class License {
 		this.lpsStatus = lpsStatus;
 	}
 
-	public String getNoOfEMCLVLicence() {
-		return noOfEMCLVLicence;
+	public String getEmcNoOfLicence() {
+		return emcNoOfLicence;
 	}
 
-	public void setNoOfEMCLVLicence(String noOfEMCLVLicence) {
-		this.noOfEMCLVLicence = noOfEMCLVLicence;
+	public void setEmcNoOfLicence(String emcNoOfLicence) {
+		this.emcNoOfLicence = emcNoOfLicence;
 	}
 
 	public String getEmcClientName() {
@@ -163,12 +162,12 @@ public class License {
 		this.emcStatus = emcStatus;
 	}
 
-	public String getNoOfRISKLVLicence() {
-		return noOfRISKLVLicence;
+	public String getRiskNoOfLicence() {
+		return riskNoOfLicence;
 	}
 
-	public void setNoOfRISKLVLicence(String noOfRISKLVLicence) {
-		this.noOfRISKLVLicence = noOfRISKLVLicence;
+	public void setRiskNoOfLicence(String riskNoOfLicence) {
+		this.riskNoOfLicence = riskNoOfLicence;
 	}
 
 	public String getRiskStatus() {
@@ -179,20 +178,20 @@ public class License {
 		this.riskStatus = riskStatus;
 	}
 
-	public String getOrganisationName() {
-		return organisationName;
+	public String getRiskOrganisationName() {
+		return riskOrganisationName;
 	}
 
-	public void setOrganisationName(String organisationName) {
-		this.organisationName = organisationName;
+	public void setRiskOrganisationName(String riskOrganisationName) {
+		this.riskOrganisationName = riskOrganisationName;
 	}
 
-	public String getProjectName() {
-		return projectName;
+	public String getRiskProjectName() {
+		return riskProjectName;
 	}
 
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
+	public void setRiskProjectName(String riskProjectName) {
+		this.riskProjectName = riskProjectName;
 	}
 
 	public ViewerRegister getViewerRegister() {

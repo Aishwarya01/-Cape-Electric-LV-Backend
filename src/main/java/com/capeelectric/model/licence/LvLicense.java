@@ -10,22 +10,44 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "licence_table")
-public class LvLicense extends LicenseTable{
+public class LvLicense extends LicenseTable {
 
-	@Column(name = "SITE_NAME")
-	private String siteName;
-	
+	@Column(name = "LV_SITE_NAME")
+	private String lvSiteName;
+
+	@Column(name = "LV_STATUS")
+	private String lvStatus;
+
+	@Column(name = "LV_NO_OF_LICENCE")
+	private String lvNoOfLicence;
+
 	@JsonBackReference
 	@ManyToOne
-    @JoinColumn(name = "REGISTER_ID")
+	@JoinColumn(name = "REGISTER_ID")
 	private LvRegister lvRegister;
 
-	public String getSiteName() {
-		return siteName;
+	public String getLvSiteName() {
+		return lvSiteName;
 	}
 
-	public void setSiteName(String siteName) {
-		this.siteName = siteName;
+	public void setLvSiteName(String lvSiteName) {
+		this.lvSiteName = lvSiteName;
+	}
+
+	public String getLvStatus() {
+		return lvStatus;
+	}
+
+	public void setLvStatus(String lvStatus) {
+		this.lvStatus = lvStatus;
+	}
+
+	public String getLvNoOfLicence() {
+		return lvNoOfLicence;
+	}
+
+	public void setLvNoOfLicence(String lvNoOfLicence) {
+		this.lvNoOfLicence = lvNoOfLicence;
 	}
 
 	public LvRegister getLvRegister() {
@@ -35,5 +57,5 @@ public class LvLicense extends LicenseTable{
 	public void setLvRegister(LvRegister lvRegister) {
 		this.lvRegister = lvRegister;
 	}
-	
+
 }
