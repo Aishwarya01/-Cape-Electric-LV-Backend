@@ -1,9 +1,13 @@
 package com.capeelectric.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,10 +38,13 @@ import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
 import com.capeelectric.request.ContactNumberRequest;
+import com.capeelectric.response.AuthenticationResponse;
 import com.capeelectric.response.AuthenticationResponseRegister;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.LoginServiceImpl;
 import com.capeelectric.service.impl.RegistrationDetailsServiceImpl;
+
+import io.jsonwebtoken.impl.DefaultClaims;
 
 @RestController
 @RequestMapping("/api/v2")
@@ -155,6 +162,24 @@ public class LoginController {
 		logger.debug("retrieveInformation_function ended");
 		return new ResponseEntity<Register>(registerUser, HttpStatus.OK);
 		
+	}
+	
+	@GetMapping(value = "/refreshToken")
+	public ResponseEntity<?> refreshtoken(HttpServletRequest request) throws Exception {
+		// From the HttpRequest get the claims
+		DefaultClaims claims = (io.jsonwebtoken.impl.DefaultClaims) request.getAttribute("claims");
+
+		Map<String, Object> expectedMap = getMapFromIoJsonwebtokenClaims(claims);
+		String token = jwtTokenUtil.doGenerateRefreshToken(expectedMap, expectedMap.get("sub").toString());
+		return ResponseEntity.ok(new AuthenticationResponse(token));
+	}
+
+	public Map<String, Object> getMapFromIoJsonwebtokenClaims(DefaultClaims claims) {
+		Map<String, Object> expectedMap = new HashMap<String, Object>();
+		for (Entry<String, Object> entry : claims.entrySet()) {
+			expectedMap.put(entry.getKey(), entry.getValue());
+		}
+		return expectedMap;
 	}
 	private void authenticate(String username, String password) throws Exception, AuthenticationException, RegistrationException {
 
