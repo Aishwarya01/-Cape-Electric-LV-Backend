@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -21,6 +22,12 @@ public class LpsLicense extends LicenseTable{
 
 	@Column(name = "LPS_STATUS")
 	private String lpsStatus;
+	
+	@Transient
+	private String userName;
+	
+	@Transient
+	private String mailId;
 	
 	@JsonBackReference
 	@ManyToOne
@@ -66,4 +73,21 @@ public class LpsLicense extends LicenseTable{
 	public void setLpsRegister(LpsRegister lpsRegister) {
 		this.lpsRegister = lpsRegister;
 	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getMailId() {
+		return mailId;
+	}
+
+	public void setMailId(String mailId) {
+		this.mailId = mailId;
+	}
+	
 }

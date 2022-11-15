@@ -25,6 +25,9 @@ public class AWSLVConfig {
 	
 	@Value("${aws.email.send.approval}")
 	private String sendEmailForApproval;
+	
+	@Value("${aws.email.send.sendLPSBasicData}")
+	private String sendLPSBasicData;
 
 	/**
 	 * @return the sendEmailWithPDF
@@ -95,6 +98,13 @@ public class AWSLVConfig {
 	public void setSendEmailForApproval(String sendEmailForApproval) {
 		this.sendEmailForApproval = sendEmailForApproval;
 	}
-	
+
+	public String getSendLPSBasicData() {
+		return sendLPSBasicData;
+	}
+
+	public void setSendLPSBasicData(String sendLPSBasicData) {
+		this.sendLPSBasicData = sendLPSBasicData;
+	}
 	
 }

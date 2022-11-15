@@ -1,5 +1,6 @@
 package com.capeelectric.service;
 
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 import com.capeelectric.model.ViewerRegister;
@@ -12,6 +13,6 @@ public interface LicenseService {
 
 	public Optional<LpsRegister> retrieveLpsRegister(String userName);
 
-	public ViewerRegister addViewerRegistration(ViewerRegister viewerRegister);
+	public ViewerRegister addViewerRegistration(ViewerRegister viewerRegister) throws URISyntaxException;
 
 }
