@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.capeelectric.model.licence.License;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -104,6 +105,9 @@ public class ViewerRegister {
 
 	@Column(name = "SITE_NAME")
 	private String siteName;
+	
+	@Transient
+	private String project;
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "viewerRegister", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -323,5 +327,12 @@ public class ViewerRegister {
 	public void setLicense(List<License> license) {
 		this.license = license;
 	}
-	
+
+	public String getProject() {
+		return project;
+	}
+
+	public void setProject(String project) {
+		this.project = project;
+	}
 }

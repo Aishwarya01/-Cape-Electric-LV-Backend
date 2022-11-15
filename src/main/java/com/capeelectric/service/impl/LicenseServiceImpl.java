@@ -64,10 +64,10 @@ public class LicenseServiceImpl implements LicenseService {
 	}
 
 	private void addProject(ViewerRegister viewerRegister) throws URISyntaxException {
-		switch (viewerRegister.getProjectName()) {
-		case "LV":
+		switch (viewerRegister.getProject()) {
+		case "lvPage":
 			break;
-		case "LPS":{
+		case "lpsPage":{
 			License license = viewerRegister.getLicense().get(0);
 			if (null !=license) {
 				LpsLicense lpsLicense = new LpsLicense();

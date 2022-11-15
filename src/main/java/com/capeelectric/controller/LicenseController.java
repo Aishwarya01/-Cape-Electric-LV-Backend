@@ -60,11 +60,11 @@ public class LicenseController {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(createdRegister.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());
-		registrationService.sendEmailForOTPGeneration(createdRegister.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
-				+ (resetUrl.contains("localhost:5000")
-						? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-						: "https://www."+webUrl)
-				+ "/generateOtp" + ";email=" + viewerRegister.getUsername());
+//		registrationService.sendEmailForOTPGeneration(createdRegister.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
+//				+ (resetUrl.contains("localhost:5000")
+//						? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
+//						: "https://www."+webUrl)
+//				+ "/generateOtp" + ";email=" + viewerRegister.getUsername());
 		logger.debug("AwsEmailService Successfully call Ended");
 		return ResponseEntity.created(uri).build();
 	}
