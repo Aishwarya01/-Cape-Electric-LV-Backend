@@ -45,8 +45,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 			} catch (IllegalArgumentException e) {
 				logger.error(e.getMessage());
 			} catch (ExpiredJwtException ex) {
+				String isRefreshToken = request.getHeader("isRefreshToken");
+				String requestURL = request.getRequestURL().toString();
 				// allow for Refresh Token creation if following conditions are true.
+				if (isRefreshToken != null && isRefreshToken.equals("true") && requestURL.contains("refreshToken")) {
 					allowForRefreshToken(ex, request);
+				} else
+					request.setAttribute("exception", ex);
 			}
 		} else {
 			logger.warn("JWT Token does not begin with Bearer String");
@@ -70,7 +75,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			}
 			}catch(ExpiredJwtException ex) {
+				String isRefreshToken = request.getHeader("isRefreshToken");
+				String requestURL = request.getRequestURL().toString();
+				// allow for Refresh Token creation if following conditions are true.
+				if (isRefreshToken != null && isRefreshToken.equals("true") && requestURL.contains("refreshToken")) {
 					allowForRefreshToken(ex, request);
+				} else
+					request.setAttribute("exception", ex);
 			}
 		}
 		chain.doFilter(request, response);
