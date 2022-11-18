@@ -6,7 +6,7 @@ import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Site;
 
 public interface SiteService {
-	public void addSite(Site site) throws CompanyDetailsException;
+	public Site addSite(Site site) throws CompanyDetailsException;
 
 	public void updateSite(Site site) throws CompanyDetailsException;
 	

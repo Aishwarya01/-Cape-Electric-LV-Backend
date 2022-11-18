@@ -49,7 +49,7 @@ public class SiteServiceImpl implements SiteService {
 	 */
 	@Transactional
 	@Override
-	public void addSite(Site site) throws CompanyDetailsException {
+	public Site addSite(Site site) throws CompanyDetailsException {
 		int count = 0;
 
 		if (site.getUserName() != null && site.getSite() != null) {
@@ -65,8 +65,8 @@ public class SiteServiceImpl implements SiteService {
           logger.debug("Finding siteperson Email already available or not in DB --> " + email);
           if (email) {
             reduceLicence(site.getUserName());
-            siteRepository.save(site);
-            logger.debug("Site Successfully Saved in DB");
+           return siteRepository.save(site);
+           // logger.debug("Site Successfully Saved in DB");
           } else {
             logger.error("PersonInchargEmail already present");
             throw new CompanyDetailsException("PersonInchargEmail already present");

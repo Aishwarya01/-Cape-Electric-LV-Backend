@@ -29,11 +29,11 @@ public class SiteController {
 	private SiteService siteService;
 
 	@PostMapping("/addSite")
-	public ResponseEntity<String> addSite(@RequestBody Site site) throws CompanyDetailsException {
+	public ResponseEntity<Site> addSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.debug("called addSite function UserName : {}, Site : {}", site.getSite());
-		siteService.addSite(site);
-		logger.debug("Ended addSite function");
-		return new ResponseEntity<String>("Site Successfully Saved", HttpStatus.CREATED);
+		;
+		//logger.debug("Ended addSite function");
+		return new ResponseEntity<Site>(siteService.addSite(site), HttpStatus.CREATED);
 
 	}
 

@@ -121,7 +121,7 @@ CREATE TABLE applicationtypes(
 			 INSERT INTO APPLICATIONTYPES VALUES  (4,'EMC Assessment Of An Installation (IEC 61000-5-1)', 'EMC Assessment','EMC');
 			 INSERT INTO APPLICATIONTYPES VALUES  (5,'Failure Analysis Of Electronic Systems', 'Failure Analysis','FAS');
 			 INSERT INTO APPLICATIONTYPES VALUES  (6,'Conformity And Project Analysis', 'Conformity Project','CPA');
-		     INSERT INTO APPLICATIONTYPES VALUES  (7,'Testing Inspection and Certification of Lightning protection system', 'LPS System', 'LPS');
+		     INSERT INTO APPLICATIONTYPES VALUES  (7,'Testing Inspection and Certification of Lightning protection system', 'LPS Systems', 'LPS');
 
 --------> Site Table <------------
 
