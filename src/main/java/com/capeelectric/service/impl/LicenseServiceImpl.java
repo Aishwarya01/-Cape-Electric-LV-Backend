@@ -4,8 +4,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,21 +22,18 @@ import com.capeelectric.model.licence.License;
 import com.capeelectric.model.licence.LpsLicense;
 import com.capeelectric.model.licence.LpsRegister;
 import com.capeelectric.model.licence.LvRegister;
-import com.capeelectric.repository.LpsRegisterRepository;
-import com.capeelectric.repository.LvRepository;
+import com.capeelectric.repository.LicenseRepository;
 import com.capeelectric.repository.ViewerRegistrationRepository;
 import com.capeelectric.service.LicenseService;
-import com.capeelectric.service.RegistrationService;
-import com.capeelectric.util.UserFullName;
 
 @Service
 public class LicenseServiceImpl implements LicenseService {
 
-	@Autowired
-	private LvRepository lvRepository;
-
-	@Autowired
-	private LpsRegisterRepository lpsRegisterRepository;
+//	@Autowired
+//	private LvRepository lvRepository;
+//
+//	@Autowired
+//	private LpsRegisterRepository lpsRegisterRepository;
 	
 	@Autowired
 	private ViewerRegistrationRepository viewerRegistrationRepository;
@@ -44,60 +42,66 @@ public class LicenseServiceImpl implements LicenseService {
 	private RestTemplate restTemplate;
 	
 	@Autowired
+	private LicenseRepository licenseRepository;
+	
+	@Autowired
 	private AWSLVConfig awsConfiguration;
 	
-	@Override
-	public Optional<LvRegister> retrieveLvRegister(String userName) {
-		return lvRepository.findByUsername(userName);
-	}
+//	@Override
+//	public Optional<LvRegister> retrieveLvRegister(String userName) {
+//		return lvRepository.findByUsername(userName);
+//	}
 
-	@Override
-	public Optional<LpsRegister> retrieveLpsRegister(String userName) {
-		return lpsRegisterRepository.findByUsername(userName);
-//		/return null;
-	}
+//	@Override
+//	public Optional<LpsRegister> retrieveLpsRegister(String userName) {
+//		return lpsRegisterRepository.findByUsername(userName);
+////		/return null;
+//	}
 
 	@Override
 	public ViewerRegister addViewerRegistration(ViewerRegister viewerRegister) throws URISyntaxException {
-		addProject(viewerRegister);
+		addDetailsTolicenseTable(viewerRegister);
 		return viewerRegistrationRepository.save(viewerRegister); 
 	}
 
-	private void addProject(ViewerRegister viewerRegister) throws URISyntaxException {
-		switch (viewerRegister.getProject()) {
-		case "lvPage":
-			break;
-		case "lpsPage":{
-			License license = viewerRegister.getLicense().get(0);
-			if (null !=license) {
-				LpsLicense lpsLicense = new LpsLicense();
-				lpsLicense.setLpsclientName(license.getLpsclientName());
-				lpsLicense.setLpsProjectName(license.getLpsProjectName());
-				lpsLicense.setUserName(viewerRegister.getAssignedBy());
-				lpsLicense.setMailId(viewerRegister.getUsername());
-				sendLPSBasicData(lpsLicense);
-			}
-			
+	private void addDetailsTolicenseTable(ViewerRegister viewerRegister) throws URISyntaxException {
+		
+//		licenseRepository.findByUserName
+		switch (viewerRegister.getSelectedProject()) {
+		case "LV":{
+			License license = new License();
+			license.setViewerUserName(viewerRegister.getUsername());
+			license.setInspectorUserName(viewerRegister.getAssignedBy());
+			license.setLvSiteName(viewerRegister.getLvSiteName());
+			licenseRepository.save(license);
 			break;
 		}
-		case "EMC":
-			break;
-		case "RISK":
+		case "LPS":{
+			License license = new License();
+			license.setViewerUserName(viewerRegister.getUsername());
+			license.setInspectorUserName(viewerRegister.getAssignedBy());
+			license.setLvSiteName(viewerRegister.getLvSiteName());
+			license.setLpsclientName(viewerRegister.getLpsclientName());
+			license.setLpsProjectName(viewerRegister.getLpsProjectName());
+			licenseRepository.save(license);
 			break;
 		}
+	}
 		
 	}
 	
 	//@Override
-	private void sendLPSBasicData(LpsLicense license) throws URISyntaxException {
+	private void sendLPSBasicData(HttpServletRequest request,LpsLicense license) throws URISyntaxException {
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set("Authorization", request.getHeader("Authorization"));
 		URI uri = new URI(awsConfiguration.getSendLPSBasicData());
 
-		RequestEntity<LpsLicense> requestEntity = new RequestEntity<>(license, headers, HttpMethod.POST, uri);
+		RequestEntity<LpsLicense> requestEntity = new RequestEntity<>(license,  headers, HttpMethod.POST, uri);
 		ParameterizedTypeReference<EmailContent> typeRef = new ParameterizedTypeReference<EmailContent>() {};
 
-		restTemplate.exchange(requestEntity, typeRef);
+		//restTemplate.exchange(requestEntity, typeRef);
 		//logger.debug("Cape-Electric-AWS-Email service Response was successful");
 		
 	}

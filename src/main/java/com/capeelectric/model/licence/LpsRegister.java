@@ -17,15 +17,15 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 public class LpsRegister extends RegisterTable{
 	
-	@JsonManagedReference
-	@OneToMany(mappedBy = "lpsRegister", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
- 	private List<LpsLicense> LpsLicense;
+//	@JsonManagedReference
+//	@OneToMany(mappedBy = "lpsRegister", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+// 	private List<LpsLicense> LpsLicense;
 
-	public List<LpsLicense> getLpsLicense() {
-		return LpsLicense;
-	}
-
-	public void setLpsLicense(List<LpsLicense> lpsLicense) {
-		LpsLicense = lpsLicense;
-	}
+//	public List<LpsLicense> getLpsLicense() {
+//		return LpsLicense;
+//	}
+//
+//	public void setLpsLicense(List<LpsLicense> lpsLicense) {
+//		LpsLicense = lpsLicense;
+//	}
 }

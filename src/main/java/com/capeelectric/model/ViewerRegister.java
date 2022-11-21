@@ -1,21 +1,14 @@
 package com.capeelectric.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import com.capeelectric.model.licence.License;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * 
@@ -81,37 +74,57 @@ public class ViewerRegister {
 
 	@Column(name = "COMMENT")
 	private String comment;
-	
+
 	@Column(name = "OTP_SESSION_KEY")
 	private String otpSessionKey;
-	
+
 	@Column(name = "ASSIGNED_BY")
 	private String assignedBy;
-	
+
 	@Column(name = "NO_OF_LICENCE")
 	private String noOfLicence;
 
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
-	
+
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
-	
+
 	@Column(name = "CREATED_BY")
 	private String createdBy;
-	
+
 	@Column(name = "UPDATED_BY")
 	private String updatedBy;
 
-	@Column(name = "SITE_NAME")
-	private String siteName;
-	
+	//user selecting based on the project 
 	@Transient
-	private String project;
+	private String selectedProject;
+
+	// LV
+	@Transient
+	private String lvSiteName;
+
+	// LPS
+	@Transient
+	private String lpsNoOfLicence;
+
+	@Transient
+	private String lpsclientName;
+
+	@Transient
+	private String lpsProjectName;
 	
-	@JsonManagedReference
-	@OneToMany(mappedBy = "viewerRegister", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<License> license;
+//	@JsonManagedReference
+//	@OneToMany(mappedBy = "viewerRegister", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<License> license;
+
+	public String getSelectedProject() {
+		return selectedProject;
+	}
+
+	public void setSelectedProject(String selectedProject) {
+		this.selectedProject = selectedProject;
+	}
 
 	public Integer getRegisterId() {
 		return registerId;
@@ -312,27 +325,29 @@ public class ViewerRegister {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	public String getSiteName() {
-		return siteName;
+
+	public String getLvSiteName() {
+		return lvSiteName;
 	}
 
-	public void setSiteName(String siteName) {
-		this.siteName = siteName;
+	public void setLvSiteName(String lvSiteName) {
+		this.lvSiteName = lvSiteName;
 	}
 
-	public List<License> getLicense() {
-		return license;
+	public String getLpsclientName() {
+		return lpsclientName;
 	}
 
-	public void setLicense(List<License> license) {
-		this.license = license;
+	public void setLpsclientName(String lpsclientName) {
+		this.lpsclientName = lpsclientName;
 	}
 
-	public String getProject() {
-		return project;
+	public String getLpsProjectName() {
+		return lpsProjectName;
 	}
 
-	public void setProject(String project) {
-		this.project = project;
+	public void setLpsProjectName(String lpsProjectName) {
+		this.lpsProjectName = lpsProjectName;
 	}
+
 }

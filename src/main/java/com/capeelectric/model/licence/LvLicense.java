@@ -2,45 +2,20 @@ package com.capeelectric.model.licence;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "licence_table")
 public class LvLicense extends LicenseTable {
 
-	@Column(name = "LV_SITE_NAME")
-	private String lvSiteName;
-
-	@Column(name = "LV_STATUS")
-	private String lvStatus;
-
 	@Column(name = "LV_NO_OF_LICENCE")
 	private String lvNoOfLicence;
-
-	@JsonBackReference
-	@ManyToOne
-	@JoinColumn(name = "REGISTER_ID")
-	private LvRegister lvRegister;
-
-	public String getLvSiteName() {
-		return lvSiteName;
-	}
-
-	public void setLvSiteName(String lvSiteName) {
-		this.lvSiteName = lvSiteName;
-	}
-
-	public String getLvStatus() {
-		return lvStatus;
-	}
-
-	public void setLvStatus(String lvStatus) {
-		this.lvStatus = lvStatus;
-	}
+	
+	@Column(name = "VIEWER_USERNAME")
+	private String viewerUserName;
+	
+	@Column(name = "INSPCTOR_USERNAME")
+	private String inspectorUserName;
 
 	public String getLvNoOfLicence() {
 		return lvNoOfLicence;
@@ -50,12 +25,20 @@ public class LvLicense extends LicenseTable {
 		this.lvNoOfLicence = lvNoOfLicence;
 	}
 
-	public LvRegister getLvRegister() {
-		return lvRegister;
+	public String getViewerUserName() {
+		return viewerUserName;
 	}
 
-	public void setLvRegister(LvRegister lvRegister) {
-		this.lvRegister = lvRegister;
+	public void setViewerUserName(String viewerUserName) {
+		this.viewerUserName = viewerUserName;
 	}
 
+	public String getInspectorUserName() {
+		return inspectorUserName;
+	}
+
+	public void setInspectorUserName(String inspectorUserName) {
+		this.inspectorUserName = inspectorUserName;
+	}
+	 
 }

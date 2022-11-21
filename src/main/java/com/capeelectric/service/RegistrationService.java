@@ -56,4 +56,6 @@ public interface RegistrationService {
 
 	public Optional<Register> retrieveFromRegister(String userName);
 
+	public Optional<?> retrieveRegistrationWithProject(String userName, String project);
+
 }

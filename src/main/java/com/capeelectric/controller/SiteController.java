@@ -1,6 +1,7 @@
 package com.capeelectric.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,4 +85,9 @@ public class SiteController {
 		return siteService.retrieveByCompanyNameDepartmentSiteName(companyName, department, siteName);
 	}
 
+	@GetMapping("/isSiteActive/{userName}")
+	public ResponseEntity<Optional<Site>> isSiteActive(@PathVariable String userName) throws CompanyDetailsException {
+		logger.debug("called retriveSite function UserName: {}", userName);
+		return new ResponseEntity<Optional<Site>>(siteService.isSiteActive(userName), HttpStatus.OK);
+	}
 }

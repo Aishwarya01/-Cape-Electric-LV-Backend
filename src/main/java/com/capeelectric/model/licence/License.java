@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.capeelectric.model.ViewerRegister;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -44,35 +45,37 @@ public class License {
 	@Column(name = "LPS_STATUS")
 	private String lpsStatus;
 
-	// EMC
-	@Column(name = "EMC_NO_OF_LICENCE")
-	private String emcNoOfLicence;
-
-	@Column(name = "EMC_CLIENT_NAME")
-	private String emcClientName;
-
-	@Column(name = "EMC_STATUS")
-	private String emcStatus;
-
-	// RISK
-	@Column(name = "RISK_NO_OF_LICENCE")
-	private String riskNoOfLicence;
-
-	@Column(name = "RISK_STATUS")
-	private String riskStatus;
-
-	@Column(name = "RISK_ORGANISATION_NAME")
-	private String riskOrganisationName;
-
-	@Column(name = "RISK_PROJECT_NAME")
-	private String riskProjectName;
-
-	// SLD
-
-	@JsonBackReference
-	@ManyToOne
-	@JoinColumn(name = "REGISTER_ID")
-	private ViewerRegister viewerRegister;
+//	// EMC
+//	@Column(name = "EMC_NO_OF_LICENCE")
+//	private String emcNoOfLicence;
+//
+//	@Column(name = "EMC_CLIENT_NAME")
+//	private String emcClientName;
+//
+//	@Column(name = "EMC_STATUS")
+//	private String emcStatus;
+//
+//	// RISK
+//	@Column(name = "RISK_NO_OF_LICENCE")
+//	private String riskNoOfLicence;
+//
+//	@Column(name = "RISK_STATUS")
+//	private String riskStatus;
+//
+//	@Column(name = "RISK_ORGANISATION_NAME")
+//	private String riskOrganisationName;
+//
+//	@Column(name = "RISK_PROJECT_NAME")
+//	private String riskProjectName;
+	
+	@Transient
+	private String project;
+	
+	@Column(name = "VIEWER_USERNAME")
+	private String viewerUserName;
+	
+	@Column(name = "INSPCTOR_USERNAME")
+	private String inspectorUserName;
 
 	public Integer getLicenceId() {
 		return licenceId;
@@ -138,67 +141,28 @@ public class License {
 		this.lpsStatus = lpsStatus;
 	}
 
-	public String getEmcNoOfLicence() {
-		return emcNoOfLicence;
+	public String getProject() {
+		return project;
 	}
 
-	public void setEmcNoOfLicence(String emcNoOfLicence) {
-		this.emcNoOfLicence = emcNoOfLicence;
+	public void setProject(String project) {
+		this.project = project;
 	}
 
-	public String getEmcClientName() {
-		return emcClientName;
+	public String getViewerUserName() {
+		return viewerUserName;
 	}
 
-	public void setEmcClientName(String emcClientName) {
-		this.emcClientName = emcClientName;
+	public void setViewerUserName(String viewerUserName) {
+		this.viewerUserName = viewerUserName;
 	}
 
-	public String getEmcStatus() {
-		return emcStatus;
+	public String getInspectorUserName() {
+		return inspectorUserName;
 	}
 
-	public void setEmcStatus(String emcStatus) {
-		this.emcStatus = emcStatus;
+	public void setInspectorUserName(String inspectorUserName) {
+		this.inspectorUserName = inspectorUserName;
 	}
 
-	public String getRiskNoOfLicence() {
-		return riskNoOfLicence;
-	}
-
-	public void setRiskNoOfLicence(String riskNoOfLicence) {
-		this.riskNoOfLicence = riskNoOfLicence;
-	}
-
-	public String getRiskStatus() {
-		return riskStatus;
-	}
-
-	public void setRiskStatus(String riskStatus) {
-		this.riskStatus = riskStatus;
-	}
-
-	public String getRiskOrganisationName() {
-		return riskOrganisationName;
-	}
-
-	public void setRiskOrganisationName(String riskOrganisationName) {
-		this.riskOrganisationName = riskOrganisationName;
-	}
-
-	public String getRiskProjectName() {
-		return riskProjectName;
-	}
-
-	public void setRiskProjectName(String riskProjectName) {
-		this.riskProjectName = riskProjectName;
-	}
-
-	public ViewerRegister getViewerRegister() {
-		return viewerRegister;
-	}
-
-	public void setViewerRegister(ViewerRegister viewerRegister) {
-		this.viewerRegister = viewerRegister;
-	}
 }

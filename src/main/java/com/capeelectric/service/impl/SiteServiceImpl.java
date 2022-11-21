@@ -298,6 +298,13 @@ public class SiteServiceImpl implements SiteService {
 		return siteDetails != null  
 				? siteDetails.getSite() : "";
 	}
+
+	@Override
+	public Optional<Site> isSiteActive(String userName) throws CompanyDetailsException {
+
+		return  siteRepository.findByAssignedToAndStatus(userName,"Active");
+
+ 	}
 	
 	
 }

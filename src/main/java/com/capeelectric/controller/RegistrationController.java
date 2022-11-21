@@ -99,6 +99,12 @@ public class RegistrationController {
 		logger.debug("called retrieveRegistration function UserName : {}", userName);
 		return registrationService.retrieveRegistration(userName);
 	}
+	
+	@GetMapping("/retrieveRegistration/{userName}/{project}")
+	public ResponseEntity<?> retrieveRegistrationWithProject(@PathVariable String userName,@PathVariable String project) throws RegistrationException {
+		logger.debug("called retrieveRegistration function UserName : {}, ProjectName is : {}", userName,project);
+		return new ResponseEntity<>(registrationService.retrieveRegistrationWithProject(userName,project), HttpStatus.OK);
+	}
 
 	@PutMapping("/updateRegistration/{adminApproveRequired}")
 	public ResponseEntity<String> updateRegistration(@RequestBody Register register,@PathVariable("adminApproveRequired") Boolean adminApproveRequired)

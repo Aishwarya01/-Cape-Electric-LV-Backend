@@ -6,6 +6,8 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,15 +71,15 @@ public class LicenseController {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@GetMapping("/retrieveLvRegister/{userName}")
-	public Optional<LvRegister> retrieveLvRegister(@PathVariable String userName) throws RegistrationException {
-		logger.debug("called retrieveUserName function UserName : {}", userName);
-		return licenseService.retrieveLvRegister(userName);
-	}
+//	@GetMapping("/retrieveLvRegister/{userName}")
+//	public Optional<LvRegister> retrieveLvRegister(@PathVariable String userName) throws RegistrationException {
+//		logger.debug("called retrieveUserName function UserName : {}", userName);
+//		return licenseService.retrieveLvRegister(userName);
+//	}
 	
-	@GetMapping("/retrieveLpsRegister/{userName}")
-	public Optional<LpsRegister> retrieveLpsRegister(@PathVariable String userName) throws RegistrationException {
-		logger.debug("called retrieveUserName function UserName : {}", userName);
-		return licenseService.retrieveLpsRegister(userName);
-	}
+//	@GetMapping("/retrieveLpsRegister/{userName}")
+//	public Optional<LpsRegister> retrieveLpsRegister(@PathVariable String userName) throws RegistrationException {
+//		logger.debug("called retrieveUserName function UserName : {}", userName);
+//		return licenseService.retrieveLpsRegister(userName);
+//	}
 }

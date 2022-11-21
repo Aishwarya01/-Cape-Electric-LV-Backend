@@ -2,11 +2,7 @@ package com.capeelectric.model.licence;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class LpsLicense extends LicenseTable{
@@ -23,16 +19,12 @@ public class LpsLicense extends LicenseTable{
 	@Column(name = "LPS_STATUS")
 	private String lpsStatus;
 	
-	@Transient
-	private String userName;
+	@Column(name = "VIEWER_USERNAME")
+	private String viewerUserName;
 	
-	@Transient
-	private String mailId;
-	
-	@JsonBackReference
-	@ManyToOne
-    @JoinColumn(name = "REGISTER_ID")
-	private LpsRegister lpsRegister;
+	@Column(name = "INSPCTOR_USERNAME")
+	private String inspectorUserName;
+	 
 
 	public String getLpsNoOfLicence() {
 		return lpsNoOfLicence;
@@ -66,28 +58,20 @@ public class LpsLicense extends LicenseTable{
 		this.lpsStatus = lpsStatus;
 	}
 
-	public LpsRegister getLpsRegister() {
-		return lpsRegister;
+	public String getViewerUserName() {
+		return viewerUserName;
 	}
 
-	public void setLpsRegister(LpsRegister lpsRegister) {
-		this.lpsRegister = lpsRegister;
+	public void setViewerUserName(String viewerUserName) {
+		this.viewerUserName = viewerUserName;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getInspectorUserName() {
+		return inspectorUserName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getMailId() {
-		return mailId;
-	}
-
-	public void setMailId(String mailId) {
-		this.mailId = mailId;
+	public void setInspectorUserName(String inspectorUserName) {
+		this.inspectorUserName = inspectorUserName;
 	}
 	
 }

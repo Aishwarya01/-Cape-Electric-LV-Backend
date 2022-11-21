@@ -39,8 +39,10 @@ import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.EmailContent;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.licence.LvLicense;
+import com.capeelectric.repository.LpsLicenseRepository;
+import com.capeelectric.repository.LvLicenseRepository;
 import com.capeelectric.repository.RegistrationRepository;
-import com.capeelectric.repository.ViewerRegistrationRepository;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.util.Constants;
@@ -67,7 +69,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 	private RegistrationRepository registerRepository;
 	
 	@Autowired
-	private ViewerRegistrationRepository viewerRegistrationRepository;
+	private LvLicenseRepository lvLicenseRepository;
+	
+	@Autowired
+	private LpsLicenseRepository lpsLicenseRepository;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -162,7 +167,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
 			if (registerRepo.isPresent()) {
 				registerRepo.get().setApplicationType(
-						Stream.of(Arrays.asList(registerRepo.get().getApplicationType().split(","))
+						Stream.of(Arrays.asList(null ==registerRepo.get().getApplicationType() ?new String[0]:registerRepo.get().getApplicationType().split(","))
 								.stream()
 								.sorted(Comparator.naturalOrder())
 								.collect(Collectors.toList()).stream()
@@ -468,5 +473,29 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public Optional<Register> retrieveFromRegister(String userName) {
 		Optional<Register> findByUsername = registerRepository.findByUsername(userName);
  		return null;
+	}
+
+	/**
+	 * @param username,project
+	 * retrieveRegistrationWithProject function checking given the username & project available or not 
+	*/
+	@Override
+	public Optional<?> retrieveRegistrationWithProject(String userName, String project) {
+
+		if (project.equalsIgnoreCase("LV")) {
+			Optional<LvLicense> lvLicense = lvLicenseRepository.findByInspectorUserName(userName);
+			if (!lvLicense.isPresent() || lvLicense.get().getLvNoOfLicence() == null) {
+				Optional<Register> registerRepo = registerRepository.findByUsername(userName);	
+				LvLicense license = new LvLicense();
+				license.setLvNoOfLicence(registerRepo.get().getNoOfLicence());
+				return Optional.of(license);
+			}
+			return lvLicense;
+			
+ 		} else if (project.equalsIgnoreCase("LPS")) {
+ 			return lpsLicenseRepository.findByInspectorUserName(userName);
+
+ 		}  
+		return null;
 	}
 }
