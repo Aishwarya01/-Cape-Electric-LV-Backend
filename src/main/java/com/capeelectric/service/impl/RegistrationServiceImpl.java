@@ -39,6 +39,7 @@ import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.EmailContent;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.licence.LpsLicense;
 import com.capeelectric.model.licence.LvLicense;
 import com.capeelectric.repository.LpsLicenseRepository;
 import com.capeelectric.repository.LvLicenseRepository;
@@ -488,11 +489,15 @@ public class RegistrationServiceImpl implements RegistrationService {
 				Optional<Register> registerRepo = registerRepository.findByUsername(userName);	
 				LvLicense license = new LvLicense();
 				license.setLvNoOfLicence(registerRepo.get().getNoOfLicence());
+				if (!lvLicense.isPresent()) {
+					license.setInspectorUserName(userName);
+					lvLicenseRepository.save(license);
+				}
 				return Optional.of(license);
 			}
 			return lvLicense;
 			
- 		} else if (project.equalsIgnoreCase("LPS")) {
+ 		} else if (project.equalsIgnoreCase("LPS")) { 			 
  			return lpsLicenseRepository.findByInspectorUserName(userName);
 
  		}  
