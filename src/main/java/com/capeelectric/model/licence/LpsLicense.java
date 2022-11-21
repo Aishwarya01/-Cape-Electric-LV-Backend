@@ -29,11 +29,8 @@ public class LpsLicense{
 	@Column(name = "LPS_STATUS")
 	private String lpsStatus;
 	
-	@Column(name = "VIEWER_USERNAME")
-	private String viewerUserName;
-	
-	@Column(name = "INSPCTOR_USERNAME")
-	private String inspectorUserName;
+	@Column(name = "USERNAME")
+	private String userName;
 	
 	public Integer getLicenceId() {
 		return licenceId;
@@ -75,20 +72,12 @@ public class LpsLicense{
 		this.lpsStatus = lpsStatus;
 	}
 
-	public String getViewerUserName() {
-		return viewerUserName;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setViewerUserName(String viewerUserName) {
-		this.viewerUserName = viewerUserName;
-	}
-
-	public String getInspectorUserName() {
-		return inspectorUserName;
-	}
-
-	public void setInspectorUserName(String inspectorUserName) {
-		this.inspectorUserName = inspectorUserName;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	
 }

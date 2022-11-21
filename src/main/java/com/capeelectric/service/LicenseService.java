@@ -10,6 +10,6 @@ public interface LicenseService {
 //
 //	public Optional<LpsRegister> retrieveLpsRegister(String userName);
 
-	public ViewerRegister addViewerRegistration(ViewerRegister viewerRegister) throws URISyntaxException;
+	public ViewerRegister addViewerRegistration(ViewerRegister viewerRegister) throws URISyntaxException, Exception;
 
 }

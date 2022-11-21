@@ -9,6 +9,6 @@ import com.capeelectric.model.licence.LvLicense;
 @Repository
 public interface LvLicenseRepository extends CrudRepository<LvLicense, Integer> {
 
-	public Optional<LvLicense> findByInspectorUserName(String userName);
+	public Optional<LvLicense> findByUserName(String userName);
 
 }

@@ -2,20 +2,25 @@ package com.capeelectric.model.licence;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "licence_table")
-public class LvLicense extends LicenseTable {
+public class LvLicense {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "LICENCE_ID")
+	private Integer licenceId;
 
 	@Column(name = "LV_NO_OF_LICENCE")
 	private String lvNoOfLicence;
 	
-	@Column(name = "VIEWER_USERNAME")
-	private String viewerUserName;
-	
-	@Column(name = "INSPCTOR_USERNAME")
-	private String inspectorUserName;
+	@Column(name = "USERNAME")
+	private String userName;
 
 	public String getLvNoOfLicence() {
 		return lvNoOfLicence;
@@ -25,20 +30,20 @@ public class LvLicense extends LicenseTable {
 		this.lvNoOfLicence = lvNoOfLicence;
 	}
 
-	public String getViewerUserName() {
-		return viewerUserName;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setViewerUserName(String viewerUserName) {
-		this.viewerUserName = viewerUserName;
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	
+	public Integer getLicenceId() {
+		return licenceId;
 	}
 
-	public String getInspectorUserName() {
-		return inspectorUserName;
+	public void setLicenceId(Integer licenceId) {
+		this.licenceId = licenceId;
 	}
-
-	public void setInspectorUserName(String inspectorUserName) {
-		this.inspectorUserName = inspectorUserName;
-	}
-	 
+ 
 }

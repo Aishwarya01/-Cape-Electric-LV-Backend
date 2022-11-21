@@ -39,6 +39,7 @@ import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.EmailContent;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.licence.License;
 import com.capeelectric.model.licence.LpsLicense;
 import com.capeelectric.model.licence.LvLicense;
 import com.capeelectric.repository.LpsLicenseRepository;
@@ -108,6 +109,21 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setCreatedBy(register.getName());
 					register.setUpdatedBy(register.getName());
 					Register createdRegister = registerRepository.save(register);
+//					License license = new License();
+//					license.setInspectorUserName(register.getAssignedBy());
+//					license.setViewerUserName(register.getUsername());
+//					if (condition) {
+//					
+//						license.setLpsclientName(register.get);
+//						license.setLpsProjectName(SESSION_TITLE)
+//					}
+//					else if (condition) {
+//						license.setLpsStatus(SESSION_TITLE);
+//						license.setLvSiteName(SESSION_TITLE);
+//						license.setLvStatus(SESSION_TITLE);
+//					}
+//					
+					
 					logger.debug("Successfully Registration Information Saved");
 					return createdRegister;
 				} else {
@@ -484,13 +500,13 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public Optional<?> retrieveRegistrationWithProject(String userName, String project) {
 
 		if (project.equalsIgnoreCase("LV")) {
-			Optional<LvLicense> lvLicense = lvLicenseRepository.findByInspectorUserName(userName);
+			Optional<LvLicense> lvLicense = lvLicenseRepository.findByUserName(userName);
 			if (!lvLicense.isPresent() || lvLicense.get().getLvNoOfLicence() == null) {
 				Optional<Register> registerRepo = registerRepository.findByUsername(userName);	
 				LvLicense license = new LvLicense();
 				license.setLvNoOfLicence(registerRepo.get().getNoOfLicence());
 				if (!lvLicense.isPresent()) {
-					license.setInspectorUserName(userName);
+					license.setUserName(userName);
 					lvLicenseRepository.save(license);
 				}
 				return Optional.of(license);
@@ -498,7 +514,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			return lvLicense;
 			
  		} else if (project.equalsIgnoreCase("LPS")) { 			 
- 			return lpsLicenseRepository.findByInspectorUserName(userName);
+ 			return lpsLicenseRepository.findByUserName(userName);
 
  		}  
 		return null;

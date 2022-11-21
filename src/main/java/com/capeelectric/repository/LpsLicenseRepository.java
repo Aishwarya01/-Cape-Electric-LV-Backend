@@ -9,6 +9,6 @@ import com.capeelectric.model.licence.LpsLicense;
 @Repository
 public interface LpsLicenseRepository extends CrudRepository<LpsLicense, Integer>{
 	
-	public Optional<LpsLicense> findByInspectorUserName(String userName);
+	public Optional<LpsLicense> findByUserName(String userName);
 
 }	

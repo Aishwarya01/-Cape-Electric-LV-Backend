@@ -71,11 +71,8 @@ public class License {
 	@Transient
 	private String project;
 	
-	@Column(name = "VIEWER_USERNAME")
-	private String viewerUserName;
-	
-	@Column(name = "INSPCTOR_USERNAME")
-	private String inspectorUserName;
+	@Column(name = "USERNAME")
+	private String userName;
 
 	public Integer getLicenceId() {
 		return licenceId;
@@ -149,20 +146,12 @@ public class License {
 		this.project = project;
 	}
 
-	public String getViewerUserName() {
-		return viewerUserName;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setViewerUserName(String viewerUserName) {
-		this.viewerUserName = viewerUserName;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-
-	public String getInspectorUserName() {
-		return inspectorUserName;
-	}
-
-	public void setInspectorUserName(String inspectorUserName) {
-		this.inspectorUserName = inspectorUserName;
-	}
-
+	 
 }

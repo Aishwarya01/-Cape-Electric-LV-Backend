@@ -54,7 +54,7 @@ public class LicenseController {
 	
 	@PostMapping("/addViewerRegistrationLicense")
 	public ResponseEntity<Void> addRegistration(@RequestBody ViewerRegister viewerRegister)
-			throws RegistrationException, MessagingException, MalformedURLException, CompanyDetailsException, URISyntaxException {
+			throws RegistrationException, CompanyDetailsException, Exception {
 		logger.debug("called addRegistration function UserName : {}", viewerRegister.getUsername());
 		
 		ViewerRegister createdRegister = licenseService.addViewerRegistration(viewerRegister);

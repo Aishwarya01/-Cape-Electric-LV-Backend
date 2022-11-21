@@ -59,9 +59,19 @@ public class LicenseServiceImpl implements LicenseService {
 //	}
 
 	@Override
-	public ViewerRegister addViewerRegistration(ViewerRegister viewerRegister) throws URISyntaxException {
-		addDetailsTolicenseTable(viewerRegister);
-		return viewerRegistrationRepository.save(viewerRegister); 
+	public ViewerRegister addViewerRegistration(ViewerRegister viewerRegister) throws Exception {
+		if (null != viewerRegister && viewerRegister.getUsername() != null) {
+            Optional<ViewerRegister> viewerRegisterRepo = viewerRegistrationRepository
+                    .findByUsername(viewerRegister.getUsername());
+            if (!viewerRegisterRepo.isPresent()) {
+                addDetailsTolicenseTable(viewerRegister);
+                return viewerRegistrationRepository.save(viewerRegister);
+            } else {
+                throw new Exception(viewerRegister.getUsername() + " This user already Registered");
+            }
+        } else {
+            throw new Exception("Username reqired");
+        } 
 	}
 
 	private void addDetailsTolicenseTable(ViewerRegister viewerRegister) throws URISyntaxException {
@@ -70,18 +80,15 @@ public class LicenseServiceImpl implements LicenseService {
 		switch (viewerRegister.getSelectedProject()) {
 		case "LV":{
 			License license = new License();
-			license.setViewerUserName(viewerRegister.getUsername());
-			license.setInspectorUserName(viewerRegister.getAssignedBy());
+			license.setUserName(viewerRegister.getUsername());
 			license.setLvSiteName(viewerRegister.getLvSiteName());
 			licenseRepository.save(license);
 			break;
 		}
 		case "LPS":{
 			License license = new License();
-			license.setViewerUserName(viewerRegister.getUsername());
-			license.setInspectorUserName(viewerRegister.getAssignedBy());
-			license.setLvSiteName(viewerRegister.getLvSiteName());
-			license.setLpsclientName(viewerRegister.getLpsclientName());
+			license.setUserName(viewerRegister.getUsername());
+ 			license.setLpsclientName(viewerRegister.getLpsclientName());
 			license.setLpsProjectName(viewerRegister.getLpsProjectName());
 			licenseRepository.save(license);
 			break;
