@@ -8,5 +8,6 @@ import com.capeelectric.model.licence.License;
 
 public interface LicenseRepository extends CrudRepository<License, Integer> {
 
- 
+	public Optional<License> findByUserName(String username);
+
 }

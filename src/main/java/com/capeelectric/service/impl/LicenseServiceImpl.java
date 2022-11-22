@@ -66,8 +66,11 @@ public class LicenseServiceImpl implements LicenseService {
             if (!viewerRegisterRepo.isPresent()) {
                 addDetailsTolicenseTable(viewerRegister);
                 return viewerRegistrationRepository.save(viewerRegister);
-            } else {
-                throw new Exception(viewerRegister.getUsername() + " This user already Registered");
+            }
+            else {
+            	addDetailsTolicenseTable(viewerRegister);
+            	return null;
+//                throw new Exception(viewerRegister.getUsername() + " This user already Registered");
             }
         } else {
             throw new Exception("Username reqired");
@@ -75,26 +78,32 @@ public class LicenseServiceImpl implements LicenseService {
 	}
 
 	private void addDetailsTolicenseTable(ViewerRegister viewerRegister) throws URISyntaxException {
-		
-//		licenseRepository.findByUserName
+
+		Optional<License> licenseRepo = licenseRepository.findByUserName(viewerRegister.getUsername());
+		License license;
+		if (licenseRepo.isPresent()) {
+			license = licenseRepo.get();
+		} else {
+			license = new License();
+		}
+
 		switch (viewerRegister.getSelectedProject()) {
-		case "LV":{
-			License license = new License();
+		case "LV": {
+
 			license.setUserName(viewerRegister.getUsername());
 			license.setLvSiteName(viewerRegister.getLvSiteName());
 			licenseRepository.save(license);
 			break;
 		}
-		case "LPS":{
-			License license = new License();
+		case "LPS": {
 			license.setUserName(viewerRegister.getUsername());
- 			license.setLpsclientName(viewerRegister.getLpsclientName());
+			license.setLpsclientName(viewerRegister.getLpsclientName());
 			license.setLpsProjectName(viewerRegister.getLpsProjectName());
 			licenseRepository.save(license);
 			break;
 		}
-	}
-		
+		}
+
 	}
 	
 	//@Override
