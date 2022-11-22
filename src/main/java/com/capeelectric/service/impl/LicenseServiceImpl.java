@@ -64,11 +64,15 @@ public class LicenseServiceImpl implements LicenseService {
             Optional<ViewerRegister> viewerRegisterRepo = viewerRegistrationRepository
                     .findByUsername(viewerRegister.getUsername());
             if (!viewerRegisterRepo.isPresent()) {
-                addDetailsTolicenseTable(viewerRegister);
+               // addDetailsTolicenseTable(viewerRegister);
                 return viewerRegistrationRepository.save(viewerRegister);
             }
             else {
-            	addDetailsTolicenseTable(viewerRegister);
+            	//addDetailsTolicenseTable(viewerRegister);
+            	ViewerRegister viewerReg = viewerRegisterRepo.get();
+            	viewerReg.setApplicationType(
+                        viewerRegisterRepo.get().getApplicationType() + "," + viewerRegister.getApplicationType());
+            	viewerRegistrationRepository.save(viewerReg);
             	return null;
 //                throw new Exception(viewerRegister.getUsername() + " This user already Registered");
             }
