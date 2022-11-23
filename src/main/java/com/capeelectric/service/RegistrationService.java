@@ -34,7 +34,7 @@ public interface RegistrationService {
 
 	public Register addViewerRegistration(Register register) throws RegistrationException, CompanyDetailsException;
 
-	public void updateLicence(String userName, String numoflicence) throws RegistrationException;
+	public void updateLicence(String userName, String numoflicence, String project) throws RegistrationException;
 	
 	public String sendNewOtp(String mobileNumber) throws RegistrationException;
 

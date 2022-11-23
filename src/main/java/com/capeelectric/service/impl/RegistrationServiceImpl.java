@@ -40,7 +40,6 @@ import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.EmailContent;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.licence.License;
-import com.capeelectric.model.licence.LpsLicense;
 import com.capeelectric.model.licence.LvLicense;
 import com.capeelectric.repository.LpsLicenseRepository;
 import com.capeelectric.repository.LvLicenseRepository;
@@ -69,6 +68,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 	
 	@Autowired
 	private RegistrationRepository registerRepository;
+	
+	@Autowired
+	private com.capeelectric.repository.LicenseRepository licenseRepository;
 	
 	@Autowired
 	private LvLicenseRepository lvLicenseRepository;
@@ -308,29 +310,55 @@ public class RegistrationServiceImpl implements RegistrationService {
 		return sendOtpResponse.getBody().replaceAll(SESSION_TITLE, "$1");
 	}
 
+	/**
+	*@param username,numberoflicense and project
+	*updateLicense function checking given username available or not in repo,
+	* if available then finding that username in license table after that based on project license adding to repo
+	*/
 	@Override
-	public void updateLicence(String userName, String numoflicence) throws RegistrationException {
+	public void updateLicence(String userName, String numoflicence, String project) throws RegistrationException {
 
-		if (userName != null && numoflicence != null) {
+		if (userName != null && numoflicence != null && project != null) {
 			logger.debug("RegistrationServiceImpl updateLicence() function Started");
 			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
-			if (registerRepo.isPresent() && registerRepo.get().getUsername() != null
-					&& registerRepo.get().getUsername().equalsIgnoreCase(userName)) {
-				Register register = registerRepo.get();
-				register.setNoOfLicence(numoflicence);
-				register.setUpdatedDate(LocalDateTime.now());
-				register.setUpdatedBy(userName);
-				registerRepository.save(register);
-				logger.debug("Sucessfully licence updated for this user @{}" + userName);
+
+			if (registerRepo.isPresent()) {
+				Optional<License> licenseRepo = licenseRepository.findByUserName(userName);
+				try {
+					if (licenseRepo.isPresent()) {
+						licenseRepository.save(getLicenseObject(licenseRepo.get(), project, numoflicence));
+					} else {
+						License license = new License();
+						license.setUserName(userName);
+						licenseRepository.save(getLicenseObject(license, project, numoflicence));
+					}
+				} catch (Exception message) {
+					logger.error("License updating falied" + message.getMessage());
+					throw new RegistrationException("License updating falied");
+				}
+
 			} else {
 				logger.error("Given UserName does not Exist");
 				throw new RegistrationException("Given UserName does not Exist");
 			}
-
 		} else {
 			logger.error("Given UserName does not Exist");
 			throw new RegistrationException("Invalid Input");
 		}
+	}
+
+	private License getLicenseObject(License license, String project, String numberOfLicense) {
+		switch (project) {
+		case "LV":
+			license.setLvNoOfLicence(numberOfLicense);
+			return license;
+
+		case "LPS":
+			license.setLvNoOfLicence(numberOfLicense);
+			return license;
+		}
+		return license;
+
 	}
 
 	@Override
@@ -515,7 +543,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 			
  		} else if (project.equalsIgnoreCase("LPS")) { 			 
  			return lpsLicenseRepository.findByUserName(userName);
-
  		}  
 		return null;
 	}

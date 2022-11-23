@@ -100,19 +100,19 @@ public class ViewerRegister {
 	@Transient
 	private String selectedProject;
 
-	// LV
-	@Transient
-	private String lvSiteName;
-
-	// LPS
-	@Transient
-	private String lpsNoOfLicence;
-
-	@Transient
-	private String lpsclientName;
-
-	@Transient
-	private String lpsProjectName;
+//	// LV
+//	@Transient
+//	private String lvSiteName;
+//
+//	// LPS
+//	@Transient
+//	private String lpsNoOfLicence;
+//
+//	@Transient
+//	private String lpsclientName;
+//
+//	@Transient
+//	private String lpsProjectName;
 	
 //	@JsonManagedReference
 //	@OneToMany(mappedBy = "viewerRegister", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -326,28 +326,28 @@ public class ViewerRegister {
 		this.country = country;
 	}
 
-	public String getLvSiteName() {
-		return lvSiteName;
-	}
-
-	public void setLvSiteName(String lvSiteName) {
-		this.lvSiteName = lvSiteName;
-	}
-
-	public String getLpsclientName() {
-		return lpsclientName;
-	}
-
-	public void setLpsclientName(String lpsclientName) {
-		this.lpsclientName = lpsclientName;
-	}
-
-	public String getLpsProjectName() {
-		return lpsProjectName;
-	}
-
-	public void setLpsProjectName(String lpsProjectName) {
-		this.lpsProjectName = lpsProjectName;
-	}
+//	public String getLvSiteName() {
+//		return lvSiteName;
+//	}
+//
+//	public void setLvSiteName(String lvSiteName) {
+//		this.lvSiteName = lvSiteName;
+//	}
+//
+//	public String getLpsclientName() {
+//		return lpsclientName;
+//	}
+//
+//	public void setLpsclientName(String lpsclientName) {
+//		this.lpsclientName = lpsclientName;
+//	}
+//
+//	public String getLpsProjectName() {
+//		return lpsProjectName;
+//	}
+//
+//	public void setLpsProjectName(String lpsProjectName) {
+//		this.lpsProjectName = lpsProjectName;
+//	}
 
 }
