@@ -161,7 +161,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Cacheable(cacheNames = "register",key = "#userName")
 	public Optional<Register> retrieveRegistration(String userName) throws RegistrationException {
 		if (userName != null) {
-			System.out.println("helo---------->");
 			logger.debug("RetrieveRegistration Started with User : {} ", userName);
 			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
 			if (registerRepo.isPresent()) {
