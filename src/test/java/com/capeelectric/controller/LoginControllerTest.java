@@ -173,4 +173,28 @@ public class LoginControllerTest {
 		ResponseEntity<Register> retrieveInformation = loginController.retrieveInformation("lvsystem@capeindia.net");
 		assertEquals(retrieveInformation.getStatusCode(), HttpStatus.OK);
 	}
+	
+	@Test
+	public void testRefreshToken() {
+		RefreshTokenRequest authenticationRequest = new RefreshTokenRequest();
+		authenticationRequest.setEmail("lvsystem@capeindia.net");
+		authenticationRequest.setPassword("abcd12345");
+		authenticationRequest.setUsername("lvsystem@capeindia.net");
+		when(refreshTokenService.generateRefreshToken()).thenReturn(refreshToken);
+		AuthenticationResponseRegister refreshTokenFromController = loginController.refreshTokens(authenticationRequest);
+		assertNotNull(refreshTokenFromController);
+	}
+	
+	@Test
+	public void testRefreshDeleteDuringLogout() {
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
+		RefreshTokenRequest authenticationRequest = new RefreshTokenRequest();
+		authenticationRequest.setEmail("lvsystem@capeindia.net");
+		authenticationRequest.setPassword("abcd12345");
+		authenticationRequest.setUsername("lvsystem@capeindia.net");
+		authenticationRequest.setRefreshToken(refreshToken.getToken());
+		ResponseEntity<String> actualResponseEntity = loginController.logout(authenticationRequest);
+		assertEquals(actualResponseEntity.getBody(), "Refresh Token Deleted Successfully!!");
+		assertEquals(actualResponseEntity.getHeaders(), expectedResponseEntity.getHeaders());
+	}
 }
