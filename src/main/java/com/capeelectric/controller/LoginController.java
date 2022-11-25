@@ -1,5 +1,7 @@
 package com.capeelectric.controller;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Optional;
@@ -171,6 +173,12 @@ public class LoginController {
 	@PostMapping("/refreshToken")
     public AuthenticationResponseRegister refreshTokens(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         return loginService.refreshToken(refreshTokenRequest, registrationDetailsServiceImpl);
+    }
+	
+	@PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
+        return ResponseEntity.status(OK).body("Refresh Token Deleted Successfully!!");
     }
 	private void authenticate(String username, String password) throws Exception, AuthenticationException, RegistrationException {
 		Optional<Register> registerRepo = registrationRepository.findByUsername(username);

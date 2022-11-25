@@ -2,18 +2,25 @@ package com.capeelectric.model;
 
 import java.time.Instant;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "refresh_token")
 public class RefreshToken {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	
+	@Column(name = "TOKEN")
 	private String token;
+	
+	@Column(name = "CREATED_DATE")
 	private Instant createdDate;
 	
 	public Long getId() {
