@@ -1,6 +1,7 @@
 package com.capeelectric.service.impl;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.capeelectric.config.JwtTokenUtil;
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.ForgotPasswordException;
@@ -21,9 +23,12 @@ import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.exception.UserException;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.RegisterDetails;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ContactNumberRequest;
+import com.capeelectric.request.RefreshTokenRequest;
+import com.capeelectric.response.AuthenticationResponseRegister;
 import com.capeelectric.service.LoginService;
 
 @Service
@@ -45,6 +50,12 @@ public class LoginServiceImpl implements LoginService {
 	
 	@Autowired
 	private RegistrationServiceImpl registerServiceImpl;
+	
+	@Autowired
+	private JwtTokenUtil jwtProvider;
+	
+	@Autowired
+	private RefreshTokenService refreshTokenService;
 
 	/**
 	 * Method to retrieve the user
@@ -278,6 +289,20 @@ public class LoginServiceImpl implements LoginService {
 		}
 	
 	}
+	
+	public AuthenticationResponseRegister refreshToken(RefreshTokenRequest refreshTokenRequest, RegistrationDetailsServiceImpl registrationServiceImpl) {
+		logger.debug("Refresh Token Starts");
+		refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+        final RegisterDetails registerDetails = registrationServiceImpl
+				.loadUserByUsername(refreshTokenRequest.getUsername());
+        String token = jwtProvider.generateToken(registerDetails);
+        return AuthenticationResponseRegister.builder()
+                .jwttoken(token)
+                .register(registerDetails.getRegister())
+                .refreshToken(refreshTokenRequest.getRefreshToken())
+                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMs()))
+                .build();
+    }
 	
 	private Register sendingSMS(Optional<Register> registerDetails) throws RegistrationException {
 		logger.debug("Sending SMS for Forgot Password Starts");
