@@ -172,6 +172,7 @@ public class LoginController {
 	
 	@PostMapping("/refreshToken")
     public AuthenticationResponseRegister refreshTokens(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+		logger.debug("RefreshToken logic begins");
         return loginService.refreshToken(refreshTokenRequest, registrationDetailsServiceImpl);
     }
 	

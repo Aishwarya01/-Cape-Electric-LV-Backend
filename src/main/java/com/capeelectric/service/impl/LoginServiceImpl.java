@@ -298,9 +298,9 @@ public class LoginServiceImpl implements LoginService {
         String token = jwtProvider.generateToken(registerDetails);
         return AuthenticationResponseRegister.builder()
                 .jwttoken(token)
+                .register(registerDetails.getRegister())
                 .refreshToken(refreshTokenRequest.getRefreshToken())
                 .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMs()))
-                .register(registerDetails.getRegister())
                 .build();
     }
 	

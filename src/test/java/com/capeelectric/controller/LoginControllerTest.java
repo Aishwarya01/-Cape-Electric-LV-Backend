@@ -89,10 +89,10 @@ public class LoginControllerTest {
 	private RefreshToken refreshToken;
 	{
 		refreshToken = new RefreshToken();
-		 refreshToken.setToken(UUID.randomUUID().toString());
-	        refreshToken.setCreatedDate(Instant.now());
+		refreshToken.setToken(UUID.randomUUID().toString());
+		refreshToken.setCreatedDate(Instant.now());
 	}
-
+	
 	@Test
 	public void testCreateAuthenticationToken() throws AuthenticationException, Exception, RegistrationException {
 		RegisterDetails registerDetails = new RegisterDetails();
@@ -176,11 +176,17 @@ public class LoginControllerTest {
 	
 	@Test
 	public void testRefreshToken() {
+		RegisterDetails registerDetails = new RegisterDetails();
+		registerDetails.setUsername("lvsystem@capeindia.net");
+		registerDetails.setPassword("abcd12345");
 		RefreshTokenRequest authenticationRequest = new RefreshTokenRequest();
 		authenticationRequest.setEmail("lvsystem@capeindia.net");
 		authenticationRequest.setPassword("abcd12345");
 		authenticationRequest.setUsername("lvsystem@capeindia.net");
 		when(refreshTokenService.generateRefreshToken()).thenReturn(refreshToken);
+		when(registrationDetailsServiceImpl.loadUserByUsername("lvsystem@capeindia.net")).thenReturn(registerDetails);
+		AuthenticationResponseRegister mockedResponse = new AuthenticationResponseRegister(null, register, refreshToken.getToken(), Instant.now());
+		when(loginServiceImpl.refreshToken(authenticationRequest, registrationDetailsServiceImpl)).thenReturn(mockedResponse);
 		AuthenticationResponseRegister refreshTokenFromController = loginController.refreshTokens(authenticationRequest);
 		assertNotNull(refreshTokenFromController);
 	}
