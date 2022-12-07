@@ -998,6 +998,7 @@ CREATE TABLE register_table (
 
  				CONSTRAINT PK_REGISTER_ID PRIMARY KEY(REGISTER_ID)
                 
+
 	);
 	CREATE TABLE licence_table{
 					LICENCE_ID INT;
@@ -1005,3 +1006,11 @@ CREATE TABLE register_table (
 					LPS_NO_OF_LICENCE VARCHAR(225);
 					USERNAME VARCHAR(225);
 	}
+
+);
+
+CREATE TABLE refresh_token(
+ID BIGINT AUTO_INCREMENT,
+TOKEN VARCHAR(255) NOT NULL,
+CREATED_DATE datetime NOT NULL
+);

@@ -1,6 +1,9 @@
 package com.capeelectric.controller;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
@@ -34,9 +37,11 @@ import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
 import com.capeelectric.request.ContactNumberRequest;
+import com.capeelectric.request.RefreshTokenRequest;
 import com.capeelectric.response.AuthenticationResponseRegister;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.LoginServiceImpl;
+import com.capeelectric.service.impl.RefreshTokenService;
 import com.capeelectric.service.impl.RegistrationDetailsServiceImpl;
 
 @RestController
@@ -62,9 +67,12 @@ public class LoginController {
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
+	
+	@Autowired
+	private RefreshTokenService refreshTokenService;
 
 	@PostMapping("/authenticate")
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
+	public AuthenticationResponseRegister createAuthenticationToken(@RequestBody RefreshTokenRequest authenticationRequest)
 			throws Exception, AuthenticationException, RegistrationException {
 		
 		logger.debug("Create Authenticate Token starts");
@@ -76,7 +84,12 @@ public class LoginController {
 
 		final String token = jwtTokenUtil.generateToken(registerDetails);
 		logger.debug("Create Authenticate Token ends");
-		return ResponseEntity.ok(new AuthenticationResponseRegister(token, registerDetails.getRegister()));
+		return AuthenticationResponseRegister.builder()
+                .jwttoken(token)
+                .refreshToken(refreshTokenService.generateRefreshToken().getToken())
+                .expiresAt(Instant.now().plusMillis(jwtTokenUtil.getJwtExpirationInMs()))
+                .register(registerDetails.getRegister())
+                .build();
 		
 	}
 
@@ -156,10 +169,20 @@ public class LoginController {
 		return new ResponseEntity<Register>(registerUser, HttpStatus.OK);
 		
 	}
+	
+	@PostMapping("/refreshToken")
+    public AuthenticationResponseRegister refreshTokens(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+		logger.debug("RefreshToken logic begins");
+        return loginService.refreshToken(refreshTokenRequest, registrationDetailsServiceImpl);
+    }
+	
+	@PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
+        return ResponseEntity.status(OK).body("Refresh Token Deleted Successfully!!");
+    }
 	private void authenticate(String username, String password) throws Exception, AuthenticationException, RegistrationException {
-
 		Optional<Register> registerRepo = registrationRepository.findByUsername(username);
-
 		if (registerRepo.isPresent()) {
 			if( registerRepo.get().getPermission() != null
 					&& !registerRepo.get().getPermission().equalsIgnoreCase("NOT_AUTHORIZED")) {

@@ -2,10 +2,13 @@ package com.capeelectric.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,15 +25,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
+import com.capeelectric.config.JwtTokenUtil;
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.ForgotPasswordException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.UpdatePasswordException;
+import com.capeelectric.model.RefreshToken;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.RegisterDetails;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.AuthenticationRequest;
+import com.capeelectric.request.RefreshTokenRequest;
+import com.capeelectric.response.AuthenticationResponseRegister;
 import com.capeelectric.service.impl.LoginServiceImpl;
+import com.capeelectric.service.impl.RefreshTokenService;
+import com.capeelectric.service.impl.RegistrationDetailsServiceImpl;
 import com.capeelectric.service.impl.RegistrationServiceImpl;
 
 @ExtendWith(SpringExtension.class)
@@ -58,6 +68,18 @@ public class LoginServiceTest {
 	@MockBean
 	private UsernameNotFoundException usernameNotFoundException;
 	
+	@MockBean
+	private RefreshTokenRequest refreshTokenRequest;
+	
+	@MockBean
+	private RefreshTokenService refreshTokenService;
+	
+	@MockBean
+	private RegistrationDetailsServiceImpl registrationDetailsServiceImpl;
+	
+	@MockBean
+	private JwtTokenUtil jwtTokenUtil;
+	
 	@Mock
 	private RestTemplate restTemplate;
 
@@ -69,6 +91,13 @@ public class LoginServiceTest {
 		register.setPassword("cape");
 		register.setContactNumber("+91-7358021553");
 
+	}
+	
+	private RefreshToken refreshToken;
+	{
+		refreshToken = new RefreshToken();
+		refreshToken.setToken(UUID.randomUUID().toString());
+		refreshToken.setCreatedDate(Instant.now());
 	}
 	
 	@Test
@@ -200,5 +229,30 @@ public class LoginServiceTest {
 				() -> loginServiceImpl.createPassword(authenticationRequest));
 		assertEquals("Username not valid", assertThrows2.getMessage());
 
+	}
+	
+	@Test
+	public void testRefreshTokenLogic() {
+		RegisterDetails registerDetails = new RegisterDetails();
+		registerDetails.setUsername("lvsystem@capeindia.net");
+		registerDetails.setPassword("abcd12345");
+		RefreshTokenRequest authenticationRequest = new RefreshTokenRequest();
+		authenticationRequest.setEmail("lvsystem@capeindia.net");
+		authenticationRequest.setPassword("abcd12345");
+		authenticationRequest.setUsername("lvsystem@capeindia.net");
+		when(refreshTokenService.generateRefreshToken()).thenReturn(refreshToken);
+		authenticationRequest.setRefreshToken(refreshToken.getToken());
+		when(registrationDetailsServiceImpl.loadUserByUsername("lvsystem@capeindia.net")).thenReturn(registerDetails);
+		when(jwtTokenUtil.getJwtExpirationInMs()).thenReturn(Long.valueOf(12));
+		AuthenticationResponseRegister mockedResponse = 
+				new AuthenticationResponseRegister(null, register, refreshToken.getToken(), Instant.now());
+		doNothing().when(refreshTokenService).validateRefreshToken(authenticationRequest.getRefreshToken());
+		when(loginServiceImpl.refreshToken(authenticationRequest, registrationDetailsServiceImpl)).thenCallRealMethod();
+		registerDetails.setRegister(register);
+		when(jwtTokenUtil.getJwtExpirationInMs()).thenReturn(Long.valueOf(12));
+		AuthenticationResponseRegister responseFromService 
+				= loginServiceImpl.refreshToken(authenticationRequest, registrationDetailsServiceImpl);
+		
+		assertEquals(mockedResponse.getRefreshToken(), responseFromService.getRefreshToken());
 	}
 }

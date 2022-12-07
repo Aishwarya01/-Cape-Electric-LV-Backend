@@ -6,7 +6,9 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.mail.MessagingException;
 
@@ -28,13 +30,17 @@ import com.capeelectric.exception.ChangePasswordException;
 import com.capeelectric.exception.ForgotPasswordException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.exception.UpdatePasswordException;
+import com.capeelectric.model.RefreshToken;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.RegisterDetails;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ChangePasswordRequest;
+import com.capeelectric.request.RefreshTokenRequest;
+import com.capeelectric.response.AuthenticationResponseRegister;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.service.impl.LoginServiceImpl;
+import com.capeelectric.service.impl.RefreshTokenService;
 import com.capeelectric.service.impl.RegistrationDetailsServiceImpl;
 
 @ExtendWith(SpringExtension.class)
@@ -64,6 +70,9 @@ public class LoginControllerTest {
 
 	@MockBean
 	private RegistrationRepository registrationRepository;
+	
+	@MockBean
+	private RefreshTokenService refreshTokenService;
 
 	private Register register;
 
@@ -76,20 +85,28 @@ public class LoginControllerTest {
 		register.setContactNumber("+91-7358021553");
 		
 	}
-
+	
+	private RefreshToken refreshToken;
+	{
+		refreshToken = new RefreshToken();
+		refreshToken.setToken(UUID.randomUUID().toString());
+		refreshToken.setCreatedDate(Instant.now());
+	}
+	
 	@Test
 	public void testCreateAuthenticationToken() throws AuthenticationException, Exception, RegistrationException {
 		RegisterDetails registerDetails = new RegisterDetails();
 		registerDetails.setUsername("lvsystem@capeindia.net");
 		registerDetails.setPassword("abcd12345");
 
-		AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+		RefreshTokenRequest authenticationRequest = new RefreshTokenRequest();
 		authenticationRequest.setEmail("lvsystem@capeindia.net");
 		authenticationRequest.setPassword("abcd12345");
 
 		when(registrationDetailsServiceImpl.loadUserByUsername("lvsystem@capeindia.net")).thenReturn(registerDetails);
 		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
-		ResponseEntity<?> token = loginController.createAuthenticationToken(authenticationRequest);
+		when(refreshTokenService.generateRefreshToken()).thenReturn(refreshToken);
+		AuthenticationResponseRegister token = loginController.createAuthenticationToken(authenticationRequest);
 		assertNotNull(token);
 
 		register.setPermission("NOT_AUTHORIZED");
@@ -155,5 +172,35 @@ public class LoginControllerTest {
 			throws RegistrationException, ForgotPasswordException, IOException, MessagingException {
 		ResponseEntity<Register> retrieveInformation = loginController.retrieveInformation("lvsystem@capeindia.net");
 		assertEquals(retrieveInformation.getStatusCode(), HttpStatus.OK);
+	}
+	
+	@Test
+	public void testRefreshToken() {
+		RegisterDetails registerDetails = new RegisterDetails();
+		registerDetails.setUsername("lvsystem@capeindia.net");
+		registerDetails.setPassword("abcd12345");
+		RefreshTokenRequest authenticationRequest = new RefreshTokenRequest();
+		authenticationRequest.setEmail("lvsystem@capeindia.net");
+		authenticationRequest.setPassword("abcd12345");
+		authenticationRequest.setUsername("lvsystem@capeindia.net");
+		when(refreshTokenService.generateRefreshToken()).thenReturn(refreshToken);
+		when(registrationDetailsServiceImpl.loadUserByUsername("lvsystem@capeindia.net")).thenReturn(registerDetails);
+		AuthenticationResponseRegister mockedResponse = new AuthenticationResponseRegister(null, register, refreshToken.getToken(), Instant.now());
+		when(loginServiceImpl.refreshToken(authenticationRequest, registrationDetailsServiceImpl)).thenReturn(mockedResponse);
+		AuthenticationResponseRegister refreshTokenFromController = loginController.refreshTokens(authenticationRequest);
+		assertNotNull(refreshTokenFromController);
+	}
+	
+	@Test
+	public void testRefreshDeleteDuringLogout() {
+		ResponseEntity<String> expectedResponseEntity = new ResponseEntity<String>(HttpStatus.OK);
+		RefreshTokenRequest authenticationRequest = new RefreshTokenRequest();
+		authenticationRequest.setEmail("lvsystem@capeindia.net");
+		authenticationRequest.setPassword("abcd12345");
+		authenticationRequest.setUsername("lvsystem@capeindia.net");
+		authenticationRequest.setRefreshToken(refreshToken.getToken());
+		ResponseEntity<String> actualResponseEntity = loginController.logout(authenticationRequest);
+		assertEquals(actualResponseEntity.getBody(), "Refresh Token Deleted Successfully!!");
+		assertEquals(actualResponseEntity.getHeaders(), expectedResponseEntity.getHeaders());
 	}
 }
