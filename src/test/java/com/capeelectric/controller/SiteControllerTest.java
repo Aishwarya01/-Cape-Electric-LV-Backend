@@ -52,7 +52,7 @@ public class SiteControllerTest {
 	@Test
 	public void testaddSite() throws CompanyDetailsException {
 		doNothing().when(siteServiceImpl).addSite(site);
-		ResponseEntity<String> actualResponseEntity = siteController.addSite(site);
+		ResponseEntity<Site> actualResponseEntity = siteController.addSite(site);
 		assertEquals(actualResponseEntity.getBody(), "Site Successfully Saved");
 	}
 

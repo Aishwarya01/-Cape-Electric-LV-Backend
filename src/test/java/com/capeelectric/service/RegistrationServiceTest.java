@@ -312,16 +312,16 @@ public class RegistrationServiceTest {
 		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
 
 		// Success flow
-		registrationServiceImpl.updateLicence("lvsystem@capeindia.net", "2");
+		registrationServiceImpl.updateLicence("lvsystem@capeindia.net", "2","LV");
 
 		// Throwing Exception --> Given UserName does not Exist
 		RegistrationException assertThrows_1 = Assertions.assertThrows(RegistrationException.class,
-				() -> registrationServiceImpl.updateLicence("lvsystem123@capeindia.net", "2"));
+				() -> registrationServiceImpl.updateLicence("lvsystem123@capeindia.net", "2","LV"));
 		assertEquals(assertThrows_1.getMessage(), "Given UserName does not Exist");
 
 		// Throwing Exception --> Invalid Input
 		RegistrationException assertThrows_2 = Assertions.assertThrows(RegistrationException.class,
-				() -> registrationServiceImpl.updateLicence(null, "2"));
+				() -> registrationServiceImpl.updateLicence(null, "2","LV"));
 		assertEquals(assertThrows_2.getMessage(), "Invalid Input");
 
 		logger.info("RegistrationServiceTest testUpdateLicence_funcion End");

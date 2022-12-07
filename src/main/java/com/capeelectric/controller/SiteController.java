@@ -32,10 +32,7 @@ public class SiteController {
 	@PostMapping("/addSite")
 	public ResponseEntity<Site> addSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.debug("called addSite function UserName : {}, Site : {}", site.getSite());
-		;
-		//logger.debug("Ended addSite function");
 		return new ResponseEntity<Site>(siteService.addSite(site), HttpStatus.CREATED);
-
 	}
 
 	@PutMapping("/updateSite")
