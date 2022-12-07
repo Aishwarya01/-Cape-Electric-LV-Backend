@@ -1,6 +1,7 @@
 package com.capeelectric.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +32,7 @@ public class SiteController {
 	@PostMapping("/lv/addSite")
 	public ResponseEntity<String> addSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.debug("called addSite function UserName : {}, Site : {}", site.getSite());
-		siteService.addSite(site);
-		logger.debug("Ended addSite function");
-		return new ResponseEntity<String>("Site Successfully Saved", HttpStatus.CREATED);
-
+		return new ResponseEntity<Site>(siteService.addSite(site), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/lv/updateSite")
@@ -84,4 +82,9 @@ public class SiteController {
 		return siteService.retrieveByCompanyNameDepartmentSiteName(companyName, department, siteName);
 	}
 
+	@GetMapping("/isSiteActive/{userName}")
+	public ResponseEntity<Optional<Site>> isSiteActive(@PathVariable String userName) throws CompanyDetailsException {
+		logger.debug("called retriveSite function UserName: {}", userName);
+		return new ResponseEntity<Optional<Site>>(siteService.isSiteActive(userName), HttpStatus.OK);
+	}
 }

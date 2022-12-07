@@ -1,12 +1,13 @@
 package com.capeelectric.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Site;
 
 public interface SiteService {
-	public void addSite(Site site) throws CompanyDetailsException;
+	public Site addSite(Site site) throws CompanyDetailsException;
 
 	public void updateSite(Site site) throws CompanyDetailsException;
 	
@@ -15,6 +16,8 @@ public interface SiteService {
 	public void deleteSite(Integer site) throws CompanyDetailsException;
 
 	public List<Site> retriveSite(String userName) throws CompanyDetailsException;
+	
+	public Optional<Site> isSiteActive(String userName) throws CompanyDetailsException;
 	
 	public Site retrieveSiteByName(String companyName, String departmentName, String siteName) throws CompanyDetailsException;
 	

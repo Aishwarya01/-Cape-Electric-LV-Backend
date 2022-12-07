@@ -27,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Table(name = "site_table")
 @NamedQueries(value = {
 		@NamedQuery(name = "SiteRepository.findByUserNameAndSite", query = "select s from Site s where s.userName=:userName and s.site=:site"),
+		@NamedQuery(name = "SiteRepository.findByAssignedToAndStatus", query = "select s from Site s where s.assignedTo=:assignedTo and s.status=:status"),
 		@NamedQuery(name = "SiteRepository.findByCompanyNameAndDepartmentNameAndSite",
 		            query = "select s from Site s where s.companyName=:companyName and s.departmentName=:departmentName and s.site=:site") })
 public class Site implements Serializable {

@@ -34,7 +34,7 @@ public interface RegistrationService {
 
 	public Register addViewerRegistration(Register register) throws RegistrationException, CompanyDetailsException;
 
-	public void updateLicence(String userName, String numoflicence) throws RegistrationException;
+	public void updateLicence(String userName, String numoflicence, String project) throws RegistrationException;
 	
 	public String sendNewOtp(String mobileNumber) throws RegistrationException;
 
@@ -55,5 +55,9 @@ public interface RegistrationService {
 	public void sendEmailForOTPGeneration(String email, String content) throws URISyntaxException;
 	
 	public void sendEMCEmailPDF(String userName, Integer id, int count, String keyname) ;
+
+	public Optional<Register> retrieveFromRegister(String userName);
+
+	public Optional<?> retrieveRegistrationWithProject(String userName, String project);
 
 }
