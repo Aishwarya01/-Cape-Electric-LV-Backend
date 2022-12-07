@@ -53,5 +53,7 @@ public interface RegistrationService {
 	public void sendEmailPDF(String userName, Integer siteId, int count, String keyname);
 	
 	public void sendEmailForOTPGeneration(String email, String content) throws URISyntaxException;
+	
+	public void sendEMCEmailPDF(String userName, Integer id, int count, String keyname) ;
 
 }

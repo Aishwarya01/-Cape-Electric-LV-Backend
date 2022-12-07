@@ -97,6 +97,57 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 		}
 	}
 
+	@Override
+	public void printFinalEMCPDF(String userName, Integer emcId, String clientName) throws Exception {
+
+		if (userName != null && !userName.isEmpty() && emcId != null && emcId != 0) {
+			Document document = new Document(PageSize.A4, 68, 68, 62, 68);
+			try {
+				List<InputStream> inputPdfList = new ArrayList<InputStream>();
+				inputPdfList.add(new FileInputStream("ClientDetails.pdf"));
+				inputPdfList.add(new FileInputStream("FacilityData.pdf"));
+				inputPdfList.add(new FileInputStream("PowerandEarthingData.pdf"));
+				inputPdfList.add(new FileInputStream("ElectromagneticData.pdf"));
+				
+
+				OutputStream outputStream = new FileOutputStream(clientName+".pdf");
+				mergeEMCPdfFiles(inputPdfList, outputStream, awsS3ServiceImpl);
+
+				try {
+                    //Create a S3 client with in-program credential
+					BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKeyId, accessKeySecret);
+					AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.AP_SOUTH_1)
+							.withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
+
+					//Uploading the PDF File in AWS S3 Bucket with folderName + fileNameInS3
+					
+					if (clientName.length() > 0) {
+						PutObjectRequest request = new PutObjectRequest(s3BucketName,
+								"EMC_Pdf Name_".concat(clientName)+"/"+(clientName+".pdf"), new File(clientName+".pdf"));
+						s3Client.putObject(request);
+						logger.info("Uploading file done in AWS s3");
+					} else {
+						logger.error("There is no site available");
+						throw new Exception("There is no site available");
+					}
+
+				} catch (AmazonS3Exception e) {
+					logger.error("Exception thrown in publishing the pdf to AWS"+e.getMessage());
+					throw new AmazonS3Exception ("Exception thrown in publishing the pdf to AWS, Please contact Admin"+e.getMessage());
+				}
+
+			} catch (Exception e) {
+				logger.error("Exception thrown in publishing the pdf to AWS"+e.getMessage());
+				throw new Exception ("Exception thrown in publishing the pdf to AWS, Please contact Admin"+e.getMessage());
+			}
+			document.close();
+		} else {
+			throw new Exception("Invalid Inputs");
+		}
+	
+		
+	}
+	
 	private static void mergePdfFiles(List<InputStream> inputPdfList, OutputStream outputStream,
 			AWSS3ServiceImpl awss3ServiceImpl) throws Exception, PdfException {
 		Document document = new Document();
@@ -136,4 +187,45 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 		document.close();
 		outputStream.close();
 	}
+	
+	private static void mergeEMCPdfFiles(List<InputStream> inputPdfList, OutputStream outputStream,
+			AWSS3ServiceImpl awss3ServiceImpl) throws Exception {
+		Document document = new Document();
+		List<PdfReader> readers = new ArrayList<PdfReader>();
+		int totalPages = 0;
+		Iterator<InputStream> pdfIterator = inputPdfList.iterator();
+		while (pdfIterator.hasNext()) {
+			InputStream pdf = pdfIterator.next();
+			PdfReader pdfReader = new PdfReader(pdf);
+			readers.add(pdfReader);
+			totalPages = totalPages + pdfReader.getNumberOfPages();
+		}
+		PdfWriter writer = PdfWriter.getInstance(document, outputStream);
+		Image image = Image.getInstance(awss3ServiceImpl.findByEMCFileName("Original1.png"));
+		image.scaleToFit(125, 155);
+		image.setAbsolutePosition(30, -32);
+
+		HeaderFooterPageEvent event = new HeaderFooterPageEvent();
+		writer.setPageEvent((PdfPageEvent) event);
+		document.open();
+		PdfContentByte pageContentByte = writer.getDirectContent();
+		PdfImportedPage pdfImportedPage;
+		int currentPdfReaderPage = 1;
+		Iterator<PdfReader> iteratorPDFReader = readers.iterator();
+		while (iteratorPDFReader.hasNext()) {
+			PdfReader pdfReader = iteratorPDFReader.next();
+			while (currentPdfReaderPage <= pdfReader.getNumberOfPages()) {
+				document.newPage();
+				document.add(image);
+				pdfImportedPage = writer.getImportedPage(pdfReader, currentPdfReaderPage);
+				pageContentByte.addTemplate(pdfImportedPage, 0, 0);
+				currentPdfReaderPage++;
+			}
+			currentPdfReaderPage = 1;
+		}
+		outputStream.flush();
+		document.close();
+		outputStream.close();
+	}
+
 }

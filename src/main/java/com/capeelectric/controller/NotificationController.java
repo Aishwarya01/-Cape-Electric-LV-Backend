@@ -29,7 +29,7 @@ public class NotificationController {
 	@Autowired
 	private NotificationService notificationService;
 
-	@GetMapping("/retrieveComments/{userName}")
+	@GetMapping("/lv/retrieveComments/{userName}")
 	public ResponseEntity<NotificationCommentList> retrieveCommentsForUser(@PathVariable String userName)
 			throws NotificationException {
 		logger.debug("Retrieve Comments Starts UserName: {}", userName);

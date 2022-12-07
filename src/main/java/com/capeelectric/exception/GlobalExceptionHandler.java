@@ -94,4 +94,29 @@ public class GlobalExceptionHandler {
     	ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
     	return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
     }
+    
+    @ExceptionHandler({ ClientDetailsException.class })
+	public ResponseEntity<ErrorMessage> handleClientDetailsException(ClientDetailsException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+	}
+
+	@ExceptionHandler({ FacilityDataException.class })
+	public ResponseEntity<ErrorMessage> handleFacilityDataException(FacilityDataException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler({ PowerEarthingDataException.class })
+	public ResponseEntity<ErrorMessage> handlePowerEarthingDataException(PowerEarthingDataException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler({ ElectromagneticCompatabilityException.class })
+	public ResponseEntity<ErrorMessage> handleElectromagneticCompatabilityException(
+			ElectromagneticCompatabilityException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
+	}
 }

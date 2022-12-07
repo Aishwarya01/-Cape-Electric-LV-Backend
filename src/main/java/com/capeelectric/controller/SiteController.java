@@ -28,7 +28,7 @@ public class SiteController {
 	@Autowired
 	private SiteService siteService;
 
-	@PostMapping("/addSite")
+	@PostMapping("/lv/addSite")
 	public ResponseEntity<String> addSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.debug("called addSite function UserName : {}, Site : {}", site.getSite());
 		siteService.addSite(site);
@@ -37,7 +37,7 @@ public class SiteController {
 
 	}
 
-	@PutMapping("/updateSite")
+	@PutMapping("/lv/updateSite")
 	public ResponseEntity<String> updateSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.debug("called updateSite function UserName: {},Site : {}", site.getUserName(), site.getSite());
 		siteService.updateSite(site);
@@ -45,7 +45,7 @@ public class SiteController {
 		return new ResponseEntity<String>("Site Successfully Updated", HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateSiteStatus")
+	@PutMapping("/lv/updateSiteStatus")
 	public ResponseEntity<String> updateSiteStatus(@RequestBody Site site) throws CompanyDetailsException {
 		logger.debug("called updateSiteStatus function UserName: {},Site : {}", site.getUserName(), site.getSite());
 		siteService.updateSiteStatus(site);
@@ -53,7 +53,7 @@ public class SiteController {
 		return new ResponseEntity<String>("Site has been successfully deleted", HttpStatus.OK);
 	}
 
-	@DeleteMapping("/deleteSite/{siteId}")
+	@DeleteMapping("/lv/deleteSite/{siteId}")
 	public ResponseEntity<String> deleteSite(@PathVariable Integer siteId) throws CompanyDetailsException {
 		logger.debug("called deleteSite function siteId: {}", siteId);
 		siteService.deleteSite(siteId);
@@ -62,13 +62,13 @@ public class SiteController {
 	}
 
 	
-	@GetMapping("/retriveSite/{userName}")
+	@GetMapping("/lv/retriveSite/{userName}")
 	public ResponseEntity<List<Site>> retriveSite(@PathVariable String userName) throws CompanyDetailsException {
 		logger.debug("called retriveSite function UserName: {}", userName);
 		return new ResponseEntity<List<Site>>(siteService.retriveSite(userName), HttpStatus.OK);
 	}
 	
-	@GetMapping("/retrieveSiteByName/{companyName}/{department}/{siteName}")
+	@GetMapping("/lv/retrieveSiteByName/{companyName}/{department}/{siteName}")
 	public ResponseEntity<Site> retrieveSiteByName(@PathVariable String companyName, 
 			@PathVariable String department, @PathVariable String siteName) throws CompanyDetailsException {
 		logger.debug("called retriveSiteByName function Company Name: {}, Department: {}, Site Name: {}", companyName,
@@ -77,7 +77,7 @@ public class SiteController {
 				HttpStatus.OK);
 	}
 	
-	@GetMapping("/retrieveSiteName/{companyName}/{department}/{siteName}")
+	@GetMapping("/lv/retrieveSiteName/{companyName}/{department}/{siteName}")
 	public String retrieveSiteName(@PathVariable String companyName, @PathVariable String department, @PathVariable String siteName) throws CompanyDetailsException {
 		logger.debug("called retriveSiteByName function Company Name: {}, Department: {}, Site Name: {}", companyName,
 				department, siteName);

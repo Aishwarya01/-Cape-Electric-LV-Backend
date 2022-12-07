@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.capeelectric.config.AWSLVConfig;
+import com.capeelectric.config.AWSConfiguration;
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
@@ -72,7 +72,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	private UserFullName userFullName;
 	
 	@Autowired
-	private AWSLVConfig awsConfiguration;
+	private AWSConfiguration awsConfiguration;
 	
 	@Value("${app.web.domain}")
 	private String webUrl;
@@ -424,6 +424,15 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@Override
 	public void sendEmailPDF(String userName, Integer id, int count, String keyname) {
 		String type = "LV";
+		restTemplate.exchange(awsConfiguration.getSendEmailWithPDF() + userName + "/"+type+"/"+ id +"/"+ keyname,
+				HttpMethod.GET, null, String.class);
+
+		logger.debug("Cape-Electric-AWS-Email service Response was successful");
+		
+	}
+	
+	public void sendEMCEmailPDF(String userName, Integer id, int count, String keyname) {
+		String type = "EMC";
 		restTemplate.exchange(awsConfiguration.getSendEmailWithPDF() + userName + "/"+type+"/"+ id +"/"+ keyname,
 				HttpMethod.GET, null, String.class);
 

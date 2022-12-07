@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class AWSLVConfig {
+public class AWSConfiguration {
 
 	@Value("${aws.email.send.pdf}")
 	private String sendEmailWithPDF;

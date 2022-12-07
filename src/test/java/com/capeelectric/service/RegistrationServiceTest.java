@@ -33,7 +33,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.capeelectric.config.AWSLVConfig;
+import com.capeelectric.config.AWSConfiguration;
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
@@ -78,7 +78,7 @@ public class RegistrationServiceTest {
 //	private RegistrationService awsEmailService;
 	
 	@MockBean
-	private AWSLVConfig awsConfiguration;
+	private AWSConfiguration awsConfiguration;
 		
 	@Value("${app.web.domain}")
 	private String webUrl;
