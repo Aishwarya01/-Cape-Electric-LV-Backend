@@ -30,7 +30,7 @@ public class SiteController {
 	private SiteService siteService;
 
 	@PostMapping("/lv/addSite")
-	public ResponseEntity<String> addSite(@RequestBody Site site) throws CompanyDetailsException {
+	public ResponseEntity<Site> addSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.debug("called addSite function UserName : {}, Site : {}", site.getSite());
 		return new ResponseEntity<Site>(siteService.addSite(site), HttpStatus.CREATED);
 	}
