@@ -48,12 +48,12 @@ public class LicenseServiceImpl implements LicenseService {
 					return register;
 				} else {
 					addDetailsTolicenseTable(viewerRegister);
-					viewerRegister.setPermission("YES");
-					viewerRegister.setUpdatedDate(LocalDateTime.now());
-					viewerRegister.setCreatedBy(viewerRegister.getName());
-					viewerRegister.setUpdatedBy(viewerRegister.getName());
-					viewerRegister.setCreatedDate(LocalDateTime.now());
 					ViewerRegister viewerReg = viewerRegisterRepo.get();
+					viewerReg.setPermission("YES");
+					viewerReg.setUpdatedDate(LocalDateTime.now());
+					viewerReg.setCreatedBy(viewerRegister.getName());
+					viewerReg.setUpdatedBy(viewerRegister.getName());
+					viewerReg.setCreatedDate(LocalDateTime.now());
 					viewerReg.setApplicationType(
 							viewerRegisterRepo.get().getApplicationType() + "," + viewerRegister.getApplicationType());
 					viewerRegistrationRepository.save(viewerReg);
