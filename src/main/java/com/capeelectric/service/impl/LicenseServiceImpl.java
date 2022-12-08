@@ -46,7 +46,7 @@ public class LicenseServiceImpl implements LicenseService {
 					viewerReg.setApplicationType(
 							viewerRegisterRepo.get().getApplicationType() + "," + viewerRegister.getApplicationType());
 					viewerRegistrationRepository.save(viewerReg);
-					addDetailsTolicenseTable(viewerRegister);
+//					addDetailsTolicenseTable(viewerRegister);
 					return null;
 				}
 

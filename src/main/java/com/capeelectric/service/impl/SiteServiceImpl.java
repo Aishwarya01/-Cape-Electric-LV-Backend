@@ -64,7 +64,7 @@ public class SiteServiceImpl implements SiteService {
           boolean email = checkSitePersonEmail(site.getSite(), site.getSitePersons());
           logger.debug("Finding siteperson Email already available or not in DB --> " + email);
           if (email) {
-            reduceLicence(site.getUserName());
+//            reduceLicence(site.getUserName());
            return siteRepository.save(site);
            // logger.debug("Site Successfully Saved in DB");
           } else {
