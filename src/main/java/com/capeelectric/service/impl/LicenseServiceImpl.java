@@ -1,6 +1,7 @@
 package com.capeelectric.service.impl;
 
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -37,11 +38,21 @@ public class LicenseServiceImpl implements LicenseService {
 					.findByUsername(viewerRegister.getUsername());
 			try {
 				if (!viewerRegisterRepo.isPresent()) {
+					viewerRegister.setPermission("YES");
+					viewerRegister.setUpdatedDate(LocalDateTime.now());
+					viewerRegister.setCreatedBy(viewerRegister.getName());
+					viewerRegister.setUpdatedBy(viewerRegister.getName());
+					viewerRegister.setCreatedDate(LocalDateTime.now());
 					ViewerRegister register = viewerRegistrationRepository.save(viewerRegister);
 					addDetailsTolicenseTable(viewerRegister);
 					return register;
 				} else {
 					addDetailsTolicenseTable(viewerRegister);
+					viewerRegister.setPermission("YES");
+					viewerRegister.setUpdatedDate(LocalDateTime.now());
+					viewerRegister.setCreatedBy(viewerRegister.getName());
+					viewerRegister.setUpdatedBy(viewerRegister.getName());
+					viewerRegister.setCreatedDate(LocalDateTime.now());
 					ViewerRegister viewerReg = viewerRegisterRepo.get();
 					viewerReg.setApplicationType(
 							viewerRegisterRepo.get().getApplicationType() + "," + viewerRegister.getApplicationType());
