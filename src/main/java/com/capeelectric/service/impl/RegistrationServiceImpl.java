@@ -354,7 +354,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			return license;
 
 		case "LPS":
-			license.setLvNoOfLicence(numberOfLicense);
+			license.setLpsNoOfLicence(numberOfLicense);
 			return license;
 		}
 		return license;
