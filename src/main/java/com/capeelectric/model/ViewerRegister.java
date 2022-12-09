@@ -95,6 +95,10 @@ public class ViewerRegister {
 
 	@Column(name = "UPDATED_BY")
 	private String updatedBy;
+	
+	
+	@Column(name = "SITE_NAME")
+	private String siteName;
 
 	//user selecting based on the project 
 	@Transient
@@ -326,28 +330,13 @@ public class ViewerRegister {
 		this.country = country;
 	}
 
-//	public String getLvSiteName() {
-//		return lvSiteName;
-//	}
-//
-//	public void setLvSiteName(String lvSiteName) {
-//		this.lvSiteName = lvSiteName;
-//	}
-//
-//	public String getLpsclientName() {
-//		return lpsclientName;
-//	}
-//
-//	public void setLpsclientName(String lpsclientName) {
-//		this.lpsclientName = lpsclientName;
-//	}
-//
-//	public String getLpsProjectName() {
-//		return lpsProjectName;
-//	}
-//
-//	public void setLpsProjectName(String lpsProjectName) {
-//		this.lpsProjectName = lpsProjectName;
-//	}
+	public String getSiteName() {
+		return siteName;
+	}
 
+	public void setSiteName(String siteName) {
+		this.siteName = siteName;
+	}
+
+	
 }

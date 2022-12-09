@@ -77,7 +77,7 @@ public class FinalReportServiceImpl implements FinalReportService {
 		if (userName != null) {
 			try {
 				logger.info("Site fetching process started");
-				return siteRepository.findByUserName(userName);
+				return sortSiteDetailsBasedOnUpdatedDate(siteRepository.findByUserName(userName));
 			} catch (Exception e) {
 				logger.info("Site fetching process faild");
 				throw new FinalReportException("Fetching site process faild");
@@ -297,6 +297,11 @@ public class FinalReportServiceImpl implements FinalReportService {
 			allComponentObservation.setTestingInnerObservation(findNonRemovedObject.findNonRemoveTestingInnerObservationByReport(testingReport));
 		}
 		return allComponentObservation;
+	}
+	
+	private List<Site> sortSiteDetailsBasedOnUpdatedDate(List<Site> siteDetails) {
+		siteDetails.sort((o1, o2) -> o2.getUpdatedDate().compareTo(o1.getUpdatedDate()));
+		return siteDetails;
 	}
 }
 

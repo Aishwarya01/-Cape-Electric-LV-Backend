@@ -94,7 +94,7 @@ public class EmcFinalReportServiceImpl implements EMCFinalReportService {
 			try {
 				logger.info("ClientDetails fetching process started");
 				List<ClientDetails> clientDetails =  clientDetailsRepository.findByUserName(userName);
-				clientDetails.sort((o1, o2) -> o1.getUpdatedDate().compareTo(o2.getUpdatedDate()));
+				clientDetails.sort((o1, o2) -> o2.getUpdatedDate().compareTo(o1.getUpdatedDate()));
 				return clientDetails;
 			} catch (Exception e) {
 				logger.info("ClientDetails fetching process faild");
