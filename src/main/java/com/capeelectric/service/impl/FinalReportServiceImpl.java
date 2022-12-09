@@ -266,7 +266,7 @@ public class FinalReportServiceImpl implements FinalReportService {
 
 	@Override
 	public List<Site> retrieveAllSites() throws FinalReportException {
-		return (List<Site>) siteRepository.findAll();
+		return sortSiteDetailsBasedOnUpdatedDate((List<Site>)siteRepository.findAll());
 	}
 	
 	private AllComponentObservation allComponentObservation(Integer siteId) {

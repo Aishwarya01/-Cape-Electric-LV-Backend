@@ -61,7 +61,7 @@ public class FinalReportController {
 
 	}
 	
-	@GetMapping("/retrieveAllSites")
+	@GetMapping("/lv/retrieveAllSites")
 	public ResponseEntity<List<Site>> retrieveAllSites() throws FinalReportException{
 		logger.info("FinalReportAPI_started retrieveAllSites");
 			
