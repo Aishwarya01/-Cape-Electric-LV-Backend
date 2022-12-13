@@ -45,7 +45,7 @@ public class SiteControllerTest {
 	@Test
 	public void tesupdateSite() throws CompanyDetailsException {
 		doNothing().when(siteServiceImpl).updateSite(site);
-		ResponseEntity<String> actualResponseEntity = siteController.updateSite(site);
+		ResponseEntity<Site> actualResponseEntity = siteController.updateSite(site);
 		assertEquals(actualResponseEntity.getBody(), "Site Successfully Updated");
 	}
 
