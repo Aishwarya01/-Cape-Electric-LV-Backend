@@ -9,7 +9,7 @@ import com.capeelectric.model.Site;
 public interface SiteService {
 	public Site addSite(Site site) throws CompanyDetailsException;
 
-	public void updateSite(Site site) throws CompanyDetailsException;
+	public Site updateSite(Site site) throws CompanyDetailsException;
 	
 	public void updateSiteStatus(Site site) throws CompanyDetailsException;
 

@@ -87,7 +87,7 @@ public class SiteServiceImpl implements SiteService {
 	 * department_name comparing, then comparing site
 	 */
 	@Override
-	public void updateSite(Site site) throws CompanyDetailsException {
+	public Site updateSite(Site site) throws CompanyDetailsException {
 		int count = 0;
 
 		if (site.getUserName() != null && site.getSite() != null) {
@@ -105,8 +105,8 @@ public class SiteServiceImpl implements SiteService {
 				boolean email = checkSitePersonEmail(site.getSite(), site.getSitePersons());
 				logger.debug("Finding siteperson Email already available or not in DB --> " + email);
 				if (email) {
-					siteRepository.save(site);
 					logger.debug("Site Successfully Updated in DB");
+					return siteRepository.save(site);
 				} else {
 					logger.error("PersonInchargEmail already present");
 					throw new CompanyDetailsException("PersonInchargEmail already present");

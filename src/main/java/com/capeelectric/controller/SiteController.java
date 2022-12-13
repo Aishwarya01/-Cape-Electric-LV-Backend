@@ -36,11 +36,9 @@ public class SiteController {
 	}
 
 	@PutMapping("/lv/updateSite")
-	public ResponseEntity<String> updateSite(@RequestBody Site site) throws CompanyDetailsException {
+	public ResponseEntity<Site> updateSite(@RequestBody Site site) throws CompanyDetailsException {
 		logger.debug("called updateSite function UserName: {},Site : {}", site.getUserName(), site.getSite());
-		siteService.updateSite(site);
-		logger.debug("Ended updateSite function");
-		return new ResponseEntity<String>("Site Successfully Updated", HttpStatus.OK);
+		return new ResponseEntity<Site>(siteService.updateSite(site),HttpStatus.OK);
 	}
 	
 	@PutMapping("/lv/updateSiteStatus")

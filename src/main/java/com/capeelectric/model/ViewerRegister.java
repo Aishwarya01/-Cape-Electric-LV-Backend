@@ -96,9 +96,9 @@ public class ViewerRegister {
 	@Column(name = "UPDATED_BY")
 	private String updatedBy;
 	
-	
-	@Column(name = "SITE_NAME")
-	private String siteName;
+//	
+//	@Column(name = "SITE_NAME")
+//	private String siteName;
 
 	//user selecting based on the project 
 	@Transient
@@ -330,13 +330,13 @@ public class ViewerRegister {
 		this.country = country;
 	}
 
-	public String getSiteName() {
-		return siteName;
-	}
-
-	public void setSiteName(String siteName) {
-		this.siteName = siteName;
-	}
+//	public String getSiteName() {
+//		return siteName;
+//	}
+//
+//	public void setSiteName(String siteName) {
+//		this.siteName = siteName;
+//	}
 
 	
 }
