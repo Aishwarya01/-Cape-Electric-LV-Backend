@@ -18,6 +18,8 @@ import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
+import com.capeelectric.model.licence.License;
+import com.capeelectric.repository.LicenseRepository;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.repository.SitePersonsRepository;
 import com.capeelectric.repository.SiteRepository;
@@ -40,6 +42,9 @@ public class SiteServiceImpl implements SiteService {
 	
 	@Autowired
 	private RegistrationRepository registrationRepository;
+	
+	@Autowired
+	private LicenseRepository licenseRepository;
 	
 	private Site siteData;
 
@@ -133,22 +138,22 @@ public class SiteServiceImpl implements SiteService {
 				siteData.setUpdatedDate(LocalDateTime.now());
 				siteData.setUpdatedBy(userName.findByUserName(site.getUserName()));	
 				
-				Optional<Register> registerRepo = registrationRepository.findByUsername(siteData.getUserName());
-				if(registerRepo.isPresent()) { 
-					Register registerData = registerRepo.get();
-					if(registerData.getNoOfLicence() != null) {
-						registerData.setNoOfLicence(String.valueOf(Integer.parseInt(registerData.getNoOfLicence()) + 1));
+				 Optional<License> license = licenseRepository.findByUserName(siteData.getUserName());
+				if(license.isPresent() && !siteData.getAllStepsCompleted().equalsIgnoreCase("AllStepCompleted")) { 
+					 License lvLicense = license.get();
+					if(lvLicense.getLvNoOfLicence() != null) {
+						lvLicense.setLvNoOfLicence(String.valueOf(Integer.parseInt(lvLicense.getLvNoOfLicence()) + 1));
+						licenseRepository.save(lvLicense);
+						logger.debug("License successfully updated for "+siteData.getUserName());
 					}
 					else {
-						registerData.setNoOfLicence(String.valueOf(1));	
+//						registerData.setNoOfLicence(String.valueOf(1));	
 					}
-					registerData.setUpdatedDate(LocalDateTime.now());
-					registerData.setUpdatedBy(siteData.getUpdatedBy());
+//					registerData.setUpdatedDate(LocalDateTime.now());
+//					registerData.setUpdatedBy(siteData.getUpdatedBy());
 					siteRepository.save(siteData);
 					logger.debug("Site Successfully Updated in DB with InActive status");
 					
-					registrationRepository.save(registerData);
-					logger.debug("License successfully updated for "+siteData.getUserName());
 				}
 				else {
 					logger.error("User doesn't exist");

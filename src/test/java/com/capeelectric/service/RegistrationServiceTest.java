@@ -39,6 +39,8 @@ import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.licence.License;
+import com.capeelectric.repository.LicenseRepository;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.impl.RegistrationServiceImpl;
@@ -57,6 +59,9 @@ public class RegistrationServiceTest {
 
 	@MockBean
 	private RegistrationRepository registrationRepository;
+	
+	@MockBean
+	private LicenseRepository licenseRepository;
 
 	@InjectMocks
 	private RegistrationServiceImpl registrationServiceImpl;
@@ -310,6 +315,10 @@ public class RegistrationServiceTest {
 		logger.info("RegistrationServiceTest testUpdateLicence_funcion Started");
 
 		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
+		
+		License license = new License();
+		license.setLvNoOfLicence("21");
+		when(licenseRepository.findByUserName("lvsystem@capeindia.net")).thenReturn(Optional.of(license));
 
 		// Success flow
 		registrationServiceImpl.updateLicence("lvsystem@capeindia.net", "2","LV");
