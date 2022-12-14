@@ -16,10 +16,14 @@ import java.util.stream.Stream;
 
 import javax.mail.MessagingException;
 
+import org.hibernate.annotations.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -91,6 +95,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	private String webUrl;
 	
 	@Override
+	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
 	public Register addRegistration(Register register) throws RegistrationException {
 		logger.debug("AddingRegistration Starts with User : {} ", register.getUsername());
 		if (register.getUsername() != null && register.getCompanyName() != null && register.getAddress() != null
@@ -146,6 +151,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	@Transactional
+	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
 	public Register addViewerRegistration(Register viewer) throws RegistrationException, CompanyDetailsException {
 		logger.debug("AddingRegistration Starts with User : {} ", viewer.getUsername());
 		if (viewer.getUsername() != null && viewer.getCompanyName() != null && viewer.getAddress() != null
@@ -180,6 +186,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 	
 	@Override
+	@Cacheable(cacheNames = "register",key = "#userName")
 	public Optional<Register> retrieveRegistration(String userName) throws RegistrationException {
 		if (userName != null) {
 			logger.debug("RetrieveRegistration Started with User : {} ", userName);
@@ -206,10 +213,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	@Transactional
+	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
 	public void updateRegistration(Register register, Boolean adminApproveRequired)
 			throws RegistrationException, CompanyDetailsException, MalformedURLException, MessagingException, URISyntaxException {
-
-		if (register.getRegisterId() != null && register.getRegisterId() != 0 && register.getUsername() != null
+ 		if (register.getRegisterId() != null && register.getRegisterId() != 0 && register.getUsername() != null
 				&& register.getCompanyName() != null && register.getAddress() != null
 				&& register.getContactNumber() != null && register.getDepartment() != null
 				&& register.getDesignation() != null && register.getCountry() != null && register.getName() != null
@@ -248,6 +255,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 
 	@Override
+	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
 	public void sendOtp(String userName, String mobileNumber) throws RegistrationException {
 
 		if (userName != null && mobileNumber != null) {
@@ -316,8 +324,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 	* if available then finding that username in license table after that based on project license adding to repo
 	*/
 	@Override
-	public void updateLicence(String userName, String numoflicence, String project) throws RegistrationException {
 
+	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
+	public void updateLicence(String userName, String numoflicence, String project) throws RegistrationException {
 		if (userName != null && numoflicence != null && project != null) {
 			logger.debug("RegistrationServiceImpl updateLicence() function Started");
 			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
@@ -368,6 +377,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 	
 	@Override
+	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
 	public Register updatePermission(RegisterPermissionRequest registerPermissionRequest)
 			throws RegisterPermissionRequestException {
 		logger.debug("updatePermission_function called");
@@ -418,6 +428,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 
 	@Override
+	@Cacheable(cacheNames = "superadmin")
 	public List<Register> retrieveAllRegistration() throws RegistrationException {
 		try {
 			logger.debug("Started retrieveAllRegistration()");
