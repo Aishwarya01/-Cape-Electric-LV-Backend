@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -86,6 +87,7 @@ public class LoginServiceImpl implements LoginService {
 	 * @throws UserException
 	 */
 	@Override
+	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
 	public Register createPassword(AuthenticationRequest request) throws UpdatePasswordException {
 		logger.debug("createPassword Starts");
 		if (request.getEmail() != null && request.getPassword() != null) {
@@ -121,6 +123,7 @@ public class LoginServiceImpl implements LoginService {
 	 * @throws UserException
 	 */
 	@Override
+	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
 	public Register updatePassword(String email, String password) throws UpdatePasswordException {
 		logger.debug("UpdatePassword Starts");
 		if (email != null && password != null) {
@@ -145,6 +148,7 @@ public class LoginServiceImpl implements LoginService {
 	 * 
 	 */
 	@Override
+	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
 	public Register changePassword(String email, String oldPassword, String password) throws ChangePasswordException {
 		logger.debug("Change Password Starts");
 		Register registerRepo = registrationRepository.findByUsername(email).get();
@@ -167,6 +171,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 	
 	@Override
+	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
 	public Register saveContactNumber(ContactNumberRequest request) throws UpdatePasswordException {
 
 		logger.debug("saveContactNumber Starts");
