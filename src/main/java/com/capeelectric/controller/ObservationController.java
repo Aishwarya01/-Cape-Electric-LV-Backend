@@ -27,7 +27,7 @@ public class ObservationController {
 	@Autowired
 	private ObservationService observationService;
 
-	@PostMapping("/saveObservation")
+	@PostMapping("/lv/saveObservation")
 	public ResponseEntity<String> saveObservation(@RequestBody ObservationComponent observationComponent)
 			throws ObservationException {
 		logger.info("started saveObservation function ");
@@ -37,7 +37,7 @@ public class ObservationController {
 
 	}
 
-	@PutMapping("/updateObservation")
+	@PutMapping("/lv/updateObservation")
 	public ResponseEntity<String> updateObservation(@RequestBody ObservationComponent observationComponent)
 			throws ObservationException {
 		logger.info("called updateSite function ");
@@ -45,7 +45,7 @@ public class ObservationController {
 		return new ResponseEntity<String>("Observation Successfully Updated", HttpStatus.OK);
 	}
 
-	@GetMapping("/retrieveObservation/{userName}/{siteId}/{observationComponent}")
+	@GetMapping("/lv/retrieveObservation/{userName}/{siteId}/{observationComponent}")
 	public ResponseEntity<ObservationComponent> retrieveObservation(@PathVariable String userName,
 			@PathVariable Integer siteId, @PathVariable String observationComponent) throws ObservationException {
 		logger.info("called retrieveObservation function");
@@ -53,7 +53,7 @@ public class ObservationController {
 				observationService.retrieveObservation(userName, siteId, observationComponent), HttpStatus.OK);
 	}
 
-	@GetMapping("/retrieveObservationsInSummary/{userName}/{siteId}")
+	@GetMapping("/lv/retrieveObservationsInSummary/{userName}/{siteId}")
 	public ResponseEntity<AllComponentObservation> retrieveObservationsInSummary(@PathVariable String userName,
 			@PathVariable Integer siteId) throws ObservationException {
 		logger.info("called retrieveObservation function");

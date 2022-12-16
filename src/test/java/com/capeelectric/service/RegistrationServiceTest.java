@@ -33,12 +33,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.capeelectric.config.AWSLVConfig;
+import com.capeelectric.config.AWSConfiguration;
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.licence.License;
+import com.capeelectric.repository.LicenseRepository;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.impl.RegistrationServiceImpl;
@@ -57,6 +59,9 @@ public class RegistrationServiceTest {
 
 	@MockBean
 	private RegistrationRepository registrationRepository;
+	
+	@MockBean
+	private LicenseRepository licenseRepository;
 
 	@InjectMocks
 	private RegistrationServiceImpl registrationServiceImpl;
@@ -78,7 +83,7 @@ public class RegistrationServiceTest {
 //	private RegistrationService awsEmailService;
 	
 	@MockBean
-	private AWSLVConfig awsConfiguration;
+	private AWSConfiguration awsConfiguration;
 		
 	@Value("${app.web.domain}")
 	private String webUrl;
@@ -310,18 +315,22 @@ public class RegistrationServiceTest {
 		logger.info("RegistrationServiceTest testUpdateLicence_funcion Started");
 
 		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(Optional.of(register));
+		
+		License license = new License();
+		license.setLvNoOfLicence("21");
+		when(licenseRepository.findByUserName("lvsystem@capeindia.net")).thenReturn(Optional.of(license));
 
 		// Success flow
-		registrationServiceImpl.updateLicence("lvsystem@capeindia.net", "2");
+		registrationServiceImpl.updateLicence("lvsystem@capeindia.net", "2","LV");
 
 		// Throwing Exception --> Given UserName does not Exist
 		RegistrationException assertThrows_1 = Assertions.assertThrows(RegistrationException.class,
-				() -> registrationServiceImpl.updateLicence("lvsystem123@capeindia.net", "2"));
+				() -> registrationServiceImpl.updateLicence("lvsystem123@capeindia.net", "2","LV"));
 		assertEquals(assertThrows_1.getMessage(), "Given UserName does not Exist");
 
 		// Throwing Exception --> Invalid Input
 		RegistrationException assertThrows_2 = Assertions.assertThrows(RegistrationException.class,
-				() -> registrationServiceImpl.updateLicence(null, "2"));
+				() -> registrationServiceImpl.updateLicence(null, "2","LV"));
 		assertEquals(assertThrows_2.getMessage(), "Invalid Input");
 
 		logger.info("RegistrationServiceTest testUpdateLicence_funcion End");

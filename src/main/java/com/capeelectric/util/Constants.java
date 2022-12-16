@@ -180,4 +180,6 @@ public class Constants {
 	public static final String EMAIL_ADMIN_SUBJECT = "Approval For Inspector";
 	
 	public static final String EMAIL_HOST_NAME = "email-smtp.ap-south-1.amazonaws.com";
+	
+	public static final String EMC_FILE_UPLOAD_DOMAIN = "https://d35eofesgzbybk.cloudfront.net";
 }

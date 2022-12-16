@@ -34,7 +34,7 @@ public class FinalPDFController {
 		this.returnPDFService = returnPDFService;
 	}
 
-	@GetMapping("/printFinalPDF/{userName}/{siteId}/{siteName}")
+	@GetMapping("/lv/printFinalPDF/{userName}/{siteId}/{siteName}")
 	@ResponseBody
 	public ResponseEntity<byte[]> printFinalPDF(@PathVariable String userName, @PathVariable Integer siteId, @PathVariable String siteName)
 			throws InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException,
@@ -43,6 +43,18 @@ public class FinalPDFController {
 
 		ByteArrayOutputStream downloadInputStream = returnPDFService.printFinalPDF(userName, siteId, siteName);
 		String keyname = siteName+".pdf";
+		return ResponseEntity.ok().contentType(contentType(keyname))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + keyname + "\"")
+				.body(downloadInputStream.toByteArray());
+	}
+	
+	@GetMapping("/emc/printFinalPDF/{userName}/{emcId}/{clientName}")
+	@ResponseBody
+	public ResponseEntity<byte[]> printEMCFinalPDF(@PathVariable String userName, @PathVariable Integer emcId,@PathVariable String clientName) throws Exception {
+		logger.info("called printFinalPDF function userName: {},emcId : {}", userName, emcId);
+
+		ByteArrayOutputStream downloadInputStream = returnPDFService.printEMCFinalPDF(userName, emcId,clientName);
+		String keyname = clientName + ".pdf";
 		return ResponseEntity.ok().contentType(contentType(keyname))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + keyname + "\"")
 				.body(downloadInputStream.toByteArray());

@@ -33,7 +33,7 @@ public class FinalReportController {
 	@Autowired
 	FinalReportServiceImpl finalReportServiceImpl;
 
-	@GetMapping("/retrieveListOfSite/{userName}")
+	@GetMapping("/lv/retrieveListOfSite/{userName}")
 	public ResponseEntity<List<Site>> retrieveListOfSite(@PathVariable String userName) throws FinalReportException {
 		logger.info("FinalReportAPI_started retrieveSiteDetails function UserName: {}", userName);
 		
@@ -42,7 +42,7 @@ public class FinalReportController {
 
 	}
 
-	@GetMapping("/retrieveReport/{userName}/{siteId}")
+	@GetMapping("/lv/retrieveReport/{userName}/{siteId}")
 	public ResponseEntity<Optional<FinalReport>> retrieveReports(@PathVariable String userName,
 			@PathVariable Integer siteId) throws FinalReportException {
 		logger.info("FinalReportAPI_started retrieveFinalReport function userName: {},siteId : {}", userName, siteId);
@@ -52,7 +52,7 @@ public class FinalReportController {
 
 	}
 	
-	@GetMapping("/retrieveReport/{siteId}")
+	@GetMapping("/lv/retrieveReport/{siteId}")
 	public ResponseEntity<Optional<FinalReport>> retrieveReportsForSiteId(@PathVariable Integer siteId) throws FinalReportException {
 		logger.info("FinalReportAPI_started retrieveFinalReport function siteId : {}", siteId);
 		
@@ -61,7 +61,7 @@ public class FinalReportController {
 
 	}
 	
-	@GetMapping("/retrieveAllSites")
+	@GetMapping("/lv/retrieveAllSites")
 	public ResponseEntity<List<Site>> retrieveAllSites() throws FinalReportException{
 		logger.info("FinalReportAPI_started retrieveAllSites");
 			

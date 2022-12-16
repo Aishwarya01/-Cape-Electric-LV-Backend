@@ -19,7 +19,6 @@ import com.capeelectric.service.RegistrationService;
 
 @RestController
 @RequestMapping("api/v2")
-
 public class MailPDFController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MailPDFController.class);
@@ -27,13 +26,24 @@ public class MailPDFController {
 	@Autowired
 	private RegistrationService awsEmailService;
 
-	@GetMapping("/sendPDFinMail/{userName}/{siteId}/{siteName}")
+	@GetMapping("/lv/sendPDFinMail/{userName}/{siteId}/{siteName}")
 	public ResponseEntity<byte[]> sendFinalPDF(@PathVariable String userName, @PathVariable Integer siteId, @PathVariable String siteName)
 			throws InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException,
 			SummaryException, Exception {
 		logger.info("called sendFinalPDF function userName: {},siteId : {}, siteName : {}", userName,siteId,siteName);
 
 		awsEmailService.sendEmailPDF(userName, siteId, siteId, siteName);
+
+		return new ResponseEntity<byte[]>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/emc/sendPDFinMail/{userName}/{emcId}/{clientName}")
+	public ResponseEntity<byte[]> sendEMCFinalPDF(@PathVariable String userName, @PathVariable Integer emcId,
+			@PathVariable String clientName) throws Exception {
+		logger.info("called sendFinalPDF function userName: {},emcId : {}, clientName : {}", userName, emcId,
+				clientName);
+
+		awsEmailService.sendEMCEmailPDF(userName, emcId, emcId, clientName);
 
 		return new ResponseEntity<byte[]>(HttpStatus.OK);
 	}

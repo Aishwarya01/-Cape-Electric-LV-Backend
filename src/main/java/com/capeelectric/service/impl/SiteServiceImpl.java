@@ -18,6 +18,8 @@ import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.Site;
 import com.capeelectric.model.SitePersons;
+import com.capeelectric.model.licence.License;
+import com.capeelectric.repository.LicenseRepository;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.repository.SitePersonsRepository;
 import com.capeelectric.repository.SiteRepository;
@@ -41,6 +43,9 @@ public class SiteServiceImpl implements SiteService {
 	@Autowired
 	private RegistrationRepository registrationRepository;
 	
+	@Autowired
+	private LicenseRepository licenseRepository;
+	
 	private Site siteData;
 
 	/*
@@ -49,7 +54,7 @@ public class SiteServiceImpl implements SiteService {
 	 */
 	@Transactional
 	@Override
-	public void addSite(Site site) throws CompanyDetailsException {
+	public Site addSite(Site site) throws CompanyDetailsException {
 		int count = 0;
 
 		if (site.getUserName() != null && site.getSite() != null) {
@@ -64,9 +69,9 @@ public class SiteServiceImpl implements SiteService {
           boolean email = checkSitePersonEmail(site.getSite(), site.getSitePersons());
           logger.debug("Finding siteperson Email already available or not in DB --> " + email);
           if (email) {
-            reduceLicence(site.getUserName());
-            siteRepository.save(site);
-            logger.debug("Site Successfully Saved in DB");
+//            reduceLicence(site.getUserName());
+           return siteRepository.save(site);
+           // logger.debug("Site Successfully Saved in DB");
           } else {
             logger.error("PersonInchargEmail already present");
             throw new CompanyDetailsException("PersonInchargEmail already present");
@@ -87,7 +92,7 @@ public class SiteServiceImpl implements SiteService {
 	 * department_name comparing, then comparing site
 	 */
 	@Override
-	public void updateSite(Site site) throws CompanyDetailsException {
+	public Site updateSite(Site site) throws CompanyDetailsException {
 		int count = 0;
 
 		if (site.getUserName() != null && site.getSite() != null) {
@@ -105,8 +110,8 @@ public class SiteServiceImpl implements SiteService {
 				boolean email = checkSitePersonEmail(site.getSite(), site.getSitePersons());
 				logger.debug("Finding siteperson Email already available or not in DB --> " + email);
 				if (email) {
-					siteRepository.save(site);
 					logger.debug("Site Successfully Updated in DB");
+					return siteRepository.save(site);
 				} else {
 					logger.error("PersonInchargEmail already present");
 					throw new CompanyDetailsException("PersonInchargEmail already present");
@@ -133,22 +138,24 @@ public class SiteServiceImpl implements SiteService {
 				siteData.setUpdatedDate(LocalDateTime.now());
 				siteData.setUpdatedBy(userName.findByUserName(site.getUserName()));	
 				
-				Optional<Register> registerRepo = registrationRepository.findByUsername(siteData.getUserName());
-				if(registerRepo.isPresent()) { 
-					Register registerData = registerRepo.get();
-					if(registerData.getNoOfLicence() != null) {
-						registerData.setNoOfLicence(String.valueOf(Integer.parseInt(registerData.getNoOfLicence()) + 1));
+				 Optional<License> license = licenseRepository.findByUserName(siteData.getUserName());
+				if(license.isPresent() &&( null == siteData.getAllStepsCompleted() 
+						|| (null != siteData.getAllStepsCompleted() && !siteData.getAllStepsCompleted().equalsIgnoreCase("AllStepCompleted")) )
+						) { 
+					 License lvLicense = license.get();
+					if(lvLicense.getLvNoOfLicence() != null) {
+						lvLicense.setLvNoOfLicence(String.valueOf(Integer.parseInt(lvLicense.getLvNoOfLicence()) + 1));
+						licenseRepository.save(lvLicense);
+						logger.debug("License successfully updated for "+siteData.getUserName());
 					}
 					else {
-						registerData.setNoOfLicence(String.valueOf(1));	
+//						registerData.setNoOfLicence(String.valueOf(1));	
 					}
-					registerData.setUpdatedDate(LocalDateTime.now());
-					registerData.setUpdatedBy(siteData.getUpdatedBy());
+//					registerData.setUpdatedDate(LocalDateTime.now());
+//					registerData.setUpdatedBy(siteData.getUpdatedBy());
 					siteRepository.save(siteData);
 					logger.debug("Site Successfully Updated in DB with InActive status");
 					
-					registrationRepository.save(registerData);
-					logger.debug("License successfully updated for "+siteData.getUserName());
 				}
 				else {
 					logger.error("User doesn't exist");
@@ -298,6 +305,13 @@ public class SiteServiceImpl implements SiteService {
 		return siteDetails != null  
 				? siteDetails.getSite() : "";
 	}
+
+	@Override
+	public Optional<Site> isSiteActive(String userName) throws CompanyDetailsException {
+
+		return  siteRepository.findByAssignedToAndStatus(userName,"Active");
+
+ 	}
 	
 	
 }

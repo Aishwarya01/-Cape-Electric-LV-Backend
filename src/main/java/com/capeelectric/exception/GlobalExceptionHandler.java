@@ -94,4 +94,71 @@ public class GlobalExceptionHandler {
     	ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
     	return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
     }
+    
+    @ExceptionHandler({ ClientDetailsException.class })
+	public ResponseEntity<ErrorMessage> handleClientDetailsException(ClientDetailsException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+	}
+
+	@ExceptionHandler({ FacilityDataException.class })
+	public ResponseEntity<ErrorMessage> handleFacilityDataException(FacilityDataException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler({ PowerEarthingDataException.class })
+	public ResponseEntity<ErrorMessage> handlePowerEarthingDataException(PowerEarthingDataException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler({ ElectromagneticCompatabilityException.class })
+	public ResponseEntity<ErrorMessage> handleElectromagneticCompatabilityException(
+			ElectromagneticCompatabilityException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "404");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler({ DiagramComponentException.class })
+	public ResponseEntity<ErrorMessage> handleDiagramComponentException(DiagramComponentException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@ExceptionHandler({ MCBException.class })
+	public ResponseEntity<ErrorMessage> handleMCBException(MCBException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@ExceptionHandler({ MCCBException.class })
+	public ResponseEntity<ErrorMessage> handleMCCBException(MCCBException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@ExceptionHandler({ RCBOException.class })
+	public ResponseEntity<ErrorMessage> handleRCBOException(RCBOException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@ExceptionHandler({ LightException.class })
+	public ResponseEntity<ErrorMessage> handleLightException(LightException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@ExceptionHandler({ PortableApplianceException.class })
+	public ResponseEntity<ErrorMessage> handlePortableApplianceException(PortableApplianceException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+	}
+	
+	@ExceptionHandler({ TransformerException.class })
+	public ResponseEntity<ErrorMessage> handleTransformerException(TransformerException e) {
+		ErrorMessage exceptionMessage = new ErrorMessage(e.getMessage(), e.getLocalizedMessage(), "406");
+		return new ResponseEntity<ErrorMessage>(exceptionMessage, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
+	}
 }

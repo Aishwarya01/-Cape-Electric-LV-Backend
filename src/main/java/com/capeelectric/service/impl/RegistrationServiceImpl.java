@@ -36,13 +36,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.capeelectric.config.AWSLVConfig;
+import com.capeelectric.config.AWSConfiguration;
 import com.capeelectric.config.OtpConfig;
 import com.capeelectric.exception.CompanyDetailsException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.EmailContent;
 import com.capeelectric.model.Register;
+import com.capeelectric.model.licence.License;
+import com.capeelectric.model.licence.LvLicense;
+import com.capeelectric.repository.LpsLicenseRepository;
+import com.capeelectric.repository.LvLicenseRepository;
 import com.capeelectric.repository.RegistrationRepository;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
@@ -70,13 +74,22 @@ public class RegistrationServiceImpl implements RegistrationService {
 	private RegistrationRepository registerRepository;
 	
 	@Autowired
+	private com.capeelectric.repository.LicenseRepository licenseRepository;
+	
+	@Autowired
+	private LvLicenseRepository lvLicenseRepository;
+	
+	@Autowired
+	private LpsLicenseRepository lpsLicenseRepository;
+	
+	@Autowired
 	private RestTemplate restTemplate;
 	
 	@Autowired
 	private UserFullName userFullName;
 	
 	@Autowired
-	private AWSLVConfig awsConfiguration;
+	private AWSConfiguration awsConfiguration;
 	
 	@Value("${app.web.domain}")
 	private String webUrl;
@@ -103,6 +116,21 @@ public class RegistrationServiceImpl implements RegistrationService {
 					register.setCreatedBy(register.getName());
 					register.setUpdatedBy(register.getName());
 					Register createdRegister = registerRepository.save(register);
+//					License license = new License();
+//					license.setInspectorUserName(register.getAssignedBy());
+//					license.setViewerUserName(register.getUsername());
+//					if (condition) {
+//					
+//						license.setLpsclientName(register.get);
+//						license.setLpsProjectName(SESSION_TITLE)
+//					}
+//					else if (condition) {
+//						license.setLpsStatus(SESSION_TITLE);
+//						license.setLvSiteName(SESSION_TITLE);
+//						license.setLvStatus(SESSION_TITLE);
+//					}
+//					
+					
 					logger.debug("Successfully Registration Information Saved");
 					return createdRegister;
 				} else {
@@ -165,7 +193,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
 			if (registerRepo.isPresent()) {
 				registerRepo.get().setApplicationType(
-						Stream.of(Arrays.asList(registerRepo.get().getApplicationType().split(","))
+						Stream.of(Arrays.asList(null ==registerRepo.get().getApplicationType() ?new String[0]:registerRepo.get().getApplicationType().split(","))
 								.stream()
 								.sorted(Comparator.naturalOrder())
 								.collect(Collectors.toList()).stream()
@@ -290,30 +318,56 @@ public class RegistrationServiceImpl implements RegistrationService {
 		return sendOtpResponse.getBody().replaceAll(SESSION_TITLE, "$1");
 	}
 
+	/**
+	*@param username,numberoflicense and project
+	*updateLicense function checking given username available or not in repo,
+	* if available then finding that username in license table after that based on project license adding to repo
+	*/
 	@Override
-	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
-	public void updateLicence(String userName, String numoflicence) throws RegistrationException {
 
-		if (userName != null && numoflicence != null) {
+	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
+	public void updateLicence(String userName, String numoflicence, String project) throws RegistrationException {
+		if (userName != null && numoflicence != null && project != null) {
 			logger.debug("RegistrationServiceImpl updateLicence() function Started");
 			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
-			if (registerRepo.isPresent() && registerRepo.get().getUsername() != null
-					&& registerRepo.get().getUsername().equalsIgnoreCase(userName)) {
-				Register register = registerRepo.get();
-				register.setNoOfLicence(numoflicence);
-				register.setUpdatedDate(LocalDateTime.now());
-				register.setUpdatedBy(userName);
-				registerRepository.save(register);
-				logger.debug("Sucessfully licence updated for this user @{}" + userName);
+
+			if (registerRepo.isPresent()) {
+				Optional<License> licenseRepo = licenseRepository.findByUserName(userName);
+				try {
+					if (licenseRepo.isPresent()) {
+						licenseRepository.save(getLicenseObject(licenseRepo.get(), project, numoflicence));
+					} else {
+						License license = new License();
+						license.setUserName(userName);
+						licenseRepository.save(getLicenseObject(license, project, numoflicence));
+					}
+				} catch (Exception message) {
+					logger.error("License updating falied" + message.getMessage());
+					throw new RegistrationException("License updating falied");
+				}
+
 			} else {
 				logger.error("Given UserName does not Exist");
 				throw new RegistrationException("Given UserName does not Exist");
 			}
-
 		} else {
 			logger.error("Given UserName does not Exist");
 			throw new RegistrationException("Invalid Input");
 		}
+	}
+
+	private License getLicenseObject(License license, String project, String numberOfLicense) {
+		switch (project) {
+		case "LV":
+			license.setLvNoOfLicence(numberOfLicense);
+			return license;
+
+		case "LPS":
+			license.setLpsNoOfLicence(numberOfLicense);
+			return license;
+		}
+		return license;
+
 	}
 
 	@Override
@@ -442,6 +496,15 @@ public class RegistrationServiceImpl implements RegistrationService {
 		
 	}
 	
+	public void sendEMCEmailPDF(String userName, Integer id, int count, String keyname) {
+		String type = "EMC";
+		restTemplate.exchange(awsConfiguration.getSendEmailWithPDF() + userName + "/"+type+"/"+ id +"/"+ keyname,
+				HttpMethod.GET, null, String.class);
+
+		logger.debug("Cape-Electric-AWS-Email service Response was successful");
+		
+	}
+	
 	@Override
 	public void sendEmailForOTPGeneration(String email, String content) throws URISyntaxException {
 		HttpHeaders headers = new HttpHeaders();
@@ -469,5 +532,38 @@ public class RegistrationServiceImpl implements RegistrationService {
 				+ "/admin");
 		logger.debug("AwsEmailService call Successfully Ended");
 
+	}
+
+	@Override
+	public Optional<Register> retrieveFromRegister(String userName) {
+		Optional<Register> findByUsername = registerRepository.findByUsername(userName);
+ 		return null;
+	}
+
+	/**
+	 * @param username,project
+	 * retrieveRegistrationWithProject function checking given the username & project available or not 
+	*/
+	@Override
+	public Optional<?> retrieveRegistrationWithProject(String userName, String project) {
+
+		if (project.equalsIgnoreCase("LV")) {
+			Optional<LvLicense> lvLicense = lvLicenseRepository.findByUserName(userName);
+			if (!lvLicense.isPresent() || lvLicense.get().getLvNoOfLicence() == null) {
+				Optional<Register> registerRepo = registerRepository.findByUsername(userName);	
+				LvLicense license = new LvLicense();
+				license.setLvNoOfLicence(registerRepo.get().getNoOfLicence());
+				if (!lvLicense.isPresent()) {
+					license.setUserName(userName);
+					lvLicenseRepository.save(license);
+				}
+				return Optional.of(license);
+			}
+			return lvLicense;
+			
+ 		} else if (project.equalsIgnoreCase("LPS")) { 			 
+ 			return lpsLicenseRepository.findByUserName(userName);
+ 		}  
+		return null;
 	}
 }
