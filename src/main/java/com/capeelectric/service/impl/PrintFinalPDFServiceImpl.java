@@ -40,8 +40,7 @@ public class PrintFinalPDFServiceImpl implements PrintFinalPDFService {
 	@Autowired
 	private AWSS3ServiceImpl awsS3ServiceImpl;
 
-	@Value("${s3.bucket.name}")
-	private String s3BucketName;
+	private String s3BucketName = "rushappjavafiles";
 
 	@Value("${access.key.id}")
 	private String accessKeyId;

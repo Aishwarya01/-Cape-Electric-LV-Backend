@@ -9,7 +9,6 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -47,8 +46,8 @@ public class PowerEarthingDataPDFServiceImpl implements PowerEarthingDataPDFServ
 	@Autowired
 	private FileDBRepository fileDBRepository;
 
-	@Value("${s3.emc.file.upload.bucket.name}")
-	private String s3EmcFileUploadBucketName;
+	
+	private String s3EmcFileUploadBucketName = "emc-cloudfront-fileupload-url";
 
 	@Autowired
 	AWSS3Configuration AWSS3configuration;

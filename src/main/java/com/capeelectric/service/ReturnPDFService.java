@@ -23,8 +23,7 @@ import com.amazonaws.services.s3.model.S3Object;
 public class ReturnPDFService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ReturnPDFService.class);
-	@Value("${s3.bucket.name}")
-	private String s3BucketName;
+	private String s3BucketName = "rushappjavafiles";
 	@Value("${access.key.id}")
 	private String accessKeyId;
 	@Value("${access.key.secret}")
