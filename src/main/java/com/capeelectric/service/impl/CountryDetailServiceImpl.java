@@ -3,6 +3,7 @@ package com.capeelectric.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.CountryDetailsException;
@@ -20,6 +21,7 @@ public class CountryDetailServiceImpl implements CountryDetailsService {
 	@Autowired
 	private StateRepository stateRepository;
 
+	@Cacheable(cacheNames = "country")
 	public List<State> fetchStatesByCountryCode(String code) throws CountryDetailsException {
 
 		List<State> state = stateRepository.fetchStatesByCountryCode(code);
@@ -31,6 +33,7 @@ public class CountryDetailServiceImpl implements CountryDetailsService {
 		return state;
 	}
 
+	@Cacheable(cacheNames = "countries")
 	public List<Country> fetchCountries() {
 
 		List<Country> country = (List<Country>) countryRepository.findAll();

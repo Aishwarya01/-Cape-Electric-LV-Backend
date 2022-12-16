@@ -37,7 +37,7 @@ public class InspectionController {
 	@Autowired
 	private SendReplyComments sendReplyComments;
 
-	@PostMapping("/addInspectionDetails")
+	@PostMapping("/lv/addInspectionDetails")
 	public ResponseEntity<String> addInspectionDetails(@RequestBody PeriodicInspection periodicInspection)
 			throws InspectionException, CompanyDetailsException {
 		logger.info("called addInspectionDetails function UserName : {},SiteId : {}", periodicInspection.getUserName(),
@@ -47,7 +47,7 @@ public class InspectionController {
 		return new ResponseEntity<String>("Inspection Details Are Successfully Saved",HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/retrieveInspectionDetails/{userName}/{siteId}")
+	@GetMapping("/lv/retrieveInspectionDetails/{userName}/{siteId}")
 	public ResponseEntity<PeriodicInspection> retrieveInspectionDetails(@PathVariable String userName,
 			@PathVariable Integer siteId) throws InspectionException {
 		logger.info("called addInspectionDetails function UserName : {},SiteId : {}", userName, siteId);
@@ -55,14 +55,14 @@ public class InspectionController {
 				HttpStatus.OK);
 	}
 	
-	@GetMapping("/retrieveInspectionDetails/{siteId}")
+	@GetMapping("/lv/retrieveInspectionDetails/{siteId}")
 	public ResponseEntity<PeriodicInspection> retrieveInspectionDetailsForSiteId(@PathVariable Integer siteId) throws InspectionException {
 		logger.info("called addInspectionDetails function SiteId : {}", siteId);
 		return new ResponseEntity<PeriodicInspection>(inspectionService.retrieveInspectionDetails(siteId),
 				HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateInspectionDetails")
+	@PutMapping("/lv/updateInspectionDetails")
 	public ResponseEntity<String> updateInspectionDetails(@RequestBody PeriodicInspection periodicInspection)
 			throws InspectionException, CompanyDetailsException {
 		logger.info("called updateInspectionDetails function UserName : {},SiteId : {},PeriodicInspectionId : {}",
@@ -73,7 +73,7 @@ public class InspectionController {
 		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.OK);
 	}
 	
-	@PostMapping("/sendInspectionComments/{userName}/{siteId}")
+	@PostMapping("/lv/sendInspectionComments/{userName}/{siteId}")
 	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody PeriodicInspectionComment periodicInspectionComment)
 			throws InspectionException, RegistrationException, Exception {
@@ -84,7 +84,7 @@ public class InspectionController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@PostMapping("/replyInspectionComments/{inspectorUserName}/{siteId}")
+	@PostMapping("/lv/replyInspectionComments/{inspectorUserName}/{siteId}")
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
 			@RequestBody PeriodicInspectionComment periodicInspectionComment)
 			throws InspectionException, RegistrationException, Exception {
@@ -100,7 +100,7 @@ public class InspectionController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@PostMapping("/approveInspectionComments/{userName}/{siteId}")
+	@PostMapping("/lv/approveInspectionComments/{userName}/{siteId}")
 	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody PeriodicInspectionComment periodicInspectionComment)
 			throws InspectionException, RegistrationException, Exception {
@@ -111,7 +111,7 @@ public class InspectionController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@GetMapping("/retrieveLocationDetails/{distributionDetails}/{referance}/{location}")
+	@GetMapping("/lv/retrieveLocationDetails/{distributionDetails}/{referance}/{location}")
 	public String retrieveLocationDetails(@PathVariable String distributionDetails,
 			@PathVariable String referance, @PathVariable String location) throws InspectionException {
 		logger.info("called retrieveLocationDetails function Distribution Details : {},Reference : {},Location: {}", distributionDetails, referance, location);

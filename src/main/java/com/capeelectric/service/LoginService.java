@@ -9,6 +9,9 @@ import com.capeelectric.exception.UpdatePasswordException;
 import com.capeelectric.model.Register;
 import com.capeelectric.request.AuthenticationRequest;
 import com.capeelectric.request.ContactNumberRequest;
+import com.capeelectric.request.RefreshTokenRequest;
+import com.capeelectric.response.AuthenticationResponseRegister;
+import com.capeelectric.service.impl.RegistrationDetailsServiceImpl;
 
 public interface LoginService {
 
@@ -23,5 +26,7 @@ public interface LoginService {
 	public Register saveContactNumber(ContactNumberRequest request) throws UpdatePasswordException;
 	
 	public Register findByUserNameOrContactNumber(String details) throws ForgotPasswordException, IOException, RegistrationException;
+	
+	public AuthenticationResponseRegister refreshToken(RefreshTokenRequest refreshTokenRequest, RegistrationDetailsServiceImpl registrationServiceImpl);
 
 }

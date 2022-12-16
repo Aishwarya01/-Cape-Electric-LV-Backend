@@ -39,7 +39,7 @@ public class SupplyCharacteristicsController {
 	@Autowired
 	private SendReplyComments sendReplyComments;
 
-	@PostMapping("/addCharacteristics")
+	@PostMapping("/lv/addCharacteristics")
 	public ResponseEntity<String> addCharacteristics(@RequestBody SupplyCharacteristics supplyCharacteristics)
 			throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
 		logger.debug("called addCharacteristics function UserName : {}, SiteId : {}",
@@ -50,7 +50,7 @@ public class SupplyCharacteristicsController {
 				HttpStatus.CREATED);
 	}
 
-	@GetMapping("/retrieveCharacteristics/{userName}/{siteId}")
+	@GetMapping("/lv/retrieveCharacteristics/{userName}/{siteId}")
 	public ResponseEntity<SupplyCharacteristics> retrieveCharacteristics(@PathVariable String userName,
 			@PathVariable Integer siteId) throws SupplyCharacteristicsException {
 		logger.debug("started retrieveCharacteristics function UserName : {}, SiteId : {}", userName, siteId);
@@ -58,14 +58,14 @@ public class SupplyCharacteristicsController {
 				supplyCharacteristicsService.retrieveCharacteristics(userName, siteId), HttpStatus.OK);
 	}
 	
-	@GetMapping("/retrieveCharacteristics/{siteId}")
+	@GetMapping("/lv/retrieveCharacteristics/{siteId}")
 	public ResponseEntity<SupplyCharacteristics> retrieveCharacteristicsForSiteId(@PathVariable Integer siteId) throws SupplyCharacteristicsException {
 		logger.debug("started retrieveCharacteristics function SiteId : {}", siteId);
 		return new ResponseEntity<SupplyCharacteristics>(
 				supplyCharacteristicsService.retrieveCharacteristics(siteId), HttpStatus.OK);
 	}
 
-	@PutMapping("/updateCharacteristics")
+	@PutMapping("/lv/updateCharacteristics")
 	public ResponseEntity<String> updateCharacteristics(@RequestBody SupplyCharacteristics supplyCharacteristics)
 			throws SupplyCharacteristicsException, DecimalConversionException, CompanyDetailsException {
 		logger.debug("called updateCharacteristics function UserName : {},SiteId : {},SupplyCharacteristicsId : {}",
@@ -76,7 +76,7 @@ public class SupplyCharacteristicsController {
 		return new ResponseEntity<String>("SupplyCharacteristics Data successfully Updated", HttpStatus.OK);
 	}
 
-	@PostMapping("/sendCharacteristicsComments/{userName}/{siteId}")
+	@PostMapping("/lv/sendCharacteristicsComments/{userName}/{siteId}")
 	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
 			throws SupplyCharacteristicsException, RegistrationException, Exception {
@@ -87,7 +87,7 @@ public class SupplyCharacteristicsController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@PostMapping("/replyCharacteristicsComments/{inspectorUserName}/{siteId}")
+	@PostMapping("/lv/replyCharacteristicsComments/{inspectorUserName}/{siteId}")
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
 			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
 			throws SupplyCharacteristicsException, RegistrationException, Exception {
@@ -105,7 +105,7 @@ public class SupplyCharacteristicsController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@PostMapping("/approveCharacteristicsComments/{userName}/{siteId}")
+	@PostMapping("/lv/approveCharacteristicsComments/{userName}/{siteId}")
 	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody SupplyCharacteristicComment supplyCharacteristicComment)
 			throws SupplyCharacteristicsException, RegistrationException, Exception {

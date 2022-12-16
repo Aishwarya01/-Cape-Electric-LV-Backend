@@ -2,6 +2,7 @@ package com.capeelectric.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,17 +44,17 @@ public class SiteControllerTest {
 	}
 
 	@Test
-	public void tesupdateSite() throws CompanyDetailsException {
-		doNothing().when(siteServiceImpl).updateSite(site);
-		ResponseEntity<String> actualResponseEntity = siteController.updateSite(site);
-		assertEquals(actualResponseEntity.getBody(), "Site Successfully Updated");
+	public void testupdateSite() throws CompanyDetailsException {
+		when(siteServiceImpl.updateSite(site)).thenReturn(site);
+		ResponseEntity<Site> actualResponseEntity = siteController.updateSite(site);
+		assertEquals(actualResponseEntity.getStatusCode(),  HttpStatus.OK);
 	}
 
 	@Test
 	public void testaddSite() throws CompanyDetailsException {
-		doNothing().when(siteServiceImpl).addSite(site);
-		ResponseEntity<String> actualResponseEntity = siteController.addSite(site);
-		assertEquals(actualResponseEntity.getBody(), "Site Successfully Saved");
+		when(siteServiceImpl.addSite(site)).thenReturn(site);
+		ResponseEntity<Site> actualResponseEntity = siteController.addSite(site);
+		assertEquals(actualResponseEntity.getStatusCode(), HttpStatus.CREATED);
 	}
 
 	@Test

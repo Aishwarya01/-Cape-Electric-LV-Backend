@@ -38,7 +38,7 @@ public class InstallReportController {
 	@Autowired
 	private SendReplyComments sendReplyComments;
 
-	@PostMapping("/addInstalReport")
+	@PostMapping("/lv/addInstalReport")
 	public ResponseEntity<String> addInstallationReport(@RequestBody ReportDetails reportDetails)
 			throws InstalReportException, CompanyDetailsException {
 		logger.info("called addInstallationReport function UserName : {}, SiteId", reportDetails.getUserName(),
@@ -47,7 +47,7 @@ public class InstallReportController {
 		return new ResponseEntity<String>("Basic Information Successfully Saved", HttpStatus.CREATED);
 	}
 
-	@GetMapping("/retrieveInstalReport/{userName}/{siteId}")
+	@GetMapping("/lv/retrieveInstalReport/{userName}/{siteId}")
 	public ResponseEntity<ReportDetails> retrieveInstallationReport(@PathVariable String userName,
 			@PathVariable Integer siteId)
 			throws InstalReportException, InspectionException {
@@ -56,7 +56,7 @@ public class InstallReportController {
 				HttpStatus.OK);
 	}
 	
-	@GetMapping("/retrieveInstalReport/{siteId}")
+	@GetMapping("/lv/retrieveInstalReport/{siteId}")
 	public ResponseEntity<ReportDetails> retrieveInstallationReportForSiteId(@PathVariable Integer siteId)
 			throws InstalReportException, InspectionException {
 		logger.info("called retrieveInstallationReportForSiteId function  SiteId : {}", siteId);
@@ -64,7 +64,7 @@ public class InstallReportController {
 				HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateInstalReport")
+	@PutMapping("/lv/updateInstalReport")
 	public ResponseEntity<String> updateInstallationReport(@RequestBody ReportDetails reportDetails)
 			throws InstalReportException, CompanyDetailsException {
 		logger.info("called updateInstallationReport function UserName : {},SiteId : {},ReportId : {}", reportDetails.getUserName(),
@@ -73,7 +73,7 @@ public class InstallReportController {
 		return new ResponseEntity<String>("Report successfully Updated", HttpStatus.OK);
 	}
 	
-	@PostMapping("/sendBasicInfoComments/{userName}/{siteId}")
+	@PostMapping("/lv/sendBasicInfoComments/{userName}/{siteId}")
 	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody ReportDetailsComment reportDetailsComment)
 			throws InstalReportException, RegistrationException, Exception {
@@ -83,7 +83,7 @@ public class InstallReportController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@PostMapping("/replyBasicInfoComments/{inspectorUserName}/{siteId}")
+	@PostMapping("/lv/replyBasicInfoComments/{inspectorUserName}/{siteId}")
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
 			@RequestBody ReportDetailsComment reportDetailsComment)
 			throws InstalReportException, RegistrationException, Exception {
@@ -97,7 +97,7 @@ public class InstallReportController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@PostMapping("/approveBasicInfoComments/{userName}/{siteId}")
+	@PostMapping("/lv/approveBasicInfoComments/{userName}/{siteId}")
 	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody ReportDetailsComment reportDetailsComment)
 			throws InstalReportException, RegistrationException, Exception {

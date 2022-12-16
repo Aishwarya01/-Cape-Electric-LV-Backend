@@ -141,6 +141,7 @@ CREATE TABLE applicationtypes(
 			 INSERT INTO APPLICATIONTYPES VALUES  (5,'Failure Analysis Of Electronic Systems', 'Failure Analysis','FAS');
 			 INSERT INTO APPLICATIONTYPES VALUES  (6,'Conformity And Project Analysis', 'Conformity Project','CPA');
 		     INSERT INTO APPLICATIONTYPES VALUES  (7,'Testing Inspection and Certification of Lightning protection system', 'LPS System', 'LPS');
+		     INSERT INTO APPLICATIONTYPES VALUES  (8,'Single Line Diagram', 'SLD Diagram', 'SLD');
 
 --------> Site Table <------------
 
@@ -1036,3 +1037,19 @@ CREATE TABLE register_table (
 				CONSTRAINT PK_OBSERVATION_ID PRIMARY KEY(OBSERVATION_ID)
 				
 	);
+
+	CREATE TABLE licence_table(
+					LICENCE_ID INT;
+					LV_NO_OF_LICENCE VARCHAR(225);
+					LPS_NO_OF_LICENCE VARCHAR(225);
+					USERNAME VARCHAR(225);
+	
+);
+
+	
+	CREATE TABLE refresh_token(
+ID BIGINT AUTO_INCREMENT,
+TOKEN VARCHAR(255) NOT NULL,
+CREATED_DATE datetime NOT NULL
+);
+

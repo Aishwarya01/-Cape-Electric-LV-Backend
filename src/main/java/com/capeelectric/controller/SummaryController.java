@@ -46,7 +46,7 @@ public class SummaryController {
 	@Autowired
 	private SendReplyComments sendReplyComments;
 
-	@PostMapping("/addSummary")
+	@PostMapping("/lv/addSummary")
 	public ResponseEntity<String> addSummary(@RequestBody Summary summary) throws SummaryException, CompanyDetailsException, InstalReportException, SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException, PdfException {
 		logger.debug("Started addSummary function userName: {},siteId : {}", summary.getUserName(),summary.getSiteId());
 		summaryService.addSummary(summary);
@@ -55,19 +55,19 @@ public class SummaryController {
 
 	}
 	
-	@GetMapping("/retrieveSummary/{userName}/{siteId}")
+	@GetMapping("/lv/retrieveSummary/{userName}/{siteId}")
 	public ResponseEntity<List<Summary>> retrieveSummary(@PathVariable String userName,@PathVariable Integer siteId) throws SummaryException {
 		logger.debug("called retrieveSummary function userName: {},siteId : {}", userName,siteId);
 		return new ResponseEntity<List<Summary>>(summaryService.retrieveSummary(userName,siteId), HttpStatus.OK);
 	}
 	
-	@GetMapping("/retrieveSummary/{siteId}")
+	@GetMapping("/lv/retrieveSummary/{siteId}")
 	public ResponseEntity<Summary> retrieveSummaryForSiteId(@PathVariable Integer siteId) throws SummaryException {
 		logger.debug("called retrieveSummary function siteId : {}",siteId);
 		return new ResponseEntity<Summary>(summaryService.retrieveSummary(siteId), HttpStatus.OK);
 	}
 	
-	@PutMapping("/updateSummary/{superAdminFlag}")
+	@PutMapping("/lv/updateSummary/{superAdminFlag}")
 	public ResponseEntity<String> updateSummary(@RequestBody Summary summary,@PathVariable Boolean superAdminFlag) throws SummaryException, CompanyDetailsException, InstalReportException, 
 	      SupplyCharacteristicsException, InspectionException, PeriodicTestingException, Exception, ObservationException, PdfException {
 		logger.debug("called updateSummary function UserName : {},SiteId : {},SummaryId : {}", summary.getUserName(),
@@ -79,7 +79,7 @@ public class SummaryController {
 	}
 
 
-	@PostMapping("/sendSummaryComments/{userName}/{siteId}")
+	@PostMapping("/lv/sendSummaryComments/{userName}/{siteId}")
 	public ResponseEntity<Void> sendComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody SummaryComment summaryComment) throws SummaryException, RegistrationException, Exception {
 		logger.debug("called sendComments function UserName : {},SiteId : {}", userName, siteId);
@@ -89,7 +89,7 @@ public class SummaryController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
-	@PostMapping("/replySummaryComments/{inspectorUserName}{siteId}")
+	@PostMapping("/lv/replySummaryComments/{inspectorUserName}{siteId}")
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
 			@RequestBody SummaryComment summaryComment) throws SummaryException, RegistrationException, Exception {
 		logger.debug("called replyComments function inspectorUserName : {},SiteId : {}", inspectorUserName, siteId);
@@ -105,7 +105,7 @@ public class SummaryController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
-	@PostMapping("/approveSummaryComments/{userName}/{siteId}")
+	@PostMapping("/lv/approveSummaryComments/{userName}/{siteId}")
 	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody SummaryComment summaryComment) throws SummaryException, RegistrationException, Exception {
 		logger.debug("called approveComments function UserName : {},SiteId : {}", userName, siteId);

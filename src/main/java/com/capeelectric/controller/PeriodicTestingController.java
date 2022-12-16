@@ -38,7 +38,7 @@ public class PeriodicTestingController {
 	@Autowired
 	private SendReplyComments sendReplyComments;
 
-	@PostMapping("/savePeriodicTesting")
+	@PostMapping("/lv/savePeriodicTesting")
 	public ResponseEntity<String> savePeriodicTesting(@RequestBody TestingReport testingReport)
 			throws PeriodicTestingException, CompanyDetailsException {
 		logger.debug("started savePeriodicTesting function userName: {},siteId : {}", testingReport.getUserName(),
@@ -51,7 +51,7 @@ public class PeriodicTestingController {
 
 	}
 
-	@GetMapping("/retrievePeriodicTesting/{userName}/{siteId}")
+	@GetMapping("/lv/retrievePeriodicTesting/{userName}/{siteId}")
 	public ResponseEntity<TestingReport> retrievePeriodicTesting(@PathVariable String userName,
 			@PathVariable Integer siteId) throws PeriodicTestingException {
 		logger.debug("Started retrievePeriodicTesting function userName: {},siteId : {}", userName, siteId);
@@ -61,7 +61,7 @@ public class PeriodicTestingController {
 		return new ResponseEntity<TestingReport>(retrieveTestingReport, HttpStatus.OK);
 	}
 
-	@GetMapping("/retrievePeriodicTesting/{siteId}")
+	@GetMapping("/lv/retrievePeriodicTesting/{siteId}")
 	public ResponseEntity<TestingReport> retrievePeriodicTestingForSiteId(@PathVariable Integer siteId) throws PeriodicTestingException {
 		logger.debug("Started retrievePeriodicTesting function siteId : {}", siteId);
 		TestingReport retrieveTestingReport = periodicTestingService.retrieveTestingReport(siteId);
@@ -71,7 +71,7 @@ public class PeriodicTestingController {
 	}
 
 
-	@PutMapping("/updatePeriodicTesting")
+	@PutMapping("/lv/updatePeriodicTesting")
 	public ResponseEntity<String> updatePeriodicTesting(@RequestBody TestingReport testingReport)
 			throws PeriodicTestingException, CompanyDetailsException {
 		logger.debug("called updatePeriodicTesting function UserName : {},SiteId : {},TestingReportId : {}",
@@ -82,7 +82,7 @@ public class PeriodicTestingController {
 		return new ResponseEntity<String>("PeriodicTesting successfully Updated", HttpStatus.OK);
 	}
 
-	@PostMapping("/sendTestingComments/{userName}/{siteId}")
+	@PostMapping("/lv/sendTestingComments/{userName}/{siteId}")
 	public ResponseEntity<Void> sendComments(@PathVariable String userName,
 			@PathVariable Integer siteId,@RequestBody TestingReportComment testingReportComment)
 			throws PeriodicTestingException, RegistrationException, Exception {
@@ -93,7 +93,7 @@ public class PeriodicTestingController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
-	@PostMapping("/replyTestingComments/{inspectorUserName}/{siteId}")
+	@PostMapping("/lv/replyTestingComments/{inspectorUserName}/{siteId}")
 	public ResponseEntity<Void> replyComments(@PathVariable String inspectorUserName, @PathVariable Integer siteId,
 			@RequestBody TestingReportComment testingReportComment)
 			throws PeriodicTestingException, RegistrationException, Exception {
@@ -108,7 +108,7 @@ public class PeriodicTestingController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 
-	@PostMapping("/approveTestingComments/{userName}/{siteId}")
+	@PostMapping("/lv/approveTestingComments/{userName}/{siteId}")
 	public ResponseEntity<Void> approveComments(@PathVariable String userName, @PathVariable Integer siteId,
 			@RequestBody TestingReportComment testingReportComment)
 			throws PeriodicTestingException, RegistrationException, Exception {

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.capeelectric.model.ApplicationTypes;
@@ -21,17 +23,20 @@ public class ApplicationTypesServiceImpl implements ApplicationTypesService {
 	private ApplicationTypesRepository repository;
 	
 	@Override
+	@Cacheable(cacheNames = "applicationtypes")
 	public List<ApplicationTypes> retrieveTypes() {
 		List<ApplicationTypes> applicationTypesDetails = (List<ApplicationTypes>) repository.findAll();
 		return sortApplicationType(applicationTypesDetails);
 	}
 
 	@Override
+	@CacheEvict(value ="applicationtypes" ,allEntries = true)
 	public ApplicationTypes addApplicationTypes(ApplicationTypes types) {
 		return repository.save(types);
 	}
 
 	@Override
+	@CacheEvict(value ="applicationtypes" ,allEntries = true)
 	public ApplicationTypes updateApplicationTypes(Integer id, String type) {
 		
 		Optional<ApplicationTypes> savedType = repository.findById(id);
@@ -47,6 +52,7 @@ public class ApplicationTypesServiceImpl implements ApplicationTypesService {
 	}
 
 	@Override
+	@CacheEvict(value ="applicationtypes" ,allEntries = true)
 	public void deleteApplicationType(Integer id) {
 		// TODO Auto-generated method stub
 		repository.deleteById(id);;

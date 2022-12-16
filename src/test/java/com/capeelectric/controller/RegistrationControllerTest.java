@@ -165,7 +165,7 @@ public class RegistrationControllerTest {
 			throws UserException, URISyntaxException, IOException, MessagingException, RegistrationException,
 			CompanyDetailsException {
 		logger.info("RegistrationControllerTest testUpdateLicence_funcion Started");
-		ResponseEntity<String> updateLicence = registrationController.updateLicence("lvsystem@capeindia.net", "2");
+		ResponseEntity<String> updateLicence = registrationController.updateLicence("lvsystem@capeindia.net", "2","LV");
 		assertEquals(updateLicence.getStatusCode(), HttpStatus.OK);
 		logger.info("RegistrationControllerTest testUpdateLicence_funcion Ended");
 	}
