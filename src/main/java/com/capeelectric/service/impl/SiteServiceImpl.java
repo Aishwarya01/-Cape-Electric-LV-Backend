@@ -139,7 +139,9 @@ public class SiteServiceImpl implements SiteService {
 				siteData.setUpdatedBy(userName.findByUserName(site.getUserName()));	
 				
 				 Optional<License> license = licenseRepository.findByUserName(siteData.getUserName());
-				if(license.isPresent() && !siteData.getAllStepsCompleted().equalsIgnoreCase("AllStepCompleted")) { 
+				if(license.isPresent() &&( null == siteData.getAllStepsCompleted() 
+						|| (null != siteData.getAllStepsCompleted() && !siteData.getAllStepsCompleted().equalsIgnoreCase("AllStepCompleted")) )
+						) { 
 					 License lvLicense = license.get();
 					if(lvLicense.getLvNoOfLicence() != null) {
 						lvLicense.setLvNoOfLicence(String.valueOf(Integer.parseInt(lvLicense.getLvNoOfLicence()) + 1));
