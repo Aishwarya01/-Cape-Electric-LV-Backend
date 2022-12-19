@@ -192,13 +192,28 @@ public class RegistrationServiceImpl implements RegistrationService {
 			logger.debug("RetrieveRegistration Started with User : {} ", userName);
 			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
 			if (registerRepo.isPresent()) {
-				registerRepo.get().setApplicationType(
-						Stream.of(Arrays.asList(null ==registerRepo.get().getApplicationType() ?new String[0]:registerRepo.get().getApplicationType().split(","))
-								.stream()
-								.sorted(Comparator.naturalOrder())
-								.collect(Collectors.toList()).stream()
-								.toArray(String[]::new))
-								.collect(Collectors.joining(","))); 
+
+				// if user(for old data) permission is Yes
+				if (null != registerRepo.get().getPermission()
+						&& registerRepo.get().getPermission().equalsIgnoreCase("Yes")
+						&& registerRepo.get().getApplicationType() != null) {
+					String applicationPermission = "";
+					for (String application : registerRepo.get().getApplicationType().split(",")) {
+						applicationPermission += application + "-U,";
+					}
+					if (!applicationPermission.isEmpty()) {
+						registerRepo.get()
+								.setPermission(applicationPermission.substring(0, applicationPermission.length() - 1));
+						registerRepo = Optional.of(registerRepository.save(registerRepo.get()));
+					}
+				}
+
+				registerRepo.get()
+						.setApplicationType(Stream.of(Arrays
+								.asList(null == registerRepo.get().getApplicationType() ? new String[0]
+										: registerRepo.get().getApplicationType().split(","))
+								.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList()).stream()
+								.toArray(String[]::new)).collect(Collectors.joining(",")));
 				return registerRepo;
 			} else {
 				logger.error("Email Id doesn't exist!");
