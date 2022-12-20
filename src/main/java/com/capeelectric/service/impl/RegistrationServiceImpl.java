@@ -7,7 +7,9 @@ import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,13 +18,11 @@ import java.util.stream.Stream;
 
 import javax.mail.MessagingException;
 
-import org.hibernate.annotations.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -274,10 +274,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public void sendOtp(String userName, String mobileNumber) throws RegistrationException {
 
 		if (userName != null && mobileNumber != null) {
-
+	
 			Optional<Register> registerRepo = registerRepository.findByUsername(userName);
 			if (registerRepo.isPresent() && registerRepo.get() != null) {
-				if (registerRepo.get().getPermission().equalsIgnoreCase("Yes")) {
+				if (!registerRepo.get().getPermission().equalsIgnoreCase("Not Authorized")) {
 					if (registerRepo.get().getContactNumber().contains(mobileNumber)) {
 						boolean isValidMobileNumber = isValidMobileNumber(mobileNumber);
 						if (isValidMobileNumber) {
@@ -393,7 +393,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 	
 	@Override
 	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
-	public Register updatePermission(RegisterPermissionRequest registerPermissionRequest)
+	public Map<String, String> updatePermission(RegisterPermissionRequest registerPermissionRequest)
 			throws RegisterPermissionRequestException {
 		logger.debug("updatePermission_function called");
 
@@ -406,30 +406,26 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 			if (registerRepo.isPresent()) {
 				Register register = registerRepo.get();
-
-				if (registerPermissionRequest.getPermission().equalsIgnoreCase("YES")) {
-
-					logger.debug("Admin accepted Registration Permission");
-					register.setApplicationType(registerPermissionRequest.getApplicationType());
-					register.setComment(registerPermissionRequest.getComment());
-					register.setPermission(registerPermissionRequest.getPermission());
-					register.setPermissionBy(registerPermissionRequest.getAdminUserName());
-					register.setUpdatedBy(registerPermissionRequest.getAdminUserName());
-					register.setUpdatedDate(LocalDateTime.now());
-					registerRepository.save(register);
-					return register;
+				Map<String, String> applicationTypesPermission = findApplicationTypesPermission(
+						registerPermissionRequest.getPermission(), registerRepo.get().getPermission());
+				if (null == register.getOtpSessionKey()) {
+						applicationTypesPermission.put("isRequiredOtp", "YES");
 				} else {
-					logger.debug("Admin Not-acepted Registration Permission");
-
-					register.setApplicationType(registerPermissionRequest.getApplicationType());
-					register.setComment(registerPermissionRequest.getComment());
-					register.setPermission(registerPermissionRequest.getPermission());
-					register.setUpdatedBy(registerPermissionRequest.getAdminUserName());
-					registerRepository.save(register);
-					return register;
-
+						applicationTypesPermission.put("isRequiredOtp", "NO");
 				}
+				logger.debug("Admin accepted Registration Permission");
+				register.setApplicationType(registerPermissionRequest.getApplicationType());
+				register.setComment(registerPermissionRequest.getComment());
+				register.setPermission(registerPermissionRequest.getPermission());
+				register.setPermissionBy(registerPermissionRequest.getAdminUserName());
+				register.setUpdatedBy(registerPermissionRequest.getAdminUserName());
+				register.setUpdatedDate(LocalDateTime.now());
+				registerRepository.save(register);
+				applicationTypesPermission.put("UserName", "thirumoorthy@capeindia.net");
+				applicationTypesPermission.put("registerId", register.getRegisterId().toString());
+				applicationTypesPermission.put("Name", register.getName());
 
+				return applicationTypesPermission;
 			} else {
 				logger.debug("Given RegisterId not Avilable in DB");
 				throw new RegisterPermissionRequestException("Given User not avilable");
@@ -440,6 +436,32 @@ public class RegistrationServiceImpl implements RegistrationService {
 			throw new RegisterPermissionRequestException("RegisterPermissionRequest has Invaild Input");
 		}
 
+	}
+
+	private Map<String, String> findApplicationTypesPermission(String adminPermission, String repoPermission) {
+		Map<String, String> permission = new HashMap<String, String>();
+		for (String newPermission : adminPermission.split(",")) {
+			for (String oldPermission : repoPermission.split(",")) {
+				if (!newPermission.split("-")[1].equalsIgnoreCase(oldPermission.split("-")[1])
+						&& newPermission.split("-")[0].equalsIgnoreCase(oldPermission.split("-")[0])) {
+					permission.put(newPermission.split("-")[0], getPermissionStatus(newPermission.split("-")[1]));
+				}
+			}
+		}
+		return permission;
+	}
+
+	private String getPermissionStatus(String string) {
+
+		switch (string) {
+		case "U":
+			return "Approved";
+		case "R":
+			return "Rejected";
+		case "A":
+			return "Added";
+		}
+		return null;
 	}
 
 	@Override
@@ -529,7 +551,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 		emailContent.setContentDetails(content);
 		RequestEntity<EmailContent> requestEntity = new RequestEntity<>(emailContent, headers, HttpMethod.PUT, uri);
 		ParameterizedTypeReference<EmailContent> typeRef = new ParameterizedTypeReference<EmailContent>() {};
-
+	
 		ResponseEntity<EmailContent> responseEntity = restTemplate.exchange(requestEntity, typeRef);
 		logger.debug("Cape-Electric-AWS-Email service Response was successful"+responseEntity.getStatusCode());
 	}

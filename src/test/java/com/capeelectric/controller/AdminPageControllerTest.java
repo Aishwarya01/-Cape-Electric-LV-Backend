@@ -8,7 +8,9 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 
@@ -26,6 +28,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.capeelectric.exception.PdfException;
 import com.capeelectric.exception.RegisterPermissionRequestException;
 import com.capeelectric.exception.RegistrationException;
 import com.capeelectric.model.Register;
@@ -88,12 +91,19 @@ public class AdminPageControllerTest {
 		RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 		
 		RegisterPermissionRequest permissionRequest = new RegisterPermissionRequest();
-		permissionRequest.setAdminUserName("lvsystem@capeindia.net");
+		permissionRequest.setAdminUserName("lvsystem@capeindia.net");	
 		permissionRequest.setComment("your company information not avilable");
 		permissionRequest.setRegisterId(1);
 		permissionRequest.setPermission("YES");
 
-		when(registrationService.updatePermission(permissionRequest)).thenReturn(register);
+		Map<String,String> applicationInfo = new HashMap<String, String>();
+		applicationInfo.put("UserName", "lvsystem@capeindia.net");
+		applicationInfo.put("registerId", "lvsystem@capeindia.net");
+		applicationInfo.put("isRequiredOtp", "YES");
+		applicationInfo.put("Name", "LV");
+		applicationInfo.put("LV Systems", "Approved");
+		
+		when(registrationService.updatePermission(permissionRequest)).thenReturn(applicationInfo);
 
 		doNothing().when(registrationService).sendEmail(register.getUsername(),
 				"You have successfully updated your profile");
@@ -102,7 +112,7 @@ public class AdminPageControllerTest {
 
 		Register register2 = new Register();
 		register2.setPermission("no");
-		when(registrationService.updatePermission(permissionRequest)).thenReturn(register2);
+		when(registrationService.updatePermission(permissionRequest)).thenReturn(applicationInfo);
 		ResponseEntity<String> updatePermission_1 = registrationController.updatePermission(permissionRequest);
 		assertEquals(updatePermission_1.getStatusCode(), HttpStatus.OK);
 		
