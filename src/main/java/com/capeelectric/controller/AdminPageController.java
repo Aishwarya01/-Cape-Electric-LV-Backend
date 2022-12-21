@@ -59,7 +59,7 @@ public class AdminPageController {
 				registerPermissionRequest.getAdminUserName());
 		Map<String, String> updatePermission = registrationService.updatePermission(registerPermissionRequest);
 		//updatePermission having 3 object(username,registerid,isRequiredOtp & name) hardcode default so except this thing will generating Mail
-		if (updatePermission.size() > 4) {
+		if (updatePermission.size() > 4 && !registerPermissionRequest.getPermission().equalsIgnoreCase("No")) {
 			URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 					.buildAndExpand(updatePermission.get("registerId")).toUri();
 			String resetUrl = Utility.getSiteURL(uri.toURL());
@@ -74,6 +74,13 @@ public class AdminPageController {
 									: ""));
 			flagOTP = false;
 			applicationRequestFlag = false;
+		}
+		else {
+			registrationService.sendEmailForOTPGeneration(updatePermission.get("UserName"), " Your request for accessing SOLVE App is Rejected"+ "\n" 
+							+ (registerPermissionRequest.getComment() != null
+									&& !registerPermissionRequest.getComment().isEmpty()
+											? "\n" + "Comment : " + registerPermissionRequest.getComment() + "\n" + "\n"
+											: ""));
 		}
 
 		return new ResponseEntity<String>("Successfully Updated RegisterPermission", HttpStatus.OK);

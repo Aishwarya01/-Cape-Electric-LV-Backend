@@ -31,6 +31,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -395,24 +396,29 @@ public class RegistrationServiceImpl implements RegistrationService {
 	@CacheEvict(value ={"register","superadmin"} ,allEntries = true)
 	public Map<String, String> updatePermission(RegisterPermissionRequest registerPermissionRequest)
 			throws RegisterPermissionRequestException {
-		logger.debug("updatePermission_function called");
+		logger.debug("updatePermission_function called");	
 
 		if (registerPermissionRequest != null && registerPermissionRequest.getAdminUserName() != null
 				&& registerPermissionRequest.getPermission() != null
 				&& registerPermissionRequest.getRegisterId() != null
 				&& registerPermissionRequest.getRegisterId() != 0) {
-
+			Map<String, String> applicationTypesPermission = new HashMap<String, String>();
 			Optional<Register> registerRepo = registerRepository.findById(registerPermissionRequest.getRegisterId());
-
+			
 			if (registerRepo.isPresent()) {
 				Register register = registerRepo.get();
-				Map<String, String> applicationTypesPermission = findApplicationTypesPermission(
-						registerPermissionRequest.getPermission(), registerRepo.get().getPermission());
-				if (null == register.getOtpSessionKey()) {
+				if (!registerPermissionRequest.getPermission().equalsIgnoreCase("No")) {
+					applicationTypesPermission = findApplicationTypesPermission(
+							registerPermissionRequest.getPermission(), registerRepo.get().getPermission());
+					if (null == register.getOtpSessionKey()) {
 						applicationTypesPermission.put("isRequiredOtp", "YES");
-				} else {
+					} else {
 						applicationTypesPermission.put("isRequiredOtp", "NO");
+					}
 				}
+				applicationTypesPermission.put("UserName", register.getUsername());
+				applicationTypesPermission.put("registerId", register.getRegisterId().toString());
+				applicationTypesPermission.put("Name", register.getName());
 				logger.debug("Admin accepted Registration Permission");
 				register.setApplicationType(registerPermissionRequest.getApplicationType());
 				register.setComment(registerPermissionRequest.getComment());
@@ -421,10 +427,6 @@ public class RegistrationServiceImpl implements RegistrationService {
 				register.setUpdatedBy(registerPermissionRequest.getAdminUserName());
 				register.setUpdatedDate(LocalDateTime.now());
 				registerRepository.save(register);
-				applicationTypesPermission.put("UserName", "thirumoorthy@capeindia.net");
-				applicationTypesPermission.put("registerId", register.getRegisterId().toString());
-				applicationTypesPermission.put("Name", register.getName());
-
 				return applicationTypesPermission;
 			} else {
 				logger.debug("Given RegisterId not Avilable in DB");
@@ -441,12 +443,17 @@ public class RegistrationServiceImpl implements RegistrationService {
 	private Map<String, String> findApplicationTypesPermission(String adminPermission, String repoPermission) {
 		Map<String, String> permission = new HashMap<String, String>();
 		for (String newPermission : adminPermission.split(",")) {
-			for (String oldPermission : repoPermission.split(",")) {
-				if (!newPermission.split("-")[1].equalsIgnoreCase(oldPermission.split("-")[1])
-						&& newPermission.split("-")[0].equalsIgnoreCase(oldPermission.split("-")[0])) {
-					permission.put(newPermission.split("-")[0], getPermissionStatus(newPermission.split("-")[1]));
+			if (!repoPermission.equalsIgnoreCase("NOT_AUTHORIZED") && !repoPermission.equalsIgnoreCase("No")) {
+				for (String oldPermission : repoPermission.split(",")) {
+					if (!newPermission.split("-")[1].equalsIgnoreCase(oldPermission.split("-")[1])
+							&& newPermission.split("-")[0].equalsIgnoreCase(oldPermission.split("-")[0])) {
+						permission.put(newPermission.split("-")[0], getPermissionStatus(newPermission.split("-")[1]));
+					}
 				}
+			} else {
+				permission.put(newPermission.split("-")[0], getPermissionStatus(newPermission.split("-")[1]));
 			}
+
 		}
 		return permission;
 	}
