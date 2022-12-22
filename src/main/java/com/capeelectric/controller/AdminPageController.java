@@ -76,7 +76,7 @@ public class AdminPageController {
 			applicationRequestFlag = false;
 		}
 		else {
-			registrationService.sendEmailForOTPGeneration(updatePermission.get("UserName"), " Your request for accessing SOLVE App is Rejected"+ "\n" 
+			registrationService.sendEmailForOTPGeneration(updatePermission.get("UserName"),"Hi "+ getName( updatePermission.get("Name"))+","+ "\n"+ " Your request for accessing SOLVE App is Rejected."+ "\n" 
 							+ (registerPermissionRequest.getComment() != null
 									&& !registerPermissionRequest.getComment().isEmpty()
 											? "\n" + "Comment : " + registerPermissionRequest.getComment() + "\n" + "\n"
@@ -104,7 +104,7 @@ public class AdminPageController {
 	 * getApplicationTypes function itrating updatePermission except username,isRequiredOtp&registerId objects
 	*/
 	private String getApplicationTypes(Map<String, String> updatePermission) {
-		String applicationwithPermission = "Hi "+ getName( updatePermission.get("Name"))+","+ "\n" +" Your request for accessing following applications in SOLVE App is Approved/Rejected"
+		String applicationwithPermission = "Hi "+ getName( updatePermission.get("Name"))+","+ "\n" +" Your request for accessing following applications in SOLVE App is Approved/Rejected."
 				+ "\n";
 
 		 int i=1;
