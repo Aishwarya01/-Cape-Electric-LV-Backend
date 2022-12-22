@@ -4,6 +4,7 @@ package com.capeelectric.service;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.mail.MessagingException;
@@ -38,7 +39,7 @@ public interface RegistrationService {
 	
 	public String sendNewOtp(String mobileNumber) throws RegistrationException;
 
-	public Register updatePermission(RegisterPermissionRequest registerPermissionRequest) throws RegisterPermissionRequestException;
+	public Map<String, String> updatePermission(RegisterPermissionRequest registerPermissionRequest) throws RegisterPermissionRequestException;
 	
 	public List<Register> retrieveAllRegistration() throws RegistrationException;
 	
