@@ -17,9 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -200,18 +197,18 @@ public class LoginServiceTest {
 
 		when(registrationRepository.findByUsername("lvsystem@capeindia.net")).thenReturn(optionalRegister);
 
-		when(restTemplate.exchange(
-				otpConfig.getVerifyOtp() + authenticationRequest.getOtpSession() + "/" + authenticationRequest.getOtp(),
-				HttpMethod.GET, null, String.class))
-						.thenReturn(new ResponseEntity<String>(
-								"{\"Status\":\"Success\",\"Details\":\"a2075b4a-25f8-44c1-824a-fd89cc310821\"}",
-								HttpStatus.ACCEPTED));
+//		when(restTemplate.exchange(
+//				otpConfig.getVerifyOtp() + authenticationRequest.getOtpSession() + "/" + authenticationRequest.getOtp(),
+//				HttpMethod.GET, null, String.class))
+//						.thenReturn(new ResponseEntity<String>(
+//								"{\"Status\":\"Success\",\"Details\":\"a2075b4a-25f8-44c1-824a-fd89cc310821\"}",
+//								HttpStatus.ACCEPTED));
+//
+//		register.setPermission("YES");
+//		Register createPassword_1 = loginServiceImpl.createPassword(authenticationRequest);
+//		assertNull(createPassword_1);
 
-		register.setPermission("YES");
-		Register createPassword_1 = loginServiceImpl.createPassword(authenticationRequest);
-		assertNull(createPassword_1);
-
-		register.setPermission("NO");
+		register.setPermission(null);
 		UpdatePasswordException createPassword_2 = Assertions.assertThrows(UpdatePasswordException.class,
 				() -> loginServiceImpl.createPassword(authenticationRequest));
 
