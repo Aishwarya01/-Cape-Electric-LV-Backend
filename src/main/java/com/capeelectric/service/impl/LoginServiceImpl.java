@@ -212,8 +212,7 @@ public class LoginServiceImpl implements LoginService {
 
 			Optional<Register> registerRepo = registrationRepository.findByUsername(request.getEmail());
 
-			if (registerRepo.isPresent() && registerRepo.get().getPermission() != null
-					&& registerRepo.get().getPermission().equalsIgnoreCase("YES")) {
+			if (registerRepo.isPresent() && registerRepo.get().getPermission() != null) {
 
 				logger.debug("RegistrationService otpSend() function called =[{}]", "Cape-Electric-SMS-Api");
 				ResponseEntity<String> otpVerifyResponse = restTemplate.exchange(
