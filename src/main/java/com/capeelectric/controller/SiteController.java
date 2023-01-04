@@ -85,4 +85,10 @@ public class SiteController {
 		logger.debug("called retriveSite function UserName: {}", userName);
 		return new ResponseEntity<Optional<Site>>(siteService.isSiteActive(userName), HttpStatus.OK);
 	}
+	
+	@GetMapping("/lv/isSiteActive/{userName}")
+	public ResponseEntity<Optional<Site>> isSiteActiveViewer(@PathVariable String userName) throws CompanyDetailsException {
+		logger.debug("called retriveSite function UserName: {}", userName);
+		return new ResponseEntity<Optional<Site>>(siteService.isSiteActive(userName), HttpStatus.OK);
+	}
 }
