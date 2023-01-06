@@ -91,6 +91,11 @@ public class LicenseServiceImpl implements LicenseService {
 					.setLpsNoOfLicence(Integer.toString((Integer.parseInt(licenseRepo.get().getLpsNoOfLicence()) - 1)));
 			break;
 		}
+		case "RISK": {
+			licenseRepo.get()
+					.setRiskNoOfLicence(Integer.toString((Integer.parseInt(licenseRepo.get().getRiskNoOfLicence()) - 1)));
+			break;
+		}
 		}
 		licenseRepository.save(licenseRepo.get());
 

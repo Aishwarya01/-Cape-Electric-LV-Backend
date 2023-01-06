@@ -9,36 +9,26 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "licence_table")
-public class LpsLicense{
+public class RiskLicense {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "LICENCE_ID")
 	private Integer licenceId;
 
-	@Column(name = "LPS_NO_OF_LICENCE")
-	private String lpsNoOfLicence;
+	@Column(name = "RISK_NO_OF_LICENCE")
+	private String riskNoOfLicence;
 	
 	@Column(name = "USERNAME")
 	private String userName;
-	
-	public Integer getLicenceId() {
-		return licenceId;
+
+	public String getRiskNoOfLicence() {
+		return riskNoOfLicence;
 	}
 
-	public void setLicenceId(Integer licenceId) {
-		this.licenceId = licenceId;
+	public void setRiskNoOfLicence(String riskNoOfLicence) {
+		this.riskNoOfLicence = riskNoOfLicence;
 	}
-
-	public String getLpsNoOfLicence() {
-		return lpsNoOfLicence;
-	}
-
-	public void setLpsNoOfLicence(String lpsNoOfLicence) {
-		this.lpsNoOfLicence = lpsNoOfLicence;
-	}
-
-
 
 	public String getUserName() {
 		return userName;
@@ -48,4 +38,12 @@ public class LpsLicense{
 		this.userName = userName;
 	}
 	
+	public Integer getLicenceId() {
+		return licenceId;
+	}
+
+	public void setLicenceId(Integer licenceId) {
+		this.licenceId = licenceId;
+	}
+ 
 }
