@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.capeelectric.exception.ClientDetailsException;
 import com.capeelectric.model.ClientDetails;
+import com.capeelectric.model.licence.License;
 import com.capeelectric.repository.ClientDetailsRepository;
+import com.capeelectric.repository.LicenseRepository;
 import com.capeelectric.service.ClientDetailsService;
 
 @Service
@@ -24,6 +26,9 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 	private ClientDetailsRepository clientDetailsRepository;
 
 	private ClientDetails clientDetailsData;
+	
+	@Autowired
+	private LicenseRepository licenseRepository;
 
 	@Transactional
 	@Override
@@ -108,10 +113,17 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 	public void updateClientDetailsStatus(ClientDetails clientDetails) throws ClientDetailsException {
 		if (clientDetails != null && clientDetails.getUserName() != null && clientDetails.getEmcId() != null) {
 			List<ClientDetails> clientDetailsRepo = clientDetailsRepository.findByEmcId(clientDetails.getEmcId());
-			if (clientDetailsRepo != null && !clientDetailsRepo.isEmpty()) {
+
+			if (clientDetailsRepo != null && !clientDetailsRepo.isEmpty() && clientDetailsRepo.get(0) != null) {
+				if (null == clientDetailsRepo.get(0).getAllStepsCompleted()
+						|| !clientDetailsRepo.get(0).getAllStepsCompleted().equalsIgnoreCase("AllStepCompleted")) {
+					Optional<License> licence = licenseRepository.findByUserName(clientDetails.getUserName());
+					licence.get().setEmcNoOfLicence(String.valueOf(Integer.parseInt(licence.get().getEmcNoOfLicence())+1));
+					licenseRepository.save(licence.get());
+				}
 				clientDetailsData = clientDetailsRepo.get(0);
 				clientDetailsData.setStatus("InActive");
-				clientDetailsData.setUpdatedDate(LocalDateTime.now());
+				clientDetailsData.setUpdatedDate(LocalDateTime.now());	
 				clientDetailsData.setUpdatedBy(clientDetails.getUserName());
 				clientDetailsRepository.save(clientDetailsData);
 			} else {
@@ -126,4 +138,8 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 
 	}
 
+	@Override
+	public Optional<ClientDetails> licenseClientDetails(String userName) {
+		return clientDetailsRepository.findByEmailAndStatus(userName, "Active");
+	}
 }

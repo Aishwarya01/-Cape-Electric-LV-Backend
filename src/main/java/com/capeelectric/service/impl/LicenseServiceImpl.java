@@ -96,6 +96,11 @@ public class LicenseServiceImpl implements LicenseService {
 					.setRiskNoOfLicence(Integer.toString((Integer.parseInt(licenseRepo.get().getRiskNoOfLicence()) - 1)));
 			break;
 		}
+		case "EMC": {
+			licenseRepo.get()
+					.setEmcNoOfLicence(Integer.toString((Integer.parseInt(licenseRepo.get().getEmcNoOfLicence()) - 1)));
+			break;
+		}
 		}
 		licenseRepository.save(licenseRepo.get());
 
