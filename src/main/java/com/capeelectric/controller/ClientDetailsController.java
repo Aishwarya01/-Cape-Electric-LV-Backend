@@ -68,4 +68,13 @@ public class ClientDetailsController {
 		return new ResponseEntity<String>("ClientDetails  has been successfully deleted", HttpStatus.OK);
 	}
 	
+	/*Validating Client Name*/
+	@GetMapping("/emc/clientNameValidation/{clientName}")
+	public ResponseEntity<Optional<ClientDetails>> retrieveClientName(@PathVariable String clientName)
+			throws ClientDetailsException  {
+		logger.info("called clientNameValidation function: {}", clientName);
+		return new ResponseEntity<Optional<ClientDetails>>(clientDetailsService.findingClientName(clientName),
+				HttpStatus.OK);
+	}
+	
 }

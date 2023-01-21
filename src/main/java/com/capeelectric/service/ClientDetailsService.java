@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.capeelectric.exception.ClientDetailsException;
-import com.capeelectric.exception.CompanyDetailsException;
-import com.capeelectric.exception.ElectromagneticCompatabilityException;
 import com.capeelectric.model.ClientDetails;
 
 public interface ClientDetailsService {
@@ -19,5 +17,7 @@ public interface ClientDetailsService {
 	public void updateClientDetailsStatus(ClientDetails clientDetails) throws ClientDetailsException;
 
 	public Optional<ClientDetails> licenseClientDetails(String userName);
+
+	public Optional<ClientDetails> findingClientName(String clientName) throws ClientDetailsException;
 
 }

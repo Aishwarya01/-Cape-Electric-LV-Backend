@@ -1,6 +1,7 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -141,5 +142,24 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 	@Override
 	public Optional<ClientDetails> licenseClientDetails(String userName) {
 		return clientDetailsRepository.findByEmailAndStatus(userName, "Active");
+	}
+	
+	/*Validating Client Name*/
+	@Override
+	public Optional<ClientDetails> findingClientName(String clientName) throws ClientDetailsException {
+		logger.info("Called findingClientName function");
+
+		Optional<ClientDetails> clientDetailsRepo = clientDetailsRepository.findByClientNameAndStatus(clientName,
+				"Active");
+
+		if (clientDetailsRepo.isPresent()) {
+
+			List<ClientDetails> clientList = new ArrayList<ClientDetails>();
+			clientList.add(clientDetailsRepo.get());
+
+			return clientDetailsRepo;
+		}
+		return null;
+
 	}
 }
