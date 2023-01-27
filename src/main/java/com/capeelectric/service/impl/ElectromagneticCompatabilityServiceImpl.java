@@ -27,6 +27,7 @@ import com.capeelectric.service.ElectromagneticPDFService;
 import com.capeelectric.service.FacilityDataPDFService;
 import com.capeelectric.service.PowerEarthingDataPDFService;
 import com.capeelectric.service.PrintFinalPDFService;
+import com.capeelectric.util.EmcStatusUpdate;
 
 @Service
 public class ElectromagneticCompatabilityServiceImpl implements ElectromagneticCompatabilityService {
@@ -61,6 +62,9 @@ public class ElectromagneticCompatabilityServiceImpl implements ElectromagneticC
 
 	@Autowired
 	private PrintFinalPDFService printFinalPDFService;
+	
+	@Autowired
+	private EmcStatusUpdate emcStatusUpdate;
 
 	@Override
 	public void saveElectromagneticCompatability(ElectromagneticCompatability electromagneticCompatability)
@@ -87,6 +91,7 @@ public class ElectromagneticCompatabilityServiceImpl implements ElectromagneticC
 								electromagneticCompatability.setUpdatedBy(electromagneticCompatability.getUserName());
 								electromagneticCompatability.setUpdatedDate(LocalDateTime.now());
 								electromagneticCompatabilityRepository.save(electromagneticCompatability);
+								emcStatusUpdate.updateEmcStatus("step-4 completed", electromagneticCompatability.getUserName(), electromagneticCompatability.getEmcId());
 								logger.debug("Electro Magnetic Compatability  Details Successfully Saved in DB");
 							}
 							catch(Exception e) {

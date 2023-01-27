@@ -17,6 +17,7 @@ import com.capeelectric.repository.ClientDetailsRepository;
 import com.capeelectric.repository.FacilityDataRepository;
 import com.capeelectric.repository.PowerEarthingDataRepository;
 import com.capeelectric.service.PowerEarthingDataService;
+import com.capeelectric.util.EmcStatusUpdate;
 
 @Service
 public class PowerEarthingDataServiceImpl implements PowerEarthingDataService {
@@ -31,6 +32,9 @@ public class PowerEarthingDataServiceImpl implements PowerEarthingDataService {
 
 	@Autowired
 	private FacilityDataRepository facilityDataRepository;
+	
+	@Autowired
+	private EmcStatusUpdate emcStatusUpdate;
 
 	@Override
 	public void savePowerEarthingData(PowerEarthingData powerEarthingData) throws PowerEarthingDataException {
@@ -49,6 +53,7 @@ public class PowerEarthingDataServiceImpl implements PowerEarthingDataService {
 						powerEarthingData.setCreatedDate(LocalDateTime.now());
 						powerEarthingData.setCreatedBy(powerEarthingData.getUserName());
 						powerEarthingDataRepository.save(powerEarthingData);
+						emcStatusUpdate.updateEmcStatus("step-3 completed",powerEarthingData.getUserName(),powerEarthingData.getEmcId());
 					} else {
 						logger.error("Given PowerEarthingData Already Exists");
 						throw new PowerEarthingDataException("Given PowerEarthingData Already Exists");

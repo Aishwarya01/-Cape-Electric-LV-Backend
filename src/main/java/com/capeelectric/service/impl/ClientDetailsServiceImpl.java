@@ -49,6 +49,7 @@ public class ClientDetailsServiceImpl implements ClientDetailsService {
 				clientDetails.setCreatedBy(clientDetails.getUserName());
 				clientDetails.setUpdatedBy(clientDetails.getUserName());
 				clientDetails.setUpdatedDate(LocalDateTime.now());
+				clientDetails.setAllStepsCompleted("step-1 completed");
 				return clientDetailsRepository.save(clientDetails);
 			} else {
 				logger.error("Client name " + clientDetails.getClientName() + " already exists");
