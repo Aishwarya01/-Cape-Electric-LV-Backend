@@ -182,4 +182,11 @@ public class Constants {
 	public static final String EMAIL_HOST_NAME = "email-smtp.ap-south-1.amazonaws.com";
 	
 	public static final String EMC_FILE_UPLOAD_DOMAIN = "https://d35eofesgzbybk.cloudfront.net";
+
+	//SMS
+	public static final String SMS_OTP_SEND = "https://api.backend.rushforsafety.com/api/v1/sendOtp/";
+	
+	public static final String SMS_OTP_VERIFY = "https://api.backend.rushforsafety.com/api/v1/verifyOtp/";
+
+
 }
