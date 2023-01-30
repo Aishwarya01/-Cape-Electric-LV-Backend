@@ -1,6 +1,7 @@
 package com.capeelectric.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,14 @@ public class ClientDetailsController {
 		return new ResponseEntity<List<ClientDetails>>(clientDetailsService.retrieveClientDetails(userName, emcId),
 				HttpStatus.OK);
 	}
+	
+	@GetMapping("/emc/clientDetail/{userName}")
+	public ResponseEntity<Optional<ClientDetails>> retrieveClientDetails(@PathVariable String userName)
+			throws ClientDetailsException  {
+		logger.info("called clientDetails function UserName: {}", userName);
+		return new ResponseEntity<Optional<ClientDetails>>(clientDetailsService.licenseClientDetails(userName),
+				HttpStatus.OK);
+	}
  
 	@PutMapping("/emc/updateClientDetails")
 	public ResponseEntity<String> updateClientDetails(@RequestBody ClientDetails clientDetails)
@@ -57,6 +66,15 @@ public class ClientDetailsController {
 		logger.info("called updateClientDetailsStatus function UserName : {},getEmcId : {}", clientDetails.getUserName());
 		clientDetailsService.updateClientDetailsStatus(clientDetails);
 		return new ResponseEntity<String>("ClientDetails  has been successfully deleted", HttpStatus.OK);
+	}
+	
+	/*Validating Client Name*/
+	@GetMapping("/emc/clientNameValidation/{clientName}")
+	public ResponseEntity<Optional<ClientDetails>> retrieveClientName(@PathVariable String clientName)
+			throws ClientDetailsException  {
+		logger.info("called clientNameValidation function: {}", clientName);
+		return new ResponseEntity<Optional<ClientDetails>>(clientDetailsService.findingClientName(clientName),
+				HttpStatus.OK);
 	}
 	
 }

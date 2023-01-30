@@ -1,5 +1,7 @@
 package com.capeelectric.service.impl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,7 +96,8 @@ public class EmcFinalReportServiceImpl implements EMCFinalReportService {
 			try {
 				logger.info("ClientDetails fetching process started");
 				List<ClientDetails> clientDetails =  clientDetailsRepository.findByUserName(userName);
-				clientDetails.sort((o1, o2) -> o2.getUpdatedDate().compareTo(o1.getUpdatedDate()));
+//				clientDetails.sort((o1, o2) -> o1.getUpdatedDate().compareTo(o2.getUpdatedDate()));
+				sortSiteDetailsBasedOnUpdatedDate(clientDetails);
 				return clientDetails;
 			} catch (Exception e) {
 				logger.info("ClientDetails fetching process faild");
@@ -107,7 +110,17 @@ public class EmcFinalReportServiceImpl implements EMCFinalReportService {
 	
 	@Override
 	public List<ClientDetails> retrieveAllCLientDetails() throws EmcFinalReportException {
-		return (List<ClientDetails>) clientDetailsRepository.findAll();
+		return sortSiteDetailsBasedOnUpdatedDate((List<ClientDetails>) clientDetailsRepository.findAll());
 	}
+//	
+//	private void sortingDateTime(List<ClientDetails> listOfClientsRepoEmc) {
+//        if (listOfClientsRepoEmc.size() > 1) {
+//            Collections.sort(listOfClientsRepoEmc, (o1, o2) -> o1.getUpdatedDate().compareTo(o2.getUpdatedDate()));
+//        }
+//	}
 
+	private List<ClientDetails> sortSiteDetailsBasedOnUpdatedDate(List<ClientDetails> siteDetails) {
+		siteDetails.sort((o1, o2) -> o2.getUpdatedDate().compareTo(o1.getUpdatedDate()));
+		return siteDetails;
+	}
 }

@@ -24,6 +24,14 @@ public class License {
 	@Column(name = "LPS_NO_OF_LICENCE")
 	private String lpsNoOfLicence;
 	
+	// RISK
+	@Column(name = "RISK_NO_OF_LICENCE")
+	private String riskNoOfLicence;
+	
+	// EMC
+	@Column(name = "EMC_NO_OF_LICENCE")
+	private String emcNoOfLicence;
+	
 	@Column(name = "USERNAME")
 	private String userName;
 
@@ -57,6 +65,22 @@ public class License {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getRiskNoOfLicence() {
+		return riskNoOfLicence;
+	}
+
+	public void setRiskNoOfLicence(String riskNoOfLicence) {
+		this.riskNoOfLicence = riskNoOfLicence;
+	}
+
+	public String getEmcNoOfLicence() {
+		return emcNoOfLicence;
+	}
+
+	public void setEmcNoOfLicence(String emcNoOfLicence) {
+		this.emcNoOfLicence = emcNoOfLicence;
 	}
 	
 }

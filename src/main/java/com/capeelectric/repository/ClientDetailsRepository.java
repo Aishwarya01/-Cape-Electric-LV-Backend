@@ -23,4 +23,6 @@ public interface ClientDetailsRepository extends CrudRepository<ClientDetails, I
 	
 	public Optional<ClientDetails> findByClientName(String clientName);
 
+	public Optional<ClientDetails> findByEmailAndStatus(String userName, String string);
+
 }

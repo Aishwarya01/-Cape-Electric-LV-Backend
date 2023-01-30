@@ -46,9 +46,11 @@ import com.capeelectric.model.EmailContent;
 import com.capeelectric.model.Register;
 import com.capeelectric.model.licence.License;
 import com.capeelectric.model.licence.LvLicense;
+import com.capeelectric.repository.EmcLicenseRepository;
 import com.capeelectric.repository.LpsLicenseRepository;
 import com.capeelectric.repository.LvLicenseRepository;
 import com.capeelectric.repository.RegistrationRepository;
+import com.capeelectric.repository.RiskLicenseRepository;
 import com.capeelectric.request.RegisterPermissionRequest;
 import com.capeelectric.service.RegistrationService;
 import com.capeelectric.util.Constants;
@@ -82,6 +84,12 @@ public class RegistrationServiceImpl implements RegistrationService {
 	
 	@Autowired
 	private LpsLicenseRepository lpsLicenseRepository;
+	
+	@Autowired
+	private RiskLicenseRepository riskLicenseRepository;
+	
+	@Autowired
+	private EmcLicenseRepository emcLicenseRepository;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -377,13 +385,17 @@ public class RegistrationServiceImpl implements RegistrationService {
 		case "LV":
 			license.setLvNoOfLicence(numberOfLicense);
 			return license;
-
 		case "LPS":
 			license.setLpsNoOfLicence(numberOfLicense);
 			return license;
+		case "RISK":
+			license.setRiskNoOfLicence(numberOfLicense);
+			return license;
+		case "EMC":
+			license.setEmcNoOfLicence(numberOfLicense);
+			return license;
 		}
 		return license;
-
 	}
 
 	@Override
@@ -604,10 +616,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 				return Optional.of(license);
 			}
 			return lvLicense;
-			
- 		} else if (project.equalsIgnoreCase("LPS")) { 			 
+ 		} 
+		else if (project.equalsIgnoreCase("LPS")) { 			 
  			return lpsLicenseRepository.findByUserName(userName);
- 		}  
+ 		}
+		else if (project.equalsIgnoreCase("RISK")) {
+			return riskLicenseRepository.findByUserName(userName);
+		}
+		else if (project.equalsIgnoreCase("EMC")) {
+			return emcLicenseRepository.findByUserName(userName);
+		}
 		return null;
 	}
 }

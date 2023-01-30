@@ -15,6 +15,7 @@ import com.capeelectric.model.FacilityData;
 import com.capeelectric.repository.ClientDetailsRepository;
 import com.capeelectric.repository.FacilityDataRepository;
 import com.capeelectric.service.FacilityDataService;
+import com.capeelectric.util.EmcStatusUpdate;
 
 @Service
 public class FacilityDataServiceImpl implements FacilityDataService {
@@ -26,6 +27,9 @@ public class FacilityDataServiceImpl implements FacilityDataService {
 
 	@Autowired
 	private ClientDetailsRepository clientDetailsRepository;
+	
+	@Autowired
+	private EmcStatusUpdate emcStatusUpdate;
 
 	@Override
 	public void addFacilityData(FacilityData facilityData) throws FacilityDataException {
@@ -39,6 +43,8 @@ public class FacilityDataServiceImpl implements FacilityDataService {
 					facilityData.setCreatedDate(LocalDateTime.now());
 					facilityData.setCreatedBy(facilityData.getUserName());
 					facilityDataRepository.save(facilityData);
+					emcStatusUpdate.updateEmcStatus("step-2 completed",facilityData.getUserName(),facilityData.getEmcId());
+					logger.debug("Basic Lps UpdatedBy and UpdatedDate by DownConductor");
 				} else {
 					logger.error("Given FacilityData Already Exists");
 					throw new FacilityDataException("Given FacilityData Already Exists");
