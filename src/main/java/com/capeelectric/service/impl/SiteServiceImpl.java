@@ -1,6 +1,7 @@
 package com.capeelectric.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -87,7 +88,7 @@ public class SiteServiceImpl implements SiteService {
 		}
 	}
 
-	/*
+	/**
 	 * @param Site updateSite method to comparing department_ClientName,
 	 * department_name comparing, then comparing site
 	 */
@@ -96,14 +97,16 @@ public class SiteServiceImpl implements SiteService {
 		int count = 0;
 
 		if (site.getUserName() != null && site.getSite() != null) {
-			Optional<Site> siteRepo = siteRepository.findByUserNameAndSite(site.getUserName(), site.getSite());
-			Set<SitePersons> sitePersons = deleteSitePersonDetails(site.getSitePersons());
-			if (!sitePersons.isEmpty()) {
-				site.getSitePersons().removeAll(sitePersons);
-				logger.debug("Removed InActive SitePersons [{}]", sitePersons);
-			}
-			if (siteRepo.isPresent() && siteRepo.get().getSite().equalsIgnoreCase(site.getSite())
-					&& siteRepo.get().getSiteId().equals(site.getSiteId())) {
+			Site siteRepo = siteRepository.findByCompanyNameAndDepartmentNameAndSite(site.getCompanyName(),
+					site.getDepartmentName(), site.getSite());
+//			Set<SitePersons> sitePersons = deleteSitePersonDetails(site.getSitePersons());
+//			if (!sitePersons.isEmpty()) {
+//				site.getSitePersons().removeAll(sitePersons);
+//				logger.debug("Removed InActive SitePersons [{}]", sitePersons);
+//			}
+
+			if (null != siteRepo && siteRepo.getSite().equalsIgnoreCase(site.getSite())
+					&& siteRepo.getSiteId().equals(site.getSiteId())) {
 				site.setSiteCd(site.getSite().substring(0, 3).concat("_0") + (count + 1));
 				site.setUpdatedDate(LocalDateTime.now());
 				site.setUpdatedBy(userName.findByUserName(site.getUserName()));
