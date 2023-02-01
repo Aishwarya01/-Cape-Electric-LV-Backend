@@ -37,7 +37,7 @@ public class EarthConnectorServiceImpl implements EarthConnectorService {
 		logger.info("Called addEarthConnector function");
 		if (earthConnector != null && earthConnector.getFileName() != null) {
 			Optional<EarthConnector> earthConnectorRepo = earthConnectorRepository
-					.findByFileNameAndNodeId(earthConnector.getFileName(), earthConnector.getNodeId());
+					.findByFileNameAndEarthCableConnectorid(earthConnector.getFileName(), earthConnector.getNodeId());
 
 			if (!earthConnectorRepo.isPresent()) {
 				earthConnector.setCreatedDate(LocalDateTime.now());
@@ -66,7 +66,7 @@ public class EarthConnectorServiceImpl implements EarthConnectorService {
 		logger.info("Called retrieveEarthConnectorData function");
 
 		if (fileName != null && !fileName.isEmpty() && nodeId != null && !nodeId.isEmpty()) {
-			return earthConnectorRepository.findByFileNameAndNodeId(fileName, nodeId);
+			return earthConnectorRepository.findByFileNameAndEarthCableConnectorid(fileName, nodeId);
 		} else {
 			logger.error("Invalid Inputs");
 			throw new EarthConnectorException("Invalid Inputs");

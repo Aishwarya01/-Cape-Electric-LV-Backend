@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import com.capeelectric.model.EarthConnector;
 
 public interface EarthConnectorRepository extends CrudRepository<EarthConnector, Integer> {
-	public Optional<EarthConnector> findByFileNameAndNodeId(String fileName, String nodeId);
+	public Optional<EarthConnector> findByFileNameAndEarthCableConnectorid(String fileName, String nodeId);
 
 	public Optional<EarthConnector> findByEarthconnectorid(Integer earthconnectorid);
 

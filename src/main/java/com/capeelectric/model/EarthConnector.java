@@ -3,8 +3,11 @@ package com.capeelectric.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,20 +22,21 @@ public class EarthConnector implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = " EARTH_CONNECTORID")
 	private Integer earthconnectorid;
 
 	@Column(name = " EARTH_CABLE_CONNECTORID")
-	private Integer earthCableConnectorid;
+	private String earthCableConnectorid;
 
 	@Column(name = " TYPE_OF_ELECTRODE")
-	private Integer typeOfElectrode;
+	private String typeOfElectrode;
 
 	@Column(name = " MATERIAL_ELECTRODE")
-	private Integer materialElectrode;
+	private String materialElectrode;
 
 	@Column(name = " SIZE_ELECTRODE")
-	private Integer sizeElectrode;
+	private String sizeElectrode;
 
 	@Column(name = " DEPTH_ELECTRODE")
 	private Integer depthElectrode;
@@ -73,38 +77,6 @@ public class EarthConnector implements Serializable {
 
 	public void setEarthconnectorid(Integer earthconnectorid) {
 		this.earthconnectorid = earthconnectorid;
-	}
-
-	public Integer getEarthCableConnectorid() {
-		return earthCableConnectorid;
-	}
-
-	public void setEarthCableConnectorid(Integer earthCableConnectorid) {
-		this.earthCableConnectorid = earthCableConnectorid;
-	}
-
-	public Integer getTypeOfElectrode() {
-		return typeOfElectrode;
-	}
-
-	public void setTypeOfElectrode(Integer typeOfElectrode) {
-		this.typeOfElectrode = typeOfElectrode;
-	}
-
-	public Integer getMaterialElectrode() {
-		return materialElectrode;
-	}
-
-	public void setMaterialElectrode(Integer materialElectrode) {
-		this.materialElectrode = materialElectrode;
-	}
-
-	public Integer getSizeElectrode() {
-		return sizeElectrode;
-	}
-
-	public void setSizeElectrode(Integer sizeElectrode) {
-		this.sizeElectrode = sizeElectrode;
 	}
 
 	public Integer getDepthElectrode() {
@@ -198,4 +170,37 @@ public class EarthConnector implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	public String getTypeOfElectrode() {
+		return typeOfElectrode;
+	}
+
+	public void setTypeOfElectrode(String typeOfElectrode) {
+		this.typeOfElectrode = typeOfElectrode;
+	}
+
+	public String getSizeElectrode() {
+		return sizeElectrode;
+	}
+
+	public void setSizeElectrode(String sizeElectrode) {
+		this.sizeElectrode = sizeElectrode;
+	}
+
+	public String getMaterialElectrode() {
+		return materialElectrode;
+	}
+
+	public void setMaterialElectrode(String materialElectrode) {
+		this.materialElectrode = materialElectrode;
+	}
+
+	public String getEarthCableConnectorid() {
+		return earthCableConnectorid;
+	}
+
+	public void setEarthCableConnectorid(String earthCableConnectorid) {
+		this.earthCableConnectorid = earthCableConnectorid;
+	}
+
 }
