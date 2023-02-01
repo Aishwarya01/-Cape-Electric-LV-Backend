@@ -55,24 +55,24 @@ public class RegistrationController {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(createdRegister.getRegisterId()).toUri();
 		String resetUrl = Utility.getSiteURL(uri.toURL());
-		if (createdRegister.getPermission().equalsIgnoreCase("YES")) {
-			registrationService.sendEmailForOTPGeneration(register.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
-					+ (resetUrl.contains("localhost:5000")
-							? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-							: "https://www."+webUrl)
-					+ "/generateOtp" + ";email=" + register.getUsername());
-			logger.debug("AwsEmailService call Successfully Ended");
-		} else {
-			registrationService
-					.sendEmailToAdmin("Please Approve or Reject the inspector by Logging to " + "Admin Portal for User "
-							+ register.getName() + " and Company " + register.getCompanyName() + " with their Email "
-							+ register.getUsername() + ". You can login to admin Portal with this link " + "\n"
-							+ (resetUrl.contains("localhost:5000")
-									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
-									: "https://admin."+webUrl)
-							+ "/admin");
-			logger.debug("AwsEmailService call Successfully Ended");
-		}
+//		if (createdRegister.getPermission().equalsIgnoreCase("YES")) {
+//			registrationService.sendEmailForOTPGeneration(register.getUsername(), Constants.EMAIL_SUBJECT_REGISTRATION + "\n" + "\n"
+//					+ (resetUrl.contains("localhost:5000")
+//							? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
+//							: "https://www."+webUrl)
+//					+ "/generateOtp" + ";email=" + register.getUsername());
+//			logger.debug("AwsEmailService call Successfully Ended");
+//		} else {
+//			registrationService
+//					.sendEmailToAdmin("Please Approve or Reject the inspector by Logging to " + "Admin Portal for User "
+//							+ register.getName() + " and Company " + register.getCompanyName() + " with their Email "
+//							+ register.getUsername() + ". You can login to admin Portal with this link " + "\n"
+//							+ (resetUrl.contains("localhost:5000")
+//									? resetUrl.replace("http://localhost:5000", "http://localhost:4200")
+//									: "https://admin."+webUrl)
+//							+ "/admin");
+//			logger.debug("AwsEmailService call Successfully Ended");
+//		}
 
 		return ResponseEntity.created(uri).build();
 	}

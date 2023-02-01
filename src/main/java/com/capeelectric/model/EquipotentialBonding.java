@@ -4,22 +4,13 @@
 package com.capeelectric.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * @author CAPE-SOFTWARE
@@ -27,33 +18,55 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  */
 @Entity
 @Table(name = "EquipotentialBonding")
-
-
 public class EquipotentialBonding {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "EQUIPBOND_ID")
 	private Integer equipBondID;
-	
+
 	@Column(name = "NODE_ID")
 	private String nodeId;
-	
+
 	@Column(name = "FILE_NAME")
 	private String fileName;
-	
+
 	@Column(name = "USER_NAME")
 	private String userName;
-	
+
 	@Column(name = "REFERENCE_NAME")
 	private String referenceName;
-		
+
 	@Column(name = "RATING")
 	private Integer rating;
+
+	@Column(name = "SIZE_ONE")
+	private String sizeOne;
+
+	@Column(name = "SIZE_TWO")
+	private String sizeTwo;
+
+	@Column(name = "MAKE")
+	private String make;
+
+	@Column(name = "TYPE_FLAT_OR_BASE")
+	private String typeFlatOrBase;
+
+	@Column(name = "MATERIAL")
+	private String material;
+
+	@Column(name = "CONDUCTOR_LENGTH")
+	private String conductorLength;
+
+	@Column(name = "CONDUCTOR_RESISTANCE")
+	private String conductorResistance;
+
+	@Column(name = "MAX_ALLOWABLE_RESISTANCE")
+	private String maxAllowableResistance;
 	
-	@Column(name = "SIZE")
-	private Integer size;
-	
+	@Column(name = "REMARKS")
+	private String remarks;
+
 	@Column(name = "CREATED_DATE")
 	private LocalDateTime createdDate;
 
@@ -62,7 +75,7 @@ public class EquipotentialBonding {
 
 	@Column(name = "UPDATED_BY")
 	private String updatedBy;
-	
+
 	@Column(name = "UPDATED_DATE")
 	private LocalDateTime updatedDate;
 
@@ -114,12 +127,76 @@ public class EquipotentialBonding {
 		this.rating = rating;
 	}
 
-	public Integer getSize() {
-		return size;
+	public String getSizeOne() {
+		return sizeOne;
 	}
 
-	public void setSize(Integer size) {
-		this.size = size;
+	public void setSizeOne(String sizeOne) {
+		this.sizeOne = sizeOne;
+	}
+
+	public String getSizeTwo() {
+		return sizeTwo;
+	}
+
+	public void setSizeTwo(String sizeTwo) {
+		this.sizeTwo = sizeTwo;
+	}
+
+	public String getMake() {
+		return make;
+	}
+
+	public void setMake(String make) {
+		this.make = make;
+	}
+
+	public String getTypeFlatOrBase() {
+		return typeFlatOrBase;
+	}
+
+	public void setTypeFlatOrBase(String typeFlatOrBase) {
+		this.typeFlatOrBase = typeFlatOrBase;
+	}
+
+	public String getMaterial() {
+		return material;
+	}
+
+	public void setMaterial(String material) {
+		this.material = material;
+	}
+
+	public String getConductorLength() {
+		return conductorLength;
+	}
+
+	public void setConductorLength(String conductorLength) {
+		this.conductorLength = conductorLength;
+	}
+
+	public String getConductorResistance() {
+		return conductorResistance;
+	}
+
+	public void setConductorResistance(String conductorResistance) {
+		this.conductorResistance = conductorResistance;
+	}
+
+	public String getMaxAllowableResistance() {
+		return maxAllowableResistance;
+	}
+
+	public void setMaxAllowableResistance(String maxAllowableResistance) {
+		this.maxAllowableResistance = maxAllowableResistance;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
 	}
 
 	public LocalDateTime getCreatedDate() {
