@@ -34,7 +34,7 @@ public class EarthConnectorController {
 			throws CablesException, EarthConnectorException {
 		logger.info("called addEarthConnector function File Name : {}", earthConnector.getFileName());
 		earthConnectorService.addEarthConnector(earthConnector);
-		return new ResponseEntity<String>("earthConnector details saved successfully", HttpStatus.CREATED);
+		return new ResponseEntity<String>("EarthConnector details saved successfully", HttpStatus.CREATED);
 	}
 
 	@GetMapping("/diagram/retrieveearthconnector/{fileName}/{nodeId}")
