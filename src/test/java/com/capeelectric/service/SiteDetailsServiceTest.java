@@ -105,7 +105,7 @@ public class SiteDetailsServiceTest {
 		sitePersonsSet.add(sitePersons2);
 		site.setSitePersons(sitePersonsSet);
 		when(siteRepository.save(site)).thenReturn(site);
-
+		when(siteRepository.findByCompanyNameAndDepartmentNameAndSite("Cape", "electric","user")).thenReturn(site);
 		sitePersons3.setPersonInchargeEmail("Cape1@gmail.com");
 		sitePersons3.setSiteName("user");
 		sitePersons3.setInActive(true);
@@ -245,6 +245,7 @@ public class SiteDetailsServiceTest {
 				.thenReturn(Optional.of(sitePersons1));
 		when(sitePersonsRepository.findBySiteNameAndPersonInchargeEmail(site.getSite(),sitePersons2.getPersonInchargeEmail()))
 				.thenReturn(Optional.of(sitePersons2));
+		when(siteRepository.findByCompanyNameAndDepartmentNameAndSite("Cape", "electric","user")).thenReturn(site);
 	}
 
 }
