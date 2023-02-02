@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.capeelectric.model.CableConnector;
 import com.capeelectric.model.Cables;
+import com.capeelectric.model.EarthConnector;
 import com.capeelectric.model.GeneralTestingCableConnector;
 import com.capeelectric.model.GeneralTestingCables;
 import com.capeelectric.model.GeneralTestingPAT;
@@ -72,4 +73,22 @@ private static final Logger logger = LoggerFactory.getLogger(SLDFindNonRemovedOb
 		logger.info("Ended findNonRemovedCableConnectorData function");
 		return generalTestingCableConnector;
 	}
+	
+//	public List<EarthConnector> findNonRemovedEarthConnectorData(Optional<EarthConnector> earthConnectorRepo) {
+//		logger.info("Called findNonRemovedCableConnectorData function");
+//
+//		ArrayList<EarthConnector> earthConnector = new ArrayList<EarthConnector>();
+//		 List<EarthConnector> earthConnectoRepository = earthConnectorRepo.get().get();
+//		for (EarthConnector EarthConnectorItr: earthConnectorRepo) {
+//			if (EarthConnectorItr.getFlag()==null || !EarthConnectorItr.getFlag().equalsIgnoreCase("R")) {
+//				if(EarthConnectorItr.getFlag()==null) {
+//					EarthConnectorItr.setFlag("N");
+//				}				
+//				earthConnector.add(EarthConnectorItr);		 
+//			}
+//		}
+//		logger.info("Ended findNonRemovedCableConnectorData function");
+//		return earthConnector;
+//	}
+	
 }
